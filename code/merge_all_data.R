@@ -15,7 +15,7 @@ rm(students_apps_demre)
 final_data <-   sample_students %>%
   left_join(all_treatments, by = c("br_code", "mrun"))  %>%
   left_join(students_apps, by = "mrun") %>%
-  mutate(female = ifelse(COD_SEXO == 1, 0, 1)) %>% 
+  mutate(gender = as.factor(ifelse(COD_SEXO == 1, "Male", "Female"))) %>% 
   #   left_join(socioecon_controls,   by = "mrun")  %>%
   left_join(stem_outcome,   by = "mrun")  %>%
   mutate(graduated_from_applied_school = (RBD == rbd)) %>% 
