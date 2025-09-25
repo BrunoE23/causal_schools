@@ -15,15 +15,22 @@ rm(students_apps_demre)
 final_data <-   sample_students %>%
   left_join(all_treatments, by = c("br_code", "mrun"))  %>%
   left_join(students_apps, by = "mrun") %>%
+  mutate(female = ifelse(COD_SEXO == 1, 0, 1)) %>% 
   #   left_join(socioecon_controls,   by = "mrun")  %>%
   left_join(stem_outcome,   by = "mrun")  %>%
   mutate(graduated_from_applied_school = (RBD == rbd)) %>% 
-  mutate(rbd_admitido = factor(rbd_admitido)) %>% 
-  mutate()
+  mutate(rbd_admitido = factor(rbd_admitido)) 
 
 save(final_data,  file = "./data/clean/final_data.Rdata")
 
 haven::write_dta(final_data, path = "./data/clean/final_data.dta")
+
+
+stop_code()
+
+# Check how many students I have gender for 
+table(final_data$female)
+table(final_data$COD_SEXO)
 
 
 #Check for people who never register for psu 
