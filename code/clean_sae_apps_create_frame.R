@@ -1,21 +1,21 @@
 
-setwd("C:/Users/xd-br/Desktop/PhD/Research/Education_Chile")
+setwd("C:/Users/xd-br/Desktop/PhD/Research/causal_schools")
 library(tidyverse)
 
 
 #read spots available
-oferta_2017 <- read_csv2("./2017/SAE_2017/A1_Oferta_Establecimientos_etapa_regular_2017_Admisión_2018.csv") %>% 
+oferta_2017 <- read_csv2("./data/raw/2017/SAE_2017/A1_Oferta_Establecimientos_etapa_regular_2017_Admisión_2018.csv") %>% 
   mutate(proceso = 2017) %>% 
   mutate(br_code = paste0(as.character(rbd), "_", cod_nivel, "_", cod_curso, "_", proceso)) %>% 
   filter(cod_nivel >= 7 & cod_nivel <= 9) %>% 
   mutate(cod_sede = NA_integer_)
 
-oferta_2018 <- read_csv2("./2018/SAE_2018/A1_Oferta_Establecimientos_etapa_regular_2018_Admisión_2019.csv") %>% 
+oferta_2018 <- read_csv2("./data/raw/2018/SAE_2018/A1_Oferta_Establecimientos_etapa_regular_2018_Admisión_2019.csv") %>% 
   mutate(proceso = 2018) %>% 
   mutate(br_code = paste0(as.character(rbd), "_", cod_nivel, "_", cod_curso, "_", proceso)) %>% 
   filter(cod_nivel >= 7 & cod_nivel <= 9) 
 
-oferta_2019 <- read_csv2("./2019/SAE_2019/A1_Oferta_Establecimientos_etapa_regular_2019_Admisión_2020.csv") %>% 
+oferta_2019 <- read_csv2("./data/raw/2019/SAE_2019/A1_Oferta_Establecimientos_etapa_regular_2019_Admisión_2020.csv") %>% 
   mutate(proceso = 2019) %>% 
   mutate(br_code = paste0(as.character(rbd), "_", cod_nivel, "_", cod_curso, "_", proceso)) %>% 
   filter(cod_nivel >= 7 & cod_nivel <= 9) 
@@ -26,17 +26,17 @@ rm(oferta_2019, oferta_2018, oferta_2017)
 
 ## Apps 
 
-sae_apps_2017 <- read_csv2("./2017/SAE_2017/C1_Postulaciones_etapa_regular_2017_Admisión_2018_PUBL.csv") %>% 
+sae_apps_2017 <- read_csv2("./data/raw/2017/SAE_2017/C1_Postulaciones_etapa_regular_2017_Admisión_2018_PUBL.csv") %>% 
   mutate(proceso = 2017) %>% 
   mutate(br_code = paste0(as.character(rbd), "_", cod_nivel, "_", cod_curso, "_", proceso)) %>% 
   filter(cod_nivel >= 7 & cod_nivel <= 9)
 
-sae_apps_2018 <- read_csv2("./2018/SAE_2018/C1_Postulaciones_etapa_regular_2018_Admisión_2019_PUBL.csv") %>% 
+sae_apps_2018 <- read_csv2("./data/raw/2018/SAE_2018/C1_Postulaciones_etapa_regular_2018_Admisión_2019_PUBL.csv") %>% 
   mutate(proceso = 2018) %>% 
   mutate(br_code = paste0(as.character(rbd), "_", cod_nivel, "_", cod_curso, "_", proceso)) %>% 
   filter(cod_nivel >= 7 & cod_nivel <= 9)
 
-sae_apps_2019 <- read_csv2("./2019/SAE_2019/C1_Postulaciones_etapa_regular_2019_Admisión_2020_PUBL.csv") %>% 
+sae_apps_2019 <- read_csv2("./data/raw/2019/SAE_2019/C1_Postulaciones_etapa_regular_2019_Admisión_2020_PUBL.csv") %>% 
   mutate(proceso = 2019) %>% 
   mutate(br_code = paste0(as.character(rbd), "_", cod_nivel, "_", cod_curso, "_", proceso)) %>% 
   filter(cod_nivel >= 7 & cod_nivel <= 9)
@@ -56,7 +56,7 @@ sae_apps <- rbind(sae_apps_2017, sae_apps_2018, sae_apps_2019) %>%
 
 rm(sae_apps_2017, sae_apps_2018, sae_apps_2019)
 
-save(sae_oferta, sae_apps, file = "./data_clean/sae_2017_19.RData")
+save(sae_oferta, sae_apps, file = "./data/clean/sae_2017_19.RData")
 
 
 hist(sae_apps$loteria_original)
@@ -120,5 +120,5 @@ sample_students <- sample_cursos %>%
   filter(preferencia_postulante <= 5) 
 
 
-save(sample_students, sample_cursos, file = "./data_clean/samples.RData")
+save(sample_students, sample_cursos, file = "./data/clean/samples.RData")
 

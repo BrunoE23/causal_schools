@@ -1,8 +1,9 @@
-setwd("C:/Users/xd-br/Desktop/PhD/Research/Education_Chile")
+setwd("C:/Users/xd-br/Desktop/PhD/Research/causal_schools")
+
 library(tidyverse)
 library(readxl)
 
-load("./data_clean/psu_applications.RData")
+load("./data/clean/psu_applications.RData")
 rm(students_apps_demre)
 
 
@@ -14,7 +15,7 @@ rm(students_apps_demre)
 #  select(PROCESO, CODIGO, CARRERA, UNIVERSIDAD, stem_share,stem_proxy_low, stem_proxy_high)
 
 
-oferta_2024 <- read_csv2("./2024/PAES-2024-Oferta-Definitiva-Programas/OFERTA_DEFINITIVA_PROGRAMAS_PAES_2024_REV.csv") %>%
+oferta_2024 <- read_csv2("./data/raw/2024/PAES-2024-Oferta-Definitiva-Programas/OFERTA_DEFINITIVA_PROGRAMAS_PAES_2024_REV.csv") %>%
   mutate(stem_share = rowSums(across(c(CIEN, M1, M2)), na.rm = TRUE),
          stem_proxy_low = ifelse(stem_share >= 40, 1L, 0L),
          stem_proxy_high = ifelse(stem_share > 40, 1L, 0L)) %>% 
@@ -50,5 +51,5 @@ prop.table(table(oferta_2024$stem_share))
     )
   
   
-  save(stem_outcome, file = "./data_clean/stem_outcome.RData")
+  save(stem_outcome, file = "./data/clean/stem_outcome.RData")
   

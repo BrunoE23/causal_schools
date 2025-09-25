@@ -1,19 +1,23 @@
-setwd("C:/Users/xd-br/Desktop/PhD/Research/Education_Chile")
+setwd("C:/Users/xd-br/Desktop/PhD/Research/causal_schools")
+
 library(tidyverse)
 
 
-results_2017 <- read_csv2("./2017/SAE_2017/D1_Resultados_etapa_regular_2017_Admisión_2018_PUBL.csv") %>%
+load("./data/clean/samples.RData")
+
+
+results_2017 <- read_csv2("./data/raw/2017/SAE_2017/D1_Resultados_etapa_regular_2017_Admisión_2018_PUBL.csv") %>%
   mutate(proceso = 2017) %>% 
   filter(cod_nivel >= 7 & cod_nivel <= 9) %>%
   mutate(br_code = paste0(as.character(rbd_admitido), "_", cod_nivel, "_", cod_curso_admitido, "_", proceso)) 
 
-results_2018 <- read_csv2("./2018/SAE_2018/D1_Resultados_etapa_regular_2018_Admisión_2019_PUBL.csv") %>%
+results_2018 <- read_csv2("./data/raw/2018/SAE_2018/D1_Resultados_etapa_regular_2018_Admisión_2019_PUBL.csv") %>%
   mutate(proceso = 2018) %>% 
   filter(cod_nivel >= 7 & cod_nivel <= 9) %>%
   mutate(br_code = paste0(as.character(rbd_admitido), "_", cod_nivel, "_", cod_curso_admitido, "_", proceso)) 
 
 
-results_2019 <- read_csv2("./2019/SAE_2019/D1_Resultados_etapa_regular_2019_Admisión_2020_PUBL.csv") %>%
+results_2019 <- read_csv2("./data/raw/2019/SAE_2019/D1_Resultados_etapa_regular_2019_Admisión_2020_PUBL.csv") %>%
   mutate(proceso = 2019) %>% 
   filter(cod_nivel >= 7 & cod_nivel <= 9) %>%
   mutate(br_code = paste0(as.character(rbd_admitido), "_", cod_nivel, "_", cod_curso_admitido, "_", proceso)) 
@@ -58,6 +62,6 @@ all_treatments <- rbind(treatment_2017, treatment_2018, treatment_2019) %>%
 
 rm(treatment_2017, treatment_2018, treatment_2019)
 
-save(all_treatments, file = "./data_clean/treatment_1R.RData")
+save(all_treatments, file = "./data/clean/treatment_1R.RData")
 
 
