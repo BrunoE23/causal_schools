@@ -51,17 +51,34 @@ ggsave(path = "./output/figures/", filename = "descriptive_hist_math.png")
 
 final_data %>%
   ggplot(aes(x = math_max, y = avg_stem_share)) + 
-  geom_smooth(formula = y~poly(x,2))
+  geom_smooth(formula = y~poly(x,2)) +
+  theme_minimal() + 
+  theme(legend.position = "bottom") + 
+  labs(x = "Math Exam Score", y = "Avg STEM content in college application") 
 
-ggsave(path = "./output/figures/", filename = "math_stem_relation.png")
+
+ggsave(path = "./output/figures/", filename = "math_stem_plot.png")
 
 
 final_data %>%
   ggplot(aes(x = math_max, y = avg_stem_share, color = gender)) + 
-  geom_smooth(formula = y~poly(x,2))
+  geom_smooth(formula = y~poly(x,2)) +
+  theme_minimal() + 
+  theme(legend.position = "bottom") + 
+  labs(x = "Math Exam Score", y = "Avg STEM content in college application", color = "Gender") 
 
-ggsave(path = "./output/figures/", filename = "math_stem_gender_relation.png")
 
+ggsave(path = "./output/figures/", filename = "math_stem_gender_plot.png")
+
+
+final_data %>%
+  ggplot(aes(x = math_max, y = avg_stem_share, color = gender_science)) + 
+  geom_smooth(formula = y~poly(x,2)) +
+  theme_minimal() + 
+  theme(legend.position = "bottom") + 
+  labs(x = "Math Exam Score", y = "Avg STEM content in college application", color = "Gender; Took Science Exam?") 
+
+ggsave(path = "./output/figures/", filename = "math_stem_gender_science_exam_plot.png")
 
 
 # 3D Plots ######

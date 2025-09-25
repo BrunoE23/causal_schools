@@ -15,7 +15,12 @@ rm(students_apps_demre)
 final_data <-   sample_students %>%
   left_join(all_treatments, by = c("br_code", "mrun"))  %>%
   left_join(students_apps, by = "mrun") %>%
+  mutate(female = as.factor(ifelse(COD_SEXO == 1, 0, 1))) %>% 
+  mutate(male   = as.factor(ifelse(COD_SEXO == 1, 1, 0))) %>% 
   mutate(gender = as.factor(ifelse(COD_SEXO == 1, "Male", "Female"))) %>% 
+  mutate(took_science = as.factor(ifelse(scien_max == 0, "No", "Yes")),
+         gender_science = factor(paste(gender, took_science, sep = "_"))
+         ) %>%
   #   left_join(socioecon_controls,   by = "mrun")  %>%
   left_join(stem_outcome,   by = "mrun")  %>%
   mutate(graduated_from_applied_school = (RBD == rbd)) %>% 
@@ -29,7 +34,7 @@ haven::write_dta(final_data, path = "./data/clean/final_data.dta")
 stop_code()
 
 # Check how many students I have gender for 
-table(final_data$female)
+table(final_data$gender)
 table(final_data$COD_SEXO)
 
 
