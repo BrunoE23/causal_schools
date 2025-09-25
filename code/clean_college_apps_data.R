@@ -1,10 +1,10 @@
-setwd("C:/Users/xd-br/Desktop/PhD/Research/Education_Chile")
+setwd("C:/Users/xd-br/Desktop/PhD/Research/causal_schools")
 
 library(tidyverse)
 
 #Reading student outcome data
 
-students_apps2025 <- read_csv2("./2025/PAES_2025_Inscritos_Puntajes/A_INSCRITOS_PUNTAJES_PAES_2025_PUB_MRUN.csv") %>%
+students_apps2025 <- read_csv2("./data/raw/2025/PAES_2025_Inscritos_Puntajes/A_INSCRITOS_PUNTAJES_PAES_2025_PUB_MRUN.csv") %>%
   mutate(year = 2025)  %>% 
   rename(mrun = MRUN) %>% 
   rename(PROM_NOTAS = PROMEDIO_NOTAS,
@@ -16,14 +16,15 @@ students_apps2025 <- read_csv2("./2025/PAES_2025_Inscritos_Puntajes/A_INSCRITOS_
          math_max   = MATE1_MAX,
          hist_max   = HCSOC_MAX,
          scien_max  = CIEN_MAX) %>% 
-  select(mrun, RBD, 
+  select(mrun, COD_SEXO, FECHA_NACIMIENTO,
+         RBD, RAMA, 
          PROM_NOTAS, PTJE_NEM, PTJE_RANKING,
          leng_max, math_max, hist_max, scien_max,
          RAMA, GRUPO_DEPENDENCIA, 
          CODIGO_REGION_EGRESO, CODIGO_COMUNA_EGRESO)
 
 
-students_apps2024 <- read_csv2("./2024/PAES-2024-Inscritos-Puntajes/A_INSCRITOS_PUNTAJES_PAES_2024_PUB_MRUN.csv") %>%
+students_apps2024 <- read_csv2("./data/raw/2024/PAES-2024-Inscritos-Puntajes/A_INSCRITOS_PUNTAJES_PAES_2024_PUB_MRUN.csv") %>%
   mutate(year = 2024)  %>% 
   rename(mrun = MRUN) %>% 
   rename(PROM_NOTAS = PROMEDIO_NOTAS,
@@ -35,14 +36,15 @@ students_apps2024 <- read_csv2("./2024/PAES-2024-Inscritos-Puntajes/A_INSCRITOS_
          math_max   = MATE1_MAX,
          hist_max   = HCSOC_MAX,
          scien_max  = CIEN_MAX) %>% 
-  select(mrun, RBD, 
+  select(mrun, COD_SEXO, FECHA_NACIMIENTO,
+         RBD, RAMA, 
          PROM_NOTAS, PTJE_NEM, PTJE_RANKING,
          leng_max, math_max, hist_max, scien_max,
          RAMA, GRUPO_DEPENDENCIA, 
          CODIGO_REGION_EGRESO, CODIGO_COMUNA_EGRESO)
 
 
-students_apps2023 <- read_csv2("./2023/PAES2023-Inscritos-Puntajes-1/A_INSCRITOS_PUNTAJES_2023_PAES_PUB_MRUN.csv") %>%
+students_apps2023 <- read_csv2("./data/raw/2023/PAES2023-Inscritos-Puntajes-1/A_INSCRITOS_PUNTAJES_2023_PAES_PUB_MRUN.csv") %>%
   mutate(year = 2023)  %>% 
   rename(mrun = MRUN) %>% 
   rename(PROM_NOTAS = PROMEDIO_NOTAS,
@@ -54,14 +56,15 @@ students_apps2023 <- read_csv2("./2023/PAES2023-Inscritos-Puntajes-1/A_INSCRITOS
          math_max   = MATE1_MAX,
          hist_max   = HCSOC_MAX,
          scien_max  = CIEN_MAX) %>% 
-  select(mrun, RBD, 
+  select(mrun, COD_SEXO, FECHA_NACIMIENTO,
+         RBD, RAMA, 
          PROM_NOTAS, PTJE_NEM, PTJE_RANKING,
          leng_max, math_max, hist_max, scien_max,
          RAMA, GRUPO_DEPENDENCIA, 
          CODIGO_REGION_EGRESO, CODIGO_COMUNA_EGRESO)
 
 
-students_apps2022 <- read_csv2("./2022/PTU2022-Inscritos-Puntajes/A_INSCRITOS_PUNTAJES_PDT_2022_PUB_MRUN.csv") %>%
+students_apps2022 <- read_csv2("./data/raw/2022/PTU2022-Inscritos-Puntajes/A_INSCRITOS_PUNTAJES_PDT_2022_PUB_MRUN.csv") %>%
   mutate(year = 2022)  %>% 
   rename(mrun = MRUN) %>% 
   rename(PROM_NOTAS = PROMEDIO_NOTAS,
@@ -73,13 +76,14 @@ students_apps2022 <- read_csv2("./2022/PTU2022-Inscritos-Puntajes/A_INSCRITOS_PU
          math_max  = pmax(MATE_ACTUAL, MATE_ANTERIOR, na.rm = TRUE),
          hist_max  = pmax(HCSO_ACTUAL, HCSO_ANTERIOR, na.rm = TRUE),
          scien_max = pmax(CIEN_ACTUAL, CIEN_ANTERIOR, na.rm = TRUE)) %>% 
-  select(mrun, RBD, 
+  select(mrun, COD_SEXO, FECHA_NACIMIENTO,
+         RBD, RAMA, 
          PROM_NOTAS, PTJE_NEM, PTJE_RANKING,
          leng_max, math_max, hist_max, scien_max,
          RAMA, GRUPO_DEPENDENCIA, 
          CODIGO_REGION_EGRESO, CODIGO_COMUNA_EGRESO)
 
-students_apps2021 <- read_csv2("./2021/PTU2021-Inscritos-Puntajes/A_INSCRITOS_PUNTAJES_PDT_2021_PUB_MRUN.csv") %>%
+students_apps2021 <- read_csv2("./data/raw/2021/PTU2021-Inscritos-Puntajes/A_INSCRITOS_PUNTAJES_PDT_2021_PUB_MRUN.csv") %>%
   mutate(year = 2021)  %>% 
   rename(mrun = MRUN) %>% 
   rename(PROM_NOTAS = PROMEDIO_NOTAS,
@@ -91,7 +95,8 @@ students_apps2021 <- read_csv2("./2021/PTU2021-Inscritos-Puntajes/A_INSCRITOS_PU
          math_max  = pmax(MATE_ACTUAL, MATE_ANTERIOR, na.rm = TRUE),
          hist_max  = pmax(HCSO_ACTUAL, HCSO_ANTERIOR, na.rm = TRUE),
          scien_max = pmax(CIEN_ACTUAL, CIEN_ANTERIOR, na.rm = TRUE)) %>% 
-  select(mrun, RBD, 
+  select(mrun, COD_SEXO, FECHA_NACIMIENTO,
+         RBD, RAMA, 
          PROM_NOTAS, PTJE_NEM, PTJE_RANKING,
          leng_max, math_max, hist_max, scien_max,
          RAMA, GRUPO_DEPENDENCIA, 
@@ -128,7 +133,7 @@ students_apps <- students_apps %>%
 #############################################
 #Demre years
 
-students_apps2020 <- read_csv2("./2020/PSU2020/Rinden_Admisión2020/ArchivoC_Adm2020.csv") %>%
+students_apps2020 <- read_csv2("./data/raw/2020/PSU2020/Rinden_Admisión2020/ArchivoC_Adm2020.csv") %>%
   rename(mrun_demre = ID_aux) %>% 
   rename(PROM_NOTAS = PROMEDIO_NOTAS,
          RAMA = RAMA_EDUCACIONAL) %>% 
@@ -147,7 +152,7 @@ students_apps2020 <- read_csv2("./2020/PSU2020/Rinden_Admisión2020/ArchivoC_Adm
 
 
 
-students_apps2019 <- read_csv2("./2019/PSU2019/Rinden_Admisión2019/ArchivoC_Adm2019.csv") %>%
+students_apps2019 <- read_csv2("./data/raw/2019/PSU2019/Rinden_Admisión2019/ArchivoC_Adm2019.csv") %>%
   rename(mrun_demre = ID_aux) %>% 
   rename(PROM_NOTAS = PROMEDIO_NOTAS,
          RAMA = RAMA_EDUCACIONAL) %>% 
@@ -163,7 +168,7 @@ students_apps2019 <- read_csv2("./2019/PSU2019/Rinden_Admisión2019/ArchivoC_Adm
   mutate(year = 2019)
 
 
-students_apps2018 <- read_csv2("./2018/PSU2018/Rinden_Admisión2018/ArchivoC_Adm2018.csv") %>%
+students_apps2018 <- read_csv2("./data/raw/2018/PSU2018/Rinden_Admisión2018/ArchivoC_Adm2018.csv") %>%
   rename(mrun_demre = ID_aux) %>% 
   rename(PROM_NOTAS = PROMEDIO_NOTAS,
          RAMA = RAMA_EDUCACIONAL) %>% 
@@ -179,7 +184,7 @@ students_apps2018 <- read_csv2("./2018/PSU2018/Rinden_Admisión2018/ArchivoC_Adm
   mutate(year = 2018)
 
 
-students_apps2017 <- read_csv2("./2017/PSU2017/Rinden_Admisión2017/ArchivoC_Adm2017.csv") %>%
+students_apps2017 <- read_csv2("./data/raw/2017/PSU2017/Rinden_Admisión2017/ArchivoC_Adm2017.csv") %>%
   rename(mrun_demre = ID_aux) %>% 
   filter(SITUACION_EGRESO == 1) %>% 
   mutate(leng_max  = pmax(LENG_ACTUAL, LENG_ANTERIOR, na.rm = TRUE),
@@ -192,7 +197,7 @@ students_apps2017 <- read_csv2("./2017/PSU2017/Rinden_Admisión2017/ArchivoC_Adm
          RAMA, GRUPO_DEPENDENCIA, CODIGO_REGION, CODIGO_COMUNA) %>% 
   mutate(year = 2017)
 
-students_apps2016 <- read_csv2("./2016/PSU2016/Rinden_Admisión2016/ArchivoC_Adm2016.csv") %>%
+students_apps2016 <- read_csv2("./data/raw/2016/PSU2016/Rinden_Admisión2016/ArchivoC_Adm2016.csv") %>%
   rename(mrun_demre = ID_aux) %>% 
   filter(SITUACION_EGRESO == 1) %>% 
   mutate(leng_max  = pmax(LENG_ACTUAL, LENG_ANTERIOR, na.rm = TRUE),
@@ -205,7 +210,7 @@ students_apps2016 <- read_csv2("./2016/PSU2016/Rinden_Admisión2016/ArchivoC_Adm
          RAMA, GRUPO_DEPENDENCIA, CODIGO_REGION, CODIGO_COMUNA)%>% 
   mutate(year = 2016)
 
-students_apps2015 <- read_csv2("./2015/PSU2015/Rinden_Admisión2015/ArchivoC_Adm2015.csv") %>%
+students_apps2015 <- read_csv2("./data/raw/2015/PSU2015/Rinden_Admisión2015/ArchivoC_Adm2015.csv") %>%
   rename(mrun_demre = ID_aux) %>% 
   filter(SITUACION_EGRESO == 1) %>% 
   mutate(leng_max  = pmax(LENG_ACTUAL, LENG_ANTERIOR, na.rm = TRUE),
@@ -235,7 +240,7 @@ rm(students_apps2015,
 
 
 
-save(students_apps, students_apps_demre, file = "./data_clean/psu_students.RData")
+save(students_apps, students_apps_demre, file = "./data/clean/psu_students.RData")
 
 
 ########################
@@ -244,7 +249,7 @@ save(students_apps, students_apps_demre, file = "./data_clean/psu_students.RData
 # and making it long data
 
 
-college_apps2025 <- read_csv2("./2025/PAES_2025_Postulantes_Totales/C_POSTULANTES_SELECCION_PAES_2025_PUB_MRUN.csv") %>%
+college_apps2025 <- read_csv2("./data/raw/2025/PAES_2025_Postulantes_Totales/C_POSTULANTES_SELECCION_PAES_2025_PUB_MRUN.csv") %>%
   rename(mrun = MRUN) %>% 
   rename(year = ANYO_PROCESO) %>% 
   arrange(mrun, ORDEN_PREF) %>% 
@@ -259,7 +264,7 @@ college_apps2025 <- read_csv2("./2025/PAES_2025_Postulantes_Totales/C_POSTULANTE
                  TIPO_PREF )
 
 
-college_apps2024 <- read_csv2("./2024/PAES-2024-Postulantes-Totales/C_POSTULANTES_SELECCION_PAES_2024_PUB_MRUN.csv") %>%
+college_apps2024 <- read_csv2("./data/raw/2024/PAES-2024-Postulantes-Totales/C_POSTULANTES_SELECCION_PAES_2024_PUB_MRUN.csv") %>%
   rename(mrun = MRUN) %>% 
   rename(year = ANYO_PROCESO) %>% 
   arrange(mrun, ORDEN_PREF) %>% 
@@ -326,20 +331,20 @@ cast_applications_long <- function(x) {
 }
 
 college_apps2023_long <- cast_applications_long(
-  read_csv2("./2023/PAES2023-Postulantes-Regulares/C_POSTULANTES_SELECCION_2023_PAES_PUB_MRUN.csv"))
+  read_csv2("./data/raw/2023/PAES2023-Postulantes-Regulares/C_POSTULANTES_SELECCION_2023_PAES_PUB_MRUN.csv"))
 
 
 
 #2023 is now long! 
 
 college_apps2022_long <- cast_applications_long(
-  read_csv2("./2022/PTU2022-Postulantes-Seleccion-Regular/C_POSTULANTES_SELECCION_PDT_2022_PUB_MRUN.csv"))
+  read_csv2("./data/raw/2022/PTU2022-Postulantes-Seleccion-Regular/C_POSTULANTES_SELECCION_PDT_2022_PUB_MRUN.csv"))
 
 #2022 is now long! 
 
 
 college_apps2021_long <- cast_applications_long(
-  read_csv2("./2021/PTU2021-Postulantes-Seleccion-Regular/C_POSTULANTES_SELECCION_PDT_2021_PUB_MRUN.csv"))
+  read_csv2("./data/raw/2021/PTU2021-Postulantes-Seleccion-Regular/C_POSTULANTES_SELECCION_PDT_2021_PUB_MRUN.csv"))
 
 #2021 is now long! 
 
@@ -407,35 +412,35 @@ cast_applications_long_demre <- function(x) {
 }
 
 
-college_apps2020_long <- read_csv2("./2020/PSU2020/PostulaciónySelección_Admisión2020/ArchivoD_Adm2020.csv") %>%
+college_apps2020_long <- read_csv2("./data/raw/2020/PSU2020/PostulaciónySelección_Admisión2020/ArchivoD_Adm2020.csv") %>%
   mutate(year = 2020) %>% 
   cast_applications_long_demre()
 
-college_apps2019_long <- read.csv("./2019/PSU2019/PostulaciónySelección_Admisión2019/ArchivoD_Adm2019.csv", sep = ";" , dec = c(",", ".")) %>%
+college_apps2019_long <- read.csv("./data/raw/2019/PSU2019/PostulaciónySelección_Admisión2019/ArchivoD_Adm2019.csv", sep = ";" , dec = c(",", ".")) %>%
   mutate(year = 2019) %>% 
   cast_applications_long_demre()
 
 
-college_apps2018_long <- read.csv("./2018/PSU2018/PostulaciónySelección_Admisión2018/ArchivoD_Adm2018.csv", sep = ";" , dec = c(",", ".")) %>%
+college_apps2018_long <- read.csv("./data/raw/2018/PSU2018/PostulaciónySelección_Admisión2018/ArchivoD_Adm2018.csv", sep = ";" , dec = c(",", ".")) %>%
   mutate(year = 2018) %>% 
   rename_with(~ str_replace(.x, "^PTJE_PREF", "PTJE_PREF_"),
               starts_with("PTJE_PREF")) %>% 
   cast_applications_long_demre()
 
 
-college_apps2017_long <- read.csv("./2017/PSU2017/Postulación_Admisión2017/ArchivoD_Adm2017.csv", sep = ";" , dec = c(",", ".")) %>%
+college_apps2017_long <- read.csv("./data/raw/2017/PSU2017/Postulación_Admisión2017/ArchivoD_Adm2017.csv", sep = ";" , dec = c(",", ".")) %>%
   mutate(year = 2017) %>% 
   rename_with(~ str_replace(.x, "^PTJE_PREF", "PTJE_PREF_"),
               starts_with("PTJE_PREF")) %>% 
   cast_applications_long_demre()
 
-college_apps2016_long <- read.csv("./2016/PSU2016/Postulación_Admisión2016/ArchivoD_Adm2016.csv", sep = ";" , dec = c(",", ".")) %>%
+college_apps2016_long <- read.csv("./data/raw/2016/PSU2016/Postulación_Admisión2016/ArchivoD_Adm2016.csv", sep = ";" , dec = c(",", ".")) %>%
   mutate(year = 2016) %>% 
   rename_with(~ str_replace(.x, "^PTJE_PREF", "PTJE_PREF_"),
               starts_with("PTJE_PREF")) %>% 
   cast_applications_long_demre()
 
-college_apps2015_long <- read.csv("./2015/PSU2015/Postulación_Admisión2015/ArchivoD_Adm2015.csv", sep = ";" , dec = c(",", ".")) %>%
+college_apps2015_long <- read.csv("./data/raw/2015/PSU2015/Postulación_Admisión2015/ArchivoD_Adm2015.csv", sep = ";" , dec = c(",", ".")) %>%
   mutate(year = 2015) %>% 
   rename_with(~ str_replace(.x, "^PTJE_PREF", "PTJE_PREF_"),
               starts_with("PTJE_PREF")) %>% 
@@ -457,7 +462,7 @@ rm(college_apps2020_long,
    college_apps2015_long)
 
 
-save(college_apps, college_apps_demre, file = "./data_clean/psu_applications.RData")
+save(college_apps, college_apps_demre, file = "./data/clean/psu_applications.RData")
 
 
 

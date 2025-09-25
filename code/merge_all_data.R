@@ -1,14 +1,14 @@
 
 library(tidyverse)
-setwd("C:/Users/xd-br/Desktop/PhD/Research/Education_Chile")
+setwd("C:/Users/xd-br/Desktop/PhD/Research/causal_schools")
 
 
-load("./data_clean/samples.RData")
-load("./data_clean/treatment_1R.RData")
-load("./data_clean/stem_outcome.RData")
+load("./data/clean/samples.RData")
+load("./data/clean/treatment_1R.RData")
+load("./data/clean/stem_outcome.RData")
 
 #Academic controls and school of graduation, only for first year applying
-load("./data_clean/psu_students.RData")
+load("./data/clean/psu_students.RData")
 rm(students_apps_demre)
 
 
@@ -21,9 +21,9 @@ final_data <-   sample_students %>%
   mutate(rbd_admitido = factor(rbd_admitido)) %>% 
   mutate()
 
-save(final_data,  file = "./data_clean/final_data.Rdata")
+save(final_data,  file = "./data/clean/final_data.Rdata")
 
-haven::write_dta(final_data, path = "./data_clean/final_data.dta")
+haven::write_dta(final_data, path = "./data/clean/final_data.dta")
 
 
 #Check for people who never register for psu 
