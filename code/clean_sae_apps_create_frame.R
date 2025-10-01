@@ -10,15 +10,22 @@ oferta_2017 <- read_csv2("./data/raw/2017/SAE_2017/A1_Oferta_Establecimientos_et
   filter(cod_nivel >= 7 & cod_nivel <= 9) %>% 
   mutate(cod_sede = NA_integer_)
 
+sum(oferta_2017$vacantes_regular)
+
 oferta_2018 <- read_csv2("./data/raw/2018/SAE_2018/A1_Oferta_Establecimientos_etapa_regular_2018_Admisión_2019.csv") %>% 
   mutate(proceso = 2018) %>% 
   mutate(br_code = paste0(as.character(rbd), "_", cod_nivel, "_", cod_curso, "_", proceso)) %>% 
   filter(cod_nivel >= 7 & cod_nivel <= 9) 
 
+sum(oferta_2018$vacantes_regular)
+
+
 oferta_2019 <- read_csv2("./data/raw/2019/SAE_2019/A1_Oferta_Establecimientos_etapa_regular_2019_Admisión_2020.csv") %>% 
   mutate(proceso = 2019) %>% 
   mutate(br_code = paste0(as.character(rbd), "_", cod_nivel, "_", cod_curso, "_", proceso)) %>% 
   filter(cod_nivel >= 7 & cod_nivel <= 9) 
+
+sum(oferta_2019$vacantes_regular)
 
 
 sae_oferta <- rbind(oferta_2019, oferta_2018, oferta_2017)
@@ -56,6 +63,8 @@ sae_apps <- rbind(sae_apps_2017, sae_apps_2018, sae_apps_2019) %>%
 
 rm(sae_apps_2017, sae_apps_2018, sae_apps_2019)
 
+length(unique(sae_apps$mrun))
+
 save(sae_oferta, sae_apps, file = "./data/clean/sae_2017_19.RData")
 
 
@@ -92,11 +101,24 @@ summ_cursos <- left_join(cupos_p_curso, apps_p_curso, by = c("rbd", "cod_nivel",
 
 #Select sample of spots
 
+summ_cursos %>%  
+  select(rbd, cod_nivel) %>% 
+  unique() %>% 
+  nrow()
+
 sample_cursos <- summ_cursos %>% 
   filter(n_cupos >= 50) %>% 
   filter(ratio_apps >= 2) %>% 
   arrange(rbd, cod_nivel, proceso) %>% 
   ungroup()
+
+
+sample_cursos %>%  
+  select(rbd, cod_nivel,proceso) %>% 
+  unique() %>% 
+  nrow()
+
+length(unique(sample_cursos$rbd))
 
 
 sample_selected_cursos <- summ_cursos %>% 

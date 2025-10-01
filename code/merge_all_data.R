@@ -26,6 +26,10 @@ final_data <-   sample_students %>%
   mutate(graduated_from_applied_school = (RBD == rbd)) %>% 
   mutate(rbd_admitido = factor(rbd_admitido)) 
 
+
+length(unique(final_data$mrun))
+
+
 save(final_data,  file = "./data/clean/final_data.Rdata")
 
 haven::write_dta(final_data, path = "./data/clean/final_data.dta")
