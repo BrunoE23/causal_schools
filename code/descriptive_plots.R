@@ -14,8 +14,9 @@ final_data %>%
   theme_minimal() + 
   theme(legend.position = "bottom")
 
+
 final_data %>%
-  filter(!(is.na(gender))) %>% 
+filter(!(is.na(gender))) %>% 
   ggplot(aes(x = avg_stem_share, colour = gender, fill = gender)) + geom_density(alpha = 0.5) + 
   labs(x = "Avg STEM content in college application", y = "Density", fill = "Gender") +
   guides(colour = "none")  +
@@ -23,6 +24,18 @@ final_data %>%
   theme(legend.position = "bottom")
 
 ggsave(path = "./output/figures/", filename = "descriptive_hist_outcome.png",
+       width = 10, height = 5)
+
+final_data %>%
+  mutate(avg_stem_share_exp = ifelse(is.na(avg_stem_share), 0 , avg_stem_share)) %>% 
+  filter(!(is.na(gender))) %>% 
+  ggplot(aes(x = avg_stem_share_exp, colour = gender, fill = gender)) + geom_density(alpha = 0.5) + 
+  labs(x = "Avg STEM content in college application, including 0s", y = "Density", fill = "Gender") +
+  guides(colour = "none")  +
+  theme_minimal() + 
+  theme(legend.position = "bottom")
+
+ggsave(path = "./output/figures/", filename = "descriptive_hist_outcome_w_0s.png",
        width = 10, height = 5)
 
 

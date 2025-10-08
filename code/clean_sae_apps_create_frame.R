@@ -49,6 +49,8 @@ sae_apps_2019 <- read_csv2("./data/raw/2019/SAE_2019/C1_Postulaciones_etapa_regu
   filter(cod_nivel >= 7 & cod_nivel <= 9)
 
 
+
+
 #Filter out prioridad 
 sae_apps <- rbind(sae_apps_2017, sae_apps_2018, sae_apps_2019) %>% 
   filter(agregada_por_continuidad == 0,
@@ -63,9 +65,49 @@ sae_apps <- rbind(sae_apps_2017, sae_apps_2018, sae_apps_2019) %>%
 
 rm(sae_apps_2017, sae_apps_2018, sae_apps_2019)
 
+
+## Student controls
+
+sae_stud_info_2017 <- read_csv2("./data/raw/2017/SAE_2017/B1_Postulantes_etapa_regular_2017_Admisión_2018_PUBL.csv") %>% 
+  select(-(c(cod_com,nom_com))) %>% 
+  filter(cod_nivel >= 7 & cod_nivel <= 9) %>% 
+  mutate(proceso = 2017) 
+  
+sae_stud_info_2018 <- read_csv2("./data/raw/2018/SAE_2018/B1_Postulantes_etapa_regular_2018_Admisión_2019_PUBL.csv")  %>% 
+  filter(cod_nivel >= 7 & cod_nivel <= 9) %>% 
+    mutate(proceso = 2018) 
+
+
+sae_stud_info_2019 <- read_csv2("./data/raw/2019/SAE_2019/B1_Postulantes_etapa_regular_2019_Admisión_2020_PUBL.csv") %>% 
+  filter(cod_nivel >= 7 & cod_nivel <= 9) %>% 
+  mutate(proceso = 2019) 
+
+
+sae_stud_info <- rbind(sae_stud_info_2017,
+                       sae_stud_info_2018,
+                       sae_stud_info_2019) %>% 
+  select(-(cod_nivel))
+
+rm(sae_stud_info_2017,
+   sae_stud_info_2018,
+   sae_stud_info_2019)
+
+#sae_apps <- left_join(sae_apps, sae_stud_info, by = "mrun", multiple = "all")
+
+sae_stud_info %>% 
+  group_by(mrun, proceso) %>% 
+  summarize(n = n()) %>% 
+  arrange(desc(n))
+  
+#Saving
 length(unique(sae_apps$mrun))
+length(unique(sae_stud_info$mrun))
+
 
 save(sae_oferta, sae_apps, file = "./data/clean/sae_2017_19.RData")
+save(sae_stud_info, file = "./data/clean/sae_2017_19_stud_controls.RData")
+
+
 
 
 hist(sae_apps$loteria_original)
