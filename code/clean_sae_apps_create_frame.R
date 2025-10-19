@@ -6,6 +6,9 @@ code_output_wd <-  "C:/Users/xd-br/Desktop/PhD/Research/causal_schools"
 setwd(data_wd)
 #####################################
 
+#IMPORTANT REMINDER: SAE 2017 takes place in 2016 and the spot allows you to
+#get a spot in a different school in the academic year of 2017. 
+#Obviously it is the same for other years.
 
 
 #packages
@@ -191,6 +194,13 @@ sample_students <- sample_cursos %>%
   left_join(sae_apps, multiple = "all",
             by = "br_code") %>% 
   filter(preferencia_postulante <= 5) 
+
+#sae_apps %>% 
+#  filter(preferencia_postulante <= 5) %>%  
+#  filter(br_code %in% sample_cursos$br_code) %>% 
+#  pull(mrun) %>% 
+#  unique %>% 
+#  length()
 
 
 save(sample_students, sample_cursos, file = "./data/clean/samples.RData")
