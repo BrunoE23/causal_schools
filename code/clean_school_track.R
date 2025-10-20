@@ -187,23 +187,29 @@ tracking_window_wide <- tracking_window_wide %>%
   ) %>% 
   
     mutate(
+    n_years_rbd_target_post = rowSums(across(matches("^in_target_school_t\\d")), na.rm = TRUE),
     n_school_changes_post = rowSums(across(matches("^school_change_t\\d")), na.rm = TRUE),
     n_comuna_changes_post = rowSums(across(matches("^comuna_change_t\\d")), na.rm = TRUE),
     n_region_changes_post = rowSums(across(matches("^region_change_t\\d")), na.rm = TRUE),
     n_repeat_grado_post   = rowSums(across(matches("^repeat_grado_t\\d")), na.rm = TRUE),
     
+    ever_target_school_post = as.integer(n_years_rbd_target_post > 0),
     ever_changed_school_post = as.integer(n_school_changes_post > 0),
     ever_changed_comuna_post = as.integer(n_comuna_changes_post > 0),
     ever_changed_region_post = as.integer(n_region_changes_post > 0),
     ever_repeat_grado_post   = as.integer(n_repeat_grado_post   > 0)
-  )
+  ) %>% 
+  mutate(mrun = as.numeric(MRUN)) %>% 
+  rename(proceso = sae_proceso) %>% 
+  select(-MRUN)
+  
 
 round(prop.table(table(tracking_window_wide$n_school_changes_post)),3)
 round(prop.table(table(tracking_window_wide$n_comuna_changes_post)),3)
 round(prop.table(table(tracking_window_wide$n_region_changes_post)),3)
 
 
-
+#class(tracking_window_wide$mrun)
 
 save( tracking_window_wide, file = "./data/clean/tracking_clean_wide.RData")
 
@@ -227,7 +233,7 @@ sum(tracking_window_wide$in_target_school_t_4, na.rm = TRUE)/nrow(tracking_windo
 
 
 unique_moves <- tracking_window_wide %>%  
-      select(MRUN, school_change_t_min5 , school_change_t_min4, school_change_t_min3, school_change_t_min2, school_change_t_min1,
+      select(mrun, school_change_t_min5 , school_change_t_min4, school_change_t_min3, school_change_t_min2, school_change_t_min1,
                    school_change_t_0, school_change_t_1, school_change_t_2, school_change_t_3, school_change_t_4) %>% 
       unique()
 

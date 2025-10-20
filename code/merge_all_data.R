@@ -26,7 +26,7 @@ rm(students_apps_demre)
 final_data <-   sample_students %>%
   rename(rbd_target = rbd) %>% 
   left_join(sae_stud_info, by = c("mrun", "proceso")) %>%
-  left_join(tracking_window_wide, by = c("mrun", "proceso")) %>%
+  left_join(tracking_window_wide, by = c("mrun", "proceso", "rbd_target")) %>%
     left_join(all_treatments, by = c("br_code", "mrun"))  %>%
   left_join(students_apps, by = "mrun") %>%
   rename(grad_rbd_psu = RBD) %>% 
