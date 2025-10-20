@@ -64,7 +64,7 @@ gc()
   
 
 tracking_window <- tracking_window %>% 
-  filter(year_rel_sae_change >= -5 & year_rel_sae_change <= 4) %>% 
+  filter(year_rel_sae_change >= -4 & year_rel_sae_change <= 3) %>% 
   select(RBD, COD_GRADO, AGNO, MRUN, sae_proceso, rbd_target,
          COD_COM_ALU, NOM_COM_ALU, COD_REG_ALU,
          PROM_GRAL, ASISTENCIA, 
@@ -187,11 +187,11 @@ tracking_window_wide <- tracking_window_wide %>%
   ) %>% 
   
     mutate(
-    n_years_rbd_target_post = rowSums(across(matches("^in_target_school_t\\d")), na.rm = TRUE),
-    n_school_changes_post = rowSums(across(matches("^school_change_t\\d")), na.rm = TRUE),
-    n_comuna_changes_post = rowSums(across(matches("^comuna_change_t\\d")), na.rm = TRUE),
-    n_region_changes_post = rowSums(across(matches("^region_change_t\\d")), na.rm = TRUE),
-    n_repeat_grado_post   = rowSums(across(matches("^repeat_grado_t\\d")), na.rm = TRUE),
+    n_years_rbd_target_post = rowSums(across(matches("in_target_school_t_\\d")), na.rm = TRUE),
+    n_school_changes_post = rowSums(across(matches("^school_change_t_\\d")), na.rm = TRUE),
+    n_comuna_changes_post = rowSums(across(matches("^comuna_change_t_\\d")), na.rm = TRUE),
+    n_region_changes_post = rowSums(across(matches("^region_change_t_\\d")), na.rm = TRUE),
+    n_repeat_grado_post   = rowSums(across(matches("^repeat_grado_t_\\d")), na.rm = TRUE),
     
     ever_target_school_post = as.integer(n_years_rbd_target_post > 0),
     ever_changed_school_post = as.integer(n_school_changes_post > 0),
@@ -204,6 +204,8 @@ tracking_window_wide <- tracking_window_wide %>%
   select(-MRUN)
   
 
+
+round(prop.table(table(tracking_window_wide$n_years_rbd_target_post)),3)
 round(prop.table(table(tracking_window_wide$n_school_changes_post)),3)
 round(prop.table(table(tracking_window_wide$n_comuna_changes_post)),3)
 round(prop.table(table(tracking_window_wide$n_region_changes_post)),3)
@@ -219,7 +221,6 @@ save( tracking_window_wide, file = "./data/clean/tracking_clean_wide.RData")
 
 
 
-sum(tracking_window_wide$in_target_school_t_min5, na.rm = TRUE)/nrow(tracking_window_wide)
 sum(tracking_window_wide$in_target_school_t_min4, na.rm = TRUE)/nrow(tracking_window_wide)
 sum(tracking_window_wide$in_target_school_t_min3, na.rm = TRUE)/nrow(tracking_window_wide)
 sum(tracking_window_wide$in_target_school_t_min2, na.rm = TRUE)/nrow(tracking_window_wide)
@@ -228,17 +229,15 @@ sum(tracking_window_wide$in_target_school_t_0, na.rm = TRUE)/nrow(tracking_windo
 sum(tracking_window_wide$in_target_school_t_1, na.rm = TRUE)/nrow(tracking_window_wide)
 sum(tracking_window_wide$in_target_school_t_2, na.rm = TRUE)/nrow(tracking_window_wide)
 sum(tracking_window_wide$in_target_school_t_3, na.rm = TRUE)/nrow(tracking_window_wide)
-sum(tracking_window_wide$in_target_school_t_4, na.rm = TRUE)/nrow(tracking_window_wide)
 
 
 
 unique_moves <- tracking_window_wide %>%  
-      select(mrun, school_change_t_min5 , school_change_t_min4, school_change_t_min3, school_change_t_min2, school_change_t_min1,
-                   school_change_t_0, school_change_t_1, school_change_t_2, school_change_t_3, school_change_t_4) %>% 
+      select(mrun, school_change_t_min4, school_change_t_min3, school_change_t_min2, school_change_t_min1,
+                   school_change_t_0, school_change_t_1, school_change_t_2, school_change_t_3) %>% 
       unique()
 
 
-sum(unique_moves$school_change_t_min5, na.rm = TRUE)/nrow(unique_moves)
 sum(unique_moves$school_change_t_min4, na.rm = TRUE)/nrow(unique_moves)
 sum(unique_moves$school_change_t_min3, na.rm = TRUE)/nrow(unique_moves)
 sum(unique_moves$school_change_t_min2, na.rm = TRUE)/nrow(unique_moves)
@@ -247,6 +246,5 @@ sum(unique_moves$school_change_t_0, na.rm = TRUE)   /nrow(unique_moves)
 sum(unique_moves$school_change_t_1, na.rm = TRUE)   /nrow(unique_moves)
 sum(unique_moves$school_change_t_2, na.rm = TRUE)   /nrow(unique_moves)
 sum(unique_moves$school_change_t_3, na.rm = TRUE)   /nrow(unique_moves)
-sum(unique_moves$school_change_t_4, na.rm = TRUE)   /nrow(unique_moves)
 
 
