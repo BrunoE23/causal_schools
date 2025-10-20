@@ -25,8 +25,11 @@ students_small <- sample_students %>%
          sae_proceso = proceso,
          MRUN = mrun) %>% 
   mutate(MRUN = as.character(MRUN)) %>%
-  # mutate(year_track = proceso - 1) %>% 
   unique()
+
+#students_small <- students_small_target %>% 
+#      select(-rbd_target)
+
 
 #Goals: 
 #1) Control for pre-SAE achievement 
@@ -36,23 +39,33 @@ students_small <- sample_students %>%
 #Suppose a student that applies in year 7 and year 9 
 
 
+#if sae_proceso == 2017, this means kid applies in 2017 to enter in 2018.
+#I want 2017 to show up as -1, 2018 to show up as 0, and 2019 as 1 
 tracking_window <- tracking_all %>%  
   left_join(students_small, by = "MRUN" ,  multiple = "all", relationship = "many-to-many") %>% 
-   mutate(year_rel_sae_change = AGNO - sae_proceso,
-          year_rel_sae_lab = paste0("t", year_rel_sae_change))
+   mutate(year_rel_sae_change = AGNO - sae_proceso - 1 ,
+          year_rel_sae_lab = paste0("t_", year_rel_sae_change), 
+          year_rel_sae_lab = str_replace_all(year_rel_sae_lab, "t_-(\\d+)", "t_min\\1"))
+          
 
+#MRUN    cod_nivel_target sae_proceso
+#   <chr>              <dbl>       <dbl>
+# 1 174523                 9        2019
 
+#tracking_all %>% 
+#  filter(MRUN == 174523) %>% 
+#  View()
 
 rm(tracking_all)  
 gc()
 
-#a student tracked in a row, might have multiple processes in SAE (either same year or across years)
+#a student tracked in a row, might have multiple processes in SAE (across years)
 #a student who applied in SAE should have multiple years tracked
   
 
 tracking_window <- tracking_window %>% 
-  filter(year_rel_sae_change >= -4 & year_rel_sae_change <= 4) %>% 
-  select(RBD, COD_GRADO, AGNO, MRUN, sae_proceso,
+  filter(year_rel_sae_change >= -5 & year_rel_sae_change <= 4) %>% 
+  select(RBD, COD_GRADO, AGNO, MRUN, sae_proceso, rbd_target,
          COD_COM_ALU, NOM_COM_ALU, COD_REG_ALU,
          PROM_GRAL, ASISTENCIA, 
          SIT_FIN, SIT_FIN_R,
@@ -64,18 +77,18 @@ tracking_window <- tracking_window %>%
   unique() %>% 
   arrange(MRUN, AGNO)
         
-
+gc()
 ##Cleaning data
 
 tracking_window_clean <- tracking_window %>% 
-  group_by(MRUN, AGNO, sae_proceso) %>% 
+  group_by(MRUN, AGNO, sae_proceso, rbd_target) %>% 
   mutate(n_school_year_entries = n()) %>% 
   ungroup() %>% 
   #145k repeated cases.
   #Drop asistencia ==0 if multiple school years for that student
   filter(!(n_school_year_entries > 1 & ASISTENCIA == 0)) %>% 
   select(-n_school_year_entries) %>% 
-  group_by(MRUN, AGNO, sae_proceso) %>% 
+  group_by(MRUN, AGNO, sae_proceso, rbd_target) %>% 
   mutate(n_school_year_entries = n(),
          n_school_year_passed  = sum(SIT_FIN == "P")) %>% 
   ungroup() %>% 
@@ -83,8 +96,8 @@ tracking_window_clean <- tracking_window %>%
 #Drop failed class year if multiple school years for a student that passed at least one class year.
   filter(!(n_school_year_entries > 1 & n_school_year_passed > 0 & SIT_FIN != "P")) %>% 
   select(-n_school_year_entries) %>% 
-    group_by(MRUN, AGNO, sae_proceso) %>% 
-    mutate(n_school_year_entries = n()) %>% 
+  group_by(MRUN, AGNO, sae_proceso, rbd_target) %>% 
+  mutate(n_school_year_entries = n()) %>% 
 #10 repeated cases remain: Pick highest attendance of the 20    
     filter(ASISTENCIA == max(ASISTENCIA)) %>% 
       ungroup() %>% 
@@ -92,6 +105,9 @@ tracking_window_clean <- tracking_window %>%
 #%>% 
 #  group_by(MRUN, AGNO, sae_proceso) %>% 
 #  mutate(n_school_year_entries = n()) 
+
+rm(tracking_window)
+gc()
 
 
 flag_var_change <- function(x) {
@@ -113,12 +129,13 @@ flag_var_repeat <- function(x) {
 tracking_window_clean<- tracking_window_clean %>% 
    mutate(z_GPA = (PROM_GRAL - school_grade_avg_GPA)/school_grade_sd_GPA ,
           z_ATT = (ASISTENCIA - school_grade_avg_ATT)/school_grade_sd_ATT ) %>% 
-   arrange(MRUN, sae_proceso, year_rel_sae_change) %>% 
-  group_by(MRUN, sae_proceso) %>% 
+   arrange(MRUN, sae_proceso, rbd_target, year_rel_sae_change) %>% 
+  group_by(MRUN, sae_proceso, rbd_target) %>% 
         mutate(region_change = flag_var_change(COD_REG_ALU),
                comuna_change = flag_var_change(COD_COM_ALU),
                school_change = flag_var_change(RBD),
-               repeat_grado  = flag_var_repeat(COD_GRADO)) %>% 
+            in_target_school = as.numeric(RBD == rbd_target), 
+              repeat_grado  = flag_var_repeat(COD_GRADO)) %>% 
   ungroup()
        
   
@@ -132,12 +149,13 @@ names(tracking_window_clean)
 
 value_cols <- setdiff(
   names(tracking_window_clean),
-  c("MRUN", "sae_proceso", "AGNO", "year_rel_sae_change", "year_rel_sae_lab")
+  c("MRUN", "sae_proceso", "AGNO", "rbd_target",
+    "year_rel_sae_change", "year_rel_sae_lab")
 )
 
 tracking_window_wide <- tracking_window_clean %>%
 pivot_wider(
-  id_cols =  c(MRUN, sae_proceso),
+  id_cols =  c(MRUN, sae_proceso, rbd_target),
   names_from = year_rel_sae_lab,
   values_from = all_of(value_cols),
   names_glue = "{.value}_{year_rel_sae_lab}"
@@ -155,11 +173,74 @@ tracking_window_wide <- tracking_window_wide %>%
     ever_changed_comuna = as.integer(n_comuna_changes > 0),
     ever_changed_region = as.integer(n_region_changes > 0),
     ever_repeat_grado   = as.integer(n_repeat_grado   > 0)
-  )  
+  ) %>% 
+  mutate(
+    n_school_changes_pret = rowSums(across(starts_with("school_change_t-")), na.rm = TRUE),
+    n_comuna_changes_pret = rowSums(across(starts_with("comuna_change_t-")), na.rm = TRUE),
+    n_region_changes_pret = rowSums(across(starts_with("region_change_t-")), na.rm = TRUE),
+    n_repeat_grado_pret   = rowSums(across(starts_with("repeat_grado_t-")), na.rm = TRUE),
+    
+    ever_changed_school_pret = as.integer(n_school_changes_pret > 0),
+    ever_changed_comuna_pret = as.integer(n_comuna_changes_pret > 0),
+    ever_changed_region_pret = as.integer(n_region_changes_pret > 0),
+    ever_repeat_grado_pret   = as.integer(n_repeat_grado_pret   > 0)
+  ) %>% 
+  
+    mutate(
+    n_school_changes_post = rowSums(across(matches("^school_change_t\\d")), na.rm = TRUE),
+    n_comuna_changes_post = rowSums(across(matches("^comuna_change_t\\d")), na.rm = TRUE),
+    n_region_changes_post = rowSums(across(matches("^region_change_t\\d")), na.rm = TRUE),
+    n_repeat_grado_post   = rowSums(across(matches("^repeat_grado_t\\d")), na.rm = TRUE),
+    
+    ever_changed_school_post = as.integer(n_school_changes_post > 0),
+    ever_changed_comuna_post = as.integer(n_comuna_changes_post > 0),
+    ever_changed_region_post = as.integer(n_region_changes_post > 0),
+    ever_repeat_grado_post   = as.integer(n_repeat_grado_post   > 0)
+  )
 
-round(prop.table(table(tracking_window_wide$n_school_changes)),3)
-round(prop.table(table(tracking_window_wide$n_comuna_changes)),3)
-round(prop.table(table(tracking_window_wide$n_region_changes)),3)
+round(prop.table(table(tracking_window_wide$n_school_changes_post)),3)
+round(prop.table(table(tracking_window_wide$n_comuna_changes_post)),3)
+round(prop.table(table(tracking_window_wide$n_region_changes_post)),3)
+
+
+
 
 save( tracking_window_wide, file = "./data/clean/tracking_clean_wide.RData")
+
+
+
+
+
+
+
+sum(tracking_window_wide$in_target_school_t_min5, na.rm = TRUE)/nrow(tracking_window_wide)
+sum(tracking_window_wide$in_target_school_t_min4, na.rm = TRUE)/nrow(tracking_window_wide)
+sum(tracking_window_wide$in_target_school_t_min3, na.rm = TRUE)/nrow(tracking_window_wide)
+sum(tracking_window_wide$in_target_school_t_min2, na.rm = TRUE)/nrow(tracking_window_wide)
+sum(tracking_window_wide$in_target_school_t_min1, na.rm = TRUE)/nrow(tracking_window_wide)
+sum(tracking_window_wide$in_target_school_t_0, na.rm = TRUE)/nrow(tracking_window_wide)
+sum(tracking_window_wide$in_target_school_t_1, na.rm = TRUE)/nrow(tracking_window_wide)
+sum(tracking_window_wide$in_target_school_t_2, na.rm = TRUE)/nrow(tracking_window_wide)
+sum(tracking_window_wide$in_target_school_t_3, na.rm = TRUE)/nrow(tracking_window_wide)
+sum(tracking_window_wide$in_target_school_t_4, na.rm = TRUE)/nrow(tracking_window_wide)
+
+
+
+unique_moves <- tracking_window_wide %>%  
+      select(MRUN, school_change_t_min5 , school_change_t_min4, school_change_t_min3, school_change_t_min2, school_change_t_min1,
+                   school_change_t_0, school_change_t_1, school_change_t_2, school_change_t_3, school_change_t_4) %>% 
+      unique()
+
+
+sum(unique_moves$school_change_t_min5, na.rm = TRUE)/nrow(unique_moves)
+sum(unique_moves$school_change_t_min4, na.rm = TRUE)/nrow(unique_moves)
+sum(unique_moves$school_change_t_min3, na.rm = TRUE)/nrow(unique_moves)
+sum(unique_moves$school_change_t_min2, na.rm = TRUE)/nrow(unique_moves)
+sum(unique_moves$school_change_t_min1, na.rm = TRUE)/nrow(unique_moves)
+sum(unique_moves$school_change_t_0, na.rm = TRUE)   /nrow(unique_moves)
+sum(unique_moves$school_change_t_1, na.rm = TRUE)   /nrow(unique_moves)
+sum(unique_moves$school_change_t_2, na.rm = TRUE)   /nrow(unique_moves)
+sum(unique_moves$school_change_t_3, na.rm = TRUE)   /nrow(unique_moves)
+sum(unique_moves$school_change_t_4, na.rm = TRUE)   /nrow(unique_moves)
+
 

@@ -1,6 +1,9 @@
 ####################################
-data_wd        <-  "C:/Users/xd-br/Dropbox/causal_schools"
-code_output_wd <-  "C:/Users/xd-br/Desktop/PhD/Research/causal_schools"
+#data_wd        <-  "C:/Users/xd-br/Dropbox/causal_schools"
+#code_output_wd <-  "C:/Users/xd-br/Desktop/PhD/Research/causal_schools"
+
+data_wd <- "C:/Users/brunem/Dropbox/causal_schools"
+code_output_wd <-  "C:/Users/brunem/Research/causal_schools"
 
 #Datawd (Dropbox) 
 setwd(data_wd)
@@ -15,15 +18,18 @@ load("./data/clean/stem_outcome.RData")
 #Academic controls and school of graduation, only for first year applying
 load("./data/clean/psu_students.RData")
 load("./data/clean/sae_2017_19_stud_controls.RData")
+load("./data/clean/tracking_clean_wide.RData")
 
 rm(students_apps_demre)
 
 
-
 final_data <-   sample_students %>%
+  rename(rbd_target = rbd) %>% 
   left_join(sae_stud_info, by = c("mrun", "proceso")) %>%
+  left_join(tracking_window_wide, by = c("mrun", "proceso")) %>%
     left_join(all_treatments, by = c("br_code", "mrun"))  %>%
   left_join(students_apps, by = "mrun") %>%
+  rename(grad_rbd_psu = RBD) %>% 
   mutate(female = as.factor(ifelse(es_mujer == 0, 0, 1))) %>% 
   mutate(male   = as.factor(ifelse(es_mujer == 0, 1, 0))) %>% 
   mutate(gender = as.factor(ifelse(es_mujer == 0, "Male", "Female"))) %>% 
@@ -38,7 +44,7 @@ final_data <-   sample_students %>%
   mutate(completed_psu = as.factor(ifelse(leng_math_total> 0,  1, 0))) %>% 
   #   left_join(socioecon_controls,   by = "mrun")  %>%
   left_join(stem_outcome,   by = "mrun")  %>%
-  mutate(graduated_from_applied_school = (RBD == rbd)) %>% 
+  mutate(graduated_from_applied_school = (grad_rbd_psu == rbd_target)) %>% 
   mutate(rbd_admitido = factor(rbd_admitido)) 
 
 
