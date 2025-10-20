@@ -81,7 +81,7 @@ read_tracking_data <- function(year) {
       "COD_GRADO","LET_CUR","COD_JOR",
       # Student vars
       "MRUN","GEN_ALU","FEC_NAC_ALU","EDAD_ALU", # EDAD_ALU will be kept only if present
-      "COD_COM_ALU","NOM_COM_ALU",
+      "COD_COM_ALU","NOM_COM_ALU", "COD_REG_ALU",
       # Outcomes
       "PROM_GRAL","ASISTENCIA","SIT_FIN","SIT_FIN_R"
     ))) %>%
