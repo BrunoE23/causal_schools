@@ -40,40 +40,58 @@ foreach v in school_grade_avg_GPA_t_0 school_grade_avg_GPA_t_1 school_grade_avg_
 }
 
 
+egen pre_GPA = rowmean(z_GPA_t_min4_c z_GPA_t_min3_c z_GPA_t_min2_c z_GPA_t_min1_c)
 
+summ pre_GPA, d 
+	local GPA_median = r(p50)
 
-
+gen         above_median_GPA_pre = 1  if 	pre_GPA >= `GPA_median'
+	replace above_median_GPA_pre = 0  if    pre_GPA <  `GPA_median'
+ 
+	
+	
 * --- 1) Define outcomes and controls ---
-global outcomes  female  n_years_rbd_target_post n_school_changes_post ///
-				 school_grade_avg_GPA_t_0_c school_grade_avg_GPA_t_1_c school_grade_avg_GPA_t_2_c school_grade_avg_GPA_t_3_c ///
-				 school_grade_avg_ATT_t_0 school_grade_avg_ATT_t_1 school_grade_avg_ATT_t_2 school_grade_avg_ATT_t_3 ///
-				 graduated_hs registered_psu completed_psu ///
-				 math_max leng_max  took_science took_history took_both avg_stem_share
+global outcomes_tracking   female n_years_rbd_target_post n_school_changes_post ///
+                           school_grade_avg_GPA_t_min4 school_grade_avg_GPA_t_min1  school_grade_avg_GPA_t_0 school_grade_avg_GPA_t_3
+				 
+	///			 school_grade_avg_GPA_t_min4 school_grade_avg_GPA_t_min3 school_grade_avg_GPA_t_min2 school_grade_avg_GPA_t_min1 ///
+	///			 school_grade_avg_GPA_t_0    school_grade_avg_GPA_t_1    school_grade_avg_GPA_t_2    school_grade_avg_GPA_t_3   ///
+	///			 school_grade_avg_ATT_t_0    school_grade_avg_ATT_t_1    school_grade_avg_ATT_t_2    school_grade_avg_ATT_t_3 
+					
+				 
+global outcomes_app			graduated_hs	  registered_psu completed_psu ///
+				          math_max leng_max  took_science took_history took_both avg_stem_share
 				 
 				 
 global controls  z_ATT_t_min4_c z_ATT_t_min3_c z_ATT_t_min2_c z_ATT_t_min1_c ///
-				z_GPA_t_min4_c z_GPA_t_min3_c z_GPA_t_min2_c z_GPA_t_min1_c 
+				z_GPA_t_min4_c z_GPA_t_min3_c z_GPA_t_min2_c z_GPA_t_min1_c  ///
+				i.proceso
 				
-				
-global year_fixed_effects i.year_1st_app
-
-				*pctl_school_grade_t_min4 pctl_school_grade_t_min3 pctl_school_grade_t_min2 pctl_school_grade_t_min1 ///
-				
+								
 				
 * --- 2) Loop, estimate, extract, and append ---
 tempfile accum
 local first = 1
 
 
-foreach y in $outcomes {
-
+foreach y in $outcomes_tracking $outcomes_app {
+ foreach group in "all" "female" "male" "ab_med" "be_med" {	
 preserve 
 
     di as txt "---- Estimating for outcome: `y' ----"
+    di as txt "---- Estimating for group: `group' ----"
 
+     // build the if-condition
+        local ifcond
+        if "`group'" == "female"       local ifcond if female==1
+        else if "`group'" == "male"    local ifcond if female==0
+        else if "`group'" == "ab_med"  local ifcond if above_median_GPA_pre==1
+        else if "`group'" == "be_med"  local ifcond if above_median_GPA_pre==0
+        // for "all" -> ifcond remains empty
+	
     quietly reghdfe `y' ///
         i.rbd_admitido ///
-        $controls $year_fixed_effects, ///
+        $controls `ifcond', ///
         absorb(br_code) vce(cluster br_code)
 
     * Optional diagnostics (works even if macros are missing)
@@ -100,6 +118,10 @@ preserve
     * Tag the outcome
     gen str32 outcome = "`y'"
 
+	
+	* Tag the group
+    gen str32 group = "`group'"
+
 
     * Append into accumulator
     if `first' {
@@ -114,14 +136,16 @@ preserve
 
 restore 
 	}
-
+}
 
 * --- 3) Load the final long dataset ---
 use `accum', clear
 compress
 di as res "Done. Tidy results are in memory: one row per {outcome, rbd_admitido level}."
 
-
+	rename estimate beta
+	rename stderr se 
+	
     * Nice labels
     label var school_id "rbd_admitido level (numeric)"
     label var beta  "Coefficient on i.rbd_admitido"
@@ -130,13 +154,18 @@ di as res "Done. Tidy results are in memory: one row per {outcome, rbd_admitido 
     label var p         "p-value"
     label var sig       "Significant at 5% (|t|>1.96)"
     label var outcome   "Outcome variable"
+    label var group     "Sample choice"
 
     * Keep tidy columns
-    keep outcome school_id parm estimate stderr t p sig
-    order outcome school_id parm
+    keep outcome school_id  beta se t p sig group
+    order outcome school_id group 
     sort  outcome school_id
 
 
  save "data/clean/effects_schools_long.dta", replace
  export delimited using "data/clean/effects_schools_long.csv", replace
 
+
+ 
+ 
+ 
