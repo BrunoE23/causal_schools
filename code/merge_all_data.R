@@ -30,18 +30,18 @@ final_data <-   sample_students %>%
     left_join(all_treatments, by = c("br_code", "mrun"))  %>%
   left_join(students_apps, by = "mrun") %>%
   rename(grad_rbd_psu = RBD) %>% 
-  mutate(female = as.factor(ifelse(es_mujer == 0, 0, 1))) %>% 
-  mutate(male   = as.factor(ifelse(es_mujer == 0, 1, 0))) %>% 
-  mutate(gender = as.factor(ifelse(es_mujer == 0, "Male", "Female"))) %>% 
+  mutate(female = as.integer(ifelse(es_mujer == 0, 0, 1))) %>% 
+  mutate(male   = as.integer(ifelse(es_mujer == 0, 1, 0))) %>% 
+  mutate(gender = as.integer(ifelse(es_mujer == 0, "Male", "Female"))) %>% 
   mutate(took_science = as.factor(ifelse(scien_max == 0, "No", "Yes")),
          gender_science = factor(paste(gender, took_science, sep = "_"))
          ) %>%
   mutate(took_history = as.factor(ifelse(hist_max == 0, "No", "Yes"))) %>% 
   mutate(took_both = as.factor(ifelse(hist_max > 0 & scien_max > 0  , "Yes", "No"))) %>% 
     mutate(leng_math_total = math_max + leng_max) %>% 
-  mutate(graduated_hs   = as.factor(ifelse(!(is.na(PROM_NOTAS)), 1, 0))) %>% 
-  mutate(registered_psu = as.factor(ifelse(!(is.na(FECHA_NACIMIENTO)), 1, 0))) %>% 
-  mutate(completed_psu = as.factor(ifelse(leng_math_total> 0,  1, 0))) %>% 
+  mutate(graduated_hs   = as.integer(ifelse(!(is.na(PROM_NOTAS)), 1, 0))) %>% 
+  mutate(registered_psu = as.integer(ifelse(!(is.na(FECHA_NACIMIENTO)), 1, 0))) %>% 
+  mutate(completed_psu = as.integer(ifelse(leng_math_total> 0,  1, 0))) %>% 
   #   left_join(socioecon_controls,   by = "mrun")  %>%
   left_join(stem_outcome,   by = "mrun")  %>%
   mutate(graduated_from_applied_school = (grad_rbd_psu == rbd_target)) %>% 
