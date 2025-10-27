@@ -1,8 +1,11 @@
 ####################################
-data_wd        <-  "C:/Users/xd-br/Dropbox/causal_schools"
-code_output_wd <-  "C:/Users/xd-br/Desktop/PhD/Research/causal_schools"
+#data_wd        <-  "C:/Users/xd-br/Dropbox/causal_schools"
+#code_output_wd <-  "C:/Users/xd-br/Desktop/PhD/Research/causal_schools"
 
-#Datawd (Dropbox) 
+data_wd <- "C:/Users/brunem/Dropbox/causal_schools"
+code_output_wd <-  "C:/Users/brunem/Research/causal_schools"
+
+
 setwd(data_wd)
 #####################################
 
@@ -76,6 +79,33 @@ sae_apps <- rbind(sae_apps_2017, sae_apps_2018, sae_apps_2019) %>%
 
 
 rm(sae_apps_2017, sae_apps_2018, sae_apps_2019)
+
+top_2_apps <- sae_apps %>%  
+  filter(preferencia_postulante <= 2) %>%  
+  select(proceso , mrun, preferencia_postulante, rbd, everything()) %>% 
+  arrange(proceso, mrun, preferencia_postulante)  %>% 
+  group_by(proceso, mrun) %>%  
+  summarise(
+    rbd_top2_code = paste(unique(rbd), collapse = "_"), 
+    n_rbd         = length(unique(rbd)),
+    rbd_1         = unique(rbd)[1],
+    rbd_2         = unique(rbd)[2])    %>% 
+    ungroup() 
+
+top2lists <- top_2_apps %>% 
+  filter(n_rbd > 1) %>% 
+  group_by(rbd_top2_code) %>% 
+  summarize(count = n()) %>% 
+  arrange(desc(count))
+
+
+
+length(unique(sae_apps$rbd))
+
+sae_apps %>%  
+  filter(preferencia_postulante <= 3) %>%  
+  filter(rbd %in% sample_rbd$rbd) %>% 
+  group_by(mrun)
 
 
 ## Student controls
@@ -172,6 +202,13 @@ sample_cursos %>%
   unique() %>% 
   nrow()
 
+
+sample_rbd <- sample_cursos %>%  
+  select(rbd) %>% 
+  unique() 
+
+
+
 length(unique(sample_cursos$rbd))
 
 
@@ -190,10 +227,22 @@ sample_selected_cursos <- summ_cursos %>%
 #For each spot, append all students that applied 
 
 sample_students <- sample_cursos %>% 
-  select(br_code, n_cupos, n_apps, exc_apps, ratio_apps) %>% 
+  select(br_code, n_cupos, n_apps) %>% 
   left_join(sae_apps, multiple = "all",
             by = "br_code") %>% 
   filter(preferencia_postulante <= 5) 
+
+sample_students_all <- sample_cursos %>% 
+  select(br_code, n_cupos, n_apps) %>% 
+  left_join(sae_apps, multiple = "all",
+            by = "br_code")
+
+
+sample_students_top3 <- sample_cursos %>% 
+  select(br_code, n_cupos, n_apps) %>% 
+  left_join(sae_apps, multiple = "all",
+            by = "br_code") %>% 
+  filter(preferencia_postulante <= 3) 
 
 #sae_apps %>% 
 #  filter(preferencia_postulante <= 5) %>%  
@@ -204,4 +253,5 @@ sample_students <- sample_cursos %>%
 
 
 save(sample_students, sample_cursos, file = "./data/clean/samples.RData")
+save(sample_students_all, file = "./data/clean/sample_students_nontop5.RData")
 
