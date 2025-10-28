@@ -16,8 +16,17 @@ effects_schools <- read_csv("./data/clean/effects_schools_long.csv")
 
 table(effects_schools$outcome)
 
+summ_effects <- effects_schools %>% 
+  #filter(outcome == "math_max") %>% 
+  filter(group == "male" | group =="female") %>% 
+  group_by(outcome, group) %>% 
+  summarize(mean = mean(beta),
+            sd  = sd(beta),
+  )
+
+
 effects_schools %>% 
-  filter(outcome == "math_max") %>% 
+  filter(outcome == "female") %>% 
   filter(group == "male") %>% 
   pull(beta) %>% 
   sd()
@@ -28,6 +37,24 @@ effects_schools %>%
   filter(group == "female") %>% 
   pull(beta) %>% 
   sd()
+
+
+
+
+effects_schools %>% 
+  filter(outcome == "leng_max") %>% 
+  filter(group == "female") %>% 
+  pull(beta) %>% 
+  mean()
+
+effects_schools %>% 
+  filter(outcome == "leng_max") %>% 
+  filter(group == "male") %>% 
+  pull(beta) %>% 
+  mean()
+
+
+
 
 effects_schools %>% 
   filter(outcome == "avg_stem_share") %>% 
@@ -72,13 +99,19 @@ effects_wide %>%
 }
 
 
+plot_2vars("all", "leng_max", "completed_psu")
+plot_2vars("male", "leng_max", "completed_psu")
+plot_2vars("female", "leng_max", "completed_psu")
+
 plot_2vars("all", "math_max", "completed_psu")
 plot_2vars("male", "math_max", "completed_psu")
 plot_2vars("female", "math_max", "completed_psu")
 
+
 plot_2vars("all", "math_max", "leng_max")
 plot_2vars("male", "math_max", "leng_max")
 plot_2vars("female", "math_max", "leng_max")
+
 
 
 plot_2vars("all", "math_max", "took_science")
@@ -99,6 +132,10 @@ plot_2vars("all", "math_max", "n_years_rbd_target_post")
 plot_2vars("male", "math_max", "n_years_rbd_target_post")
 plot_2vars("female", "math_max", "n_years_rbd_target_post")
 
+
+plot_2vars("all", "leng_max", "n_years_rbd_target_post")
+plot_2vars("male", "leng_max", "n_years_rbd_target_post")
+plot_2vars("female", "leng_max", "n_years_rbd_target_post")
 
 plot_2samples <- function(this_outcome, group1, group2) {
   
@@ -123,6 +160,7 @@ plot_2samples <- function(this_outcome, group1, group2) {
 plot_2samples("avg_stem_share", "male", "female")
 
 
+#plot_2samples("female", "male", "female")
 plot_2samples("math_max", "male", "female")
 plot_2samples("math_max", "ab_med", "be_med")
 plot_2samples("math_max", "be_med", "ab_med")
