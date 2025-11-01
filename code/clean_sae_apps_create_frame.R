@@ -9,65 +9,91 @@ code_output_wd <-  "C:/Users/brunem/Research/causal_schools"
 setwd(data_wd)
 #####################################
 
-#IMPORTANT REMINDER: SAE 2017 takes place in 2016 and the spot allows you to
-#get a spot in a different school in the academic year of 2017. 
+#IMPORTANT REMINDER: SAE 2017 takes place in 2017 and the spot allows you to
+#get a spot in a different school in the academic year of 2018. 
 #Obviously it is the same for other years.
 
+#Kids in SAE 2017 are in grade 8 in 2017,
+#Show up in grade              9 in 2018
+#                              12 in 2021
+
+#Kids in SAE 2020 are in grade 12 in 2025.
 
 #packages
 library(tidyverse)
 
 
 #read spots available
+#4 regions?
 oferta_2017 <- read_csv2("./data/raw/2017/SAE_2017/A1_Oferta_Establecimientos_etapa_regular_2017_Admisión_2018.csv") %>% 
   mutate(proceso = 2017) %>% 
-  mutate(br_code = paste0(as.character(rbd), "_", cod_nivel, "_", cod_curso, "_", proceso)) %>% 
-  filter(cod_nivel >= 7 & cod_nivel <= 9) %>% 
+  mutate(br_code = paste0(as.character(rbd),  "_", cod_curso, "_", proceso)) %>% 
+  filter(cod_nivel == 9) %>% 
   mutate(cod_sede = NA_integer_)
 
 sum(oferta_2017$vacantes_regular)
 
+#all country?
 oferta_2018 <- read_csv2("./data/raw/2018/SAE_2018/A1_Oferta_Establecimientos_etapa_regular_2018_Admisión_2019.csv") %>% 
   mutate(proceso = 2018) %>% 
-  mutate(br_code = paste0(as.character(rbd), "_", cod_nivel, "_", cod_curso, "_", proceso)) %>% 
-  filter(cod_nivel >= 7 & cod_nivel <= 9) 
+  mutate(br_code = paste0(as.character(rbd),  "_", cod_curso, "_", proceso)) %>% 
+  filter(cod_nivel == 9) 
 
 sum(oferta_2018$vacantes_regular)
 
 
 oferta_2019 <- read_csv2("./data/raw/2019/SAE_2019/A1_Oferta_Establecimientos_etapa_regular_2019_Admisión_2020.csv") %>% 
   mutate(proceso = 2019) %>% 
-  mutate(br_code = paste0(as.character(rbd), "_", cod_nivel, "_", cod_curso, "_", proceso)) %>% 
-  filter(cod_nivel >= 7 & cod_nivel <= 9) 
+  mutate(br_code = paste0(as.character(rbd),  "_", cod_curso, "_", proceso)) %>% 
+  filter(cod_nivel == 9) 
 
 sum(oferta_2019$vacantes_regular)
 
 
-sae_oferta <- rbind(oferta_2019, oferta_2018, oferta_2017)
-rm(oferta_2019, oferta_2018, oferta_2017)
+oferta_2020 <- read_csv2("./data/raw/2020/SAE_2020/A1_Oferta_Establecimientos_etapa_regular_2020_Admisión_2021.csv") %>% 
+  mutate(proceso = 2020) %>% 
+  mutate(br_code = paste0(as.character(rbd),  "_", cod_curso, "_", proceso)) %>% 
+  filter(cod_nivel == 9) 
+
+sum(oferta_2020$vacantes_regular)
+
+
+sae_oferta <- rbind(oferta_2020, oferta_2019, oferta_2018, oferta_2017)
+rm(oferta_2020, oferta_2019, oferta_2018, oferta_2017)
 
 ## Apps 
 
 sae_apps_2017 <- read_csv2("./data/raw/2017/SAE_2017/C1_Postulaciones_etapa_regular_2017_Admisión_2018_PUBL.csv") %>% 
   mutate(proceso = 2017) %>% 
-  mutate(br_code = paste0(as.character(rbd), "_", cod_nivel, "_", cod_curso, "_", proceso)) %>% 
-  filter(cod_nivel >= 7 & cod_nivel <= 9)
+  mutate(br_code = paste0(as.character(rbd),  "_", cod_curso, "_", proceso)) %>% 
+  filter(cod_nivel == 9)
 
 sae_apps_2018 <- read_csv2("./data/raw/2018/SAE_2018/C1_Postulaciones_etapa_regular_2018_Admisión_2019_PUBL.csv") %>% 
   mutate(proceso = 2018) %>% 
-  mutate(br_code = paste0(as.character(rbd), "_", cod_nivel, "_", cod_curso, "_", proceso)) %>% 
-  filter(cod_nivel >= 7 & cod_nivel <= 9)
+  mutate(br_code = paste0(as.character(rbd), "_",  cod_curso, "_", proceso)) %>% 
+  filter(cod_nivel == 9)
 
 sae_apps_2019 <- read_csv2("./data/raw/2019/SAE_2019/C1_Postulaciones_etapa_regular_2019_Admisión_2020_PUBL.csv") %>% 
   mutate(proceso = 2019) %>% 
+  mutate(br_code = paste0(as.character(rbd), "_", cod_curso, "_", proceso)) %>% 
+  filter(cod_nivel == 9)
+
+
+
+sae_apps_2020 <- read_csv2("./data/raw/2020/SAE_2020/C1_Postulaciones_etapa_regular_2020_Admisión_2021_PUBL.csv") %>% 
+  mutate(proceso = 2020) %>% 
   mutate(br_code = paste0(as.character(rbd), "_", cod_nivel, "_", cod_curso, "_", proceso)) %>% 
-  filter(cod_nivel >= 7 & cod_nivel <= 9)
+  filter(cod_nivel == 9)
+
+
+#table(sae_apps_2019$rbd)
+#table(sae_apps_2020$rbd)
 
 
 
 
 #Filter out prioridad 
-sae_apps <- rbind(sae_apps_2017, sae_apps_2018, sae_apps_2019) %>% 
+sae_apps <- rbind(sae_apps_2017, sae_apps_2018, sae_apps_2019,sae_apps_2020) %>% 
   filter(agregada_por_continuidad == 0,
          prioridad_matriculado == 0,
          prioridad_hermano == 0,
@@ -78,7 +104,7 @@ sae_apps <- rbind(sae_apps_2017, sae_apps_2018, sae_apps_2019) %>%
             prioridad_hijo_funcionario, prioridad_exalumno))
 
 
-rm(sae_apps_2017, sae_apps_2018, sae_apps_2019)
+rm(sae_apps_2017, sae_apps_2018, sae_apps_2019, sae_apps_2020 )
 
 top_2_apps <- sae_apps %>%  
   filter(preferencia_postulante <= 2) %>%  
@@ -99,47 +125,53 @@ top2lists <- top_2_apps %>%
   arrange(desc(count))
 
 
+#length(unique(sae_apps$rbd))
 
-length(unique(sae_apps$rbd))
 
-sae_apps %>%  
-  filter(preferencia_postulante <= 3) %>%  
-  filter(rbd %in% sample_rbd$rbd) %>% 
-  group_by(mrun)
+#sae_apps %>%  
+#  filter(preferencia_postulante <= 3) %>%  
+#  filter(rbd %in% sample_rbd$rbd) %>% 
+#  group_by(mrun)
 
 
 ## Student controls
 
 sae_stud_info_2017 <- read_csv2("./data/raw/2017/SAE_2017/B1_Postulantes_etapa_regular_2017_Admisión_2018_PUBL.csv") %>% 
   select(-(c(cod_com,nom_com))) %>% 
-  filter(cod_nivel >= 7 & cod_nivel <= 9) %>% 
+  filter(cod_nivel== 9) %>% 
   mutate(proceso = 2017) 
   
 sae_stud_info_2018 <- read_csv2("./data/raw/2018/SAE_2018/B1_Postulantes_etapa_regular_2018_Admisión_2019_PUBL.csv")  %>% 
-  filter(cod_nivel >= 7 & cod_nivel <= 9) %>% 
+  filter(cod_nivel== 9) %>% 
     mutate(proceso = 2018) 
 
 
 sae_stud_info_2019 <- read_csv2("./data/raw/2019/SAE_2019/B1_Postulantes_etapa_regular_2019_Admisión_2020_PUBL.csv") %>% 
-  filter(cod_nivel >= 7 & cod_nivel <= 9) %>% 
+  filter(cod_nivel== 9) %>% 
   mutate(proceso = 2019) 
+
+sae_stud_info_2020 <- read_csv2("./data/raw/2020/SAE_2020/B1_Postulantes_etapa_regular_2020_Admisión_2021_PUBL.csv") %>% 
+  filter(cod_nivel== 9) %>% 
+  mutate(proceso = 2020) 
 
 
 sae_stud_info <- rbind(sae_stud_info_2017,
                        sae_stud_info_2018,
-                       sae_stud_info_2019) %>% 
+                       sae_stud_info_2019,
+                       sae_stud_info_2020) %>% 
   select(-(cod_nivel))
 
 rm(sae_stud_info_2017,
    sae_stud_info_2018,
-   sae_stud_info_2019)
+   sae_stud_info_2019,
+   sae_stud_info_2020)
 
 #sae_apps <- left_join(sae_apps, sae_stud_info, by = "mrun", multiple = "all")
 
-sae_stud_info %>% 
-  group_by(mrun, proceso) %>% 
-  summarize(n = n()) %>% 
-  arrange(desc(n))
+#sae_stud_info %>% 
+#  group_by(mrun, proceso) %>% 
+#  summarize(n = n()) %>% 
+#  arrange(desc(n))
   
 #Saving
 length(unique(sae_apps$mrun))
@@ -171,8 +203,10 @@ cupos_p_curso <- sae_oferta %>%
 # table(cupos_p_curso$more_50_cupos)
 
 
+#This is what determines whether a school is oversubscribbed or not.
+#I Will only count top 3 applications
 apps_p_curso <- sae_apps %>% 
-  filter(preferencia_postulante <= 5) %>% 
+  filter(preferencia_postulante <= 3) %>% 
   group_by(rbd, cod_nivel, cod_curso, proceso) %>% 
   summarize(n_apps = n())
 
@@ -180,7 +214,7 @@ summ_cursos <- left_join(cupos_p_curso, apps_p_curso, by = c("rbd", "cod_nivel",
   mutate(exc_apps = n_apps - n_cupos,
          ratio_apps = n_apps / n_cupos) %>% 
   arrange(-(exc_apps)) %>%  
-  mutate(br_code = paste0(as.character(rbd), "_", cod_nivel, "_", cod_curso, "_", proceso))
+  mutate(br_code = paste0(as.character(rbd), "_", cod_curso, "_", proceso))
 
 
 #Select sample of spots
@@ -196,6 +230,7 @@ sample_cursos <- summ_cursos %>%
   arrange(rbd, cod_nivel, proceso) %>% 
   ungroup()
 
+summary(sample_cursos)
 
 sample_cursos %>%  
   select(rbd, cod_nivel,proceso) %>% 
@@ -212,12 +247,14 @@ sample_rbd <- sample_cursos %>%
 length(unique(sample_cursos$rbd))
 
 
-sample_selected_cursos <- summ_cursos %>% 
-  filter(n_cupos >= 100) %>% 
-  filter(ratio_apps >= 5) %>% 
-  arrange(rbd, cod_nivel, proceso) %>% 
-  ungroup()
+#sample_selected_cursos <- summ_cursos %>% 
+#  filter(n_cupos >= 100) %>% 
+#  filter(ratio_apps >= 5) %>% 
+#  arrange(rbd, cod_nivel, proceso) %>% 
+#  ungroup()
 
+
+#table(sample_selected_cursos$rbd)
 
 ######################
 ## Create data frame 
@@ -230,7 +267,7 @@ sample_students <- sample_cursos %>%
   select(br_code, n_cupos, n_apps) %>% 
   left_join(sae_apps, multiple = "all",
             by = "br_code") %>% 
-  filter(preferencia_postulante <= 5) 
+  filter(preferencia_postulante <= 3) 
 
 sample_students_all <- sample_cursos %>% 
   select(br_code, n_cupos, n_apps) %>% 
@@ -238,11 +275,11 @@ sample_students_all <- sample_cursos %>%
             by = "br_code")
 
 
-sample_students_top3 <- sample_cursos %>% 
-  select(br_code, n_cupos, n_apps) %>% 
-  left_join(sae_apps, multiple = "all",
-            by = "br_code") %>% 
-  filter(preferencia_postulante <= 3) 
+#sample_students_top3 <- sample_cursos %>% 
+#  select(br_code, n_cupos, n_apps) %>% 
+#  left_join(sae_apps, multiple = "all",
+#            by = "br_code") %>% 
+#  filter(preferencia_postulante <= 3) 
 
 #sae_apps %>% 
 #  filter(preferencia_postulante <= 5) %>%  
