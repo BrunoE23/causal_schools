@@ -16,6 +16,7 @@ library(tidyr)
 #read samples to get student universe
 load("./data/clean/samples.RData")
 
+sum(sample_cursos$n_cupos[sample_cursos$proceso == 2019])
 
 students_small <- sample_students %>% 
   select(mrun, rbd, cod_nivel, proceso) %>% 
@@ -113,6 +114,8 @@ read_tracking_data <- function(year) {
   return(tracking_year)
   
 }
+
+
 read_matricula_data <- function(year) {
   
   folder_path <- paste0("./data/raw/student_tracking/", year, "/Rendimiento-", year)
@@ -178,6 +181,15 @@ read_matricula_data <- function(year) {
 }
 
 
+students_sae2020 <- sample_students %>% 
+  filter(proceso == 2020) %>% 
+  pull(mrun) %>% 
+  unique()
+x
+
+
+round(sum(students_sae2020 %in% tracking_year$MRUN)/length(students_sae2020), 3))
+
 
 #years pre SAE
 tracking_2013 <- read_tracking_data(2013)
@@ -198,17 +210,17 @@ tracking_2023 <- read_tracking_data(2023)
 tracking_2024 <- read_tracking_data(2024)
 
 
-test2016 <- tracking_2016 %>% 
-  filter(COD_GRADO == 8) %>% 
-  mutate(mrun = as.double(MRUN)) %>% 
-  mutate(in_sae_app_2017 = (mrun %in% sae_apps_2017$mrun))
+#test2016 <- tracking_2016 %>% 
+#  filter(COD_GRADO == 8) %>% 
+#  mutate(mrun = as.double(MRUN)) %>% 
+#  mutate(in_sae_app_2017 = (mrun %in% sae_apps_2017$mrun))
 
-test2017 <-tracking_2017 %>% 
-  filter(COD_GRADO == 8) %>% 
-  mutate(mrun = as.double(MRUN)) %>% 
-  mutate(in_sae_app_2017 = (mrun %in% sae_apps_2017$mrun))
+#test2017 <-tracking_2017 %>% 
+#  filter(COD_GRADO == 8) %>% 
+#  mutate(mrun = as.double(MRUN)) %>% 
+#  mutate(in_sae_app_2017 = (mrun %in% sae_apps_2017$mrun))
 
-
+table(mat_2022$in_st_school)
 
 mat_2022<-  read_matricula_data(2022) %>% 
   mutate(in_st_school = as.numeric(RBD %in% sample_cursos$rbd))
@@ -225,6 +237,12 @@ table(mat_2020$COD_GRADO, mat_2020$in_st_school)
 #Q1: How many students of mat_2021 are in my sample ?
 table(mat_2022$COD_GRADO)
 table(mat_2022$COD_ENSE2)
+
+media_2022 <- mat_2022 %>% 
+  filter(COD_ENSE2 >= 5) %>% 
+#  filter(COD_GRADO == 4) %>% 
+ mutate(in_st_school = RBD %in% sample_cursos$rbd)
+
 
 seniors_2022 <- mat_2022 %>% 
   filter(COD_ENSE2 >= 5) %>% 
