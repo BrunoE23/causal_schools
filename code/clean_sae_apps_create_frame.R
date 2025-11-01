@@ -194,6 +194,7 @@ hist(sae_apps$loteria_original)
 cupos_p_curso <- sae_oferta %>% 
   group_by(rbd, cod_nivel, cod_curso, proceso) %>% 
   summarize(n_cupos = sum(vacantes_regular))  %>% 
+  ungroup() %>% 
   filter(n_cupos > 0)  
 #  mutate(more_30_cupos = ifelse(n_cupos >= 30,1,0),
 #         more_50_cupos = ifelse(n_cupos >= 50,1,0),
@@ -208,43 +209,118 @@ cupos_p_curso <- sae_oferta %>%
 apps_p_curso <- sae_apps %>% 
   filter(preferencia_postulante <= 3) %>% 
   group_by(rbd, cod_nivel, cod_curso, proceso) %>% 
-  summarize(n_apps = n())
+  summarize(n_apps = n()) %>% 
+  ungroup()
 
 summ_cursos <- left_join(cupos_p_curso, apps_p_curso, by = c("rbd", "cod_nivel", "cod_curso", "proceso")) %>% 
-  mutate(exc_apps = n_apps - n_cupos,
+  mutate(exc_apps = pmax(n_apps - n_cupos, 0) ,
          ratio_apps = n_apps / n_cupos) %>% 
   arrange(-(exc_apps)) %>%  
   mutate(br_code = paste0(as.character(rbd), "_", cod_curso, "_", proceso))
 
 
-#Select sample of spots
+#summ_cursos %>%  
+#  select(rbd, cod_nivel) %>% 
+#  unique() %>% 
+#  nrow()
 
-summ_cursos %>%  
-  select(rbd, cod_nivel) %>% 
-  unique() %>% 
-  nrow()
+#summary(summ_cursos)
+
+#sample_cursos <- summ_cursos %>% 
+#  filter(n_cupos >= 200) %>% 
+#  filter(ratio_apps >= 2) %>% 
+#  arrange(rbd, cod_nivel, proceso) %>% 
+#  ungroup()
+
+#summ_cursos %>% 
+#  group_by(rbd) %>% 
+#  summarize(n_proc = n()) %>% 
+#  arrange(desc(n_proc))
+
+
+#Power calculation by school
+power_cursos <- summ_cursos %>% 
+  group_by(rbd, proceso) %>% 
+  mutate(n_treated = sum(n_cupos), 
+       n_controls = sum(exc_apps)) %>% 
+  ungroup() %>% 
+  select(rbd, proceso, n_treated, n_controls)  
+
+
+summary(power_cursos)
+
+#library(dplyr)
+
+# MDE per rbd with clustering across proceso (clusters).
+# Assumes each row is one (rbd, proceso) with counts n_treated, n_controls.
+# Uses: Var( mean_T ) = σ^2 * [ Σ_j nTj * DE_Tj ] / (Σ_j nTj)^2  and similarly for controls,
+# where DE_Tj = 1 + (nTj - 1)*rho and DE_Cj = 1 + (nCj - 1)*rho.
+
+mde_by_rbd_clustered <- function(df,
+                                 rho,
+                                 alpha = 0.05,
+                                 power = 0.80,
+                                 small_sample = TRUE) {
+  
+  z_beta <- qnorm(power)
+  
+  df %>%
+    group_by(rbd) %>%
+    summarise(
+      G          = n_distinct(proceso),               # number of clusters for this rbd
+      nT_total   = sum(n_treated,  na.rm = TRUE),
+      nC_total   = sum(n_controls, na.rm = TRUE),
+      # Sums needed for variance pieces:
+      sum_nT_DET = sum(n_treated  * (1 + (n_treated  - 1) * rho), na.rm = TRUE),
+      sum_nC_DEC = sum(n_controls * (1 + (n_controls - 1) * rho), na.rm = TRUE),
+      .groups = "drop"
+    ) %>%
+    mutate(
+      # Small-sample df ≈ G - 2 (min 1). Large-sample uses z.
+      df_ss   = pmax(G - 2, 1),
+      crit    = if (small_sample) qt(1 - alpha/2, df = df_ss) else qnorm(1 - alpha/2),
+      se_fact = sqrt( (sum_nT_DET / (nT_total^2)) + (sum_nC_DEC / (nC_total^2)) ),
+      MDE_d   = (crit + z_beta) * se_fact
+    ) %>%
+    select(rbd, G, nT_total, nC_total, MDE_d, se_fact, crit, df_ss)
+}
+
+# ---- Example usage ----
+# df <- your data frame with columns: rbd, proceso, n_treated, n_controls, br_code
+# Choose an ICC:
+rho <- 0.01
+
+mde_rbd <- mde_by_rbd_clustered(power_cursos, rho = rho, alpha = 0.05, power = 0.80, small_sample = FALSE)
+mde_rbd
+
+
+# If you want MDE in outcome units:
+# sd_outcome <- 10
+# mde_rbd <- mde_rbd %>% mutate(MDE_units = MDE_d * sd_outcome)
+
+
+hist(mde_rbd$MDE_d, breaks = 50)
+
+
+#Sample of schools 
+rbd_mde_filter <- mde_rbd %>% 
+              filter(MDE_d <= 0.35)
+
+
+#To investigate in the future
+rbd_sample %>% filter( G == 2)
+
+
+
+#sample_cursos <- summ_cursos %>% 
+#  filter(n_cupos >= 200) %>% 
+#  filter(ratio_apps >= 2) %>% 
+#  arrange(rbd, cod_nivel, proceso) %>% 
+#  ungroup()
+
 
 sample_cursos <- summ_cursos %>% 
-  filter(n_cupos >= 50) %>% 
-  filter(ratio_apps >= 2) %>% 
-  arrange(rbd, cod_nivel, proceso) %>% 
-  ungroup()
-
-summary(sample_cursos)
-
-sample_cursos %>%  
-  select(rbd, cod_nivel,proceso) %>% 
-  unique() %>% 
-  nrow()
-
-
-sample_rbd <- sample_cursos %>%  
-  select(rbd) %>% 
-  unique() 
-
-
-
-length(unique(sample_cursos$rbd))
+  filter(rbd %in% rbd_mde_filter$rbd) 
 
 
 #sample_selected_cursos <- summ_cursos %>% 
