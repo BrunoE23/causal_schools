@@ -17,6 +17,8 @@ setwd(data_wd)
 #Show up in grade              9 in 2018
 #                              12 in 2021
 
+#Kids in SAE 2020 are in grade 8 in 2020.
+#Kids in SAE 2020 are in grade 9 in 2021.
 #Kids in SAE 2020 are in grade 12 in 2025.
 
 #packages
@@ -55,6 +57,8 @@ oferta_2020 <- read_csv2("./data/raw/2020/SAE_2020/A1_Oferta_Establecimientos_et
   mutate(br_code = paste0(as.character(rbd),  "_", cod_curso, "_", proceso)) %>% 
   filter(cod_nivel == 9) 
 
+
+
 sum(oferta_2020$vacantes_regular)
 
 
@@ -79,17 +83,14 @@ sae_apps_2019 <- read_csv2("./data/raw/2019/SAE_2019/C1_Postulaciones_etapa_regu
   filter(cod_nivel == 9)
 
 
-
 sae_apps_2020 <- read_csv2("./data/raw/2020/SAE_2020/C1_Postulaciones_etapa_regular_2020_Admisión_2021_PUBL.csv") %>% 
   mutate(proceso = 2020) %>% 
-  mutate(br_code = paste0(as.character(rbd), "_", cod_nivel, "_", cod_curso, "_", proceso)) %>% 
+  mutate(br_code = paste0(as.character(rbd), "_", cod_curso, "_", proceso)) %>% 
   filter(cod_nivel == 9)
 
 
 #table(sae_apps_2019$rbd)
 #table(sae_apps_2020$rbd)
-
-
 
 
 #Filter out prioridad 
@@ -103,6 +104,8 @@ sae_apps <- rbind(sae_apps_2017, sae_apps_2018, sae_apps_2019,sae_apps_2020) %>%
             prioridad_matriculado, prioridad_hermano,
             prioridad_hijo_funcionario, prioridad_exalumno))
 
+
+table(sae_apps$proceso)
 
 rm(sae_apps_2017, sae_apps_2018, sae_apps_2019, sae_apps_2020 )
 
@@ -165,6 +168,7 @@ rm(sae_stud_info_2017,
    sae_stud_info_2018,
    sae_stud_info_2019,
    sae_stud_info_2020)
+
 
 #sae_apps <- left_join(sae_apps, sae_stud_info, by = "mrun", multiple = "all")
 
@@ -308,7 +312,7 @@ rbd_mde_filter <- mde_rbd %>%
 
 
 #To investigate in the future
-rbd_sample %>% filter( G == 2)
+rbd_mde_filter %>% filter( G == 2)
 
 
 
@@ -345,11 +349,14 @@ sample_students <- sample_cursos %>%
             by = "br_code") %>% 
   filter(preferencia_postulante <= 3) 
 
+
+
 sample_students_all <- sample_cursos %>% 
   select(br_code, n_cupos, n_apps) %>% 
   left_join(sae_apps, multiple = "all",
             by = "br_code")
 
+#table(sample_students_all$proceso)
 
 #sample_students_top3 <- sample_cursos %>% 
 #  select(br_code, n_cupos, n_apps) %>% 
@@ -365,6 +372,7 @@ sample_students_all <- sample_cursos %>%
 #  length()
 
 
+save(rbd_mde_filter, file = "./data/clean/rbd_mde_sample.RData")
 save(sample_students, sample_cursos, file = "./data/clean/samples.RData")
 save(sample_students_all, file = "./data/clean/sample_students_nontop5.RData")
 
