@@ -1,9 +1,9 @@
 ####################################
-#data_wd        <-  "C:/Users/xd-br/Dropbox/causal_schools"
-#code_output_wd <-  "C:/Users/xd-br/Desktop/PhD/Research/causal_schools"
+data_wd        <-  "C:/Users/xd-br/Dropbox/causal_schools"
+code_output_wd <-  "C:/Users/xd-br/Desktop/PhD/Research/causal_schools"
 
-data_wd <- "C:/Users/brunem/Dropbox/causal_schools"
-code_output_wd <-  "C:/Users/brunem/Research/causal_schools"
+#data_wd <- "C:/Users/brunem/Dropbox/causal_schools"
+#code_output_wd <-  "C:/Users/brunem/Research/causal_schools"
 
 
 #Datawd (Dropbox) 
@@ -57,9 +57,13 @@ offered_spots <- function(results, year,
     mutate(offered_spot_1R = replace_na(as.numeric(rbd == rbd_admitido), 0),
            offered_spot_2R = replace_na(as.numeric(rbd == rbd_admitido_post_resp), 0),
            offered_spot_anyR =   pmax(offered_spot_1R, offered_spot_2R)) %>% 
+    mutate(rbd_treated_1R = ifelse(offered_spot_1R == 1, rbd, 0), 
+           rbd_treated_2R = ifelse(offered_spot_2R == 1, rbd, 0), 
+           rbd_treated    = ifelse(offered_spot_anyR == 1, rbd, 0)
+    ) %>% 
   select(mrun, n_cupos, n_apps,  br_code, preferencia_postulante,
                offered_spot_1R, offered_spot_2R, offered_spot_anyR, 
-                        rbd_admitido, rbd_admitido_post_resp)
+                     rbd_treated_1R, rbd_treated_2R, rbd_treated)
   
   return(treatment)
   
@@ -122,7 +126,7 @@ all_treatments <- rbind(treatment_2017,
                         treatment_2018, 
                         treatment_2019,
                         treatment_2020) %>% 
-  mutate(rbd_admitido = ifelse(is.na(rbd_admitido),0, rbd_admitido)) %>% 
+ # mutate(rbd_admitido = ifelse(is.na(rbd_admitido),0, rbd_admitido)) %>% 
   select(-c(preferencia_postulante,n_cupos, n_apps))
 
 #all_treatments %>% 

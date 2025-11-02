@@ -20,19 +20,30 @@ load("./data/clean/psu_students.RData")
 load("./data/clean/sae_2017_19_stud_controls.RData")
 load("./data/clean/tracking_clean_wide.RData")
 
-rm(students_apps_demre)
+
+length(unique(sample_students$rbd))
+  
+colnames(tracking_window_wide)
+
+tracking_window_small <- tracking_window_wide %>% 
+        select(proceso, mrun, rbd_target, 
+               n_years_rbd_target_post, n_school_changes_post, n_repeat_grado_post,
+               z_GPA_t_min4, z_GPA_t_min3, z_GPA_t_min2, z_GPA_t_min1, 
+               z_ATT_t_min4, z_ATT_t_min3, z_ATT_t_min2, z_ATT_t_min1
+        )
+               
 
 
 final_data <-   sample_students %>%
   rename(rbd_target = rbd) %>% 
   left_join(sae_stud_info, by = c("mrun", "proceso")) %>%
-  left_join(tracking_window_wide, by = c("mrun", "proceso", "rbd_target")) %>%
+  left_join(tracking_window_small, by = c("mrun", "proceso", "rbd_target")) %>%
     left_join(all_treatments, by = c("br_code", "mrun"))  %>%
   left_join(students_apps, by = "mrun") %>%
   rename(grad_rbd_psu = RBD) %>% 
   mutate(female = as.integer(ifelse(es_mujer == 0, 0, 1))) %>% 
   mutate(male   = as.integer(ifelse(es_mujer == 0, 1, 0))) %>% 
-  mutate(gender = as.integer(ifelse(es_mujer == 0, "Male", "Female"))) %>% 
+  mutate(gender = as.factor(ifelse(es_mujer == 0, "Male", "Female"))) %>% 
   mutate(took_only_science = as.integer(ifelse(hist_max == 0 & scien_max > 0  , 1, 0))) %>% 
   mutate(took_only_history = as.integer(ifelse(hist_max > 0 & scien_max == 0  , 1, 0))) %>% 
   mutate(took_both = as.integer(ifelse(hist_max > 0 & scien_max > 0  , 1, 0))) %>% 
@@ -42,10 +53,12 @@ final_data <-   sample_students %>%
   mutate(completed_psu = as.integer(ifelse(leng_math_total> 0,  1, 0))) %>% 
   #   left_join(socioecon_controls,   by = "mrun")  %>%
   left_join(stem_outcome,   by = "mrun")  %>%
-  mutate(graduated_from_applied_school = (grad_rbd_psu == rbd_target)) %>% 
-  mutate(rbd_admitido = factor(rbd_admitido)) 
+  mutate(graduated_from_applied_school = (grad_rbd_psu == rbd_target)) 
 
+table(final_data$offered_spot_anyR)
+table(final_data$rbd_treated)
 
+length(unique(final_data$rbd_treated))
 
 #final_data %>% 
 #  filter(completed_psu == 1) %>% 
