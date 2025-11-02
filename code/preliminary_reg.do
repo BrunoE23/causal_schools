@@ -41,6 +41,7 @@ foreach v in school_grade_avg_GPA_t_0 school_grade_avg_GPA_t_1 school_grade_avg_
 
 
 egen pre_GPA = rowmean(z_GPA_t_min4_c z_GPA_t_min3_c z_GPA_t_min2_c z_GPA_t_min1_c)
+egen pre_ATT = rowmean(z_ATT_t_min4_c z_ATT_t_min3_c z_ATT_t_min2_c z_ATT_t_min1_c)
 
 summ pre_GPA, d 
 	local GPA_median = r(p50)
@@ -57,25 +58,40 @@ global outcomes_tracking   female n_years_rbd_target_post n_school_changes_post 
 	///			 school_grade_avg_GPA_t_min4 school_grade_avg_GPA_t_min3 school_grade_avg_GPA_t_min2 school_grade_avg_GPA_t_min1 ///
 	///			 school_grade_avg_GPA_t_0    school_grade_avg_GPA_t_1    school_grade_avg_GPA_t_2    school_grade_avg_GPA_t_3   ///
 	///			 school_grade_avg_ATT_t_0    school_grade_avg_ATT_t_1    school_grade_avg_ATT_t_2    school_grade_avg_ATT_t_3 
-					
-				 
-global outcomes_app			graduated_hs	  registered_psu completed_psu ///
-				          math_max leng_max  took_science took_history took_both avg_stem_share
-				 
-				 
-global controls  z_ATT_t_min4_c z_ATT_t_min3_c z_ATT_t_min2_c z_ATT_t_min1_c ///
-				z_GPA_t_min4_c z_GPA_t_min3_c z_GPA_t_min2_c z_GPA_t_min1_c  ///
-				i.proceso
 				
-								
+
+					
+			
+global outcomes_app			graduated_hs	  /// registered_psu
+							completed_psu ///
+				          math_max leng_max  took_only_science took_only_history took_both ///
+						   avg_stem_share   /// 
+						   prop_*
+				 
+				 
+global controls pre_ATT  ///
+				pre_GPA  
+
+
+bysort br_code: gen n_per_br = _N
+
+* Drop groups with fewer than 100 obs
+drop if n_per_br < 100
+
+* (Optional) clean up the helper variable
+drop n_per_br
+				
+				
 				
 * --- 2) Loop, estimate, extract, and append ---
 tempfile accum
 local first = 1
 
 
-foreach y in $outcomes_tracking $outcomes_app {
- foreach group in "all" "female" "male" "ab_med" "be_med" {	
+* foreach y in $outcomes_tracking $outcomes_app {
+* foreach group in "all" "female" "male" "ab_med" "be_med" {	
+foreach y in n_years_rbd_target_post $outcomes_app {
+	 foreach group in "all"  {	
 preserve 
 
     di as txt "---- Estimating for outcome: `y' ----"
@@ -89,10 +105,10 @@ preserve
         else if "`group'" == "be_med"  local ifcond if above_median_GPA_pre==0
         // for "all" -> ifcond remains empty
 	
-    quietly reghdfe `y' ///
+   qui  areg `y' ///
         i.rbd_admitido ///
         $controls `ifcond', ///
-        absorb(br_code) vce(cluster br_code)
+        absorb(rbd_target) vce(cluster rbd_target)
 
     * Optional diagnostics (works even if macros are missing)
     capture noisily di as text "Obs: " %9.0f e(N) "  |  Clusters (br_code): " %9.0f e(N_clust1)
@@ -162,8 +178,8 @@ di as res "Done. Tidy results are in memory: one row per {outcome, rbd_admitido 
     sort  outcome school_id
 
 
- save "data/clean/effects_schools_long.dta", replace
- export delimited using "data/clean/effects_schools_long.csv", replace
+ save "data/clean/effects_schools_long_v2.dta", replace
+ export delimited using "data/clean/effects_schools_long_v2.csv", replace
 
 
  
