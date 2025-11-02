@@ -139,121 +139,9 @@ students_apps <- students_apps %>%
   filter(!(mrun %in% odd_mrun$mrun))
 
 
-
-#############################################
-#Demre years
-
-students_apps2020 <- read_csv2("./data/raw/2020/PSU2020/Rinden_Admisión2020/ArchivoC_Adm2020.csv") %>%
-  rename(mrun_demre = ID_aux) %>% 
-  rename(PROM_NOTAS = PROMEDIO_NOTAS,
-         RAMA = RAMA_EDUCACIONAL) %>% 
-  filter(SITUACION_EGRESO == 1) %>% 
-  mutate(leng_max  = pmax(LENG_ACTUAL, LENG_ANTERIOR, na.rm = TRUE),
-         math_max  = pmax(MATE_ACTUAL, MATE_ANTERIOR, na.rm = TRUE),
-         hist_max  = pmax(HCSO_ACTUAL, HCSO_ANTERIOR, na.rm = TRUE),
-         scien_max = pmax(CIEN_ACTUAL, CIEN_ANTERIOR, na.rm = TRUE)) %>% 
-  select(mrun_demre, RBD, 
-         PROM_NOTAS, PTJE_NEM, PTJE_RANKING,
-         leng_max, math_max, hist_max, scien_max,
-         RAMA, GRUPO_DEPENDENCIA, CODIGO_REGION, CODIGO_COMUNA) %>% 
-  mutate(year = 2020)
+save(students_apps, file = "./data/clean/psu_students.RData")
 
 
-
-
-
-students_apps2019 <- read_csv2("./data/raw/2019/PSU2019/Rinden_Admisión2019/ArchivoC_Adm2019.csv") %>%
-  rename(mrun_demre = ID_aux) %>% 
-  rename(PROM_NOTAS = PROMEDIO_NOTAS,
-         RAMA = RAMA_EDUCACIONAL) %>% 
-  filter(SITUACION_EGRESO == 1) %>% 
-  mutate(leng_max  = pmax(LENG_ACTUAL, LENG_ANTERIOR, na.rm = TRUE),
-         math_max  = pmax(MATE_ACTUAL, MATE_ANTERIOR, na.rm = TRUE),
-         hist_max  = pmax(HCSO_ACTUAL, HCSO_ANTERIOR, na.rm = TRUE),
-         scien_max = pmax(CIEN_ACTUAL, CIEN_ANTERIOR, na.rm = TRUE)) %>% 
-  select(mrun_demre, RBD, 
-         PROM_NOTAS, PTJE_NEM, PTJE_RANKING,
-         leng_max, math_max, hist_max, scien_max,
-         RAMA, GRUPO_DEPENDENCIA, CODIGO_REGION, CODIGO_COMUNA) %>% 
-  mutate(year = 2019)
-
-
-students_apps2018 <- read_csv2("./data/raw/2018/PSU2018/Rinden_Admisión2018/ArchivoC_Adm2018.csv") %>%
-  rename(mrun_demre = ID_aux) %>% 
-  rename(PROM_NOTAS = PROMEDIO_NOTAS,
-         RAMA = RAMA_EDUCACIONAL) %>% 
-  filter(SITUACION_EGRESO == 1) %>% 
-  mutate(leng_max  = pmax(LENG_ACTUAL, LENG_ANTERIOR, na.rm = TRUE),
-         math_max  = pmax(MATE_ACTUAL, MATE_ANTERIOR, na.rm = TRUE),
-         hist_max  = pmax(HCSO_ACTUAL, HCSO_ANTERIOR, na.rm = TRUE),
-         scien_max = pmax(CIEN_ACTUAL, CIEN_ANTERIOR, na.rm = TRUE)) %>% 
-  select(mrun_demre, RBD, 
-         PROM_NOTAS, PTJE_NEM, PTJE_RANKING,
-         leng_max, math_max, hist_max, scien_max,
-         RAMA, GRUPO_DEPENDENCIA, CODIGO_REGION, CODIGO_COMUNA) %>% 
-  mutate(year = 2018)
-
-
-students_apps2017 <- read_csv2("./data/raw/2017/PSU2017/Rinden_Admisión2017/ArchivoC_Adm2017.csv") %>%
-  rename(mrun_demre = ID_aux) %>% 
-  filter(SITUACION_EGRESO == 1) %>% 
-  mutate(leng_max  = pmax(LENG_ACTUAL, LENG_ANTERIOR, na.rm = TRUE),
-         math_max  = pmax(MATE_ACTUAL, MATE_ANTERIOR, na.rm = TRUE),
-         hist_max  = pmax(HCSO_ACTUAL, HCSO_ANTERIOR, na.rm = TRUE),
-         scien_max = pmax(CIEN_ACTUAL, CIEN_ANTERIOR, na.rm = TRUE)) %>% 
-  select(mrun_demre, RBD, 
-         PROM_NOTAS, PTJE_NEM, PTJE_RANKING,
-         leng_max, math_max, hist_max, scien_max,
-         RAMA, GRUPO_DEPENDENCIA, CODIGO_REGION, CODIGO_COMUNA) %>% 
-  mutate(year = 2017)
-
-students_apps2016 <- read_csv2("./data/raw/2016/PSU2016/Rinden_Admisión2016/ArchivoC_Adm2016.csv") %>%
-  rename(mrun_demre = ID_aux) %>% 
-  filter(SITUACION_EGRESO == 1) %>% 
-  mutate(leng_max  = pmax(LENG_ACTUAL, LENG_ANTERIOR, na.rm = TRUE),
-         math_max  = pmax(MATE_ACTUAL, MATE_ANTERIOR, na.rm = TRUE),
-         hist_max  = pmax(HCSO_ACTUAL, HCSO_ANTERIOR, na.rm = TRUE),
-         scien_max = pmax(CIEN_ACTUAL, CIEN_ANTERIOR, na.rm = TRUE)) %>% 
-  select(mrun_demre, RBD, 
-         PROM_NOTAS, PTJE_NEM, PTJE_RANKING,
-         leng_max, math_max, hist_max, scien_max,
-         RAMA, GRUPO_DEPENDENCIA, CODIGO_REGION, CODIGO_COMUNA)%>% 
-  mutate(year = 2016)
-
-students_apps2015 <- read_csv2("./data/raw/2015/PSU2015/Rinden_Admisión2015/ArchivoC_Adm2015.csv") %>%
-  rename(mrun_demre = ID_aux) %>% 
-  filter(SITUACION_EGRESO == 1) %>% 
-  mutate(leng_max  = pmax(LENG_ACTUAL, LENG_ANTERIOR, na.rm = TRUE),
-         math_max  = pmax(MATE_ACTUAL, MATE_ANTERIOR, na.rm = TRUE),
-         hist_max  = pmax(HCSO_ACTUAL, HCSO_ANTERIOR, na.rm = TRUE),
-         scien_max = pmax(CIEN_ACTUAL, CIEN_ANTERIOR, na.rm = TRUE)) %>% 
-  select(mrun_demre, RBD, 
-         PROM_NOTAS, PTJE_NEM, PTJE_RANKING,
-         leng_max, math_max, hist_max, scien_max,
-         RAMA, GRUPO_DEPENDENCIA, CODIGO_REGION, CODIGO_COMUNA) %>% 
-  mutate(year = 2015)
-
-
-students_apps_demre <- rbind(students_apps2015, 
-                             students_apps2016, 
-                             students_apps2017,
-                             students_apps2018,
-                             students_apps2019,
-                             students_apps2020)
-
-rm(students_apps2015, 
-   students_apps2016, 
-   students_apps2017,
-   students_apps2018,
-   students_apps2019,
-   students_apps2020)
-
-
-
-save(students_apps, students_apps_demre, file = "./data/clean/psu_students.RData")
-
-
-########################
 
 #Reading college app data
 # and making it long data
@@ -373,6 +261,124 @@ rm(college_apps2025,
    college_apps2021_long)
 
 save(college_apps, file = "./data/clean/psu_applications.RData")
+
+
+
+#############################################
+#Demre years
+
+students_apps2020 <- read_csv2("./data/raw/2020/PSU2020/Rinden_Admisión2020/ArchivoC_Adm2020.csv") %>%
+  rename(mrun_demre = ID_aux) %>% 
+  rename(PROM_NOTAS = PROMEDIO_NOTAS,
+         RAMA = RAMA_EDUCACIONAL) %>% 
+  filter(SITUACION_EGRESO == 1) %>% 
+  mutate(leng_max  = pmax(LENG_ACTUAL, LENG_ANTERIOR, na.rm = TRUE),
+         math_max  = pmax(MATE_ACTUAL, MATE_ANTERIOR, na.rm = TRUE),
+         hist_max  = pmax(HCSO_ACTUAL, HCSO_ANTERIOR, na.rm = TRUE),
+         scien_max = pmax(CIEN_ACTUAL, CIEN_ANTERIOR, na.rm = TRUE)) %>% 
+  select(mrun_demre, RBD, 
+         PROM_NOTAS, PTJE_NEM, PTJE_RANKING,
+         leng_max, math_max, hist_max, scien_max,
+         RAMA, GRUPO_DEPENDENCIA, CODIGO_REGION, CODIGO_COMUNA) %>% 
+  mutate(year = 2020)
+
+
+
+
+
+students_apps2019 <- read_csv2("./data/raw/2019/PSU2019/Rinden_Admisión2019/ArchivoC_Adm2019.csv") %>%
+  rename(mrun_demre = ID_aux) %>% 
+  rename(PROM_NOTAS = PROMEDIO_NOTAS,
+         RAMA = RAMA_EDUCACIONAL) %>% 
+  filter(SITUACION_EGRESO == 1) %>% 
+  mutate(leng_max  = pmax(LENG_ACTUAL, LENG_ANTERIOR, na.rm = TRUE),
+         math_max  = pmax(MATE_ACTUAL, MATE_ANTERIOR, na.rm = TRUE),
+         hist_max  = pmax(HCSO_ACTUAL, HCSO_ANTERIOR, na.rm = TRUE),
+         scien_max = pmax(CIEN_ACTUAL, CIEN_ANTERIOR, na.rm = TRUE)) %>% 
+  select(mrun_demre, RBD, 
+         PROM_NOTAS, PTJE_NEM, PTJE_RANKING,
+         leng_max, math_max, hist_max, scien_max,
+         RAMA, GRUPO_DEPENDENCIA, CODIGO_REGION, CODIGO_COMUNA) %>% 
+  mutate(year = 2019)
+
+
+students_apps2018 <- read_csv2("./data/raw/2018/PSU2018/Rinden_Admisión2018/ArchivoC_Adm2018.csv") %>%
+  rename(mrun_demre = ID_aux) %>% 
+  rename(PROM_NOTAS = PROMEDIO_NOTAS,
+         RAMA = RAMA_EDUCACIONAL) %>% 
+  filter(SITUACION_EGRESO == 1) %>% 
+  mutate(leng_max  = pmax(LENG_ACTUAL, LENG_ANTERIOR, na.rm = TRUE),
+         math_max  = pmax(MATE_ACTUAL, MATE_ANTERIOR, na.rm = TRUE),
+         hist_max  = pmax(HCSO_ACTUAL, HCSO_ANTERIOR, na.rm = TRUE),
+         scien_max = pmax(CIEN_ACTUAL, CIEN_ANTERIOR, na.rm = TRUE)) %>% 
+  select(mrun_demre, RBD, 
+         PROM_NOTAS, PTJE_NEM, PTJE_RANKING,
+         leng_max, math_max, hist_max, scien_max,
+         RAMA, GRUPO_DEPENDENCIA, CODIGO_REGION, CODIGO_COMUNA) %>% 
+  mutate(year = 2018)
+
+
+students_apps2017 <- read_csv2("./data/raw/2017/PSU2017/Rinden_Admisión2017/ArchivoC_Adm2017.csv") %>%
+  rename(mrun_demre = ID_aux) %>% 
+  filter(SITUACION_EGRESO == 1) %>% 
+  mutate(leng_max  = pmax(LENG_ACTUAL, LENG_ANTERIOR, na.rm = TRUE),
+         math_max  = pmax(MATE_ACTUAL, MATE_ANTERIOR, na.rm = TRUE),
+         hist_max  = pmax(HCSO_ACTUAL, HCSO_ANTERIOR, na.rm = TRUE),
+         scien_max = pmax(CIEN_ACTUAL, CIEN_ANTERIOR, na.rm = TRUE)) %>% 
+  select(mrun_demre, RBD, 
+         PROM_NOTAS, PTJE_NEM, PTJE_RANKING,
+         leng_max, math_max, hist_max, scien_max,
+         RAMA, GRUPO_DEPENDENCIA, CODIGO_REGION, CODIGO_COMUNA) %>% 
+  mutate(year = 2017)
+
+students_apps2016 <- read_csv2("./data/raw/2016/PSU2016/Rinden_Admisión2016/ArchivoC_Adm2016.csv") %>%
+  rename(mrun_demre = ID_aux) %>% 
+  filter(SITUACION_EGRESO == 1) %>% 
+  mutate(leng_max  = pmax(LENG_ACTUAL, LENG_ANTERIOR, na.rm = TRUE),
+         math_max  = pmax(MATE_ACTUAL, MATE_ANTERIOR, na.rm = TRUE),
+         hist_max  = pmax(HCSO_ACTUAL, HCSO_ANTERIOR, na.rm = TRUE),
+         scien_max = pmax(CIEN_ACTUAL, CIEN_ANTERIOR, na.rm = TRUE)) %>% 
+  select(mrun_demre, RBD, 
+         PROM_NOTAS, PTJE_NEM, PTJE_RANKING,
+         leng_max, math_max, hist_max, scien_max,
+         RAMA, GRUPO_DEPENDENCIA, CODIGO_REGION, CODIGO_COMUNA)%>% 
+  mutate(year = 2016)
+
+students_apps2015 <- read_csv2("./data/raw/2015/PSU2015/Rinden_Admisión2015/ArchivoC_Adm2015.csv") %>%
+  rename(mrun_demre = ID_aux) %>% 
+  filter(SITUACION_EGRESO == 1) %>% 
+  mutate(leng_max  = pmax(LENG_ACTUAL, LENG_ANTERIOR, na.rm = TRUE),
+         math_max  = pmax(MATE_ACTUAL, MATE_ANTERIOR, na.rm = TRUE),
+         hist_max  = pmax(HCSO_ACTUAL, HCSO_ANTERIOR, na.rm = TRUE),
+         scien_max = pmax(CIEN_ACTUAL, CIEN_ANTERIOR, na.rm = TRUE)) %>% 
+  select(mrun_demre, RBD, 
+         PROM_NOTAS, PTJE_NEM, PTJE_RANKING,
+         leng_max, math_max, hist_max, scien_max,
+         RAMA, GRUPO_DEPENDENCIA, CODIGO_REGION, CODIGO_COMUNA) %>% 
+  mutate(year = 2015)
+
+
+students_apps_demre <- rbind(students_apps2015, 
+                             students_apps2016, 
+                             students_apps2017,
+                             students_apps2018,
+                             students_apps2019,
+                             students_apps2020)
+
+rm(students_apps2015, 
+   students_apps2016, 
+   students_apps2017,
+   students_apps2018,
+   students_apps2019,
+   students_apps2020)
+
+
+
+save(students_apps_demre, file = "./data/clean/psu_students_demre.RData")
+
+
+########################
+
 
 ####
 #Demre years
