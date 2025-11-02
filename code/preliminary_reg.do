@@ -8,7 +8,10 @@
 
 set more off
 
-cd "C:/Users/brunem/Dropbox/causal_schools/"
+*cd "C:/Users/brunem/Dropbox/causal_schools/"
+cd "C:/Users/xd-br/Dropbox/causal_schools/"
+
+
 use "./data/clean/final_data.dta", replace 
 
 * --- 0) One-time setup ---
@@ -66,20 +69,19 @@ global outcomes_app			graduated_hs	  /// registered_psu
 							completed_psu ///
 				          math_max leng_max  took_only_science took_only_history took_both ///
 						   avg_stem_share   /// 
-						   prop_*
-				 
+				 prop_science1 prop_technology1 prop_health1 prop_engineer2 prop_science2 prop_technology2 prop_health2
 				 
 global controls pre_ATT  ///
 				pre_GPA  
 
 
-bysort br_code: gen n_per_br = _N
+*bysort br_code: gen n_per_br = _N
 
 * Drop groups with fewer than 100 obs
-drop if n_per_br < 100
+*drop if n_per_br < 100
 
 * (Optional) clean up the helper variable
-drop n_per_br
+*drop n_per_br
 				
 				
 				
