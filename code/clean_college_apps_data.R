@@ -1,6 +1,9 @@
 ####################################
-data_wd        <-  "C:/Users/xd-br/Dropbox/causal_schools"
-code_output_wd <-  "C:/Users/xd-br/Desktop/PhD/Research/causal_schools"
+#data_wd        <-  "C:/Users/xd-br/Dropbox/causal_schools"
+#code_output_wd <-  "C:/Users/xd-br/Desktop/PhD/Research/causal_schools"
+
+data_wd <- "C:/Users/brunem/Dropbox/causal_schools"
+code_output_wd <-  "C:/Users/brunem/Research/causal_schools"
 
 #Datawd (Dropbox) 
 setwd(data_wd)
@@ -369,6 +372,7 @@ rm(college_apps2025,
    college_apps2022_long,
    college_apps2021_long)
 
+save(college_apps, file = "./data/clean/psu_applications.RData")
 
 ####
 #Demre years
@@ -469,7 +473,7 @@ rm(college_apps2020_long,
    college_apps2015_long)
 
 
-save(college_apps, college_apps_demre, file = "./data/clean/psu_applications.RData")
+save(college_apps_demre, file = "./data/clean/psu_applications_demre.RData")
 
 
 
