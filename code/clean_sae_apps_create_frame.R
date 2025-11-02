@@ -187,6 +187,10 @@ save(sae_stud_info, file = "./data/clean/sae_2017_19_stud_controls.RData")
 
 
 
+#sae_apps %>% 
+#  arrange(proceso, mrun, preferencia_postulante)
+
+
 
 hist(sae_apps$loteria_original)
 #Why is this not a uniform distribution? 
