@@ -1,9 +1,9 @@
 ####################################
-#data_wd        <-  "C:/Users/xd-br/Dropbox/causal_schools"
-#code_output_wd <-  "C:/Users/xd-br/Desktop/PhD/Research/causal_schools"
+data_wd        <-  "C:/Users/xd-br/Dropbox/causal_schools"
+code_output_wd <-  "C:/Users/xd-br/Desktop/PhD/Research/causal_schools"
 
-data_wd <- "C:/Users/brunem/Dropbox/causal_schools"
-code_output_wd <-  "C:/Users/brunem/Research/causal_schools"
+#data_wd <- "C:/Users/brunem/Dropbox/causal_schools"
+#code_output_wd <-  "C:/Users/brunem/Research/causal_schools"
 
 
 setwd(data_wd)
@@ -12,7 +12,11 @@ setwd(data_wd)
 library(tidyverse)
 
 
-effects_schools <- read_csv("./data/clean/effects_schools_long.csv")
+load("./data/clean/final_data.RData")
+
+
+
+effects_schools <- read_csv("./data/clean/effects_schools_long_v2.csv")
 
 table(effects_schools$outcome)
 
@@ -33,8 +37,8 @@ effects_schools %>%
 
 
 effects_schools %>% 
-  filter(outcome == "math_max") %>% 
-  filter(group == "female") %>% 
+  filter(outcome == "avg_stem_share") %>% 
+  filter(group == "all") %>% 
   pull(beta) %>% 
   sd()
 
@@ -84,17 +88,29 @@ plot_2vars <- function(this_group = "all", outcome1, outcome2) {
 effects_wide <- effects_schools %>% 
   filter(group == this_group) %>% 
   filter(outcome %in% c(outcome1, outcome2)) %>% 
+  select(outcome, school_id, beta) %>% 
   pivot_wider(
         names_from = outcome,
-        values_from = beta:sig
+        values_from = beta,
+        names_prefix = "beta_"
   ) 
 
 y_var <- (paste0("beta_",outcome2))
 x_var <- (paste0("beta_",outcome1))
 
+sample_sd_xvar <- sd(final_data[[outcome1]], na.rm = TRUE)
+
+sample_sd_yvar <- sd(final_data[[outcome2]], na.rm = TRUE)
+
+
+
 effects_wide %>% 
-  ggplot(aes_string(x=x_var, y = y_var)) + geom_point() +
-  geom_smooth(method = "lm", se = FALSE) 
+  ggplot(aes(
+    x = .data[[x_var]] / sample_sd_xvar,
+    y = .data[[y_var]] / sample_sd_yvar
+  )) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)
 
 }
 
@@ -114,9 +130,16 @@ plot_2vars("female", "math_max", "leng_max")
 
 
 
-plot_2vars("all", "math_max", "took_science")
-plot_2vars("male", "math_max", "took_science")
-plot_2vars("female", "math_max", "took_science")
+plot_2vars("all", "math_max", "took_only_science")
+plot_2vars("male", "math_max", "took_only_science")
+plot_2vars("female", "math_max", "took_only_science")
+
+plot_2vars("all", "math_max", "took_only_history")
+plot_2vars("male", "math_max", "took_only_history")
+plot_2vars("female", "math_max", "took_only_history")
+
+plot_2vars("all", "math_max", "took_both")
+
 
 plot_2vars("all", "math_max", "avg_stem_share")
 plot_2vars("male", "math_max", "avg_stem_share")
