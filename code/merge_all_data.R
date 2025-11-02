@@ -33,10 +33,10 @@ final_data <-   sample_students %>%
   mutate(female = as.integer(ifelse(es_mujer == 0, 0, 1))) %>% 
   mutate(male   = as.integer(ifelse(es_mujer == 0, 1, 0))) %>% 
   mutate(gender = as.integer(ifelse(es_mujer == 0, "Male", "Female"))) %>% 
-  mutate(took_science = as.factor(ifelse(scien_max == 0, "No", "Yes")),
-         gender_science = factor(paste(gender, took_science, sep = "_"))
+  mutate(took_only_science = as.integer(ifelse(scien_max > 0 & hist_max == 0, 1, 0)),
+    #     gender_science = factor(paste(gender, took_science, sep = "_"))
          ) %>%
-  mutate(took_history = as.factor(ifelse(hist_max == 0, "No", "Yes"))) %>% 
+  mutate(took_only_history = as.integer(ifelse(scien_max == 0 & hist_max > 0, 1, 0))) %>% 
   mutate(took_both = as.factor(ifelse(hist_max > 0 & scien_max > 0  , "Yes", "No"))) %>% 
     mutate(leng_math_total = math_max + leng_max) %>% 
   mutate(graduated_hs   = as.integer(ifelse(!(is.na(PROM_NOTAS)), 1, 0))) %>% 
