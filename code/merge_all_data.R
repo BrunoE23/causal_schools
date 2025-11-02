@@ -71,3 +71,27 @@ save(final_data,  file = "./data/clean/final_data.Rdata")
 haven::write_dta(final_data, path = "./data/clean/final_data.dta")
 
 
+
+all_applications <- students_apps  %>% 
+  rename(grad_rbd_psu = RBD) %>% 
+  mutate(female = as.integer(ifelse(COD_SEXO == 2, 1, 0))) %>% 
+  mutate(male   = as.integer(ifelse(COD_SEXO == 1, 1, 0))) %>% 
+  mutate(gender = as.factor(ifelse(COD_SEXO == 1, "Male", "Female"))) %>% 
+  mutate(took_only_science = as.integer(ifelse(hist_max == 0 & scien_max > 0  , 1, 0))) %>% 
+  mutate(took_only_history = as.integer(ifelse(hist_max > 0 & scien_max == 0  , 1, 0))) %>% 
+  mutate(took_both = as.integer(ifelse(hist_max > 0 & scien_max > 0  , 1, 0))) %>% 
+  mutate(leng_math_total = math_max + leng_max) %>% 
+  mutate(graduated_hs   = as.integer(ifelse(!(is.na(PROM_NOTAS)), 1, 0))) %>% 
+  mutate(registered_psu = as.integer(ifelse(!(is.na(FECHA_NACIMIENTO)), 1, 0))) %>% 
+  mutate(completed_psu = as.integer(ifelse(leng_math_total > 0,  1, 0))) %>% 
+  #   left_join(socioecon_controls,   by = "mrun")  %>%
+  left_join(stem_outcome,   by = "mrun")  
+
+
+
+
+save(all_applications,  file = "./data/clean/all_apps.Rdata")
+haven::write_dta(all_applications, path = "./data/clean/all_apps.dta")
+
+
+
