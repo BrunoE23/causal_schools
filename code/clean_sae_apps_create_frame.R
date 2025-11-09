@@ -89,6 +89,9 @@ sae_apps_2020 <- read_csv2("./data/raw/2020/SAE_2020/C1_Postulaciones_etapa_regu
   filter(cod_nivel == 9)
 
 
+length(unique(final_data$mrun))
+table(sae_apps_2020$preferencia_postulante)
+
 #table(sae_apps_2019$rbd)
 #table(sae_apps_2020$rbd)
 
