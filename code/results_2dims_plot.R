@@ -15,8 +15,10 @@ library(tidyverse)
 load("./data/clean/final_data.RData")
 load("./data/clean/all_apps.RData")
 
-effects_schools <- read_csv("./data/clean/effects_schools_long_v2.csv")
-effects_schools <- read_csv("./data/clean/effects_schools_long_P1.csv")
+sample_type <- "P1"
+sample_type <- "V2"
+
+effects_schools <- read_csv(paste0("./data/clean/effects_schools_long_", sample_type, ".csv"))
 
 effects_schools <- effects_schools %>% 
   filter(!(is.na(school_id)))
@@ -107,7 +109,8 @@ outcome1<- "math_max"
 outcome2<- "avg_stem_share"
 
 
-plot_2vars <- function(outcome1, outcome2, this_group = "all", data = effects_schools) {
+plot_2vars <- function(outcome1, outcome2, this_group = "all", data = effects_schools,
+                       my_xlab = outcome1, my_ylab = outcome2) {
 
   effects_wide <- data %>%
     filter(group == this_group, outcome %in% c(outcome1, outcome2)) %>%
@@ -196,8 +199,13 @@ effects_wide %>%
   coord_cartesian(xlim = lims, ylim = lims) +
   theme_minimal() +
   theme(legend.position = "bottom")  +
-  geom_abline(slope = 1, intercept = 0, linetype = "dashed", color = "gray50")
-
+  geom_abline(slope = 1, intercept = 0, linetype = "dashed", color = "gray50") +
+  labs(
+    x = my_xlab,
+    y = my_ylab,
+    title = "Scatter plot of school effects",
+    subtitle = "Effects are as fractions of the population s.d."
+  )
 }
 
 
@@ -276,7 +284,34 @@ plot_2samples <- function(this_outcome, group1 ="male", group2 ="female", data =
 
 
 
-plot_2vars("math_max", "leng_max")
+plot_2vars("math_max", "leng_max", my_xlab = "Effect on math exam", my_ylab = "Effect on verbal exam")
+ggsave(paste0(code_output_wd, "/output/figures/2dim_math_lang", sample_type, ".png"),
+       width = 6.5, height = 4, units = "in",
+       dpi = 600)
+
+
+plot_2vars("math_max", "avg_stem_share", my_xlab = "Effect on math exam", my_ylab = "Effect on app. STEM content")
+ggsave(paste0(code_output_wd, "/output/figures/2dim_math_stem", sample_type, ".png"),
+       width = 6.5, height = 4, units = "in",
+       dpi = 600)
+
+
+plot_2vars("math_max", "avg_stem_share", data = effects_schools_late, my_xlab = "Effect on math exam", my_ylab = "Effect on app. STEM content")
+ggsave(paste0(code_output_wd, "/output/figures/2dim_math_stem_late_", sample_type, ".png"),
+       width = 6.5, height = 4, units = "in",
+       dpi = 600)
+
+
+
+
+
+plot_2vars("math_max", "took_only_science", my_xlab = "Effect on math exam", my_ylab = "Effect on taking only science exam")
+ggsave(paste0(code_output_wd, "/output/figures/2dim_math_sci", sample_type, ".png"),
+       width = 6.5, height = 4, units = "in",
+       dpi = 600)
+
+
+
 plot_2vars("math_max", "leng_max", data = effects_schools_late)
 
 
