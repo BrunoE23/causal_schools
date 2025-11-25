@@ -218,8 +218,9 @@ cupos_p_curso <- sae_oferta %>%
 #This is what determines whether a school is oversubscribbed or not.
 #I Will only count top 3 applications
 apps_p_curso <- sae_apps %>% 
-  filter(preferencia_postulante <= 3) %>% 
-  group_by(rbd, cod_nivel, cod_curso, proceso) %>% 
+#  filter(preferencia_postulante <= 3) %>% 
+  filter(preferencia_postulante <= 1) %>% 
+    group_by(rbd, cod_nivel, cod_curso, proceso) %>% 
   summarize(n_apps = n()) %>% 
   ungroup()
 
@@ -253,7 +254,7 @@ summ_cursos <- left_join(cupos_p_curso, apps_p_curso, by = c("rbd", "cod_nivel",
 power_cursos <- summ_cursos %>% 
   group_by(rbd, proceso) %>% 
   mutate(n_treated = sum(n_cupos), 
-       n_controls = sum(exc_apps)) %>% 
+       n_controls = sum(exc_apps, na.rm = TRUE)) %>% 
   ungroup() %>% 
   select(rbd, proceso, n_treated, n_controls)  
 
