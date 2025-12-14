@@ -5,7 +5,8 @@ code_output_wd <-  "C:/Users/xd-br/Desktop/PhD/Research/causal_schools"
 data_wd <- "C:/Users/brunem/Dropbox/causal_schools"
 code_output_wd <-  "C:/Users/brunem/Research/causal_schools"
 
-#Datawd (Dropbox) setwd(data_wd)
+#Datawd (Dropbox) 
+setwd(data_wd)
 #####################################
 
 library(tidyverse)
@@ -57,7 +58,7 @@ program_info_2024 <-    read_csv2("./data/raw/2024/Matricula-Ed-Superior-2024/20
   select(COD_SIES, 
          NOMB_CARRERA, TIPO_INST_1, NOMB_INST, COD_INST,AREA_CARRERA_GENERICA,
          science1, technology1, health1, engineer2, science2, technology2,health2,
-         ACREDITADA_CARR, ACREDITADA_INST)
+         ACREDITADA_CARR, ACREDITADA_INST) 
          
 length(unique(program_info_2024$COD_SIES))
 
@@ -77,18 +78,92 @@ mifuturo_recent <- readxl::read_xlsx(
   mutate(TIPO_INST_1 = ifelse(TIPO_INST_1 == "Insitutos Profesionales", 
                               "Institutos Profesionales", 
                               TIPO_INST_1)) %>% 
-  select(NOMB_CARRERA, NOMB_INST, AREA_CARRERA_GENERICA, TIPO_INST_1,
+  select(#NOMB_CARRERA, 
+    NOMB_INST, AREA_CARRERA_GENERICA, TIPO_INST_1,
          employment_1st_year, employment_2nd_year, income_4th_year
+  ) 
+#%>% 
+#mutate(NOMB_CARRERA = stringr::str_to_upper(NOMB_CARRERA))
+
+
+
+mifuturo_recent_clean <- mifuturo_recent %>%
+  mutate(
+    # --- employment: coerce to character, replace "n/a"/"s/i", then parse numeric
+    employment_1st_year = as.character(employment_1st_year),
+    employment_2nd_year = as.character(employment_2nd_year),
+    
+    employment_1st_year = na_if(employment_1st_year, "n/a"),
+    employment_1st_year = na_if(employment_1st_year, "s/i"),
+    employment_2nd_year = na_if(employment_2nd_year, "n/a"),
+    employment_2nd_year = na_if(employment_2nd_year, "s/i"),
+    
+    employment_1st_year = parse_number(employment_1st_year, locale = locale(decimal_mark = ".")),
+    employment_2nd_year = parse_number(employment_2nd_year, locale = locale(decimal_mark = ".")),
+    
+    # --- income: keep as character, replace "n/a"/"s/i"
+    income_4th_year = as.character(income_4th_year),
+    income_4th_year = na_if(income_4th_year, "n/a"),
+    income_4th_year = na_if(income_4th_year, "s/i")
   )
 
+
+parse_income_midpoint_clp <- function(x) {
+  x <- str_squish(as.character(x))
+  x[x %in% c("n/a", "s/i", "", "NA")] <- NA_character_
+  
+  extract_amounts <- function(s) {
+    if (is.na(s)) return(numeric(0))
+    s2 <- str_squish(str_replace_all(s, "\\$", ""))
+    
+    pat <- "(\\d+)\\s+mill[oó]n(?:es)?(?:\\s+(\\d+)\\s+mil)?|(\\d+)\\s+mil"
+    m <- str_match_all(s2, pat)[[1]]
+    if (nrow(m) == 0) return(numeric(0))
+    
+    out <- numeric(0)
+    for (i in seq_len(nrow(m))) {
+      mil1  <- m[i, 2]
+      milk  <- m[i, 3]
+      onlyk <- m[i, 4]
+      if (!is.na(mil1)) {
+        out <- c(out, as.numeric(mil1) * 1e6 + ifelse(is.na(milk), 0, as.numeric(milk) * 1e3))
+      } else if (!is.na(onlyk)) {
+        out <- c(out, as.numeric(onlyk) * 1e3)
+      }
+    }
+    out
+  }
+  
+  vapply(x, function(s) {
+    if (is.na(s)) return(NA_real_)
+    
+    if (s == "Sobre $3 millones 500 mil") return(4e6)
+    
+    amts <- extract_amounts(s)
+    if (length(amts) >= 2) mean(amts[1:2]) else NA_real_
+  }, numeric(1))
+}
+
+mifuturo_recent_clean <- mifuturo_recent_clean %>%
+  mutate(income_4th_year_mid_clp = parse_income_midpoint_clp(income_4th_year))
+
+
+
 #Append employment data
-program_info_2024 <-  left_join(program_info_2024,
-                                mifuturo_recent, 
-                                by = c("NOMB_CARRERA", 
-                                       "NOMB_INST",
+program_info_2024_joint <-  left_join(program_info_2024,
+                                mifuturo_recent_clean, 
+                                by = c("NOMB_INST",
                                        "AREA_CARRERA_GENERICA",
                                        "TIPO_INST_1"))
 
+#sum(program_info_2024$NOMB_CARRERA %in% mifuturo_recent$NOMB_CARRERA)
+sum(program_info_2024$NOMB_INST %in% mifuturo_recent$NOMB_INST)
+sum(program_info_2024$AREA_CARRERA_GENERICA %in% mifuturo_recent$AREA_CARRERA_GENERICA)
+sum(program_info_2024$TIPO_INST_1 %in% mifuturo_recent$TIPO_INST_1)
+
+#TODO: See and think on how to fix this NAs 
+sum(is.na(program_info_2024_joint$income_4th_year))
+sum(is.na(program_info_2024_joint$income_4th_year_clp))
 
 
 oferta_2024 <- read_csv2("./data/raw/2024/PAES-2024-Oferta-Definitiva-Programas/OFERTA_DEFINITIVA_PROGRAMAS_PAES_2024_REV.csv") %>%
@@ -98,7 +173,7 @@ oferta_2024 <- read_csv2("./data/raw/2024/PAES-2024-Oferta-Definitiva-Programas/
   mutate(PROCESO = 2024) %>%
   rename(COD_CARRERA_PREF = COD_CARRERA) %>%
   select(PROCESO, COD_CARRERA_PREF, COD_SIES, CARRERA, UNIVERSIDAD, stem_share,stem_proxy_low, stem_proxy_high) %>% 
-  left_join(program_info_2024, by = "COD_SIES")
+  left_join(program_info_2024_joint, by = "COD_SIES")
 
 
 
@@ -106,7 +181,8 @@ hist(oferta_2024$stem_share, breaks = 20)
 prop.table(table(oferta_2024$stem_share))
 
 
-                         
+hist(oferta_2024$income_4th_year_mid_clp, breaks = 20)
+
 #oferta_combined <- rbind(oferta_2024, oferta_2020) %>%
 #                   select(-PROCESO) %>%
 #                    unique() %>%
@@ -130,11 +206,17 @@ colnames(oferta_2024)
                 ~ mean(.x, na.rm = TRUE),                 # proportion=mean for 0/1
                 .names = "prop_{.col}"),
                 
-              n_stem_low  = sum(stem_proxy_low),
-              n_stem_high = sum(stem_proxy_high),
+              n_stem_low  = sum(stem_proxy_low, na.rm = TRUE),
+              n_stem_high = sum(stem_proxy_high, na.rm = TRUE),
               only_stem_low  = min(stem_proxy_low),
               only_stem_high = min(stem_proxy_high),
-              year_1st_app = min(year)
+              year_1st_app = min(year),
+              #,
+              avg_employ_y1 = mean(employment_1st_year, na.rm = TRUE),   
+              avg_employ_y2 = mean(employment_2nd_year, na.rm = TRUE),   
+              avg_income_y4 = mean(income_4th_year_mid_clp, na.rm = TRUE),       
+              
+                            
     )
   
   
