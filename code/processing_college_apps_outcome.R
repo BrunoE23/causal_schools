@@ -219,10 +219,7 @@ colnames(oferta_2024)
                             
     )
   
-  
+  sum(is.na(stem_outcome$avg_income_y4))
   
   save(stem_outcome, file = "./data/clean/stem_outcome.RData")
-  
-  
-  
   
