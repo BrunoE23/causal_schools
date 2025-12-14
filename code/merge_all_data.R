@@ -17,9 +17,10 @@ load("./data/clean/stem_outcome.RData")
 
 #Academic controls and school of graduation, only for first year applying
 load("./data/clean/psu_students.RData")
+
 load("./data/clean/sae_2017_19_stud_controls.RData")
 load("./data/clean/tracking_clean_wide.RData")
-
+load("./data/clean/simce_4to.Rdata")
 
 length(unique(sample_students$rbd))
   
@@ -53,6 +54,7 @@ final_data <-   sample_students %>%
   mutate(completed_psu = as.integer(ifelse(leng_math_total> 0,  1, 0))) %>% 
   #   left_join(socioecon_controls,   by = "mrun")  %>%
   left_join(stem_outcome,   by = "mrun")  %>%
+  left_join(simce_4to,   by = "mrun")  %>%
   mutate(graduated_from_applied_school = (grad_rbd_psu == rbd_target)) 
 
 table(final_data$offered_spot_anyR)
@@ -85,7 +87,8 @@ all_applications <- students_apps  %>%
   mutate(registered_psu = as.integer(ifelse(!(is.na(FECHA_NACIMIENTO)), 1, 0))) %>% 
   mutate(completed_psu = as.integer(ifelse(leng_math_total > 0,  1, 0))) %>% 
   #   left_join(socioecon_controls,   by = "mrun")  %>%
-  left_join(stem_outcome,   by = "mrun")  
+  left_join(stem_outcome,   by = "mrun") %>% 
+  left_join(simce_4to, by = "mrun")
 
 
 

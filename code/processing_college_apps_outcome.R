@@ -55,10 +55,41 @@ program_info_2024 <-    read_csv2("./data/raw/2024/Matricula-Ed-Superior-2024/20
   ) %>% 
   rename(COD_SIES = CODIGO_UNICO) %>% 
   select(COD_SIES, 
+         NOMB_CARRERA, TIPO_INST_1, NOMB_INST, COD_INST,AREA_CARRERA_GENERICA,
          science1, technology1, health1, engineer2, science2, technology2,health2,
          ACREDITADA_CARR, ACREDITADA_INST)
          
-    
+length(unique(program_info_2024$COD_SIES))
+
+
+mifuturo_recent <- readxl::read_xlsx(
+  "./data/raw/mifuturo/Buscador_Empleabilidad_ingresos_2025_2026_SIES.xlsx",
+  sheet = 2) %>%  
+  rename(NOMB_INST             = `Nombre de institución`, 
+         AREA_CARRERA_GENERICA = `Nombre carrera genérica`,
+         TIPO_INST_1           = `Tipo de institución`,
+         NOMB_CARRERA           = `Nombre carrera (del título)`,
+         
+         employment_1st_year   = `Empleabilidad 1er año`,
+         employment_2nd_year   = `Empleabilidad 2° año`,
+         income_4th_year       = `Ingreso Promedio al 4° año`
+  ) %>% 
+  mutate(TIPO_INST_1 = ifelse(TIPO_INST_1 == "Insitutos Profesionales", 
+                              "Institutos Profesionales", 
+                              TIPO_INST_1)) %>% 
+  select(NOMB_CARRERA, NOMB_INST, AREA_CARRERA_GENERICA, TIPO_INST_1,
+         employment_1st_year, employment_2nd_year, income_4th_year
+  )
+
+#Append employment data
+program_info_2024 <-  left_join(program_info_2024,
+                                mifuturo_recent, 
+                                by = c("NOMB_CARRERA", 
+                                       "NOMB_INST",
+                                       "AREA_CARRERA_GENERICA",
+                                       "TIPO_INST_1"))
+
+
 
 oferta_2024 <- read_csv2("./data/raw/2024/PAES-2024-Oferta-Definitiva-Programas/OFERTA_DEFINITIVA_PROGRAMAS_PAES_2024_REV.csv") %>%
   mutate(stem_share = rowSums(across(c(CIEN, M1, M2)), na.rm = TRUE),
@@ -75,11 +106,14 @@ hist(oferta_2024$stem_share, breaks = 20)
 prop.table(table(oferta_2024$stem_share))
 
 
-
+                         
 #oferta_combined <- rbind(oferta_2024, oferta_2020) %>%
 #                   select(-PROCESO) %>%
 #                    unique() %>%
 #                    arrange(CODIGO)
+
+colnames(oferta_2024)
+
 
 
   stem_outcome <- college_apps %>% 
@@ -104,5 +138,9 @@ prop.table(table(oferta_2024$stem_share))
     )
   
   
+  
   save(stem_outcome, file = "./data/clean/stem_outcome.RData")
+  
+  
+  
   
