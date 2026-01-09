@@ -9,6 +9,8 @@ code_output_wd <-  "C:/Users/brunem/Research/causal_schools"
 setwd(data_wd)
 #####################################
 
+dollar_clp_conversion <- 913
+
 library(tidyverse)
 
 load("./data/clean/samples.RData")
@@ -55,6 +57,7 @@ final_data <-   sample_students %>%
   #   left_join(socioecon_controls,   by = "mrun")  %>%
   left_join(stem_outcome,   by = "mrun")  %>%
   left_join(simce_4to,   by = "mrun")  %>%
+  mutate(avg_income_y4_usd = avg_income_y4 / dollar_clp_conversion) %>%  
   mutate(graduated_from_applied_school = (grad_rbd_psu == rbd_target)) 
 
 table(final_data$offered_spot_anyR)

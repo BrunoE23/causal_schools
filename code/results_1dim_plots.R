@@ -1,9 +1,9 @@
 ####################################
-data_wd        <-  "C:/Users/xd-br/Dropbox/causal_schools"
-code_output_wd <-  "C:/Users/xd-br/Desktop/PhD/Research/causal_schools"
+#data_wd        <-  "C:/Users/xd-br/Dropbox/causal_schools"
+#code_output_wd <-  "C:/Users/xd-br/Desktop/PhD/Research/causal_schools"
 
-#data_wd <- "C:/Users/brunem/Dropbox/causal_schools"
-#code_output_wd <-  "C:/Users/brunem/Research/causal_schools"
+data_wd <- "C:/Users/brunem/Dropbox/causal_schools"
+code_output_wd <-  "C:/Users/brunem/Research/causal_schools"
 
 
 setwd(data_wd)
@@ -15,11 +15,19 @@ library(tidyverse)
 load("./data/clean/final_data.RData")
 load("./data/clean/all_apps.RData")
 
-sample_type <- "V2"
+#sample_type <- "V2"
 sample_type <- "P1"
 
 effects_schools <- read_csv(paste0("./data/clean/effects_schools_long_", sample_type, ".csv"))
 
+
+theme_transparent <- theme_minimal(base_size = 12) +
+  theme(
+    panel.background = element_rect(fill = "transparent", color = NA),
+    plot.background  = element_rect(fill = "transparent", color = NA),
+    legend.background = element_rect(fill = "transparent", color = NA),
+    legend.box.background = element_rect(fill = "transparent", color = NA)
+  )
 
 plot_1dim <- function(this_outcome, ref_data = final_data, param = 1.5){
 
@@ -71,24 +79,37 @@ ggplot(est2, aes(x = beta, y = rank)) +
   theme(
     legend.position = "none",
     panel.spacing.y = unit(1, "lines")
-  )  + coord_cartesian(xlim = lims) 
+  )  + coord_cartesian(xlim = lims)  +
+  theme_transparent
 
 
 }
   
 
+
+
+
+
 plot_1dim("n_years_rbd_target_post", param = 2)
 ggsave(paste0(code_output_wd, "/output/figures/distr_eff_years_", sample_type, ".png"),
        width = 6.5, height = 4, units = "in",
-       dpi = 600)
+       dpi = 600,
+       bg = "transparent")
 
 plot_1dim("math_max")
 ggsave(paste0(code_output_wd, "/output/figures/distr_eff_math_", sample_type, ".png"),
        width = 6.5, height = 4, units = "in",
-       dpi = 600)
+       dpi = 600,
+       bg = "transparent")
 
 plot_1dim("avg_stem_share")
 ggsave(paste0(code_output_wd, "/output/figures/distr_eff_stem_", sample_type, ".png"),
        width = 6.5, height = 4, units = "in",
-       dpi = 600)
+       dpi = 600,
+       bg = "transparent")
 
+
+plot_1dim("avg_income_y4_usd")
+ggsave(paste0(code_output_wd, "/output/figures/distr_eff_inc_", sample_type, ".png"),
+       width = 6.5, height = 4, units = "in",
+       dpi = 600)

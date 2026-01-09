@@ -8,8 +8,8 @@
 
 set more off
 
-*cd "C:/Users/brunem/Dropbox/causal_schools/"
-cd "C:/Users/xd-br/Dropbox/causal_schools/"
+cd "C:/Users/brunem/Dropbox/causal_schools/"
+*cd "C:/Users/xd-br/Dropbox/causal_schools/"
 
 
 use "./data/clean/final_data.dta", replace 
@@ -71,12 +71,14 @@ global outcomes_tracking   female n_years_rbd_target_post n_school_changes_post 
 global outcomes_app			graduated_hs	  /// registered_psu
 							completed_psu ///
 				          math_max leng_max  took_only_science took_only_history took_both ///
-						   avg_stem_share   /// 
+						   avg_stem_share   avg_income_y4_usd /// 
 				 prop_science1 prop_technology1 prop_health1 prop_engineer2 prop_science2 prop_technology2 prop_health2
 				 
 global controls pre_ATT  ///
-				pre_GPA  
-
+				pre_GPA  ///
+				z_sim_mat_4to ///
+				z_sim_leng_4to ///
+				income_decile
 
 
 				
