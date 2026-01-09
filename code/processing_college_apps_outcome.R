@@ -147,7 +147,21 @@ parse_income_midpoint_clp <- function(x) {
 mifuturo_recent_clean <- mifuturo_recent_clean %>%
   mutate(income_4th_year_mid_clp = parse_income_midpoint_clp(income_4th_year))
 
+fe_reg_wage <- lm(data = mifuturo_recent_clean, income_4th_year_mid_clp ~ factor(NOMB_INST) + factor(AREA_CARRERA_GENERICA))
+summary(fe_reg_wage)$r.squared
+nobs(fe_reg_wage)
 
+sum(is.na(mifuturo_recent_clean$income_4th_year_mid_clp))
+sum(is.na(mifuturo_recent_clean$employment_1st_year))
+sum(is.na(mifuturo_recent_clean$employment_2nd_year))
+
+fe_reg_employ <- lm(data = mifuturo_recent_clean, employment_1st_year ~ factor(NOMB_INST) + factor(AREA_CARRERA_GENERICA))
+summary(fe_reg_employ)$r.squared
+nobs(fe_reg_employ)
+
+fe_reg_employ2 <- lm(data = mifuturo_recent_clean, employment_2nd_year ~ factor(NOMB_INST) + factor(AREA_CARRERA_GENERICA))
+summary(fe_reg_employ2)$r.squared
+nobs(fe_reg_employ2)
 
 #Append employment data
 program_info_2024_joint <-  left_join(program_info_2024,
