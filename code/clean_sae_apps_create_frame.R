@@ -89,12 +89,31 @@ sae_apps_2020 <- read_csv2("./data/raw/2020/SAE_2020/C1_Postulaciones_etapa_regu
   filter(cod_nivel == 9)
 
 
-length(unique(final_data$mrun))
+#length(unique(final_data$mrun))
 table(sae_apps_2020$preferencia_postulante)
 
 #table(sae_apps_2019$rbd)
 #table(sae_apps_2020$rbd)
 
+sae_apps_allprio <- rbind(sae_apps_2017, sae_apps_2018, sae_apps_2019,sae_apps_2020)
+
+sae_apps_allprio %>% 
+  mutate(any_prio = pmax(prioridad_hermano, prioridad_hijo_funcionario, prioridad_exalumno )) %>% 
+  group_by(mrun) %>% 
+  mutate(ever_prio = max(any_prio)) %>% 
+  ungroup() %>% 
+  select(mrun, ever_prio) %>% 
+  unique() %>% 
+  pull(ever_prio) %>% 
+  table() %>% 
+  prop.table()
+
+sae_apps_allprio %>% 
+  mutate(any_prio = pmax(prioridad_hermano, prioridad_hijo_funcionario, prioridad_exalumno, prioridad_matriculado )) %>%  
+  pull(any_prio) %>% 
+  table() %>% 
+  prop.table()
+  
 
 #Filter out prioridad 
 sae_apps <- rbind(sae_apps_2017, sae_apps_2018, sae_apps_2019,sae_apps_2020) %>% 
