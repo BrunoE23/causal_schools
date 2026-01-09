@@ -34,6 +34,13 @@ students_apps2025 <- read_csv2("./data/raw/2025/PAES_2025_Inscritos_Puntajes/A_I
          CODIGO_REGION_EGRESO, CODIGO_COMUNA_EGRESO)
 
 
+students_apps2025 %>% 
+  select(PROM_NOTAS, PTJE_NEM, PTJE_RANKING,
+         leng_max, math_max, hist_max, scien_max
+  ) %>% 
+  summary()
+
+
 students_apps2024 <- read_csv2("./data/raw/2024/PAES-2024-Inscritos-Puntajes/A_INSCRITOS_PUNTAJES_PAES_2024_PUB_MRUN.csv") %>%
   mutate(year = 2024)  %>% 
   rename(mrun = MRUN) %>% 
