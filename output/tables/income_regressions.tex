@@ -1,0 +1,39 @@
+{
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\begin{tabular}{l*{6}{c}}
+\toprule
+                    &\multicolumn{3}{c}{OLS}                                          &\multicolumn{3}{c}{School Fixed Effects}                         \\
+                    &\multicolumn{1}{c}{(1)}&\multicolumn{1}{c}{(2)}&\multicolumn{1}{c}{(3)}&\multicolumn{1}{c}{(4)}&\multicolumn{1}{c}{(5)}&\multicolumn{1}{c}{(6)}\\
+\cmidrule(lr){2-4}\cmidrule(lr){5-7}
+Female, binary      &    -190.965\sym{***}&    -126.702\sym{***}&    -139.109\sym{***}&    -171.105\sym{***}&    -120.598\sym{***}&    -135.715\sym{***}\\
+                    &     (2.601)         &     (2.532)         &     (2.453)         &     (2.714)         &     (2.658)         &     (2.575)         \\
+\addlinespace
+Income Decile, 1-10 &      53.055\sym{***}&      13.382\sym{***}&      15.236\sym{***}&      19.058\sym{***}&       4.085\sym{***}&       4.422\sym{***}\\
+                    &     (0.451)         &     (0.454)         &     (0.442)         &     (0.584)         &     (0.544)         &     (0.527)         \\
+\addlinespace
+Z-score math exam   &                     &     245.988\sym{***}&     202.454\sym{***}&                     &     246.430\sym{***}&     196.061\sym{***}\\
+                    &                     &     (1.744)         &     (1.726)         &                     &     (1.882)         &     (1.867)         \\
+\addlinespace
+Z-score verbal exam &                     &       5.925\sym{***}&      42.714\sym{***}&                     &       1.221         &      38.720\sym{***}\\
+                    &                     &     (1.637)         &     (1.623)         &                     &     (1.666)         &     (1.647)         \\
+\addlinespace
+Z-score GPA score   &                     &      77.967\sym{***}&      69.522\sym{***}&                     &     165.745\sym{***}&     140.227\sym{***}\\
+                    &                     &     (7.760)         &     (7.489)         &                     &    (10.001)         &     (9.696)         \\
+\addlinespace
+Z-score School-relative GPA score&                     &      70.467\sym{***}&      62.698\sym{***}&                     &      -1.900         &       6.800         \\
+                    &                     &     (7.520)         &     (7.259)         &                     &     (9.573)         &     (9.279)         \\
+\addlinespace
+Chose exclusively science exam, binary&                     &                     &     239.635\sym{***}&                     &                     &     231.651\sym{***}\\
+                    &                     &                     &     (2.822)         &                     &                     &     (2.857)         \\
+\addlinespace
+Chose exclusively history exam, binary&                     &                     &    -199.859\sym{***}&                     &                     &    -211.906\sym{***}\\
+                    &                     &                     &     (2.681)         &                     &                     &     (2.717)         \\
+\addlinespace
+Constant            &    1850.082\sym{***}&    2036.740\sym{***}&    1978.460\sym{***}&    2054.521\sym{***}&    2090.296\sym{***}&    2050.437\sym{***}\\
+                    &     (3.478)         &     (3.387)         &     (3.610)         &     (4.159)         &     (3.920)         &     (4.174)         \\
+\midrule
+Observations        &      359137         &      354101         &      354101         &      358312         &      353301         &      353301         \\
+R-squared           &       0.053         &       0.217         &       0.266         &       0.103         &       0.245         &       0.293         \\
+\bottomrule
+\end{tabular}
+}
