@@ -3,3 +3,11 @@ data/
 
 *.Rproj
 .Rproj.user/
+
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.fls
+*.fdb_latexmk

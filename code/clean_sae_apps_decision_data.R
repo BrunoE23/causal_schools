@@ -18,25 +18,25 @@ load("./data/clean/samples.RData")
 
 
 results_2017 <- read_csv2("./data/raw/2017/SAE_2017/D1_Resultados_etapa_regular_2017_Admisión_2018_PUBL.csv") %>%
-  mutate(proceso = 2017) %>% 
-  filter(cod_nivel == 9) 
+  mutate(proceso = 2017) %>%
+  filter(cod_nivel == 9)
 
 
 results_2018 <- read_csv2("./data/raw/2018/SAE_2018/D1_Resultados_etapa_regular_2018_Admisión_2019_PUBL.csv") %>%
-  mutate(proceso = 2018) %>% 
-  filter(cod_nivel == 9) 
+  mutate(proceso = 2018) %>%
+  filter(cod_nivel == 9)
 
 results_2019 <- read_csv2("./data/raw/2019/SAE_2019/D1_Resultados_etapa_regular_2019_Admisión_2020_PUBL.csv") %>%
-  mutate(proceso = 2019) %>% 
-  filter(cod_nivel == 9) 
+  mutate(proceso = 2019) %>%
+  filter(cod_nivel == 9)
 
 results_2020 <- read_csv2("./data/raw/2020/SAE_2020/D1_Resultados_etapa_regular_2020_Admisión_2021_PUBL.csv") %>%
-  mutate(proceso = 2020) %>% 
-  filter(cod_nivel == 9) 
+  mutate(proceso = 2020) %>%
+  filter(cod_nivel == 9)
 
 
 #Simple framework: every applicant taken vs every applicant not taken
-#Simple framework: every applicant taken vs every applicant 
+#Simple framework: every applicant taken vs every applicant
 
 
 offered_spots <- function(results, year,

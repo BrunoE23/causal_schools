@@ -1,0 +1,120 @@
+%% Encoding
+\RequirePackage[utf8]{inputenx}     % Source code
+\RequirePackage[T1]{fontenc}        % PDF
+
+%% Fonts and typography
+\RequirePackage{lmodern}           % Latin Modern Roman
+\RequirePackage[scaled]{beramono}  % Bera Mono (Bitstream Vera Sans Mono)
+\RequirePackage[final]{microtype}  % Improved typography
+\pretitle{\begin{center}\Huge}                    % Title evt også: \sffamily\bfseries
+\renewcommand*{\chaptitlefont}{\Large\raggedright} % Chapter
+
+%% Mathematics
+\RequirePackage{amsmath}   % Extra symbols
+\RequirePackage{amssymb}   % Extra symbols
+\RequirePackage{amsthm}    % Theorem-like environments
+\RequirePackage{thmtools}  % Theorem-like environments
+\RequirePackage{thm-restate}
+\RequirePackage{mathtools} % Fonts and environments for mathematical formuale
+\RequirePackage{mathrsfs}  % Script font with \mathscr{}
+\RequirePackage{bbm}
+
+%% Miscellanous
+\RequirePackage{graphicx}  % Tool for images
+\RequirePackage{csquotes}  % Quotes
+\RequirePackage{textcomp}  % Extra symbols
+\RequirePackage{listings}  % Typesetting code
+\lstset{basicstyle = \ttfamily, frame = tb}
+
+%% Bibliography
+\RequirePackage{mathscinet}
+\usepackage[round]{natbib}  % Or another citation style
+
+%% Cross references
+\RequirePackage{hyperref}
+\RequirePackage{varioref}
+\urlstyle{sf}
+\RequirePackage[nameinlink, noabbrev]{cleveref}
+
+%% Misc
+\RequirePackage[dvipsnames,
+                svgnames,
+                cmyk]{xcolor}
+\RequirePackage{tikz}   
+\RequirePackage{textcomp}
+\RequirePackage{placeins} % for the \FloatBarrier command
+\RequirePackage{geometry}
+\geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+\counterwithout{section}{chapter}
+\RequirePackage{caption}
+\RequirePackage{float}
+\captionsetup{margin={0cm,1cm},labelfont=bf}
+\setcounter{secnumdepth}{5}
+\RequirePackage[english]{babel}
+\RequirePackage{cancel}
+\RequirePackage{fancyhdr}
+
+% Misc figure stuff
+\graphicspath{{figures/}}
+\newsubfloat{figure}
+\newsubfloat{table}
+\captionnamefont{\bfseries}
+
+% Set link colors
+\definecolor{bluelink}{HTML}{0B5A9D}
+\hypersetup{
+  colorlinks=true,
+  allcolors=bluelink
+}
+
+% Nice lists
+\RequirePackage{enumitem}
+
+%% Operators
+\DeclareMathOperator{\im}{im}
+\DeclareMathOperator{\rank}{rank}
+
+%% Commands for operators, etc.
+\newcommand{\E}{\mathbb{E}}   
+\newcommand{\var}{\mathbb{V}}   
+\newcommand{\cov}{\mathbb{C}}  
+\renewcommand{\P}{\mathbb{P}}
+\newcommand{\1}{\mathbbm{1}}
+\renewcommand{\L}{\mathbb{L}}
+\newcommand{\diag}{\text{diag}}
+\newcommand{\I}{\mathbb{I}}
+
+% Nicely spaced exists and for all
+\newcommand{\forallsp}{\,\,\forall\,\,}
+\newcommand{\existssp}{\,\,\exists\,\,}
+
+% Convergence
+\newcommand{\conv}{\xrightarrow{\;\;\;}}
+
+%% Distributions
+\newcommand{\N}{\mathfrak{N}}
+\newcommand{\Chi}{\mathfrak{C}}
+
+% misc
+\newcommand{\del}{\partial} 
+\renewcommand{\H}{\mathcal{H}} % hypotheses
+\renewcommand{\qedsymbol}{\(\blacksquare\)}
+\def\qed{\rule{2mm}{2mm}}
+\def\indep{\perp \!\!\! \perp}
+\DeclarePairedDelimiter{\pr}{(}{)}
+
+%% Theorems
+\newtheorem{assumption}{Assumption}
+\newtheorem{proposition}{Proposition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{definition}{Definition}
+\AtEndEnvironment{remark}{\hfill~\qed}
+\AtEndEnvironment{proof}{\hfill}
+
+% helpful todo command
+\newcommand{\mytodo}[1]{\vspace{4pt}\noindent\textcolor{red}{TODO: #1}\vspace{4pt}}
+
+% Set baseline stretch for comfortable reading
+\renewcommand{\baselinestretch}{1.15}
