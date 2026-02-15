@@ -316,3 +316,23 @@ ggplot(heat_df, aes(field_a, field_b, fill = jaccard)) +
     fill = "Jaccard"
   )
 
+
+################ Get Cutoff scores
+
+
+
+college_apps %>% 
+#solo seleccionados and regular admission
+    filter(ESTADO_PREF == 24) %>%  
+      group_by(COD_CARRERA_PREF, year, TIPO_PREF) %>% 
+    filter(PTJE_PREF == min(PTJE_PREF))  %>% 
+    ungroup() %>% 
+    select(year, COD_CARRERA_PREF, PTJE_PREF, TIPO_PREF) %>% 
+    rename(PTJE_corte = PTJE_PREF)
+  
+    
+  
+
+
+
+
