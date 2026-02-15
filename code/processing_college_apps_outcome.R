@@ -12,55 +12,47 @@ setwd(data_wd)
 library(tidyverse)
 library(readxl)
 
+dollar_clp_conversion <- 913
+
+
 load("./data/clean/psu_applications.RData")
 
 
-#oferta_2020 <- read_xlsx("./2020/PSU2020/PostulaciónySelección_Admisión2020/Libro_CódigosADM2020_ArchivoD.xlsx", sheet = 3) %>% 
-#  mutate(stem_share = `%_MATE` + `%_CIEN`,
-#         stem_proxy_low = ifelse(stem_share > 45, 1L, 0L),
-#         stem_proxy_high = ifelse(stem_share > 50, 1L, 0L)) %>% 
-#  rename(PROCESO = AGNO_ACAD) %>% 
-#  select(PROCESO, CODIGO, CARRERA, UNIVERSIDAD, stem_share,stem_proxy_low, stem_proxy_high)
+oferta_2020 <- read_xlsx("./data/raw/2020/PSU2020/PostulaciónySelección_Admisión2020/Libro_CódigosADM2020_ArchivoD.xlsx", sheet = 3) %>% 
+  mutate(stem_share = `%_MATE` + `%_CIEN`,
+         stem_proxy_low = ifelse(stem_share > 45, 1L, 0L),
+         stem_proxy_high = ifelse(stem_share > 50, 1L, 0L)) %>% 
+  rename(PROCESO = AGNO_ACAD) %>% 
+  select(PROCESO, CODIGO, CARRERA, UNIVERSIDAD, stem_share,stem_proxy_low, stem_proxy_high)
 
 
 
 #colnames(program_info_2024)
 
-program_info_2024 <-    read_csv2("./data/raw/2024/Matricula-Ed-Superior-2024/20250729_Matrícula_Ed_Superior_2024_PUBL_MRUN.csv",
-            locale = locale(decimal_mark = ",", grouping_mark = ".")) %>%  
-  rename_with(~ toupper(.x)) %>% 
-      select(CODIGO_UNICO, 
-             TIPO_INST_1, TIPO_INST_2 , TIPO_INST_3, COD_INST, NOMB_INST,
-             COD_SEDE, NOMB_SEDE,
-             COD_CARRERA, NOMB_CARRERA, 
-             DUR_TOTAL_CARR,
-             REGION_SEDE,  PROVINCIA_SEDE,  COMUNA_SEDE, 
-             NIVEL_GLOBAL,
-             NIVEL_CARRERA_1, NIVEL_CARRERA_2,
-             CODIGO_DEMRE,
-             AREA_CONOCIMIENTO,
-             CINE_F_97_AREA_AREA, CINE_F_97_SUBAREA, 
-             AREA_CARRERA_GENERICA, 
-             CINE_F_13_AREA, CINE_F_13_SUBAREA, 
-             ACREDITADA_CARR, ACREDITADA_INST
-             ) %>% 
-  unique()  %>% 
-  filter(NIVEL_CARRERA_2 %in% c("Carreras Profesionales", "Carreras Técnicas")) %>% 
-  mutate(science1    = as.integer(AREA_CONOCIMIENTO == "Ciencias Básicas"),
-         technology1 = as.integer(AREA_CONOCIMIENTO == "Tecnología"),
-         health1     = as.integer(AREA_CONOCIMIENTO == "Salud"),
-         engineer2   = as.integer(CINE_F_13_AREA == "Ingeniería, Industria y Construcción"),
-         science2    = as.integer(CINE_F_13_AREA == "Ciencias naturales, matemáticas y estadística"),
-         technology2 = as.integer(CINE_F_13_AREA == "Tecnología de la Información y la Comunicación (TIC)"),
-         health2     = as.integer(CINE_F_13_AREA == "Salud y Bienestar")
-  ) %>% 
-  rename(COD_SIES = CODIGO_UNICO) %>% 
-  select(COD_SIES, 
-         NOMB_CARRERA, TIPO_INST_1, NOMB_INST, COD_INST,AREA_CARRERA_GENERICA,
-         science1, technology1, health1, engineer2, science2, technology2,health2,
-         ACREDITADA_CARR, ACREDITADA_INST) 
-         
-length(unique(program_info_2024$COD_SIES))
+#Enrollment data, but has a lot of info I use.
+
+
+program_info_all <- readRDS("./data/clean/program_info_22-24.rds") %>% 
+  mutate(
+    NOMB_INST = str_remove(NOMB_INST, 
+                           "\\s*\\(\\*.*?\\)")
+  )
+
+
+#Data checks
+# length(unique(program_info_2024$COD_SIES))
+# 
+# table(program_info_2024$AREA_CONOCIMIENTO, program_info_2024$CINE_F_13_AREA)
+# table(program_info_2024$CINE_F_13_AREA)
+# 
+# program_info_2024 %>% 
+#   filter(CINE_F_13_AREA == "Servicios") %>% 
+#   pull(AREA_CARRERA_GENERICA) %>% 
+#   table()
+# 
+# program_info_2024 %>% 
+#   filter(AREA_CONOCIMIENTO == "Tecnología") %>% 
+#   View()
 
 
 mifuturo_recent <- readxl::read_xlsx(
@@ -81,7 +73,8 @@ mifuturo_recent <- readxl::read_xlsx(
   select(#NOMB_CARRERA, 
     NOMB_INST, AREA_CARRERA_GENERICA, TIPO_INST_1,
          employment_1st_year, employment_2nd_year, income_4th_year
-  ) 
+  )  %>% 
+  filter(!(is.na(AREA_CARRERA_GENERICA)))
 #%>% 
 #mutate(NOMB_CARRERA = stringr::str_to_upper(NOMB_CARRERA))
 
@@ -145,15 +138,130 @@ parse_income_midpoint_clp <- function(x) {
 }
 
 mifuturo_recent_clean <- mifuturo_recent_clean %>%
-  mutate(income_4th_year_mid_clp = parse_income_midpoint_clp(income_4th_year))
+  mutate(income_4th_year_mid_clp = parse_income_midpoint_clp(income_4th_year)) %>% 
+  mutate(income_4th_year_mid_usd = income_4th_year_mid_clp / dollar_clp_conversion) %>%  
+  mutate(log_income = log(income_4th_year_mid_usd))
 
-fe_reg_wage <- lm(data = mifuturo_recent_clean, income_4th_year_mid_clp ~ factor(NOMB_INST) + factor(AREA_CARRERA_GENERICA))
-summary(fe_reg_wage)$r.squared
-nobs(fe_reg_wage)
+table(is.na(mifuturo_recent_clean$log_income))
+
+mifuturo_recent_clean %>% 
+  filter(is.na(log_income)) %>% 
+  View()
+ 
+
+# mifuturo_recent_clean %>%
+#   group_by(NOMB_INST, AREA_CARRERA_GENERICA) %>%
+#   summarize(count = n()) %>% 
+#   filter(count > 1) %>% 
+#   ungroup()
+
+
+#Predicting employment 
+emp_reg_wage <- lm(data = mifuturo_recent_clean, employment_2nd_year ~ employment_1st_year)
+summary(emp_reg_wage)$r.squared
+nobs(emp_reg_wage)
+###
+
+
+###################################
+######### Impute wages
+
+# Ensure factors in the training data
+train <- mifuturo_recent_clean %>%
+  filter(!is.na(log_income)) %>%
+  mutate(
+    NOMB_INST = factor(NOMB_INST),
+    AREA_CARRERA_GENERICA = factor(AREA_CARRERA_GENERICA)
+  )
+
+miss <- mifuturo_recent_clean %>%
+  filter(is.na(log_income)) %>%
+  mutate(
+    NOMB_INST = factor(NOMB_INST, levels = levels(train$NOMB_INST)),
+    AREA_CARRERA_GENERICA = factor(AREA_CARRERA_GENERICA,
+                                   levels = levels(train$AREA_CARRERA_GENERICA))
+  )
+
+
+fe_reg_wage <- lm(log_income ~ NOMB_INST + AREA_CARRERA_GENERICA, data = train)
+
+smear <- mean(exp(residuals(fe_reg_wage)))
+# Predict only where both factors are in-support (not NA after re-leveling)
+
+miss_supported <- miss %>% filter(!is.na(NOMB_INST), !is.na(AREA_CARRERA_GENERICA))
+miss_supported$log_income_hat <- predict(fe_reg_wage, newdata = miss_supported)
+miss_supported$income_hat <- exp(miss_supported$log_income_hat) * smear
+
+
+b <- coef(fe_reg_wage)
+
+# Build FULL vector of institution effects, including the omitted baseline as 0
+inst_levels <- levels(train$NOMB_INST)
+inst_fe <- setNames(rep(0, length(inst_levels)), inst_levels)
+
+inst_idx <- grep("^NOMB_INST", names(b))  # works with formula "log_income ~ NOMB_INST + ..."
+inst_names <- sub("^NOMB_INST", "", names(b)[inst_idx])
+inst_fe[inst_names] <- b[inst_idx]
+
+# Unweighted mean across institutions (each institution once)
+c_inst <- mean(inst_fe)
+
+# Centered institution effects
+inst_fe_centered <- inst_fe - c_inst
+
+# Adjust intercept so fitted values don't change
+alpha_centered <- b["(Intercept)"] + c_inst
+
+
+## Repeat for majors
+maj_levels <- levels(train$AREA_CARRERA_GENERICA)
+maj_fe <- setNames(rep(0, length(maj_levels)), maj_levels)
+
+maj_fe_idx <- grep("^AREA_CARRERA_GENERICA", names(b))  # works with formula "log_income ~ NOMB_INST + ..."
+maj_fe_names <- sub("^AREA_CARRERA_GENERICA", "", names(b)[maj_fe_idx])
+maj_fe[maj_fe_names] <- b[maj_fe_idx]
+
+sort(maj_fe)
+
+
+
+mifuturo_imputed <- mifuturo_recent_clean %>%
+  left_join(
+    miss_supported %>% select(NOMB_INST , AREA_CARRERA_GENERICA , log_income_hat, income_hat),
+    by = c("NOMB_INST", "AREA_CARRERA_GENERICA")
+  ) %>%
+  mutate(
+    log_income_imp = ifelse(is.na(log_income), log_income_hat, log_income),
+    income_imp     = ifelse(is.na(log_income), income_hat, exp(log_income))
+  )
+
+
+
+
+inst_effects_tbl <- tibble::tibble(
+  NOMB_INST = names(inst_fe_centered),
+  inst_fe = as.numeric(inst_fe_centered)
+)
+
+
+major_effects_tbl <- tibble::tibble(
+  AREA_CARRERA_GENERICA = names(maj_fe),
+  maj_fe = as.numeric(maj_fe)
+)
+
+
+
+saveRDS(inst_effects_tbl, "./data/clean/inst_fe.rds")
+saveRDS(major_effects_tbl, "./data/clean/maj_fe.rds")
+
+##########################
+
 
 sum(is.na(mifuturo_recent_clean$income_4th_year_mid_clp))
 sum(is.na(mifuturo_recent_clean$employment_1st_year))
 sum(is.na(mifuturo_recent_clean$employment_2nd_year))
+
+
 
 fe_reg_employ <- lm(data = mifuturo_recent_clean, employment_1st_year ~ factor(NOMB_INST) + factor(AREA_CARRERA_GENERICA))
 summary(fe_reg_employ)$r.squared
@@ -163,12 +271,47 @@ fe_reg_employ2 <- lm(data = mifuturo_recent_clean, employment_2nd_year ~ factor(
 summary(fe_reg_employ2)$r.squared
 nobs(fe_reg_employ2)
 
+
+
+
 #Append employment data
-program_info_2024_joint <-  left_join(program_info_2024,
-                                mifuturo_recent_clean, 
+mifuturo_imputed <- mifuturo_imputed %>%
+  mutate(AREA_CARRERA_GENERICA = str_squish(AREA_CARRERA_GENERICA))
+
+program_info_all <- program_info_all %>%
+  mutate(AREA_CARRERA_GENERICA = str_squish(AREA_CARRERA_GENERICA))
+
+program_info_joint <-  left_join(program_info_all,
+                                 mifuturo_imputed, 
                                 by = c("NOMB_INST",
                                        "AREA_CARRERA_GENERICA",
                                        "TIPO_INST_1"))
+
+setdiff(unique(program_info_all$AREA_CARRERA_GENERICA),
+        unique(mifuturo_imputed$AREA_CARRERA_GENERICA))
+        
+
+setdiff(unique(mifuturo_imputed$AREA_CARRERA_GENERICA),
+        unique(program_info_all$AREA_CARRERA_GENERICA))
+
+
+
+setdiff(unique(program_info_all$NOMB_INST),
+        unique(mifuturo_imputed$NOMB_INST))
+
+
+setdiff(unique(mifuturo_imputed$NOMB_INST),
+        unique(program_info_all$NOMB_INST))
+
+
+
+
+program_info_joint %>% 
+  filter(CODIGO_DEMRE ==0) %>% 
+  filter(is.na(employment_1st_year)) %>% 
+#  filter(TIPO_INST_1 == "Universidades") %>% 
+  View()
+
 
 #sum(program_info_2024$NOMB_CARRERA %in% mifuturo_recent$NOMB_CARRERA)
 sum(program_info_2024$NOMB_INST %in% mifuturo_recent$NOMB_INST)
@@ -180,31 +323,69 @@ sum(is.na(program_info_2024_joint$income_4th_year))
 sum(is.na(program_info_2024_joint$income_4th_year_clp))
 
 
-oferta_2024 <- read_csv2("./data/raw/2024/PAES-2024-Oferta-Definitiva-Programas/OFERTA_DEFINITIVA_PROGRAMAS_PAES_2024_REV.csv") %>%
+
+
+oferta_codes_all_info <- readRDS("./data/clean/oferta_codes_24_25.rds") %>% 
   mutate(stem_share = rowSums(across(c(CIEN, M1, M2)), na.rm = TRUE),
          stem_proxy_low = ifelse(stem_share >= 40, 1L, 0L),
          stem_proxy_high = ifelse(stem_share > 40, 1L, 0L)) %>% 
-  mutate(PROCESO = 2024) %>%
-  rename(COD_CARRERA_PREF = COD_CARRERA) %>%
-  select(PROCESO, COD_CARRERA_PREF, COD_SIES, CARRERA, UNIVERSIDAD, stem_share,stem_proxy_low, stem_proxy_high) %>% 
-  left_join(program_info_2024_joint, by = "COD_SIES")
+  rename(year_oferta = year_info) %>%   
+#  select(PROCESO, COD_CARRERA_PREF, COD_SIES, CARRERA, UNIVERSIDAD, stem_share,stem_proxy_low, stem_proxy_high) %>% 
+  left_join(program_info_joint, by = "COD_SIES")
 
 
+oferta_codes_all %>% 
+  filter(is.na(income_imp)) %>% 
+  View()
 
-hist(oferta_2024$stem_share, breaks = 20)
-prop.table(table(oferta_2024$stem_share))
+hist(oferta_codes_all$stem_share, breaks = 20)
+prop.table(table(oferta_codes_all$stem_share))
 
 
-hist(oferta_2024$income_4th_year_mid_clp, breaks = 20)
+hist(oferta_codes_all$income_imp, breaks = 20)
 
 #oferta_combined <- rbind(oferta_2024, oferta_2020) %>%
 #                   select(-PROCESO) %>%
 #                    unique() %>%
 #                    arrange(CODIGO)
 
-colnames(oferta_2024)
 
 
+########
+
+
+apps_all_info <- college_apps %>% 
+  filter(ORDEN_PREF <= 10) %>%
+  filter(TIPO_PREF == "REGULAR") %>%
+  left_join(oferta_codes_all_info, by = "COD_CARRERA_PREF") %>%
+  group_by(mrun) %>%
+  #Only first application per person
+  filter(year == min(year)) %>% 
+  ungroup()
+  
+
+#Of 4.1M apps I am missing income information for 700K.
+#So my coverage is 83%. Not too shabby. 
+
+apps_all_info %>% 
+  filter(is.na(income_imp))
+
+#If I dont limit to first 10 apps, I get 4.75M and I miss 800k. 
+#Same rate 
+
+#Of 4.1M apps I am missing  field information for 77k
+#So my coverage is 98%. Pretty good!!  
+apps_all_info %>% 
+  filter(is.na(field_merged))
+
+
+apps_all_info %>% 
+  pull(COMUNA_SEDE) %>% 
+  table()
+
+
+#################################
+#### Current person level outcome computation
 
   stem_outcome <- college_apps %>% 
         filter(ORDEN_PREF <= 5) %>%
@@ -216,8 +397,8 @@ colnames(oferta_2024)
     summarize(avg_stem_share = mean(stem_share),
               
               across(
-                c(science1, technology1, health1, engineer2, science2, technology2, health2),
-                ~ mean(.x, na.rm = TRUE),                 # proportion=mean for 0/1
+                c(stem_bin, health_bin),
+                ~ mean(.x, na.rm = TRUE),           # proportion=mean for 0/1
                 .names = "prop_{.col}"),
                 
               n_stem_low  = sum(stem_proxy_low, na.rm = TRUE),
