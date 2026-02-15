@@ -321,7 +321,7 @@ ggplot(heat_df, aes(field_a, field_b, fill = jaccard)) +
 
 
 
-college_apps %>% 
+cutoff_scores <- college_apps %>% 
 #solo seleccionados and regular admission
     filter(ESTADO_PREF == 24) %>%  
       group_by(COD_CARRERA_PREF, year, TIPO_PREF) %>% 
@@ -331,7 +331,28 @@ college_apps %>%
     rename(PTJE_corte = PTJE_PREF)
   
     
-  
+saveRDS(cutoff_scores, "./data/clean/cutoff_scores.rds")
+
+
+
+
+################ Check Spatial data 
+
+library(sf)
+
+comunas_info <- read_sf("./data/raw/spatial/chl_admin_boundaries/chl_admin3.shp") %>% 
+  select(adm3_name, adm3_pcode, center_lat, center_lon) %>%
+  rename(CODIGO_COMUNA = adm3_pcode,
+         NOMBRE_COMUNA = adm3_name,
+         LAT = center_lat,
+         LON = center_lon)  %>% 
+    mutate(
+      CODIGO_COMUNA = str_remove(CODIGO_COMUNA, "^CL")
+         )
+
+comunas_info <- st_set_geometry(comunas_info, NULL)
+         
+saveRDS(comunas_info, "./data/clean/comuna_info.RDS")
 
 
 
