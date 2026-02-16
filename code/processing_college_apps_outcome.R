@@ -2,8 +2,8 @@
 data_wd        <-  "C:/Users/xd-br/Dropbox/causal_schools"
 code_output_wd <-  "C:/Users/xd-br/Desktop/PhD/Research/causal_schools"
 
-data_wd <- "C:/Users/brunem/Dropbox/causal_schools"
-code_output_wd <-  "C:/Users/brunem/Research/causal_schools"
+#data_wd <- "C:/Users/brunem/Dropbox/causal_schools"
+#code_output_wd <-  "C:/Users/brunem/Research/causal_schools"
 
 #Datawd (Dropbox) 
 setwd(data_wd)
@@ -253,6 +253,9 @@ major_effects_tbl <- tibble::tibble(
 
 saveRDS(inst_effects_tbl, "./data/clean/inst_fe.rds")
 saveRDS(major_effects_tbl, "./data/clean/maj_fe.rds")
+
+saveRDS(mifuturo_imputed, "./data/clean/mifuturo_imputed.rds")
+
 
 ##########################
 

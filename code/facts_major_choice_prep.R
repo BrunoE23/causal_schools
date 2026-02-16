@@ -133,7 +133,7 @@ map_codes_2025 <- read_csv("./data/raw/2025/PAES-2025-Oferta-Definitiva-Programa
   rename(COD_CARRERA_PREF = COD_CARRERA) %>% 
   mutate(year_info = 2025)
 
-map_codes_all<- bind_rows(
+map_codes_most_recent<- bind_rows(
   map_codes_2024,
   map_codes_2025
 ) %>% 
@@ -142,8 +142,16 @@ map_codes_all<- bind_rows(
   ungroup() 
 
 
-saveRDS(map_codes_all, "./data/clean/oferta_codes_24_25.rds")
-map_codes_all <- readRDS ("./data/clean/oferta_codes_24_25.rds")
+map_codes_all<- bind_rows(
+  map_codes_2024,
+  map_codes_2025
+) 
+
+saveRDS(map_codes_most_recent, "./data/clean/oferta_codes_24_25_rec.rds")
+saveRDS(map_codes_all,         "./data/clean/oferta_codes_24_25_all.rds")
+
+
+map_codes_most_recent <- readRDS ("./data/clean/oferta_codes_24_25_rec.rds")
 
 
 apps_field <- college_apps %>%  
@@ -328,7 +336,8 @@ cutoff_scores <- college_apps %>%
     filter(PTJE_PREF == min(PTJE_PREF))  %>% 
     ungroup() %>% 
     select(year, COD_CARRERA_PREF, PTJE_PREF, TIPO_PREF) %>% 
-    rename(PTJE_corte = PTJE_PREF)
+    rename(PTJE_corte = PTJE_PREF) %>% 
+  unique()
   
     
 saveRDS(cutoff_scores, "./data/clean/cutoff_scores.rds")
@@ -339,6 +348,7 @@ saveRDS(cutoff_scores, "./data/clean/cutoff_scores.rds")
 ################ Check Spatial data 
 
 library(sf)
+library(stringi)
 
 comunas_info <- read_sf("./data/raw/spatial/chl_admin_boundaries/chl_admin3.shp") %>% 
   select(adm3_name, adm3_pcode, center_lat, center_lon) %>%
@@ -352,6 +362,14 @@ comunas_info <- read_sf("./data/raw/spatial/chl_admin_boundaries/chl_admin3.shp"
 
 comunas_info <- st_set_geometry(comunas_info, NULL)
          
+comunas_info <- comunas_info %>% 
+mutate(CODIGO_COMUNA = as.double(CODIGO_COMUNA)) %>% 
+  mutate(NOMBRE_COMUNA = toupper(NOMBRE_COMUNA)) %>% 
+  mutate( NOMBRE_COMUNA = 
+            stri_trans_general(NOMBRE_COMUNA, "Latin-ASCII")) %>% 
+  mutate( NOMBRE_COMUNA = 
+            ifelse(NOMBRE_COMUNA == "CALERA", "LA CALERA", NOMBRE_COMUNA))
+
 saveRDS(comunas_info, "./data/clean/comuna_info.RDS")
 
 
