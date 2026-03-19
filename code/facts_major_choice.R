@@ -1285,6 +1285,8 @@ apps_global_dist %>%
   summary()
 
 
+table(apps_global_dist$n_applied_feasible > 0)
+
 row_global_dist <- apps_global_dist %>%
   filter(n_applied_feasible > 0) %>%
   summarise(
@@ -1302,6 +1304,8 @@ row_global_dist <- apps_global_dist %>%
   )
 
 
+row_global_dist
+
 saveRDS(apps_global_dist, "./data/clean/optim_global_dist.RDS")
 
 
@@ -1317,8 +1321,8 @@ summ_table <- as.data.frame(
 summ_table$distance_filter <- c("\\cross", "\\cross", "\\cross",
                                 "\\check","\\check","\\check")
 
-summ_table$other_constraint <- c("none", "Top 2 fields", "Top 3 majors",
-                                "none","Top 2 fields","Top 3 majors")
+summ_table$optim <- c("Global", "Top 2 fields", "Top 3 majors",
+                                "Global","Top 2 fields","Top 3 majors")
 
 
 apps_global_dist
@@ -1399,19 +1403,21 @@ cdf_df %>%
   stat_ecdf(size = 1) +
   scale_x_continuous(labels = percent_format(accuracy = 1)) +
   labs(
-    x = "Percent gap (best feasible vs constrained feasible)",
+    x = "Percent gap (chosen feasible vs optim. constrained feasible)",
     y = "CDF",
     colour = "Regime"
   ) +
   theme_minimal() +
   coord_cartesian(xlim = c(0, 2)) +
   theme(
-    panel.grid.major = element_line(color = "grey60", size = 0.6),
-    panel.grid.minor = element_line(color = "grey80", size = 0.4)
+    panel.grid.major = element_line(color = "grey60", size = 0.3),
+    panel.grid.minor = element_line(color = "grey80", size = 0.2)
   )
 
-
-
+ggsave(paste0(code_output_wd, "/output/figures/gap_models.png"),
+       width = 6.5, height = 4, units = "in",
+       dpi = 600,
+       bg = "transparent")
 
 ####################################
 #6) Ask questions and establish some nice facts :D 
