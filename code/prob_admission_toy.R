@@ -38,8 +38,14 @@ apps_db <- data.frame(
 
 #### Run the algorithm once 
 
-Run_school_DA <-    function(school_db, apps_db, seed = NULL) {
+Run_school_DA <-    function(school_db, apps_db, 
+                             seed = NULL, print = FALSE, time = FALSE) {
 
+  
+  if(time == TRUE) {
+    start_time <- Sys.time()
+  }
+  
   #Create new Databases:
 
   #A copy of school_db where I can update spots remaining
@@ -141,7 +147,7 @@ for (i in 1:nrow(schools_iterate)) {
         slice(-N_spots_available) %>% 
       pull(student_id)
     
-    if (length(rejected_cur_school) > 0) {
+    if (length(rejected_cur_school) > 0 & (print == TRUE)) {
     print(paste("student", rejected_cur_school, "rejected from school", spot_id))
     }
     
@@ -163,7 +169,7 @@ for (i in 1:nrow(schools_iterate)) {
               }
   #End of within school spot loop
    
-print(paste("Number of rejections this round:", n_rejected))
+if (print == TRUE)  print(paste("Number of rejections this round:", n_rejected))
 
 
   #End of across schools spots loop  (a round)
@@ -173,20 +179,67 @@ print(paste("Number of rejections this round:", n_rejected))
   school_offers <-    cur_app_proposal %>% 
                       filter(rejected == 0) %>% 
                       select(student_id, school_id) %>% 
-    left_join(school_offers, ., by = "student_id") 
+    left_join(school_offers, ., by = "student_id")   %>% 
+    mutate(school_id = replace_na(school_id, -99L))  
+  
+  
+  if(time == TRUE) {
+    end_time <- Sys.time()
+  elapsed_seconds <- as.numeric(end_time - start_time, units = "secs")
+  
+  cat(sprintf("Elapsed time: %.3f seconds\n", elapsed_seconds))
+  
+  }
   
   
   return(school_offers)
   
 }
 
-Run_school_DA(school_db, apps_db)
+
+Run_school_DA(school_db, apps_db, print = FALSE, time = TRUE)
 
 ### Loop it K times 
 
+Loop_DA <- function(school_db, apps_db, n_reps,
+                    time = FALSE) {
+  
+  if(time == TRUE) {
+    start_time <- Sys.time()
+  }
+  
+  
+  results <- replicate(
+    n_reps,
+    Run_school_DA(school_db, apps_db, print = FALSE),
+    simplify = FALSE
+  )
+  
 
-### Get probabilities.
+  results_df <- bind_rows(results, .id = "sim_id") %>% 
+    mutate(
+      school_id = ifelse(school_id == -99, "unmatched", as.character(school_id))
+    )
+  
+  probs <- results_df %>% 
+    group_by(student_id, school_id) %>% 
+    summarise(prob = n() / n_reps, .groups = "drop")
+  
+  
+  if(time == TRUE) {
+    end_time <- Sys.time()
+    elapsed_seconds <- as.numeric(end_time - start_time, units = "secs")
+    
+    cat(sprintf("Elapsed time: %.3f seconds\n", elapsed_seconds))
+    
+  }
+  
+  return(probs)
+  
+}
 
 
+Loop_DA(school_db, apps_db, 1000, time = TRUE)
 
-
+# Loop_DA(school_db, apps_db, 1000, time = TRUE)
+#Elapsed time: 44.836 seconds
