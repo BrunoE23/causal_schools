@@ -1,9 +1,9 @@
 ####################################
-#data_wd        <-  "C:/Users/xd-br/Dropbox/causal_schools"
-#code_output_wd <-  "C:/Users/xd-br/Desktop/PhD/Research/causal_schools"
+data_wd        <-  "C:/Users/xd-br/Dropbox/causal_schools"
+code_output_wd <-  "C:/Users/xd-br/Desktop/PhD/Research/causal_schools"
 
-data_wd <- "C:/Users/brunem/Dropbox/causal_schools"
-code_output_wd <-  "C:/Users/brunem/Research/causal_schools"
+#data_wd <- "C:/Users/brunem/Dropbox/causal_schools"
+#code_output_wd <-  "C:/Users/brunem/Research/causal_schools"
 
 
 setwd(data_wd)
@@ -71,6 +71,22 @@ sae_apps_2017 <- read_csv2("./data/raw/2017/SAE_2017/C1_Postulaciones_etapa_regu
   mutate(proceso = 2017) %>% 
   mutate(br_code = paste0(as.character(rbd),  "_", cod_curso, "_", proceso)) %>% 
   filter(cod_nivel == 9)
+
+
+#high_lotteries <- sae_apps_2017 %>% 
+#  filter(loteria_original == 1000) %>% 
+#  pull(br_code)
+
+#sae_apps_2017 %>% 
+#  filter(br_code %in% high_lotteries) %>% 
+#  group_by(br_code) %>% 
+#  summarize(n_apps = n())
+
+#sae_apps_2017 %>% 
+#  filter(br_code == "7699_13100033_2017") %>% 
+#  select(br_code)
+
+
 
 sae_apps_2018 <- read_csv2("./data/raw/2018/SAE_2018/C1_Postulaciones_etapa_regular_2018_Admisión_2019_PUBL.csv") %>% 
   mutate(proceso = 2018) %>% 
