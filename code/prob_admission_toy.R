@@ -176,11 +176,19 @@ if (print == TRUE)  print(paste("Number of rejections this round:", n_rejected))
   }
   #End of all rounds
   
+  if (is.character(school_db$school_id)) {
+    unmatched_value <- "unmatched"
+  } else if (is.integer(school_db$school_id)) {
+    unmatched_value <- -99L
+  } else {
+    unmatched_value <- -99
+  }
+  
   school_offers <-    cur_app_proposal %>% 
                       filter(rejected == 0) %>% 
                       select(student_id, school_id) %>% 
     left_join(school_offers, ., by = "student_id")   %>% 
-    mutate(school_id = replace_na(school_id, -99L))  
+    mutate(school_id = replace_na(school_id, unmatched_value))  
   
   
   if(time == TRUE) {
