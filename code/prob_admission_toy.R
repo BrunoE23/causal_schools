@@ -67,12 +67,12 @@ Run_school_DA <-    function(school_db, apps_db,
     select(student_id) %>% 
     unique() 
   
-  n_rejected = -999
+  round_rejected = -999
 
 #change for a while  
-while (n_rejected != 0) {  
+while (round_rejected != 0) {  
 
-  n_rejected = 0
+  round_rejected = 0
   
   #Matched students
 #  matched_students <- school_offers %>% 
@@ -142,16 +142,17 @@ for (i in 1:nrow(schools_iterate)) {
         arrange(desc(priority_level), lottery_ticket) 
       
       
-
+      n_reject <- max(nrow(ordered_cur_school) - N_spots_available, 0)
+      
       rejected_cur_school <- ordered_cur_school %>% 
-        slice_tail(n = max(n() - N_spots_available, 0)) %>% 
+        slice_tail(n = n_reject) %>% 
         pull(student_id)
     
-    if (length(rejected_cur_school) > 0 & (print == TRUE)) {
+    if (n_reject > 0 & (print == TRUE)) {
     print(paste("student", rejected_cur_school, "rejected from school", spot_id))
     }
     
-    n_rejected <- n_rejected + length(rejected_cur_school)
+    round_rejected <- round_rejected + n_reject
     
 #    provisional_cur_school <-  ordered_cur_school %>% 
 #      slice(N_spots_available)
