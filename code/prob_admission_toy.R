@@ -142,10 +142,10 @@ for (i in 1:nrow(schools_iterate)) {
         arrange(desc(priority_level), lottery_ticket) 
       
       
-    
-    rejected_cur_school <-  ordered_cur_school %>% 
-        slice(-N_spots_available) %>% 
-      pull(student_id)
+
+      rejected_cur_school <- ordered_cur_school %>% 
+        slice_tail(n = max(n() - N_spots_available, 0)) %>% 
+        pull(student_id)
     
     if (length(rejected_cur_school) > 0 & (print == TRUE)) {
     print(paste("student", rejected_cur_school, "rejected from school", spot_id))
