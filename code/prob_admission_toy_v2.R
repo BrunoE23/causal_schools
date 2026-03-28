@@ -18,7 +18,7 @@ library(tidyverse)
 #Page 8-9 of RDMD
 #######################################
 
-
+#toy 1
 school_db <- data.frame(
   school_id = c(41,52,63), 
   school_name = c("a","b","c"),
@@ -35,10 +35,28 @@ apps_db <- data.frame(
 
 
 
+#toy 2
+school_db2 <- data.frame(
+  school_id = c(41,52,63), 
+  school_name = c("a","b","c"),
+  spots_available = c(1,1,1)
+)
+
+apps_db2 <- data.frame(
+  student_id     = c(1,2,2,2,3,3,4),
+  school_id      = c(63,63,52,41,52,41,41),
+  student_pref   = c(1,1,2,3,1,2,1),
+  priority_level = c(0,0,0,0,0,0,0)
+)
+
+
 
 #### Run the algorithm once 
 Run_school_DA <- function(school_db, apps_db, 
-                          seed = NULL, print = FALSE, time = FALSE) {
+                          seed = NULL, print = FALSE, time = FALSE,
+                          lottery_type = c("by_school", "single")) {
+  
+  lottery_type <- match.arg(lottery_type)
   
   if (time == TRUE) {
     start_time <- Sys.time()
@@ -47,11 +65,23 @@ Run_school_DA <- function(school_db, apps_db,
   if (!is.null(seed)) set.seed(seed)
   
   # Fixed applications table with lottery tickets
-  apps_state <- apps_db %>%
-    group_by(school_id) %>%
-    mutate(lottery_ticket = sample.int(n())) %>%
-    ungroup() %>%
-    arrange(student_id, student_pref)
+  if (lottery_type == "by_school") {
+    apps_state <- apps_db %>%
+      group_by(school_id) %>%
+      mutate(lottery_ticket = sample.int(n())) %>%
+      ungroup() %>%
+      arrange(student_id, student_pref)
+    
+  } else if (lottery_type == "single") {
+    student_lottery <- data.frame(
+      student_id = sort(unique(apps_db$student_id)),
+      lottery_ticket = sample.int(length(unique(apps_db$student_id)))
+    )
+    
+    apps_state <- apps_db %>%
+      left_join(student_lottery, by = "student_id") %>%
+      arrange(student_id, student_pref)
+  }
   
   school_offers <- apps_db %>% 
     select(student_id) %>% 
@@ -134,52 +164,13 @@ Run_school_DA <- function(school_db, apps_db,
 }
 
 
-Run_school_DA(school_db, apps_db, print = FALSE, time = TRUE)
-
-
-
-Loop_DA <- function(school_db, apps_db, n_reps,
-                    time = FALSE) {
-  
-  if(time == TRUE) {
-    start_time <- Sys.time()
-  }
-  
-  
-  results <- replicate(
-    n_reps,
-    Run_school_DA(school_db, apps_db, print = FALSE),
-    simplify = FALSE
-  )
-  
-  
-  results_df <- bind_rows(results, .id = "sim_id") %>% 
-    mutate(
-      school_id = ifelse(school_id == -99, "unmatched", as.character(school_id))
-    )
-  
-  probs <- results_df %>% 
-    group_by(student_id, school_id) %>% 
-    summarise(prob = n() / n_reps, .groups = "drop")
-  
-  
-  if(time == TRUE) {
-    end_time <- Sys.time()
-    elapsed_seconds <- as.numeric(end_time - start_time, units = "secs")
-    
-    cat(sprintf("Elapsed time: %.3f seconds\n", elapsed_seconds))
-    
-  }
-  
-  return(probs)
-  
-}
-
-
 Run_school_DA_fast <- function(school_db, apps_db,
                                seed = NULL,
                                print = FALSE,
-                               time = FALSE) {
+                               time = FALSE,
+                               lottery_type = c("by_school", "single")) {
+  
+  lottery_type <- match.arg(lottery_type)
   
   if (time) {
     start_time <- proc.time()[["elapsed"]]
@@ -220,7 +211,7 @@ Run_school_DA_fast <- function(school_db, apps_db,
   apps <- apps_db
   schools <- school_db
   
-  if (is.factor(apps$school_id))   apps$school_id   <- as.character(apps$school_id)
+  if (is.factor(apps$school_id))    apps$school_id <- as.character(apps$school_id)
   if (is.factor(schools$school_id)) schools$school_id <- as.character(schools$school_id)
   
   # student coding
@@ -248,19 +239,60 @@ Run_school_DA_fast <- function(school_db, apps_db,
   priority      <- apps$priority_level[ord_student_pref]
   school_id_raw <- apps$school_id[ord_student_pref]
   
-  # ---- fixed school-specific lottery tickets ----
+  # ---- lottery tickets ----
   # smaller lottery ticket is better
   lottery <- integer(n_apps)
-  school_rows <- split(seq_len(n_apps), school_idx)
-  for (rows in school_rows) {
-    lottery[rows] <- sample.int(length(rows))
+  
+  if ("loteria_original" %in% names(apps)) {
+    x <- apps$loteria_original[ord_student_pref]
+    
+    if (anyNA(x)) {
+      stop("apps_db$loteria_original contains missing values")
+    }
+    if (!is.numeric(x)) {
+      stop("apps_db$loteria_original must be numeric/integer")
+    }
+    if (any(x != as.integer(x))) {
+      stop("apps_db$loteria_original must contain integers")
+    }
+    
+    lottery <- as.integer(x)
+    
+    if (lottery_type == "by_school") {
+      school_rows <- split(seq_len(n_apps), school_idx)
+      for (rows in school_rows) {
+        vals <- lottery[rows]
+        if (anyDuplicated(vals)) {
+          stop("apps_db$loteria_original contains duplicate lottery values within a school")
+        }
+      }
+    } else if (lottery_type == "single") {
+      student_rows <- split(seq_len(n_apps), student_idx)
+      student_lot <- vapply(student_rows, function(rows) {
+        vals <- unique(lottery[rows])
+        if (length(vals) != 1L) {
+          stop("Under lottery_type = 'single', each student must have exactly one unique loteria_original across applications")
+        }
+        vals
+      }, integer(1))
+    }
+    
+  } else {
+    if (lottery_type == "by_school") {
+      school_rows <- split(seq_len(n_apps), school_idx)
+      for (rows in school_rows) {
+        lottery[rows] <- sample.int(length(rows))
+      }
+    } else if (lottery_type == "single") {
+      student_lottery <- sample.int(n_students)
+      lottery <- student_lottery[student_idx]
+    }
   }
   
   # ---- student pointer structure ----
-  # app_counts[s] = how many choices student s listed
   app_counts <- tabulate(student_idx, nbins = n_students)
   start_pos  <- cumsum(c(1L, head(app_counts, -1L)))
-  cur_pos    <- rep.int(1L, n_students)   # pointer within each student's ranked list
+  cur_pos    <- rep.int(1L, n_students)
   
   # ---- DA loop ----
   round_rejected <- -1L
@@ -305,8 +337,6 @@ Run_school_DA_fast <- function(school_db, apps_db,
     }
     
     if (round_rejected > 0L) {
-      # each student proposes to exactly one school per round,
-      # so rejected_students are unique in a round
       cur_pos[rejected_students] <- cur_pos[rejected_students] + 1L
     }
   }
@@ -343,41 +373,38 @@ Run_school_DA_fast <- function(school_db, apps_db,
   out
 }
 
-Loop_DA <- function(school_db, apps_db, n_reps, time = FALSE) {
+
+Loop_DA <- function(school_db, apps_db, n_reps,
+                    time = FALSE,
+                    lottery_type = c("by_school", "single")) {
   
-  if (time == TRUE) {
+  lottery_type <- match.arg(lottery_type)
+  
+  if(time == TRUE) {
     start_time <- Sys.time()
-  }
-  
-  if (is.character(school_db$school_id)) {
-    unmatched_value <- "unmatched"
-  } else if (is.integer(school_db$school_id)) {
-    unmatched_value <- -99L
-  } else {
-    unmatched_value <- -99
   }
   
   results <- replicate(
     n_reps,
-    Run_school_DA(school_db, apps_db, print = FALSE),
+    Run_school_DA(
+      school_db,
+      apps_db,
+      print = FALSE,
+      lottery_type = lottery_type
+    ),
     simplify = FALSE
   )
   
-  results_df <- bind_rows(results, .id = "sim_id") %>%
+  results_df <- bind_rows(results, .id = "sim_id") %>% 
     mutate(
-      school_id = ifelse(
-        school_id == unmatched_value,
-        "unmatched",
-        as.character(school_id)
-      )
+      school_id = ifelse(school_id == -99, "unmatched", as.character(school_id))
     )
   
-  probs <- results_df %>%
-    count(student_id, school_id, name = "n") %>%
-    mutate(prob = n / n_reps) %>%
-    select(student_id, school_id, prob)
+  probs <- results_df %>% 
+    group_by(student_id, school_id) %>% 
+    summarise(prob = n() / n_reps, .groups = "drop")
   
-  if (time == TRUE) {
+  if(time == TRUE) {
     end_time <- Sys.time()
     elapsed_seconds <- as.numeric(end_time - start_time, units = "secs")
     cat(sprintf("Elapsed time: %.3f seconds\n", elapsed_seconds))
@@ -387,10 +414,12 @@ Loop_DA <- function(school_db, apps_db, n_reps, time = FALSE) {
 }
 
 
-
 Loop_DA_fast <- function(school_db, apps_db, n_reps,
                          seed = NULL,
-                         time = FALSE) {
+                         time = FALSE,
+                         lottery_type = c("by_school", "single")) {
+  
+  lottery_type <- match.arg(lottery_type)
   
   if (time) {
     start_time <- proc.time()[["elapsed"]]
@@ -398,11 +427,8 @@ Loop_DA_fast <- function(school_db, apps_db, n_reps,
   
   if (!is.null(seed)) set.seed(seed)
   
-  # Get all students once
   student_vals <- sort(unique(apps_db$student_id))
-  n_students   <- length(student_vals)
   
-  # Figure out unmatched label consistent with Run_school_DA_fast
   school_id_col <- school_db$school_id
   if (is.factor(school_id_col)) school_id_col <- as.character(school_id_col)
   
@@ -414,7 +440,6 @@ Loop_DA_fast <- function(school_db, apps_db, n_reps,
     -99
   }
   
-  # Count assignments across repetitions using a named integer vector
   counts <- integer(0)
   
   for (r in seq_len(n_reps)) {
@@ -426,10 +451,10 @@ Loop_DA_fast <- function(school_db, apps_db, n_reps,
       apps_db   = apps_db,
       seed      = sim_seed,
       print     = FALSE,
-      time      = FALSE
+      time      = FALSE,
+      lottery_type = lottery_type
     )
     
-    # Convert school_id to character keys for counting
     school_chr <- as.character(sim_result$school_id)
     school_chr[is.na(school_chr)] <- "unmatched"
     school_chr[school_chr == as.character(unmatched_value)] <- "unmatched"
@@ -450,14 +475,12 @@ Loop_DA_fast <- function(school_db, apps_db, n_reps,
     }
   }
   
-  # Convert counts back to tidy output
   key_names <- names(counts)
   parts <- strsplit(key_names, "___", fixed = TRUE)
   
   student_out <- vapply(parts, `[`, character(1), 1L)
   school_out  <- vapply(parts, `[`, character(1), 2L)
   
-  # Restore student_id type if possible
   if (is.integer(apps_db$student_id)) {
     student_out <- as.integer(student_out)
   } else if (is.numeric(apps_db$student_id)) {
@@ -471,7 +494,6 @@ Loop_DA_fast <- function(school_db, apps_db, n_reps,
     stringsAsFactors = FALSE
   )
   
-  # Optional nicer ordering
   probs <- probs[order(probs$student_id, probs$school_id), ]
   rownames(probs) <- NULL
   
@@ -482,3 +504,89 @@ Loop_DA_fast <- function(school_db, apps_db, n_reps,
   
   probs
 }
+
+
+Loop_DA_fast(school_db, apps_db, 10000, time = TRUE, lottery_type = "single")
+Loop_DA_fast(school_db2, apps_db2, 10000, time = TRUE, lottery_type = "single")
+
+
+expand_market <- function(school_db, apps_db, n_rep_types) {
+  if (n_rep_types < 1) stop("n_rep_types must be >= 1")
+  
+  # map original students to 1..K types
+  base_students <- sort(unique(apps_db$student_id))
+  K <- length(base_students)
+  
+  apps_rep <- do.call(
+    rbind,
+    lapply(seq_len(n_rep_types), function(r) {
+      tmp <- apps_db
+      # new student ids: type k in replication r
+      tmp$student_id <- match(tmp$student_id, base_students) + (r - 1L) * K
+      tmp
+    })
+  )
+  
+  school_rep <- school_db
+  school_rep$spots_available <- school_rep$spots_available * n_rep_types
+  
+  list(
+    school_db = school_rep,
+    apps_db = apps_rep
+  )
+}
+
+
+Loop_DA_large_market <- function(school_db, apps_db,
+                                 n_rep_types,
+                                 n_sims = 10000,
+                                 lottery_type = c("single", "by_school"),
+                                 time = FALSE) {
+  
+  lottery_type <- match.arg(lottery_type)
+  
+  expanded <- expand_market(school_db, apps_db, n_rep_types)
+  
+  probs_big <- Loop_DA_fast(
+    school_db = expanded$school_db,
+    apps_db = expanded$apps_db,
+    n_reps = n_sims,
+    lottery_type = lottery_type,
+    time = time
+  )
+  
+  # collapse back to original "type"
+  K <- length(unique(apps_db$student_id))
+  probs_big$type_id <- ((as.integer(probs_big$student_id) - 1L) %% K) + 1L
+  
+  out <- probs_big %>%
+    dplyr::group_by(type_id, school_id) %>%
+    dplyr::summarise(prob = mean(prob), .groups = "drop")
+  
+  if ("school_name" %in% names(school_db)) {
+    school_map <- school_db %>%
+      dplyr::distinct(school_id, school_name) %>%
+      dplyr::mutate(school_id = as.character(school_id))
+    
+    out <- out %>%
+      dplyr::mutate(school_id_chr = as.character(school_id)) %>%
+      dplyr::left_join(school_map, by = c("school_id_chr" = "school_id")) %>%
+      dplyr::mutate(
+        school_name = dplyr::if_else(school_id_chr == "unmatched", "unmatched", school_name)
+      ) %>%
+      dplyr::select(type_id, school_id, school_name, prob)
+  }
+  
+  out[order(out$type_id, out$school_id), ]
+}
+
+
+# finite-market simulation
+Loop_DA_fast(school_db2, apps_db2, 10000, lottery_type = "single", time = TRUE)
+
+# replicated economy, e.g. n = 50 copies of each type
+Loop_DA_large_market(school_db2, apps_db2,
+                     n_rep_types = 10,
+                     n_sims = 100000,
+                     lottery_type = "single",
+                     time = TRUE)
