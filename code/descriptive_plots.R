@@ -89,6 +89,14 @@ ggsave(path = "./output/figures/", filename = "math_stem_plot.png",
 
 
 final_data %>%
+  ggplot(aes(x = math_max, y = prop_health2)) + 
+  geom_smooth(formula = y~poly(x,2)) +
+  theme_minimal() + 
+  theme(legend.position = "bottom") + 
+  labs(x = "Math Exam Score", y = "Avg STEM content in college application") 
+
+
+final_data %>%
   ggplot(aes(x = math_max, y = avg_stem_share, color = gender)) + 
   geom_smooth(formula = y~poly(x,2)) +
 #  geom_bin2d() +
