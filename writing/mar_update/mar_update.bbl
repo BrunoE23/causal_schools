@@ -1,0 +1,160 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nyt/global//global/global/global}
+    \entry{abdulkadiroglu_research_2017}{article}{}{}
+      \name{author}{4}{}{%
+        {{un=0,uniquepart=base,hash=9210d7a0646d485f1f21951c61c52cd2}{%
+           family={Abdulkadiroğlu},
+           familyi={A\bibinitperiod},
+           given={Atila},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=71a74466a85192690bb7668576e4f2f3}{%
+           family={Angrist},
+           familyi={A\bibinitperiod},
+           given={Joshua},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=4bb6eca8ac4f0778b07f81866190ff34}{%
+           family={Narita},
+           familyi={N\bibinitperiod},
+           given={Yusuke},
+           giveni={Y\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=116110e566f5ce57aba815a2a1c58074}{%
+           family={Pathak},
+           familyi={P\bibinitperiod},
+           given={Parag},
+           giveni={P\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {Econometric Society}%
+      }
+      \strng{namehash}{009b8760f2c3c4cd564591d9c91799d7}
+      \strng{fullhash}{60acc3625507789373edca21b08b3132}
+      \strng{fullhashraw}{60acc3625507789373edca21b08b3132}
+      \strng{bibnamehash}{60acc3625507789373edca21b08b3132}
+      \strng{authorbibnamehash}{60acc3625507789373edca21b08b3132}
+      \strng{authornamehash}{009b8760f2c3c4cd564591d9c91799d7}
+      \strng{authorfullhash}{60acc3625507789373edca21b08b3132}
+      \strng{authorfullhashraw}{60acc3625507789373edca21b08b3132}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{A growing number of school districts use centralized assignment mechanisms to allocate school seats in a manner that reflects student preferences and school priorities. Many of these assignment schemes use lotteries to ration seats when schools are oversubscribed. The resulting random assignment opens the door to credible quasi‐experimental research designs for the evaluation of school effectiveness. Yet the question of how best to separate the lottery‐generated randomization integral to such designs from non‐random preferences and priorities remains open. This paper develops easily‐implemented empirical strategies that fully exploit the random assignment embedded in a wide class of mechanisms, while also revealing why seats are randomized at one school but not another. We use these methods to evaluate charter schools in Denver, one of a growing number of districts that combine charter and traditional public schools in a unified assignment system. The resulting estimates show large achievement gains from charter school attendance. Our approach generates efficiency gains over ad hoc methods, such as those that focus on schools ranked first, while also identifying a more representative average causal effect. We also show how to use centralized assignment mechanisms to identify causal effects in models with multiple school sectors.}
+      \field{journaltitle}{Econometrica}
+      \field{shorttitle}{Research {Design} {Meets} {Market} {Design}}
+      \field{title}{Research {Design} {Meets} {Market} {Design}: {Using} {Centralized} {Assignment} for {Impact} {Evaluation}}
+      \field{urlday}{2}
+      \field{urlmonth}{11}
+      \field{urlyear}{2025}
+      \field{volume}{85}
+      \field{year}{2017}
+      \field{urldateera}{ce}
+      \field{pages}{1373\bibrangedash 1432}
+      \range{pages}{60}
+      \verb{file}
+      \verb PDF:C\:\\Users\\xd-br\\Zotero\\storage\\XB5URWA7\\Abdulkadiroğlu et al. - 2017 - Research Design Meets Market Design Using Centralized Assignment for Impact Evaluation.pdf:application/pdf;Snapshot:C\:\\Users\\xd-br\\Zotero\\storage\\3B97ZSR7\\RePEcwlyemetrpv85y2017ip1373-1432.html:text/html
+      \endverb
+      \verb{urlraw}
+      \verb https://EconPapers.repec.org/RePEc:wly:emetrp:v:85:y:2017:i::p:1373-1432
+      \endverb
+      \verb{url}
+      \verb https://EconPapers.repec.org/RePEc:wly:emetrp:v:85:y:2017:i::p:1373-1432
+      \endverb
+    \endentry
+    \entry{angrist_credible_2024}{article}{}{}
+      \name{author}{4}{}{%
+        {{un=0,uniquepart=base,hash=71a74466a85192690bb7668576e4f2f3}{%
+           family={Angrist},
+           familyi={A\bibinitperiod},
+           given={Joshua},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=37ff659ee267754271943145f8ae0ce2}{%
+           family={Hull},
+           familyi={H\bibinitperiod},
+           given={Peter},
+           giveni={P\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=e75d96917751be05beac30ccd106dc84}{%
+           family={Pathak},
+           familyi={P\bibinitperiod},
+           given={Parag\bibnamedelima A.},
+           giveni={P\bibinitperiod\bibinitdelim A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=00f4eae9d53892723e6ec72a134e44e5}{%
+           family={Walters},
+           familyi={W\bibinitperiod},
+           given={Christopher},
+           giveni={C\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{08066f46f89322d1d81cf67cefb9a866}
+      \strng{fullhash}{5a2b479b6b00e8793a980ed707c8177c}
+      \strng{fullhashraw}{5a2b479b6b00e8793a980ed707c8177c}
+      \strng{bibnamehash}{5a2b479b6b00e8793a980ed707c8177c}
+      \strng{authorbibnamehash}{5a2b479b6b00e8793a980ed707c8177c}
+      \strng{authornamehash}{08066f46f89322d1d81cf67cefb9a866}
+      \strng{authorfullhash}{5a2b479b6b00e8793a980ed707c8177c}
+      \strng{authorfullhashraw}{5a2b479b6b00e8793a980ed707c8177c}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{We introduce two empirical strategies harnessing the randomness in school assignment mechanisms to measure school value-added. The first estimator controls for the probability of school assignment, treating take-up as ignorable. We test this assumption using randomness in assignments. The second approach uses assignments as instrumental variables (IVs) for low-dimensional models of value-added and forms empirical Bayes posteriors from these IV estimates. Both strategies solve the underidentification challenge arising from school undersubscription. Models controlling for assignment risk and lagged achievement in Denver and New York City yield reliable value-added estimates. Estimates from models with lower-quality achievement controls are improved by IV.}
+      \field{issn}{0034-6535}
+      \field{journaltitle}{The Review of Economics and Statistics}
+      \field{month}{1}
+      \field{number}{1}
+      \field{title}{Credible {School} {Value}-{Added} with {Undersubscribed} {School} {Lotteries}}
+      \field{urlday}{28}
+      \field{urlmonth}{3}
+      \field{urlyear}{2026}
+      \field{volume}{106}
+      \field{year}{2024}
+      \field{urldateera}{ce}
+      \field{pages}{1\bibrangedash 19}
+      \range{pages}{19}
+      \verb{doi}
+      \verb 10.1162/rest_a_01149
+      \endverb
+      \verb{file}
+      \verb Full Text PDF:C\:\\Users\\xd-br\\Zotero\\storage\\MWXTEJNE\\Angrist et al. - 2024 - Credible School Value-Added with Undersubscribed School Lotteries.pdf:application/pdf;Snapshot:C\:\\Users\\xd-br\\Zotero\\storage\\4DTPCE2W\\rest_a_01149.html:text/html
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1162/rest_a_01149
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1162/rest_a_01149
+      \endverb
+    \endentry
+  \enddatalist
+  \missing{rosenbaum_central_1983}
+\endrefsection
+\endinput
+
