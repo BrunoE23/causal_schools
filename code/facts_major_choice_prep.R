@@ -1,9 +1,9 @@
 ####################################
-data_wd        <-  "C:/Users/xd-br/Dropbox/causal_schools"
-code_output_wd <-  "C:/Users/xd-br/Desktop/PhD/Research/causal_schools"
+#data_wd        <-  "C:/Users/xd-br/Dropbox/causal_schools"
+#code_output_wd <-  "C:/Users/xd-br/Desktop/PhD/Research/causal_schools"
 
-#data_wd <- "C:/Users/brunem/Dropbox/causal_schools"
-#code_output_wd <-  "C:/Users/brunem/Research/causal_schools"
+data_wd <- "C:/Users/brunem/Dropbox/causal_schools"
+code_output_wd <-  "C:/Users/brunem/Research/causal_schools"
 
 #Datawd (Dropbox) 
 setwd(data_wd)
@@ -155,7 +155,7 @@ map_codes_most_recent <- readRDS ("./data/clean/oferta_codes_24_25_rec.rds")
 
 
 apps_field <- college_apps %>%  
-  left_join(map_codes_all, by = "COD_CARRERA_PREF") %>% 
+  left_join(map_codes_most_recent, by = "COD_CARRERA_PREF") %>% 
   left_join(program_info_all, by = "COD_SIES") %>% 
  #filter(ORDEN_PREF <= 10) %>%
  filter(TIPO_PREF == "REGULAR") %>% 
@@ -204,6 +204,7 @@ tab_apps_p_person <- apps_field %>%
   ungroup() 
 
 table(tab_apps_p_person$year, tab_apps_p_person$n_apps_person)
+#table(tab_apps_p_person$year, tab_apps_p_person$n_apps_person)
 
 #Finding: Until 2022 people could only rank up to 10 programs.
 #Since 2023 people rank up to 20. 
@@ -211,10 +212,14 @@ table(tab_apps_p_person$year, tab_apps_p_person$n_apps_person)
 tab_apps_p_person %>% 
   filter(year >= 2023) %>% 
   pull(n_apps_person) %>% 
+  mean()
   table() %>% 
   prop.table() %>% 
   cumsum()
 
+#5.4 schools ranked in average, to 7.8
+    
+  
 #74% rank 10 choices or less after 2023; 85% rank up 14 or less. 
 #Let me stay with 10. 
 
@@ -222,6 +227,8 @@ apps_top10 <- apps_field %>%
   filter(ORDEN_PREF <= 10)
 
 apps_top10 %>%
+#  apps_field %>% 
+  filter(year>= 2023) %>% 
   distinct(mrun, field_merged) %>% 
   group_by(mrun) %>%
   summarise(n_fields = n_distinct(field_merged)) %>%
@@ -241,6 +248,8 @@ apps_top10 %>%
 
 
 apps_top10 %>%
+  #  apps_field %>% 
+  filter(year>= 2023) %>% 
   distinct(mrun, AREA_CARRERA_GENERICA) %>% 
   group_by(mrun) %>%
   summarise(n_majors = n_distinct(AREA_CARRERA_GENERICA)) %>%
