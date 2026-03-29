@@ -1,12 +1,12 @@
 Run_school_DA_fast_CL_v4 <- function(
     school_db,
     apps_db,
+    use_loteria_original,
     seed = NULL,
     print = FALSE,
     time = FALSE,
     quota_order = c("pie", "achievement", "prioritario", "regular", "continuity"),
-    unused_quota_rule = c("waste", "roll_to_regular"),
-    use_loteria_original = TRUE,
+    unused_quota_rule = c("roll_to_regular", "waste"),
     special_priority_rule = c("same_as_regular", "lottery_only"),
     achievement_rule = c("transition", "regime"),
     pie_rule = c("school_order_if_available", "regular_rule")
@@ -481,4 +481,132 @@ Run_school_DA_fast_CL_v4 <- function(
   }
   
   out
+}
+
+
+
+Loop_DA_fast <- function(
+    school_db,
+    apps_db,
+    n_reps,
+    seed = NULL,
+    time = FALSE,
+    quota_order = c("pie", "achievement", "prioritario", "regular", "continuity"),
+    unused_quota_rule = c("roll_to_regular", "waste"),
+    special_priority_rule = c("same_as_regular", "lottery_only"),
+    achievement_rule = c("transition", "regime"),
+    pie_rule = c("school_order_if_available", "regular_rule")
+) {
+  
+  unused_quota_rule <- match.arg(unused_quota_rule)
+  special_priority_rule <- match.arg(special_priority_rule)
+  achievement_rule <- match.arg(achievement_rule)
+  pie_rule <- match.arg(pie_rule)
+  
+  if (time) {
+    start_time <- proc.time()[["elapsed"]]
+  }
+  
+  if (!is.null(seed)) set.seed(seed)
+  
+  school_id_col <- school_db$school_id
+  if (is.factor(school_id_col)) school_id_col <- as.character(school_id_col)
+  
+  unmatched_value <- if (is.character(school_id_col)) {
+    "unmatched"
+  } else if (is.integer(school_id_col)) {
+    -99L
+  } else {
+    -99
+  }
+  
+  counts <- integer(0)
+  
+  for (r in seq_len(n_reps)) {
+    sim_seed <- sample.int(.Machine$integer.max, 1L)
+    
+    sim_result <- Run_school_DA_fast_CL_v4(
+      school_db = school_db,
+      apps_db = apps_db,
+      use_loteria_original = FALSE,
+      seed = sim_seed,
+      print = FALSE,
+      time = FALSE,
+      quota_order = quota_order,
+      unused_quota_rule = unused_quota_rule,
+      special_priority_rule = special_priority_rule,
+      achievement_rule = achievement_rule,
+      pie_rule = pie_rule
+    )
+    
+    school_chr <- as.character(sim_result$school_id)
+    school_chr[is.na(school_chr)] <- "unmatched"
+    school_chr[school_chr == as.character(unmatched_value)] <- "unmatched"
+    
+    keys <- paste(sim_result$student_id, school_chr, sep = "___")
+    tab <- table(keys)
+    
+    nm <- names(tab)
+    if (length(counts) == 0L) {
+      counts <- as.integer(tab)
+      names(counts) <- nm
+    } else {
+      new_nm <- setdiff(nm, names(counts))
+      if (length(new_nm) > 0L) {
+        counts <- c(counts, setNames(integer(length(new_nm)), new_nm))
+      }
+      counts[nm] <- counts[nm] + as.integer(tab)
+    }
+  }
+  
+  key_names <- names(counts)
+  parts <- strsplit(key_names, "___", fixed = TRUE)
+  
+  student_out <- vapply(parts, `[`, character(1), 1L)
+  school_out  <- vapply(parts, `[`, character(1), 2L)
+  
+  if (is.integer(apps_db$student_id)) {
+    student_out <- as.integer(student_out)
+  } else if (is.numeric(apps_db$student_id)) {
+    student_out <- as.numeric(student_out)
+  }
+  
+  if (is.integer(school_db$school_id)) {
+    school_out <- ifelse(school_out == "unmatched", NA, school_out)
+    school_out <- as.integer(school_out)
+  } else if (is.numeric(school_db$school_id)) {
+    school_out <- ifelse(school_out == "unmatched", NA, school_out)
+    school_out <- as.numeric(school_out)
+  }
+  
+  probs <- data.frame(
+    student_id = student_out,
+    school_id = school_out,
+    prob = as.numeric(counts) / n_reps,
+    stringsAsFactors = FALSE
+  )
+  
+  if ("school_name" %in% names(school_db)) {
+    school_map <- school_db %>%
+      distinct(school_id, school_name) %>%
+      mutate(school_id_chr = as.character(school_id))
+    
+    probs <- probs %>%
+      mutate(school_id_chr = as.character(school_id)) %>%
+      left_join(school_map, by = "school_id_chr") %>%
+      mutate(
+        school_name = if_else(school_id_chr == "unmatched", "unmatched", school_name)
+      ) %>%
+      select(student_id, school_id, school_name, prob)
+  }
+  
+  probs <- probs[order(probs$student_id, probs$school_id), ]
+  rownames(probs) <- NULL
+  
+  if (time) {
+    elapsed_seconds <- proc.time()[["elapsed"]] - start_time
+    cat(sprintf("Elapsed time: %.3f seconds\n", elapsed_seconds))
+  }
+  
+  probs
 }
