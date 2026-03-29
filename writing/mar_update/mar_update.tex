@@ -15,8 +15,15 @@
 
 \addbibresource{causal_effect_schools.bib}
 
+\AtEveryBibitem{%
+  \clearfield{urlyear}%
+  \clearfield{urlmonth}%
+  \clearfield{urlday}%
+  \clearfield{urldate}%
+}
+
 % Name and Title
-\title{Causal effects of schools - March update}
+\title{Causal effects of schools on higher education outcomes - March update}
 \author{ Bruno E. Aravena-Magüida}
 \date{March 2026}
 
@@ -41,23 +48,29 @@
 
 \section{Introduction}
 
-\section{Conceptual Framework} \label{framework}
+This document presents an update on the progress of my research project. I begin by outlining the conceptual framework and identification strategy guiding the analysis.
 
-In this section I describe how I am currently thinking of my analysis.
+The project focuses on estimating the effect of schools on students’ choice of major in higher education, with particular attention to whether these effects operate through academic achievement (test scores) or through non-score mechanisms.
 
-\subsection{Potential Outcomes in Achievement}
+I then introduce the reduced-form specifications used to estimate school effects on the main outcomes, along with a strategy to provide evidence on non-score channels in major choice.
+In addition, I discuss a structural model of major choice that may help disentangle these mechanisms. Finally, I describe progress in replicating school assignments in the Chilean centralized system and outline procedures to compute assignment probabilities.
+
+\section{Conceptual Framework and Identification Strategy} \label{framework}
+
+In this section I describe how I am currently thinking of my analysis. I review the assumptions and methodologies related to the estimation of school specific effects using centralized assignment mechanisms, and then I present the main reduced-form regressions I intend to run, as well as some challenges and how I intend to address them.
+
+\subsection{Potential Outcomes and School Effects}
 
 For this section I borrow from \textcite{angrist_credible_2024} and \textcite{abdulkadiroglu_research_2017}
 
 Suppose $N$ students and $J$ schools. 
-Following the value-added literature on school effectiveness,  I assume a constant-effects model. 
-This is equivalent to writing the potential outcome $Y_{ij}$ of a student $i$ in a school $j$ linearly separable as: 
+Following the value-added literature on school effectiveness,  I assume a constant-effects model. Then, the potential outcome $Y_{ij}$ of a student $i$ in a school $j$ is additively separable and can be written as: 
 \begin{equation}
   Y_{ij} = \nu_j + \epsilon_i
   \label{linear-separable}
 \end{equation}
 
-Hence, the causal effect of a school $j$ relative to a school $k$ would be given by $\nu_j - \nu_k$.
+Hence, the causal effect of attending a school $j$ relative to $k$ would be given by $\nu_j - \nu_k$.
 
 
 By adding a constant, we can renormalize this model relative to the average achievement ($\beta_0 = \frac{1}{J}\sum_{j=1}^J \nu_j$ )
@@ -71,23 +84,24 @@ As a result, we can rewrite the model as:
 where now $\beta_j = \nu_j - \beta_0$. 
 
 Unless school assignment is completely random, the evident threat to running this regression is the fact that $\cov(\epsilon_i, D_{ij})$ might be different than zero. 
-This selection bias would refrain our estimates from having a causal interpretation. 
+This selection bias would bias our estimates and prevent a causal interpretation.
 
-\subsubsection{Centralized Assignment Mechanisms}
+
+\subsubsection{Assignment Mechanisms and Assignment Risk}
 A common strategy used in research to overcome this issue is the use of individual school lotteries, and more recently, centralized school assignments. 
-In centralized assignment mechanisms, applying students submit rank-ordered preferences over schools ($\succ_i$) at which they might also have different priority levels\footnote{e.g. in the Chilean case being the child of a member of the school staff gives a student priority in that school.}.
+In centralized assignment mechanisms, applicants submit rank-ordered preferences over schools ($\succ_i$) at which they might also have different priority levels\footnote{e.g. in the Chilean case being the child of a member of the school staff gives a student priority in that school.}.
 These priorities operate as the school's preferences for students. An algorithm in place (most commonly student-proposing Deferred Acceptance) takes these preferences and outputs a school assignment ($Z_{ij}$) with one offer per student.
 In order to break ties of students with the same preference and priority level, these systems randomize. 
 
 If we refer to a student's priority at each school as $\rho_i = (\rho_{i1}, ...,\rho_{iJ})'$, we can define a student's type as the combination of both $\theta_i \equiv (\succ_i, \rho_i)$.
 Let the probabilities of admission at a school be given by $p_i = (p_{i1}, ..., p_{ij})'$, with $p_{ij} = Pr(Z_{ij} = 1)$.
 
-The mechanism described above implies that students with the same preferences and priority vector have the same probability of being assgined to the schools in their portfolio, which is called by \textcite{abdulkadiroglu_research_2017} the `equal treatment of equals' (ETE) property. 
+The mechanism described above implies that students with the same preferences and priority vector have the same probability of being assigned to the schools in their portfolio, which is called by \textcite{abdulkadiroglu_research_2017} the `equal treatment of equals' (ETE) property. 
 Formally ETE states $\theta_i = \theta_j \implies p_i = p_j$. 
 
 They also prove that under ETE that for any observed characteristic fixed under re-randomization $W_i$ (i.e. pre-assignment or not affected by assignment) we have that:
 \begin{equation}
- Pr[Z_{ij} = 1|\, W_i = w, \theta_i = \theta] = Pr[Z_{ij} = 1 | \, \theta_i = \theta]  \coloneqq p_j(\theta) 
+ Pr[Z_{ij} = 1|\, W_i = w, \theta_i = \theta] = Pr[Z_{ij} = 1 | \, \theta_i = \theta]  
 \end{equation}
 
 Hence, for any such variable $W_i$ we can write 
@@ -101,12 +115,14 @@ In particular, and as a consequence of equation \ref{linear-separable}, where we
   \epsilon_i \ind Z_i \, | \, \theta_i   
 \end{equation}
 
-This is the core assumption of the design. 
-Under this assumption and perfect compliance ($Z_i = D_i$), we could estimate equation \ref{base} by saturating on indicator for each student type $\theta_i$. 
+This is the key identifying assumption of the design.
+It states that conditional on the student type, the school offer is exogenous to the error term (in this example student's ability).
+Under this assumption and perfect compliance ($Z_i = D_i$), we could estimate equation \ref{base} by saturating on an indicator for each student type $\theta_i$. 
 
-However, that is often not possible as these strata might be too granular to have enough variation within each of them to estimate the model. 
+However, that is often not feasible as these strata are too granular to have enough variation within each of them to estimate the model. 
 As described by \textcite{angrist_credible_2024}: "In practice (...) we see nearly as many preference and priority combinations as there are students in a match."  
-A solution to this issue is to use the probablities of admissions as propensity scores to pool over student types, as proposed by \textcite{abdulkadiroglu_research_2017}. This idea is just an application of the propensity score matching \parencite{rosenbaum_central_1983}, and it yields:  
+A solution to this issue is to use the probabilities of admissions as propensity scores to pool over student types, as proposed by \textcite{abdulkadiroglu_research_2017}. 
+This is an application of the propensity score methods \parencite{rosenbaum_central_1983} and it yields:  
 \begin{equation}
   \epsilon_i \ind Z_i \, | \, p_i 
   \label{CRA}
@@ -115,38 +131,44 @@ A solution to this issue is to use the probablities of admissions as propensity 
 Note that by eq. \ref{w ind} we can also consider other control variables (as long as they are fixed under re-randomization). Thus for any pre-treatment covariate $X_i$ it must be the case that 
 ($\epsilon_i, X_i) \ind Z_i | \theta_i$, so we can rewrite Eq \ref{CRA} as $  \epsilon_i \ind Z_i \, | \, (p_i, X_i) $ to allow for such controls.
 
-\subsubsection{RC VAM}
+\subsubsection{Towards Conditional Independence Assignment}
 
-The traditional IV framework would allow us to estimate a causal effect with an assumption such as \ref{CRA} for any school where we have a non-degenerate lottery (an instrument -lottery based offer- for each endogenous -attendance- variable).
-However, that would not allow to get an estimate for schools without lotteries. An hybrid approach proposed by (paper) suggests integrating the variation given by lotteries within a simpler value-added framework.
+Although an instrumental variables approach may seem natural given the availability of many exogenous instruments, estimation of school-specific effects suggests otherwise. The issue arises from the multiplicity of (unordered) outside options. 
+Individuals instrumented into a school may come from different margins, and as a result interpretation becomes challenging unless strong assumptions are made \parencite{angrist_methods_2023} \parencite{kirkeboen_field_2016}.  
+To see this, consider students with an identical ranked list of three schools who are guaranteed admission to their third choice if they are not successful in their first two applications. An offer to the first school then generates two margins of compliance.
+The problem becomes more complex when students have different fallback options or when identical preference lists are rare in the data.
 
-To do this, the authors make an addtional assumption, which is to have compliance with the offers to be as good as random (under the same conditioning set.)
-They argue this is simlar to Dale and Krueger's strategy (quote req), where the sorting occurs when application choices are made and deviations from such plans must be unrelated to the potential outcomes.
+Instead, to compute effects at the school level, the literature typically relies on selection on observables i.e. the construction of a control vector $X_i$ such that $ \epsilon_i \ind D_i \, | \, (X_i)$.
+Note that under the constant effects assumption and the ETE property of lotteries, equation \ref{CRA} is closely related to this framework. 
 
-This final assumption yields a traidional conditional independence assumption, from where estimation is straight-forward. 
+An additional assumption that allows us to move from equation \ref{CRA} to a conditional independence framework is that compliance with offers is as good as random.
+The argument for this assumption is that all sorting occurs at the application stage, and thus captured by the individual type $\theta_i$, and that post-offer compliance is determined by idiosyncratic shocks uncorrelated with the error term (in this case ability $\epsilon_i$).
+This argument is often credited to \textcite{dale_estimating_2002}. 
 
 \begin{equation}
-  \epsilon_i \ind D_i \, | \, (p_i, X_i) 
+  \epsilon_i \ind D_i  \mid (p_i) 
   \label{CIA}
 \end{equation}
 
-In particular, if covariates used are lagged (pre-treatment) outcomes we end up with a Risk Controlled Value Added Model (RC VAM) as constructed in (centralized VAM paper). 
+Compliance being as good as random yields a traditional conditional independence assumption, from where estimation is straightforward. 
+%Note that we can add controls to the conditioning set 
+%In particular, if covariates used are lagged (pre-treatment) outcomes we end up with a Risk Controlled Value Added Model (RC VAM) as constructed in (centralized VAM paper). 
 
 %\begin{equation}
 %  Y_i = \alpha_0 + \sum_j \alpha_j D_{ij} + X_i' \Gamma + g(p_i) + \eta_i 
 %\end{equation}
 
-
 \subsection{Estimation in specific outcomes}
 
-In this subsection I present the main regressions I intend to run, some challenges and how I intend to adress them. 
-Let $Y^{MATH}_i$ represent the outcome of a student in the standarized exam for mathematics and $Y^{STEM}_i$ an indicator variable for whether the student enrolls in a STEM program. 
-Let $X_i$ be a vector of characteristics not changed by treatment (demographics), including also pre-treatment math achievement $Y^{MATH}_{pre,i}$.
+In this subsection I present the main regressions I intend to run, as well as an approach to provide reduced-form evidence for a non-score mechanism of schools on major choice.
+Let $Y^{MATH}_i$ represent the outcome of a student in the standardized exam for mathematics and $Y^{STEM}_i$ an indicator variable for whether the student enrolls in a STEM program. 
+
+Let $X_i$ be a vector of characteristics not changed by treatment (e.g. demographics), and $Y^{MATH}_{pre,i}$ a measure of pre-treatment math achievement .
 
 Following equation \ref{CIA} I write:
 
 \begin{equation}
-  Y^{MATH}_i = b_0 + \sum_j b_j D_{ij} +  X_i' B +   g(p_i) + \epsilon_i 
+  Y^{MATH}_i = b_0 + \sum_j b_j D_{ij} +  X_i' B + b_{pre} Y^{MATH}_{pre,i} +   g(p_i) + \epsilon_i 
   \label{Math}
 \end{equation}
 
@@ -156,20 +178,23 @@ Following equation \ref{CIA} I write:
   \label{STEM_prev}
 \end{equation}
 
-The only difference between these two regressions is the fact that I propose to include pre-treatment achievement on the first regression and exclude it from the second. 
-The incllusion of lagged outcome for math achievement makes \ref{Math} a VAM regression and it helps to increase precision. 
+The only difference between these two regressions is the fact that I propose to include a lagged outcome (pre-treatment math achievement) on the first regression.
 I do not have a similar lagged outcome for STEM enrollment. 
+The inclusion of lagged outcome for math achievement makes \ref{Math} an `RC VAM' regression under the \textcite{angrist_credible_2024} terminology. While \ref{STEM_prev} is a Risk-Controlled OLS or what \textcite{angrist_credible_2024} calls `Risk only'. 
+
 Remember that, under the CIA assumption above, these regressions could be run without any of the controls and should still hold causal interpretation: the CIA assumption only needs the $p_i$ to be included.
 
 
-Consider instead in the true model for STEM enrollment we have the student outcome in the standarized math exam $Y^{MATH}_i$ entering linearly, and that everything else is specified as in equation \ref{STEM_prev}.
+\subsubsection{Thought exercise: what happens if math achievement affects major choice?}
+
+Suppose that in the true model for STEM enrollment we have the student outcome in the standardized math exam $Y^{MATH}_i$ entering linearly, and that everything else is specified as in equation \ref{STEM_prev}.
 In such case, the true model would be given by: 
 \begin{equation}
   Y^{STEM}_i = \gamma_0 + \sum_j \gamma_j D_{ij} +\gamma_M Y^{MATH}_i + X_i' \Gamma + g(p_i) + \eta_i 
   \label{STEM_true}
 \end{equation}
 
-This idea is based on the observed relationship (figure), which likely captures potentially both issues of elegibility into more mathematically-demanding programs, as well as sorting on related abilities. 
+This idea is supposed to capture relationships of sorting based on ability, as well as eligibility cutoffs. 
 
 
 Then, if we run the regression \ref{STEM_prev} we would get that: 
@@ -185,15 +210,19 @@ Then, if we run the regression \ref{STEM_prev} we would get that:
 Where the first equality follows from replacing equation \ref{Math} in \ref{STEM_true}. The second one from dropping constants and functions of the conditioning set. 
 The third one from applying equation \ref{CIA} to the individual's fixed mathematical ability ($\epsilon_i$) and interest for STEM ($\eta_i$), and the final one from covariance/variance identities. 
 
-Note that unless either $\gamma_M = 0$ (math scores not affecting likelihood of student applying to STEM) or $(b_k) = 0$ (school not affecting math scores), the outcome of the short regression is biased. 
+Note that unless either $\gamma_M = 0$ (math scores not affecting likelihood of student applying to STEM) or $(b_k) = 0$ (school not affecting math scores), the outcome of the short regression would include both an effect through scores, as well as a potential non-score effect.
 
-A solution to this issue could be to include instead a forecast of $\hat{Y^{MATH}_i}$ constructed from pre-treatment variables such as $Y^{MATH}_{pre,i}$, potentially also including other elements of $X_i$.
+If we run regression \ref{STEM_prev}, however, for a subset of schools for which we have estimated $b_j = 0$, we are effectively shutting-down that channel. 
 
-\clearpage
-\section{Structural model of major choice}
+Thus, any non-zero $c_j$ estimated  for those schools would provide evidence of a non-score effect of schools on major choice.
 
-In order to separate these two channels, I intend to estimate a model of demand for fields following (Do Parents Value School Effectiveness?† 2020) and more closely (Campos et al. 2026). 
-I folow more closely the work by (Campos et al. 2026)  as I decide to collapse the demand into broad fields of occupation as opposed to particular programs.
+
+\section{A Structural Model of Major Choice}
+
+An alternative approach to separate these two channels is to estimate a model of demand for fields of higher educational choices, following \textcite{abdulkadiroglu_parents_2020} and \textcite{campos_college_2026}. 
+Note that since I am trying to study major choice as an outcome, I am moving away from lists for high school admission into ranked-lists of preferences for higher educational programs. 
+I, thus, follow most closely the work by \textcite{campos_college_2026} as I decide to collapse the demand into broad fields of occupation as opposed to particular programs. Moreover, the authors use data from the same context: ranked-lists for higher education programs in Chile.
+
 
 Let $u_{if}$ be the indirect utility associated with field $f \in \mathcal{F}$. Let $g(i)$ index the covariate-cell group of $i$. 
 I specify the following functional form: 
@@ -204,10 +233,11 @@ I specify the following functional form:
 
 where $\delta_{g(i)f}$ represents the mean utility of field $j$ for applicants of covariate-cell $g(i)$, $d_{if}$ is given by the distance between student $i$ and the nearest program corresponding to the field $f$, and $\kappa_{g(i)}$ is a cell-specific distance cost. 
 $f_{g(i)f}(Y^{MATH}, Y^{VERBAL})$ gives a polynomial of degree 2 for the math and verbal exams, for each covariate-cell and field. $\lambda_{fs}$ is a school-field preference shifter. Finally $\eta_{if}$ represents the unobserved preference shock, assumed to follow an EVT1 distribution conditional on $(X_i', d_i')$. 
+The first two terms $(\delta_{g(i)f}, \kappa_{g(i)})$ are relatively standard in these exercises and included on both models cited above. 
+The polynomial of degree 2 for each exam, field studied and covariate cell allow to flexibly account for how scores might play an important role in the choice of majors. Scores affect elegibility for particular programs, measure skills that might be relevant to them, while also potentially operating as a signal for students of their comparative advantage.  
+Finally the $\lambda_{fs}$ is the main object of interest in this exercise, as it allows to test whether schools do shift their students preference even when allowing scores to have a very flexible effect.
 
-
-
-The idea underlying this approach is to use the submitted college application ranked-choice lists as revealing their preferences given that in this setting truthful reporting is a weakly dominant strategy given that these also operate under a student-proposing DA system.
+The rationale underlying this approach is that submitted college application ranked-choice lists as revealing their preferences given that in this setting truthful reporting is a weakly dominant strategy. This is given by the fact that the mechanism used to process them is a student-proposing DA system.
 If we refer to a student's rank-order list by $R_i = (R_{i1}, ..., R_{il(i)})'$ where $l(i)$ is the number of different fields ranked by the student, 
 then we have that the students' top-ranked field satisfies we have that:
 \[R_{1i} = \arg \max_{f \in \mathcal{F}} U_{if} \] 
@@ -225,23 +255,22 @@ For the covariate-cells, I consider each combination of macro-region (3 values),
 That would yield a total of 12 x (5(8) + 1) = 12(41) = 492 parameters. On top of that estimating school-preference shifter with 200 schools, would require other (200)(8) = 1600 parameters, for a total of 2092 parameters.
 Limiting myself to study only 100 schools would bring down the number of parameters to 1292.
 
-An important caveat is that this approach does not rely at all in the use of lotteries. As a result, as long as preferences are relatively estable over time, I could use data from cohorts that arrived to high school before the introduction of the lotteries. Potentially, this is also an interesting space to work on. 
+An important caveat is that this approach does not rely at all in the use of lotteries. As a result, as long as preferences are relatively stable over time, I could use data from cohorts that arrived to high school before the introduction of the lotteries. Potentially, this is also an interesting space to work on. 
 
-\clearpage
-\section{Computing $p_{ij}$} 
+\section{Computing Assignment Probabilities} 
 
 Evidently, as discussed in section \ref{framework}, the computation of the $p_{ij}$ is crucial to leveraging the exogenous variation provided by the centralized assignment mechanism.
+The first step to do so is to actually nail-down the assignment mechanism so that new draws of the lottery number yield counterfactual assignments that are consistent with the mechanism and its inputs.
 
-
-\subsection{Reproducing school offers in the Chilean system}
+\subsection{Replicating School Offers in the Chilean System}
 
 I have made significant progress in being able to fully replicate the assignment delivered by the mechanism. On one hand this is possible by the fact that the responsible agency includes the used lottery number when making the data available. 
-On the other hand, this process has become more complicated given the number of features of the system that escape a traditional DA mechanism. Documentation for these is far from complete.
+On the other hand, the problem becomes more complex given the number of features of the system that escape a traditional DA mechanism. Documentation for these is far from complete.
 
 The Chilean system has many features that are not captured by the textbook DA mechanism which features ranked preferences and priorities $(\succ_i, \rho_i)$.
 There are reserved spots for low-income, high-achievement and special-needs students. Despite documentation not being clear about this,
 these quotas do roll-over to regular spots if they are not taken. Additionally, students have guaranteed admission in their original school if they do not get assigned anywhere else, even if their original school did not list any available spots.
-The system also allows siblings to apply in block, such that if the older one gets accepted by a school, the submitted list of younger siblings gets updated and prioritizes such school. Note this is different than the priority tier for students who have a sibiling at the school before the process starts. 
+The system also allows siblings to apply in block, such that if the older one gets accepted by a school, the submitted list of younger siblings gets updated and prioritizes such school. Note this is different than the priority tier for students who have a sibling at the school before the process starts. 
 Some of these rules also change over a transition period on the first few years of the implementation, which is where I sample from given that this allows me to have enough cohorts that have spent at least 4 years after their centralized assignment.
 
 I can currently replicate 99.47 \% of the assignments for almost 80k students applying to grade 9 in 2018.
@@ -250,19 +279,36 @@ Including the actual lottery numbers in this case, slightly decreases the fracti
 
 Evident next steps in this part of the project include trying to figure out the remaining fraction, as well as ensure that I can achieve similar replication rates for later admission cycles, where some of the transition rules phase out.
 
+\subsection{Procedures to compute $p_{ij}$}
 
-\subsection{Computing $p_{ij}$}
+The ideal way to compute $p_{ij}$ in a pure DA mechanism is arguably to follow the mathematical derivation in \textcite{abdulkadiroglu_research_2017}. Given the importance of the additional features described in the previous section, however, I doubt this will be my preferred approach.
 
-For a traditional DA system (MCM)
+Many of the problematic features discussed above involve running variables, for which the framework in \textcite{abdulkadiroglu_breaking_2022} may be especially useful. However, some features---such as sibling block applications and guaranteed admission at the origin school---do not seem to fit naturally within that framework.
 
+In the worst case, these values can still be computed through repeated simulations. At present, I am able to run more than 1,000 simulations of the DA algorithm for the Chilean setting in under an hour.
 
-
-\section{Conclusion}
-
-Bye bye 
-
-
+\clearpage
 \printbibliography
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 \end{document}
