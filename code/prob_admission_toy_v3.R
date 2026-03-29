@@ -426,6 +426,8 @@ Loop_DA_fast <- function(school_db, apps_db, n_reps,
   probs
 }
 
+
+
 expand_market <- function(school_db, apps_db, n_rep_types) {
   if (n_rep_types < 1) stop("n_rep_types must be >= 1")
   

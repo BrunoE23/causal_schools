@@ -346,9 +346,9 @@ results_2018_DA <- read_csv2("./data/raw/2018/SAE_2018/D1_Resultados_etapa_regul
 results_2018_DA %>% 
   filter(school_id_actual == "unmatched")
 
-test_2018_seed <- Run_school_DA(apps_db = sae_apps_2018_DA, 
+test_2018_seed <- Run_school_DA_fast(apps_db = sae_apps_2018_DA, 
               school_db = oferta_2018_DA_old,  
-              print = FALSE, time = TRUE, seed = 123)
+              print = FALSE, time = TRUE, seed = 321)
 
 head(test_2018_seed)
 
