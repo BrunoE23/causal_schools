@@ -242,35 +242,24 @@ comp_results_2021 <- compare_results(2021)
 ##### Prob Computation
 ####################################
 
-<<<<<<< HEAD
 #Took like 90 min in small laptop
-=======
 #5660 seconds in small laptop (1h30)
->>>>>>> 7e2e1f83606a6740fc6730efe3ec8ae2458ae785
 set.seed(233)
 probs_2018  <- get_probs(2018, 1000)
 write.csv(probs_2018, "./data/clean/DA_probs/DA_probs_2018.csv")
 
-<<<<<<< HEAD
 #Never run in small laptop
 #3812 seconds
 set.seed(283)
-=======
-
-set.seed(243)
->>>>>>> 7e2e1f83606a6740fc6730efe3ec8ae2458ae785
 probs_2019  <- get_probs(2019, 1000)
 write.csv(probs_2019, "./data/clean/DA_probs/DA_probs_2019.csv")
 
-
+set.seed(253)
 probs_2020  <- get_probs(2020, 1000)
 write.csv(probs_2020, "./data/clean/DA_probs/DA_probs_2020.csv")
 
-<<<<<<< HEAD
 
 set.seed(263)
-=======
->>>>>>> 7e2e1f83606a6740fc6730efe3ec8ae2458ae785
 probs_2021  <- get_probs(2021, 1000)
 write.csv(probs_2021, "./data/clean/DA_probs/DA_probs_2021.csv")
 

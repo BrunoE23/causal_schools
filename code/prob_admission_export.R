@@ -19,7 +19,7 @@ library(tidyverse)
 probs_2018 <- read_csv("./data/clean/DA_probs/DA_probs_2018.csv") %>% 
   select(-...1)
 
-probs_2019 <- read_csv("./data/clean/DA_probs/DA_probs_2019_100.csv") %>% 
+probs_2019 <- read_csv("./data/clean/DA_probs/DA_probs_2019.csv") %>% 
   select(-...1)
 
 
