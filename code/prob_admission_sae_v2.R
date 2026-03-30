@@ -244,7 +244,8 @@ probs_2018  <- get_probs(2018, 1000)
 write.csv(probs_2018, "./data/clean/DA_probs/DA_probs_2018.csv")
 
 #Never run in small laptop
-set.seed(243)
+#3812 seconds
+set.seed(283)
 probs_2019  <- get_probs(2019, 1000)
 write.csv(probs_2019, "./data/clean/DA_probs/DA_probs_2019.csv")
 
