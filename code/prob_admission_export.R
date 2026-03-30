@@ -1,9 +1,9 @@
 ####################################
-#data_wd        <-  "C:/Users/xd-br/Dropbox/causal_schools"
-#code_output_wd <-  "C:/Users/xd-br/Desktop/PhD/Research/causal_schools"
+data_wd        <-  "C:/Users/xd-br/Dropbox/causal_schools"
+code_output_wd <-  "C:/Users/xd-br/Desktop/PhD/Research/causal_schools"
 
-data_wd <- "C:/Users/brunem/Dropbox/causal_schools"
-code_output_wd <-  "C:/Users/brunem/Research/causal_schools"
+#data_wd <- "C:/Users/brunem/Dropbox/causal_schools"
+#code_output_wd <-  "C:/Users/brunem/Research/causal_schools"
 
 setwd(data_wd)
 #####################################
@@ -118,6 +118,6 @@ probs_wide <- probs_wide %>%
   )
 
 #Save 
-write_csv(probs_wide, "./data/clean/DA_probs/probs_columns_wide.csv")
-#haven::write_dta(probs_wide, "./data/clean/DA_probs/probs_columns_wide.dta")
+write.csv(probs_wide, "./data/clean/DA_probs/probs_columns_wide.csv", row.names = FALSE)
+haven::write_dta(probs_wide, "./data/clean/DA_probs/probs_columns_wide.dta")
 
