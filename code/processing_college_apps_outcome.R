@@ -26,6 +26,65 @@ oferta_2020 <- read_xlsx("./data/raw/2020/PSU2020/PostulaciónySelección_Admisi
   select(PROCESO, CODIGO, CARRERA, UNIVERSIDAD, stem_share,stem_proxy_low, stem_proxy_high)
 
 
+year_input = 2024
+
+file_path <- paste0(
+  "./data/raw/", year_input,
+  "/Matricula-Ed-Superior-", year_input,
+  "/20250729_Matrícula_Ed_Superior_", year_input,
+  "_PUBL_MRUN.csv"
+)
+
+mat2022 <- read_csv2(file_path) %>% 
+  rename_with(~ toupper(.x)) 
+
+mat2023 <- read_csv2(file_path) %>% 
+  rename_with(~ toupper(.x)) 
+
+mat2024 <- read_csv2(file_path) %>% 
+  rename_with(~ toupper(.x)) 
+
+  
+
+#What I decided to use last time 
+mat2022 %>% 
+  pull(CINE_F_13_AREA) %>% 
+  unique()
+
+#What Campos et al. 2026 use but they modify it a bit
+mat2022 %>% 
+  pull(CINE_F_97_AREA_AREA) %>% 
+  unique()
+
+mat2022 %>% 
+  pull(CINE_F_97_SUBAREA) %>% 
+  unique()
+
+
+mat2022 %>% 
+  select(CINE_F_97_AREA_AREA, CINE_F_97_SUBAREA) %>% 
+  unique() %>% 
+  arrange(CINE_F_97_AREA_AREA) %>% 
+  View()
+
+
+
+mat2022 %>% 
+  pull(CINE_F_97_AREA_AREA) %>% 
+  unique()
+
+mat2022 %>% 
+  pull(CINE_F_13_AREA) %>% 
+  unique()
+
+
+mat2022 %>% 
+  pull(AREA_CARRERA_GENERICA) %>% 
+  unique()
+
+
+
+
 
 #colnames(program_info_2024)
 
