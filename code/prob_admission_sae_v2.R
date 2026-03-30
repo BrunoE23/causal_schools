@@ -1,11 +1,11 @@
 ####################################
-data_wd        <-  "C:/Users/xd-br/Dropbox/causal_schools"
-code_output_wd <-  "C:/Users/xd-br/Desktop/PhD/Research/causal_schools"
+#data_wd        <-  "C:/Users/xd-br/Dropbox/causal_schools"
+#code_output_wd <-  "C:/Users/xd-br/Desktop/PhD/Research/causal_schools"
 
-#data_wd <- "C:/Users/brunem/Dropbox/causal_schools"
-#code_output_wd <-  "C:/Users/brunem/Research/causal_schools"
+data_wd <- "C:/Users/brunem/Dropbox/causal_schools"
+code_output_wd <-  "C:/Users/brunem/Research/causal_schools"
 
-#Datawd (Dropbox) 
+setwd(data_wd)
 #####################################
 
 
@@ -166,10 +166,11 @@ return(probs)
 }
 
 
-(sum(schools_DA_2018$achievement_spots_reg))
-(sum(schools_DA_2019$achievement_spots_reg))
-(sum(schools_DA_2020$achievement_spots_reg))
-(sum(schools_DA_2021$achievement_spots_reg))
+#No achievements_spots_reg on my 
+#(sum(schools_DA_2018$achievement_spots_reg))
+#(sum(schools_DA_2019$achievement_spots_reg))
+#(sum(schools_DA_2020$achievement_spots_reg))
+#(sum(schools_DA_2021$achievement_spots_reg))
 
 
 
@@ -195,8 +196,8 @@ student_risk <- probs_2018 %>%
 
 prop.table(table(student_risk$risk))
 
-#100 replications in 3.25 minutes3
-
+#100 replications in 3.25 minutes (195s)
+#100 replications in almost 7 min (410s) in my small laptop
 ####################################
 
 #####2019 block
@@ -237,12 +238,14 @@ comp_results_2021 <- compare_results(2021)
 
 ##### Prob Computation
 ####################################
-set.seed(233)
 
+#5660 seconds in small laptop (1h30)
+set.seed(233)
 probs_2018  <- get_probs(2018, 1000)
 write.csv(probs_2018, "./data/clean/DA_probs/DA_probs_2018.csv")
 
 
+set.seed(243)
 probs_2019  <- get_probs(2019, 1000)
 write.csv(probs_2019, "./data/clean/DA_probs/DA_probs_2019.csv")
 
