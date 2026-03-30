@@ -27,7 +27,7 @@ bysort year_1st_app: egen std_gpa  = std(PTJE_NEM)
 bysort year_1st_app: egen std_rnkg = std(PTJE_RANKING)
 
 
-   save "./data/clean/df_pop_comparison.dta", replace 
+   save "./data/clean/df_pop_c.dta", replace 
 
 
 

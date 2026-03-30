@@ -109,6 +109,9 @@ outcome1<- "math_max"
 outcome2<- "avg_stem_share"
 
 
+comparison_data <- haven::read_dta("./data/clean/df_pop_comparison.dta")
+
+
 plot_2vars <- function(outcome1, outcome2, this_group = "all", data = effects_schools,
                        my_xlab = outcome1, my_ylab = outcome2) {
 

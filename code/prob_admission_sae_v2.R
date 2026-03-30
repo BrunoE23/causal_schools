@@ -1,6 +1,6 @@
 ####################################
-#data_wd        <-  "C:/Users/xd-br/Dropbox/causal_schools"
-#code_output_wd <-  "C:/Users/xd-br/Desktop/PhD/Research/causal_schools"
+data_wd        <-  "C:/Users/xd-br/Dropbox/causal_schools"
+code_output_wd <-  "C:/Users/xd-br/Desktop/PhD/Research/causal_schools"
 
 data_wd <- "C:/Users/brunem/Dropbox/causal_schools"
 code_output_wd <-  "C:/Users/brunem/Research/causal_schools"
@@ -18,6 +18,30 @@ setwd(data_wd)
 
 
 
+prep_spots_db <- function(year = NULL) {
+  
+  path = "./data/raw/YYY/SAE_YYY/A1_Oferta_Establecimientos_etapa_regular_YYY_Admisión_YYZ.csv"
+  path <- str_replace_all(string = path, pattern = "YYY", paste0(year)) 
+  path <- str_replace(string = path, pattern = "YYZ", paste0(year+1))  
+  
+  
+  oferta_db <- read_csv2(path) %>% 
+    mutate(proceso = year) %>% 
+    mutate(br_code = paste0(as.character(rbd),  "_", cod_curso, "_", proceso)) %>% 
+    filter(cod_nivel == 9) %>% 
+    select(br_code, vacantes_pie , vacantes_prioritarios , vacantes_alta_exigencia_t, vacantes_alta_exigencia_r,  vacantes_regular) %>% 
+    rename(  school_id = br_code,
+             regular_spots         =  vacantes_regular,
+             pie_spots             =  vacantes_pie, 
+             prioritario_spots     =  vacantes_prioritarios,
+             achievement_spots     =  vacantes_alta_exigencia_t,
+             achievement_spots_reg =  vacantes_alta_exigencia_r,
+    )
+  
+  
+  
+  
+}
 prep_apps_db <- function(year = NULL) {
 path = "./data/raw/YYY/SAE_YYY/C1_Postulaciones_etapa_regular_YYY_Admisión_YYZ_PUBL.csv"
 path <- str_replace_all(string = path, pattern = "YYY", paste0(year)) 
@@ -63,30 +87,6 @@ path2 <- str_replace(string = path2, pattern = "YYZ", paste0(year+1))
   return(sae_apps_all)
   
   }
-prep_spots_db <- function(year = NULL) {
-  
-  path = "./data/raw/YYY/SAE_YYY/A1_Oferta_Establecimientos_etapa_regular_YYY_Admisión_YYZ.csv"
-  path <- str_replace_all(string = path, pattern = "YYY", paste0(year)) 
-  path <- str_replace(string = path, pattern = "YYZ", paste0(year+1))  
-  
-  
-  oferta_db <- read_csv2(path) %>% 
-    mutate(proceso = year) %>% 
-    mutate(br_code = paste0(as.character(rbd),  "_", cod_curso, "_", proceso)) %>% 
-    filter(cod_nivel == 9) %>% 
-    select(br_code, vacantes_pie , vacantes_prioritarios , vacantes_alta_exigencia_t, vacantes_alta_exigencia_r,  vacantes_regular) %>% 
-    rename(  school_id = br_code,
-             regular_spots         =  vacantes_regular,
-             pie_spots             =  vacantes_pie, 
-             prioritario_spots     =  vacantes_prioritarios,
-             achievement_spots     =  vacantes_alta_exigencia_t,
-             achievement_spots_reg =  vacantes_alta_exigencia_r,
-    )
-  
-  
-  
-  
-}
 results_db <- function(year = NULL) {
 
   
@@ -166,10 +166,7 @@ return(probs)
 }
 
 
-<<<<<<< HEAD
-=======
 #No achievements_spots_reg on my 
->>>>>>> 7e2e1f83606a6740fc6730efe3ec8ae2458ae785
 #(sum(schools_DA_2018$achievement_spots_reg))
 #(sum(schools_DA_2019$achievement_spots_reg))
 #(sum(schools_DA_2020$achievement_spots_reg))

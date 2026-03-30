@@ -541,12 +541,21 @@ apps_db2 <- data.frame(
 
 ####Tables 
 
+set.seed(25)
+
 table_toy1 <- Loop_DA_fast(
   school_db, apps_db, 100000,
   lottery_type = "single",
   time = TRUE
 ) %>%
-  arrange(school_name, type_id)
+  arrange(school_name, type_id) 
+
+table_toy1_f<- table_toy1 %>% 
+  select(-school_id)
+
+
+
+
 
 table_SM <- Loop_DA_fast(
   school_db2, apps_db2, 100000,

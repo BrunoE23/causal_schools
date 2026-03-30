@@ -11,6 +11,18 @@ setwd(data_wd)
 library(tidyverse)
 
 
+schools_DA_2021_top <- prep_spots_db(2021) %>% 
+  arrange(desc(regular_spots)) %>% 
+  slice_head(n=251)
+
+
+sample_school_list <- schools_DA_2021_top %>% 
+  mutate(rbd_target = trimws(as.character(sub("_.*", "", school_id)))) %>% 
+  distinct(rbd_target) %>%
+  arrange(rbd_target)
+
+write.csv(sample_school_list, "./data/clean/selected_rbd.csv", row.names = FALSE)
+
 
 ##### Combining all DA_probs
 ####################################
@@ -36,7 +48,7 @@ probs_2018 <- probs_2018 %>%
   mutate(school_id = ifelse(school_id == "unmatched", "unmatched_2018", school_id))
 
 probs_2019 <- probs_2019 %>% 
-  mutate(school_id = ifelse(school_id == "unmatched", "unmatched_2018", school_id))
+  mutate(school_id = ifelse(school_id == "unmatched", "unmatched_2019", school_id))
 
 
 probs_2020 <- probs_2020 %>% 
@@ -48,34 +60,43 @@ probs_2021 <- probs_2021 %>%
 
 
 #Combine them
-probs_all <- rbind(probs_2018,
-                                      probs_2019,
-                   probs_2020,
-                   probs_2021)  %>% 
-  mutate(rbd_prob = sub("_.*", "", school_id)) %>% 
-  mutate(prob_r = round(prob, 2)) %>% 
-  mutate(year = str_extract(school_id, "\\d{4}$"))  
+probs_all <- rbind(probs_2018, probs_2019, probs_2020, probs_2021) %>% 
+  mutate(
+    rbd_prob = trimws(as.character(sub("_.*", "", school_id))),
+    prob_r   = round(prob, 2),
+    year     = as.integer(str_extract(school_id, "\\d{4}$"))
+  )
   
-  
-  probs_all %>% 
+  probs_all %>%
+  #  probs_unique %>% 
   pull(student_id) %>% 
   unique() %>% 
   length()
 
 
   #1% appears more than once, suggests repeating grade
-  probs_all |>
-    dplyr::summarise(n = dplyr::n(), .by = c(student_id, rbd_prob)) |>
-    dplyr::filter(n > 1L) %>% 
-    View()
+#  probs_all |>
+#    dplyr::summarise(n = dplyr::n(), .by = c(student_id, rbd_prob)) |>
+#    dplyr::filter(n > 1L) %>% 
+#    View()
   
   
 #Filtering first for the first application in the cycle
-probs_unique <- probs_all %>% 
-  select(student_id, rbd_prob, prob_r, year) %>%
-  group_by(student_id, rbd_prob) %>%
-  slice_min(year, n = 1, with_ties = FALSE) %>%
-  ungroup() 
+  probs_unique <- probs_all %>% 
+    select(student_id, rbd_prob, prob_r, year) %>%
+    group_by(student_id) %>%
+    filter(year == min(year)) %>% 
+    ungroup()
+  
+
+  #Filtering to only 250 schools + unmatched
+  probs_unique <- probs_unique %>%
+    filter(rbd_prob %in% sample_school_list$rbd_target | rbd_prob == "unmatched")
+  
+  #add different br_codes into 1 rbd
+  probs_unique <- probs_unique %>%
+    group_by(student_id, year, rbd_prob) %>%
+    summarise(prob_r = sum(prob_r, na.rm = TRUE), .groups = "drop")
 
 
 #Computing individual risk 
@@ -84,7 +105,7 @@ probs_unique <- probs_unique %>%
   mutate(any_risk = ifelse(max(prob_r) == 1.0, 0, 1)) %>% 
   ungroup()
 
-#5% has approximately 0s computed
+#3% has approximately 0s computed
 probs_unique %>% 
   filter(prob_r == 0)
 
@@ -107,6 +128,8 @@ probs_wide <- probs_unique %>%
 probs_wide <- probs_wide %>%
   mutate(across(-c(student_id, any_risk), ~ tidyr::replace_na(., 0)))
 
+
+
 #Get the binaries
 probs_wide <- probs_wide %>%
   mutate(
@@ -118,6 +141,6 @@ probs_wide <- probs_wide %>%
   )
 
 #Save 
-write.csv(probs_wide, "./data/clean/DA_probs/probs_columns_wide.csv", row.names = FALSE)
-haven::write_dta(probs_wide, "./data/clean/DA_probs/probs_columns_wide.dta")
+write.csv(probs_wide, "./data/clean/DA_probs/probs_columns_wide_small.csv", row.names = FALSE)
+haven::write_dta(probs_wide, "./data/clean/DA_probs/probs_columns_wide_small.dta")
 
