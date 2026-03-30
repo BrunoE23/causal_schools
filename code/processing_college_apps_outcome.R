@@ -26,62 +26,6 @@ oferta_2020 <- read_xlsx("./data/raw/2020/PSU2020/PostulaciónySelección_Admisi
   select(PROCESO, CODIGO, CARRERA, UNIVERSIDAD, stem_share,stem_proxy_low, stem_proxy_high)
 
 
-year_input = 2024
-
-file_path <- paste0(
-  "./data/raw/", year_input,
-  "/Matricula-Ed-Superior-", year_input,
-  "/20250729_Matrícula_Ed_Superior_", year_input,
-  "_PUBL_MRUN.csv"
-)
-
-mat2022 <- read_csv2(file_path) %>% 
-  rename_with(~ toupper(.x)) 
-
-mat2023 <- read_csv2(file_path) %>% 
-  rename_with(~ toupper(.x)) 
-
-mat2024 <- read_csv2(file_path) %>% 
-  rename_with(~ toupper(.x)) 
-
-  
-
-#What I decided to use last time 
-mat2022 %>% 
-  pull(CINE_F_13_AREA) %>% 
-  unique()
-
-#What Campos et al. 2026 use but they modify it a bit
-mat2022 %>% 
-  pull(CINE_F_97_AREA_AREA) %>% 
-  unique()
-
-mat2022 %>% 
-  pull(CINE_F_97_SUBAREA) %>% 
-  unique()
-
-
-mat2022 %>% 
-  select(CINE_F_97_AREA_AREA, CINE_F_97_SUBAREA) %>% 
-  unique() %>% 
-  arrange(CINE_F_97_AREA_AREA) %>% 
-  View()
-
-
-
-mat2022 %>% 
-  pull(CINE_F_97_AREA_AREA) %>% 
-  unique()
-
-mat2022 %>% 
-  pull(CINE_F_13_AREA) %>% 
-  unique()
-
-
-mat2022 %>% 
-  pull(AREA_CARRERA_GENERICA) %>% 
-  unique()
-
 
 
 
@@ -317,6 +261,7 @@ saveRDS(mifuturo_imputed, "./data/clean/mifuturo_imputed.rds")
 
 
 ##########################
+mifuturo_imputed <- readRDS("./data/clean/mifuturo_imputed.rds")
 
 
 sum(is.na(mifuturo_recent_clean$income_4th_year_mid_clp))
@@ -342,6 +287,9 @@ mifuturo_imputed <- mifuturo_imputed %>%
 
 program_info_all <- program_info_all %>%
   mutate(AREA_CARRERA_GENERICA = str_squish(AREA_CARRERA_GENERICA))
+
+mifuturo_imputed <- readRDS("./data/clean/mifuturo_imputed.rds")
+
 
 program_info_joint <-  left_join(program_info_all,
                                  mifuturo_imputed, 
@@ -416,15 +364,76 @@ hist(oferta_codes_all$income_imp, breaks = 20)
 ########
 
 
-apps_all_info <- college_apps %>% 
+apps_most_info <- college_apps %>% 
   filter(ORDEN_PREF <= 10) %>%
   filter(TIPO_PREF == "REGULAR") %>%
   left_join(oferta_codes_all_info, by = "COD_CARRERA_PREF") %>%
   group_by(mrun) %>%
   #Only first application per person
   filter(year == min(year)) %>% 
-  ungroup()
+  ungroup() %>% 
+  mutate(
+    
+    #my implementation of Campos et al. 2026
+    field_reclassified = case_when(
+      
+      # Keep Veterinaria
+      CINE_F_97_SUBAREA == "Veterinaria" ~ "Health and Welfare",
+      
+      # Drop remaining Agriculture and Services
+      CINE_F_97_AREA_AREA %in% c("Agricultura", "Servicios") ~ NA_character_,
+      
+      # Science
+      CINE_F_97_AREA_AREA == "Ciencias" ~ "Science",
+      
+      # Teaching
+      CINE_F_97_AREA_AREA == "Educación" ~ "Teaching",
+      
+      # Humanities and Arts
+      CINE_F_97_AREA_AREA == "Humanidades y Artes" ~ "Humanities and Arts",
+      
+      # Engineering
+      CINE_F_97_AREA_AREA == "Ingeniería, Industria y Construcción" ~
+        "Engineering, Manufacturing and Construction",
+      
+      # Social Sciences / Business / Law
+      CINE_F_97_AREA_AREA == "Ciencias Sociales, Enseñanza Comercial y Derecho" &
+        CINE_F_97_SUBAREA == "Derecho" ~ "Law",
+      
+      CINE_F_97_AREA_AREA == "Ciencias Sociales, Enseñanza Comercial y Derecho" &
+        CINE_F_97_SUBAREA == "Enseñanza Comercial y Administración" ~ "Business",
+      
+      CINE_F_97_AREA_AREA == "Ciencias Sociales, Enseñanza Comercial y Derecho" &
+        CINE_F_97_SUBAREA %in% c(
+          "Ciencias Sociales y del Comportamiento",
+          "Periodismo e Información"
+        ) ~ "Social Sciences",
+      
+      # Medicine vs Health and Welfare
+      CINE_F_97_AREA_AREA == "Salud y Servicios Sociales" &
+        CINE_F_97_SUBAREA == "Medicina" ~ "Medicine",
+      
+      CINE_F_97_AREA_AREA == "Salud y Servicios Sociales" ~ "Health and Welfare",
+      
+      TRUE ~ NA_character_
+    ),
+    
+    f_science   = as.integer(field_reclassified == "Science"),
+    f_social    = as.integer(field_reclassified == "Social Sciences"),
+    f_business  = as.integer(field_reclassified == "Business"),
+    f_law       = as.integer(field_reclassified == "Law"),
+    f_teaching  = as.integer(field_reclassified == "Teaching"),
+    f_humarts   = as.integer(field_reclassified == "Humanities and Arts"),
+    f_eng       = as.integer(field_reclassified == "Engineering, Manufacturing and Construction"),
+    f_medicine  = as.integer(field_reclassified == "Medicine"),
+    f_health    = as.integer(field_reclassified == "Health and Welfare")
+  )
+
   
+
+save(apps_most_info, file = "./data/clean/college_apps_full.RData")
+
+
 
 #Of 4.1M apps I am missing income information for 700K.
 #So my coverage is 83%. Not too shabby. 
@@ -452,21 +461,22 @@ apps_all_info %>%
   stem_outcome <- college_apps %>% 
         filter(ORDEN_PREF <= 5) %>%
         filter(TIPO_PREF == "REGULAR") %>%
-        left_join(oferta_2024, by = "COD_CARRERA_PREF") %>%
+        left_join(oferta_codes_all_info, by = "COD_CARRERA_PREF") %>%
         group_by(mrun) %>%
   #Only first application
     filter(year == min(year)) %>%
     summarize(avg_stem_share = mean(stem_share),
               
               across(
-                c(stem_bin, health_bin),
+                c(f_science,     f_social, f_law,     f_teaching, 
+                  f_humarts ,  f_eng,     f_medicine,   f_health    ),
                 ~ mean(.x, na.rm = TRUE),           # proportion=mean for 0/1
                 .names = "prop_{.col}"),
                 
-              n_stem_low  = sum(stem_proxy_low, na.rm = TRUE),
-              n_stem_high = sum(stem_proxy_high, na.rm = TRUE),
-              only_stem_low  = min(stem_proxy_low),
-              only_stem_high = min(stem_proxy_high),
+            #  n_stem_low  = sum(stem_proxy_low, na.rm = TRUE),
+            #  n_stem_high = sum(stem_proxy_high, na.rm = TRUE),
+            #  only_stem_low  = min(stem_proxy_low),
+            #  only_stem_high = min(stem_proxy_high),
               year_1st_app = min(year),
               #,
               avg_employ_y1 = mean(employment_1st_year, na.rm = TRUE),   
