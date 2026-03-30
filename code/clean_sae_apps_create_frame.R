@@ -113,7 +113,15 @@ table(sae_apps_2020$preferencia_postulante)
 #table(sae_apps_2019$rbd)
 #table(sae_apps_2020$rbd)
 
-sae_apps_grade9 <- rbind(sae_apps_2017, sae_apps_2018, sae_apps_2019,sae_apps_2020)
+sae_apps_grade9 <- rbind(sae_apps_2017, sae_apps_2018, sae_apps_2019,sae_apps_2020) %>% 
+                   rename(sae_proceso = proceso) %>% 
+                   select(mrun, sae_proceso) %>% 
+                   distinct() %>% 
+                   group_by(mrun) %>% 
+                   filter(sae_proceso == min(sae_proceso)) %>% 
+                   ungroup()
+
+save(sae_apps_grade9, file = "./data/clean/sae_binary_prep.RData")
 
 
 

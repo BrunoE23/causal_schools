@@ -195,5 +195,24 @@ simce_4to <- rbind(simce_2013,
                    simce_2016) %>% 
           mutate(income_decile = ntile(income_mid, 10))
 
+#First year simce only
+simce_4to <- simce_4to %>% 
+     select(-idalumno)  %>% 
+     group_by(mrun) %>% 
+     filter(simce_year == min(simce_year)) %>% 
+     ungroup()
+
+#Drop simce if none of them have scores. If any scores, pick highest avg 
+simce_4to <- simce_4to %>%
+  group_by(mrun) %>%
+  mutate(
+    all_missing = all(is.na(ptje_lect4b_alu) & is.na(ptje_mate4b_alu)),
+    avg_score = rowMeans(cbind(ptje_lect4b_alu, ptje_mate4b_alu), na.rm = TRUE)
+  ) %>%
+  filter(!all_missing) %>%
+  slice_max(avg_score, n = 1, with_ties = FALSE) %>%
+  ungroup() %>%
+  select(-all_missing, -avg_score)
+
 
 save( simce_4to, file = "./data/clean/simce_4to.Rdata")
