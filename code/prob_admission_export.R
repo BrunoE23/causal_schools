@@ -1,9 +1,9 @@
 ####################################
-data_wd        <-  "C:/Users/xd-br/Dropbox/causal_schools"
-code_output_wd <-  "C:/Users/xd-br/Desktop/PhD/Research/causal_schools"
+#data_wd        <-  "C:/Users/xd-br/Dropbox/causal_schools"
+#code_output_wd <-  "C:/Users/xd-br/Desktop/PhD/Research/causal_schools"
 
-#data_wd <- "C:/Users/brunem/Dropbox/causal_schools"
-#code_output_wd <-  "C:/Users/brunem/Research/causal_schools"
+data_wd <- "C:/Users/brunem/Dropbox/causal_schools"
+code_output_wd <-  "C:/Users/brunem/Research/causal_schools"
 
 setwd(data_wd)
 #####################################
@@ -19,6 +19,9 @@ library(tidyverse)
 probs_2018 <- read_csv("./data/clean/DA_probs/DA_probs_2018.csv") %>% 
   select(-...1)
 
+probs_2019 <- read_csv("./data/clean/DA_probs/DA_probs_2019_100.csv") %>% 
+  select(-...1)
+
 
 probs_2020 <- read_csv("./data/clean/DA_probs/DA_probs_2020.csv") %>% 
   select(-...1)
@@ -32,6 +35,10 @@ probs_2021 <- read_csv("./data/clean/DA_probs/DA_probs_2021.csv") %>%
 probs_2018 <- probs_2018 %>% 
   mutate(school_id = ifelse(school_id == "unmatched", "unmatched_2018", school_id))
 
+probs_2019 <- probs_2019 %>% 
+  mutate(school_id = ifelse(school_id == "unmatched", "unmatched_2018", school_id))
+
+
 probs_2020 <- probs_2020 %>% 
   mutate(school_id = ifelse(school_id == "unmatched", "unmatched_2020", school_id))
 
@@ -42,7 +49,7 @@ probs_2021 <- probs_2021 %>%
 
 #Combine them
 probs_all <- rbind(probs_2018,
-                   #                   probs_2019,
+                                      probs_2019,
                    probs_2020,
                    probs_2021)  %>% 
   mutate(rbd_prob = sub("_.*", "", school_id)) %>% 
@@ -56,6 +63,13 @@ probs_all <- rbind(probs_2018,
   length()
 
 
+  #1% appears more than once, suggests repeating grade
+  probs_all |>
+    dplyr::summarise(n = dplyr::n(), .by = c(student_id, rbd_prob)) |>
+    dplyr::filter(n > 1L) %>% 
+    View()
+  
+  
 #Filtering first for the first application in the cycle
 probs_unique <- probs_all %>% 
   select(student_id, rbd_prob, prob_r, year) %>%
@@ -77,11 +91,6 @@ probs_unique %>%
 prop.table(table(probs_unique$any_risk))
 
 
-#1% appears more than once, suggests repeating grade
-probs_all |>
-  dplyr::summarise(n = dplyr::n(), .by = c(student_id, rbd_prob)) |>
-  dplyr::filter(n > 1L) %>% 
-  View()
 
 #TODO: Maybe add a school filter to focus in fewer schools; avoid making the df unnecessarily large
 
@@ -109,6 +118,6 @@ probs_wide <- probs_wide %>%
   )
 
 #Save 
-#write_csv(probs_wide, "./data/clean/DA_probs/probs_columns_wide.csv")
-haven::write_dta(probs_wide, "./data/clean/DA_probs/probs_columns_wide.dta")
+write_csv(probs_wide, "./data/clean/DA_probs/probs_columns_wide.csv")
+#haven::write_dta(probs_wide, "./data/clean/DA_probs/probs_columns_wide.dta")
 

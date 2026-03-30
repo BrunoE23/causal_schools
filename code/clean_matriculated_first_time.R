@@ -1,9 +1,9 @@
 ####################################
-data_wd        <-  "C:/Users/xd-br/Dropbox/causal_schools"
-code_output_wd <-  "C:/Users/xd-br/Desktop/PhD/Research/causal_schools"
+#data_wd        <-  "C:/Users/xd-br/Dropbox/causal_schools"
+#code_output_wd <-  "C:/Users/xd-br/Desktop/PhD/Research/causal_schools"
 
-#data_wd <- "C:/Users/brunem/Dropbox/causal_schools"
-#code_output_wd <-  "C:/Users/brunem/Research/causal_schools"
+data_wd <- "C:/Users/brunem/Dropbox/causal_schools"
+code_output_wd <-  "C:/Users/brunem/Research/causal_schools"
 
 #Datawd (Dropbox) 
 setwd(data_wd)
@@ -117,7 +117,8 @@ load_student_mat_info <- function(year_input) {
 student_mat_all <- bind_rows(
   load_student_mat_info(2022),
   load_student_mat_info(2023),
-  load_student_mat_info(2024)
+  load_student_mat_info(2024),
+  load_student_mat_info(2025),
 )
 
 
@@ -190,7 +191,7 @@ student_mat_last_small <- student_mat_last %>%
 
 
 #export
-write.csv(student_mat_1st_small,  "./data/clean/mat_ingresos_22-24/mat_1st_ing.csv")
-write.csv(student_mat_last_small, "./data/clean/mat_ingresos_22-24/mat_last_ing.csv")
+write.csv(student_mat_1st_small,  "./data/clean/mat_ingresos_22-24/mat_1st_ing.csv", row.names = FALSE)
+write.csv(student_mat_last_small, "./data/clean/mat_ingresos_22-24/mat_last_ing.csv", row.names = FALSE)
 
 

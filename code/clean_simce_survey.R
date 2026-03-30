@@ -149,8 +149,8 @@ simce_alu_2016 <- read_simce4b_alu(2016)
 simce_2013 <- left_join(simce_alu_2013, cpad_2013, by = c("idalumno", "simce_year")) %>% 
   mutate(ptje_mate4b_alu = as.numeric(ptje_mate4b_alu),
          ptje_lect4b_alu = as.numeric(ptje_lect4b_alu)) %>% 
-  mutate(z_sim_mat_4to  = scale(ptje_mate4b_alu), 
-         z_sim_leng_4to = scale(ptje_lect4b_alu))
+  mutate(z_sim_mat_4to  = as.numeric(scale(ptje_mate4b_alu)), 
+         z_sim_leng_4to = as.numeric(scale(ptje_lect4b_alu)))
 
 sum(is.na(simce_2013$ptje_lect4b_alu))
 sum(is.na(simce_2013$ptje_mate4b_alu))
@@ -159,8 +159,8 @@ sum(is.na(simce_2013$income_mid))
 simce_2014 <- left_join(simce_alu_2014, cpad_2014, by = c("idalumno", "simce_year")) %>% 
 mutate(ptje_mate4b_alu = as.numeric(ptje_mate4b_alu),
        ptje_lect4b_alu = as.numeric(ptje_lect4b_alu)) %>% 
-  mutate(z_sim_mat_4to  = scale(ptje_mate4b_alu), 
-         z_sim_leng_4to = scale(ptje_lect4b_alu))
+  mutate(z_sim_mat_4to  = as.numeric(scale(ptje_mate4b_alu)), 
+         z_sim_leng_4to = as.numeric(scale(ptje_lect4b_alu)))
 
 sum(is.na(simce_2014$ptje_lect4b_alu))
 sum(is.na(simce_2014$ptje_mate4b_alu))
@@ -169,8 +169,8 @@ sum(is.na(simce_2014$income_mid))
 simce_2015 <- left_join(simce_alu_2015, cpad_2015, by = c("idalumno", "simce_year")) %>% 
 mutate(ptje_mate4b_alu = as.numeric(ptje_mate4b_alu),
        ptje_lect4b_alu = as.numeric(ptje_lect4b_alu)) %>% 
-  mutate(z_sim_mat_4to  = scale(ptje_mate4b_alu), 
-         z_sim_leng_4to = scale(ptje_lect4b_alu))
+  mutate(z_sim_mat_4to  = as.numeric(scale(ptje_mate4b_alu)), 
+         z_sim_leng_4to = as.numeric(scale(ptje_lect4b_alu)))
 
 sum(is.na(simce_2015$ptje_lect4b_alu))
 sum(is.na(simce_2015$ptje_mate4b_alu))
@@ -180,8 +180,8 @@ sum(is.na(simce_2015$income_mid))
 simce_2016 <- left_join(simce_alu_2016, cpad_2016, by = c("idalumno", "simce_year")) %>% 
   mutate(ptje_mate4b_alu = as.numeric(ptje_mate4b_alu),
        ptje_lect4b_alu = as.numeric(ptje_lect4b_alu)) %>% 
-  mutate(z_sim_mat_4to  = scale(ptje_mate4b_alu), 
-         z_sim_leng_4to = scale(ptje_lect4b_alu))
+  mutate(z_sim_mat_4to  = as.numeric(scale(ptje_mate4b_alu)), 
+         z_sim_leng_4to = as.numeric(scale(ptje_lect4b_alu)))
 
 sum(is.na(simce_2016$ptje_lect4b_alu))
 sum(is.na(simce_2016$ptje_mate4b_alu))
@@ -194,7 +194,6 @@ simce_4to <- rbind(simce_2013,
                    simce_2015, 
                    simce_2016) %>% 
           mutate(income_decile = ntile(income_mid, 10))
-
 
 
 save( simce_4to, file = "./data/clean/simce_4to.Rdata")
