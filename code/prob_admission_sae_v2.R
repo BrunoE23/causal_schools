@@ -1,11 +1,16 @@
 ####################################
 data_wd        <-  "C:/Users/xd-br/Dropbox/causal_schools"
 code_output_wd <-  "C:/Users/xd-br/Desktop/PhD/Research/causal_schools"
+#data_wd        <-  "C:/Users/xd-br/Dropbox/causal_schools"
+#code_output_wd <-  "C:/Users/xd-br/Desktop/PhD/Research/causal_schools"
 
 #data_wd <- "C:/Users/brunem/Dropbox/causal_schools"
 #code_output_wd <-  "C:/Users/brunem/Research/causal_schools"
+data_wd <- "C:/Users/brunem/Dropbox/causal_schools"
+code_output_wd <-  "C:/Users/brunem/Research/causal_schools"
 
 #Datawd (Dropbox) 
+setwd(data_wd)
 #####################################
 
 
@@ -166,6 +171,10 @@ return(probs)
 }
 
 
+<<<<<<< HEAD
+=======
+#No achievements_spots_reg on my 
+>>>>>>> 7e2e1f83606a6740fc6730efe3ec8ae2458ae785
 #(sum(schools_DA_2018$achievement_spots_reg))
 #(sum(schools_DA_2019$achievement_spots_reg))
 #(sum(schools_DA_2020$achievement_spots_reg))
@@ -189,11 +198,9 @@ probs_2018  <- get_probs(2018, 100)
 
 
 #How many students are at (risk) ? 
-#student_risk <- probs_2018 %>% 
-#  group_by(student_id) %>% 
-#  mutate(risk = ifelse(max(prob) == 1.0, 0, 1))
-
-#prop.table(table(student_risk$risk))
+student_risk <- probs_2018 %>% 
+  group_by(student_id) %>% 
+  mutate(risk = ifelse(max(prob) == 1.0, 0, 1))
 
 #100 replications in 3.25 minutes3
 
@@ -238,14 +245,22 @@ comp_results_2021 <- compare_results(2021)
 ##### Prob Computation
 ####################################
 
+<<<<<<< HEAD
 #Took like 90 min in small laptop
+=======
+#5660 seconds in small laptop (1h30)
+>>>>>>> 7e2e1f83606a6740fc6730efe3ec8ae2458ae785
 set.seed(233)
 probs_2018  <- get_probs(2018, 1000)
 write.csv(probs_2018, "./data/clean/DA_probs/DA_probs_2018.csv")
 
+<<<<<<< HEAD
 #Never run in small laptop
 #3812 seconds
 set.seed(283)
+=======
+
+>>>>>>> 7e2e1f83606a6740fc6730efe3ec8ae2458ae785
 probs_2019  <- get_probs(2019, 1000)
 write.csv(probs_2019, "./data/clean/DA_probs/DA_probs_2019.csv")
 
@@ -255,9 +270,14 @@ set.seed(253)
 probs_2020  <- get_probs(2020, 1000)
 write.csv(probs_2020, "./data/clean/DA_probs/DA_probs_2020.csv")
 
+<<<<<<< HEAD
 
 set.seed(263)
+=======
+>>>>>>> 7e2e1f83606a6740fc6730efe3ec8ae2458ae785
 probs_2021  <- get_probs(2021, 1000)
 write.csv(probs_2021, "./data/clean/DA_probs/DA_probs_2021.csv")
+
+
 
 
