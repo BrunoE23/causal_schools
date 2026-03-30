@@ -13,7 +13,7 @@ setwd(data_wd)
 library(tidyverse)
 library(geosphere)
 
-
+library(stringi)
 
 #### Step 1:  Distance matrix 
 
@@ -578,6 +578,23 @@ dist_pref <- pref_db %>%
   )  %>% 
   ungroup()
 
+summary(dist_pref$max_app_distance)
+
+dist_pref %>%
+#  filter(n_applied_feasible > 0) %>%
+  summarise(
+    n = sum(!is.na(max_app_distance)),
+    min   = round(min(max_app_distance, na.rm = TRUE), 3),
+    
+    p10   = round(quantile(max_app_distance, 0.10, na.rm = TRUE), 3),
+    p25   = round(quantile(max_app_distance, 0.25, na.rm = TRUE), 3),
+    median= round(median(max_app_distance, na.rm = TRUE), 3),
+    mean  = round(mean(max_app_distance, na.rm = TRUE), 3),
+    p75   = round(quantile(max_app_distance, 0.75, na.rm = TRUE), 3),
+    p90   = round(quantile(max_app_distance, 0.90, na.rm = TRUE), 3),
+    #p99   = round(quantile(global_nd_perc_improvement_c, 0.99, na.rm = TRUE), 3),
+    #max   = round(max(global_nd_perc_improvement_c, na.rm = TRUE), 3)
+  )
 
 
 dist_pref %>% 
