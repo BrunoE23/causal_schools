@@ -189,11 +189,11 @@ probs_2018  <- get_probs(2018, 100)
 
 
 #How many students are at (risk) ? 
-student_risk <- probs_2018 %>% 
-  group_by(student_id) %>% 
-  mutate(risk = ifelse(max(prob) == 1.0, 0, 1))
+#student_risk <- probs_2018 %>% 
+#  group_by(student_id) %>% 
+#  mutate(risk = ifelse(max(prob) == 1.0, 0, 1))
 
-prop.table(table(student_risk$risk))
+#prop.table(table(student_risk$risk))
 
 #100 replications in 3.25 minutes3
 
@@ -238,21 +238,21 @@ comp_results_2021 <- compare_results(2021)
 ##### Prob Computation
 ####################################
 set.seed(233)
-
 probs_2018  <- get_probs(2018, 1000)
 write.csv(probs_2018, "./data/clean/DA_probs/DA_probs_2018.csv")
 
-
+set.seed(243)
 probs_2019  <- get_probs(2019, 1000)
 write.csv(probs_2019, "./data/clean/DA_probs/DA_probs_2019.csv")
 
 
+#3000 seconds on big laptop (50 min)
+set.seed(253)
 probs_2020  <- get_probs(2020, 1000)
 write.csv(probs_2020, "./data/clean/DA_probs/DA_probs_2020.csv")
 
+set.seed(263)
 probs_2021  <- get_probs(2021, 1000)
 write.csv(probs_2021, "./data/clean/DA_probs/DA_probs_2021.csv")
-
-
 
 
