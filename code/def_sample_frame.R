@@ -1,9 +1,9 @@
 ####################################
-data_wd        <-  "C:/Users/xd-br/Dropbox/causal_schools"
-code_output_wd <-  "C:/Users/xd-br/Desktop/PhD/Research/causal_schools"
+#data_wd        <-  "C:/Users/xd-br/Dropbox/causal_schools"
+#code_output_wd <-  "C:/Users/xd-br/Desktop/PhD/Research/causal_schools"
 
-#data_wd <- "C:/Users/brunem/Dropbox/causal_schools"
-#code_output_wd <-  "C:/Users/brunem/Research/causal_schools"
+data_wd <- "C:/Users/brunem/Dropbox/causal_schools"
+code_output_wd <-  "C:/Users/brunem/Research/causal_schools"
 
 #Datawd (Dropbox) 
 setwd(data_wd)
@@ -11,10 +11,10 @@ setwd(data_wd)
 
 
 #universe of students: 
-#everyone in grado 8 in the years 2017 (would belong to SAE 2017)
-#everyone in grado 8 in the years 2018 ("" SAE 2018)
-#everyone in grado 8 in the years 2019 ("" SAE 2019)
-#everyone in grado 8 in the years 2020 ("" SAE 2020)
+#everyone in grado 8 in the years 2017 (would belong to SAE 2017) #psu in 2021 (proceso/mat 2022)
+#everyone in grado 8 in the years 2018 ("" SAE 2018) (proceso/mat 2023)
+#everyone in grado 8 in the years 2019 ("" SAE 2019)(proceso/mat 2024)
+#everyone in grado 8 in the years 2020 ("" SAE 2020)  (proceso/mat 2025)
 
 
 #I restricted back to having a SIT_FIN, but I think this avoids repetitions.
@@ -85,24 +85,32 @@ read_matricula_data <- function(year) {
 
   
 
-mat_2017_gr8 <-  read_matricula_data_v2(2017) %>% 
+mat_2017_gr8 <-  read_matricula_data(2017) %>% 
   filter(COD_GRADO == 8) %>% 
-  select(MRUN, AGNO)
+  select(MRUN, AGNO,
+         GEN_ALU, FEC_NAC_ALU, EDAD_ALU, # EDAD_ALU will be kept only if present
+         COD_COM_ALU,NOM_COM_ALU, COD_REG_ALU)
 
 
-mat_2018_gr8 <-  read_matricula_data_v2(2018) %>% 
+mat_2018_gr8 <-  read_matricula_data(2018) %>% 
   filter(COD_GRADO == 8) %>% 
-  select(MRUN, AGNO)
+  select(MRUN, AGNO,
+         GEN_ALU, FEC_NAC_ALU, EDAD_ALU, # EDAD_ALU will be kept only if present
+         COD_COM_ALU,NOM_COM_ALU, COD_REG_ALU)
 
 
-mat_2019_gr8 <-  read_matricula_data_v2(2019) %>% 
+mat_2019_gr8 <-  read_matricula_data(2019) %>% 
   filter(COD_GRADO == 8) %>% 
-  select(MRUN, AGNO)
+  select(MRUN, AGNO,
+         GEN_ALU, FEC_NAC_ALU, EDAD_ALU, # EDAD_ALU will be kept only if present
+         COD_COM_ALU,NOM_COM_ALU, COD_REG_ALU)
 
 
-mat_2020_gr8 <-  read_matricula_data_v2(2020) %>% 
+mat_2020_gr8 <-  read_matricula_data(2020) %>% 
   filter(COD_GRADO == 8) %>% 
-  select(MRUN, AGNO)
+  select(MRUN, AGNO,
+         GEN_ALU, FEC_NAC_ALU, EDAD_ALU, # EDAD_ALU will be kept only if present
+         COD_COM_ALU,NOM_COM_ALU, COD_REG_ALU)
 
 #rbind
 mat_gr8 <- rbind(mat_2017_gr8,
@@ -112,6 +120,7 @@ mat_gr8 <- rbind(mat_2017_gr8,
 
 #Out of the 1million of rows, 105k are repeated.
 first_8gr <- mat_gr8 %>% 
+  select(MRUN, AGNO) %>% 
   group_by(MRUN) %>% 
   filter(AGNO == min (AGNO))  %>% 
   ungroup() %>% 
@@ -121,6 +130,17 @@ first_8gr <- mat_gr8 %>%
 write.csv(first_8gr, "data/clean/universe.csv")
 
 #Final N = 944.510
+
+first_8gr_controls <- mat_gr8 %>% 
+  group_by(MRUN) %>% 
+  filter(AGNO == min (AGNO))  %>% 
+  ungroup() %>% 
+  distinct() %>% 
+  rename(cohort_gr8 = AGNO) 
+
+write.csv(first_8gr_controls, "data/clean/universe_controls.csv")
+
+
 
 
 ####Assign a school to each of these kids. 

@@ -1,15 +1,10 @@
 ####################################
-data_wd        <-  "C:/Users/xd-br/Dropbox/causal_schools"
-code_output_wd <-  "C:/Users/xd-br/Desktop/PhD/Research/causal_schools"
 #data_wd        <-  "C:/Users/xd-br/Dropbox/causal_schools"
 #code_output_wd <-  "C:/Users/xd-br/Desktop/PhD/Research/causal_schools"
 
-#data_wd <- "C:/Users/brunem/Dropbox/causal_schools"
-#code_output_wd <-  "C:/Users/brunem/Research/causal_schools"
 data_wd <- "C:/Users/brunem/Dropbox/causal_schools"
 code_output_wd <-  "C:/Users/brunem/Research/causal_schools"
 
-#Datawd (Dropbox) 
 setwd(data_wd)
 #####################################
 
@@ -202,8 +197,10 @@ student_risk <- probs_2018 %>%
   group_by(student_id) %>% 
   mutate(risk = ifelse(max(prob) == 1.0, 0, 1))
 
-#100 replications in 3.25 minutes3
+prop.table(table(student_risk$risk))
 
+#100 replications in 3.25 minutes (195s)
+#100 replications in almost 7 min (410s) in my small laptop
 ####################################
 
 #####2019 block
@@ -260,13 +257,12 @@ write.csv(probs_2018, "./data/clean/DA_probs/DA_probs_2018.csv")
 set.seed(283)
 =======
 
+set.seed(243)
 >>>>>>> 7e2e1f83606a6740fc6730efe3ec8ae2458ae785
 probs_2019  <- get_probs(2019, 1000)
 write.csv(probs_2019, "./data/clean/DA_probs/DA_probs_2019.csv")
 
 
-#3000 seconds on big laptop (50 min)
-set.seed(253)
 probs_2020  <- get_probs(2020, 1000)
 write.csv(probs_2020, "./data/clean/DA_probs/DA_probs_2020.csv")
 

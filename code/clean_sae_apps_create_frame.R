@@ -113,7 +113,10 @@ table(sae_apps_2020$preferencia_postulante)
 #table(sae_apps_2019$rbd)
 #table(sae_apps_2020$rbd)
 
-sae_apps_allprio <- rbind(sae_apps_2017, sae_apps_2018, sae_apps_2019,sae_apps_2020)
+sae_apps_grade9 <- rbind(sae_apps_2017, sae_apps_2018, sae_apps_2019,sae_apps_2020)
+
+
+
 
 sae_apps_allprio %>% 
   mutate(any_prio = pmax(prioridad_hermano, prioridad_hijo_funcionario, prioridad_exalumno )) %>% 
