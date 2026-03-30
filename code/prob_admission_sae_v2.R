@@ -166,10 +166,10 @@ return(probs)
 }
 
 
-(sum(schools_DA_2018$achievement_spots_reg))
-(sum(schools_DA_2019$achievement_spots_reg))
-(sum(schools_DA_2020$achievement_spots_reg))
-(sum(schools_DA_2021$achievement_spots_reg))
+#(sum(schools_DA_2018$achievement_spots_reg))
+#(sum(schools_DA_2019$achievement_spots_reg))
+#(sum(schools_DA_2020$achievement_spots_reg))
+#(sum(schools_DA_2021$achievement_spots_reg))
 
 
 
@@ -237,10 +237,13 @@ comp_results_2021 <- compare_results(2021)
 
 ##### Prob Computation
 ####################################
+
+#Took like 90 min in small laptop
 set.seed(233)
 probs_2018  <- get_probs(2018, 1000)
 write.csv(probs_2018, "./data/clean/DA_probs/DA_probs_2018.csv")
 
+#Never run in small laptop
 set.seed(243)
 probs_2019  <- get_probs(2019, 1000)
 write.csv(probs_2019, "./data/clean/DA_probs/DA_probs_2019.csv")
@@ -250,6 +253,7 @@ write.csv(probs_2019, "./data/clean/DA_probs/DA_probs_2019.csv")
 set.seed(253)
 probs_2020  <- get_probs(2020, 1000)
 write.csv(probs_2020, "./data/clean/DA_probs/DA_probs_2020.csv")
+
 
 set.seed(263)
 probs_2021  <- get_probs(2021, 1000)
