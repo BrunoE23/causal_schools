@@ -71,32 +71,89 @@ load_program_info <- function(year_input) {
            NOMB_CARRERA, TIPO_INST_1, NOMB_INST, COD_INST,
            AREA_CARRERA_GENERICA,
            REGION_SEDE, PROVINCIA_SEDE, COMUNA_SEDE, 
-           AREA_CONOCIMIENTO, CINE_F_13_AREA,
+           AREA_CONOCIMIENTO, CINE_F_13_AREA, 
+           CINE_F_97_AREA_AREA, CINE_F_97_SUBAREA, 
            ACREDITADA_CARR, ACREDITADA_INST) %>%
     
     mutate(
-      field_merged = case_when(
-        CINE_F_13_AREA %in% c(
-          "Ingeniería, Industria y Construcción",
-          "Ciencias naturales, matemáticas y estadística",
-          "Tecnología de la Información y la Comunicación (TIC)"
-        ) ~ "STEM, non health",
-        TRUE ~ CINE_F_13_AREA
+  #    field_merged = case_when(
+  #      CINE_F_13_AREA %in% c(
+  #        "Ingeniería, Industria y Construcción",
+  #        "Ciencias naturales, matemáticas y estadística",
+  #        "Tecnología de la Información y la Comunicación (TIC)"
+  #      ) ~ "STEM, non health",
+  #      TRUE ~ CINE_F_13_AREA
+   #   ),
+    
+    #my implementation of Campos et al. 2026
+      field_reclassified = case_when(
+        
+        # Keep Veterinaria
+        CINE_F_97_SUBAREA == "Veterinaria" ~ "Health and Welfare",
+        
+        # Drop remaining Agriculture and Services
+        CINE_F_97_AREA_AREA %in% c("Agricultura", "Servicios") ~ NA_character_,
+        
+        # Science
+        CINE_F_97_AREA_AREA == "Ciencias" ~ "Science",
+        
+        # Teaching
+        CINE_F_97_AREA_AREA == "Educación" ~ "Teaching",
+        
+        # Humanities and Arts
+        CINE_F_97_AREA_AREA == "Humanidades y Artes" ~ "Humanities and Arts",
+        
+        # Engineering
+        CINE_F_97_AREA_AREA == "Ingeniería, Industria y Construcción" ~
+          "Engineering, Manufacturing and Construction",
+        
+        # Social Sciences / Business / Law
+        CINE_F_97_AREA_AREA == "Ciencias Sociales, Enseñanza Comercial y Derecho" &
+          CINE_F_97_SUBAREA == "Derecho" ~ "Law",
+        
+        CINE_F_97_AREA_AREA == "Ciencias Sociales, Enseñanza Comercial y Derecho" &
+          CINE_F_97_SUBAREA == "Enseñanza Comercial y Administración" ~ "Business",
+        
+        CINE_F_97_AREA_AREA == "Ciencias Sociales, Enseñanza Comercial y Derecho" &
+          CINE_F_97_SUBAREA %in% c(
+            "Ciencias Sociales y del Comportamiento",
+            "Periodismo e Información"
+          ) ~ "Social Sciences",
+        
+        # Medicine vs Health and Welfare
+        CINE_F_97_AREA_AREA == "Salud y Servicios Sociales" &
+          CINE_F_97_SUBAREA == "Medicina" ~ "Medicine",
+        
+        CINE_F_97_AREA_AREA == "Salud y Servicios Sociales" ~ "Health and Welfare",
+        
+        TRUE ~ NA_character_
       ),
-      year_info = year_input,
+      
+      
+          year_info = year_input,
       #   science1    = as.integer(AREA_CONOCIMIENTO == "Ciencias Básicas"),
       #    technology1 = as.integer(AREA_CONOCIMIENTO == "Tecnología"),
       #    health1     = as.integer(AREA_CONOCIMIENTO == "Salud"),
       #   engineer2   = as.integer(CINE_F_13_AREA == "Ingeniería, Industria y Construcción"),
       #  science2    = as.integer(CINE_F_13_AREA == "Ciencias naturales, matemáticas y estadística"),
       #  technology2 = as.integer(CINE_F_13_AREA == "Tecnología de la Información y la Comunicación (TIC)"),
-      stem_bin   = as.integer(field_merged == "STEM, non health"),
-      health_bin = as.integer(field_merged == "Salud y Bienestar")
-        )
-  
+#      stem_bin   = as.integer(field_merged == "STEM, non health"),
+#      health_bin = as.integer(field_merged == "Salud y Bienestar")
+  f_science   = as.integer(field_reclassified == "Science"),
+  f_social    = as.integer(field_reclassified == "Social Sciences"),
+  f_business  = as.integer(field_reclassified == "Business"),
+  f_law       = as.integer(field_reclassified == "Law"),
+  f_teaching  = as.integer(field_reclassified == "Teaching"),
+  f_humarts   = as.integer(field_reclassified == "Humanities and Arts"),
+  f_eng       = as.integer(field_reclassified == "Engineering, Manufacturing and Construction"),
+  f_medicine  = as.integer(field_reclassified == "Medicine"),
+  f_health    = as.integer(field_reclassified == "Health and Welfare")
+)
+
+
 }
 
-#program_info_2022 <- load_program_info(2022)
+program_info_2022 <- load_program_info(2022)
 #program_info_2023 <- load_program_info(2023)
 #program_info_2024 <- load_program_info(2024)
 
