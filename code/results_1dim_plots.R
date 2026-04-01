@@ -1,9 +1,9 @@
 ####################################
-data_wd        <-  "C:/Users/xd-br/Dropbox/causal_schools"
-code_output_wd <-  "C:/Users/xd-br/Desktop/PhD/Research/causal_schools"
+#data_wd        <-  "C:/Users/xd-br/Dropbox/causal_schools"
+#code_output_wd <-  "C:/Users/xd-br/Desktop/PhD/Research/causal_schools"
 
-#data_wd <- "C:/Users/brunem/Dropbox/causal_schools"
-#code_output_wd <-  "C:/Users/brunem/Research/causal_schools"
+data_wd <- "C:/Users/brunem/Dropbox/causal_schools"
+code_output_wd <-  "C:/Users/brunem/Research/causal_schools"
 
 
 setwd(data_wd)
@@ -35,7 +35,7 @@ theme_transparent <- theme_minimal(base_size = 12) +
   )
 
 plot_1dim <- function(this_outcome,
-                      enzo_file = "C:/Users/xd-br/Dropbox/causal_schools/data/clean/Enzo/Adm_combined_na_21_25.csv",
+                      enzo_file = "./data/clean/Enzo/Adm_combined_na_21_25.csv",
                       param = 1.5) {
   
   enzo_data <- readr::read_csv(
@@ -47,7 +47,7 @@ plot_1dim <- function(this_outcome,
     filter(year == max(enzo_data$year)) %>%
     filter(!is.na(RBD), !is.na(avg_MATE_ACTUAL)) %>%
     distinct(RBD, avg_MATE_ACTUAL) %>%
-    arrange(avg_MATE_ACTUAL) %>%
+    arrange(-avg_MATE_ACTUAL) %>%
     pull(RBD)
   
   estimates <- effects_schools %>% 
@@ -101,6 +101,7 @@ plot_1dim <- function(this_outcome,
     ) +
     
     theme_minimal(base_size = 12) +
+    scale_y_reverse() +
     labs(
       x = "Estimate (β)",
       y = paste0("School rank (ordered by average math achievement)")
