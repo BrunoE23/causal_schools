@@ -5,6 +5,7 @@ This file defines how Codex should work in this repository.
 ## Source of Truth
 - Personal defaults: `PROFILE.md`
 - Process defaults: `WORKFLOW.md`
+- Project context: `project_overview.md`
 - Repository-specific constraints in this file override generic defaults when needed.
 
 ## Default Intent
