@@ -15,7 +15,7 @@
 ## Git Commit Cadence
 - Create one commit per meaningful completed unit of work.
 - Use clear commit messages that describe outcome, not just file names.
-- When Codex creates a commit, prefix the message with `[codex]`.
+- When Codex creates a commit, append `[codex]` to the end of the message.
 - Do not batch unrelated changes into one commit.
 
 
