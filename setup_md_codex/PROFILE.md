@@ -39,6 +39,8 @@
 - "Explain reasoning when suggesting code changes"
 - "Ask before modifying files outside my project"
 - "Be concise unless I ask for detail"
+- For substantial tasks, use a "deep research" workflow: first clarify the objective, inspect lightly, and present a short plan before doing heavier execution.
+- Treat large data loads, long-running scripts, broad searches, and output-generating jobs as "heavy" work that should wait for my go-ahead after the plan.
 
 # Other 
 
@@ -57,4 +59,3 @@
 - Prioritize reproducibility (inputs, outputs, assumptions documented).
 - Preserve traceability of results (versions, commands, timestamps).
 - Prefer explicit file paths and concrete run instructions.
-
