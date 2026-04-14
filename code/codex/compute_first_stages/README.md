@@ -2,7 +2,7 @@
 
 ## Task
 
-Create a school-level first-stage dataframe using the universe of `sample_students` in `samples.RData`.
+Create a school-level first-stage dataframe using the universe of `sae_apps_grade9` in `sae_grade9_unique_proceso.RData`.
 
 For this task:
 - Use only `FIRST ROUND` offers.
@@ -11,26 +11,26 @@ For this task:
 
 ## Outcome Definition
 
-Attendance is defined as an indicator that the student is present in the applied school in the school-tracking data:
+Attendance is defined as an indicator that the student is present in the applied school in the school summary file:
 - Year 1 after SAE: `in_target_school_t_0`
 - Year 4 after SAE: `in_target_school_t_3`
 
-These variables come from `tracking_clean_wide.RData`, where relative time is defined so that:
-- `t_0` is the first school year after the SAE process
-- `t_3` is the fourth school year after the SAE process
+These variables are constructed from `rbd_universe.csv` as:
+- `in_target_school_t_0 = 1(RBD_rel1 == rbd_target)`
+- `in_target_school_t_3 = 1(RBD_rel4 == rbd_target)`
 
 ## Inputs
 
-- `C:/Users/xd-br/Dropbox/causal_schools/data/clean/samples.RData`
+- `C:/Users/xd-br/Dropbox/causal_schools/data/clean/sae_grade9_unique_proceso.RData`
 - `C:/Users/xd-br/Dropbox/causal_schools/data/clean/treatment_1R.RData`
-- `C:/Users/xd-br/Dropbox/causal_schools/data/clean/tracking_clean_wide.RData`
+- `C:/Users/xd-br/Dropbox/causal_schools/data/clean/rbd_universe.csv`
 
 ## Construction Notes
 
-- The application universe starts from `sample_students`.
+- The application universe starts from `sae_apps_grade9`.
 - First-round offers are merged using `mrun` and `br_code`.
-- Because `sample_students` contains duplicated student-process-school rows at the `rbd` level, the script collapses to one row per `mrun`-`proceso`-`rbd_target` after merging offers.
-- Within a student-process-school combination, the script defines first-round offer status as `1` if the student received any first-round offer in any associated `br_code` for that school.
+- Because `sae_apps_grade9` can contain multiple `br_code` rows within the same school, the script collapses to one row per `mrun`-`sae_proceso`-`rbd_target` after merging offers.
+- Within a student-process-school combination, the script defines first-round offer status as `1` if the student received a first-round offer to that target school in any associated `br_code`.
 
 ## Output
 
@@ -42,9 +42,13 @@ with columns:
 
 - `rbd`
 - `n_apps`
-- `n_offers_1r`
+- `n_offers_target_school_1r`
 - `prop_attend_y1_given_offer`
 - `prop_attend_y4_given_offer`
+- `prop_attend_y1_given_no_offer`
+- `prop_attend_y4_given_no_offer`
+- `first_stage_y1`
+- `first_stage_y4`
 
 ## Script
 

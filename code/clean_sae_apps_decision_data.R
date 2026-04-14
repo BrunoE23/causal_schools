@@ -14,8 +14,8 @@ setwd(data_wd)
 library(tidyverse)
 
 
-load("./data/clean/samples.RData")
-
+#load("./data/clean/samples.RData")
+load("./data/clean/sae_grade9_unique_proceso.RData")
 
 results_2017 <- read_csv2("./data/raw/2017/SAE_2017/D1_Resultados_etapa_regular_2017_Admisión_2018_PUBL.csv") %>%
   mutate(proceso = 2017) %>%
@@ -40,7 +40,7 @@ results_2020 <- read_csv2("./data/raw/2020/SAE_2020/D1_Resultados_etapa_regular_
 
 
 offered_spots <- function(results, year,
-                          sample = sample_students) {
+                          sample = sae_apps_grade9) {
   
   x_12R <- results  %>% 
     select(mrun, rbd_admitido, rbd_admitido_post_resp) 
@@ -51,7 +51,7 @@ offered_spots <- function(results, year,
   
 #  sample_students
   treatment  <-  sample %>% 
-    filter(proceso == year) %>% 
+    filter(sae_proceso == year) %>% 
     left_join(x_12R, by = c("mrun")) %>% 
     #       left_join(x_2R, by = c("mrun", "br_code")) %>% 
     mutate(offered_spot_1R = replace_na(as.numeric(rbd == rbd_admitido), 0),
@@ -61,7 +61,9 @@ offered_spots <- function(results, year,
            rbd_treated_2R = ifelse(offered_spot_2R == 1, rbd, 0), 
            rbd_treated    = ifelse(offered_spot_anyR == 1, rbd, 0)
     ) %>% 
-  select(mrun, n_cupos, n_apps,  br_code, preferencia_postulante,
+  select(mrun, 
+         #n_cupos, n_apps,  
+         br_code, preferencia_postulante,
                offered_spot_1R, offered_spot_2R, offered_spot_anyR, 
                      rbd_treated_1R, rbd_treated_2R, rbd_treated)
   
@@ -127,13 +129,16 @@ all_treatments <- rbind(treatment_2017,
                         treatment_2019,
                         treatment_2020) %>% 
  # mutate(rbd_admitido = ifelse(is.na(rbd_admitido),0, rbd_admitido)) %>% 
-  select(-c(preferencia_postulante,n_cupos, n_apps))
+  select(-c(preferencia_postulante
+            #,n_cupos, n_apps
+            ))
 
 #all_treatments %>% 
 #  filter(rbd_admitido == 0)
 
 rm(treatment_2017, treatment_2018, treatment_2019, treatment_2020)
 
-save(all_treatments, file = "./data/clean/treatment_1R.RData")
+#save(all_treatments, file = "./data/clean/treatment_1R.RData")
+save(all_treatments, file = "./data/clean/treatment_1R_v2.RData")
 
 
