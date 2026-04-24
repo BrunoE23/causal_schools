@@ -1,0 +1,443 @@
+\documentclass[12pt]{article}
+
+\usepackage{ulem}
+\usepackage{setspace}
+\usepackage{geometry}
+
+\normalem
+\onehalfspacing
+\geometry{left=1.0in,right=1.0in,top=1.0in,bottom=1.0in}
+
+\usepackage{placeins}
+\usepackage{booktabs}
+\usepackage{threeparttable} % optional, if you want notes nicely formatted
+\usepackage{adjustbox}
+
+\usepackage{bbm, dsfont}
+
+\usepackage{graphicx} 
+\usepackage{comment}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage[table]{xcolor}
+
+\newcommand{\blue}[1]{\textcolor{blue}{#1}}
+\newcommand{\red}[1]{\textcolor{red}{#1}}
+\newcommand{\purple}[1]{\textcolor{purple}{#1}}
+
+\usepackage[
+  backend=biber,
+  style=authoryear-ibid,
+  maxcitenames=2,  % show up to 2 authors in citations
+  mincitenames=1,  % use "et al." if more than 2
+  maxbibnames=10,  % show up to 10 names in bibliography
+  minbibnames=1,
+    uniquelist=false   
+]{biblatex}
+
+
+
+\addbibresource{Causal Effect of Schools on College App.bib}
+
+
+\begin{document}
+
+
+\begin{titlepage}
+\title{How much do high schools matter?: \\  Effects on college choice beyond achievement}
+\author{Bruno Aravena-Magüida }
+\date{December 2025}
+\maketitle
+\begin{abstract}
+How much of the differences observed across students can be attributed to their schools, as opposed to selection? How different are those effects across schools?  Do schools play a role on posterior human capital acquisition beyond academic achievement? I answer these questions using administrative data from the Chile which features a centralized school assignment system with random variation and wide coverage, allowing to control for student selection.  I observe students' performance in different standardized tests as well as their applications and enrollment to college.  I estimate a causal effect on these outcomes for each oversubscribed schools which span span 20\% of the high school population of the country. Results suggest that schools differ on their impact on achievement and college choices. I also report that while achievement metrics show high correlation among them, they are uncorrelated with other college-relevant metrics. 
+\noindent \vspace{1cm}
+\\
+\noindent\textbf{Keywords:} School-value added, college choice, Chile.\\
+\vspace{0in}\\
+\noindent\textbf{JEL Codes:} I20, J24 \\
+\bigskip
+\end{abstract}
+
+\setcounter{page}{0}
+\thispagestyle{empty}
+\end{titlepage}
+\pagebreak \newpage
+
+
+\doublespacing
+
+\section{Introduction}
+
+
+
+Assessing a school's quality has been an important concern for families, governments and researchers. For the most part, the economics literature has focused for in outcomes such as achievement scores in  standardized tests and college exams, considering them as proxies for later relevant variables such as college or labor market outcomes. \parencite{chetty_measuring_2014}\footnote{ More recently, the literature has also measured other socially-relevant outcomes such as teenage pregnancy, incarceration and substance use \parencite{dobbie_medium-term_2015, beuermann_what_2023}.}. 
+Many of the attempts to measure direct effects on higher education have been limited to a crude set of outcomes such as college enrollment or number of academic semesters \parencite{angrist_stand_2016, dobbie_medium-term_2015}\footnote{An important exception on this regard is \parencite{dobbie_charter_2020} where the authors can directly observe labor market outcomes, but giving up exogenous variation in their study.}.
+
+
+I argue that this is an insufficient way to characterize the effects of schools on later outcomes: There are important differences across institutions and programs that make the time spent at a higher education institution too coarse. I discuss on this paper the role of selectivity/quality of the higher education institution, as well as the choice of field of occupation. Intuitively: a school with that places their students in more selective institutions or higher pay programs will have alumni should be considered to have a different causal effect than another one -with a similar incoming student pool- that places their students in less selective institutions or lower pay programs, even if they have similar college enrollment and retention rates.  In line with these arguments,  \parencite{abdulkadiroglu_elite_2014} and 
+\parencite{abdulkadiroglu_parents_2020} are some of the only papers to report causal effect of schools on some measure of quality of college enrolled. Yet, these papers are unable to assess whether these effects operate through increases in application rates, acceptance rates or enrollment rate. Moreover, they do not speak to how schools might affect major choice. 
+
+Evidently these effects could entirely be driven by achievement effects. However, there is evidence to think that there are important margins on the college choice decision that are not determined by scores.  For instance, the fact that lower-income students are less likely to apply to selective institutions than their higher-income peers of the same achievement level has been documented multiple times  \parencite{dynarski_closing_2021} \parencite{chetty_diversifying_2025}, and simple interventions  \parencite{hoxby_what_2015} have proven successful in closing this gap. If schools differ on the type of institutions they might induce their students to apply to, there might be important effects that the metrics such as college enrollment or number of semesters would fail to capture. 
+
+
+Another example is how information about returns might change major choice. We know that the returns to higher education education vary enormously across fields \parencite{kirkeboen_field_2016} and that interventions such as information provision -which do not change achievement- can help move students move towards higher return programs \parencite{hastings_informed_2016}. 
+
+To the extent that different schools provide more accurate information about the returns to college and fields, they might nudge students int higher education and into high-pay majors. However, incomplete or wrong information might push into other fields. Other than education, schools might also affect this choice through other channels such as non-tested cognitive skills, non-cognitive skills or preferences.  In this paper I attempt to show that schools induce differences on higher education choices through both achievement and non-achievement channels.
+
+
+To study these issues, I use data from the Chilean system of education which centralizes both school and college assignments. In the college application system, centralized applications are observable and exam scores and high school grades fully determine a student application. Hence, individuals with the same scores and the same application list should have the exact outcome in their application. Table \ref{tab:income_regs} uses application data to show the relevance of demographics, schools and scores. Here I am attaching to each college-major choice its average monthly wage 4 years after graduation. Then I take each individual's top 5 application and compute an average wage of their application portfolio.  From column 1, we can observe that, unconditionally, female students have portfolios expected to earn 190 USD less in wages and that students from the lowest income decile have a gap of more than 475 USD relative to those of the highest income decile. From column 2 we can see that including achievement reduces these gaps to 150 USD and 155 USD, respectively. So scores obviously play an important role, especially on the income side. However scores do not fully close the gap as one might expect. Females apply as if they had 0.52 SD less in their math scores, and the poorest students apply as if they had 0.54 SD less than the richest students.  
+
+\begin{table}[htbp]
+\centering
+\caption{Differences in expected returns of college applications, conditioning on achievement}
+\label{tab:income_regs}
+
+\begin{threeparttable}
+\begin{adjustbox}{max width=\textwidth}
+  \input{tables/income_regressions.tex}
+\end{adjustbox}
+\begin{tablenotes}[flushleft]
+\footnotesize
+\begin{minipage}{\textwidth}
+\item Notes: The dependent variable is the average unconditional expected fourth-year post-graduation income (USD) across an individual’s top five applications. Income is converted using an exchange rate of 913 CLP/USD. Standardized test scores have mean 0 and standard deviation 1. Fixed effects are absorbed at the graduating school level. Omitted category in optional exam variable is the group that took both science and history exams. Robust standard errors in parentheses. Currently merged sample might be biased into higher-paying programs. Average of program wages 4 years after completion is 1586 USD.
+\end{minipage}
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+
+Column (4) shows that nearly two-thirds of the income effect observed in column (1) is accounted for by graduating-school fixed effects. Once test scores are reintroduced in column (5), the income gap effectively disappears and it becomes insignificant in (6). While this points to an important role for schools, the pattern is consistent both with a causal effect of attending higher–value-added schools; and/or and with sorting, whereby differences in family income are mechanically reflected in schools’ average earnings.
+
+
+%\blue{Maybe add more lit on major choice?}
+
+To tease out these two mechanisms, I take advantage of the recently introduced school assignment centralized system. Lotteries to break ties in the high school assignment mechanism provide exogenous variation. Given that this is a nation-wide system, I am able to estimate causal effects for 400 oversubscribed schools  which span around 25\% of the high school student population for a variety of outcomes.  
+
+The coexistence of this with a centralized college application system  allows for a unique opportunity to study how schools might causally affect higher educational choices and attainment through multiple channel. Given that higher education applications are centralized we can observe not only college enrollment over the years, but also college applications. Both can be observed at the program-institution level. This allows me to study major choice as an outcome, as well as program switches within and across institutions. These outcomes paint a far more comprehensive picture on the issue of higher educational choices. This is the first paper to study the causal effect of schools on outcomes of this granularity. My results suggest that schools do impact academic achievement and college application behavior but that these effects are largely uncorrelated among them, suggesting that there might be different dimensions of school quality. 
+
+
+The rest of the paper is organized as follows. The next section introduces the context and data. Section 3 discusses the methodology and assumptions. Section 4 presents the preliminary results. Section 5 discusses the some limitations of the results and brainstorms some potential extensions for future work. Section 6 concludes. 
+
+
+
+\clearpage
+\section{Context and Data}
+
+
+
+%In 2015, Chile passed a law that prohibited discrimination on admission to schools that received any type of public funding on the base of academic achievement or family circumstances, as well as the prohibition of application fees. The law also makes explicit that oversubscribed spots must be randomized among students of the same priority level\footnote{Priority is given to -- in respective order-- students who are already enrolled at a school, those who have siblings on the school,  children of a school staff, and those who were part of the school earlier on.}.
+
+%In the system that resulted from this law, families are able to rank their preferences for schools with available spots. The system then runs a Deferred Acceptance algorithm, known to be strategy-proof, to allocate spots. 
+
+
+%\subsection{Higher education application system}
+\subsection{Centralized School Assignment: Treatment and Sample Frame}
+
+The Chilean system of school assignment (SAE) is a relatively recent policy innovation in the country. Attempting to avoid discrimination on school admissions on the basis of academic achievement or family circumstances , policy-makers centralized this process. Families can rank schools at no cost. The system then uses a Deferred Acceptance algorithm to allocate spots, which ensures that the rankings are strategy-proof.  The system gives priority spots to --in respective order-- students who are already enrolled at a school, those who have siblings on the school, those who are children of a school staff, and those who were part of the school earlier on. There are also a fraction of spots reserved for low-income students. 
+
+
+I construct my sample from the universe of applications to vacancies in grade 9 during the 2017-2020 processes. For my preliminary results, I only consider regular vacancies and students that do not have any of the aforementioned priorities, implying that conditional on  having the same school ranking list they would have the same chances of being admitted. 9.0 \% of all the applications on this period have any  priority.  I intend to include all the students for my final paper. 
+
+%Check clean_sae_apps_data_frame.R
+
+%I also limit my study to consider only each of their top 3 school applications.  Call these the ``candidate'' applications for the sample.
+
+
+%I limit my sample of schools to those where I am powered to detect effects: Pooling all the ``candidate'' application information across years and considering each year of application as a cluster, I perform power calculations on each school. Assuming an ICC of 0.01, a significance level of 0.05 and a power of 0.8, I focus on the schools where I am powered to detect a MDE of 0.35 standard deviations. This results on a total of 273 schools, these schools span more than a fifth of all high school population in the country. My final sample is given by all the ``candidate'' applications to these 273 schools.  This implies that my final sample has nearly 183,000 unique students and 301,000 applications. 
+
+I am also able to observe enrollment of individuals to schools each years, together with whether they passed their course, their attendance level and GPA. I use these as important pre-treatment controls as a measure of cognitive (GPA relative to their school) and non-cognitive (attendance relative to their school) skills.
+
+
+%\blue{Characterization of schools?}
+
+\subsection{Outcomes: Higher Education Data}
+
+Application to higher education in Chile is centralized and it takes place at the program-institution (from here on: programs) level.  The allocation of students to programs is fully determined by 3 components: the scores of applying students, their ranked preferences of programs, and the weights that each program assigns to each of the score components. 
+
+
+Graduating students who want to access higher education are required to take the higher education entrance exam (PSU until 2020; PTU in 2021-22; PAES from 2023 onward). These exams consist of a standardized test on mathematics and verbal skills. Students must choose to take at least one of either the history and social sciences exam or the natural sciences exam. Students can also choose to take an advanced mathematics exam. I track as outcomes the scores in the mandatory exams, as well as which optional exams were taken. Students are also assigned a score depending on their GPA (GPA-score) as well as their GPA relative to their school distribution (from here on Ranking score). 
+
+Programs choose how much weight to give to each exam as well as the GPA and Ranking scores, within some general rules. These weights are made public and students know about them before they apply. Each program application is given a weighted score, and the system computes a Deferred Acceptance Algorithm using the student's preferences for programs and the weighted scores as programs' preferences for students. 
+
+
+My main outcome of interest are program application and enrollment choices. A straight-forward way to collapse these choices is the monetary return associated to them. For this purpose, I use data from the platform \texttt{mifuturo.cl}: a site where the Ministry of Education provides information on labor market outcomes for each program-institution. They inform average wages 4 years post-graduation, as well as employability levels 1 and 2 years after graduation. While there is some missingness on the data, I am fairly certain I can have reasonable imputation. Two-way fixed effect regressions (i.e. regression labor market outcome on generic major and 
+instititution) yield $R^2$ values of 0.934 for the wage variable and $\approx$ 0.860 for the employment variables. 
+
+
+
+To study major choice more directly, I use the aforementioned weights to construct a student-level that quantifies the STEM content in their portfolio (top-5) of applications.  This adds up the weights of the program associated to the mathematics, science and advanced mathematics. The assumption here is that these weights capture reasonably well the STEM content of the program and thus are a useful way to describe major choice across programs. Other related variables that I use to describe programs in terms of their fields are indicators for health, engineering, technology and natural sciences based on the ISCED-F (International Standard Classification of Education) 2013 \footnote{These are }. I then average these metrics for up to the first 5 applications of the student, to create an outcome at the individual level. 
+
+On top of that, I plan to use enrollment data each year to track in which program is a student enrolled each year. This allows me to identify whether students stay in their program or higher education as a whole, while noting switches across programs and/or institutions. 
+
+
+
+
+\subsection{Pre-treatment controls: School Assessment Data}
+
+The Ministry of Education also runs a different set of exams and surveys to assess school quality. These are taken on a some combination of grades 4, 8 and 10 every year. However, these were not implemented during 2020 and 2021, which are important years for the study. In practice, this means that I observe every cohort at least once -at grade 4 or 8- before their application for high school. I only observe one of this cohorts with an examination on grade 10. 
+
+From this data source, I construct a universally (across schools, unlike GPA) comparable measure of skills in verbal and mathematics before treatment. I also recover data from parents survey and relevant questions such as income level fo the family and family expectations for the student achievement in the near future.
+
+
+
+\section{Methodology}
+
+\subsection{Reduced-form analysis}
+
+A significant challenge when we attempt to make claims about school effects is the fact that student might sort into them depending on their characteristics. As a result a naïve comparison of means of any student outcome would include both the pre-existing differences among students and the differences due to school effects. One of the most common solutions to this issue is the use of admission lotteries \parencite{deming_better_2011, abdulkadiroglu_elite_2014, angrist_stand_2016, abdulkadiroglu_parents_2020}. 
+
+% \blue{Probably evidence of sorting}. 
+
+In my preliminary results I use the exogenous variation from the Chilean assignment mechanism by considering only offers of seats to an applicant's first choice. This  implies conditioning on the student's first choice and compare students who received an offer to those who do not. This is in line with other first-choice designs. See \textcite{abdulkadiroglu_research_2017} for a brief literature review on these studies. 
+
+%DALE AND KRUEGER CITATION
+
+%This methodology assumes that treatment assignment is uncorrelated with a student's characteristics conditional on their application list. Given that I am only working with students that do not have priority, the system in place guarantees that. 
+
+The evident down-side of this approach is the amount of variation that is discarded.  The econometrics literature has worked out this specific problem and the way to use all the variation while also taking into account students' ordered lists. This comes down to a selection on observables strategy. As discussed in \textcite{abdulkadiroglu_research_2017} the solution comes down to creating a DA propensity score given the ranked ordered lists. This is obviously an important next step on this project.
+
+
+
+\subsubsection{Preliminary Specification}
+
+Putting all together my current specification for the outcome `o' a student `i' who applied for a course type `c' to school `s' between a given year `t' between 2017 and 2020 is given by: 
+\begin{align}
+y^o_{i,c,s,t} =\;&
+\beta_s^o \mathbf{1}\{\text{Offered Spot}_{i,s}\} + \lambda'  (   z^{GPA_{pre}}_i , z^{ATT_{pre}}_i   )  \notag \\
+&+ \mu_{c,s,t} + \epsilon_{i,v,c,t}
+\end{align}
+
+Where $z^{GPA_{pre}}_i $ and $ z^{ATT_{pre}}_i $ represent an average of the z-scores of a student's GPA and attendance rate relative to that of their pre-treatment school in years 5-8 and $\mu_{c,s,t}$ represents a fixed-effect at the specific school-course-type-year. For instance, all students who applied to a given school on year 2017 have the same fixed-effect if that school does not have course types.  Standard errors are also clustered at this level.  \footnote{A course type could be given by a time shift, or some type of technical specialization within the school. Given that there might be selection into these, I choose this as the level of the fixed-effect. Moreover,  course-types are relevant for the assignment mechanism so randomization occurs at the school-course-type-year level  which is why I cluster the standard errors at this level. Most schools only offer 1 course type for the spots offered in grade 9. } 
+
+The parameter of interest is $\beta_s$ and it is assumed to be homogeneous across individuals and time-invariant. Given that I am using the offer of a spot, any results for $\beta_s$ can be interpreted as an ITT (intent-to-treat) effect on a particular outcome. Note that we have several clusters estimating each $\beta_s$.
+
+One of the outcomes I measure is the number of completed years in the target school, as a result I am also able to report a LATE estimate given by: 
+\[\beta^o_{LATE, s} = 4 \frac{\beta^o_s}{\beta^{N. years}_s} \]
+
+Where  $\beta^o_{LATE, s}$ represents the scaled effect of complying with treatment i.e. attending school $s$ for 4 years assuming that effects are linear on the number of years completed. Note that under perfect compliance $\beta^{N. years}_s = 4$ and the LATE is equal to the ITT.
+
+
+\subsection{Structural model}
+
+To go beyond average and constant school effects, and to include information from student choices --such as enrollment on high school given offer, school switches, dropping out, elective course choices and exam-taking choices-- I am considering also to estimate a structural model where students know exactly their general ability, but learn about  their field-specific taste/abilities, the school qualities and the school-student match effects.
+
+On this model, students would have a general ability $\theta_i$ and K specific taste/abilities parameters $\gamma_{ik}$, one for each broad area k. For instance,  \textcite{arcidiacono_ability_2004} a very related paper uses K = 4: natural sciences; business and economics; social sciences and humanities; and education. While the specific number or categories are yet to be decided, I would be very interested in separating at least health related fields from natural sciences given its importance and the gender differences among these two subgroups.
+
+
+This implies writing down a school choice problem, an elective course problem, an exam-taking problem and a college application problem. 
+
+\subsubsection{School choice problem}
+
+For the school choice problem I propose a model where families optimize for the sum of the expected value of the causal effect of the school jointly with the match effect, the observable characteristics of the school, distance to school, and an error term. Thus, they choose 
+among schools
+\(j \in \mathcal{J}_i\) to maximize expected utility. The utility that student
+\(i\) derives from school \(j\) is given by
+\[
+U_{ijt}
+= \theta_i+ \mathbb{E}\!\left[\theta_j + \theta_{i,j} \mid \mathcal{I}_{it} \right]
++ X_j'\beta
+- \delta \, d_{ij}
++ \varepsilon_{ijt},
+\]
+where \(\theta_j\) denotes the causal effect (quality) of school \(j\),
+\(\theta_{i,j}\) captures student--school match effects, \(X_j\) is a vector
+of observable school characteristics, \(d_{ij}\) is the distance from the
+family’s residence to school \(j\), and \(\varepsilon_{ij}\) is an
+idiosyncratic preference shock. Families choose the school that maximizes
+\(U_{ij}\).
+
+
+Each period, after students finish a year of schooling, students receive a signal around the true school quality, as well as a signal about their match effect. The later could be proxied by changes in the relative position of academic achievement, and/or relative school attendance. With this information they choose whether to continue on their school, dropout or switch\footnote{Currently switching schools is considered costless, but frictions could be considered. }.
+
+Under this model people who do not attend an offer from their top choice, could be rationalized via different draws of $\varepsilon_{i,j,t}$ on the application and enrollment stage, and thus after controlling for observables and distance, high enrollment rates would suggest higher expected $\theta_j + \theta_{i,j}$ values. Moreover, if we normalize such that a person  $i$ who has not attended a school $j$ must have that $ \mathbb{E}\!\left[ \theta_{i,j}  \mid \mathcal{I}_{it} \right] = 0$, then high enrollment rates is surely evidence of high $\theta_j$.
+
+
+
+\subsubsection{College application problem} 
+
+The  utility of finishing a program $p$ at institution $c$ is : 
+
+\[ U_{i,p,c}= W_{p,c} + \beta \sum_{k=1}^K \gamma_k \mathbbm{1}\{f(p) =  k\} + \lambda_p' \alpha  + \eta_c + \varepsilon_{i,p,c}  \]
+where $W_p$ represents the wage of the program, and  $f(p)$ represents the field $k$ at which $p$ belongs, and $\lambda_p$ includes program specific observable characteristics.
+
+The optimization constraint is given by $p \in \mathcal{S}_i$ , where $\mathcal{S}_i$ represents the set of programs to which student $i$ can get accepted given their scores. 
+
+Throughout high school, students acquire skills that might expand their set $ \mathcal{S}_i$, but they also receive signals about which fields they might be more interested/talented. As in \textcite{arcidiacono_ability_2004}, high relative performance in a class tied to field $k$ should increase the corresponding $\gamma_{i,k}$ and thus make it more likely students' apply to programs in those fields.
+
+\subsubsection{Exam-taking problem}
+
+Given our previous problem, the exam taking problem becomes for the options history or science becomes
+\[ \max_{o = sci, his} \Big( \max_{p,c}    U_{i,p,c} \mid   E[  \mathcal {S}_i^o  ] \Big)  \]
+
+where $E[  \mathcal {S}_i^o  ] = E[Z_i^{verbal}] \cup E[Z_i^{math}] \cup E[Z_i^o]$, with the later term, the expected standarized exam on either science or history. One this has been chosen the agent solves whether to take the additional exam at a certain effort cost which I model as decreasing on general ability.  
+
+\[ \max \Big( \mathcal{S}_i^{\text{both}} - \frac{C }{\theta_i};  \mathcal{S}_i^o^*   \Big)  \]
+
+I am less certain on how to model the choice of elective courses, but I also intend to have them update $\lambda_{i,k}$
+
+
+
+%\subsubsection{Updating $\gamma_k$}
+
+%Relative performance on certain subjects (e.g mathematics, language, history) will act as a signal for $\gamma_k$. 
+
+
+\clearpage
+\section{Reduced-form preliminary results}
+\FloatBarrier
+
+In this section I show my reduced-form preliminary results for achievement and average STEM content for each school, as well as the correlation between these effects. 
+
+\subsection{How noisy are the estimates?}
+
+In this subsection I show the estimated effects and their C.I. for three outcomes: number of years in target school --which, as discussed can be interpreted as a first-stage regression-- (figure \ref{fig:years_P1}), score in the mathematics higher education exam (figure \ref{fig:math_P1}), and STEM content of the application  (figure \ref{fig:stem_P1}).
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.9\linewidth]{figures/distr_eff_years_P1.png}
+    \caption{Effect on years in target school, first application sample}
+    \label{fig:years_P1}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.9\linewidth]{figures/distr_eff_math_P1.png}
+    \caption{Effect on higher-ed math exam, first application sample}
+    \label{fig:math_P1}
+\end{figure}
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.9\linewidth]{figures/distr_eff_stem_P1.png}
+    \caption{Effect on STEM application content, first application sample}
+    \label{fig:stem_P1}
+\end{figure}
+
+\begin{comment}
+    
+\begin{figure}
+    \centering
+    \includegraphics[width=0.9\linewidth]{figures/distr_eff_years_V2.png}
+    \caption{Effect on years in target school, top-3 applications sample}
+    \label{fig:years_V2}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.9\linewidth]{figures/distr_eff_math_V2.png}
+    \caption{Effect on higher-ed math exam, top-3 applications sample}
+    \label{fig:math_V2}
+\end{figure}
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.9\linewidth]{figures/distr_eff_stem_V2.png}
+    \caption{Effect on STEM application content, top-3 applications sample}
+    \label{fig:stem_V2}
+\end{figure}
+\end{comment}
+
+
+
+\FloatBarrier
+
+\subsection{Summary of effects by outcome}
+
+Table \ref{tab:summ_P1} attempts to summarize the school effects for a wider set of outcomes. Columns (1)-(3) describe the statistically significant results and columns (4)-(5) attempt to contextualize them. Finally, column (6) takes a ratio between columns (3) and (5) attempting to compare how much a movement on the distribution of schools implies on the distribution of outcomes. An evident next step here is to construct an underlying distribution for these effects, through an Empirical Bayes framework as described in \textcite{walters_chapter_2024}.  
+
+\input{tables/effects_summary_P1}
+%\input{tables/effects_summary_V2}
+
+\clearpage 
+\FloatBarrier
+\subsection{Evidence on the correlation of outcomes}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.9\linewidth]{figures/2dim_math_langP1.png}
+    \caption{Correlation of math and verbal, first application sample}
+    \label{fig:2dim_A_P1}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.9\linewidth]{figures/2dim_math_stemP1.png}
+    \caption{Correlation of math exam and app. STEM content, first application sample}
+    \label{fig:2dim_B_P1}
+\end{figure}
+
+\begin{comment}
+    
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.9\linewidth]{figures/2dim_math_langV2.png}
+    \caption{Correlation of math and verbal, top-3 applications sample}
+    \label{fig:2dim_A_V2}
+\end{figure}
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.9\linewidth]{figures/2dim_math_stemV2.png}
+    \caption{Correlation of math exam and app. STEM content, top-3 applications sample}
+    \label{fig:2dim_B_V2}
+\end{figure}
+
+\end{comment}
+
+\clearpage
+\FloatBarrier
+\section{Discussion and future work}
+
+\subsection{Outside options}
+
+The $\beta_s$ I estimate is not relative to a particular option. This falls under the case `of `unordered treatments''. This complicates its interpretation to some extent as the effect gets contaminated by the level of the outside options of the control group and their relative shares.  I argue the current $\beta_s$ is still policy relevant: it answers the policy question of what is the expected benefit of an additional spot assuming the student who takes it comes from the same distribution of counterfactual schools. 
+
+\textcite{kirkeboen_field_2016} get around this by using the ``second-choice'' data. While I do have a similar information set, the authors also rely on reducing the dimension of their objects to estimate it. To study the effects of programs for instance, they reclassify them in 10 fields, which implies they only need to estimate 90 objects. This approach does not have an obvious analogue on my setting given that there isn't a straight-forward to separate schools, and that I care about their idiosyncratic differences. 
+
+Another approach would be to follow an AKM-intuition \parencite{abowd_high_1999} and identify the effects based on consecutive schools on a given ranking list --akin to movers within 2 firms. One could attempt to estimate a network of school effects in this way, though it would likely be fragmented given that only 5\% of students change their region in my sample. \textcite{beuermann_what_2023} offers an interesting test that tackles this issue in their appendix: Instead of trying to estimate the whole network they test whether school effects are additive by comparing estimable triangles in the network  ``i.e. the effect of attending School 1 relative to 5 is equal to the effect of attending School 1 relative to 3 plus the effect of attending School 3 relative to 5''. 
+
+
+%\subsection{Characterize the application rates and moves among school}
+
+%There is a strand of the literature that analyzes which metric of school value-added is more associated with families applications. \parencite{abdulkadiroglu_parents_2020, beuermann_what_2023} In particular, it would be interesting to see whether families internalize any of the higher education related effects or if they seem to respond to levels of an outcome, or other school characteristics such as funding or infrastructure. Somewhat related, it might be interesting to study take-up conditional on offer and compare how this varies by starting school.
+%Also, trying to understand what does an individual value, might be relevant to 
+%Characterize moves
+
+
+\subsection{Can this effect be broken down / What are these causal effects correlated to? }
+
+A common reaction to this project has been that it might be good to to understand what the effect is capturing. For instance, one would expect that the causal effects estimated in math and verbal exams are correlated with high teacher results on those fields. There are observables such as staffing, teacher exams -for some of them- and funding that I could use to analyze this. Would it be worth it to try to complement my data --via surveys or fieldwork-- to unpack these effects? It seems to me some measure of quality of college counseling might be useful and not well captured by observable data.
+
+%\subsection{Compare schools before and after selection and treatment heterogeneity}
+
+%An interesting feature of this setting is that the centralized system of assignment was not always present. This might allow me to think through a model that compares value-added metrics for a selected sample (before SAE) to value-added metrics for a random sample (after SAE). I could also use this to study whether these effects seem to play a role for past graduates, for whom I might have more data.
+
+%This point, seems to be on the same research agenda of testing whether $\beta_s$ is constant, and part of such study could be heterogeneity analysis. Interesting groups would be gender, different levels of pre-switch achievement, as well as levels of parental investments. \textcite{celhay_early_2025} show that in the Chilean context, date of birth can induce important exogenous differences in parental investments. 
+
+
+\subsection{Random peer effects}
+
+An important part of the literature uses admission cutoffs to estimate a causal effect of a school for a given achievement level. Relative to such setting, a setting that does not use academic achievement to assign spots as mine, might exogenous variation on peer composition. Thus, I could separate part of the school exogenous variation in some measure of quality of the applicant pool, quality of the selected pool and a school effect. There is work suggesting that relative rank in a school is an important part of sorting into fields might be due to relative ranking. \parencite{goulas_comparative_2024, delaney_high_2021}
+
+\subsection{Other outcomes}
+
+Some of the outcomes I intend to include in this analysis are: a measure of how safe/risky an application is, whether student is applying outside their region,  institution quality (both in applications and enrollment), enrollment in higher education (on-time and at all), enrollment field, number of program switches. 
+
+
+\section{Conclusion}
+
+Schools could potentially impact students in multiple ways. Using a centralized school assignment system I show that schools impact achievement and college applications. While the first part is widely studied, work on the second aspect is almost non-existent and it has been assumed to occur only through the former. I present preliminary evidence that these outcomes are uncorrelated. 
+
+These results could change how families and policy-makers think about their choices on the education space. For instance, a government trying to increase the number of graduates in STEM could induce a negative effect by moving students to schools with higher value-added in math achievement. Similarly, a family trying to maximize expected income of their children, might prefer a school with a lower achievement level but that induces their students to apply to higher return programs. 
+
+
+\clearpage
+\printbibliography
+
+\end{document}
+

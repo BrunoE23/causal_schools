@@ -1,0 +1,1206 @@
+\documentclass[notes,11pt, aspectratio=169]{beamer}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{booktabs,threeparttable}
+
+\usetheme[progressbar=frametitle]{metropolis}
+\usepackage{appendixnumberbeamer}
+\usepackage[numbers,sort&compress]{natbib}
+\bibliographystyle{plainnat}
+
+\usepackage{booktabs}
+\usepackage[scale=2]{ccicons}
+\usepackage{bbm}
+\newcommand{\diffcol}[1]{\textcolor{blue}{#1}}
+\newcommand{\red}[1]{\textcolor{red}{#1}}
+\newcommand{\blue}[1]{\textcolor{blue}{#1}}
+\newcommand{\green}[1]{\textcolor{teal}{#1}}
+
+
+
+
+\newenvironment{wideitemize}{%
+%  \begin{center}
+  \begin{minipage}{0.90\textwidth}
+  \begin{itemize}
+  \addtolength{\itemsep}{1em}
+}{%
+  \end{itemize}
+  \end{minipage}
+%  \end{center}
+}
+
+\newenvironment{cwideitemize}{%
+  \begin{center}
+  \begin{minipage}{0.9\textwidth}
+  \begin{itemize}
+  \addtolength{\itemsep}{1em}
+}{%
+  \end{itemize}
+  \end{minipage}
+  \end{center}
+}
+
+
+\usepackage{comment}
+\usepackage{xspace}
+\newcommand{\themename}{\textbf{\textsc{metropolis}}\xspace}
+
+\title{\centering{ How much do high schools matter?: \\  Effects on college choice beyond achievement} \\ }
+\author[BEAM (U ABC)]{%
+  \texorpdfstring{%
+    \begin{columns}
+      \column{.3\linewidth}
+      \centering
+%     author
+      \column{.3\linewidth}
+      \centering
+ Bruno E. Aravena-Magüida\\ UChicago  
+      \column{.3\linewidth}
+      \centering
+   %   Author 3 \\ Institution 3
+    \end{columns}
+ }
+ {BEAM}
+}
+\date{\vspace{20}\hfill \today }  % For some reason I can't get the date to be centered
+
+
+\usepackage[
+  backend=biber,
+  style=authoryear-ibid,
+  maxcitenames=2,  % show up to 2 authors in citations
+  mincitenames=1,  % use "et al." if more than 2
+  maxbibnames=10,  % show up to 10 names in bibliography
+  minbibnames=1,
+    uniquelist=false   
+]{biblatex}
+
+
+\let\oldparencite\parencite
+\renewcommand{\parencite}[2][]{%
+  \footnotesize {\tiny \oldparencite[#1]{#2}} \normalsize %
+}
+
+\renewcommand*{\bibfont}{\footnotesize}
+
+\addbibresource{causal_effect_schools.bib}
+
+
+\begin{document}
+\maketitle
+
+%\begin{frame}{Table of contents}
+%  \setbeamertemplate{section in toc}[sections numbered]
+%  \tableofcontents[hideallsubsections]
+%\end{frame}
+
+
+\section{Introduction}
+
+
+
+
+\begin{frame}{Motivation}
+\begin{wideitemize}
+
+
+\item A central objective in the economics of education is to estimate the returns to different educational programs. Within this broader agenda, a large literature has focused on school value-added. \parencite{angrist_stand_2016, dobbie_medium-term_2015, angrist_leveraging_2017, angrist_credible_2024}. 
+
+\item Much of this work starts by studying effects on academic achievement, though recent research has broadened the notion of value-added to include other outcomes. \parencite[]{beuermann_what_2023, rose_effects_2022}. 
+
+\item By contrast, the effect of schools on major choice, an especially important decision, has received little attention. I propose to study school effects on major choice and to disentangle the extent to which those effects operate through academic achievement.
+\end{wideitemize}
+\end{frame}
+
+
+\begin{frame}{Literature Review}
+\textbf{Three strands of literature}
+
+\begin{itemize}
+    \item \textbf{School effects on higher education outcomes}
+    \begin{itemize}
+        \item Literature has focused on achievement or the higher educational choices on the `intensive' margin (college enrollment, number of academic semesters) \parencite{chetty_measuring_2014, angrist_stand_2016, dobbie_medium-term_2015, abdulkadiroglu_elite_2014, abdulkadiroglu_parents_2020}.
+    \end{itemize}
+
+    \item \textbf{College choice beyond achievement}
+    \begin{itemize}
+        \item Evidence for margins of college choice  not fully determined by test scores. e.g. lower-income students are less likely to apply to selective institutions than equally high-achieving peers \parencite{dynarski_closing_2021, chetty_diversifying_2025 , hoxby_what_2015}.
+    \end{itemize}
+
+    \item \textbf{Major choice and returns}
+    \begin{itemize}
+        \item Returns to higher education vary substantially across fields \parencite{kirkeboen_field_2016}.
+        \item Information about returns can shift students toward higher-return programs even without changing achievement \parencite{hastings_informed_2016}.
+    \end{itemize}
+\end{itemize}
+
+\vspace{0.4em}
+\textbf{This paper:} I connect these three strands by studying how schools affect where students apply, where they are admitted and enroll, and which majors they choose, through both achievement and non-achievement channels.
+    
+\end{frame}
+
+%\item Theoretically, taste parameters are usually considered a primitive, not an outcome. Empirically,  answering this requires a rare combination of: \begin{enumerate}
+%    \item exogenous variation in school assignment (e.g. lotteries)
+%    \item information about higher eduction choices (often not centralized) 
+%    \item being able to match both datasets.
+%\end{enumerate}
+
+
+\begin{frame}{This paper}
+\begin{wideitemize}
+
+\item Employ oversubscribed school methodology to study higher education outcomes. Larger sample and more granular outcomes. 
+
+
+%\item In most papers schools only impact college choices through attainment and skills. This paper examines a new channel: taste formation. 
+
+\item Taking advantage of unique policy and data landscape from Chile: \begin{enumerate}
+    \item `Recently' introduced centralized system for high school assignment which randomizes oversubscribed spots. (spot assignment as instrument)
+    \item Centralized system of applications to major-college combinations which allows to observe multiple outcomes (achievement, applications, enrollment)
+\end{enumerate}
+
+%\item Intuition: Compare application STEM content of (female) students who got spots at high-school X and those who applied but did not receive a spot, while controlling for attainment.
+
+\item (Currently) Estimate school-level value added for achievement and field choice. Might pivot to different strategy. 
+
+%\item Compare it with population, observe correlation among effects.
+
+%Estimate an ITT/LATE at the gender-school level which could be interpreted as a school causal effect on each gender. Obtain distribution of effects.
+    
+\end{wideitemize}
+\end{frame}
+
+
+%\begin{frame}{Preview of Results}
+    
+%\end{frame}
+
+
+
+
+\section{Data and Methodology}
+\begin{frame}{Data}
+
+\textbf{Linked administrative records, in approximate chronological order}
+
+\vspace{0.5em}
+
+\begin{itemize}
+    \item \textbf{SIMCE student-level assessments} (grades 4 and 8)  
+    \hfill \textit{Baseline controls}
+
+    \vspace{0.4em}
+    \item \textbf{School Admission System (SAE), 2017--2020}  
+    \hfill \textit{Treatment probability   $\mid \theta$}
+
+    \vspace{0.4em}
+    \item \textbf{High school enrollment and grades, by year}  
+    \hfill \textit{Treatment take-up}
+
+    \vspace{0.4em}
+    \item \textbf{Higher education entry exams (PAES), 2022--2025}  
+    \hfill \textit{Outcome 1}
+
+    \vspace{0.4em}
+    \item \textbf{Higher education enrollment, by year}  
+    \hfill \textit{Outcome 2}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Institutional Context}
+\begin{wideitemize}
+
+
+\item \textbf{How high-school assignment system works:}
+    \begin{itemize}
+        \item Every school with public funding that wants to fill spots must put them in the system. 
+        \item Students in new cycle (y9), moving cities, want a new match.
+        \item Deferred Acceptance (DA) with random assignment if ties. 
+        \item Priority tiers for for siblings, alumni and staff children.
+        \item But also quotas for special needs, low-income students; not textbook DA.
+%        \item Intended focus on oversubscribed ``high-schools''  with at least 50 spots 
+    \end{itemize}
+
+
+%\item How college application system works:
+%    \begin{itemize}
+%            \item Graduating students take standardized exams when they graduate HS \{Math, Verbal\}. Must choose at least 1 of \{Sciences, History\}.%\{Math 2\}*.
+            %\item Also a GPA-score and a GPA-relative-to-school score.
+
+            
+%        \item \textbf{College-majors} decide weights of each app component, number of spots.
+
+%        \item \textbf{Scores + weights fully determine a particular applications.}
+ %       \item Students \textbf{rank} college-majors.
+ %       \item College-major takes first X students by weighted score (DA). 
+ %   \end{itemize}
+
+
+
+\end{wideitemize}
+\end{frame}
+
+
+\begin{frame}{Unique Setting to Study this type of question}
+\begin{wideitemize}
+
+\item \textbf{ There are a couple of reasons why this setting is ideal to study this question.}
+    \begin{itemize}
+    \item Centralized admission system for schools. (treatment randomly assigned conditionally)
+    \item Centralized admission system for college applications: ranked lists are available and truth-telling. (outcomes)
+    \item Choices observed allegedly before higher institution has an effect. 
+    \item High switching costs make this an even more salient margin to study. Mistakes are costly.
+ 
+    \end{itemize}
+ 
+ \end{wideitemize}
+%\parencite{abdulkadiroglu_research_2017}\parencite{angrist_credible_2024}
+\end{frame}
+
+
+
+\begin{frame}{Conceptual Framework}
+\begin{itemize}
+    \item Assume a constant-effects model for school value added:
+    \[
+    Y_{ij} = \nu_j + \epsilon_i
+    \]
+    \item This implies school effects can be written relative to the average school effect:
+    \[
+    Y_i = \beta_0 + \sum_{j=1}^J \beta_j D_{ij} + \epsilon_i
+    \]
+    \item The core challenge is selection: students attending a school may differ systematically in unobservables.
+\end{itemize}
+%\parencite{abdulkadiroglu_research_2017}\parencite{angrist_credible_2024}
+\end{frame}
+
+
+
+
+\begin{frame}{Identification from Centralized Assignment}
+\begin{itemize}
+    \item In centralized assignment, students submit ranked preferences and schools rank students by priority.
+    \item Randomness enters through lottery tie-breakers.
+    \item Define student type as the combination of preferences and priorities:
+    \[
+    \theta_i \equiv (\succ_i, \rho_i)
+    \]
+    \item Under ``equal treatment of equals'' (ETE), students with the same type face the same assignment probabilities.  \parencite{abdulkadiroglu_research_2017}
+      \[
+    \epsilon_i \perp\!\!\!\perp Z_i \mid \theta_i
+    \]
+    \item Other (fixed under randomization) variables do not affect the assignment. Key example: $\epsilon_i$. 
+
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Assignment Risk as a Control Strategy}
+\begin{itemize}
+    \item Saturating on exact student type is often infeasible because preference-priority cells are too sparse.
+    \item A practical alternative is to use assignment probabilities \(p_i\) as propensity scores. \parencite{abdulkadiroglu_research_2017,rosenbaum_central_1983} 
+
+    \item As a result we can write instead: 
+    \[
+    \epsilon_i \perp\!\!\!\perp Z_i \mid p_i
+    \]
+    \item This motivates ``risk-controlled'' designs that condition on school-assignment risk.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Example: Common Risk Without Common Type}
+\small
+\begin{columns}[T]
+\begin{column}{0.46\textwidth}
+\textbf{Setup}
+\begin{itemize}
+    \item Applicants: $\{1,2,3,4,5\}$
+    \item Schools: $\{a,b,c\}$, one seat each
+    \item Priority:
+    \begin{itemize}
+        \item 5 highest at $c$
+        \item 2 highest at $b$
+    \end{itemize}
+\end{itemize}
+
+
+
+
+\textbf{Preferences}
+\[
+\begin{array}{ll}
+1:& a \succ b\\
+2:& a \succ b\\
+3:& a\\
+4:& c \succ a\\
+5:& c
+\end{array}
+\]
+\end{column}
+
+\begin{column}{0.54\textwidth}
+\textbf{DA implication}
+\begin{itemize}
+    \item 5 gets $c$
+    \item 1, 2, 3, 4 compete for $a$
+    \item none has an advantage at $a$
+\end{itemize}
+
+\[
+P(Z_{ia}=1)=0.25 \qquad \forall i \in \{1,2,3,4\}
+\]
+
+\textbf{Takeaway}
+\begin{itemize}
+    \item No two applicants share the same full type
+    \item Full-type conditioning gives one stratum per applicant
+    \item But applicants 1--4 share the same propensity score for $a$
+    \item So they can be pooled in one risk stratum
+\end{itemize}
+\end{column}
+\end{columns}
+\end{frame}
+
+
+\begin{frame}{From Offers to Attendance}
+\begin{itemize}
+    \item Offers \(Z_i\) are exogenous conditional on assignment risk \(p_i\).
+    \item To move from offers to actual attendance \(D_i\), the project invokes a conditional-independence argument:
+    \[
+    \epsilon_i \perp\!\!\!\perp D_i \mid p_i
+    \]
+    \item Intuition: sorting occurs at the application stage, while post-offer compliance is driven by idiosyncratic shocks. \parencite{dale_estimating_2002} 
+    \item This delivers a tractable framework for school-specific reduced-form estimation. \parencite[]{angrist_methods_2023-1}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Reduced-Form School Effects}
+\begin{itemize}
+    \item Example outcomes:
+    \begin{itemize}
+        \item standardized math achievement,
+        \item STEM enrollment in higher education.
+    \end{itemize}
+    \item Yet also interested in other fields; outcomes such as financial aid application.
+    \item Proposed specifications:
+    \[
+    Y_i^{\text{MATH}} = b_0 + \sum_j b_j D_{ij} + X_i'B + b_{\text{pre}}Y_{\text{pre},i} + g(p_i) + \epsilon_i
+    \]
+    \[
+    Y_i^{\text{STEM}} = c_0 + \sum_j c_j D_{ij} + X_i'C + b_{\text{pre}}Y_{\text{pre},i} + g(p_i) + \eta_i
+    \]
+    \item Under \textcite{angrist_credible_2024}, these correspond to an RC VAM specification and a risk-controlled OLS.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Why Major Choice May Reflect More Than Scores}
+\begin{itemize}
+
+    
+    \item If math achievement affects STEM enrollment, then school effects on STEM can operate through:
+    \begin{enumerate}
+        \item a score channel, and
+        \item a non-score channel.
+    \end{enumerate}
+    \item In that case, the reduced-form coefficient on school attendance in the STEM regression mixes both channels.
+    \item It could be interesting to focus on schools with estimated zero effects on math scores.
+    \item Non-zero STEM effects for those schools could provide evidence of non-score school effects.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Potentially: An additional score-only instrument}
+
+\begin{itemize}
+    \item In situations like these, the gold-standard for mediation analysis is having access to an instrument that affects only one of the variables (e.g. scores) 
+    \item Currently considering using exam forms (randomly assigned, might give a boost of achievement to some students), but concerned about potentially weak first-stage. 
+
+\end{itemize}
+    
+\end{frame}
+
+ \begin{frame}{Replication of Chilean algorithm}
+\begin{itemize}
+    \item Any paper on this space needs to pin down the algorithm of assignment.
+    \item Managed to replicate above 99\% of original assignments with my 4 sample cohorts. (!) 
+    \item Using only student types and a random seed replicated about \(68\%\) of assignments.   
+    \item This highlights the importance of correctly modeling the additional institutional features as quotas and guaranteed admission in original school.
+    \item Around 30\% of the sample in the centralized system get the same assignment regardless of the lottery number.  
+    \item Next steps: explain the remaining mismatch, and try to implement the large market approximation from \textcite{abdulkadiroglu_breaking_2022}, \textcite{abdulkadiroglu_research_2017}.  
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Replicating Example 1}
+    \begin{table}[htbp]
+\centering
+\begin{tabular}{ccc}
+\hline
+\textbf{type\_id} & \textbf{school\_name} & \textbf{prob} \\
+\hline
+1 & a         & 0.24880 \\
+2 & a         & 0.25122 \\
+3 & a         & 0.24731 \\
+4 & a         & 0.25267 \\
+1 & b         & 0.25122 \\
+2 & b         & 0.74878 \\
+5 & c         & 1.00000 \\
+1 & unmatched & 0.49998 \\
+3 & unmatched & 0.75269 \\
+4 & unmatched & 0.74733 \\
+\hline
+\end{tabular}
+\caption{Assignment probabilities by type and school}
+\label{tab:type_probs}
+\end{table}
+\end{frame}
+
+\begin{comment}
+    
+\begin{frame}{Sample Construction (to be updated)}
+\begin{wideitemize}
+    \item Consider universe of regular spots for years 9 in the system.
+
+    \item Consider only the first application. 
+
+    \item Focus on schools where I have power: Filter to schools where using all data over 4 years, I can have a MDE of 0.3 with standard assumptions and ICC of 0.01. Resulting number is 273 schools.
+
+%    \item Sample frame of students who applied to such schools in their top-3. 
+
+    \item \textbf{Final data frame has 301k rows, from $\approx$ 183k unique individuals} given that an individual can be on the control group for more than one school. 
+    
+\end{wideitemize}
+\end{frame}
+
+
+%\begin{frame}{Sample Overview}
+
+%Maybe some kind of plot ? 
+
+%\end{frame}
+
+
+\begin{frame}{Methodology: approaches}
+
+\begin{wideitemize}
+
+\item Obvious issue on school effects literature is that of sorting. Random assignment for tie-breaking ensures exogeneity but DA structure poses some challenges. 
+
+\item Results only with top-1 application. Common in the literature. Assumption: Randomization well done conditional on application list. Reduced sample. 
+
+%\item Results with top-3 applications. Ad-hoc. Additional assumption: No differences between those who rank a school first second or third, conditional on ranking the school within the top 3. 
+
+\item Ideal solution: implement \textcite{abdulkadiroglu_research_2017}, which estimates a treatment DA propensity score from the lists of priorities and rankings.
+
+
+    
+\end{wideitemize}
+
+    
+\end{frame}
+
+
+
+\section{Results}
+    
+
+\begin{frame}{How noisy are the estimates?: years in target school}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\linewidth]{figures/distr_eff_years_P1.png}
+    \caption{Estimates and confidence intervals for distribution of  $\beta_s$}
+    \label{fig:hist_outcome}
+\end{figure}
+\end{frame}
+
+\begin{frame}{How noisy are the estimates?: math exam}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\linewidth]{figures/distr_eff_math_P1.png}
+    \caption{Estimates and confidence intervals for distribution of  $\beta_s$}
+    \label{fig:hist_outcome}
+\end{figure}
+\end{frame}
+
+\begin{frame}{How noisy are the estimates?: STEM content}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\linewidth]{figures/distr_eff_stem_P1.png}
+    \caption{Estimates and confidence intervals for distribution of  $\beta_s$}
+    \label{fig:hist_outcome}
+\end{figure}
+\end{frame}
+
+\begin{comment}
+
+\begin{frame}{How noisy are the estimates?: years in target school, top-3}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\linewidth]{figures/distr_eff_years_V2.png}
+    \caption{Estimates and confidence intervals for distribution of  $\beta_s$}
+    \label{fig:hist_outcome}
+\end{figure}
+\end{frame}
+
+    
+\begin{frame}{How noisy are the estimates?: math exam, top-3}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\linewidth]{figures/distr_eff_math_V2.png}
+    \caption{Estimates and confidence intervals for distribution of  $\beta_s$}
+    \label{fig:hist_outcome}
+\end{figure}
+\end{frame}
+
+\begin{frame}{How noisy are the estimates?: STEM content, top-3}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\linewidth]{figures/distr_eff_stem_V2.png}
+    \caption{Estimates and confidence intervals for distribution of  $\beta_s$}
+    \label{fig:hist_outcome}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}{Correlation on estimates, math and verbal exams}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\linewidth]{figures/2dim_math_langP1.png}
+    \caption{Estimates and confidence intervals for distribution of  $\beta_s$}
+    \label{fig:hist_outcome}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}{Correlation on estimates, math exam and STEM content}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\linewidth]{figures/2dim_math_stemP1.png}
+    \caption{Estimates and confidence intervals for distribution of  $\beta_s$}
+    \label{fig:hist_outcome}
+\end{figure}
+\end{frame}
+\end{comment}
+
+
+\begin{comment}
+    
+\begin{frame}{Correlation on estimates, math and verbal exams, top-3}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\linewidth]{figures/2dim_math_langV2.png}
+    \caption{Estimates and confidence intervals for distribution of  $\beta_s$}
+    \label{fig:hist_outcome}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}{Correlation on estimates, math exam and STEM content, top-3}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\linewidth]{figures/2dim_math_stemV2.png}
+    \caption{Estimates and confidence intervals for distribution of  $\beta_s$}
+    \label{fig:hist_outcome}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Correlation on estimates, math exam and STEM content, top-3, LATE}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\linewidth]{figures/2dim_math_stem_late_V2.png}
+    \caption{Estimates and confidence intervals for distribution of  $\beta_s$}
+    \label{fig:hist_outcome}
+\end{figure}
+\end{frame}
+
+
+
+\begin{frame}{Discussion: Outside options}
+\begin{wideitemize}
+
+\item Unordered treatments: $\beta_s$ I estimate is not relative to a particular option.
+\item  \textcite{kirkeboen_field_2016} get around this by using the ``second-choice'' data. Yet they also collapse their effect of spaces to 10 fields (90 effects to estimate).
+
+\item I could try an AKM-intuition \parencite{abowd_high_1999} and identify the effects based on consecutive schools on a given ranking list --akin to movers within 2 firms. But network will likely be divided.
+
+\item \textcite{beuermann_what_2023} offers an interesting test that tackles this issue in their appendix. Test if triangles recover the same effect both ways:  ``i.e. the effect of attending School 1 relative to 5 is equal to the effect of attending School 1 relative to 3 plus the effect of attending School 3 relative to 5''. 
+
+
+\end{wideitemize}
+\end{frame}
+
+\end{comment}
+
+
+
+\section{Conclusion}
+
+\begin{frame}{Conclusion}
+
+\begin{wideitemize}
+
+
+\item I leverage a unique setting to implement an oversubscribed school-lottery design at a nationwide scale to study an important outcome in more granularity than before: major choice. 
+
+
+%\item I find preliminary evidence that schools play an important role in major choice, in a way that is completely uncorrelated with achievement effects. 
+
+
+\end{wideitemize}
+\end{frame}
+
+%\item At the same time, multiple mechanisms could explain ``taste formation''. Some of them include: 
+%\begin{itemize}
+%    \item Peer effects and role models (information, joint consumption)
+ %   \item Reduced expected probability/harm of gender discrimination
+ %   \item Pure taste i.e. higher utility derived from STEM academic fields.
+%\end{itemize}
+
+\begin{comment}
+    
+
+\section{Potential next steps}
+
+
+
+\begin{frame}{Can this effect be broken down / What are these causal effects correlated to? }
+
+\begin{wideitemize}
+
+\item Unclear what $\beta_s$ is truly capturing given that school is a bundle. I intend to analyze the correlates of these effects in observable characteristics such as teacher quality, staffing and funding.
+
+\item I wonder if it could be worth it to try to complement my data --via surveys or fieldwork-- to unpack these effects? 
+
+\item  Surveying  graduating  students could help unpack the mechanism behind potential school effects (e.g. information on returns; non-tested skills; confidence/role-models/taste formation, etc. )
+
+\item I could also get a measure of traditionally unobserved school attributes E.g. quality of college counseling.
+
+    
+\end{wideitemize}
+\end{frame}
+
+
+
+
+\begin{frame}{Effect of selection and heterogeneity in school effects}
+\begin{itemize}
+    \item How constant is  $\beta_s$ ? 
+
+    \item An interesting feature of this setting is that the centralized system of assignment was not always present.
+    \item  This might allow me to think through a model that compares value-added metrics for a selected sample (before SAE) to value-added metrics for a random sample (after SAE).
+    \item  I could also use this to study whether these effects seem to play a role for past graduates, for whom I might have more data.
+    \item   Room for heterogeneity analysis? Interesting groups would be gender, different levels of pre-switch achievement, as well as levels of parental investments. \textcite{celhay_early_2025} show that in the Chilean context, date of birth can induce important exogenous differences in parental investments. 
+
+\end{itemize}    
+\end{frame}
+
+\begin{frame}{Random peer effects}
+\begin{itemize}
+    \item Compared to admission cutoffs settings, I have random variation of the admitted cohort. 
+    \item Some literature uses this variation to study effect on achievement.
+    \item  I could separate part of the school exogenous variation in some measure of quality of the applicant pool, quality of the selected pool and a (residual) school effect.
+    \item For field choice, relative dynamics seem to play an important role \parencite{goulas_comparative_2024, delaney_high_2021}
+    \item I also have classroom level data and could track how much schools sort by classroom. 
+\end{itemize}    
+\end{frame}
+
+\begin{frame}{Do families internalize these value-added effects}
+
+\begin{wideitemize}
+
+
+\item Strand of the literature that analyzes which metric of school value-added is more associated with families applications. \parencite{abdulkadiroglu_parents_2020, beuermann_what_2023}
+
+\item Somewhat related, it might be interesting to study take-up conditional on offer and compare how this varies by starting school.
+
+\end{wideitemize}
+\end{frame}
+
+
+\begin{frame}{Other outcomes}
+
+Some of the outcomes I intend to include in this analysis are: 
+
+\begin{wideitemize}
+
+
+\item Income measures of application: 
+an income measure of a student application portfolio,  a measure of how income-distance relative to the best (score achievable) school fixing the major choice, a similar measure but fixing the institution choice. 
+
+\item Other application metrics: 
+whether student is applying outside their region,  institution type and quality
+
+\item Enrollment metrics:  enrollment in higher education (on-time and at all), number of program switches. On top of many of the application outcomes that also make sense to study at the enrollment level.
+
+\end{wideitemize}
+\end{frame}
+\end{comment}
+
+
+
+
+\begin{frame}{Thanks!}
+
+\centering{
+    I would really appreciate your feedback ! \\
+    brunem@uchicago.edu
+    }
+    
+\end{frame}
+
+
+\begin{comment}
+    
+
+\begin{frame}{Appendix: Quantifying Gender Gap }
+  \centering
+  \scriptsize   % or \tiny if you need more space
+  \resizebox{0.85\textwidth}{!}{%
+    \begin{tabular}{l*{5}{c}}
+      \toprule
+      \input{tables/stem_gap_table_5models_yearfe_hidden_fragment.tex}
+      \bottomrule
+    \end{tabular}
+  }
+\end{frame}
+
+
+\begin{frame}{Appendix: Quantifying Gender Gap 2}
+
+\begin{wideitemize}
+    \item Just a simple set of models to benchmark the gender gap on this particular outcome space. 
+
+    \item Under these models, gender gap can be measured to be between 1.66 and 4.26 STEM content share percentage points.
+
+    \item Depending on the model we can translate this as female students applying into STEM as if they had 85 fewer math points (model 1) or 316 fewer math points (model 4) for those girls who did not take the science exam. SD of Math scores is 225. 
+    
+    
+\end{wideitemize}
+\end{frame}
+
+\end{comment}
+
+
+\begin{comment}
+\begin{frame}{A more ambitious version of this paper}
+
+\begin{wideitemize}
+
+\item Surveying  graduating  students could help unpack the mechanism behind potential school effects (e.g. information on returns; non-tested skills; confidence/role-models/taste formation, etc. )
+
+
+\item Integrate students who do not move between schools in the paper / estimation. There is a promising econometrics literature for this. 
+
+
+\item STEM Gender Gap literature emphasizes relative achievement on particular classes as an important part of the decision. Would it be necessary/ good to add these elements to the paper? 
+
+
+\end{wideitemize}
+\end{frame}
+
+
+\begin{frame}{Females are underrepresented in STEM programs all over the world}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.65\linewidth]{figures/oecd_gender_gap.png}
+    \caption{(Card and Payne 2021)}
+    \label{fig:enter-label}
+\end{figure}
+
+\end{frame}
+
+
+\begin{frame}{Females apply less to STEM programs in Chile 2022-25}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.9\linewidth]{figures/descriptive_hist_outcome.png}
+    \caption{Avg. STEM content on college application by gender.}
+    \label{fig:hist_outcome}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Males apply less in Chile 2022-25}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.9\linewidth]{figures/descriptive_hist_outcome_w_0s.png}
+    \caption{Avg. STEM content on college application by gender, including 0s}
+    \label{fig:hist_outcome}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}{Females apply less to STEM programs in Chile even conditional on scores}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.9\linewidth]{figures/math_stem_gender_plot.png}
+    \caption{Avg. STEM content on college application by math achievement and gender.}
+    \label{fig:hist_outcome}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}{Largest differences for non-STEM girls that end up with high math score}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.88\linewidth]{figures/math_stem_gender_science_exam_plot.png}
+    \caption{Avg. STEM content on college application by math achievement, gender and science exam decision}
+    \label{fig:hist_outcome}
+\end{figure}
+\end{frame}
+
+
+
+\begin{frame}{Motivation}
+\begin{wideitemize}
+
+\item Minimum wage is obviously important in labor/public given welfare and efficiency concerns.
+\item Subject of political discussion and recent changes. More than 138 US state-level increases between 1979 and 2016.
+\item Literature has usually focused on particular sets of workers (e.g. cannonical Card and Krueger 1994 use fast-food employees), teen employment or narrowly around around new boundary.
+
+\item This paper propose: increasing the scope to all workers, while also disaggregating effect by income level bin.
+    
+\end{wideitemize}
+\end{frame}
+
+%\begin{frame}{Related Literature}
+    
+%\end{frame}
+
+\begin{frame}{Intuition: Bunching}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.65\linewidth]{figures/mw_fig1.png}
+    %\caption{Caption}
+    \label{fig:enter-label}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}{Intuition: Bunching, details}
+\begin{wideitemize}
+
+\item By comparing distributions before and after, no need to guess/model counterfactual distribution. Instead, Differences-in-Differences approach that relies on parallel trends assumption with respect to other control states not treated at that moment.
+
+\item "Missing jobs" $(\Delta b)$ missing mass below MW.
+\item "Excess jobs" $(\Delta a)$  new mas above MW.
+
+\item Overall employment effect $ = \Delta e = \Delta a + \Delta b$
+
+\item Note that not all the moved mass is lying right after new boundary.
+
+\end{wideitemize}
+\end{frame}
+
+
+\begin{frame}{Wage Spillover}
+\begin{wideitemize}
+    
+
+\item Authors argue is important to consider potential wage spillover, induced by increased bargaining power for workers, as well as keeping within-firm hierarchy. 
+
+\item At the same time, they argue that MW is unlikely to have important effects on the upper tail of the wage distribution despite theoretical labor-labor substitution given low share of production given by MW workers.
+
+\item \tiny{"\textbf{Minimum wage workers’ share in overall
+ production is very small (around 2\% in the United States)}, reasonable calibrations of a neoclassical model would suggest very
+ small upper-tail effects. For example, if we consider an elasticity
+ of substitution between high- and low-wage workers of around
+ 1.4 based on Katz and Murphy (1992), and an output demand
+ elasticity of around 1 based on Aaronson and French (2007), \textbf{the
+ implied upper-tail employment elasticity with respect to the minimum wage would be around 0.006."}}
+
+
+\end{wideitemize}    
+\end{frame}
+
+
+\section{Data and Methodology}
+
+
+
+\begin{frame}{Data and Sample}
+\begin{wideitemize}
+    
+\item 138 state-level minimum wage events between 1979 and 2016 where: i) at least 0.25\$ increase and ii) "directly affecting" (binding for?) at least 2\% of workers.
+
+\item Data from "individual-level NBER Merged Outgoing Rotation Group of the Current Population Survey for 1979–2016 (NBER CPS merged ORG data)". This is basically a version of the CPS that is particularly detailed on earnings (e.g. hourly wages, weekly earnings, overtime pay). Data collected monthly in a 4-8-4 rotation. Data is publicly available and has population weights.
+
+
+\end{wideitemize}
+\end{frame}
+
+
+
+\begin{frame}{Empirical Implementation}
+\begin{wideitemize}
+
+
+\item Let $s$ index states, $t$ quarters. Define $j$ bins of 0.25\$ as unit of analysis. This allows to estimate effects of the minimum wage at each bin $j$. 
+
+    \item E is employment and N is population. Ratio is employment share per bin. 
+
+ \begin{equation}
+    \frac{E_{sjt}}{N_{st}} = \sum_{\tau = -3}^4 \sum_{k=-4}^{17} \alpha_{\tau  k} I_{sjt}^{\tau k} + \mu_{sj} + \rho_{jt} + \Omega_{sjt} + u_{sjt}
+\end{equation}
+    
+
+    \item Note treatment effect ($\alpha)$ estimated at the event study relative year ($\tau)$ dollar (k) level. Details in next slide. 
+
+    \item $\mu_{sj},  \rho_{jt}$  fixed effects (state-bin) (bin-quarter).  $\Omega_{sjt}$ controls for small or federal increases.
+    
+
+\end{wideitemize}    
+\end{frame}
+
+
+\begin{frame}{Empirical Implementation 2}
+ \begin{equation}
+    \frac{E_{sjt}}{N_{st}} = \sum_{\tau = -3}^4 \sum_{k=-4}^{17} \alpha_{\tau  k} I_{sjt}^{\tau k} + \mu_{sj} + \rho_{jt} + \Omega_{sjt} + u_{sjt}  \nonumber \end{equation}
+\begin{wideitemize}
+
+\item $\tau$ indexes year relative to MW change. $\tau = 0$ is the quarter of treatment and the next 3 quarters.
+
+\item $k$ is dollar counter relative to the new-minimum wage. \\
+{\tiny"For instance, k = 0 represents the four \$0.25 bins between MW and MW
+ + \$0.99 and k = −1 is a “below” bin with wages paying between
+ MW−\$0.01 and MW −\$1.00."}
+
+\item Basically every bin in a state that increased their minimum wage is considered treated for the next 4 years with flexible treatment effects ($\alpha_{\tau k}$) that vary over time and at a dollar distance from the new MW. 
+
+\end{wideitemize}
+\end{frame}
+
+
+\begin{frame}{Mapping estimation to intuition}
+\begin{wideitemize}
+
+\item Change in jobs under MW (jobs lost) between event date -1 and $\tau$ given by Diff-in-Diff* estimate $\sum_{k=-4}^{-1} \alpha_{\tau,k} - \sum_{k=-4}^{-1} \alpha_{-1, k}$
+
+\item Similarly, jobs created are $\sum_{k=0}^{\bar{W} - MW}  \alpha_{\tau,k} - \sum_{k=0}^{\bar{W} - MW} \alpha_{-1, k}$. 
+
+\item They end up choosing bounds -4 and $\overline{W} = MW + 4$ arguing that effects should be mostly local.
+
+\item Normalizing by pre-t total employment-to-population ratio ($\overline{EPOP_{-1}}$):
+
+\item $\Delta b_\tau = \frac{\sum_{k=-4}^{-1} \alpha_{\tau,k} - \sum_{k=-4}^{-1} \alpha_{-1, k}}{\overline{EPOP_{-1}}}  \quad \Delta a_\tau = \frac{\sum_{k=0}^{4} \alpha_{\tau,k} - \sum_{k=0}^{4} \alpha_{-1, k}}{\overline{EPOP_{-1}}}   $  
+
+\item $b = \frac{1}{5} \sum_{\tau = 0}^4 \Delta b_\tau 
+ \quad a = \frac{1}{5} \sum_{\tau = 0}^4 \Delta a_\tau$, \\ similarly we can define $\alpha_k$ by averaging $\alpha_{\tau k}$
+
+\end{wideitemize}
+\end{frame}
+
+
+\begin{frame}{Other objects constructed}
+\begin{wideitemize}
+
+\item Remember now $\Delta e = \Delta a + \Delta b$ a percentage of baseline employment.
+
+\item Employment elasticity = $\frac{\% \Delta Total Employment}{\% \Delta MW} = \frac{\Delta a + \Delta b}{\% \Delta MW}$
+
+\item \%$\Delta AffectedEmployment$ = \%$\Delta e$ = $\frac{\Delta a + \Delta b}{\overline{b}_{-1}}$
+
+\item Average wages:  $\overline{w}_{-1} = \frac{\overline{wb}_{-1}}{\overline{b}_{-1}}$, $w = \frac{\overline{wb}_{-1} + \Delta wb}{\overline{b}_{-1} + \Delta e}$
+
+\item Effect on (average) wages = \%$\Delta AffectedWage$ = \% $\Delta w$ = $\frac{w}{\overline{w}_{-1}} -1$
+
+\item Employment elasticity with respect to own-wage ("labor demand elasticity" in a competitive market) = $\frac{\%\Delta AffectedEmployment}{\%\Delta AffectedWage} = \frac{1}{\% \Delta w}   \frac{\Delta a + \Delta b}{\overline{b}_{-1}}$
+
+
+\item No Spillover wage effect =  \% $\Delta w_{\text{no spillover}}$ = $\frac{\sum_{k = -4}^{-1} k (\alpha_k - \alpha_{-1, k}) }{\overline{wb}_{-1}}$ 
+
+\end{wideitemize}
+\end{frame}
+
+
+
+\section{Results}
+
+
+\begin{frame}{Impact of Minimum Wages on the Wage Distribution}
+
+Average employment effect in the 5-year post treatment. X-axis is k
+
+ \begin{figure}
+    \centering
+    \includegraphics[width=0.55\linewidth]{figures/mw_fig2.png}
+    %\caption{Caption}
+    \label{fig:enter-label}
+\end{figure}
+
+\end{frame}
+
+
+\begin{frame}{Table: Impact of Minimum Wages on the Wage Distribution}
+
+ \begin{figure}
+    \centering
+    \includegraphics[width=0.65\linewidth]{figures/mw_tab1.png}
+    %\caption{Caption}
+    \label{fig:enter-label}
+\end{figure}
+
+\end{frame}
+
+
+
+\begin{frame}{Impact of Minimum Wages on Jobs Over Time}
+
+$\Delta a$ and $\Delta b$ over time. 
+
+ \begin{figure}
+    \centering
+    \includegraphics[width=0.65\linewidth]{figures/mw_fig3.png}
+    %\caption{Caption}
+    \label{fig:enter-label}
+\end{figure}
+
+\end{frame}
+
+
+\begin{frame}{Heterogeneity: Impact of Minimum Wages by Demographic Group}
+
+ \begin{figure}
+    \centering
+    \includegraphics[width=0.85\linewidth]{figures/mw_tab2.png}
+    %\caption{Caption}
+    \label{fig:enter-label}
+\end{figure}
+
+\end{frame}
+
+
+\begin{frame}{Heterogeneity: Impact of Minimum Wages by Sector}
+
+ \begin{figure}
+    \centering
+    \includegraphics[width=0.85\linewidth]{figures/mw_tab3.png}
+    %\caption{Caption}
+    \label{fig:enter-label}
+\end{figure}
+
+\end{frame}
+
+
+\begin{frame}{Wage Spillover by Work Status}
+
+ \begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{figures/mw_fig4.png}
+    %\caption{Caption}
+    \label{fig:enter-label}
+\end{figure}
+
+\end{frame}
+
+
+
+\begin{frame}{Wage Spillover by Group}
+
+ \begin{figure}
+    \centering
+    \includegraphics[width=0.55\linewidth]{figures/mw_tab4.png}
+    %\caption{Caption}
+    \label{fig:enter-label}
+\end{figure}
+
+\end{frame}
+
+
+
+
+\section{Conclusion}
+
+
+\begin{frame}{Conclusion}
+\begin{wideitemize}
+
+\item Comprehensive and detailed study of effects of minimum wage changes, pooling over multiple policy changes and allowing for effects across the income distribution and time varying.
+
+\item Robust no effects on unemployment, or even slight increase on employment. $\Delta a$ and $\Delta b$ almost perfectly offsetting each other.
+
+\item Little heterogeneity on employment effect across demographic groups. Tradable and manufacturing are suggested to have negative employment effects, while employment seems to increase on retail. 
+
+
+\item Interesting evidence on spillover effects to workers slightly above the minimum wage. Up to 40\% of the total effect, with some heterogeneity across demographics and industries.
+    
+\end{wideitemize}
+\end{frame}
+
+
+%\begin{frame}{Thanks!}
+
+%\centering{
+%    I would really appreciate your feedback ! \\
+%    brunem@uchicago.edu
+%    }
+    
+%\end{frame}
+
+
+%\begin{frame}{Expected results across job types}
+    
+%\end{frame}
+
+
+
+
+%\section{Conclusion}
+
+
+%\begin{frame}{ List }
+%    \begin{wideitemize}
+%        \item[] Outside item
+%         \bigskip
+%        \begin{wideitemize}
+%            \item Inside item
+%        \end{wideitemize}
+%    \end{wideitemize}
+%\end{frame}
+
+\begin{frame}{Related Literature: Major Choice and Schools}
+\footnotesize
+\begin{wideitemize}
+
+
+\item \textbf{Major choice.} Field choice materially affects earnings. (\cite{kirkeboen_field_2016}) Expectations about returns and perceived ability matter, but substantial heterogeneity in major-specific (often unobserved) tastes remains. (\cite{hastings_informed_2016}; \cite{wiswall_determinants_2015}) Contextual influences—local labor markets, sibling/neighbor college outcomes—also shift choices. (\cite{blom_investment_2021}; \cite{altmejd_o_2021}; \cite{avdeev_spillovers_2024}) \textbf{The role of schools, a crucial part of a student's context has not been analyzed yet.}
+
+\item \textbf{Causal effect of schools.} Oversubscribed school lotteries provide exogenous access to high-demand schools. Canonical studies focus on academic outcomes (test scores, graduation) (\cite{angrist_stand_2016}); \cite{abdulkadiroglu_elite_2014}) ; some examine non-academic outcomes (teen pregnancy, incarceration). (\cite{beuermann_what_2023}) \textbf{Major choice has been largely unexplored under this framework and representative nation-wide samples are rare on this literature}
+
+
+\end{wideitemize}
+\end{frame}
+
+
+    \begin{frame}{Related Literature: the STEM Gender Gap}
+\footnotesize
+\begin{wideitemize}
+
+
+\item \textbf{Gender differences and the STEM gap.} Females are less likely to enroll in, stay in, and graduate from STEM programs. ( \cite{card_high_2021}; \cite{astorne-figari_are_2019}; \cite{blau_gender_2017}) Research has identified how some elements such as comparative advantage/high-school rank (\cite{delaney_high_2021}; \cite{goulas_comparative_2024}) or instructor's gender (\cite{carrell_sex_2010}) play a differential role across genders, thus feeding on these differences. Some interventions highlight the role that mentors can play too. (\cite{porter_gender_2020}) \textbf{I investigate the role of schools. Arguably, a more salient and transformative experience than those studied so far by the literature}
+
+
+\end{wideitemize}
+\end{frame}
+
+
+
+\end{comment}
+
+
+
+
+\end{document}
+
