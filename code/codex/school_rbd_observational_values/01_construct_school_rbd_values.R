@@ -23,6 +23,10 @@ school_definition <- "most_time_RBD"
 gender_var <- "GEN_ALU"
 male_gender_code <- 1
 female_gender_code <- 2
+age_var <- "EDAD_ALU"
+min_age <- 12
+max_age <- 16
+# EDAD_ALU is interpreted here as age in grade 8.
 
 score_year_var <- "psu_year"
 raw_score_outcomes <- c(
@@ -96,6 +100,7 @@ control_vars <- c(
 gender_gap_base_outcomes <- c("z_year_math_max", "stem_enrollment_m1")
 gender_gap_control_terms <- control_terms[control_terms != "factor(GEN_ALU)"]
 gender_gap_control_vars <- setdiff(control_vars, gender_var)
+gender_gap_interacted_control_terms <- setdiff(gender_gap_control_terms, "factor(COD_COM_ALU)")
 gender_gap_prefix <- "gender_gap"
 
 low_count_threshold <- 20L
@@ -367,6 +372,7 @@ compute_raw_gender_gap <- function(data,
 estimate_gender_gap_value_added <- function(data,
                                             outcome,
                                             controls,
+                                            interacted_controls,
                                             control_vars,
                                             female_var = "female_indicator",
                                             outcome_name = paste(gender_gap_prefix, outcome, sep = "__")) {
@@ -406,16 +412,24 @@ estimate_gender_gap_value_added <- function(data,
   }
 
   controls_rhs <- paste(controls, collapse = " + ")
+  interacted_rhs <- paste(interacted_controls, collapse = " + ")
   model_formula <- as.formula(
     paste0(
       outcome,
       " ~ ",
       controls_rhs,
-      " + ",
-      female_var,
-      ":(",
-      controls_rhs,
-      ") | school_gender_fe"
+      if (nzchar(interacted_rhs)) {
+        paste0(
+          " + ",
+          female_var,
+          ":(",
+          interacted_rhs,
+          ")"
+        )
+      } else {
+        ""
+      },
+      " | school_gender_fe"
     )
   )
 
@@ -494,7 +508,7 @@ setFixest_nthreads(0)
 
 df <- read_csv(input_path, show_col_types = FALSE)
 
-stop_if_missing(df, c(school_var, control_vars), "Main input")
+stop_if_missing(df, c(school_var, control_vars, age_var), "Main input")
 
 student_id_var <- if ("mrun" %in% names(df)) {
   "mrun"
@@ -515,7 +529,13 @@ if (!is.na(student_id_var) && anyDuplicated(df[[student_id_var]]) > 0) {
 
 analytic <- df %>%
   mutate(school_rbd = as.numeric(.data[[school_var]])) %>%
-  filter(!is.na(school_rbd), school_rbd > 0)
+  filter(
+    !is.na(school_rbd),
+    school_rbd > 0,
+    !is.na(.data[[age_var]]),
+    .data[[age_var]] >= min_age,
+    .data[[age_var]] <= max_age
+  )
 
 analytic <- analytic %>%
   mutate(female_indicator = standardize_gender_indicator(.data[[gender_var]]))
@@ -600,6 +620,7 @@ gender_gap_controlled_values <- map_dfr(gender_gap_outcomes, function(outcome_na
     data = analytic,
     outcome = outcome_name,
     controls = gender_gap_control_terms,
+    interacted_controls = gender_gap_interacted_control_terms,
     control_vars = gender_gap_control_vars
   )
 })

@@ -1,9 +1,9 @@
 ####################################
-#data_wd        <-  "C:/Users/xd-br/Dropbox/causal_schools"
-#code_output_wd <-  "C:/Users/xd-br/Desktop/PhD/Research/causal_schools"
+data_wd        <-  "C:/Users/xd-br/Dropbox/causal_schools"
+code_output_wd <-  "C:/Users/xd-br/Desktop/PhD/Research/causal_schools"
 
-data_wd <- "C:/Users/brunem/Dropbox/causal_schools"
-code_output_wd <-  "C:/Users/brunem/Research/causal_schools"
+#data_wd <- "C:/Users/brunem/Dropbox/causal_schools"
+#code_output_wd <-  "C:/Users/brunem/Research/causal_schools"
 
 #Datawd (Dropbox) 
 setwd(data_wd)
@@ -87,6 +87,7 @@ read_matricula_data <- function(year) {
 
 mat_2017_gr8 <-  read_matricula_data(2017) %>% 
   filter(COD_GRADO == 8) %>% 
+  filter(COD_ENSE == 110) %>% 
   select(MRUN, AGNO,
          GEN_ALU, FEC_NAC_ALU, EDAD_ALU, # EDAD_ALU will be kept only if present
          COD_COM_ALU,NOM_COM_ALU, COD_REG_ALU)
@@ -94,6 +95,7 @@ mat_2017_gr8 <-  read_matricula_data(2017) %>%
 
 mat_2018_gr8 <-  read_matricula_data(2018) %>% 
   filter(COD_GRADO == 8) %>% 
+  filter(COD_ENSE == 110) %>% 
   select(MRUN, AGNO,
          GEN_ALU, FEC_NAC_ALU, EDAD_ALU, # EDAD_ALU will be kept only if present
          COD_COM_ALU,NOM_COM_ALU, COD_REG_ALU)
@@ -101,13 +103,15 @@ mat_2018_gr8 <-  read_matricula_data(2018) %>%
 
 mat_2019_gr8 <-  read_matricula_data(2019) %>% 
   filter(COD_GRADO == 8) %>% 
-  select(MRUN, AGNO,
+  filter(COD_ENSE == 110) %>% 
+    select(MRUN, AGNO,
          GEN_ALU, FEC_NAC_ALU, EDAD_ALU, # EDAD_ALU will be kept only if present
          COD_COM_ALU,NOM_COM_ALU, COD_REG_ALU)
 
 
 mat_2020_gr8 <-  read_matricula_data(2020) %>% 
   filter(COD_GRADO == 8) %>% 
+  filter(COD_ENSE == 110) %>% 
   select(MRUN, AGNO,
          GEN_ALU, FEC_NAC_ALU, EDAD_ALU, # EDAD_ALU will be kept only if present
          COD_COM_ALU,NOM_COM_ALU, COD_REG_ALU)
