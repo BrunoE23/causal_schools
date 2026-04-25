@@ -11,6 +11,10 @@
 ## Data workflow
 - Never modify anything that is in the data/raw folder of a project.
 - Unless modifying a script that exports data to data/clean, code should not modify existing databases there. Creating new databases on data/clean is fine and encouraged if necessary.  
+- Store reusable derived data objects, analysis CSVs, and diagnostic CSVs in the project's clean data area, usually `data/clean/`.
+- Store exploratory or analysis figures in the repository output figures area, usually `output/figures/<task_name>/`.
+- Store paper-ready tables, especially `.tex` tables meant for manuscripts, in the repository output tables area, usually `output/tables/<task_name>/`.
+- Do not put paper `.tex` tables in `data/clean/`. Do not put ordinary analysis CSVs in `output/tables/` unless they are temporary companions to paper table generation.
 
 ## Code location
 - Place new Codex-written code in `code/codex/` by default.

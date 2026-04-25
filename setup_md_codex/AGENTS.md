@@ -6,6 +6,7 @@ This file defines how Codex should work in this repository.
 - Personal defaults: `PROFILE.md`
 - Process defaults: `WORKFLOW.md`
 - Project context: `project_overview.md`
+- Project memory structure: `project_memory/layer_structure.md`
 - Repository-specific constraints in this file override generic defaults when needed.
 
 ## Default Intent
@@ -14,6 +15,7 @@ This file defines how Codex should work in this repository.
 
 ## Operating Instructions
 - Follow the workflow in `WORKFLOW.md`.
+- For substantial tasks, use the memory structure in `project_memory/layer_structure.md`: stable facts in `project_documentation.md`, live issues in `issues.md`, and resolved rationale in `decisions/`.
 - Keep edits small, scoped, and reversible.
 - Prefer ASCII unless the file already requires Unicode.
 - Use explicit paths and commands in explanations.

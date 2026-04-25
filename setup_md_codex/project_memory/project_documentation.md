@@ -31,6 +31,273 @@ This means:
 
 This convention may change later, but for now it is the convention used in the tracking databases.
 
+## RBD Metadata Handling
+
+`RBD` should generally be treated as the school identifier, but metadata attached to an `RBD` is not always unique or stable in raw files.
+
+Important distinction:
+- The fact that `GRUPO_DEPENDENCIA`, `CODIGO_REGION`, `CODIGO_COMUNA`, or similar metadata changes does not by itself prove that `RBD` is unstable.
+- It means the metadata associated with an `RBD` may vary within or across years because of administrative changes, coding differences, data errors, or source-file inconsistencies.
+
+When constructing school-year summaries, do not collapse outcomes by `RBD` and then join back `distinct(RBD, metadata...)`. If there is more than one metadata row per `RBD`, this can duplicate already-collapsed school-year rows.
+
+Preferred pattern:
+- Summarize outcomes and metadata in the same `group_by(RBD, year)` or equivalent school-year aggregation.
+- For metadata fields, use an explicit rule such as first non-missing value, modal value, or a separately cleaned school directory.
+- Write diagnostics that flag metadata conflicts rather than treating them as evidence that `RBD` itself is unusable.
+
+See `decisions/2026-04-24-rbd-metadata-handling.md` for the rationale behind the current task-level rule.
+
+## School RBD Observational Values
+
+The current school-level observational-value workflow lives in:
+
+- `code/codex/school_rbd_observational_values/01_construct_school_rbd_values.R`
+- `code/codex/school_rbd_observational_values/02_visualize_school_rbd_values.R`
+
+The input file for the constructor is:
+
+- `data/clean/univ_gr8_df.csv`
+
+The main school definition is:
+
+- `school_rbd = most_time_RBD`
+
+This is currently the default school object for the observational-value exercise. If the project later changes to a different school definition, that should be treated as a substantive change in estimand rather than a small coding detail.
+
+### Main Construction Logic
+
+The observational-value task constructs school-level measures for both score outcomes and higher-education enrollment or field outcomes.
+
+For each school-outcome pair, the constructor currently produces:
+
+- a raw school value
+- an adjusted school value based on individual-level regressions with school fixed effects
+
+The main adjusted object is intentionally student-level and does not use school-level regressions on demographic shares.
+
+### Outcomes Currently Built
+
+Score outcomes are built from PSU or PAES-style score variables in `univ_gr8_df.csv`.
+
+The raw score variables currently considered are:
+
+- `math_max`
+- `leng_max`
+- `leng_math_total`
+- `hist_max`
+- `scien_max`
+- `math2_max`
+
+Because score scales differ across years, the constructor also creates two transformed versions of each score outcome:
+
+- `scale1000_*`: older 850-scale years are multiplied by `1000 / 850`
+- `z_year_*`: scores are standardized within `psu_year`
+
+For pooled score comparisons across years, the current preferred object is the `z_year_*` family, especially `z_year_math_max`.
+
+Higher-education outcomes are built from:
+
+- `field_reclassified_m1`
+- `field_reclassified_ml`
+- existing binary field indicators such as `f_science_m1`, `f_eng_m1`, and related `*_ml` versions
+
+The current main enrollment outcome for STEM-style summaries is:
+
+- `stem_enrollment_m1`
+
+### Raw School Values
+
+For a generic outcome `Y`, the raw school value is:
+
+- the simple mean of `Y` among students assigned to that `school_rbd`
+
+This is stored as:
+
+- `raw_mean`
+
+The constructor also creates centered versions:
+
+- `raw_mean_centered`: subtract the national school-level mean of `raw_mean`
+- `raw_mean_centered_student`: subtract the national student-weighted mean of `raw_mean`
+
+These are different objects. The first is appropriate when each school should count equally. The second is appropriate when larger schools should count more.
+
+### Adjusted School Values
+
+The adjusted school value is estimated from an individual-level fixed-effects regression of the form:
+
+`outcome ~ controls | school_rbd`
+
+The current control set is:
+
+- `factor(cohort_gr8)`
+- `factor(GEN_ALU)`
+- `factor(COD_COM_ALU)`
+- `z_sim_mat_4to`
+- `z_sim_leng_4to`
+
+Interpretation of the controls:
+
+- `cohort_gr8` adjusts for cohort differences
+- `GEN_ALU` adjusts for gender differences
+- `COD_COM_ALU` is the student's comuna, not the school's comuna
+- `z_sim_mat_4to` and `z_sim_leng_4to` adjust for prior achievement
+
+Important current restriction:
+
+- `income_decile` is intentionally excluded because it is currently messy and not yet clean enough for use as a control
+
+The school fixed effect from this regression is stored as:
+
+- `controlled_value_added`
+
+This fixed effect is not automatically on the same level scale as the raw mean, so the constructor also stores centered or shifted versions:
+
+- `controlled_value_added_centered`: subtract the national school-level mean of the school fixed effect
+- `controlled_value_added_centered_student`: subtract the national student-weighted mean of the school fixed effect
+- `controlled_adjusted_mean`: raw national outcome mean plus `controlled_value_added_centered`
+- `controlled_adjusted_mean_student`: regression-sample outcome mean plus `controlled_value_added_centered_student`
+
+The centered fixed-effect versions are useful for school-to-school comparison. The adjusted-mean versions are more interpretable when raw and adjusted values need to be read on the same outcome scale.
+
+### Sample Size Flags
+
+The constructor uses a low-count threshold of `20`.
+
+It currently records:
+
+- `n_students_school`
+- `n_students_outcome`
+- `n_students_regression`
+- `n_students_regression_total`
+- `low_outcome_count`
+- `missing_controlled_value`
+
+This allows downstream work to separate "true missing" from "estimated with a thin sample."
+
+## School Gender-Gap Measures
+
+The constructor now also builds school-level gender-gap objects for:
+
+- `z_year_math_max`
+- `stem_enrollment_m1`
+
+These are stored as separate outcomes:
+
+- `gender_gap__z_year_math_max`
+- `gender_gap__stem_enrollment_m1`
+
+The corresponding `outcome_family` is:
+
+- `gender_gap`
+
+### Gender Coding
+
+The current coding used in `univ_gr8_df.csv` is treated as:
+
+- `GEN_ALU == 1`: boys
+- `GEN_ALU == 2`: girls
+
+The constructor converts this into:
+
+- `female_indicator = 1` for girls
+- `female_indicator = 0` for boys
+
+Any other value is treated as missing for the gender-gap exercise.
+
+### Raw Gender Gap
+
+For each school and each supported outcome, the raw gender gap is:
+
+- girls' mean outcome minus boys' mean outcome within the same school
+
+This is stored in the generic raw-value fields for the gender-gap outcomes:
+
+- `raw_mean`
+- `raw_mean_centered`
+- `raw_mean_centered_student`
+
+For gender-gap rows, these fields should be interpreted as "raw girl-minus-boy gap" rather than as a raw level of the underlying outcome.
+
+### Adjusted Gender Gap
+
+The adjusted gender gap is designed to let controls work flexibly by gender.
+
+The current procedure does not force boys and girls to have the same control slopes. Instead, it estimates a pooled regression with:
+
+- school-by-gender fixed effects
+- gender-interacted controls for cohort and prior achievement
+- a common, non-interacted comuna control
+
+Operationally, the constructor creates:
+
+- `school_gender_fe = paste0(school_rbd, "__", gender_group)`
+
+where `gender_group` is either `girl` or `boy`.
+
+The adjusted model is then:
+
+`outcome ~ controls + female_indicator:(controls) | school_gender_fe`
+
+where `controls` currently means:
+
+- `factor(cohort_gr8)`
+- `factor(COD_COM_ALU)`
+- `z_sim_mat_4to`
+- `z_sim_leng_4to`
+
+Note that `factor(GEN_ALU)` is omitted from the gender-gap model because gender is already built into the school-by-gender fixed effects and the gender-specific control interactions.
+
+The current interaction rule is:
+
+- interact `factor(cohort_gr8)`
+- interact `z_sim_mat_4to`
+- interact `z_sim_leng_4to`
+- do not interact `factor(COD_COM_ALU)`
+
+So comuna is treated as a shared control, while cohort and prior achievement are allowed to work differently by gender.
+
+Interpretation:
+
+- each school has a boys fixed effect
+- each school has a girls fixed effect
+- the adjusted gender-gap school value is the girls fixed effect minus the boys fixed effect
+
+That difference is stored as:
+
+- `controlled_value_added`
+
+For gender-gap rows, this field should be read as:
+
+- adjusted girl-minus-boy school gap after flexible control adjustment
+
+As with the level outcomes, centered versions are also stored:
+
+- `controlled_value_added_centered`
+- `controlled_value_added_centered_student`
+
+For gender-gap rows, the "adjusted mean" fields are currently just the same adjusted gap carried through for convenience:
+
+- `controlled_adjusted_mean`
+- `controlled_adjusted_mean_student`
+
+These are not school-level predicted score levels. They are adjusted gender-gap objects.
+
+### Gender-Gap Counts and Flags
+
+For gender-gap outcomes, the constructor also stores:
+
+- `n_girls_outcome`
+- `n_boys_outcome`
+- `n_girls_regression`
+- `n_boys_regression`
+- `low_gender_count`
+
+`low_gender_count` is triggered when the smaller of the boys or girls outcome counts is below the current threshold of `20`.
+
+This matters especially for sparse outcomes such as STEM enrollment, where a school can easily have a usable overall sample but a noisy gender-specific gap.
+
 ## Current Research Priority
 
 The current project priority is to measure causal effects of schools on higher-education field choice and causal effects of schools on academic scores as two central outcome objects.
