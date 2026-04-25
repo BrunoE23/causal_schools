@@ -1,0 +1,2193 @@
+---
+title: "Proyect_Bruno_Tarea_1"
+author: "Enzo Aravena"
+format: html
+editor: visual
+editor_options: 
+  chunk_output_type: console
+---
+
+## Reading the data
+
+```{r}
+library(tidyverse)
+library(readr)
+```
+
+
+```{r}
+ArchivoC_Adm2020 <- read_csv("Data/ArchivoC_Adm2020.csv")
+ArchivoC_Adm2019 <- read_csv("Data/ArchivoC_Adm2019.csv")
+ArchivoC_Adm2018 <- read_csv("Data/ArchivoC_Adm2018.csv")
+ArchivoC_Adm2017 <- read_csv("Data/ArchivoC_Adm2017.csv")
+ArchivoC_Adm2016 <- read_csv("Data/ArchivoC_Adm2016.csv")
+ArchivoC_Adm2015 <- read_csv("Data/ArchivoC_Adm2015.csv")
+ArchivoC_Adm2014 <- read_csv("Data/ArchivoC_Adm2014.csv")
+ArchivoC_Adm2013 <- read_csv("Data/ArchivoC_Adm2013.csv")
+ArchivoC_Adm2012 <- read_csv("Data/ArchivoC_Adm2012.csv")
+
+```
+
+## Delimiter
+
+```{r}
+
+
+Adm2020 <- ArchivoC_Adm2020 <- read_delim("Data/ArchivoC_Adm2020.csv", 
+                               delim = ";")
+Adm2019 <- ArchivoC_Adm2019 <- read_delim("Data/ArchivoC_Adm2019.csv", 
+                               delim = ";")
+Adm2018 <- ArchivoC_Adm2018 <- read_delim("Data/ArchivoC_Adm2018.csv", 
+                               delim = ";")
+Adm2017 <- ArchivoC_Adm2017 <- read_delim("Data/ArchivoC_Adm2017.csv", 
+                               delim = ";")
+Adm2016 <- ArchivoC_Adm2016 <- read_delim("Data/ArchivoC_Adm2016.csv", 
+                               delim = ";")
+Adm2015 <- ArchivoC_Adm2015 <- read_delim("Data/ArchivoC_Adm2015.csv", 
+                               delim = ";")
+Adm2014 <- ArchivoC_Adm2014 <- read_delim("Data/ArchivoC_Adm2014.csv", delim = ";")
+Adm2013 <- ArchivoC_Adm2013 <- read_delim("Data/ArchivoC_Adm2013.csv", delim = ";")
+Adm2012 <- ArchivoC_Adm2012 <- read_delim("Data/ArchivoC_Adm2012.csv", delim = ";")
+```
+
+```{r}
+Adm2013 <- ArchivoC_Adm2013 <- read_delim("Data/ArchivoC_Adm2013.csv", delim = ";")
+Adm2012 <- ArchivoC_Adm2012 <- read_delim("Data/ArchivoC_Adm2012.csv", delim = ";")
+```
+
+
+
+## 2020 (where 0 are treated as NA)
+
+```{r}
+Adm2020_na <- Adm2020 %>%
+  mutate(
+    LENG_ACTUAL = na_if(LENG_ACTUAL, 0),
+    MATE_ACTUAL = na_if(MATE_ACTUAL, 0),
+    HCSO_ACTUAL = na_if(HCSO_ACTUAL, 0),
+    CIEN_ACTUAL = na_if(CIEN_ACTUAL, 0),
+    PTJE_NEM = na_if(PTJE_NEM, 0)
+  )
+```
+
+
+```{r}
+glimpse(Adm2020_na)
+
+Adm2020_na %>%
+  group_by(RBD) %>%
+  summarise(count_LENG = sum(!is.na(LENG_ACTUAL)))
+```
+
+
+```{r}
+Adm2020_na <- Adm2020_na %>% 
+  filter(SITUACION_EGRESO == 1)
+Adm2020_na <- Adm2020_na %>% 
+  select(ID_aux, RBD, GRUPO_DEPENDENCIA, CODIGO_REGION, CODIGO_COMUNA, LENG_ACTUAL, MATE_ACTUAL, HCSO_ACTUAL, CIEN_ACTUAL, PTJE_NEM)
+
+Adm2020_na_grouped <- Adm2020_na %>%
+  group_by(RBD) %>% 
+  summarise(
+    avg_LENG_ACTUAL = mean(LENG_ACTUAL, na.rm = TRUE),
+    avg_MATE_ACTUAL = mean(MATE_ACTUAL, na.rm = TRUE),
+    avg_HCSO_ACTUAL = mean(HCSO_ACTUAL, na.rm = TRUE),
+    avg_CIEN_ACTUAL = mean(CIEN_ACTUAL, na.rm = TRUE),
+    avg_PTJE_NEM = mean(PTJE_NEM, na.rm = TRUE),
+    LENG_ACTUAL_p10 = quantile(LENG_ACTUAL, 0.10, na.rm = TRUE),
+    LENG_ACTUAL_p25 = quantile(LENG_ACTUAL, 0.25, na.rm = TRUE),
+    LENG_ACTUAL_MEDIAN = quantile(LENG_ACTUAL, 0.50, na.rm = TRUE),
+    LENG_ACTUAL_p75 = quantile(LENG_ACTUAL, 0.75, na.rm = TRUE),
+    LENG_ACTUAL_p90 = quantile(LENG_ACTUAL, 0.90, na.rm = TRUE),
+    MATE_ACTUAL_p10 = quantile(MATE_ACTUAL, 0.10, na.rm = TRUE),
+    MATE_ACTUAL_p25 = quantile(MATE_ACTUAL, 0.25, na.rm = TRUE),
+    MATE_ACTUAL_MEDIAN = quantile(MATE_ACTUAL, 0.50, na.rm = TRUE),
+    MATE_ACTUAL_p75 = quantile(MATE_ACTUAL, 0.75, na.rm = TRUE),
+    MATE_ACTUAL_p90 = quantile(MATE_ACTUAL, 0.90, na.rm = TRUE),
+    HCSO_ACTUAL_p10 = quantile(HCSO_ACTUAL, 0.10, na.rm = TRUE),
+    HCSO_ACTUAL_p25 = quantile(HCSO_ACTUAL, 0.25, na.rm = TRUE),
+    HCSO_ACTUAL_MEDIAN = quantile(HCSO_ACTUAL, 0.50, na.rm = TRUE),
+    HCSO_ACTUAL_p75 = quantile(HCSO_ACTUAL, 0.75, na.rm = TRUE),
+    HCSO_ACTUAL_p90 = quantile(HCSO_ACTUAL, 0.90, na.rm = TRUE),
+    PTJE_NEM_p10 = quantile(PTJE_NEM, 0.10, na.rm = TRUE),
+    PTJE_NEM_p25 = quantile(PTJE_NEM, 0.25, na.rm = TRUE),
+    PTJE_NEM_MEDIAN = quantile(PTJE_NEM, 0.50, na.rm = TRUE),
+    PTJE_NEM_p75 = quantile(PTJE_NEM, 0.75, na.rm = TRUE),
+    PTJE_NEM_p90 = quantile(PTJE_NEM, 0.90, na.rm = TRUE),
+    n_Students_LENG = sum(!is.na(LENG_ACTUAL)),
+    n_Students_MATE = sum(!is.na(MATE_ACTUAL)),
+    n_Students_HCSO = sum(!is.na(HCSO_ACTUAL)),
+    n_Students_CIEN = sum(!is.na(CIEN_ACTUAL)),
+    n_Students_PTJE_NEM = sum(!is.na(PTJE_NEM)),
+    n_Students_RBD = n()
+    )
+Adm2020_na_grouped <- Adm2020_na_grouped %>%
+  left_join(Adm2020_na %>% select(RBD, GRUPO_DEPENDENCIA, CODIGO_REGION, CODIGO_COMUNA) %>% distinct(), by = "RBD")
+
+
+```
+
+
+## 2020 (where 0 are counted in the calculations)
+
+```{r}
+Adm2020 <- Adm2020 %>% 
+  filter(SITUACION_EGRESO == 1)
+
+Adm2020 <- Adm2020 %>% 
+  select(ID_aux, RBD, GRUPO_DEPENDENCIA, CODIGO_REGION, CODIGO_COMUNA, LENG_ACTUAL, MATE_ACTUAL, HCSO_ACTUAL, CIEN_ACTUAL, PTJE_NEM)
+# I want to compute the median per rbd in the columns LENG_ACTUAL, MATE_ACTUAL, HCSO_ACTUAL, CIEN_ACTUAL, PTJE_NEM. I will use the group_by and summarise functions from the dplyr package to do this. I will group by RBD and then compute the mean for each of the columns mentioned above. I will also add a new column that counts the number of students in each RBD group. I also want to compute the percentile 10, 25, 75, and 90 for each of the columns mentioned above. I will use the quantile function from the base R package to do this. I will add new columns for each of the percentiles computed. I will name the columns as follows: LENG_ACTUAL_p10, LENG_ACTUAL_p25, LENG_ACTUAL_MEDIAN, LENG_ACTUAL_p75, LENG_ACTUAL_p90, MATE_ACTUAL_p10, MATE_ACTUAL_p25, MATE_ACTUAL_MEDIAN, MATE_ACTUAL_p75, MATE_ACTUAL_p90, HCSO_ACTUAL_p10, HCSO_ACTUAL_p25, HCSO_ACTUAL_MEDIAN, HCSO_ACTUAL_p75, HCSO_ACTUAL_p90, CIEN_ACTUAL_p10, CIEN_ACTUAL_p25, CIEN_ACTUAL_MEDIAN, CIEN_ACTUAL_p75, CIEN_ACTUAL_p90, PTJE_NEM_p10, PTJE_NEM_p25, PTJE_NEM_MEDIAN, PTJE_NEM_p75, PTJE_NEM_p90.
+
+Adm2020_grouped <- Adm2020 %>% 
+  group_by(RBD) %>% 
+  summarise(
+    avg_LENG_ACTUAL = mean(LENG_ACTUAL, na.rm = TRUE),
+    avg_MATE_ACTUAL = mean(MATE_ACTUAL, na.rm = TRUE),
+    avg_HCSO_ACTUAL = mean(HCSO_ACTUAL, na.rm = TRUE),
+    avg_CIEN_ACTUAL = mean(CIEN_ACTUAL, na.rm = TRUE),
+    avg_PTJE_NEM = mean(PTJE_NEM, na.rm = TRUE),
+    n_Students_RBD = n(),
+    LENG_ACTUAL_p10 = quantile(LENG_ACTUAL, 0.10, na.rm = TRUE),
+    LENG_ACTUAL_p25 = quantile(LENG_ACTUAL, 0.25, na.rm = TRUE),
+    LENG_ACTUAL_MEDIAN = quantile(LENG_ACTUAL, 0.50, na.rm = TRUE),
+    LENG_ACTUAL_p75 = quantile(LENG_ACTUAL, 0.75, na.rm = TRUE),
+    LENG_ACTUAL_p90 = quantile(LENG_ACTUAL, 0.90, na.rm = TRUE),
+    MATE_ACTUAL_p10 = quantile(MATE_ACTUAL, 0.10, na.rm = TRUE),
+    MATE_ACTUAL_p25 = quantile(MATE_ACTUAL, 0.25, na.rm = TRUE),
+    MATE_ACTUAL_MEDIAN = quantile(MATE_ACTUAL, 0.50, na.rm = TRUE),
+    MATE_ACTUAL_p75 = quantile(MATE_ACTUAL, 0.75, na.rm = TRUE),
+    MATE_ACTUAL_p90 = quantile(MATE_ACTUAL, 0.90, na.rm = TRUE),
+    HCSO_ACTUAL_p10 = quantile(HCSO_ACTUAL, 0.10, na.rm = TRUE),
+    HCSO_ACTUAL_p25 = quantile(HCSO_ACTUAL, 0.25, na.rm = TRUE),
+    HCSO_ACTUAL_MEDIAN = quantile(HCSO_ACTUAL, 0.50, na.rm = TRUE),
+    HCSO_ACTUAL_p75 = quantile(HCSO_ACTUAL, 0.75, na.rm = TRUE),
+    HCSO_ACTUAL_p90 = quantile(HCSO_ACTUAL, 0.90, na.rm = TRUE),
+    CIEN_ACTUAL_p10 = quantile(CIEN_ACTUAL, 0.10, na.rm = TRUE),
+    CIEN_ACTUAL_p25 = quantile(CIEN_ACTUAL, 0.25, na.rm = TRUE),
+    CIEN_ACTUAL_MEDIAN = quantile(CIEN_ACTUAL, 0.50, na.rm = TRUE),
+    CIEN_ACTUAL_p75 = quantile(CIEN_ACTUAL, 0.75, na.rm = TRUE),
+    CIEN_ACTUAL_p90 = quantile(CIEN_ACTUAL, 0.90, na.rm = TRUE),
+    PTJE_NEM_p10 = quantile(PTJE_NEM, 0.10, na.rm = TRUE),
+    PTJE_NEM_p25 = quantile(PTJE_NEM, 0.25, na.rm = TRUE),
+    PTJE_NEM_MEDIAN = quantile(PTJE_NEM, 0.50, na.rm = TRUE),
+    PTJE_NEM_p75 = quantile(PTJE_NEM, 0.75, na.rm = TRUE),
+    PTJE_NEM_p90 = quantile(PTJE_NEM, 0.90, na.rm = TRUE)
+    ) 
+
+Adm2020_grouped <- Adm2020_grouped %>% 
+  left_join(Adm2020 %>% select(RBD, GRUPO_DEPENDENCIA, CODIGO_REGION, CODIGO_COMUNA) %>% distinct(), by = "RBD")
+
+```
+
+## 2019 (Where 0 are treated as NA)
+
+```{r}
+Adm2019_na <- Adm2019 %>%
+  mutate(
+    LENG_ACTUAL = na_if(LENG_ACTUAL, 0),
+    MATE_ACTUAL = na_if(MATE_ACTUAL, 0),
+    HCSO_ACTUAL = na_if(HCSO_ACTUAL, 0),
+    CIEN_ACTUAL = na_if(CIEN_ACTUAL, 0),
+    PTJE_NEM = na_if(PTJE_NEM, 0)
+  )
+
+Adm2019_na <- Adm2019_na %>%
+  filter(SITUACION_EGRESO == 1)
+Adm2019_na <- Adm2019_na %>%
+  select(ID_aux, RBD, GRUPO_DEPENDENCIA, CODIGO_REGION, CODIGO_COMUNA, LENG_ACTUAL, MATE_ACTUAL, HCSO_ACTUAL, CIEN_ACTUAL, PTJE_NEM)
+
+Adm2019_na_grouped <- Adm2019_na %>%
+  group_by(RBD) %>%
+  summarise(
+    avg_LENG_ACTUAL = mean(LENG_ACTUAL, na.rm = TRUE),
+    avg_MATE_ACTUAL = mean(MATE_ACTUAL, na.rm = TRUE),
+    avg_HCSO_ACTUAL = mean(HCSO_ACTUAL, na.rm = TRUE),
+    avg_CIEN_ACTUAL = mean(CIEN_ACTUAL, na.rm = TRUE),
+    avg_PTJE_NEM = mean(PTJE_NEM, na.rm = TRUE),
+    LENG_ACTUAL_p10 = quantile(LENG_ACTUAL, 0.10, na.rm = TRUE),
+    LENG_ACTUAL_p25 = quantile(LENG_ACTUAL, 0.25, na.rm = TRUE),
+    LENG_ACTUAL_MEDIAN = quantile(LENG_ACTUAL, 0.50, na.rm = TRUE),
+    LENG_ACTUAL_p75 = quantile(LENG_ACTUAL, 0.75, na.rm = TRUE),
+    LENG_ACTUAL_p90 = quantile(LENG_ACTUAL, 0.90, na.rm = TRUE),
+    MATE_ACTUAL_p10 = quantile(MATE_ACTUAL, 0.10, na.rm = TRUE),
+    MATE_ACTUAL_p25 = quantile(MATE_ACTUAL, 0.25, na.rm = TRUE),
+    MATE_ACTUAL_MEDIAN = quantile(MATE_ACTUAL, 0.50, na.rm = TRUE),
+    MATE_ACTUAL_p75 = quantile(MATE_ACTUAL, 0.75, na.rm = TRUE),
+    MATE_ACTUAL_p90 = quantile(MATE_ACTUAL, 0.90, na.rm = TRUE),
+    HCSO_ACTUAL_p10 = quantile(HCSO_ACTUAL, 0.10, na.rm = TRUE),
+    HCSO_ACTUAL_p25 = quantile(HCSO_ACTUAL, 0.25, na.rm = TRUE),
+    HCSO_ACTUAL_MEDIAN = quantile(HCSO_ACTUAL, 0.50, na.rm = TRUE),
+    HCSO_ACTUAL_p75 = quantile(HCSO_ACTUAL, 0.75, na.rm = TRUE),
+    HCSO_ACTUAL_p90 = quantile(HCSO_ACTUAL, 0.90, na.rm = TRUE),
+    CIEN_ACTUAL_p10 = quantile(CIEN_ACTUAL, 0.10, na.rm = TRUE),
+    CIEN_ACTUAL_p25 = quantile(CIEN_ACTUAL, 0.25, na.rm = TRUE),
+    CIEN_ACTUAL_MEDIAN = quantile(CIEN_ACTUAL, 0.50, na.rm = TRUE),
+    CIEN_ACTUAL_p75 = quantile(CIEN_ACTUAL, 0.75, na.rm = TRUE),
+    CIEN_ACTUAL_p90 = quantile(CIEN_ACTUAL, 0.90, na.rm = TRUE),
+    PTJE_NEM_p10 = quantile(PTJE_NEM, 0.10, na.rm = TRUE),
+    PTJE_NEM_p25 = quantile(PTJE_NEM, 0.25, na.rm = TRUE),
+    PTJE_NEM_MEDIAN = quantile(PTJE_NEM, 0.50, na.rm = TRUE),
+    PTJE_NEM_p75 = quantile(PTJE_NEM, 0.75, na.rm = TRUE),
+    PTJE_NEM_p90 = quantile(PTJE_NEM, 0.90, na.rm = TRUE),
+    n_Students_LENG = sum(!is.na(LENG_ACTUAL)),
+    n_Students_MATE = sum(!is.na(MATE_ACTUAL)),
+    n_Students_HCSO = sum(!is.na(HCSO_ACTUAL)),
+    n_Students_CIEN = sum(!is.na(CIEN_ACTUAL)),
+    n_Students_PTJE_NEM = sum(!is.na(PTJE_NEM)),
+    n_Students_RBD = n()
+    )
+Adm2019_na_grouped <- Adm2019_na_grouped %>%
+  left_join(Adm2019_na %>% select(RBD, GRUPO_DEPENDENCIA, CODIGO_REGION, CODIGO_COMUNA) %>% distinct(), by = "RBD")
+
+
+```
+
+
+
+## 2019 (where 0 are counted in the calculations)
+
+```{r}
+Adm2019 <- Adm2019 %>% 
+  filter(SITUACION_EGRESO == 1)
+
+Adm2019 <- Adm2019 %>% 
+  select(ID_aux, RBD, GRUPO_DEPENDENCIA, CODIGO_REGION, CODIGO_COMUNA, LENG_ACTUAL, MATE_ACTUAL, HCSO_ACTUAL, CIEN_ACTUAL, PTJE_NEM)
+
+Adm2019_grouped <- Adm2019 %>% 
+    group_by(RBD) %>% 
+  summarise(
+    avg_LENG_ACTUAL = mean(LENG_ACTUAL, na.rm = TRUE),
+    avg_MATE_ACTUAL = mean(MATE_ACTUAL, na.rm = TRUE),
+    avg_HCSO_ACTUAL = mean(HCSO_ACTUAL, na.rm = TRUE),
+    avg_CIEN_ACTUAL = mean(CIEN_ACTUAL, na.rm = TRUE),
+    avg_PTJE_NEM = mean(PTJE_NEM, na.rm = TRUE),
+    n_Students_RBD = n(),
+    LENG_ACTUAL_p10 = quantile(LENG_ACTUAL, 0.10, na.rm = TRUE),
+    LENG_ACTUAL_p25 = quantile(LENG_ACTUAL, 0.25, na.rm = TRUE),
+    LENG_ACTUAL_MEDIAN = quantile(LENG_ACTUAL, 0.50, na.rm = TRUE),
+    LENG_ACTUAL_p75 = quantile(LENG_ACTUAL, 0.75, na.rm = TRUE),
+    LENG_ACTUAL_p90 = quantile(LENG_ACTUAL, 0.90, na.rm = TRUE),
+    MATE_ACTUAL_p10 = quantile(MATE_ACTUAL, 0.10, na.rm = TRUE),
+    MATE_ACTUAL_p25 = quantile(MATE_ACTUAL, 0.25, na.rm = TRUE),
+    MATE_ACTUAL_MEDIAN = quantile(MATE_ACTUAL, 0.50, na.rm = TRUE),
+    MATE_ACTUAL_p75 = quantile(MATE_ACTUAL, 0.75, na.rm = TRUE),
+    MATE_ACTUAL_p90 = quantile(MATE_ACTUAL, 0.90, na.rm = TRUE),
+    HCSO_ACTUAL_p10 = quantile(HCSO_ACTUAL, 0.10, na.rm = TRUE),
+    HCSO_ACTUAL_p25 = quantile(HCSO_ACTUAL, 0.25, na.rm = TRUE),
+    HCSO_ACTUAL_MEDIAN = quantile(HCSO_ACTUAL, 0.50, na.rm = TRUE),
+    HCSO_ACTUAL_p75 = quantile(HCSO_ACTUAL, 0.75, na.rm = TRUE),
+    HCSO_ACTUAL_p90 = quantile(HCSO_ACTUAL, 0.90, na.rm = TRUE),
+    CIEN_ACTUAL_p10 = quantile(CIEN_ACTUAL, 0.10, na.rm = TRUE),
+    CIEN_ACTUAL_p25 = quantile(CIEN_ACTUAL, 0.25, na.rm = TRUE),
+    CIEN_ACTUAL_MEDIAN = quantile(CIEN_ACTUAL, 0.50, na.rm = TRUE),
+    CIEN_ACTUAL_p75 = quantile(CIEN_ACTUAL, 0.75, na.rm = TRUE),
+    CIEN_ACTUAL_p90 = quantile(CIEN_ACTUAL, 0.90, na.rm = TRUE),
+    PTJE_NEM_p10 = quantile(PTJE_NEM, 0.10, na.rm = TRUE),
+    PTJE_NEM_p25 = quantile(PTJE_NEM, 0.25, na.rm = TRUE),
+    PTJE_NEM_MEDIAN = quantile(PTJE_NEM, 0.50, na.rm = TRUE),
+    PTJE_NEM_p75 = quantile(PTJE_NEM, 0.75, na.rm = TRUE),
+    PTJE_NEM_p90 = quantile(PTJE_NEM, 0.90, na.rm = TRUE)
+    ) 
+
+Adm2019_grouped <- Adm2019_grouped %>% 
+  left_join(Adm2019 %>% select(RBD, GRUPO_DEPENDENCIA, CODIGO_REGION, CODIGO_COMUNA) %>% distinct(), by = "RBD")
+
+```
+
+## 2018 (where 0 are treated as NA)
+
+```{r}
+Adm2018_na <- Adm2018 %>%
+  mutate(
+    LENG_ACTUAL = na_if(LENG_ACTUAL, 0),
+    MATE_ACTUAL = na_if(MATE_ACTUAL, 0),
+    HCSO_ACTUAL = na_if(HCSO_ACTUAL, 0),
+    CIEN_ACTUAL = na_if(CIEN_ACTUAL, 0),
+    PTJE_NEM = na_if(PTJE_NEM, 0)
+  )
+Adm2018_na <- Adm2018_na %>%
+  filter(SITUACION_EGRESO == 1)
+Adm2018_na <- Adm2018_na %>%
+  select(ID_aux, RBD, GRUPO_DEPENDENCIA, CODIGO_REGION, CODIGO_COMUNA, LENG_ACTUAL, MATE_ACTUAL, HCSO_ACTUAL, CIEN_ACTUAL, PTJE_NEM)
+Adm2018_na_grouped <- Adm2018_na %>%
+  group_by(RBD) %>%
+  summarise(
+    avg_LENG_ACTUAL = mean(LENG_ACTUAL, na.rm = TRUE),
+    avg_MATE_ACTUAL = mean(MATE_ACTUAL, na.rm = TRUE),
+    avg_HCSO_ACTUAL = mean(HCSO_ACTUAL, na.rm = TRUE),
+    avg_CIEN_ACTUAL = mean(CIEN_ACTUAL, na.rm = TRUE),
+    avg_PTJE_NEM = mean(PTJE_NEM, na.rm = TRUE),
+    LENG_ACTUAL_p10 = quantile(LENG_ACTUAL, 0.10, na.rm = TRUE),
+    LENG_ACTUAL_p25 = quantile(LENG_ACTUAL, 0.25, na.rm = TRUE),
+    LENG_ACTUAL_MEDIAN = quantile(LENG_ACTUAL, 0.50, na.rm = TRUE),
+    LENG_ACTUAL_p75 = quantile(LENG_ACTUAL, 0.75, na.rm = TRUE),
+    LENG_ACTUAL_p90 = quantile(LENG_ACTUAL, 0.90, na.rm = TRUE),
+    MATE_ACTUAL_p10 = quantile(MATE_ACTUAL, 0.10, na.rm = TRUE),
+    MATE_ACTUAL_p25 = quantile(MATE_ACTUAL, 0.25, na.rm = TRUE),
+    MATE_ACTUAL_MEDIAN = quantile(MATE_ACTUAL, 0.50, na.rm = TRUE),
+    MATE_ACTUAL_p75 = quantile(MATE_ACTUAL, 0.75, na.rm = TRUE),
+    MATE_ACTUAL_p90 = quantile(MATE_ACTUAL, 0.90, na.rm = TRUE),
+    HCSO_ACTUAL_p10 = quantile(HCSO_ACTUAL, 0.10, na.rm = TRUE),
+    HCSO_ACTUAL_p25 = quantile(HCSO_ACTUAL, 0.25, na.rm = TRUE),
+    HCSO_ACTUAL_MEDIAN = quantile(HCSO_ACTUAL, 0.50, na.rm = TRUE),
+    HCSO_ACTUAL_p75 = quantile(HCSO_ACTUAL, 0.75, na.rm = TRUE),
+    HCSO_ACTUAL_p90 = quantile(HCSO_ACTUAL, 0.90, na.rm = TRUE),
+    CIEN_ACTUAL_p10 = quantile(CIEN_ACTUAL, 0.10, na.rm = TRUE),
+    CIEN_ACTUAL_p25 = quantile(CIEN_ACTUAL, 0.25, na.rm = TRUE),
+    CIEN_ACTUAL_MEDIAN = quantile(CIEN_ACTUAL, 0.50, na.rm = TRUE),
+    CIEN_ACTUAL_p75 = quantile(CIEN_ACTUAL, 0.75, na.rm = TRUE),
+    CIEN_ACTUAL_p90 = quantile(CIEN_ACTUAL, 0.90, na.rm = TRUE),
+    PTJE_NEM_p10 = quantile(PTJE_NEM, 0.10, na.rm = TRUE),
+    PTJE_NEM_p25 = quantile(PTJE_NEM, 0.25, na.rm = TRUE),
+    PTJE_NEM_MEDIAN = quantile(PTJE_NEM, 0.50, na.rm = TRUE),
+    PTJE_NEM_p75 = quantile(PTJE_NEM, 0.75, na.rm = TRUE),
+    PTJE_NEM_p90 = quantile(PTJE_NEM, 0.90, na.rm = TRUE),
+    n_Students_LENG = sum(!is.na(LENG_ACTUAL)),
+    n_Students_MATE = sum(!is.na(MATE_ACTUAL)),
+    n_Students_HCSO = sum(!is.na(HCSO_ACTUAL)),
+    n_Students_CIEN = sum(!is.na(CIEN_ACTUAL)),
+    n_Students_PTJE_NEM = sum(!is.na(PTJE_NEM)),
+    n_Students_RBD = n()
+    )
+
+Adm2018_na_grouped <- Adm2018_na_grouped %>%
+  left_join(Adm2018_na %>% select(RBD, GRUPO_DEPENDENCIA, CODIGO_REGION, CODIGO_COMUNA) %>% distinct(), by = "RBD")
+```
+
+
+## 2018 (where 0 are counted in the calculations)
+
+```{r}
+Adm2018 <- Adm2018 %>% 
+  filter(SITUACION_EGRESO == 1)
+
+Adm2018 <- Adm2018 %>% 
+  select(ID_aux, RBD, GRUPO_DEPENDENCIA, CODIGO_REGION, CODIGO_COMUNA, LENG_ACTUAL, MATE_ACTUAL, HCSO_ACTUAL, CIEN_ACTUAL, PTJE_NEM)
+
+Adm2018_grouped <- Adm2018 %>% 
+    group_by(RBD) %>% 
+  summarise(
+    avg_LENG_ACTUAL = mean(LENG_ACTUAL, na.rm = TRUE),
+    avg_MATE_ACTUAL = mean(MATE_ACTUAL, na.rm = TRUE),
+    avg_HCSO_ACTUAL = mean(HCSO_ACTUAL, na.rm = TRUE),
+    avg_CIEN_ACTUAL = mean(CIEN_ACTUAL, na.rm = TRUE),
+    avg_PTJE_NEM = mean(PTJE_NEM, na.rm = TRUE),
+    n_Students_RBD = n(),
+    LENG_ACTUAL_p10 = quantile(LENG_ACTUAL, 0.10, na.rm = TRUE),
+    LENG_ACTUAL_p25 = quantile(LENG_ACTUAL, 0.25, na.rm = TRUE),
+    LENG_ACTUAL_MEDIAN = quantile(LENG_ACTUAL, 0.50, na.rm = TRUE),
+    LENG_ACTUAL_p75 = quantile(LENG_ACTUAL, 0.75, na.rm = TRUE),
+    LENG_ACTUAL_p90 = quantile(LENG_ACTUAL, 0.90, na.rm = TRUE),
+    MATE_ACTUAL_p10 = quantile(MATE_ACTUAL, 0.10, na.rm = TRUE),
+    MATE_ACTUAL_p25 = quantile(MATE_ACTUAL, 0.25, na.rm = TRUE),
+    MATE_ACTUAL_MEDIAN = quantile(MATE_ACTUAL, 0.50, na.rm = TRUE),
+    MATE_ACTUAL_p75 = quantile(MATE_ACTUAL, 0.75, na.rm = TRUE),
+    MATE_ACTUAL_p90 = quantile(MATE_ACTUAL, 0.90, na.rm = TRUE),
+    HCSO_ACTUAL_p10 = quantile(HCSO_ACTUAL, 0.10, na.rm = TRUE),
+    HCSO_ACTUAL_p25 = quantile(HCSO_ACTUAL, 0.25, na.rm = TRUE),
+    HCSO_ACTUAL_MEDIAN = quantile(HCSO_ACTUAL, 0.50, na.rm = TRUE),
+    HCSO_ACTUAL_p75 = quantile(HCSO_ACTUAL, 0.75, na.rm = TRUE),
+    HCSO_ACTUAL_p90 = quantile(HCSO_ACTUAL, 0.90, na.rm = TRUE),
+    CIEN_ACTUAL_p10 = quantile(CIEN_ACTUAL, 0.10, na.rm = TRUE),
+    CIEN_ACTUAL_p25 = quantile(CIEN_ACTUAL, 0.25, na.rm = TRUE),
+    CIEN_ACTUAL_MEDIAN = quantile(CIEN_ACTUAL, 0.50, na.rm = TRUE),
+    CIEN_ACTUAL_p75 = quantile(CIEN_ACTUAL, 0.75, na.rm = TRUE),
+    CIEN_ACTUAL_p90 = quantile(CIEN_ACTUAL, 0.90, na.rm = TRUE),
+    PTJE_NEM_p10 = quantile(PTJE_NEM, 0.10, na.rm = TRUE),
+    PTJE_NEM_p25 = quantile(PTJE_NEM, 0.25, na.rm = TRUE),
+    PTJE_NEM_MEDIAN = quantile(PTJE_NEM, 0.50, na.rm = TRUE),
+    PTJE_NEM_p75 = quantile(PTJE_NEM, 0.75, na.rm = TRUE),
+    PTJE_NEM_p90 = quantile(PTJE_NEM, 0.90, na.rm = TRUE)
+    ) 
+
+Adm2018_grouped <- Adm2018_grouped %>% 
+  left_join(Adm2018 %>% select(RBD, GRUPO_DEPENDENCIA, CODIGO_REGION, CODIGO_COMUNA) %>% distinct(), by = "RBD")
+
+```
+
+## 2017 (where 0 are treated as NA)
+
+```{r}
+Adm2017_na <- Adm2017 %>%
+  mutate(
+    LENG_ACTUAL = na_if(LENG_ACTUAL, 0),
+    MATE_ACTUAL = na_if(MATE_ACTUAL, 0),
+    HCSO_ACTUAL = na_if(HCSO_ACTUAL, 0),
+    CIEN_ACTUAL = na_if(CIEN_ACTUAL, 0),
+    PTJE_NEM = na_if(PTJE_NEM, 0)
+  )
+Adm2017_na <- Adm2017_na %>%
+  filter(SITUACION_EGRESO == 1)
+Adm2017_na <- Adm2017_na %>%
+  select(ID_aux, RBD, GRUPO_DEPENDENCIA, CODIGO_REGION,
+ CODIGO_COMUNA, LENG_ACTUAL, MATE_ACTUAL, HCSO_ACTUAL, CIEN_ACTUAL, PTJE_NEM)
+Adm2017_na_grouped <- Adm2017_na %>%
+  group_by(RBD) %>%
+  summarise(
+    avg_LENG_ACTUAL = mean(LENG_ACTUAL, na.rm = TRUE),
+    avg_MATE_ACTUAL = mean(MATE_ACTUAL, na.rm = TRUE),
+    avg_HCSO_ACTUAL = mean(HCSO_ACTUAL, na.rm = TRUE),
+    avg_CIEN_ACTUAL = mean(CIEN_ACTUAL, na.rm = TRUE),
+    avg_PTJE_NEM = mean(PTJE_NEM, na.rm = TRUE),
+    LENG_ACTUAL_p10 = quantile(LENG_ACTUAL, 0.10, na.rm = TRUE),
+    LENG_ACTUAL_p25 = quantile(LENG_ACTUAL, 0.25, na.rm = TRUE),
+    LENG_ACTUAL_MEDIAN = quantile(LENG_ACTUAL, 0.50, na.rm = TRUE),
+    LENG_ACTUAL_p75 = quantile(LENG_ACTUAL, 0.75, na.rm = TRUE),
+    LENG_ACTUAL_p90 = quantile(LENG_ACTUAL, 0.90, na.rm = TRUE),
+    MATE_ACTUAL_p10 = quantile(MATE_ACTUAL, 0.10, na.rm = TRUE),
+    MATE_ACTUAL_p25 = quantile(MATE_ACTUAL, 0.25, na.rm = TRUE),
+    MATE_ACTUAL_MEDIAN = quantile(MATE_ACTUAL, 0.50, na.rm = TRUE),
+    MATE_ACTUAL_p75 = quantile(MATE_ACTUAL, 0.75, na.rm = TRUE),
+    MATE_ACTUAL_p90 = quantile(MATE_ACTUAL, 0.90, na.rm = TRUE),
+    HCSO_ACTUAL_p10 = quantile(HCSO_ACTUAL, 0.10, na.rm = TRUE),
+    HCSO_ACTUAL_p25 = quantile(HCSO_ACTUAL, 0.25, na.rm = TRUE),
+    HCSO_ACTUAL_MEDIAN = quantile(HCSO_ACTUAL, 0.50, na.rm = TRUE),
+    HCSO_ACTUAL_p75 = quantile(HCSO_ACTUAL, 0.75, na.rm = TRUE),
+    HCSO_ACTUAL_p90 = quantile(HCSO_ACTUAL, 0.90, na.rm = TRUE),
+    CIEN_ACTUAL_p10 = quantile(CIEN_ACTUAL, 0.10, na.rm = TRUE),
+    CIEN_ACTUAL_p25 = quantile(CIEN_ACTUAL, 0.25, na.rm = TRUE),
+    CIEN_ACTUAL_MEDIAN = quantile(CIEN_ACTUAL, 0.50, na.rm = TRUE),
+    CIEN_ACTUAL_p75 = quantile(CIEN_ACTUAL, 0.75, na.rm = TRUE),
+    CIEN_ACTUAL_p90 = quantile(CIEN_ACTUAL, 0.90, na.rm = TRUE),
+    PTJE_NEM_p10 = quantile(PTJE_NEM, 0.10, na.rm = TRUE),
+    PTJE_NEM_p25 = quantile(PTJE_NEM, 0.25, na.rm = TRUE),
+    PTJE_NEM_MEDIAN = quantile(PTJE_NEM, 0.50, na.rm = TRUE),
+    PTJE_NEM_p75 = quantile(PTJE_NEM, 0.75, na.rm = TRUE),
+    PTJE_NEM_p90 = quantile(PTJE_NEM, 0.90, na.rm = TRUE),
+    n_Students_LENG = sum(!is.na(LENG_ACTUAL)),
+    n_Students_MATE = sum(!is.na(MATE_ACTUAL)),
+    n_Students_HCSO = sum(!is.na(HCSO_ACTUAL)),
+    n_Students_CIEN = sum(!is.na(CIEN_ACTUAL)),
+    n_Students_PTJE_NEM = sum(!is.na(PTJE_NEM)),
+    n_Students_RBD = n()
+    )
+Adm2017_na_grouped <- Adm2017_na_grouped %>%
+  left_join(Adm2017_na %>% select(RBD, GRUPO_DEPENDENCIA, CODIGO_REGION, CODIGO_COMUNA) %>% distinct(), by = "RBD")
+
+```
+
+
+
+## 2017 (where 0 is counted in the calculations)
+
+```{r}
+Adm2017 <- Adm2017 %>% 
+  filter(SITUACION_EGRESO == 1)
+
+Adm2017 <- Adm2017 %>% 
+  select(ID_aux, RBD, GRUPO_DEPENDENCIA, CODIGO_REGION, CODIGO_COMUNA, LENG_ACTUAL, MATE_ACTUAL, HCSO_ACTUAL, CIEN_ACTUAL, PTJE_NEM)
+
+Adm2017_grouped <- Adm2017 %>% 
+    group_by(RBD) %>% 
+  summarise(
+    avg_LENG_ACTUAL = mean(LENG_ACTUAL, na.rm = TRUE),
+    avg_MATE_ACTUAL = mean(MATE_ACTUAL, na.rm = TRUE),
+    avg_HCSO_ACTUAL = mean(HCSO_ACTUAL, na.rm = TRUE),
+    avg_CIEN_ACTUAL = mean(CIEN_ACTUAL, na.rm = TRUE),
+    avg_PTJE_NEM = mean(PTJE_NEM, na.rm = TRUE),
+    n_Students_RBD = n(),
+    LENG_ACTUAL_p10 = quantile(LENG_ACTUAL, 0.10, na.rm = TRUE),
+    LENG_ACTUAL_p25 = quantile(LENG_ACTUAL, 0.25, na.rm = TRUE),
+    LENG_ACTUAL_MEDIAN = quantile(LENG_ACTUAL, 0.50, na.rm = TRUE),
+    LENG_ACTUAL_p75 = quantile(LENG_ACTUAL, 0.75, na.rm = TRUE),
+    LENG_ACTUAL_p90 = quantile(LENG_ACTUAL, 0.90, na.rm = TRUE),
+    MATE_ACTUAL_p10 = quantile(MATE_ACTUAL, 0.10, na.rm = TRUE),
+    MATE_ACTUAL_p25 = quantile(MATE_ACTUAL, 0.25, na.rm = TRUE),
+    MATE_ACTUAL_MEDIAN = quantile(MATE_ACTUAL, 0.50, na.rm = TRUE),
+    MATE_ACTUAL_p75 = quantile(MATE_ACTUAL, 0.75, na.rm = TRUE),
+    MATE_ACTUAL_p90 = quantile(MATE_ACTUAL, 0.90, na.rm = TRUE),
+    HCSO_ACTUAL_p10 = quantile(HCSO_ACTUAL, 0.10, na.rm = TRUE),
+    HCSO_ACTUAL_p25 = quantile(HCSO_ACTUAL, 0.25, na.rm = TRUE),
+    HCSO_ACTUAL_MEDIAN = quantile(HCSO_ACTUAL, 0.50, na.rm = TRUE),
+    HCSO_ACTUAL_p75 = quantile(HCSO_ACTUAL, 0.75, na.rm = TRUE),
+    HCSO_ACTUAL_p90 = quantile(HCSO_ACTUAL, 0.90, na.rm = TRUE),
+    CIEN_ACTUAL_p10 = quantile(CIEN_ACTUAL, 0.10, na.rm = TRUE),
+    CIEN_ACTUAL_p25 = quantile(CIEN_ACTUAL, 0.25, na.rm = TRUE),
+    CIEN_ACTUAL_MEDIAN = quantile(CIEN_ACTUAL, 0.50, na.rm = TRUE),
+    CIEN_ACTUAL_p75 = quantile(CIEN_ACTUAL, 0.75, na.rm = TRUE),
+    CIEN_ACTUAL_p90 = quantile(CIEN_ACTUAL, 0.90, na.rm = TRUE),
+    PTJE_NEM_p10 = quantile(PTJE_NEM, 0.10, na.rm = TRUE),
+    PTJE_NEM_p25 = quantile(PTJE_NEM, 0.25, na.rm = TRUE),
+    PTJE_NEM_MEDIAN = quantile(PTJE_NEM, 0.50, na.rm = TRUE),
+    PTJE_NEM_p75 = quantile(PTJE_NEM, 0.75, na.rm = TRUE),
+    PTJE_NEM_p90 = quantile(PTJE_NEM, 0.90, na.rm = TRUE)
+    ) 
+
+Adm2017_grouped <- Adm2017_grouped %>% 
+  left_join(Adm2017 %>% select(RBD, GRUPO_DEPENDENCIA, CODIGO_REGION, CODIGO_COMUNA) %>% distinct(), by = "RBD")
+
+```
+
+## 2016 (where 0 are treated as NA)
+
+```{r}
+Adm2016_na <- Adm2016 %>%
+  mutate(
+    LENG_ACTUAL = na_if(LENG_ACTUAL, 0),
+    MATE_ACTUAL = na_if(MATE_ACTUAL, 0),
+    HCSO_ACTUAL = na_if(HCSO_ACTUAL, 0),
+    CIEN_ACTUAL = na_if(CIEN_ACTUAL, 0),
+    PTJE_NEM = na_if(PTJE_NEM, 0)
+  )
+
+Adm2016_na <- Adm2016_na %>%
+  filter(SITUACION_EGRESO == 1)
+Adm2016_na <- Adm2016_na %>%
+  select(ID_aux, RBD, GRUPO_DEPENDENCIA, CODIGO_REGION, CODIGO_COMUNA, LENG_ACTUAL, MATE_ACTUAL, HCSO_ACTUAL, CIEN_ACTUAL, PTJE_NEM)
+Adm2016_na_grouped <- Adm2016_na %>%
+  group_by(RBD) %>%
+  summarise(
+    avg_LENG_ACTUAL = mean(LENG_ACTUAL, na.rm = TRUE),
+    avg_MATE_ACTUAL = mean(MATE_ACTUAL, na.rm = TRUE),
+    avg_HCSO_ACTUAL = mean(HCSO_ACTUAL, na.rm = TRUE),
+    avg_CIEN_ACTUAL = mean(CIEN_ACTUAL, na.rm = TRUE),
+    avg_PTJE_NEM = mean(PTJE_NEM, na.rm = TRUE),
+    LENG_ACTUAL_p10 = quantile(LENG_ACTUAL, 0.10, na.rm = TRUE),
+    LENG_ACTUAL_p25 = quantile(LENG_ACTUAL, 0.25, na.rm = TRUE),
+    LENG_ACTUAL_MEDIAN = quantile(LENG_ACTUAL, 0.50, na.rm = TRUE),
+    LENG_ACTUAL_p75 = quantile(LENG_ACTUAL, 0.75, na.rm = TRUE),
+    LENG_ACTUAL_p90 = quantile(LENG_ACTUAL, 0.90, na.rm = TRUE),
+    MATE_ACTUAL_p10 = quantile(MATE_ACTUAL, 0.10, na.rm = TRUE),
+    MATE_ACTUAL_p25 = quantile(MATE_ACTUAL, 0.25, na.rm = TRUE),
+    MATE_ACTUAL_MEDIAN = quantile(MATE_ACTUAL, 0.50, na.rm = TRUE),
+    MATE_ACTUAL_p75 = quantile(MATE_ACTUAL, 0.75, na.rm = TRUE),
+    MATE_ACTUAL_p90 = quantile(MATE_ACTUAL, 0.90, na.rm = TRUE),
+    HCSO_ACTUAL_p10 = quantile(HCSO_ACTUAL, 0.10, na.rm = TRUE),
+    HCSO_ACTUAL_p25 = quantile(HCSO_ACTUAL, 0.25, na.rm = TRUE),
+    HCSO_ACTUAL_MEDIAN = quantile(HCSO_ACTUAL, 0.50, na.rm = TRUE),
+    HCSO_ACTUAL_p75 = quantile(HCSO_ACTUAL, 0.75, na.rm = TRUE),
+    HCSO_ACTUAL_p90 = quantile(HCSO_ACTUAL, 0.90, na.rm = TRUE),
+    CIEN_ACTUAL_p10 = quantile(CIEN_ACTUAL, 0.10, na.rm = TRUE),
+    CIEN_ACTUAL_p25 = quantile(CIEN_ACTUAL, 0.25, na.rm = TRUE),
+    CIEN_ACTUAL_MEDIAN = quantile(CIEN_ACTUAL, 0.50, na.rm = TRUE),
+    CIEN_ACTUAL_p75 = quantile(CIEN_ACTUAL, 0.75, na.rm = TRUE),
+    CIEN_ACTUAL_p90 = quantile(CIEN_ACTUAL, 0.90, na.rm = TRUE),
+    PTJE_NEM_p10 = quantile(PTJE_NEM, 0.10, na.rm = TRUE),
+    PTJE_NEM_p25 = quantile(PTJE_NEM, 0.25, na.rm = TRUE),
+    PTJE_NEM_MEDIAN = quantile(PTJE_NEM, 0.50, na.rm = TRUE),
+    PTJE_NEM_p75 = quantile(PTJE_NEM, 0.75, na.rm = TRUE),
+    PTJE_NEM_p90 = quantile(PTJE_NEM, 0.90, na.rm = TRUE),
+    n_Students_LENG = sum(!is.na(LENG_ACTUAL)),
+    n_Students_MATE = sum(!is.na(MATE_ACTUAL)),
+    n_Students_HCSO = sum(!is.na(HCSO_ACTUAL)),
+    n_Students_CIEN = sum(!is.na(CIEN_ACTUAL)),
+    n_Students_PTJE_NEM = sum(!is.na(PTJE_NEM)),
+    n_Students_RBD = n()
+    )
+Adm2016_na_grouped <- Adm2016_na_grouped %>%
+  left_join(Adm2016_na %>% select(RBD, GRUPO_DEPENDENCIA, CODIGO_REGION, CODIGO_COMUNA) %>% distinct(), by = "RBD")
+
+
+```
+
+## 2016 (where 0 are counted in the calculations)
+
+```{r}
+Adm2016 <- Adm2016 %>% 
+  filter(SITUACION_EGRESO == 1)
+
+## I also just want the features, ID, RBD, GRUPO_DEPENDENCIA,CODIGO_REGION, CODIGO_COMUNA, LENG_ACTUAL, MATE_ACTUAL, HCSO_ACTUAL, CIEN_ACTUAL, PTJE_NEM
+Adm2016 <- Adm2016 %>% 
+  select(ID_aux, RBD, GRUPO_DEPENDENCIA, CODIGO_REGION, CODIGO_COMUNA, LENG_ACTUAL, MATE_ACTUAL, HCSO_ACTUAL, CIEN_ACTUAL, PTJE_NEM)
+
+# i want make groups by RBD and compute the average of Leng_ACTUAL, MATE_ACTUAL, HCSO_ACTUAL, CIEN_ACTUAL, PTJE_NEM for each group.
+Adm2016_grouped <- Adm2016 %>% 
+    group_by(RBD) %>% 
+  summarise(
+    avg_LENG_ACTUAL = mean(LENG_ACTUAL, na.rm = TRUE),
+    avg_MATE_ACTUAL = mean(MATE_ACTUAL, na.rm = TRUE),
+    avg_HCSO_ACTUAL = mean(HCSO_ACTUAL, na.rm = TRUE),
+    avg_CIEN_ACTUAL = mean(CIEN_ACTUAL, na.rm = TRUE),
+    avg_PTJE_NEM = mean(PTJE_NEM, na.rm = TRUE),
+    n_Students_RBD = n(),
+    LENG_ACTUAL_p10 = quantile(LENG_ACTUAL, 0.10, na.rm = TRUE),
+    LENG_ACTUAL_p25 = quantile(LENG_ACTUAL, 0.25, na.rm = TRUE),
+    LENG_ACTUAL_MEDIAN = quantile(LENG_ACTUAL, 0.50, na.rm = TRUE),
+    LENG_ACTUAL_p75 = quantile(LENG_ACTUAL, 0.75, na.rm = TRUE),
+    LENG_ACTUAL_p90 = quantile(LENG_ACTUAL, 0.90, na.rm = TRUE),
+    MATE_ACTUAL_p10 = quantile(MATE_ACTUAL, 0.10, na.rm = TRUE),
+    MATE_ACTUAL_p25 = quantile(MATE_ACTUAL, 0.25, na.rm = TRUE),
+    MATE_ACTUAL_MEDIAN = quantile(MATE_ACTUAL, 0.50, na.rm = TRUE),
+    MATE_ACTUAL_p75 = quantile(MATE_ACTUAL, 0.75, na.rm = TRUE),
+    MATE_ACTUAL_p90 = quantile(MATE_ACTUAL, 0.90, na.rm = TRUE),
+    HCSO_ACTUAL_p10 = quantile(HCSO_ACTUAL, 0.10, na.rm = TRUE),
+    HCSO_ACTUAL_p25 = quantile(HCSO_ACTUAL, 0.25, na.rm = TRUE),
+    HCSO_ACTUAL_MEDIAN = quantile(HCSO_ACTUAL, 0.50, na.rm = TRUE),
+    HCSO_ACTUAL_p75 = quantile(HCSO_ACTUAL, 0.75, na.rm = TRUE),
+    HCSO_ACTUAL_p90 = quantile(HCSO_ACTUAL, 0.90, na.rm = TRUE),
+    CIEN_ACTUAL_p10 = quantile(CIEN_ACTUAL, 0.10, na.rm = TRUE),
+    CIEN_ACTUAL_p25 = quantile(CIEN_ACTUAL, 0.25, na.rm = TRUE),
+    CIEN_ACTUAL_MEDIAN = quantile(CIEN_ACTUAL, 0.50, na.rm = TRUE),
+    CIEN_ACTUAL_p75 = quantile(CIEN_ACTUAL, 0.75, na.rm = TRUE),
+    CIEN_ACTUAL_p90 = quantile(CIEN_ACTUAL, 0.90, na.rm = TRUE),
+    PTJE_NEM_p10 = quantile(PTJE_NEM, 0.10, na.rm = TRUE),
+    PTJE_NEM_p25 = quantile(PTJE_NEM, 0.25, na.rm = TRUE),
+    PTJE_NEM_MEDIAN = quantile(PTJE_NEM, 0.50, na.rm = TRUE),
+    PTJE_NEM_p75 = quantile(PTJE_NEM, 0.75, na.rm = TRUE),
+    PTJE_NEM_p90 = quantile(PTJE_NEM, 0.90, na.rm = TRUE)
+    ) 
+# I want add the column of GRUPO_DEPENDENCIA, CODIGO_REGION, CODIGO_COMUNA to the grouped data frame. I will use the RBD to join the original data frame with the grouped data frame. I will use the left_join function from the dplyr package to do this.
+Adm2016_grouped <- Adm2016_grouped %>% 
+  left_join(Adm2016 %>% select(RBD, GRUPO_DEPENDENCIA, CODIGO_REGION, CODIGO_COMUNA) %>% distinct(), by = "RBD")
+
+```
+
+## 2015 (where 0 is trated as NA)
+
+```{r}
+Adm2015_na <- Adm2015 %>%
+  mutate(
+    LENG_ACTUAL = na_if(LENG_ACTUAL, 0),
+    MATE_ACTUAL = na_if(MATE_ACTUAL, 0),
+    HCSO_ACTUAL = na_if(HCSO_ACTUAL, 0),
+    CIEN_ACTUAL = na_if(CIEN_ACTUAL, 0),
+    PTJE_NEM = na_if(PTJE_NEM, 0)
+  )
+Adm2015_na <- Adm2015_na %>%
+  filter(SITUACION_EGRESO == 1)
+Adm2015_na <- Adm2015_na %>%
+  select(ID_aux, RBD, GRUPO_DEPENDENCIA, CODIGO_REGION, CODIGO_COMUNA, LENG_ACTUAL, MATE_ACTUAL, HCSO_ACTUAL, CIEN_ACTUAL, PTJE_NEM)
+Adm2015_na_grouped <- Adm2015_na %>%
+    group_by(RBD) %>%
+  summarise(
+    avg_LENG_ACTUAL = mean(LENG_ACTUAL, na.rm = TRUE),
+    avg_MATE_ACTUAL = mean(MATE_ACTUAL, na.rm = TRUE),
+    avg_HCSO_ACTUAL = mean(HCSO_ACTUAL, na.rm = TRUE),
+    avg_CIEN_ACTUAL = mean(CIEN_ACTUAL, na.rm = TRUE),
+    avg_PTJE_NEM = mean(PTJE_NEM, na.rm = TRUE),
+    LENG_ACTUAL_p10 = quantile(LENG_ACTUAL, 0.10, na.rm = TRUE),
+    LENG_ACTUAL_p25 = quantile(LENG_ACTUAL, 0.25, na.rm = TRUE),
+    LENG_ACTUAL_MEDIAN = quantile(LENG_ACTUAL, 0.50, na.rm = TRUE),
+    LENG_ACTUAL_p75 = quantile(LENG_ACTUAL, 0.75, na.rm = TRUE),
+    LENG_ACTUAL_p90 = quantile(LENG_ACTUAL, 0.90, na.rm = TRUE),
+    MATE_ACTUAL_p10 = quantile(MATE_ACTUAL, 0.10, na.rm = TRUE),
+    MATE_ACTUAL_p25 = quantile(MATE_ACTUAL, 0.25, na.rm = TRUE),
+    MATE_ACTUAL_MEDIAN = quantile(MATE_ACTUAL, 0.50, na.rm = TRUE),
+    MATE_ACTUAL_p75 = quantile(MATE_ACTUAL, 0.75, na.rm = TRUE),
+    MATE_ACTUAL_p90 = quantile(MATE_ACTUAL, 0.90, na.rm = TRUE),
+    HCSO_ACTUAL_p10 = quantile(HCSO_ACTUAL, 0.10, na.rm = TRUE),
+    HCSO_ACTUAL_p25 = quantile(HCSO_ACTUAL, 0.25, na.rm = TRUE),
+    HCSO_ACTUAL_MEDIAN = quantile(HCSO_ACTUAL, 0.50, na.rm = TRUE),
+    HCSO_ACTUAL_p75 = quantile(HCSO_ACTUAL, 0.75, na.rm = TRUE),
+    HCSO_ACTUAL_p90 = quantile(HCSO_ACTUAL, 0.90, na.rm = TRUE),
+    CIEN_ACTUAL_p10 = quantile(CIEN_ACTUAL, 0.10, na.rm = TRUE),
+    CIEN_ACTUAL_p25 = quantile(CIEN_ACTUAL, 0.25, na.rm = TRUE),
+    CIEN_ACTUAL_MEDIAN = quantile(CIEN_ACTUAL, 0.50, na.rm = TRUE),
+    CIEN_ACTUAL_p75 = quantile(CIEN_ACTUAL, 0.75, na.rm = TRUE),
+    CIEN_ACTUAL_p90 = quantile(CIEN_ACTUAL, 0.90, na.rm = TRUE),
+    PTJE_NEM_p10 = quantile(PTJE_NEM, 0.10, na.rm = TRUE),
+    PTJE_NEM_p25 = quantile(PTJE_NEM, 0.25, na.rm = TRUE),
+    PTJE_NEM_MEDIAN = quantile(PTJE_NEM, 0.50, na.rm = TRUE),
+    PTJE_NEM_p75 = quantile(PTJE_NEM, 0.75, na.rm = TRUE),
+    PTJE_NEM_p90 = quantile(PTJE_NEM, 0.90, na.rm = TRUE),
+    n_Students_LENG = sum(!is.na(LENG_ACTUAL)),
+    n_Students_MATE = sum(!is.na(MATE_ACTUAL)),
+    n_Students_HCSO = sum(!is.na(HCSO_ACTUAL)),
+    n_Students_CIEN = sum(!is.na(CIEN_ACTUAL)),
+    n_Students_PTJE_NEM = sum(!is.na(PTJE_NEM)),
+    n_Students_RBD = n()
+    )
+Adm2015_na_grouped <- Adm2015_na_grouped %>%
+  left_join(Adm2015_na %>% select(RBD, GRUPO_DEPENDENCIA, CODIGO_REGION, CODIGO_COMUNA) %>% distinct(), by = "RBD")
+```
+
+
+
+## 2015 (Where 0 is counted in the calculations)
+
+```{r}
+Adm2015 <- ArchivoC_Adm2015 %>% 
+  filter(SITUACION_EGRESO == 1) %>% 
+  select(ID_aux, RBD, GRUPO_DEPENDENCIA, CODIGO_REGION, CODIGO_COMUNA, LENG_ACTUAL, MATE_ACTUAL, HCSO_ACTUAL, CIEN_ACTUAL, PTJE_NEM)
+
+Adm2015_grouped <- Adm2015 %>% 
+    group_by(RBD) %>% 
+  summarise(
+    avg_LENG_ACTUAL = mean(LENG_ACTUAL, na.rm = TRUE),
+    avg_MATE_ACTUAL = mean(MATE_ACTUAL, na.rm = TRUE),
+    avg_HCSO_ACTUAL = mean(HCSO_ACTUAL, na.rm = TRUE),
+    avg_CIEN_ACTUAL = mean(CIEN_ACTUAL, na.rm = TRUE),
+    avg_PTJE_NEM = mean(PTJE_NEM, na.rm = TRUE),
+    n_Students_RBD = n(),
+    LENG_ACTUAL_p10 = quantile(LENG_ACTUAL, 0.10, na.rm = TRUE),
+    LENG_ACTUAL_p25 = quantile(LENG_ACTUAL, 0.25, na.rm = TRUE),
+    LENG_ACTUAL_MEDIAN = quantile(LENG_ACTUAL, 0.50, na.rm = TRUE),
+    LENG_ACTUAL_p75 = quantile(LENG_ACTUAL, 0.75, na.rm = TRUE),
+    LENG_ACTUAL_p90 = quantile(LENG_ACTUAL, 0.90, na.rm = TRUE),
+    MATE_ACTUAL_p10 = quantile(MATE_ACTUAL, 0.10, na.rm = TRUE),
+    MATE_ACTUAL_p25 = quantile(MATE_ACTUAL, 0.25, na.rm = TRUE),
+    MATE_ACTUAL_MEDIAN = quantile(MATE_ACTUAL, 0.50, na.rm = TRUE),
+    MATE_ACTUAL_p75 = quantile(MATE_ACTUAL, 0.75, na.rm = TRUE),
+    MATE_ACTUAL_p90 = quantile(MATE_ACTUAL, 0.90, na.rm = TRUE),
+    HCSO_ACTUAL_p10 = quantile(HCSO_ACTUAL, 0.10, na.rm = TRUE),
+    HCSO_ACTUAL_p25 = quantile(HCSO_ACTUAL, 0.25, na.rm = TRUE),
+    HCSO_ACTUAL_MEDIAN = quantile(HCSO_ACTUAL, 0.50, na.rm = TRUE),
+    HCSO_ACTUAL_p75 = quantile(HCSO_ACTUAL, 0.75, na.rm = TRUE),
+    HCSO_ACTUAL_p90 = quantile(HCSO_ACTUAL, 0.90, na.rm = TRUE),
+    CIEN_ACTUAL_p10 = quantile(CIEN_ACTUAL, 0.10, na.rm = TRUE),
+    CIEN_ACTUAL_p25 = quantile(CIEN_ACTUAL, 0.25, na.rm = TRUE),
+    CIEN_ACTUAL_MEDIAN = quantile(CIEN_ACTUAL, 0.50, na.rm = TRUE),
+    CIEN_ACTUAL_p75 = quantile(CIEN_ACTUAL, 0.75, na.rm = TRUE),
+    CIEN_ACTUAL_p90 = quantile(CIEN_ACTUAL, 0.90, na.rm = TRUE),
+    PTJE_NEM_p10 = quantile(PTJE_NEM, 0.10, na.rm = TRUE),
+    PTJE_NEM_p25 = quantile(PTJE_NEM, 0.25, na.rm = TRUE),
+    PTJE_NEM_MEDIAN = quantile(PTJE_NEM, 0.50, na.rm = TRUE),
+    PTJE_NEM_p75 = quantile(PTJE_NEM, 0.75, na.rm = TRUE),
+    PTJE_NEM_p90 = quantile(PTJE_NEM, 0.90, na.rm = TRUE)
+    )  %>% left_join(Adm2015 %>% select(RBD, GRUPO_DEPENDENCIA, CODIGO_REGION, CODIGO_COMUNA) %>% distinct(), by = "RBD")
+```
+
+## 2014 (where 0 is counted as NA)
+
+```{r}
+Adm2014_na <- Adm2014 %>%
+  mutate(
+    LENG_ACTUAL = na_if(LENG_ACTUAL, 0),
+    MATE_ACTUAL = na_if(MATE_ACTUAL, 0),
+    HCSO_ACTUAL = na_if(HCSO_ACTUAL, 0),
+    CIEN_ACTUAL = na_if(CIEN_ACTUAL, 0),
+    PTJE_NEM = na_if(PTJE_NEM, 0)
+  )
+Adm2014_na <- Adm2014_na %>%
+  filter(SITUACION_EGRESO == 1)
+Adm2014_na <- Adm2014_na %>%
+  select(ID_aux, RBD, GRUPO_DEPENDENCIA, CODIGO_REGION, CODIGO_COMUNA, LENG_ACTUAL, MATE_ACTUAL, HCSO_ACTUAL, CIEN_ACTUAL, PTJE_NEM)
+Adm2014_na_grouped <- Adm2014_na %>%
+    group_by(RBD) %>%
+  summarise(
+    avg_LENG_ACTUAL = mean(LENG_ACTUAL, na.rm = TRUE),
+    avg_MATE_ACTUAL = mean(MATE_ACTUAL, na.rm = TRUE),
+    avg_HCSO_ACTUAL = mean(HCSO_ACTUAL, na.rm = TRUE),
+    avg_CIEN_ACTUAL = mean(CIEN_ACTUAL, na.rm = TRUE),
+    avg_PTJE_NEM = mean(PTJE_NEM, na.rm = TRUE),
+    LENG_ACTUAL_p10 = quantile(LENG_ACTUAL, 0.10, na.rm = TRUE),
+    LENG_ACTUAL_p25 = quantile(LENG_ACTUAL, 0.25, na.rm = TRUE),
+    LENG_ACTUAL_MEDIAN = quantile(LENG_ACTUAL, 0.50, na.rm = TRUE),
+    LENG_ACTUAL_p75 = quantile(LENG_ACTUAL, 0.75, na.rm = TRUE),
+    LENG_ACTUAL_p90 = quantile(LENG_ACTUAL, 0.90, na.rm = TRUE),
+    MATE_ACTUAL_p10 = quantile(MATE_ACTUAL, 0.10, na.rm = TRUE),
+    MATE_ACTUAL_p25 = quantile(MATE_ACTUAL, 0.25, na.rm = TRUE),
+    MATE_ACTUAL_MEDIAN = quantile(MATE_ACTUAL, 0.50, na.rm = TRUE),
+    MATE_ACTUAL_p75 = quantile(MATE_ACTUAL, 0.75, na.rm = TRUE),
+    MATE_ACTUAL_p90 = quantile(MATE_ACTUAL, 0.90, na.rm = TRUE),
+    HCSO_ACTUAL_p10 = quantile(HCSO_ACTUAL, 0.10, na.rm = TRUE),
+    HCSO_ACTUAL_p25 = quantile(HCSO_ACTUAL, 0.25, na.rm = TRUE),
+    HCSO_ACTUAL_MEDIAN = quantile(HCSO_ACTUAL, 0.50, na.rm = TRUE),
+    HCSO_ACTUAL_p75 = quantile(HCSO_ACTUAL, 0.75, na.rm = TRUE),
+    HCSO_ACTUAL_p90 = quantile(HCSO_ACTUAL, 0.90, na.rm = TRUE),
+    CIEN_ACTUAL_p10 = quantile(CIEN_ACTUAL, 0.10, na.rm = TRUE),
+    CIEN_ACTUAL_p25 = quantile(CIEN_ACTUAL, 0.25, na.rm = TRUE),
+    CIEN_ACTUAL_MEDIAN = quantile(CIEN_ACTUAL, 0.50, na.rm = TRUE),
+    CIEN_ACTUAL_p75 = quantile(CIEN_ACTUAL, 0.75, na.rm = TRUE),
+    CIEN_ACTUAL_p90 = quantile(CIEN_ACTUAL, 0.90, na.rm = TRUE),
+    PTJE_NEM_p10 = quantile(PTJE_NEM, 0.10, na.rm = TRUE),
+    PTJE_NEM_p25 = quantile(PTJE_NEM, 0.25, na.rm = TRUE),
+    PTJE_NEM_MEDIAN = quantile(PTJE_NEM, 0.50, na.rm = TRUE),
+    PTJE_NEM_p75 = quantile(PTJE_NEM, 0.75, na.rm = TRUE),
+    PTJE_NEM_p90 = quantile(PTJE_NEM, 0.90, na.rm = TRUE),
+    n_Students_LENG = sum(!is.na(LENG_ACTUAL)),
+    n_Students_MATE = sum(!is.na(MATE_ACTUAL)),
+    n_Students_HCSO = sum(!is.na(HCSO_ACTUAL)),
+    n_Students_CIEN = sum(!is.na(CIEN_ACTUAL)),
+    n_Students_PTJE_NEM = sum(!is.na(PTJE_NEM)),
+    n_Students_RBD = n()
+    )
+Adm2014_na_grouped <- Adm2014_na_grouped %>%
+  left_join(Adm2014_na %>% select(RBD, GRUPO_DEPENDENCIA, CODIGO_REGION, CODIGO_COMUNA) %>% distinct(), by = "RBD")
+```
+
+
+## 2014 (where 0 is counted in the calculations)
+
+```{r}
+Adm2014 <- ArchivoC_Adm2014 %>% 
+  filter(SITUACION_EGRESO == 1) %>% 
+  select(ID_aux, RBD, GRUPO_DEPENDENCIA, CODIGO_REGION, CODIGO_COMUNA, LENG_ACTUAL, MATE_ACTUAL, HCSO_ACTUAL, CIEN_ACTUAL, PTJE_NEM)
+
+Adm2014_grouped <- Adm2014 %>% 
+    group_by(RBD) %>% 
+  summarise(
+    avg_LENG_ACTUAL = mean(LENG_ACTUAL, na.rm = TRUE),
+    avg_MATE_ACTUAL = mean(MATE_ACTUAL, na.rm = TRUE),
+    avg_HCSO_ACTUAL = mean(HCSO_ACTUAL, na.rm = TRUE),
+    avg_CIEN_ACTUAL = mean(CIEN_ACTUAL, na.rm = TRUE),
+    avg_PTJE_NEM = mean(PTJE_NEM, na.rm = TRUE),
+    n_Students_RBD = n(),
+    LENG_ACTUAL_p10 = quantile(LENG_ACTUAL, 0.10, na.rm = TRUE),
+    LENG_ACTUAL_p25 = quantile(LENG_ACTUAL, 0.25, na.rm = TRUE),
+    LENG_ACTUAL_MEDIAN = quantile(LENG_ACTUAL, 0.50, na.rm = TRUE),
+    LENG_ACTUAL_p75 = quantile(LENG_ACTUAL, 0.75, na.rm = TRUE),
+    LENG_ACTUAL_p90 = quantile(LENG_ACTUAL, 0.90, na.rm = TRUE),
+    MATE_ACTUAL_p10 = quantile(MATE_ACTUAL, 0.10, na.rm = TRUE),
+    MATE_ACTUAL_p25 = quantile(MATE_ACTUAL, 0.25, na.rm = TRUE),
+    MATE_ACTUAL_MEDIAN = quantile(MATE_ACTUAL, 0.50, na.rm = TRUE),
+    MATE_ACTUAL_p75 = quantile(MATE_ACTUAL, 0.75, na.rm = TRUE),
+    MATE_ACTUAL_p90 = quantile(MATE_ACTUAL, 0.90, na.rm = TRUE),
+    HCSO_ACTUAL_p10 = quantile(HCSO_ACTUAL, 0.10, na.rm = TRUE),
+    HCSO_ACTUAL_p25 = quantile(HCSO_ACTUAL, 0.25, na.rm = TRUE),
+    HCSO_ACTUAL_MEDIAN = quantile(HCSO_ACTUAL, 0.50, na.rm = TRUE),
+    HCSO_ACTUAL_p75 = quantile(HCSO_ACTUAL, 0.75, na.rm = TRUE),
+    HCSO_ACTUAL_p90 = quantile(HCSO_ACTUAL, 0.90, na.rm = TRUE),
+    CIEN_ACTUAL_p10 = quantile(CIEN_ACTUAL, 0.10, na.rm = TRUE),
+    CIEN_ACTUAL_p25 = quantile(CIEN_ACTUAL, 0.25, na.rm = TRUE),
+    CIEN_ACTUAL_MEDIAN = quantile(CIEN_ACTUAL, 0.50, na.rm = TRUE),
+    CIEN_ACTUAL_p75 = quantile(CIEN_ACTUAL, 0.75, na.rm = TRUE),
+    CIEN_ACTUAL_p90 = quantile(CIEN_ACTUAL, 0.90, na.rm = TRUE),
+    PTJE_NEM_p10 = quantile(PTJE_NEM, 0.10, na.rm = TRUE),
+    PTJE_NEM_p25 = quantile(PTJE_NEM, 0.25, na.rm = TRUE),
+    PTJE_NEM_MEDIAN = quantile(PTJE_NEM, 0.50, na.rm = TRUE),
+    PTJE_NEM_p75 = quantile(PTJE_NEM, 0.75, na.rm = TRUE),
+    PTJE_NEM_p90 = quantile(PTJE_NEM, 0.90, na.rm = TRUE)
+    )  %>% left_join(Adm2014 %>% select(RBD, GRUPO_DEPENDENCIA, CODIGO_REGION, CODIGO_COMUNA) %>% distinct(), by = "RBD")
+
+```
+
+## 2013 (where 0 is treated as NA)
+
+```{r}
+Adm2013_na <- Adm2013 %>%
+  mutate(
+    LENG_ACTUAL = na_if(LENG_ACTUAL, 0),
+    MATE_ACTUAL = na_if(MATE_ACTUAL, 0),
+    HCSO_ACTUAL = na_if(HCSO_ACTUAL, 0),
+    CIEN_ACTUAL = na_if(CIEN_ACTUAL, 0),
+    PTJE_NEM = na_if(PTJE_NEM, 0)
+  ) %>%
+  filter(SITUACION_EGRESO == 1) %>%
+  select(ID_aux, RBD, GRUPO_DEPENDENCIA, CODIGO_REGION, CODIGO_COMUNA,
+         LENG_ACTUAL, MATE_ACTUAL, HCSO_ACTUAL, CIEN_ACTUAL, PTJE_NEM)
+
+Adm2013_na_grouped <- Adm2013_na %>%   # ✅ fixed here
+  group_by(RBD) %>% 
+  summarise(
+    avg_LENG_ACTUAL = mean(LENG_ACTUAL, na.rm = TRUE),
+    avg_MATE_ACTUAL = mean(MATE_ACTUAL, na.rm = TRUE),
+    avg_HCSO_ACTUAL = mean(HCSO_ACTUAL, na.rm = TRUE),
+    avg_CIEN_ACTUAL = mean(CIEN_ACTUAL, na.rm = TRUE),
+    avg_PTJE_NEM = mean(PTJE_NEM, na.rm = TRUE),
+    LENG_ACTUAL_p10 = quantile(LENG_ACTUAL, 0.10, na.rm = TRUE),
+    LENG_ACTUAL_p25 = quantile(LENG_ACTUAL, 0.25, na.rm = TRUE),
+    LENG_ACTUAL_MEDIAN = quantile(LENG_ACTUAL, 0.50, na.rm = TRUE),
+    LENG_ACTUAL_p75 = quantile(LENG_ACTUAL, 0.75, na.rm = TRUE),
+    LENG_ACTUAL_p90 = quantile(LENG_ACTUAL, 0.90, na.rm = TRUE),
+    MATE_ACTUAL_p10 = quantile(MATE_ACTUAL, 0.10, na.rm = TRUE),
+    MATE_ACTUAL_p25 = quantile(MATE_ACTUAL, 0.25, na.rm = TRUE),
+    MATE_ACTUAL_MEDIAN = quantile(MATE_ACTUAL, 0.50, na.rm = TRUE),
+    MATE_ACTUAL_p75 = quantile(MATE_ACTUAL, 0.75, na.rm = TRUE),
+    MATE_ACTUAL_p90 = quantile(MATE_ACTUAL, 0.90, na.rm = TRUE),
+    HCSO_ACTUAL_p10 = quantile(HCSO_ACTUAL, 0.10, na.rm = TRUE),
+    HCSO_ACTUAL_p25 = quantile(HCSO_ACTUAL, 0.25, na.rm = TRUE),
+    HCSO_ACTUAL_MEDIAN = quantile(HCSO_ACTUAL, 0.50, na.rm = TRUE),
+    HCSO_ACTUAL_p75 = quantile(HCSO_ACTUAL, 0.75, na.rm = TRUE),
+    HCSO_ACTUAL_p90 = quantile(HCSO_ACTUAL, 0.90, na.rm = TRUE),
+    CIEN_ACTUAL_p10 = quantile(CIEN_ACTUAL, 0.10, na.rm = TRUE),
+    CIEN_ACTUAL_p25 = quantile(CIEN_ACTUAL, 0.25, na.rm = TRUE),
+    CIEN_ACTUAL_MEDIAN = quantile(CIEN_ACTUAL, 0.50, na.rm = TRUE),
+    CIEN_ACTUAL_p75 = quantile(CIEN_ACTUAL, 0.75, na.rm = TRUE),
+    CIEN_ACTUAL_p90 = quantile(CIEN_ACTUAL, 0.90, na.rm = TRUE),
+    PTJE_NEM_p10 = quantile(PTJE_NEM, 0.10, na.rm = TRUE),
+    PTJE_NEM_p25 = quantile(PTJE_NEM, 0.25, na.rm = TRUE),
+    PTJE_NEM_MEDIAN = quantile(PTJE_NEM, 0.50, na.rm = TRUE),
+    PTJE_NEM_p75 = quantile(PTJE_NEM, 0.75, na.rm = TRUE),
+    PTJE_NEM_p90 = quantile(PTJE_NEM, 0.90, na.rm = TRUE),
+    n_Students_LENG = sum(!is.na(LENG_ACTUAL)),
+    n_Students_MATE = sum(!is.na(MATE_ACTUAL)),
+    n_Students_HCSO = sum(!is.na(HCSO_ACTUAL)),
+    n_Students_CIEN = sum(!is.na(CIEN_ACTUAL)),
+    n_Students_PTJE_NEM = sum(!is.na(PTJE_NEM)),
+    n_Students_RBD = n()
+  )
+
+Adm2013_na_grouped <- Adm2013_na_grouped %>%
+  left_join(
+    Adm2013_na %>%
+      select(RBD, GRUPO_DEPENDENCIA, CODIGO_REGION, CODIGO_COMUNA) %>%
+      distinct(),
+    by = "RBD"
+  )
+```
+
+
+## 2013 (where 0 is counted in the calculations)
+
+```{r}
+Adm2013 <- ArchivoC_Adm2013 %>% 
+  filter(SITUACION_EGRESO == 1) %>% 
+  select(ID_aux, RBD, GRUPO_DEPENDENCIA, CODIGO_REGION, CODIGO_COMUNA, LENG_ACTUAL, MATE_ACTUAL, HCSO_ACTUAL, CIEN_ACTUAL, PTJE_NEM)
+
+Adm2013_grouped <- Adm2013 %>% 
+    group_by(RBD) %>% 
+  summarise(
+    avg_LENG_ACTUAL = mean(LENG_ACTUAL, na.rm = TRUE),
+    avg_MATE_ACTUAL = mean(MATE_ACTUAL, na.rm = TRUE),
+    avg_HCSO_ACTUAL = mean(HCSO_ACTUAL, na.rm = TRUE),
+    avg_CIEN_ACTUAL = mean(CIEN_ACTUAL, na.rm = TRUE),
+    avg_PTJE_NEM = mean(PTJE_NEM, na.rm = TRUE),
+    n_Students_RBD = n(),
+    LENG_ACTUAL_p10 = quantile(LENG_ACTUAL, 0.10, na.rm = TRUE),
+    LENG_ACTUAL_p25 = quantile(LENG_ACTUAL, 0.25, na.rm = TRUE),
+    LENG_ACTUAL_MEDIAN = quantile(LENG_ACTUAL, 0.50, na.rm = TRUE),
+    LENG_ACTUAL_p75 = quantile(LENG_ACTUAL, 0.75, na.rm = TRUE),
+    LENG_ACTUAL_p90 = quantile(LENG_ACTUAL, 0.90, na.rm = TRUE),
+    MATE_ACTUAL_p10 = quantile(MATE_ACTUAL, 0.10, na.rm = TRUE),
+    MATE_ACTUAL_p25 = quantile(MATE_ACTUAL, 0.25, na.rm = TRUE),
+    MATE_ACTUAL_MEDIAN = quantile(MATE_ACTUAL, 0.50, na.rm = TRUE),
+    MATE_ACTUAL_p75 = quantile(MATE_ACTUAL, 0.75, na.rm = TRUE),
+    MATE_ACTUAL_p90 = quantile(MATE_ACTUAL, 0.90, na.rm = TRUE),
+    HCSO_ACTUAL_p10 = quantile(HCSO_ACTUAL, 0.10, na.rm = TRUE),
+    HCSO_ACTUAL_p25 = quantile(HCSO_ACTUAL, 0.25, na.rm = TRUE),
+    HCSO_ACTUAL_MEDIAN = quantile(HCSO_ACTUAL, 0.50, na.rm = TRUE),
+    HCSO_ACTUAL_p75 = quantile(HCSO_ACTUAL, 0.75, na.rm = TRUE),
+    HCSO_ACTUAL_p90 = quantile(HCSO_ACTUAL, 0.90, na.rm = TRUE),
+    CIEN_ACTUAL_p10 = quantile(CIEN_ACTUAL, 0.10, na.rm = TRUE),
+    CIEN_ACTUAL_p25 = quantile(CIEN_ACTUAL, 0.25, na.rm = TRUE),
+    CIEN_ACTUAL_MEDIAN = quantile(CIEN_ACTUAL, 0.50, na.rm = TRUE),
+    CIEN_ACTUAL_p75 = quantile(CIEN_ACTUAL, 0.75, na.rm = TRUE),
+    CIEN_ACTUAL_p90 = quantile(CIEN_ACTUAL, 0.90, na.rm = TRUE),
+    PTJE_NEM_p10 = quantile(PTJE_NEM, 0.10, na.rm = TRUE),
+    PTJE_NEM_p25 = quantile(PTJE_NEM, 0.25, na.rm = TRUE),
+    PTJE_NEM_MEDIAN = quantile(PTJE_NEM, 0.50, na.rm = TRUE),
+    PTJE_NEM_p75 = quantile(PTJE_NEM, 0.75, na.rm = TRUE),
+    PTJE_NEM_p90 = quantile(PTJE_NEM, 0.90, na.rm = TRUE)
+    ) %>% left_join(Adm2013 %>% select(RBD, GRUPO_DEPENDENCIA, CODIGO_REGION, CODIGO_COMUNA) %>% distinct(), by = "RBD")
+```
+
+## 2012 (where 0 is treated as NA)'
+
+```{r}
+Adm2012_na <- Adm2012 %>%
+  mutate(
+    LENG_ACTUAL = na_if(LENG_ACTUAL, 0),
+    MATE_ACTUAL = na_if(MATE_ACTUAL, 0),
+    HCSO_ACTUAL = na_if(HCSO_ACTUAL, 0),
+    CIEN_ACTUAL = na_if(CIEN_ACTUAL, 0),
+    PTJE_NEM = na_if(PTJE_NEM, 0)
+  ) %>%
+  filter(SITUACION_EGRESO == 1) %>%
+  select(ID_aux, RBD, GRUPO_DEPENDENCIA, CODIGO_REGION, CODIGO_COMUNA,
+         LENG_ACTUAL, MATE_ACTUAL, HCSO_ACTUAL, CIEN_ACTUAL, PTJE_NEM)
+
+Adm2012_na_grouped <- Adm2012_na %>%   # ✅ fixed here
+  group_by(RBD) %>% 
+  summarise(
+    avg_LENG_ACTUAL = mean(LENG_ACTUAL, na.rm = TRUE),
+    avg_MATE_ACTUAL = mean(MATE_ACTUAL, na.rm = TRUE),
+    avg_HCSO_ACTUAL = mean(HCSO_ACTUAL, na.rm = TRUE),
+    avg_CIEN_ACTUAL = mean(CIEN_ACTUAL, na.rm = TRUE),
+    avg_PTJE_NEM = mean(PTJE_NEM, na.rm = TRUE),
+    LENG_ACTUAL_p10 = quantile(LENG_ACTUAL, 0.10, na.rm = TRUE),
+    LENG_ACTUAL_p25 = quantile(LENG_ACTUAL, 0.25, na.rm = TRUE),
+    LENG_ACTUAL_MEDIAN = quantile(LENG_ACTUAL, 0.50, na.rm = TRUE),
+    LENG_ACTUAL_p75 = quantile(LENG_ACTUAL, 0.75, na.rm = TRUE),
+    LENG_ACTUAL_p90 = quantile(LENG_ACTUAL, 0.90, na.rm = TRUE),
+    MATE_ACTUAL_p10 = quantile(MATE_ACTUAL, 0.10, na.rm = TRUE),
+    MATE_ACTUAL_p25 = quantile(MATE_ACTUAL, 0.25, na.rm = TRUE),
+    MATE_ACTUAL_MEDIAN = quantile(MATE_ACTUAL, 0.50, na.rm = TRUE),
+    MATE_ACTUAL_p75 = quantile(MATE_ACTUAL, 0.75, na.rm = TRUE),
+    MATE_ACTUAL_p90 = quantile(MATE_ACTUAL, 0.90, na.rm = TRUE),
+    HCSO_ACTUAL_p10 = quantile(HCSO_ACTUAL, 0.10, na.rm = TRUE),
+    HCSO_ACTUAL_p25 = quantile(HCSO_ACTUAL, 0.25, na.rm = TRUE),
+    HCSO_ACTUAL_MEDIAN = quantile(HCSO_ACTUAL, 0.50, na.rm = TRUE),
+    HCSO_ACTUAL_p75 = quantile(HCSO_ACTUAL, 0.75, na.rm = TRUE),
+    HCSO_ACTUAL_p90 = quantile(HCSO_ACTUAL, 0.90, na.rm = TRUE),
+    CIEN_ACTUAL_p10 = quantile(CIEN_ACTUAL, 0.10, na.rm = TRUE),
+    CIEN_ACTUAL_p25 = quantile(CIEN_ACTUAL, 0.25, na.rm = TRUE),
+    CIEN_ACTUAL_MEDIAN = quantile(CIEN_ACTUAL, 0.50, na.rm = TRUE),
+    CIEN_ACTUAL_p75 = quantile(CIEN_ACTUAL, 0.75, na.rm = TRUE),
+    CIEN_ACTUAL_p90 = quantile(CIEN_ACTUAL, 0.90, na.rm = TRUE),
+    PTJE_NEM_p10 = quantile(PTJE_NEM, 0.10, na.rm = TRUE),
+    PTJE_NEM_p25 = quantile(PTJE_NEM, 0.25, na.rm = TRUE),
+    PTJE_NEM_MEDIAN = quantile(PTJE_NEM, 0.50, na.rm = TRUE),
+    PTJE_NEM_p75 = quantile(PTJE_NEM, 0.75, na.rm = TRUE),
+    PTJE_NEM_p90 = quantile(PTJE_NEM, 0.90, na.rm = TRUE),
+    n_Students_LENG = sum(!is.na(LENG_ACTUAL)),
+    n_Students_MATE = sum(!is.na(MATE_ACTUAL)),
+    n_Students_HCSO = sum(!is.na(HCSO_ACTUAL)),
+    n_Students_CIEN = sum(!is.na(CIEN_ACTUAL)),
+    n_Students_PTJE_NEM = sum(!is.na(PTJE_NEM)),
+    n_Students_RBD = n()
+  )
+
+Adm2012_na_grouped <- Adm2012_na_grouped %>%
+  left_join(
+    Adm2012_na %>%
+      select(RBD, GRUPO_DEPENDENCIA, CODIGO_REGION, CODIGO_COMUNA) %>%
+      distinct(),
+    by = "RBD"
+  )
+```
+
+## 2012 (where 0 is counted in the calculations)
+```{r}
+Adm2012 <- ArchivoC_Adm2012 %>% 
+  filter(SITUACION_EGRESO == 1) %>% 
+  select(ID_aux, RBD, GRUPO_DEPENDENCIA, CODIGO_REGION, CODIGO_COMUNA, LENG_ACTUAL, MATE_ACTUAL, HCSO_ACTUAL, CIEN_ACTUAL, PTJE_NEM)
+
+Adm2012_grouped <- Adm2012 %>% 
+    group_by(RBD) %>% 
+  summarise(
+    avg_LENG_ACTUAL = mean(LENG_ACTUAL, na.rm = TRUE),
+    avg_MATE_ACTUAL = mean(MATE_ACTUAL, na.rm = TRUE),
+    avg_HCSO_ACTUAL = mean(HCSO_ACTUAL, na.rm = TRUE),
+    avg_CIEN_ACTUAL = mean(CIEN_ACTUAL, na.rm = TRUE),
+    avg_PTJE_NEM = mean(PTJE_NEM, na.rm = TRUE),
+    n_Students_RBD = n(),
+    LENG_ACTUAL_p10 = quantile(LENG_ACTUAL, 0.10, na.rm = TRUE),
+    LENG_ACTUAL_p25 = quantile(LENG_ACTUAL, 0.25, na.rm = TRUE),
+    LENG_ACTUAL_MEDIAN = quantile(LENG_ACTUAL, 0.50, na.rm = TRUE),
+    LENG_ACTUAL_p75 = quantile(LENG_ACTUAL, 0.75, na.rm = TRUE),
+    LENG_ACTUAL_p90 = quantile(LENG_ACTUAL, 0.90, na.rm = TRUE),
+    MATE_ACTUAL_p10 = quantile(MATE_ACTUAL, 0.10, na.rm = TRUE),
+    MATE_ACTUAL_p25 = quantile(MATE_ACTUAL, 0.25, na.rm = TRUE),
+    MATE_ACTUAL_MEDIAN = quantile(MATE_ACTUAL, 0.50, na.rm = TRUE),
+    MATE_ACTUAL_p75 = quantile(MATE_ACTUAL, 0.75, na.rm = TRUE),
+    MATE_ACTUAL_p90 = quantile(MATE_ACTUAL, 0.90, na.rm = TRUE),
+    HCSO_ACTUAL_p10 = quantile(HCSO_ACTUAL, 0.10, na.rm = TRUE),
+    HCSO_ACTUAL_p25 = quantile(HCSO_ACTUAL, 0.25, na.rm = TRUE),
+    HCSO_ACTUAL_MEDIAN = quantile(HCSO_ACTUAL, 0.50, na.rm = TRUE),
+    HCSO_ACTUAL_p75 = quantile(HCSO_ACTUAL, 0.75, na.rm = TRUE),
+    HCSO_ACTUAL_p90 = quantile(HCSO_ACTUAL, 0.90, na.rm = TRUE),
+    CIEN_ACTUAL_p10 = quantile(CIEN_ACTUAL, 0.10, na.rm = TRUE),
+    CIEN_ACTUAL_p25 = quantile(CIEN_ACTUAL, 0.25, na.rm = TRUE),
+    CIEN_ACTUAL_MEDIAN = quantile(CIEN_ACTUAL, 0.50, na.rm = TRUE),
+    CIEN_ACTUAL_p75 = quantile(CIEN_ACTUAL, 0.75, na.rm = TRUE),
+    CIEN_ACTUAL_p90 = quantile(CIEN_ACTUAL, 0.90, na.rm = TRUE),
+    PTJE_NEM_p10 = quantile(PTJE_NEM, 0.10, na.rm = TRUE),
+    PTJE_NEM_p25 = quantile(PTJE_NEM, 0.25, na.rm = TRUE),
+    PTJE_NEM_MEDIAN = quantile(PTJE_NEM, 0.50, na.rm = TRUE),
+    PTJE_NEM_p75 = quantile(PTJE_NEM, 0.75, na.rm = TRUE),
+    PTJE_NEM_p90 = quantile(PTJE_NEM, 0.90, na.rm = TRUE)
+    ) %>% left_join(Adm2012 %>% select(RBD, GRUPO_DEPENDENCIA, CODIGO_REGION, CODIGO_COMUNA) %>% distinct(), by = "RBD")
+```
+
+Now we have the grouped data frames for each year. We can combine them into a single data frame for analysis. We will use the bind_rows function from the dplyr package to do this. I give an additional column to each adm year to identify the year of the data.
+
+
+
+## Adm_combined_na (0 treated as NA in the calculations)
+
+```{r}
+Adm2020_grouped_na <- Adm2020_na_grouped %>% mutate(year = 2020)
+Adm2019_grouped_na <- Adm2019_na_grouped %>% mutate(year = 2019)
+Adm2018_grouped_na <- Adm2018_na_grouped %>% mutate(year = 2018)
+Adm2017_grouped_na <- Adm2017_na_grouped %>% mutate(year = 2017)
+Adm2016_grouped_na <- Adm2016_na_grouped %>% mutate(year = 2016)
+Adm2015_grouped_na <- Adm2015_na_grouped %>% mutate(year = 2015)
+Adm2014_grouped_na <- Adm2014_na_grouped %>% mutate(year = 2014)
+Adm2013_grouped_na <- Adm2013_na_grouped %>% mutate(year = 2013)
+Adm2012_grouped_na <- Adm2012_na_grouped %>% mutate(year = 2012)
+Adm_combined_na_2012_2020 <- bind_rows(Adm2020_grouped_na, Adm2019_grouped_na, Adm2018_grouped_na, Adm2017_grouped_na, Adm2016_grouped_na, Adm2015_grouped_na, Adm2014_grouped_na, Adm2013_grouped_na, Adm2012_grouped_na)
+```
+
+
+
+
+## Adm_combined (0 counted in the calculations)
+
+```{r}
+Adm2020_grouped <- Adm2020_grouped %>% mutate(year = 2020)
+Adm2019_grouped <- Adm2019_grouped %>% mutate(year = 2019)
+Adm2018_grouped <- Adm2018_grouped %>% mutate(year = 2018)
+Adm2017_grouped <- Adm2017_grouped %>% mutate(year = 2017)
+Adm2016_grouped <- Adm2016_grouped %>% mutate(year = 2016)
+Adm2015_grouped <- Adm2015_grouped %>% mutate(year = 2015)
+Adm2014_grouped <- Adm2014_grouped %>% mutate(year = 2014)
+Adm2013_grouped <- Adm2013_grouped %>% mutate(year = 2013)
+Adm2012_grouped <- Adm2012_grouped %>% mutate(year = 2012)
+Adm_combined_2012_2020 <- bind_rows(Adm2020_grouped, Adm2019_grouped, Adm2018_grouped, Adm2017_grouped, Adm2016_grouped, Adm2015_grouped, Adm2014_grouped, Adm2013_grouped, Adm2012_grouped)
+                                  
+                                    
+```
+
+I want to make groups in Adm_combined where are grouped by rbd, and whe can see the year in ascendent order. We can use the group_by and arrange functions from the dplyr package to do this.
+
+
+## ADM_COMBINED_GROUPED_NA (where 0 is treated as NA in the calculations)
+
+```{r}
+Adm_combined_grouped_na_2012_2020 <- Adm_combined_na_2012_2020 %>% 
+  group_by(RBD) %>% 
+  arrange(year)
+
+# could you change the column year to the second column in the data frame? We can use the select function from the dplyr package to do this.
+Adm_combined_grouped_na_2012_2020 <- Adm_combined_grouped_na_2012_2020 %>% 
+  select(RBD, year, everything())
+
+# i want drop the rbd = 0 from the data frame, we can use the filter function from the dplyr package to do this.
+Adm_combined_grouped_na_2012_2020 <- Adm_combined_grouped_na_2012_2020 %>% 
+  filter(RBD != 0)
+#I want that the order is by the rbd increasing
+Adm_combined_grouped_na_2012_2020 <- Adm_combined_grouped_na_2012_2020 %>% 
+  arrange(RBD)
+
+
+#move the columns of n_student_ (LENG, MATE, HCSO, CIEN) to the end of the data frame with also GRUPO_DEPENDENCIA, CODIGO_REGION, CODIGO_COMUNA
+Adm_combined_grouped_na_2012_2020 <- Adm_combined_grouped_na_2012_2020 %>% 
+  select(-starts_with("n_Students_"), -GRUPO_DEPENDENCIA, -CODIGO_REGION, -CODIGO_COMUNA, everything())
+
+
+View(Adm_combined_grouped_na_2012_2020)
+```
+
+
+## ADM_COMBINED_GROUPED (where 0 is counted in the calculations)
+
+```{r}
+Adm_combined_grouped_2012_2020 <- Adm_combined_2012_2020 %>% 
+  group_by(RBD) %>% 
+  arrange(year)
+
+# could you change the column year to the second column in the data frame? We can use the select function from the dplyr package to do this.
+
+Adm_combined_grouped_2012_2020 <- Adm_combined_grouped_2012_2020 %>% 
+  select(RBD, year, everything())
+
+# i want drop the rbd = 0 from the data frame, we can use the filter function from the dplyr package to do this.
+
+Adm_combined_grouped_2012_2020 <- Adm_combined_grouped_2012_2020 %>% 
+  filter(RBD != 0)
+
+#I want that the order is by the rbd increasing
+Adm_combined_grouped_2012_2020 <- Adm_combined_grouped_2012_2020 %>% 
+  arrange(RBD)
+
+
+# move 'n_Students' change the name of the column to N_Students_RBD. And then move the column "N_Studnets_RBD" to the end of the dataframe
+Adm_combined_grouped_2012_2020 <- Adm_combined_grouped_2012_2020 %>% 
+  rename(N_Students_RBD = n_Students) %>%
+  select(-starts_with("n_Students_"), everything())
+
+
+view(Adm_combined_grouped_2012_2020)
+
+
+```
+
+```{r}
+#Exporting csv where 0 are counted in the calculations
+write.csv(Adm_combined_grouped_2012_2020, "Adm_combined_grouped_2012_2020.csv", row.names = FALSE)
+
+#Exporting csv where 0 are treated as NA in the calculations
+write.csv(Adm_combined_grouped_na_2012_2020, "Adm_combined_grouped_na_2012_2020.csv", row.names = FALSE)
+
+```
+NOTA: por alguna razon en rbd 2013 (n_de estudiantes) no son iguales
+NOTA2: Arreglado :)
+
+## Reading 2021 - 2025
+
+```{r}
+# I want to create a new data frame for the years 2021 to 2025, we can use the filter function from the dplyr package to do this.
+ArchivoC_Adm2021 <- read_csv("Data/A_INSCRITOS_PUNTAJES_PDT_2021_PUB_MRUN.csv")
+ArchivoC_Adm2022 <- read_csv("Data/A_INSCRITOS_PUNTAJES_PDT_2022_PUB_MRUN.csv")
+ArchivoC_Adm2023 <- read_csv("Data/A_INSCRITOS_PUNTAJES_2023_PAES_PUB_MRUN.csv")
+ArchivoC_Adm2024 <- read_csv("Data/A_INSCRITOS_PUNTAJES_PAES_2024_PUB_MRUN.csv")
+ArchivoC_Adm2025 <- read_csv("Data/A_INSCRITOS_PUNTAJES_PAES_2025_PUB_MRUN.csv")
+
+```
+
+## Delimiter 2:
+
+```{r}
+Adm2021 <- ArchivoC_Adm2021 <- read_delim("Data/A_INSCRITOS_PUNTAJES_PDT_2021_PUB_MRUN.csv", 
+                               delim = ";")
+Adm2022 <- ArchivoC_Adm2022 <- read_delim("Data/A_INSCRITOS_PUNTAJES_PDT_2022_PUB_MRUN.csv", 
+                               delim = ";")
+Adm2023 <- ArchivoC_Adm2023 <- read_delim("Data/A_INSCRITOS_PUNTAJES_2023_PAES_PUB_MRUN.csv", 
+                               delim = ";")
+Adm2024 <- ArchivoC_Adm2024 <- read_delim("Data/A_INSCRITOS_PUNTAJES_PAES_2024_PUB_MRUN.csv", 
+                               delim = ";")
+Adm2025 <- ArchivoC_Adm2025 <- read_delim("Data/A_INSCRITOS_PUNTAJES_PAES_2025_PUB_MRUN.csv", 
+                               delim = ";")
+```
+
+## 2021 (where 0 is counted in the calculations)
+
+```{r}
+## 2021
+Adm2021 <- Adm2021 %>% 
+  filter(ANYO_DE_EGRESO == 2020, 
+         PUNTAJES_PROCESO == 1, 
+         TIPO_RENDICION == 1) %>% 
+  select(ANYO_PROCESO, RBD, DEPENDENCIA, CODIGO_REGION_EGRESO, 
+         CODIGO_COMUNA_EGRESO, PUNTAJES_PROCESO, 
+         CLEC_ACTUAL, MATE_ACTUAL, HCSO_ACTUAL, CIEN_ACTUAL, 
+         PTJE_NEM, ANYO_DE_EGRESO, TIPO_RENDICION) %>% 
+  mutate(
+    CLEC_ACTUAL = as.numeric(gsub(",", ".", CLEC_ACTUAL)),
+    MATE_ACTUAL = as.numeric(gsub(",", ".", MATE_ACTUAL)),
+    HCSO_ACTUAL = as.numeric(gsub(",", ".", HCSO_ACTUAL)),
+    CIEN_ACTUAL = as.numeric(gsub(",", ".", CIEN_ACTUAL)),
+    PTJE_NEM = as.numeric(PTJE_NEM)
+  )
+
+Adm2021_grouped <- Adm2021 %>% 
+  group_by(RBD) %>% 
+  summarise(
+    avg_LENG_ACTUAL = mean(CLEC_ACTUAL, na.rm = TRUE),
+    avg_MATE_ACTUAL = mean(MATE_ACTUAL, na.rm = TRUE),
+    avg_HCSO_ACTUAL = mean(HCSO_ACTUAL, na.rm = TRUE),
+    avg_CIEN_ACTUAL = mean(CIEN_ACTUAL, na.rm = TRUE),
+    avg_PTJE_NEM = mean(PTJE_NEM, na.rm = TRUE),
+    LENG_ACTUAL_p10 = quantile(CLEC_ACTUAL, 0.10, na.rm = TRUE),
+    LENG_ACTUAL_p25 = quantile(CLEC_ACTUAL, 0.25, na.rm = TRUE),
+    LENG_ACTUAL_MEDIAN = quantile(CLEC_ACTUAL, 0.50, na.rm = TRUE),
+    LENG_ACTUAL_p75 = quantile(CLEC_ACTUAL, 0.75, na.rm = TRUE),
+    LENG_ACTUAL_p90 = quantile(CLEC_ACTUAL, 0.90, na.rm = TRUE),
+    MATE_ACTUAL_p10 = quantile(MATE_ACTUAL, 0.10, na.rm = TRUE),
+    MATE_ACTUAL_p25 = quantile(MATE_ACTUAL, 0.25, na.rm = TRUE),
+    MATE_ACTUAL_MEDIAN = quantile(MATE_ACTUAL, 0.50, na.rm = TRUE),
+    MATE_ACTUAL_p75 = quantile(MATE_ACTUAL, 0.75, na.rm = TRUE),
+    MATE_ACTUAL_p90 = quantile(MATE_ACTUAL, 0.90, na.rm = TRUE),
+    HCSO_ACTUAL_p10 = quantile(HCSO_ACTUAL, 0.10, na.rm = TRUE),
+    HCSO_ACTUAL_p25 = quantile(HCSO_ACTUAL, 0.25, na.rm = TRUE),
+    HCSO_ACTUAL_MEDIAN = quantile(HCSO_ACTUAL, 0.50, na.rm = TRUE),
+    HCSO_ACTUAL_p75 = quantile(HCSO_ACTUAL, 0.75, na.rm = TRUE),
+    HCSO_ACTUAL_p90 = quantile(HCSO_ACTUAL, 0.90, na.rm = TRUE),
+    CIEN_ACTUAL_p10 = quantile(CIEN_ACTUAL, 0.10, na.rm = TRUE),
+    CIEN_ACTUAL_p25 = quantile(CIEN_ACTUAL, 0.25, na.rm = TRUE),
+    CIEN_ACTUAL_MEDIAN = quantile(CIEN_ACTUAL, 0.50, na.rm = TRUE),
+    CIEN_ACTUAL_p75 = quantile(CIEN_ACTUAL, 0.75, na.rm = TRUE),
+    CIEN_ACTUAL_p90 = quantile(CIEN_ACTUAL, 0.90, na.rm = TRUE),
+    PTJE_NEM_p10 = quantile(PTJE_NEM, 0.10, na.rm = TRUE),
+    PTJE_NEM_p25 = quantile(PTJE_NEM, 0.25, na.rm = TRUE),
+    PTJE_NEM_MEDIAN = quantile(PTJE_NEM, 0.50, na.rm = TRUE),
+    PTJE_NEM_p75 = quantile(PTJE_NEM, 0.75, na.rm = TRUE),
+    PTJE_NEM_p90 = quantile(PTJE_NEM, 0.90, na.rm = TRUE),
+    n_Students_RBD= n()
+    ) %>%
+  left_join(
+    Adm2021 %>% 
+      select(RBD, DEPENDENCIA, CODIGO_REGION_EGRESO, CODIGO_COMUNA_EGRESO) %>% 
+      distinct(),
+    by = "RBD"
+  ) %>%
+  rename(
+    GRUPO_DEPENDENCIA = DEPENDENCIA,
+    CODIGO_REGION = CODIGO_REGION_EGRESO,
+    CODIGO_COMUNA = CODIGO_COMUNA_EGRESO
+  )
+
+View(Adm2021_grouped)
+```
+## 2021 (where 0 is treated as NA in the calculations)
+
+
+
+```{r}
+## 2021 (same filters as Adm2021, but zeros -> NA)
+Adm2021_na <- Adm2021 %>%   # use your raw dataset here
+  filter(
+    ANYO_DE_EGRESO == 2020,
+    PUNTAJES_PROCESO == 1,
+    TIPO_RENDICION == 1
+  ) %>%
+  select(
+    ANYO_PROCESO, RBD, DEPENDENCIA, CODIGO_REGION_EGRESO,
+    CODIGO_COMUNA_EGRESO, PUNTAJES_PROCESO,
+    CLEC_ACTUAL, MATE_ACTUAL, HCSO_ACTUAL, CIEN_ACTUAL,
+    PTJE_NEM, ANYO_DE_EGRESO, TIPO_RENDICION
+  ) %>%
+  mutate(
+    CLEC_ACTUAL = na_if(as.numeric(gsub(",", ".", CLEC_ACTUAL)), 0),
+    MATE_ACTUAL = na_if(as.numeric(gsub(",", ".", MATE_ACTUAL)), 0),
+    HCSO_ACTUAL = na_if(as.numeric(gsub(",", ".", HCSO_ACTUAL)), 0),
+    CIEN_ACTUAL = na_if(as.numeric(gsub(",", ".", CIEN_ACTUAL)), 0),
+    PTJE_NEM = na_if(as.numeric(PTJE_NEM), 0)
+  )
+
+Adm2021_na_grouped <- Adm2021_na %>%
+  group_by(RBD) %>%
+  summarise(
+    avg_LENG_ACTUAL = mean(CLEC_ACTUAL, na.rm = TRUE),
+    avg_MATE_ACTUAL = mean(MATE_ACTUAL, na.rm = TRUE),
+    avg_HCSO_ACTUAL = mean(HCSO_ACTUAL, na.rm = TRUE),
+    avg_CIEN_ACTUAL = mean(CIEN_ACTUAL, na.rm = TRUE),
+    avg_PTJE_NEM = mean(PTJE_NEM, na.rm = TRUE),
+
+    LENG_ACTUAL_p10 = quantile(CLEC_ACTUAL, 0.10, na.rm = TRUE),
+    LENG_ACTUAL_p25 = quantile(CLEC_ACTUAL, 0.25, na.rm = TRUE),
+    LENG_ACTUAL_MEDIAN = quantile(CLEC_ACTUAL, 0.50, na.rm = TRUE),
+    LENG_ACTUAL_p75 = quantile(CLEC_ACTUAL, 0.75, na.rm = TRUE),
+    LENG_ACTUAL_p90 = quantile(CLEC_ACTUAL, 0.90, na.rm = TRUE),
+
+    MATE_ACTUAL_p10 = quantile(MATE_ACTUAL, 0.10, na.rm = TRUE),
+    MATE_ACTUAL_p25 = quantile(MATE_ACTUAL, 0.25, na.rm = TRUE),
+    MATE_ACTUAL_MEDIAN = quantile(MATE_ACTUAL, 0.50, na.rm = TRUE),
+    MATE_ACTUAL_p75 = quantile(MATE_ACTUAL, 0.75, na.rm = TRUE),
+    MATE_ACTUAL_p90 = quantile(MATE_ACTUAL, 0.90, na.rm = TRUE),
+
+    HCSO_ACTUAL_p10 = quantile(HCSO_ACTUAL, 0.10, na.rm = TRUE),
+    HCSO_ACTUAL_p25 = quantile(HCSO_ACTUAL, 0.25, na.rm = TRUE),
+    HCSO_ACTUAL_MEDIAN = quantile(HCSO_ACTUAL, 0.50, na.rm = TRUE),
+    HCSO_ACTUAL_p75 = quantile(HCSO_ACTUAL, 0.75, na.rm = TRUE),
+    HCSO_ACTUAL_p90 = quantile(HCSO_ACTUAL, 0.90, na.rm = TRUE),
+
+    CIEN_ACTUAL_p10 = quantile(CIEN_ACTUAL, 0.10, na.rm = TRUE),
+    CIEN_ACTUAL_p25 = quantile(CIEN_ACTUAL, 0.25, na.rm = TRUE),
+    CIEN_ACTUAL_MEDIAN = quantile(CIEN_ACTUAL, 0.50, na.rm = TRUE),
+    CIEN_ACTUAL_p75 = quantile(CIEN_ACTUAL, 0.75, na.rm = TRUE),
+    CIEN_ACTUAL_p90 = quantile(CIEN_ACTUAL, 0.90, na.rm = TRUE),
+
+    PTJE_NEM_p10 = quantile(PTJE_NEM, 0.10, na.rm = TRUE),
+    PTJE_NEM_p25 = quantile(PTJE_NEM, 0.25, na.rm = TRUE),
+    PTJE_NEM_MEDIAN = quantile(PTJE_NEM, 0.50, na.rm = TRUE),
+    PTJE_NEM_p75 = quantile(PTJE_NEM, 0.75, na.rm = TRUE),
+    PTJE_NEM_p90 = quantile(PTJE_NEM, 0.90, na.rm = TRUE),
+
+    n_Students_LENG = sum(!is.na(CLEC_ACTUAL)),
+    n_Students_MATE = sum(!is.na(MATE_ACTUAL)),
+    n_Students_HCSO = sum(!is.na(HCSO_ACTUAL)),
+    n_Students_CIEN = sum(!is.na(CIEN_ACTUAL)),
+    n_Students_PTJE_NEM = sum(!is.na(PTJE_NEM)),
+    n_Students_RBD = n()
+  ) %>%
+  left_join(
+    Adm2021_na %>%
+      select(RBD, DEPENDENCIA, CODIGO_REGION_EGRESO, CODIGO_COMUNA_EGRESO) %>%
+      distinct(),
+    by = "RBD"
+  ) %>%
+  rename(
+    GRUPO_DEPENDENCIA = DEPENDENCIA,
+    CODIGO_REGION = CODIGO_REGION_EGRESO,
+    CODIGO_COMUNA = CODIGO_COMUNA_EGRESO
+  )
+
+View(Adm2021_na_grouped)
+
+```
+
+
+## 2022 (where 0 is counted in the calculations
+
+```{r}
+## 2022
+Adm2022 <- Adm2022 %>% 
+  filter(ANYO_DE_EGRESO == 2021, 
+         PUNTAJES_PROCESO == 1 
+         ) %>% 
+  select(ANYO_PROCESO, RBD, DEPENDENCIA, CODIGO_REGION_EGRESO, 
+         CODIGO_COMUNA_EGRESO, PUNTAJES_PROCESO, 
+         CLEC_ACTUAL, MATE_ACTUAL, HCSO_ACTUAL, CIEN_ACTUAL, 
+         PTJE_NEM, ANYO_DE_EGRESO) %>% 
+  mutate(
+    CLEC_ACTUAL = as.numeric(gsub(",", ".", CLEC_ACTUAL)),
+    MATE_ACTUAL = as.numeric(gsub(",", ".", MATE_ACTUAL)),
+    HCSO_ACTUAL = as.numeric(gsub(",", ".", HCSO_ACTUAL)),
+    CIEN_ACTUAL = as.numeric(gsub(",", ".", CIEN_ACTUAL)),
+    PTJE_NEM = as.numeric(PTJE_NEM)
+  )
+
+Adm2022_grouped <- Adm2022 %>% 
+  group_by(RBD) %>% 
+  summarise(
+    avg_LENG_ACTUAL = mean(CLEC_ACTUAL, na.rm = TRUE),
+    avg_MATE_ACTUAL = mean(MATE_ACTUAL, na.rm = TRUE),
+    avg_HCSO_ACTUAL = mean(HCSO_ACTUAL, na.rm = TRUE),
+    avg_CIEN_ACTUAL = mean(CIEN_ACTUAL, na.rm = TRUE),
+    avg_PTJE_NEM = mean(PTJE_NEM, na.rm = TRUE),
+    LENG_ACTUAL_p10 = quantile(CLEC_ACTUAL, 0.10, na.rm = TRUE),
+    LENG_ACTUAL_p25 = quantile(CLEC_ACTUAL, 0.25, na.rm = TRUE),
+    LENG_ACTUAL_MEDIAN = quantile(CLEC_ACTUAL, 0.50, na.rm = TRUE),
+    LENG_ACTUAL_p75 = quantile(CLEC_ACTUAL, 0.75, na.rm = TRUE),
+    LENG_ACTUAL_p90 = quantile(CLEC_ACTUAL, 0.90, na.rm = TRUE),
+    MATE_ACTUAL_p10 = quantile(MATE_ACTUAL, 0.10, na.rm = TRUE),
+    MATE_ACTUAL_p25 = quantile(MATE_ACTUAL, 0.25, na.rm = TRUE),
+    MATE_ACTUAL_MEDIAN = quantile(MATE_ACTUAL, 0.50, na.rm = TRUE),
+    MATE_ACTUAL_p75 = quantile(MATE_ACTUAL, 0.75, na.rm = TRUE),
+    MATE_ACTUAL_p90 = quantile(MATE_ACTUAL, 0.90, na.rm = TRUE),
+    HCSO_ACTUAL_p10 = quantile(HCSO_ACTUAL, 0.10, na.rm = TRUE),
+    HCSO_ACTUAL_p25 = quantile(HCSO_ACTUAL, 0.25, na.rm = TRUE),
+    HCSO_ACTUAL_MEDIAN = quantile(HCSO_ACTUAL, 0.50, na.rm = TRUE),
+    HCSO_ACTUAL_p75 = quantile(HCSO_ACTUAL, 0.75, na.rm = TRUE),
+    HCSO_ACTUAL_p90 = quantile(HCSO_ACTUAL, 0.90, na.rm = TRUE),
+    CIEN_ACTUAL_p10 = quantile(CIEN_ACTUAL, 0.10, na.rm = TRUE),
+    CIEN_ACTUAL_p25 = quantile(CIEN_ACTUAL, 0.25, na.rm = TRUE),
+    CIEN_ACTUAL_MEDIAN = quantile(CIEN_ACTUAL, 0.50, na.rm = TRUE),
+    CIEN_ACTUAL_p75 = quantile(CIEN_ACTUAL, 0.75, na.rm = TRUE),
+    CIEN_ACTUAL_p90 = quantile(CIEN_ACTUAL, 0.90, na.rm = TRUE),
+    PTJE_NEM_p10 = quantile(PTJE_NEM, 0.10, na.rm = TRUE),
+    PTJE_NEM_p25 = quantile(PTJE_NEM, 0.25, na.rm = TRUE),
+    PTJE_NEM_MEDIAN = quantile(PTJE_NEM, 0.50, na.rm = TRUE),
+    PTJE_NEM_p75 = quantile(PTJE_NEM, 0.75, na.rm = TRUE),
+    PTJE_NEM_p90 = quantile(PTJE_NEM, 0.90, na.rm = TRUE),
+    n_Students_RBD= n()
+    ) %>%
+  left_join(
+    Adm2021 %>% 
+      select(RBD, DEPENDENCIA, CODIGO_REGION_EGRESO, CODIGO_COMUNA_EGRESO) %>% 
+      distinct(),
+    by = "RBD"
+  ) %>%
+  rename(
+    GRUPO_DEPENDENCIA = DEPENDENCIA,
+    CODIGO_REGION = CODIGO_REGION_EGRESO,
+    CODIGO_COMUNA = CODIGO_COMUNA_EGRESO
+  )
+
+View(Adm2022_grouped)
+```
+
+
+## 2022 (0 treated as NA)
+
+```{r}
+Adm2022_na <- Adm2022 %>%   # use your raw dataset here
+  filter(
+    ANYO_DE_EGRESO == 2021,
+    PUNTAJES_PROCESO == 1
+  ) %>%
+  select(
+    ANYO_PROCESO, RBD, DEPENDENCIA, CODIGO_REGION_EGRESO,
+    CODIGO_COMUNA_EGRESO, PUNTAJES_PROCESO,
+    CLEC_ACTUAL, MATE_ACTUAL, HCSO_ACTUAL, CIEN_ACTUAL,
+    PTJE_NEM, ANYO_DE_EGRESO
+  ) %>%
+  mutate(
+    CLEC_ACTUAL = na_if(as.numeric(gsub(",", ".", CLEC_ACTUAL)), 0),
+    MATE_ACTUAL = na_if(as.numeric(gsub(",", ".", MATE_ACTUAL)), 0),
+    HCSO_ACTUAL = na_if(as.numeric(gsub(",", ".", HCSO_ACTUAL)), 0),
+    CIEN_ACTUAL = na_if(as.numeric(gsub(",", ".", CIEN_ACTUAL)), 0),
+    PTJE_NEM = na_if(as.numeric(PTJE_NEM), 0)
+  )
+
+Adm2022_na_grouped <- Adm2022_na %>%
+  group_by(RBD) %>%
+  summarise(
+    avg_LENG_ACTUAL = mean(CLEC_ACTUAL, na.rm = TRUE),
+    avg_MATE_ACTUAL = mean(MATE_ACTUAL, na.rm = TRUE),
+    avg_HCSO_ACTUAL = mean(HCSO_ACTUAL, na.rm = TRUE),
+    avg_CIEN_ACTUAL = mean(CIEN_ACTUAL, na.rm = TRUE),
+    avg_PTJE_NEM = mean(PTJE_NEM, na.rm = TRUE),
+
+    LENG_ACTUAL_p10 = quantile(CLEC_ACTUAL, 0.10, na.rm = TRUE),
+    LENG_ACTUAL_p25 = quantile(CLEC_ACTUAL, 0.25, na.rm = TRUE),
+    LENG_ACTUAL_MEDIAN = quantile(CLEC_ACTUAL, 0.50, na.rm = TRUE),
+    LENG_ACTUAL_p75 = quantile(CLEC_ACTUAL, 0.75, na.rm = TRUE),
+    LENG_ACTUAL_p90 = quantile(CLEC_ACTUAL, 0.90, na.rm = TRUE),
+
+    MATE_ACTUAL_p10 = quantile(MATE_ACTUAL, 0.10, na.rm = TRUE),
+    MATE_ACTUAL_p25 = quantile(MATE_ACTUAL, 0.25, na.rm = TRUE),
+    MATE_ACTUAL_MEDIAN = quantile(MATE_ACTUAL, 0.50, na.rm = TRUE),
+    MATE_ACTUAL_p75 = quantile(MATE_ACTUAL, 0.75, na.rm = TRUE),
+    MATE_ACTUAL_p90 = quantile(MATE_ACTUAL, 0.90, na.rm = TRUE),
+
+    HCSO_ACTUAL_p10 = quantile(HCSO_ACTUAL, 0.10, na.rm = TRUE),
+    HCSO_ACTUAL_p25 = quantile(HCSO_ACTUAL, 0.25, na.rm = TRUE),
+    HCSO_ACTUAL_MEDIAN = quantile(HCSO_ACTUAL, 0.50, na.rm = TRUE),
+    HCSO_ACTUAL_p75 = quantile(HCSO_ACTUAL, 0.75, na.rm = TRUE),
+    HCSO_ACTUAL_p90 = quantile(HCSO_ACTUAL, 0.90, na.rm = TRUE),
+
+    CIEN_ACTUAL_p10 = quantile(CIEN_ACTUAL, 0.10, na.rm = TRUE),
+    CIEN_ACTUAL_p25 = quantile(CIEN_ACTUAL, 0.25, na.rm = TRUE),
+    CIEN_ACTUAL_MEDIAN = quantile(CIEN_ACTUAL, 0.50, na.rm = TRUE),
+    CIEN_ACTUAL_p75 = quantile(CIEN_ACTUAL, 0.75, na.rm = TRUE),
+    CIEN_ACTUAL_p90 = quantile(CIEN_ACTUAL, 0.90, na.rm = TRUE),
+
+    PTJE_NEM_p10 = quantile(PTJE_NEM, 0.10, na.rm = TRUE),
+    PTJE_NEM_p25 = quantile(PTJE_NEM, 0.25, na.rm = TRUE),
+    PTJE_NEM_MEDIAN = quantile(PTJE_NEM, 0.50, na.rm = TRUE),
+    PTJE_NEM_p75 = quantile(PTJE_NEM, 0.75, na.rm = TRUE),
+    PTJE_NEM_p90 = quantile(PTJE_NEM, 0.90, na.rm = TRUE),
+
+    n_Students_LENG = sum(!is.na(CLEC_ACTUAL)),
+    n_Students_MATE = sum(!is.na(MATE_ACTUAL)),
+    n_Students_HCSO = sum(!is.na(HCSO_ACTUAL)),
+    n_Students_CIEN = sum(!is.na(CIEN_ACTUAL)),
+    n_Students_PTJE_NEM = sum(!is.na(PTJE_NEM)),
+    n_Students_RBD = n()
+  ) %>%
+  left_join(
+    Adm2022_na %>%
+      select(RBD, DEPENDENCIA, CODIGO_REGION_EGRESO, CODIGO_COMUNA_EGRESO) %>%
+      distinct(),
+    by = "RBD"
+  ) %>%
+  rename(
+    GRUPO_DEPENDENCIA = DEPENDENCIA,
+    CODIGO_REGION = CODIGO_REGION_EGRESO,
+    CODIGO_COMUNA = CODIGO_COMUNA_EGRESO
+  )
+
+View(Adm2022_na_grouped)
+```
+
+
+
+
+## 2023 (0 counted in the calculations)
+
+```{r}
+# 1️⃣ Filter and select relevant columns
+Adm2023 <- Adm2023 %>% 
+  filter(
+    ANYO_PROCESO == 2023, 
+    RINDIO_PROCESO_ANTERIOR == 0) %>%
+  select(
+    ANYO_PROCESO, RBD, DEPENDENCIA, CODIGO_REGION_EGRESO, CODIGO_COMUNA_EGRESO,
+    CLEC_MAX, MATE1_MAX, MATE2_MAX, HCSOC_MAX, CIEN_MAX, PTJE_NEM
+  )
+
+Adm2023_grouped <- Adm2023 %>% 
+  group_by(RBD) %>% 
+  summarise(
+    ## --- Averages ---  ### From 2023 all the ACTUAL ARE ACTUALLY MAX SCORES
+    avg_LENG_ACTUAL   = mean(CLEC_MAX, na.rm = TRUE),       ## MAX CLEC
+    avg_MATE_ACTUAL  = mean(MATE1_MAX, na.rm = TRUE),       ## MAX MATH1
+    avg_MATE2_MAX  = mean(MATE2_MAX, na.rm = TRUE),         ## Added for Matemática 2
+    avg_HCSO_ACTUAL  = mean(HCSOC_MAX, na.rm = TRUE),       ## MAX HCSOC
+    avg_CIEN_ACTUAL   = mean(CIEN_MAX, na.rm = TRUE),      ## MAX CIEN
+    avg_PTJE_NEM = mean(PTJE_NEM, na.rm = TRUE),
+
+    ## --- Percentiles: Lenguaje ---
+    LENG_ACTUAL_p10   = quantile(CLEC_MAX, 0.10, na.rm = TRUE),
+    LENG_ACTUAL_p25   = quantile(CLEC_MAX, 0.25, na.rm = TRUE),
+    LENG_ACTUAL_MEDIAN= quantile(CLEC_MAX, 0.50, na.rm = TRUE),
+    LENG_ACTUAL_p75   = quantile(CLEC_MAX, 0.75, na.rm = TRUE),
+    LENG_ACTUAL_p90   = quantile(CLEC_MAX, 0.90, na.rm = TRUE),
+
+    ## --- Percentiles: Matemática 1 ---
+    MATE_ACTUAL_p10   = quantile(MATE1_MAX, 0.10, na.rm = TRUE),
+    MATE_ACTUAL_p25   = quantile(MATE1_MAX, 0.25, na.rm = TRUE),
+    MATE_ACTUAL_MEDIAN= quantile(MATE1_MAX, 0.50, na.rm = TRUE),
+    MATE_ACTUAL_p75   = quantile(MATE1_MAX, 0.75, na.rm = TRUE),
+    MATE_ACTUAL_p90   = quantile(MATE1_MAX, 0.90, na.rm = TRUE),
+
+    ## --- Percentiles: Matemática 2 ---
+    MATE2_MAX_p10   = quantile(MATE2_MAX, 0.10, na.rm = TRUE),
+    MATE2_MAX_p25   = quantile(MATE2_MAX, 0.25, na.rm = TRUE),
+    MATE2_MAX_MEDIAN= quantile(MATE2_MAX, 0.50, na.rm = TRUE),
+    MATE2_MAX_p75   = quantile(MATE2_MAX, 0.75, na.rm = TRUE),
+    MATE2_MAX_p90   = quantile(MATE2_MAX, 0.90, na.rm = TRUE),
+
+    ## --- Percentiles: Historia y Ciencias Sociales ---
+    HCSO_ACTUAL_p10   = quantile(HCSOC_MAX, 0.10, na.rm = TRUE),
+    HCSO_ACTUAL_p25   = quantile(HCSOC_MAX, 0.25, na.rm = TRUE),
+    HCSO_ACTUAL_MEDIAN= quantile(HCSOC_MAX, 0.50, na.rm = TRUE),
+    HCSO_ACTUAL_p75   = quantile(HCSOC_MAX, 0.75, na.rm = TRUE),
+    HCSO_ACTUAL_p90   = quantile(HCSOC_MAX, 0.90, na.rm = TRUE),
+
+    ## --- Percentiles: Ciencias ---
+    CIEN_ACTUAL_p10   = quantile(CIEN_MAX, 0.10, na.rm = TRUE),
+    CIEN_ACTUAL_p25   = quantile(CIEN_MAX, 0.25, na.rm = TRUE),
+    CIEN_ACTUAL_MEDIAN= quantile(CIEN_MAX, 0.50, na.rm = TRUE),
+    CIEN_ACTUAL_p75   = quantile(CIEN_MAX, 0.75, na.rm = TRUE),
+    CIEN_ACTUAL_p90   = quantile(CIEN_MAX, 0.90, na.rm = TRUE),
+    ## --- Percentiles: Puntaje Nem
+    PTJE_NEM_p10 = quantile(PTJE_NEM, 0.10, na.rm = TRUE),
+    PTJE_NEM_p25 = quantile(PTJE_NEM, 0.25, na.rm = TRUE),
+    PTJE_NEM_MEDIAN = quantile(PTJE_NEM, 0.50, na.rm = TRUE),
+    PTJE_NEM_p75 = quantile(PTJE_NEM, 0.75, na.rm = TRUE),
+    PTJE_NEM_p90 = quantile(PTJE_NEM, 0.90, na.rm = TRUE),
+
+    ## --- Student counts per subject ---
+    n_Students_RBD   = n()
+  ) %>%
+  ungroup() %>%
+  left_join(
+    Adm2023 %>% 
+      select(RBD, DEPENDENCIA, CODIGO_REGION_EGRESO, CODIGO_COMUNA_EGRESO) %>% 
+      distinct(),
+    by = "RBD"
+  ) %>%
+  rename(
+    GRUPO_DEPENDENCIA = DEPENDENCIA,
+    CODIGO_REGION = CODIGO_REGION_EGRESO,
+    CODIGO_COMUNA = CODIGO_COMUNA_EGRESO
+  )
+
+View(Adm2023_grouped)
+
+
+```
+
+
+
+
+## --- 2023 (0 treated as NA) ---
+```{r}
+
+# 2️⃣ Convert scores to numeric and replace 0 with NA
+Adm2023_na <- Adm2023 %>% 
+  mutate(
+    CLEC_MAX   = na_if(as.numeric(gsub(",", ".", CLEC_MAX)), 0),
+    MATE1_MAX  = na_if(as.numeric(gsub(",", ".", MATE1_MAX)), 0),
+    MATE2_MAX  = na_if(as.numeric(gsub(",", ".", MATE2_MAX)), 0),
+    HCSOC_MAX  = na_if(as.numeric(gsub(",", ".", HCSOC_MAX)), 0),
+    CIEN_MAX   = na_if(as.numeric(gsub(",", ".", CIEN_MAX)), 0),
+    PTJE_NEM = na_if(as.numeric(PTJE_NEM), 0)
+  )
+
+# 3️⃣ Group by RBD and calculate summary statistics
+Adm2023_na_grouped <- Adm2023_na %>% 
+  group_by(RBD) %>% 
+  summarise(
+    ## --- Averages ---
+    ## --- Averages ---  ### From 2023 all the ACTUAL ARE ACTUALLY MAX SCORES
+    avg_LENG_ACTUAL   = mean(CLEC_MAX, na.rm = TRUE),       ## MAX CLEC
+    avg_MATE_ACTUAL  = mean(MATE1_MAX, na.rm = TRUE),       ## MAX MATH1
+    avg_MATE2_MAX  = mean(MATE2_MAX, na.rm = TRUE),         ## Added for Matemática 2
+    avg_HCSO_ACTUAL  = mean(HCSOC_MAX, na.rm = TRUE),       ## MAX HCSOC
+    avg_CIEN_ACTUAL   = mean(CIEN_MAX, na.rm = TRUE),    ## MAX CIEN
+    avg_PTJE_NEM = mean(PTJE_NEM, na.rm = TRUE),
+
+    ## --- Percentiles: Lenguaje ---
+    LENG_ACTUAL_p10   = quantile(CLEC_MAX, 0.10, na.rm = TRUE),
+    LENG_ACTUAL_p25   = quantile(CLEC_MAX, 0.25, na.rm = TRUE),
+    LENG_ACTUAL_MEDIAN= quantile(CLEC_MAX, 0.50, na.rm = TRUE),
+    LENG_ACTUAL_p75   = quantile(CLEC_MAX, 0.75, na.rm = TRUE),
+    LENG_ACTUAL_p90   = quantile(CLEC_MAX, 0.90, na.rm = TRUE),
+
+    ## --- Percentiles: Matemática 1 ---
+    MATE_ACTUAL_p10   = quantile(MATE1_MAX, 0.10, na.rm = TRUE),
+    MATE_ACTUAL_p25   = quantile(MATE1_MAX, 0.25, na.rm = TRUE),
+    MATE_ACTUAL_MEDIAN= quantile(MATE1_MAX, 0.50, na.rm = TRUE),
+    MATE_ACTUAL_p75   = quantile(MATE1_MAX, 0.75, na.rm = TRUE),
+    MATE_ACTUAL_p90   = quantile(MATE1_MAX, 0.90, na.rm = TRUE),
+
+    ## --- Percentiles: Matemática 2 ---
+    MATE2_MAX_p10   = quantile(MATE2_MAX, 0.10, na.rm = TRUE),
+    MATE2_MAX_p25   = quantile(MATE2_MAX, 0.25, na.rm = TRUE),
+    MATE2_MAX_MEDIAN= quantile(MATE2_MAX, 0.50, na.rm = TRUE),
+    MATE2_MAX_p75   = quantile(MATE2_MAX, 0.75, na.rm = TRUE),
+    MATE2_MAX_p90   = quantile(MATE2_MAX, 0.90, na.rm = TRUE),
+
+     ## --- Percentiles: Historia y Ciencias Sociales ---
+    HCSO_ACTUAL_p10   = quantile(HCSOC_MAX, 0.10, na.rm = TRUE),
+    HCSO_ACTUAL_p25   = quantile(HCSOC_MAX, 0.25, na.rm = TRUE),
+    HCSO_ACTUAL_MEDIAN= quantile(HCSOC_MAX, 0.50, na.rm = TRUE),
+    HCSO_ACTUAL_p75   = quantile(HCSOC_MAX, 0.75, na.rm = TRUE),
+    HCSO_ACTUAL_p90   = quantile(HCSOC_MAX, 0.90, na.rm = TRUE),
+
+    ## --- Percentiles: Ciencias ---
+    CIEN_ACTUAL_p10   = quantile(CIEN_MAX, 0.10, na.rm = TRUE),
+    CIEN_ACTUAL_p25   = quantile(CIEN_MAX, 0.25, na.rm = TRUE),
+    CIEN_ACTUAL_MEDIAN= quantile(CIEN_MAX, 0.50, na.rm = TRUE),
+    CIEN_ACTUAL_p75   = quantile(CIEN_MAX, 0.75, na.rm = TRUE),
+    CIEN_ACTUAL_p90   = quantile(CIEN_MAX, 0.90, na.rm = TRUE),
+    
+    ## --- Percentiles: Puntaje Nem
+    PTJE_NEM_p10 = quantile(PTJE_NEM, 0.10, na.rm = TRUE),
+    PTJE_NEM_p25 = quantile(PTJE_NEM, 0.25, na.rm = TRUE),
+    PTJE_NEM_MEDIAN = quantile(PTJE_NEM, 0.50, na.rm = TRUE),
+    PTJE_NEM_p75 = quantile(PTJE_NEM, 0.75, na.rm = TRUE),
+    PTJE_NEM_p90 = quantile(PTJE_NEM, 0.90, na.rm = TRUE),
+    
+    ## --- Student counts per subject ---
+    n_Students_LENG  = sum(!is.na(CLEC_MAX)),
+    n_Students_MATE = sum(!is.na(MATE1_MAX)),
+    n_Students_MATE2 = sum(!is.na(MATE2_MAX)),
+    n_Students_HCSO  = sum(!is.na(HCSOC_MAX)),
+    n_Students_CIEN  = sum(!is.na(CIEN_MAX)),
+    n_Students_PTJE_NEM = sum(!is.na(PTJE_NEM)),
+    n_Students_RBD   = n()
+  ) %>%
+  ungroup() %>%
+  left_join(
+    Adm2023_na %>% 
+      select(RBD, DEPENDENCIA, CODIGO_REGION_EGRESO, CODIGO_COMUNA_EGRESO) %>% 
+      distinct(),
+    by = "RBD"
+  ) %>%
+  rename(
+    GRUPO_DEPENDENCIA = DEPENDENCIA,
+    CODIGO_REGION = CODIGO_REGION_EGRESO,
+    CODIGO_COMUNA = CODIGO_COMUNA_EGRESO
+  )
+
+View(Adm2023_na_grouped)
+```
+
+
+## 2024 (0 counted in the calculations)
+
+```{r}
+# 1️⃣ Filter and select relevant columns
+Adm2024 <- Adm2024 %>% 
+  filter(
+    ANYO_PROCESO == 2024, 
+    RINDIO_PROCESO_ANTERIOR == 0) %>%
+  select(
+    ANYO_PROCESO, RBD, DEPENDENCIA, CODIGO_REGION_EGRESO, CODIGO_COMUNA_EGRESO,
+    CLEC_MAX, MATE1_MAX, MATE2_MAX, HCSOC_MAX, CIEN_MAX, PTJE_NEM
+  )
+
+Adm2024_grouped <- Adm2024 %>% 
+  group_by(RBD) %>% 
+  summarise(
+    ## --- Averages ---
+    ## --- Averages ---  ### From 2023 all the ACTUAL ARE ACTUALLY MAX SCORES
+    avg_LENG_ACTUAL   = mean(CLEC_MAX, na.rm = TRUE),       ## MAX CLEC
+    avg_MATE_ACTUAL  = mean(MATE1_MAX, na.rm = TRUE),       ## MAX MATH1
+    avg_MATE2_MAX  = mean(MATE2_MAX, na.rm = TRUE),         ## Added for Matemática 2
+    avg_HCSO_ACTUAL  = mean(HCSOC_MAX, na.rm = TRUE),       ## MAX HCSOC
+    avg_CIEN_ACTUAL   = mean(CIEN_MAX, na.rm = TRUE),        ## MAX CIEN
+    avg_PTJE_NEM = mean(PTJE_NEM, na.rm = TRUE),
+
+    ## --- Percentiles: Lenguaje ---
+    LENG_ACTUAL_p10   = quantile(CLEC_MAX, 0.10, na.rm = TRUE),
+    LENG_ACTUAL_p25   = quantile(CLEC_MAX, 0.25, na.rm = TRUE),
+    LENG_ACTUAL_MEDIAN= quantile(CLEC_MAX, 0.50, na.rm = TRUE),
+    LENG_ACTUAL_p75   = quantile(CLEC_MAX, 0.75, na.rm = TRUE),
+    LENG_ACTUAL_p90   = quantile(CLEC_MAX, 0.90, na.rm = TRUE),
+
+    ## --- Percentiles: Matemática 1 ---
+    MATE_ACTUAL_p10   = quantile(MATE1_MAX, 0.10, na.rm = TRUE),
+    MATE_ACTUAL_p25   = quantile(MATE1_MAX, 0.25, na.rm = TRUE),
+    MATE_ACTUAL_MEDIAN= quantile(MATE1_MAX, 0.50, na.rm = TRUE),
+    MATE_ACTUAL_p75   = quantile(MATE1_MAX, 0.75, na.rm = TRUE),
+    MATE_ACTUAL_p90   = quantile(MATE1_MAX, 0.90, na.rm = TRUE),
+
+    ## --- Percentiles: Matemática 2 ---
+    MATE2_MAX_p10   = quantile(MATE2_MAX, 0.10, na.rm = TRUE),
+    MATE2_MAX_p25   = quantile(MATE2_MAX, 0.25, na.rm = TRUE),
+    MATE2_MAX_MEDIAN= quantile(MATE2_MAX, 0.50, na.rm = TRUE),
+    MATE2_MAX_p75   = quantile(MATE2_MAX, 0.75, na.rm = TRUE),
+    MATE2_MAX_p90   = quantile(MATE2_MAX, 0.90, na.rm = TRUE),
+
+     ## --- Percentiles: Historia y Ciencias Sociales ---
+    HCSO_ACTUAL_p10   = quantile(HCSOC_MAX, 0.10, na.rm = TRUE),
+    HCSO_ACTUAL_p25   = quantile(HCSOC_MAX, 0.25, na.rm = TRUE),
+    HCSO_ACTUAL_MEDIAN= quantile(HCSOC_MAX, 0.50, na.rm = TRUE),
+    HCSO_ACTUAL_p75   = quantile(HCSOC_MAX, 0.75, na.rm = TRUE),
+    HCSO_ACTUAL_p90   = quantile(HCSOC_MAX, 0.90, na.rm = TRUE),
+
+    ## --- Percentiles: Ciencias ---
+    CIEN_ACTUAL_p10   = quantile(CIEN_MAX, 0.10, na.rm = TRUE),
+    CIEN_ACTUAL_p25   = quantile(CIEN_MAX, 0.25, na.rm = TRUE),
+    CIEN_ACTUAL_MEDIAN= quantile(CIEN_MAX, 0.50, na.rm = TRUE),
+    CIEN_ACTUAL_p75   = quantile(CIEN_MAX, 0.75, na.rm = TRUE),
+    CIEN_ACTUAL_p90   = quantile(CIEN_MAX, 0.90, na.rm = TRUE),
+    ## --- Percentiles: Puntaje Nem
+    PTJE_NEM_p10 = quantile(PTJE_NEM, 0.10, na.rm = TRUE),
+    PTJE_NEM_p25 = quantile(PTJE_NEM, 0.25, na.rm = TRUE),
+    PTJE_NEM_MEDIAN = quantile(PTJE_NEM, 0.50, na.rm = TRUE),
+    PTJE_NEM_p75 = quantile(PTJE_NEM, 0.75, na.rm = TRUE),
+    PTJE_NEM_p90 = quantile(PTJE_NEM, 0.90, na.rm = TRUE),
+    
+    ## --- Student counts per subject ---
+    n_Students_RBD   = n()
+  ) %>%
+  ungroup() %>%
+  left_join(
+    Adm2024 %>% 
+      select(RBD, DEPENDENCIA, CODIGO_REGION_EGRESO, CODIGO_COMUNA_EGRESO) %>% 
+      distinct(),
+    by = "RBD"
+  ) %>%
+  rename(
+    GRUPO_DEPENDENCIA = DEPENDENCIA,
+    CODIGO_REGION = CODIGO_REGION_EGRESO,
+    CODIGO_COMUNA = CODIGO_COMUNA_EGRESO
+  )
+
+View(Adm2024_grouped)
+```
+
+## --- 2024 (0 treated as NA) ---
+```{r}
+
+# 2️⃣ Convert scores to numeric and replace 0 with NA
+Adm2024_na <- Adm2024 %>% 
+  mutate(
+    CLEC_MAX   = na_if(as.numeric(gsub(",", ".", CLEC_MAX)), 0),
+    MATE1_MAX  = na_if(as.numeric(gsub(",", ".", MATE1_MAX)), 0),
+    MATE2_MAX  = na_if(as.numeric(gsub(",", ".", MATE2_MAX)), 0),
+    HCSOC_MAX  = na_if(as.numeric(gsub(",", ".", HCSOC_MAX)), 0),
+    CIEN_MAX   = na_if(as.numeric(gsub(",", ".", CIEN_MAX)), 0),
+    PTJE_NEM = na_if(as.numeric(PTJE_NEM), 0)
+  )
+
+# 3️⃣ Group by RBD and calculate summary statistics
+Adm2024_na_grouped <- Adm2024_na %>% 
+  group_by(RBD) %>% 
+  summarise(
+    ## --- Averages ---
+    ## --- Averages ---  ### From 2023 all the ACTUAL ARE ACTUALLY MAX SCORES
+    avg_LENG_ACTUAL   = mean(CLEC_MAX, na.rm = TRUE),       ## MAX CLEC
+    avg_MATE_ACTUAL  = mean(MATE1_MAX, na.rm = TRUE),       ## MAX MATH1
+    avg_MATE2_MAX  = mean(MATE2_MAX, na.rm = TRUE),         ## Added for Matemática 2
+    avg_HCSO_ACTUAL  = mean(HCSOC_MAX, na.rm = TRUE),       ## MAX HCSOC
+    avg_CIEN_ACTUAL   = mean(CIEN_MAX, na.rm = TRUE),        ## MAX CIEN
+    avg_PTJE_NEM = mean(PTJE_NEM, na.rm = TRUE),
+
+    ## --- Percentiles: Lenguaje ---
+    LENG_ACTUAL_p10   = quantile(CLEC_MAX, 0.10, na.rm = TRUE),
+    LENG_ACTUAL_p25   = quantile(CLEC_MAX, 0.25, na.rm = TRUE),
+    LENG_ACTUAL_MEDIAN= quantile(CLEC_MAX, 0.50, na.rm = TRUE),
+    LENG_ACTUAL_p75   = quantile(CLEC_MAX, 0.75, na.rm = TRUE),
+    LENG_ACTUAL_p90   = quantile(CLEC_MAX, 0.90, na.rm = TRUE),
+
+    ## --- Percentiles: Matemática 1 ---
+    MATE_ACTUAL_p10   = quantile(MATE1_MAX, 0.10, na.rm = TRUE),
+    MATE_ACTUAL_p25   = quantile(MATE1_MAX, 0.25, na.rm = TRUE),
+    MATE_ACTUAL_MEDIAN= quantile(MATE1_MAX, 0.50, na.rm = TRUE),
+    MATE_ACTUAL_p75   = quantile(MATE1_MAX, 0.75, na.rm = TRUE),
+    MATE_ACTUAL_p90   = quantile(MATE1_MAX, 0.90, na.rm = TRUE),
+
+    ## --- Percentiles: Matemática 2 ---
+    MATE2_MAX_p10   = quantile(MATE2_MAX, 0.10, na.rm = TRUE),
+    MATE2_MAX_p25   = quantile(MATE2_MAX, 0.25, na.rm = TRUE),
+    MATE2_MAX_MEDIAN= quantile(MATE2_MAX, 0.50, na.rm = TRUE),
+    MATE2_MAX_p75   = quantile(MATE2_MAX, 0.75, na.rm = TRUE),
+    MATE2_MAX_p90   = quantile(MATE2_MAX, 0.90, na.rm = TRUE),
+    
+     ## --- Percentiles: Historia y Ciencias Sociales ---
+    HCSO_ACTUAL_p10   = quantile(HCSOC_MAX, 0.10, na.rm = TRUE),
+    HCSO_ACTUAL_p25   = quantile(HCSOC_MAX, 0.25, na.rm = TRUE),
+    HCSO_ACTUAL_MEDIAN= quantile(HCSOC_MAX, 0.50, na.rm = TRUE),
+    HCSO_ACTUAL_p75   = quantile(HCSOC_MAX, 0.75, na.rm = TRUE),
+    HCSO_ACTUAL_p90   = quantile(HCSOC_MAX, 0.90, na.rm = TRUE),
+
+    ## --- Percentiles: Ciencias ---
+    CIEN_ACTUAL_p10   = quantile(CIEN_MAX, 0.10, na.rm = TRUE),
+    CIEN_ACTUAL_p25   = quantile(CIEN_MAX, 0.25, na.rm = TRUE),
+    CIEN_ACTUAL_MEDIAN= quantile(CIEN_MAX, 0.50, na.rm = TRUE),
+    CIEN_ACTUAL_p75   = quantile(CIEN_MAX, 0.75, na.rm = TRUE),
+    CIEN_ACTUAL_p90   = quantile(CIEN_MAX, 0.90, na.rm = TRUE),
+    ## --- Percentiles: Puntaje Nem
+    PTJE_NEM_p10 = quantile(PTJE_NEM, 0.10, na.rm = TRUE),
+    PTJE_NEM_p25 = quantile(PTJE_NEM, 0.25, na.rm = TRUE),
+    PTJE_NEM_MEDIAN = quantile(PTJE_NEM, 0.50, na.rm = TRUE),
+    PTJE_NEM_p75 = quantile(PTJE_NEM, 0.75, na.rm = TRUE),
+    PTJE_NEM_p90 = quantile(PTJE_NEM, 0.90, na.rm = TRUE),
+    ## --- Student counts per subject ---
+    n_Students_LENG  = sum(!is.na(CLEC_MAX)),
+    n_Students_MATE = sum(!is.na(MATE1_MAX)),
+    n_Students_MATE2 = sum(!is.na(MATE2_MAX)),
+    n_Students_HCSO  = sum(!is.na(HCSOC_MAX)),
+    n_Students_CIEN  = sum(!is.na(CIEN_MAX)),
+    n_Students_PTJE_NEM = sum(!is.na(PTJE_NEM)),
+    n_Students_RBD   = n()
+  ) %>%
+  ungroup() %>%
+  left_join(
+    Adm2024_na %>% 
+      select(RBD, DEPENDENCIA, CODIGO_REGION_EGRESO, CODIGO_COMUNA_EGRESO) %>% 
+      distinct(),
+    by = "RBD"
+  ) %>%
+  rename(
+    GRUPO_DEPENDENCIA = DEPENDENCIA,
+    CODIGO_REGION = CODIGO_REGION_EGRESO,
+    CODIGO_COMUNA = CODIGO_COMUNA_EGRESO
+  )
+
+View(Adm2024_na_grouped)
+```
+
+
+
+## 2025 (0 counted in the calculations)
+
+```{r}
+# 1️⃣ Filter and select relevant columns
+Adm2025 <- Adm2025 %>% 
+  filter(
+    ANYO_PROCESO == 2025, 
+    RINDIO_PROCESO_ANTERIOR == 0) %>%
+  select(
+    ANYO_PROCESO, RBD, DEPENDENCIA, CODIGO_REGION_EGRESO, CODIGO_COMUNA_EGRESO,
+    CLEC_MAX, MATE1_MAX, MATE2_MAX, HCSOC_MAX, CIEN_MAX, PTJE_NEM
+  )
+
+Adm2025_grouped <- Adm2025 %>% 
+  group_by(RBD) %>% 
+  summarise(
+    ## --- Averages ---
+    ## --- Averages ---  ### From 2023 all the ACTUAL ARE ACTUALLY MAX SCORES
+    avg_LENG_ACTUAL   = mean(CLEC_MAX, na.rm = TRUE),       ## MAX CLEC
+    avg_MATE_ACTUAL  = mean(MATE1_MAX, na.rm = TRUE),       ## MAX MATH1
+    avg_MATE2_MAX  = mean(MATE2_MAX, na.rm = TRUE),         ## Added for Matemática 2
+    avg_HCSO_ACTUAL  = mean(HCSOC_MAX, na.rm = TRUE),       ## MAX HCSOC
+    avg_CIEN_ACTUAL   = mean(CIEN_MAX, na.rm = TRUE),        ## MAX CIEN
+    avg_PTJE_NEM = mean(PTJE_NEM, na.rm = TRUE),
+
+    ## --- Percentiles: Lenguaje ---
+    LENG_ACTUAL_p10   = quantile(CLEC_MAX, 0.10, na.rm = TRUE),
+    LENG_ACTUAL_p25   = quantile(CLEC_MAX, 0.25, na.rm = TRUE),
+    LENG_ACTUAL_MEDIAN= quantile(CLEC_MAX, 0.50, na.rm = TRUE),
+    LENG_ACTUAL_p75   = quantile(CLEC_MAX, 0.75, na.rm = TRUE),
+    LENG_ACTUAL_p90   = quantile(CLEC_MAX, 0.90, na.rm = TRUE),
+
+    ## --- Percentiles: Matemática 1 ---
+    MATE_ACTUAL_p10   = quantile(MATE1_MAX, 0.10, na.rm = TRUE),
+    MATE_ACTUAL_p25   = quantile(MATE1_MAX, 0.25, na.rm = TRUE),
+    MATE_ACTUAL_MEDIAN= quantile(MATE1_MAX, 0.50, na.rm = TRUE),
+    MATE_ACTUAL_p75   = quantile(MATE1_MAX, 0.75, na.rm = TRUE),
+    MATE_ACTUAL_p90   = quantile(MATE1_MAX, 0.90, na.rm = TRUE),
+
+    ## --- Percentiles: Matemática 2 ---
+    MATE2_MAX_p10   = quantile(MATE2_MAX, 0.10, na.rm = TRUE),
+    MATE2_MAX_p25   = quantile(MATE2_MAX, 0.25, na.rm = TRUE),
+    MATE2_MAX_MEDIAN= quantile(MATE2_MAX, 0.50, na.rm = TRUE),
+    MATE2_MAX_p75   = quantile(MATE2_MAX, 0.75, na.rm = TRUE),
+    MATE2_MAX_p90   = quantile(MATE2_MAX, 0.90, na.rm = TRUE),
+
+    ## --- Percentiles: Historia y Ciencias Sociales ---
+    HCSO_ACTUAL_p10   = quantile(HCSOC_MAX, 0.10, na.rm = TRUE),
+    HCSO_ACTUAL_p25   = quantile(HCSOC_MAX, 0.25, na.rm = TRUE),
+    HCSO_ACTUAL_MEDIAN= quantile(HCSOC_MAX, 0.50, na.rm = TRUE),
+    HCSO_ACTUAL_p75   = quantile(HCSOC_MAX, 0.75, na.rm = TRUE),
+    HCSO_ACTUAL_p90   = quantile(HCSOC_MAX, 0.90, na.rm = TRUE),
+
+    ## --- Percentiles: Ciencias ---
+    CIEN_ACTUAL_p10   = quantile(CIEN_MAX, 0.10, na.rm = TRUE),
+    CIEN_ACTUAL_p25   = quantile(CIEN_MAX, 0.25, na.rm = TRUE),
+    CIEN_ACTUAL_MEDIAN= quantile(CIEN_MAX, 0.50, na.rm = TRUE),
+    CIEN_ACTUAL_p75   = quantile(CIEN_MAX, 0.75, na.rm = TRUE),
+    CIEN_ACTUAL_p90   = quantile(CIEN_MAX, 0.90, na.rm = TRUE),
+    ## --- Percentiles: Puntaje Nem
+    PTJE_NEM_p10 = quantile(PTJE_NEM, 0.10, na.rm = TRUE),
+    PTJE_NEM_p25 = quantile(PTJE_NEM, 0.25, na.rm = TRUE),
+    PTJE_NEM_MEDIAN = quantile(PTJE_NEM, 0.50, na.rm = TRUE),
+    PTJE_NEM_p75 = quantile(PTJE_NEM, 0.75, na.rm = TRUE),
+    PTJE_NEM_p90 = quantile(PTJE_NEM, 0.90, na.rm = TRUE),
+    ## --- Student counts per subject ---
+    n_Students_RBD   = n()
+  ) %>%
+  ungroup() %>%
+  left_join(
+    Adm2025 %>% 
+      select(RBD, DEPENDENCIA, CODIGO_REGION_EGRESO, CODIGO_COMUNA_EGRESO) %>% 
+      distinct(),
+    by = "RBD"
+  ) %>%
+  rename(
+    GRUPO_DEPENDENCIA = DEPENDENCIA,
+    CODIGO_REGION = CODIGO_REGION_EGRESO,
+    CODIGO_COMUNA = CODIGO_COMUNA_EGRESO
+  )
+
+View(Adm2025_grouped)
+```
+
+## --- 2025 (0 treated as NA) ---
+```{r}
+
+# 2️⃣ Convert scores to numeric and replace 0 with NA
+Adm2025_na <- Adm2025 %>% 
+  mutate(
+    CLEC_MAX   = na_if(as.numeric(gsub(",", ".", CLEC_MAX)), 0),
+    MATE1_MAX  = na_if(as.numeric(gsub(",", ".", MATE1_MAX)), 0),
+    MATE2_MAX  = na_if(as.numeric(gsub(",", ".", MATE2_MAX)), 0),
+    HCSO_MAX  = na_if(as.numeric(gsub(",", ".", HCSOC_MAX)), 0),
+    CIEN_MAX   = na_if(as.numeric(gsub(",", ".", CIEN_MAX)), 0),
+    PTJE_NEM = na_if(as.numeric(PTJE_NEM), 0)
+  )
+
+# 3️⃣ Group by RBD and calculate summary statistics
+Adm2025_na_grouped <- Adm2025_na %>% 
+  group_by(RBD) %>% 
+  summarise(
+    ## --- Averages ---
+    ## --- Averages ---  ### From 2023 all the ACTUAL ARE ACTUALLY MAX SCORES
+    avg_LENG_ACTUAL   = mean(CLEC_MAX, na.rm = TRUE),       ## MAX CLEC
+    avg_MATE_ACTUAL  = mean(MATE1_MAX, na.rm = TRUE),       ## MAX MATH1
+    avg_MATE2_MAX  = mean(MATE2_MAX, na.rm = TRUE),         ## Added for Matemática 2
+    avg_HCSO_ACTUAL  = mean(HCSOC_MAX, na.rm = TRUE),       ## MAX HCSOC
+    avg_CIEN_ACTUAL   = mean(CIEN_MAX, na.rm = TRUE),        ## MAX CIEN
+    avg_PTJE_NEM = mean(PTJE_NEM, na.rm = TRUE),
+
+    ## --- Percentiles: Lenguaje ---
+    LENG_ACTUAL_p10   = quantile(CLEC_MAX, 0.10, na.rm = TRUE),
+    LENG_ACTUAL_p25   = quantile(CLEC_MAX, 0.25, na.rm = TRUE),
+    LENG_ACTUAL_MEDIAN= quantile(CLEC_MAX, 0.50, na.rm = TRUE),
+    LENG_ACTUAL_p75   = quantile(CLEC_MAX, 0.75, na.rm = TRUE),
+    LENG_ACTUAL_p90   = quantile(CLEC_MAX, 0.90, na.rm = TRUE),
+
+    ## --- Percentiles: Matemática 1 ---
+    MATE_ACTUAL_p10   = quantile(MATE1_MAX, 0.10, na.rm = TRUE),
+    MATE_ACTUAL_p25   = quantile(MATE1_MAX, 0.25, na.rm = TRUE),
+    MATE_ACTUAL_MEDIAN= quantile(MATE1_MAX, 0.50, na.rm = TRUE),
+    MATE_ACTUAL_p75   = quantile(MATE1_MAX, 0.75, na.rm = TRUE),
+    MATE_ACTUAL_p90   = quantile(MATE1_MAX, 0.90, na.rm = TRUE),
+
+    ## --- Percentiles: Matemática 2 ---
+    MATE2_MAX_p10   = quantile(MATE2_MAX, 0.10, na.rm = TRUE),
+    MATE2_MAX_p25   = quantile(MATE2_MAX, 0.25, na.rm = TRUE),
+    MATE2_MAX_MEDIAN= quantile(MATE2_MAX, 0.50, na.rm = TRUE),
+    MATE2_MAX_p75   = quantile(MATE2_MAX, 0.75, na.rm = TRUE),
+    MATE2_MAX_p90   = quantile(MATE2_MAX, 0.90, na.rm = TRUE),
+
+     ## --- Percentiles: Historia y Ciencias Sociales ---
+    HCSO_ACTUAL_p10   = quantile(HCSOC_MAX, 0.10, na.rm = TRUE),
+    HCSO_ACTUAL_p25   = quantile(HCSOC_MAX, 0.25, na.rm = TRUE),
+    HCSO_ACTUAL_MEDIAN= quantile(HCSOC_MAX, 0.50, na.rm = TRUE),
+    HCSO_ACTUAL_p75   = quantile(HCSOC_MAX, 0.75, na.rm = TRUE),
+    HCSO_ACTUAL_p90   = quantile(HCSOC_MAX, 0.90, na.rm = TRUE),
+
+    ## --- Percentiles: Ciencias ---
+    CIEN_ACTUAL_p10   = quantile(CIEN_MAX, 0.10, na.rm = TRUE),
+    CIEN_ACTUAL_p25   = quantile(CIEN_MAX, 0.25, na.rm = TRUE),
+    CIEN_ACTUAL_MEDIAN= quantile(CIEN_MAX, 0.50, na.rm = TRUE),
+    CIEN_ACTUAL_p75   = quantile(CIEN_MAX, 0.75, na.rm = TRUE),
+    CIEN_ACTUAL_p90   = quantile(CIEN_MAX, 0.90, na.rm = TRUE),
+    
+    ## --- Percentiles: Puntaje Nem
+    PTJE_NEM_p10 = quantile(PTJE_NEM, 0.10, na.rm = TRUE),
+    PTJE_NEM_p25 = quantile(PTJE_NEM, 0.25, na.rm = TRUE),
+    PTJE_NEM_MEDIAN = quantile(PTJE_NEM, 0.50, na.rm = TRUE),
+    PTJE_NEM_p75 = quantile(PTJE_NEM, 0.75, na.rm = TRUE),
+    PTJE_NEM_p90 = quantile(PTJE_NEM, 0.90, na.rm = TRUE),
+    
+    ## --- Student counts per subject ---
+    n_Students_LENG  = sum(!is.na(CLEC_MAX)),
+    n_Students_MATE = sum(!is.na(MATE1_MAX)),
+    n_Students_MATE2 = sum(!is.na(MATE2_MAX)),
+    n_Students_HCSO  = sum(!is.na(HCSOC_MAX)),
+    n_Students_CIEN  = sum(!is.na(CIEN_MAX)),
+    n_Students_PTJE_NEM = sum(!is.na(PTJE_NEM)),
+    n_Students_RBD   = n()
+  ) %>%
+  ungroup() %>%
+  left_join(
+    Adm2025_na %>% 
+      select(RBD, DEPENDENCIA, CODIGO_REGION_EGRESO, CODIGO_COMUNA_EGRESO) %>% 
+      distinct(),
+    by = "RBD"
+  ) %>%
+  rename(
+    GRUPO_DEPENDENCIA = DEPENDENCIA,
+    CODIGO_REGION = CODIGO_REGION_EGRESO,
+    CODIGO_COMUNA = CODIGO_COMUNA_EGRESO
+  )
+
+View(Adm2025_na_grouped)
+```
+
+
+```{r}
+# Ensure consistent types before combining
+Adm2021_grouped <- Adm2021_grouped %>%
+  mutate(
+    CODIGO_REGION = as.character(CODIGO_REGION),
+    CODIGO_COMUNA = as.character(CODIGO_COMUNA)
+  )
+
+Adm2022_grouped <- Adm2022_grouped %>%
+  mutate(
+    CODIGO_REGION = as.character(CODIGO_REGION),
+    CODIGO_COMUNA = as.character(CODIGO_COMUNA)
+  )
+
+Adm2023_grouped <- Adm2023_grouped %>%
+  mutate(
+    CODIGO_REGION = as.character(CODIGO_REGION),
+    CODIGO_COMUNA = as.character(CODIGO_COMUNA)
+  )
+
+Adm2024_grouped <- Adm2024_grouped %>%
+  mutate(
+    CODIGO_REGION = as.character(CODIGO_REGION),
+    CODIGO_COMUNA = as.character(CODIGO_COMUNA)
+  )
+
+Adm2025_grouped <- Adm2025_grouped %>%
+  mutate(
+    CODIGO_REGION = as.character(CODIGO_REGION),
+    CODIGO_COMUNA = as.character(CODIGO_COMUNA)
+  )
+
+
+Adm2025_grouped <- Adm2025_grouped %>% mutate(year = 2025)
+Adm2024_grouped <- Adm2024_grouped %>% mutate(year = 2024)
+Adm2023_grouped <- Adm2023_grouped %>% mutate(year = 2023)
+Adm2022_grouped <- Adm2022_grouped %>% mutate(year = 2022)
+Adm2021_grouped <- Adm2021_grouped %>% mutate(year = 2021)
+
+Adm_combined_2021_2025 <- bind_rows(
+  Adm2025_grouped,
+  Adm2024_grouped, 
+  Adm2023_grouped, 
+  Adm2022_grouped, 
+  Adm2021_grouped
+)
+Adm_combined_21_25 <- Adm_combined_2021_2025 %>% 
+  mutate(RBD = trimws(RBD)) %>%        # remove leading/trailing spaces
+  filter(!is.na(RBD), RBD != "")
+
+
+Adm_combined_21_25 <- Adm_combined_21_25 %>%
+  select(
+    year, everything()) %>%
+  arrange(RBD, year)
+View(Adm_combined_21_25)
+```
+
+
+
+
+```{r}
+Adm2021_na_grouped <- Adm2021_na_grouped %>%
+  mutate(
+    CODIGO_REGION = as.character(CODIGO_REGION),
+    CODIGO_COMUNA = as.character(CODIGO_COMUNA)
+  )
+
+Adm2022_na_grouped <- Adm2022_na_grouped %>%
+  mutate(
+    CODIGO_REGION = as.character(CODIGO_REGION),
+    CODIGO_COMUNA = as.character(CODIGO_COMUNA)
+  )
+
+Adm2023_na_grouped <- Adm2023_na_grouped %>%
+  mutate(
+    CODIGO_REGION = as.character(CODIGO_REGION),
+    CODIGO_COMUNA = as.character(CODIGO_COMUNA)
+  )
+
+Adm2024_na_grouped <- Adm2024_na_grouped %>%
+  mutate(
+    CODIGO_REGION = as.character(CODIGO_REGION),
+    CODIGO_COMUNA = as.character(CODIGO_COMUNA)
+  )
+
+Adm2025_na_grouped <- Adm2025_na_grouped %>%
+  mutate(
+    CODIGO_REGION = as.character(CODIGO_REGION),
+    CODIGO_COMUNA = as.character(CODIGO_COMUNA)
+  )
+
+
+Adm2025_na_grouped <- Adm2025_na_grouped %>% mutate(year = 2025)
+Adm2024_na_grouped <- Adm2024_na_grouped %>% mutate(year = 2024)
+Adm2023_na_grouped <- Adm2023_na_grouped %>% mutate(year = 2023)
+Adm2022_na_grouped <- Adm2022_na_grouped %>% mutate(year = 2022)
+Adm2021_na_grouped <- Adm2021_na_grouped %>% mutate(year = 2021)
+
+Adm_combined_na_2021_2025 <- bind_rows(
+  Adm2025_na_grouped,
+  Adm2024_na_grouped, 
+  Adm2023_na_grouped, 
+  Adm2022_na_grouped, 
+  Adm2021_na_grouped
+)
+Adm_combined_na_21_25 <- Adm_combined_na_2021_2025 %>% 
+  mutate(RBD = trimws(RBD)) %>%        # remove leading/trailing spaces
+  filter(!is.na(RBD), RBD != "")
+
+
+Adm_combined_na_21_25 <- Adm_combined_na_21_25 %>%
+  select(
+    year, everything()) %>%
+  arrange(RBD, year)
+View(Adm_combined_na_21_25)
+```
+
+
+## Save files
+
+FILES 2021-2025 WITH 2012-2020 are really similar but i decided to separate it because have differetns RBD (idk why)
+
+```{r}
+write_csv(Adm_combined_21_25, "Adm_combined_21_25.csv")
+write_csv(Adm_combined_na_21_25, "Adm_combined_na_21_25.csv")
+```
+
+
+
+
+
+
