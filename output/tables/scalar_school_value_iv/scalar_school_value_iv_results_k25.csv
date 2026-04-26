@@ -1,0 +1,8 @@
+spec,outcome,treatment,instrument,beta,se,zstat,p_value,n,fs_f,iv_seconds,fs_seconds,rc
+math_unadj,z_year_math_max,d_math_unadj,z_math_unadj,.2054010419067486,.03149322,6.5220718,6.9342809e-11,2,4985.3359,562.11298,299.548,0
+math_adj,z_year_math_max,d_math_adj,z_math_adj,,,,,2,,234.36301,,1
+leng_unadj,z_year_leng_max,d_leng_unadj,z_leng_unadj,,,,,2,,33.106998,,1
+leng_adj,z_year_leng_max,d_leng_adj,z_leng_adj,,,,,2,,2.141,,1
+stem_unadj,stem_enrollment_m1,d_stem_unadj,z_stem_unadj,,,,,2,,.146,,1
+stem_adj,stem_enrollment_m1,d_stem_adj,z_stem_adj,,,,,2,,.139,,1
+stem_gap_adj,stem_enrollment_m1,d_stem_gap_adj,z_stem_gap_adj,,,,,2,,.14,,1

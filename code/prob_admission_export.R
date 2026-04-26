@@ -11,17 +11,17 @@ setwd(data_wd)
 library(tidyverse)
 
 
-schools_DA_2021_top <- prep_spots_db(2021) %>% 
-  arrange(desc(regular_spots)) %>% 
-  slice_head(n=251)
+#schools_DA_2021_top <- prep_spots_db(2021) %>% 
+#  arrange(desc(regular_spots)) %>% 
+#  slice_head(n=251)
 
 
-sample_school_list <- schools_DA_2021_top %>% 
-  mutate(rbd_target = trimws(as.character(sub("_.*", "", school_id)))) %>% 
-  distinct(rbd_target) %>%
-  arrange(rbd_target)
+#sample_school_list <- schools_DA_2021_top %>% 
+#  mutate(rbd_target = trimws(as.character(sub("_.*", "", school_id)))) %>% 
+#  distinct(rbd_target) %>%
+#  arrange(rbd_target)
 
-write.csv(sample_school_list, "./data/clean/selected_rbd.csv", row.names = FALSE)
+#write.csv(sample_school_list, "./data/clean/selected_rbd.csv", row.names = FALSE)
 
 
 ##### Combining all DA_probs

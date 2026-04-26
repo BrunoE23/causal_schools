@@ -1,0 +1,10 @@
+spec,group,outcome,treatment,instrument,beta,se,zstat,p_value,n,fs_f,iv_seconds,fs_seconds,rc
+math_unadj,all,z_year_math_max,d_math_unadj,z_math_unadj,.2113803675323917,.033121262,6.3820143,1.7477388e-10,2,4365.8979,144.44099,28.179001,0
+math_adj,all,z_year_math_max,d_math_adj,z_math_adj,.4323069604756625,.056601714,7.637701,2.2113471e-14,2,3642.7024,207.577,24.795,0
+leng_unadj,all,z_year_leng_max,d_leng_unadj,z_leng_unadj,.1742664856022978,.032113418,5.4265943,5.7439468e-08,2,5396.3999,129.97,24.615999,0
+leng_adj,all,z_year_leng_max,d_leng_adj,z_leng_adj,.4047298962877067,.062475514,6.4782162,9.2813271e-11,2,4831.1465,148.936,29.495001,0
+stem_unadj,all,stem_enrollment_m1,d_stem_unadj,z_stem_unadj,.3414027964245406,.046569467,7.3310437,2.2836735e-13,2,6466.0933,172.43201,37.476002,0
+stem_adj,all,stem_enrollment_m1,d_stem_adj,z_stem_adj,.5793331327641732,.068051405,8.5131693,1.6924205e-17,2,5049.3369,180.812,35.424999,0
+stem_gap_adj,all,stem_enrollment_m1,d_stem_gap_adj,z_stem_gap_adj,-.2558461800702162,.078133635,-3.2744694,.0010586064,2,4959.6978,173.39,33.014,0
+stem_gap_adj,boys,stem_enrollment_m1,d_stem_gap_adj,z_stem_gap_adj,-.4586727123372889,.12187023,-3.7636156,.00016747425,2,2820.1885,127.296,22.073,0
+stem_gap_adj,girls,stem_enrollment_m1,d_stem_gap_adj,z_stem_gap_adj,-.0182991208891214,.086905949,-.21056235,.83322877,2,2152.3225,130.642,21.091999,0
