@@ -1,5 +1,9 @@
 # Project Documentation
 
+This file records substantive, project-specific knowledge needed to understand and continue the causal schools research project. It should document data construction, sample definitions, outcome definitions, empirical design choices, interpretation conventions, and links to decision logs.
+
+It should not include Codex workflow rules, collaboration preferences, or general assistant behavior instructions. Those belong in `setup_md_codex/WORKFLOW.md` or other agent-facing setup files.
+
 Empirical regression specifications are tracked separately in `empirical_methods.md`.
 
 ## `br_code`

@@ -111,6 +111,58 @@ where:
 
 The regression should be run separately for each version of `V_s`, for example raw means and controlled value-added.
 
+### Probability-Control Support
+
+The first-pass probability-control matrix uses a practical support restriction to avoid carrying probability controls for every school that appears anywhere in the assignment simulation.
+
+The current support is defined among students in the IV construction sample:
+
+- timely SAE students
+- with matching simulated assignment probabilities
+- with assignment risk, `any_risk == 1`
+
+A school is retained in the probability-control set if at least `25` timely at-risk students have positive simulated assignment probability for that school.
+
+This produces the k=25 supported school set used to construct the `prob_<rbd>` and `iszero_<rbd>` controls. The same supported set is used when coding the scalar offer instrument normalization: supported offers can generate nonzero `Z_i`; no-offer and outside-support offers are coded as the omitted `Z_i = 0` category.
+
+The k=25 threshold is a practical support rule. It reduces the dimensionality of the probability-control matrix while retaining schools with meaningful lottery support in the estimation sample. The construction writes diagnostics such as the number of supported schools and the retained probability mass, which should be checked when the support rule changes.
+
+For the first-pass scalar IV dataframe, score outcomes such as `z_year_math_max` and `z_year_leng_max` are constructed on the broad `univ_gr8_df` by PSU year before merging the reduced probability controls. This keeps the score scale from being redefined by the narrower IV estimation sample.
+
+### Current Scalar Offer-Instrument Normalization
+
+The current first-pass scalar IV uses the value of the attended school as the endogenous treatment:
+
+`D_i = V_{most_time_RBD}`
+
+and the value of the first-round offered school as the scalar offer instrument:
+
+`Z_i = V_{rbd_treated_1R}`
+
+Because the probability-control set is restricted to schools in the practical k=25 lottery support, the scalar offer instrument is normalized so that unsupported offers and no-offer cases are the omitted baseline. For each school-value measure, compute:
+
+`mu_out = mean(V_{rbd_treated_1R} | rbd_treated_1R outside supported set, rbd_treated_1R != 0)`
+
+among timely at-risk students.
+
+Then code:
+
+`D_i = V_{most_time_RBD} - mu_out`
+
+and:
+
+`Z_i = 1{rbd_treated_1R in supported set} * (V_{rbd_treated_1R} - mu_out)`
+
+So:
+
+- no first-round offer has `Z_i = 0`
+- an offer to a school outside the supported probability-control set has `Z_i = 0`
+- an offer to a supported school has positive or negative `Z_i` depending on whether that school's value is above or below the outside-support offered-school baseline
+
+This normalization makes zero correspond to the omitted outside-support/no-supported-offer category, not the national mean school value. The same baseline is subtracted from `D_i` so the endogenous treatment and scalar instrument are measured on the same shifted value scale.
+
+This is an implementation choice for the first-pass scalar IV with restricted probability support. If the support definition changes, the outside-support baseline should be recomputed.
+
 ### Interpretation
 
 The IV coefficient `beta` is not the causal effect of attending any particular school. It is the causal effect of moving along the chosen school-value index among students whose school attendance is shifted by the lottery instruments.

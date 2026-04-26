@@ -41,6 +41,7 @@
 - Do not revert unrelated user changes.
 - Prefer non-destructive commands.
 - Include file references when explaining changes.
+- When code introduces or changes a substantive research normalization, scaling rule, sample restriction, support definition, estimand definition, or regression specification, document it in the appropriate project-memory file before finalizing. Use `empirical_methods.md` and/or a decision-log entry for empirical-design choices; do not leave the reasoning only in code comments or task READMEs.
 
 ## Validation Rules
 - Run available tests/checks relevant to changed scope.
@@ -51,5 +52,6 @@
 - Provide short progress updates during longer tasks.
 - Report what was done, what is pending, and why.
 - Be explicit about assumptions and unverified items.
+- When Bruno says he wants to explain, discuss, "tell you what's up", or is still deciding the target, pause and listen. Do not run code, inspect files, or make edits unless explicitly asked. If the next action is ambiguous, first restate the understood goal and wait for confirmation.
 - When a conversation resolves a documentation question or clarifies a project convention, add that information to `setup_md_codex/project_memory/project_documentation.md`.
 - When a task uncovers a data, code, or workflow issue that may matter later, record it in `setup_md_codex/project_memory/issues.md`.

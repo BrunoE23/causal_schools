@@ -49,3 +49,12 @@
 - Current working rule: Collapse offers to `mrun` x `sae_proceso`, define `rbd_treated_1R` as the nonzero first-round offered RBD if one exists, then keep the earliest `sae_proceso` per student before merging to the broad universe.
 - Why it matters: The broad-universe file should remain one row per student. Application-level offer rows should not duplicate student rows.
 - Follow-up: After rebuilding `univ_gr8_df`, verify one row per `mrun`, verify `offers_1R_first` is one row per `mrun`, and check that no `mrun` x `sae_proceso` has multiple distinct nonzero first-round offered RBDs.
+
+### `stem_enrollment_m1` source-of-truth in scalar IV construction
+
+- Status: Open
+- Date noted: 2026-04-26
+- Context: The scalar IV construction script starts from `univ_gr8_df`. If `stem_enrollment_m1` is missing, the script currently reconstructs it as `f_science_m1 == 1 | f_eng_m1 == 1`, with missing field indicators treated as zero.
+- Why it matters: This is intended to mirror the school-value construction, but the denominator/source-of-truth should be explicit. Reconstructing the outcome inside the scalar IV construction could add zero cases for students without observed higher-education enrollment if the upstream data do not already define the outcome.
+- Current workaround: Leave the guard as-is for now; if `stem_enrollment_m1` exists upstream, the script does not overwrite it.
+- Follow-up: Decide whether `stem_enrollment_m1` should be created upstream in `universe_reg_df` and required by the scalar IV script, or whether reconstruction in the scalar IV construction is acceptable with explicit denominator documentation.
