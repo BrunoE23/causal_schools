@@ -61,7 +61,7 @@ offered_spots <- function(results, year,
            rbd_treated_2R = ifelse(offered_spot_2R == 1, rbd, 0), 
            rbd_treated    = ifelse(offered_spot_anyR == 1, rbd, 0)
     ) %>% 
-  select(mrun, 
+  select(mrun, sae_proceso,
          #n_cupos, n_apps,  
          br_code, preferencia_postulante,
                offered_spot_1R, offered_spot_2R, offered_spot_anyR, 
@@ -82,46 +82,47 @@ treatment_2020 <- offered_spots(results_2020, 2020)
 test_treatments <- rbind(treatment_2017, treatment_2018, treatment_2019)
 
 
-
-prob_treatment_1R <- test_treatments %>% 
-  arrange(br_code, preferencia_postulante) %>% 
-  group_by(br_code, preferencia_postulante) %>% 
-  summarize(prob_treatment = mean(offered_spot_1R, na.rm = TRUE),
-            n_students = n(), 
-            n_offers = sum(offered_spot_1R == 1), 
-            n_cupos = max(n_cupos),
-            n_apps = max(n_apps),
-            prop_cupos = n_offers / n_cupos,
-            prop_apps = n_students / n_apps) %>% 
-  arrange(br_code, preferencia_postulante) %>%
-  group_by(br_code) %>% 
-  mutate(
-    cumm_cupos = cumsum(prop_cupos)
-  ) 
-
-
-prob_treatment_1R %>% 
-  filter(prob_treatment == 1) %>% 
-  pull(cumm_cupos) %>% 
-  summary()
-
-prob_treatment_1R %>% 
-  filter(preferencia_postulante == 3) %>% 
-  pull(cumm_cupos) %>% 
-  summary()
-
-prob_treatment_1R %>% 
-  filter(preferencia_postulante == 5) %>% 
-  pull(cumm_cupos) %>% 
-  summary()
-
-
-
-prob_treatment_2R <- test_treatments %>% 
-  group_by(br_code, preferencia_postulante) %>% 
-  summarize(prob_treatment = mean(offered_spot_2R, na.rm = TRUE),
-            n_students = n())
-
+# 
+# prob_treatment_1R <- test_treatments %>% 
+#   arrange(br_code, preferencia_postulante) %>% 
+#   group_by(br_code, preferencia_postulante) %>% 
+#   summarize(prob_treatment = mean(offered_spot_1R, na.rm = TRUE),
+#             n_students = n(), 
+#             n_offers = sum(offered_spot_1R == 1), 
+# #            n_cupos = max(n_cupos),
+# #            n_apps = max(n_apps),
+# #            prop_cupos = n_offers / n_cupos,
+# #            prop_apps = n_students / n_apps
+#                                       ) %>% 
+#   arrange(br_code, preferencia_postulante) %>%
+#   group_by(br_code) %>% 
+#   mutate(
+#     cumm_cupos = cumsum(prop_cupos)
+#   ) 
+# 
+# 
+# prob_treatment_1R %>% 
+#   filter(prob_treatment == 1) %>% 
+#   pull(cumm_cupos) %>% 
+#   summary()
+# 
+# prob_treatment_1R %>% 
+#   filter(preferencia_postulante == 3) %>% 
+#   pull(cumm_cupos) %>% 
+#   summary()
+# 
+# prob_treatment_1R %>% 
+#   filter(preferencia_postulante == 5) %>% 
+#   pull(cumm_cupos) %>% 
+#   summary()
+# 
+# 
+# 
+# prob_treatment_2R <- test_treatments %>% 
+#   group_by(br_code, preferencia_postulante) %>% 
+#   summarize(prob_treatment = mean(offered_spot_2R, na.rm = TRUE),
+#             n_students = n())
+# 
 
 
 all_treatments <- rbind(treatment_2017, 
@@ -133,12 +134,30 @@ all_treatments <- rbind(treatment_2017,
             #,n_cupos, n_apps
             ))
 
-#all_treatments %>% 
-#  filter(rbd_admitido == 0)
+all_treatments %>% 
+  filter(rbd_treated_1R   != 0) %>% 
+  View()
 
 rm(treatment_2017, treatment_2018, treatment_2019, treatment_2020)
+
+
+offers_1R_proceso <- all_treatments %>%
+  group_by(mrun, sae_proceso) %>%
+  summarise(
+    offered_1R = as.integer(any(rbd_treated_1R != 0, na.rm = TRUE)),
+    rbd_treated_1R = {
+      offered_rbd <- unique(rbd_treated_1R[!is.na(rbd_treated_1R) & rbd_treated_1R != 0])
+      if (length(offered_rbd) == 0) 0 else offered_rbd[1]
+    },
+    n_application_rows = n(),
+    n_distinct_offered_rbd_1R = n_distinct(rbd_treated_1R[rbd_treated_1R != 0]),
+    .groups = "drop"
+  )
+
 
 #save(all_treatments, file = "./data/clean/treatment_1R.RData")
 save(all_treatments, file = "./data/clean/treatment_1R_v2.RData")
 
+
+save(offers_1R_proceso, file = "./data/clean/offers_1R_p_proceso.RData")
 
