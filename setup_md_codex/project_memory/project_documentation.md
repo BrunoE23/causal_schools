@@ -65,6 +65,12 @@ The main school definition is:
 
 This is currently the default school object for the observational-value exercise. If the project later changes to a different school definition, that should be treated as a substantive change in estimand rather than a small coding detail.
 
+Current sample-definition note:
+
+- the upstream merged universe is intended to reflect the regular 8th-grade sample
+- the current observational-value constructor additionally restricts to `12 <= EDAD_ALU <= 16`
+- this age restriction is currently imposed inside the VA constructor, not upstream in the general universe build
+
 ### Main Construction Logic
 
 The observational-value task constructs school-level measures for both score outcomes and higher-education enrollment or field outcomes.
@@ -133,6 +139,7 @@ The current control set is:
 
 - `factor(cohort_gr8)`
 - `factor(GEN_ALU)`
+- `factor(EDAD_ALU)`
 - `factor(COD_COM_ALU)`
 - `z_sim_mat_4to`
 - `z_sim_leng_4to`
@@ -141,6 +148,7 @@ Interpretation of the controls:
 
 - `cohort_gr8` adjusts for cohort differences
 - `GEN_ALU` adjusts for gender differences
+- `EDAD_ALU` adjusts flexibly for grade-8 age
 - `COD_COM_ALU` is the student's comuna, not the school's comuna
 - `z_sim_mat_4to` and `z_sim_leng_4to` adjust for prior achievement
 
@@ -243,6 +251,7 @@ The adjusted model is then:
 where `controls` currently means:
 
 - `factor(cohort_gr8)`
+- `factor(EDAD_ALU)`
 - `factor(COD_COM_ALU)`
 - `z_sim_mat_4to`
 - `z_sim_leng_4to`
@@ -254,9 +263,10 @@ The current interaction rule is:
 - interact `factor(cohort_gr8)`
 - interact `z_sim_mat_4to`
 - interact `z_sim_leng_4to`
+- do not interact `factor(EDAD_ALU)`
 - do not interact `factor(COD_COM_ALU)`
 
-So comuna is treated as a shared control, while cohort and prior achievement are allowed to work differently by gender.
+So age and comuna are treated as shared controls, while cohort and prior achievement are allowed to work differently by gender.
 
 Interpretation:
 

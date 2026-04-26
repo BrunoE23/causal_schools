@@ -84,6 +84,7 @@ stem_indicator_vars <- list(
 control_terms <- c(
   "factor(cohort_gr8)",
   "factor(GEN_ALU)",
+  "factor(EDAD_ALU)",
   "factor(COD_COM_ALU)",
   "z_sim_mat_4to",
   "z_sim_leng_4to"
@@ -92,6 +93,7 @@ control_terms <- c(
 control_vars <- c(
   "cohort_gr8",
   "GEN_ALU",
+  "EDAD_ALU",
   "COD_COM_ALU",
   "z_sim_mat_4to",
   "z_sim_leng_4to"

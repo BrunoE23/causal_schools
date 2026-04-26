@@ -26,6 +26,26 @@ values_path <- file.path(
 )
 
 
+school_directory_root <- file.path(data_wd, "data/raw/school_directory")
+
+dependency_group_order <- c("1", "2", "3", "4", "5")
+dependency_group_labels <- c(
+  "1" = "Municipal",
+  "2" = "Particular Subvencionado",
+  "3" = "Particular Pagado",
+  "4" = "Administracion Delegada",
+  "5" = "Servicio Local de Educacion"
+)
+dependency_detail_order <- c("1", "2", "3", "4", "5", "6")
+dependency_detail_labels <- c(
+  "1" = "Corporacion Municipal",
+  "2" = "Municipal DAEM",
+  "3" = "Particular Subvencionado",
+  "4" = "Particular Pagado",
+  "5" = "Administracion Delegada",
+  "6" = "Servicio Local de Educacion"
+)
+
 
 # ------------------------- Helpers -------------------------
 
@@ -127,3 +147,10 @@ values %>%
   ) %>% 
   View()
 
+
+univ_gr8 <- read_csv("data/clean/univ_gr8_df.csv")
+
+univ_gr8 %>% 
+  filter(most_time_RBD == 25524) %>% 
+  pull(EDAD_ALU) %>% 
+  table()
