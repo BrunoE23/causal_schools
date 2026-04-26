@@ -3,6 +3,8 @@
 **Date:** 2026-04-26
 **Status:** active
 
+Update: the original non-interaction rule for `EDAD_ALU` in the gender-gap VA model was later changed. Current rule: include `factor(EDAD_ALU)` in the main VA model and interact `factor(EDAD_ALU)` with gender in the gender-gap VA model. The only shared, non-interacted gender-gap control is `factor(COD_COM_ALU)`, because comuna has many categories.
+
 ## Context
 
 While reviewing the school-level observational value-added outputs, some schools that appear to serve adults or heavily over-age students were showing very poor value-added metrics.

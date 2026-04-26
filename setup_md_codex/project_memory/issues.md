@@ -40,3 +40,12 @@
 - Why it matters: This would shift the estimand toward a high-achievement STEM outcome rather than an unconditional STEM enrollment rate. It may better capture STEM preparation among students with enough academic preparation, but it also builds achievement directly into the outcome definition.
 - Current workaround: The `school_rbd_observational_values` task currently uses unconditional enrollment and field indicators, including STEM indicators based on the existing binary field specs.
 - Follow-up: Decide the score threshold, which score to use, and whether the thresholded STEM measure should supplement or replace the unconditional STEM outcome.
+
+### Validate first-offer merge in `universe_reg_df`
+
+- Status: Open
+- Date noted: 2026-04-26
+- Context: While adding first-round offer information to `universe_reg_df`, joining raw `treatment_1R_v2.RData` by `mrun` expanded the broad universe from 944,360 rows to 1,778,389 rows because `all_treatments` is application-level.
+- Current working rule: Collapse offers to `mrun` x `sae_proceso`, define `rbd_treated_1R` as the nonzero first-round offered RBD if one exists, then keep the earliest `sae_proceso` per student before merging to the broad universe.
+- Why it matters: The broad-universe file should remain one row per student. Application-level offer rows should not duplicate student rows.
+- Follow-up: After rebuilding `univ_gr8_df`, verify one row per `mrun`, verify `offers_1R_first` is one row per `mrun`, and check that no `mrun` x `sae_proceso` has multiple distinct nonzero first-round offered RBDs.

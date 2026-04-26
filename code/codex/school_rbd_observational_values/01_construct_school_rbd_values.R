@@ -78,16 +78,29 @@ stem_indicator_vars <- list(
   ml = c("f_science_ml", "f_eng_ml")
 )
 
+# Controlled VA is the expensive step. Keep this list narrow while iterating;
+# raw means can still be computed for the broader configured outcome set.
+controlled_value_added_outcomes <- c(
+  "z_year_math_max",
+  "z_year_leng_max",
+  "z_year_leng_math_total",
+  "stem_enrollment_m1"
+)
+
 # Main individual-level control set for controlled observational value-added.
 # COD_COM_ALU is the student's comuna, not the school's comuna.
 # income_decile is intentionally excluded for now because it is currently messy.
+baseline_score_vars <- c("z_sim_mat_4to", "z_sim_leng_4to")
+baseline_score_poly_terms <- unlist(lapply(baseline_score_vars, function(var) {
+  c(var, paste0("I(", var, "^", 2:3, ")"))
+}), use.names = FALSE)
+
 control_terms <- c(
   "factor(cohort_gr8)",
   "factor(GEN_ALU)",
   "factor(EDAD_ALU)",
   "factor(COD_COM_ALU)",
-  "z_sim_mat_4to",
-  "z_sim_leng_4to"
+  baseline_score_poly_terms
 )
 
 control_vars <- c(
@@ -310,7 +323,7 @@ estimate_school_value_added <- function(data, outcome, controls, control_vars) {
   )
 
   model <- feols(model_formula, data = regression_data, notes = FALSE)
-  school_fe <- fixef(model)$school_rbd
+  school_fe <- fixef(model)[["school_rbd"]]
 
   regression_counts <- regression_data %>%
     count(school_rbd, name = "n_students_regression")
@@ -436,7 +449,7 @@ estimate_gender_gap_value_added <- function(data,
   )
 
   model <- feols(model_formula, data = regression_data, notes = FALSE)
-  school_gender_fe <- fixef(model)$school_gender_fe
+  school_gender_effects <- fixef(model)[["school_gender_fe"]]
 
   regression_counts <- regression_data %>%
     group_by(school_rbd) %>%
@@ -448,8 +461,8 @@ estimate_gender_gap_value_added <- function(data,
     mutate(n_students_regression = n_girls_regression + n_boys_regression)
 
   fe_values <- tibble(
-    school_gender_fe = names(school_gender_fe),
-    school_gender_effect = as.numeric(school_gender_fe)
+    school_gender_fe = names(school_gender_effects),
+    school_gender_effect = as.numeric(school_gender_effects)
   ) %>%
     separate(
       school_gender_fe,
@@ -461,15 +474,12 @@ estimate_gender_gap_value_added <- function(data,
     select(-school_gender_fe) %>%
     pivot_wider(
       names_from = gender_group,
-      values_from = school_gender_effect
-    ) %>%
-    rename(
-      girls_effect = girl,
-      boys_effect = boy
+      values_from = school_gender_effect,
+      values_fn = mean
     ) %>%
     mutate(
       outcome = outcome_name,
-      controlled_value_added = girls_effect - boys_effect,
+      controlled_value_added = .data[["girl"]] - .data[["boy"]],
       n_students_regression_total = nobs(model)
     ) %>%
     left_join(regression_counts, by = "school_rbd") %>%
@@ -591,7 +601,13 @@ raw_values <- map_dfr(outcome_specs$outcome, function(outcome_name) {
 
 # ------------------------- Controlled school value-added -------------------------
 
-controlled_values <- map_dfr(outcome_specs$outcome, function(outcome_name) {
+controlled_outcomes <- intersect(controlled_value_added_outcomes, outcome_specs$outcome)
+
+if (length(controlled_outcomes) == 0) {
+  stop("No configured controlled VA outcomes were found.", call. = FALSE)
+}
+
+controlled_values <- map_dfr(controlled_outcomes, function(outcome_name) {
   estimate_school_value_added(
     data = analytic,
     outcome = outcome_name,
