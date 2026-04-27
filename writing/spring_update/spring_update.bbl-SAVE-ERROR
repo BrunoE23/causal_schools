@@ -1,0 +1,609 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nyt/global//global/global/global}
+    \entry{abdulkadiroglu_research_2017}{article}{}{}
+      \name{author}{4}{}{%
+        {{un=0,uniquepart=base,hash=9210d7a0646d485f1f21951c61c52cd2}{%
+           family={Abdulkadiroğlu},
+           familyi={A\bibinitperiod},
+           given={Atila},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=71a74466a85192690bb7668576e4f2f3}{%
+           family={Angrist},
+           familyi={A\bibinitperiod},
+           given={Joshua},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=4bb6eca8ac4f0778b07f81866190ff34}{%
+           family={Narita},
+           familyi={N\bibinitperiod},
+           given={Yusuke},
+           giveni={Y\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=116110e566f5ce57aba815a2a1c58074}{%
+           family={Pathak},
+           familyi={P\bibinitperiod},
+           given={Parag},
+           giveni={P\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {Econometric Society}%
+      }
+      \strng{namehash}{009b8760f2c3c4cd564591d9c91799d7}
+      \strng{fullhash}{60acc3625507789373edca21b08b3132}
+      \strng{fullhashraw}{60acc3625507789373edca21b08b3132}
+      \strng{bibnamehash}{60acc3625507789373edca21b08b3132}
+      \strng{authorbibnamehash}{60acc3625507789373edca21b08b3132}
+      \strng{authornamehash}{009b8760f2c3c4cd564591d9c91799d7}
+      \strng{authorfullhash}{60acc3625507789373edca21b08b3132}
+      \strng{authorfullhashraw}{60acc3625507789373edca21b08b3132}
+      \field{extraname}{1}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{A growing number of school districts use centralized assignment mechanisms to allocate school seats in a manner that reflects student preferences and school priorities. Many of these assignment schemes use lotteries to ration seats when schools are oversubscribed. The resulting random assignment opens the door to credible quasi‐experimental research designs for the evaluation of school effectiveness. Yet the question of how best to separate the lottery‐generated randomization integral to such designs from non‐random preferences and priorities remains open. This paper develops easily‐implemented empirical strategies that fully exploit the random assignment embedded in a wide class of mechanisms, while also revealing why seats are randomized at one school but not another. We use these methods to evaluate charter schools in Denver, one of a growing number of districts that combine charter and traditional public schools in a unified assignment system. The resulting estimates show large achievement gains from charter school attendance. Our approach generates efficiency gains over ad hoc methods, such as those that focus on schools ranked first, while also identifying a more representative average causal effect. We also show how to use centralized assignment mechanisms to identify causal effects in models with multiple school sectors.}
+      \field{journaltitle}{Econometrica}
+      \field{shorttitle}{Research {Design} {Meets} {Market} {Design}}
+      \field{title}{Research {Design} {Meets} {Market} {Design}: {Using} {Centralized} {Assignment} for {Impact} {Evaluation}}
+      \field{urlday}{2}
+      \field{urlmonth}{11}
+      \field{urlyear}{2025}
+      \field{volume}{85}
+      \field{year}{2017}
+      \field{urldateera}{ce}
+      \field{pages}{1373\bibrangedash 1432}
+      \range{pages}{60}
+      \verb{file}
+      \verb PDF:C\:\\Users\\xd-br\\Zotero\\storage\\XB5URWA7\\Abdulkadiroğlu et al. - 2017 - Research Design Meets Market Design Using Centralized Assignment for Impact Evaluation.pdf:application/pdf;Snapshot:C\:\\Users\\xd-br\\Zotero\\storage\\3B97ZSR7\\RePEcwlyemetrpv85y2017ip1373-1432.html:text/html
+      \endverb
+      \verb{urlraw}
+      \verb https://EconPapers.repec.org/RePEc:wly:emetrp:v:85:y:2017:i::p:1373-1432
+      \endverb
+      \verb{url}
+      \verb https://EconPapers.repec.org/RePEc:wly:emetrp:v:85:y:2017:i::p:1373-1432
+      \endverb
+    \endentry
+    \entry{abdulkadiroglu_breaking_2022}{article}{}{}
+      \name{author}{4}{}{%
+        {{un=0,uniquepart=base,hash=9210d7a0646d485f1f21951c61c52cd2}{%
+           family={Abdulkadiroğlu},
+           familyi={A\bibinitperiod},
+           given={Atila},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=ee326f34eea24952d04c41cef1771bfc}{%
+           family={Angrist},
+           familyi={A\bibinitperiod},
+           given={Joshua\bibnamedelima D.},
+           giveni={J\bibinitperiod\bibinitdelim D\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=4bb6eca8ac4f0778b07f81866190ff34}{%
+           family={Narita},
+           familyi={N\bibinitperiod},
+           given={Yusuke},
+           giveni={Y\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=116110e566f5ce57aba815a2a1c58074}{%
+           family={Pathak},
+           familyi={P\bibinitperiod},
+           given={Parag},
+           giveni={P\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{language}{1}{%
+        {en}%
+      }
+      \strng{namehash}{009b8760f2c3c4cd564591d9c91799d7}
+      \strng{fullhash}{1716eb1794be69936fb699d7bec2750e}
+      \strng{fullhashraw}{1716eb1794be69936fb699d7bec2750e}
+      \strng{bibnamehash}{1716eb1794be69936fb699d7bec2750e}
+      \strng{authorbibnamehash}{1716eb1794be69936fb699d7bec2750e}
+      \strng{authornamehash}{009b8760f2c3c4cd564591d9c91799d7}
+      \strng{authorfullhash}{1716eb1794be69936fb699d7bec2750e}
+      \strng{authorfullhashraw}{1716eb1794be69936fb699d7bec2750e}
+      \field{extraname}{2}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{Many schools in large urban districts have more applicants than seats. Centralized school assignment algorithms ration seats at over-subscribed schools using randomly assigned lottery numbers, non-lottery tie-breakers like test scores, or both. The New York City public high school match illustrates the latter, using test scores and other criteria to rank applicants at the city's screened schools, combined with lottery tie-breaking at the rest. We show how to identify causal effects of school attendance in such settings. Our approach generalizes regression discontinuity methods to allow for multiple treatments and multiple running variables, some of which are randomly assigned. The key to this generalization is a local propensity score that quantifies the school assignment probabilities induced by lottery and non-lottery tie-breakers. The utility of the local propensity score is demonstrated in an assessment of the predictive value of New York City's school report cards. Schools that earn the highest report card grade indeed improve SAT math scores and increase graduation rates, though by much less than OLS estimates suggest. Selection bias in OLS estimates of grade effects is egregious for screened schools.}
+      \field{issn}{1468-0262}
+      \field{journaltitle}{Econometrica}
+      \field{note}{\_eprint: https://onlinelibrary.wiley.com/doi/pdf/10.3982/ECTA17125}
+      \field{number}{1}
+      \field{shorttitle}{Breaking {Ties}}
+      \field{title}{Breaking {Ties}: {Regression} {Discontinuity} {Design} {Meets} {Market} {Design}}
+      \field{urlday}{28}
+      \field{urlmonth}{3}
+      \field{urlyear}{2026}
+      \field{volume}{90}
+      \field{year}{2022}
+      \field{urldateera}{ce}
+      \field{pages}{117\bibrangedash 151}
+      \range{pages}{35}
+      \verb{doi}
+      \verb 10.3982/ECTA17125
+      \endverb
+      \verb{urlraw}
+      \verb https://onlinelibrary.wiley.com/doi/abs/10.3982/ECTA17125
+      \endverb
+      \verb{url}
+      \verb https://onlinelibrary.wiley.com/doi/abs/10.3982/ECTA17125
+      \endverb
+      \keyw{deferred acceptance,Propensity score,research design,school choice,school quality}
+    \endentry
+    \entry{abdulkadiroglu_parents_2020}{article}{}{}
+      \name{author}{4}{}{%
+        {{un=0,uniquepart=base,hash=9210d7a0646d485f1f21951c61c52cd2}{%
+           family={Abdulkadiroğlu},
+           familyi={A\bibinitperiod},
+           given={Atila},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=e75d96917751be05beac30ccd106dc84}{%
+           family={Pathak},
+           familyi={P\bibinitperiod},
+           given={Parag\bibnamedelima A.},
+           giveni={P\bibinitperiod\bibinitdelim A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=2ab1348ea81f7a3ddc12ff3524649461}{%
+           family={Schellenberg},
+           familyi={S\bibinitperiod},
+           given={Jonathan},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=5274cf4d6ae8b9cd307590bef3c54969}{%
+           family={Walters},
+           familyi={W\bibinitperiod},
+           given={Christopher\bibnamedelima R.},
+           giveni={C\bibinitperiod\bibinitdelim R\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{language}{1}{%
+        {en}%
+      }
+      \strng{namehash}{009b8760f2c3c4cd564591d9c91799d7}
+      \strng{fullhash}{7f8b1f9b6f29a9247492f7b4f14d9af2}
+      \strng{fullhashraw}{7f8b1f9b6f29a9247492f7b4f14d9af2}
+      \strng{bibnamehash}{7f8b1f9b6f29a9247492f7b4f14d9af2}
+      \strng{authorbibnamehash}{7f8b1f9b6f29a9247492f7b4f14d9af2}
+      \strng{authornamehash}{009b8760f2c3c4cd564591d9c91799d7}
+      \strng{authorfullhash}{7f8b1f9b6f29a9247492f7b4f14d9af2}
+      \strng{authorfullhashraw}{7f8b1f9b6f29a9247492f7b4f14d9af2}
+      \field{extraname}{3}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{School choice may lead to improvements in school productivity if parents' choices reward effective schools and punish ineffective ones. This mechanism requires parents to choose schools based on causal effectiveness rather than peer characteristics. We study relationships among parent preferences, peer quality, and causal effects on outcomes for applicants to New York City's centralized high school assignment mechanism. We use applicants' rank-ordered choice lists to measure preferences and to construct selection-corrected estimates of treatment effects on test scores, high school graduation, college attendance, and college quality. Parents prefer schools that enroll high-achieving peers, and these schools generate larger improvements in short- and long-run student outcomes. Preferences are unrelated to school effectiveness and academic match quality after controlling for peer quality.}
+      \field{issn}{0002-8282}
+      \field{journaltitle}{American Economic Review}
+      \field{month}{5}
+      \field{number}{5}
+      \field{title}{Do {Parents} {Value} {School} {Effectiveness}?}
+      \field{urlday}{31}
+      \field{urlmonth}{10}
+      \field{urlyear}{2025}
+      \field{volume}{110}
+      \field{year}{2020}
+      \field{urldateera}{ce}
+      \field{pages}{1502\bibrangedash 1539}
+      \range{pages}{38}
+      \verb{doi}
+      \verb 10.1257/aer.20172040
+      \endverb
+      \verb{file}
+      \verb Full Text:C\:\\Users\\xd-br\\Zotero\\storage\\U7XZZDFF\\Abdulkadiroğlu et al. - 2020 - Do Parents Value School Effectiveness.pdf:application/pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://www.aeaweb.org/articles?id=10.1257/aer.20172040
+      \endverb
+      \verb{url}
+      \verb https://www.aeaweb.org/articles?id=10.1257/aer.20172040
+      \endverb
+      \keyw{Analysis of Education,Education,Welfare,Returns to Education,Education: Government Policy,Consumer Economics: Empirical Analysis,Consumer Economics: Empirical Analysis,State and Local Government: Health,Public Pensions,Analysis of Education,Returns to Education,Education: Government Policy,State and Local Government: Health; Education; Welfare; Public Pensions}
+    \endentry
+    \entry{angrist_credible_2024}{article}{}{}
+      \name{author}{4}{}{%
+        {{un=0,uniquepart=base,hash=71a74466a85192690bb7668576e4f2f3}{%
+           family={Angrist},
+           familyi={A\bibinitperiod},
+           given={Joshua},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=37ff659ee267754271943145f8ae0ce2}{%
+           family={Hull},
+           familyi={H\bibinitperiod},
+           given={Peter},
+           giveni={P\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=e75d96917751be05beac30ccd106dc84}{%
+           family={Pathak},
+           familyi={P\bibinitperiod},
+           given={Parag\bibnamedelima A.},
+           giveni={P\bibinitperiod\bibinitdelim A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=00f4eae9d53892723e6ec72a134e44e5}{%
+           family={Walters},
+           familyi={W\bibinitperiod},
+           given={Christopher},
+           giveni={C\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{08066f46f89322d1d81cf67cefb9a866}
+      \strng{fullhash}{5a2b479b6b00e8793a980ed707c8177c}
+      \strng{fullhashraw}{5a2b479b6b00e8793a980ed707c8177c}
+      \strng{bibnamehash}{5a2b479b6b00e8793a980ed707c8177c}
+      \strng{authorbibnamehash}{5a2b479b6b00e8793a980ed707c8177c}
+      \strng{authornamehash}{08066f46f89322d1d81cf67cefb9a866}
+      \strng{authorfullhash}{5a2b479b6b00e8793a980ed707c8177c}
+      \strng{authorfullhashraw}{5a2b479b6b00e8793a980ed707c8177c}
+      \field{extraname}{1}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{We introduce two empirical strategies harnessing the randomness in school assignment mechanisms to measure school value-added. The first estimator controls for the probability of school assignment, treating take-up as ignorable. We test this assumption using randomness in assignments. The second approach uses assignments as instrumental variables (IVs) for low-dimensional models of value-added and forms empirical Bayes posteriors from these IV estimates. Both strategies solve the underidentification challenge arising from school undersubscription. Models controlling for assignment risk and lagged achievement in Denver and New York City yield reliable value-added estimates. Estimates from models with lower-quality achievement controls are improved by IV.}
+      \field{issn}{0034-6535}
+      \field{journaltitle}{The Review of Economics and Statistics}
+      \field{month}{1}
+      \field{number}{1}
+      \field{title}{Credible {School} {Value}-{Added} with {Undersubscribed} {School} {Lotteries}}
+      \field{urlday}{28}
+      \field{urlmonth}{3}
+      \field{urlyear}{2026}
+      \field{volume}{106}
+      \field{year}{2024}
+      \field{urldateera}{ce}
+      \field{pages}{1\bibrangedash 19}
+      \range{pages}{19}
+      \verb{doi}
+      \verb 10.1162/rest_a_01149
+      \endverb
+      \verb{file}
+      \verb Full Text PDF:C\:\\Users\\xd-br\\Zotero\\storage\\MWXTEJNE\\Angrist et al. - 2024 - Credible School Value-Added with Undersubscribed School Lotteries.pdf:application/pdf;Snapshot:C\:\\Users\\xd-br\\Zotero\\storage\\4DTPCE2W\\rest_a_01149.html:text/html
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1162/rest_a_01149
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1162/rest_a_01149
+      \endverb
+    \endentry
+    \entry{angrist_methods_2023}{incollection}{}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=71a74466a85192690bb7668576e4f2f3}{%
+           family={Angrist},
+           familyi={A\bibinitperiod},
+           given={Joshua},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=37ff659ee267754271943145f8ae0ce2}{%
+           family={Hull},
+           familyi={H\bibinitperiod},
+           given={Peter},
+           giveni={P\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=00f4eae9d53892723e6ec72a134e44e5}{%
+           family={Walters},
+           familyi={W\bibinitperiod},
+           given={Christopher},
+           giveni={C\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{language}{1}{%
+        {en}%
+      }
+      \list{publisher}{1}{%
+        {Elsevier}%
+      }
+      \strng{namehash}{08066f46f89322d1d81cf67cefb9a866}
+      \strng{fullhash}{4f85a360a0402854a1cfa20421dff7a7}
+      \strng{fullhashraw}{4f85a360a0402854a1cfa20421dff7a7}
+      \strng{bibnamehash}{4f85a360a0402854a1cfa20421dff7a7}
+      \strng{authorbibnamehash}{4f85a360a0402854a1cfa20421dff7a7}
+      \strng{authornamehash}{08066f46f89322d1d81cf67cefb9a866}
+      \strng{authorfullhash}{4f85a360a0402854a1cfa20421dff7a7}
+      \strng{authorfullhashraw}{4f85a360a0402854a1cfa20421dff7a7}
+      \field{extraname}{2}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Handbook of the {Economics} of {Education}}
+      \field{isbn}{978-0-443-13276-6}
+      \field{title}{Methods for measuring school effectiveness}
+      \field{urlday}{4}
+      \field{urlmonth}{2}
+      \field{urlyear}{2026}
+      \field{volume}{7}
+      \field{year}{2023}
+      \field{urldateera}{ce}
+      \field{pages}{1\bibrangedash 60}
+      \range{pages}{60}
+      \verb{doi}
+      \verb 10.1016/bs.hesedu.2023.03.001
+      \endverb
+      \verb{file}
+      \verb PDF:C\:\\Users\\xd-br\\Zotero\\storage\\7SCX93XJ\\Angrist et al. - 2023 - Methods for measuring school effectiveness.pdf:application/pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://linkinghub.elsevier.com/retrieve/pii/S1574069223000156
+      \endverb
+      \verb{url}
+      \verb https://linkinghub.elsevier.com/retrieve/pii/S1574069223000156
+      \endverb
+    \endentry
+    \entry{campos_college_2026}{misc}{}{}
+      \name{author}{4}{}{%
+        {{un=0,uniquepart=base,hash=d40907e2f07fdd8a55b97790ab723736}{%
+           family={Campos},
+           familyi={C\bibinitperiod},
+           given={Christopher},
+           giveni={C\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=9fffdcece974a6ab3cb69ff79d8b3cbf}{%
+           family={Muñoz},
+           familyi={M\bibinitperiod},
+           given={Pablo},
+           giveni={P\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=912fb3d73998b7afa89f79c4983adca2}{%
+           family={Bucarey},
+           familyi={B\bibinitperiod},
+           given={Alonso},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=8b35391f95d22327efc900736ccf3fd2}{%
+           family={Contreras},
+           familyi={C\bibinitperiod},
+           given={Dante},
+           giveni={D\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {National Bureau of Economic Research}%
+      }
+      \strng{namehash}{ff00b855b9f3425b7c3cd9cf909ffce9}
+      \strng{fullhash}{bd4f97d0a467b6478c5625f8e75b1722}
+      \strng{fullhashraw}{bd4f97d0a467b6478c5625f8e75b1722}
+      \strng{bibnamehash}{bd4f97d0a467b6478c5625f8e75b1722}
+      \strng{authorbibnamehash}{bd4f97d0a467b6478c5625f8e75b1722}
+      \strng{authornamehash}{ff00b855b9f3425b7c3cd9cf909ffce9}
+      \strng{authorfullhash}{bd4f97d0a467b6478c5625f8e75b1722}
+      \strng{authorfullhashraw}{bd4f97d0a467b6478c5625f8e75b1722}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{This paper studies how college major choices shape earnings and fertility outcomes. Using administrative data that link students' preferences, random assignment to majors, and post-college outcomes, we estimate the causal pecuniary and non-pecuniary returns to different fields of study. We document substantial heterogeneity in these returns across majors and show that such variation helps explain gender gaps in labor market outcomes: women place greater weight on balancing career and family in their major choices, and these preference differences account for about 30\% of the gender earnings gap among college graduates. Last, we use our causal estimates to evaluate the effects of counterfactual assignment rules that target representation gaps in settings with centralized assignment systems. We find that gender quotas in high-return fields can significantly reduce representation and earnings gaps with minimal impacts on efficiency and aggregate fertility.}
+      \field{month}{1}
+      \field{series}{Working {Paper} {Series}}
+      \field{title}{College {Major} {Choice}, {Payoffs}, and {Gender} {Gaps}}
+      \field{type}{Working {Paper}}
+      \field{urlday}{28}
+      \field{urlmonth}{3}
+      \field{urlyear}{2026}
+      \field{year}{2026}
+      \field{urldateera}{ce}
+      \verb{doi}
+      \verb 10.3386/w34736
+      \endverb
+      \verb{file}
+      \verb Full Text:C\:\\Users\\xd-br\\Zotero\\storage\\XUT6R9R4\\Campos et al. - 2026 - College Major Choice, Payoffs, and Gender Gaps.pdf:application/pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://www.nber.org/papers/w34736
+      \endverb
+      \verb{url}
+      \verb https://www.nber.org/papers/w34736
+      \endverb
+    \endentry
+    \entry{dale_estimating_2002}{article}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=20bbd35e6a26f958835cdf32f49447c3}{%
+           family={Dale},
+           familyi={D\bibinitperiod},
+           given={Stacy\bibnamedelima Berg},
+           giveni={S\bibinitperiod\bibinitdelim B\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=34526c3bf548080921683822747fad7e}{%
+           family={Krueger},
+           familyi={K\bibinitperiod},
+           given={Alan\bibnamedelima B.},
+           giveni={A\bibinitperiod\bibinitdelim B\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{2d46196936819de4cb23b4473f25364a}
+      \strng{fullhash}{2d46196936819de4cb23b4473f25364a}
+      \strng{fullhashraw}{2d46196936819de4cb23b4473f25364a}
+      \strng{bibnamehash}{2d46196936819de4cb23b4473f25364a}
+      \strng{authorbibnamehash}{2d46196936819de4cb23b4473f25364a}
+      \strng{authornamehash}{2d46196936819de4cb23b4473f25364a}
+      \strng{authorfullhash}{2d46196936819de4cb23b4473f25364a}
+      \strng{authorfullhashraw}{2d46196936819de4cb23b4473f25364a}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{Estimates of the effect of college selectivity on earnings may be biased because elite colleges admit students, in part, based on characteristics that are related to future earnings. We matched students who applied to, and were accepted by, similar colleges to try to eliminate this bias. Using the College and Beyond data set and National Longitudinal Survey of the High School Class of 1972, we find that students who attended more selective colleges earned about the same as students of seemingly comparable ability who attended less selective schools. Children from low-income families, however, earned more if they attended selective colleges.}
+      \field{issn}{0033-5533}
+      \field{journaltitle}{The Quarterly Journal of Economics}
+      \field{month}{11}
+      \field{number}{4}
+      \field{shorttitle}{Estimating the {Payoff} to {Attending} a {More} {Selective} {College}}
+      \field{title}{Estimating the {Payoff} to {Attending} a {More} {Selective} {College}: {An} {Application} of {Selection} on {Observables} and {Unobservables}*}
+      \field{urlday}{28}
+      \field{urlmonth}{3}
+      \field{urlyear}{2026}
+      \field{volume}{117}
+      \field{year}{2002}
+      \field{urldateera}{ce}
+      \field{pages}{1491\bibrangedash 1527}
+      \range{pages}{37}
+      \verb{doi}
+      \verb 10.1162/003355302320935089
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1162/003355302320935089
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1162/003355302320935089
+      \endverb
+    \endentry
+    \entry{kirkeboen_field_2016}{article}{}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=c447ca944c23f77e96acd93d7c2e1efa}{%
+           family={Kirkeboen},
+           familyi={K\bibinitperiod},
+           given={Lars\bibnamedelima J.},
+           giveni={L\bibinitperiod\bibinitdelim J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=73617459d7b5ec52c55e78a4cae26169}{%
+           family={Leuven},
+           familyi={L\bibinitperiod},
+           given={Edwin},
+           giveni={E\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=98a93a8ebb93b69e901fdf1b9926a748}{%
+           family={Mogstad},
+           familyi={M\bibinitperiod},
+           given={Magne},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{a46ad78b1f83f00fd3c45fe2c337a68d}
+      \strng{fullhash}{4709612fce85652ecf0f1561bf32f69f}
+      \strng{fullhashraw}{4709612fce85652ecf0f1561bf32f69f}
+      \strng{bibnamehash}{4709612fce85652ecf0f1561bf32f69f}
+      \strng{authorbibnamehash}{4709612fce85652ecf0f1561bf32f69f}
+      \strng{authornamehash}{a46ad78b1f83f00fd3c45fe2c337a68d}
+      \strng{authorfullhash}{4709612fce85652ecf0f1561bf32f69f}
+      \strng{authorfullhashraw}{4709612fce85652ecf0f1561bf32f69f}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{This article examines the labor market payoffs to different types of postsecondary education, including field and institution of study. Instrumental variables (IV) estimation of the payoff to choosing one type of education compared to another is made particularly challenging by individuals choosing between several types of education. Not only does identification require one instrument per alternative, but it is also necessary to deal with the issue that individuals who choose the same education may have different next-best alternatives. We address these difficulties using rich administrative data for Norway’s postsecondary education system. A centralized admission process creates credible instruments from discontinuities that effectively randomize applicants near unpredictable admission cutoffs into different institutions and fields of study. The admission process also provides information on preferred and next-best alternatives from strategy-proof measures of individuals’ ranking of institutions and fields. The results from our IV approach may be summarized with three broad conclusions. First, different fields of study have substantially different labor market payoffs, even after accounting for institution and peer quality. Second, the effect on earnings from attending a more selective institution tends to be relatively small compared to payoffs to field of study. Third, the estimated payoffs to field of study are consistent with individuals choosing fields in which they have a comparative advantage. Comparing our estimates to those obtained from other approaches highlights the importance of using instruments to correct for selection bias and information on individuals’ ranking of institutions and fields to measure their preferred and next-best alternatives.}
+      \field{issn}{0033-5533}
+      \field{journaltitle}{The Quarterly Journal of Economics}
+      \field{month}{8}
+      \field{number}{3}
+      \field{title}{Field of {Study}, {Earnings}, and {Self}-{Selection}*}
+      \field{urlday}{12}
+      \field{urlmonth}{9}
+      \field{urlyear}{2025}
+      \field{volume}{131}
+      \field{year}{2016}
+      \field{urldateera}{ce}
+      \field{pages}{1057\bibrangedash 1111}
+      \range{pages}{55}
+      \verb{doi}
+      \verb 10.1093/qje/qjw019
+      \endverb
+      \verb{file}
+      \verb EBSCO-FullText-09_12_2025 (2):C\:\\Users\\xd-br\\Zotero\\storage\\ZDGBU9C5\\EBSCO-FullText-09_12_2025 (2).pdf:application/pdf;Submitted Version:C\:\\Users\\xd-br\\Zotero\\storage\\GCI5ETJ7\\Kirkeboen et al. - 2016 - Field of Study, Earnings, and Self-Selection.pdf:application/pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1093/qje/qjw019
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1093/qje/qjw019
+      \endverb
+    \endentry
+    \entry{rosenbaum_central_1983}{article}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=2619036f349e499ca578ec1a7ebb3a46}{%
+           family={Rosenbaum},
+           familyi={R\bibinitperiod},
+           given={Paul\bibnamedelima R.},
+           giveni={P\bibinitperiod\bibinitdelim R\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=49a367b6280de8a239f8bbdd573f996f}{%
+           family={Rubin},
+           familyi={R\bibinitperiod},
+           given={Donald\bibnamedelima B.},
+           giveni={D\bibinitperiod\bibinitdelim B\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {[Oxford University Press, Biometrika Trust]}%
+      }
+      \strng{namehash}{92f2e2437becffd0791eaf96ba456246}
+      \strng{fullhash}{92f2e2437becffd0791eaf96ba456246}
+      \strng{fullhashraw}{92f2e2437becffd0791eaf96ba456246}
+      \strng{bibnamehash}{92f2e2437becffd0791eaf96ba456246}
+      \strng{authorbibnamehash}{92f2e2437becffd0791eaf96ba456246}
+      \strng{authornamehash}{92f2e2437becffd0791eaf96ba456246}
+      \strng{authorfullhash}{92f2e2437becffd0791eaf96ba456246}
+      \strng{authorfullhashraw}{92f2e2437becffd0791eaf96ba456246}
+      \field{sortinit}{R}
+      \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{The propensity score is the conditional probability of assignment to a particular treatment given a vector of observed covariates. Both large and small sample theory show that adjustment for the scalar propensity score is sufficient to remove bias due to all observed covariates. Applications include: (i) matched sampling on the univariate propensity score, which is a generalization of discriminant matching, (ii) multivariate adjustment by subclassification on the propensity score where the same subclasses are used to estimate treatment effects for all outcome variables and in all subpopulations, and (iii) visual representation of multivariate covariance adjustment by a two-dimensional plot.}
+      \field{issn}{0006-3444}
+      \field{journaltitle}{Biometrika}
+      \field{number}{1}
+      \field{title}{The {Central} {Role} of the {Propensity} {Score} in {Observational} {Studies} for {Causal} {Effects}}
+      \field{urlday}{28}
+      \field{urlmonth}{3}
+      \field{urlyear}{2026}
+      \field{volume}{70}
+      \field{year}{1983}
+      \field{urldateera}{ce}
+      \field{pages}{41\bibrangedash 55}
+      \range{pages}{15}
+      \verb{doi}
+      \verb 10.2307/2335942
+      \endverb
+      \verb{urlraw}
+      \verb https://www.jstor.org/stable/2335942
+      \endverb
+      \verb{url}
+      \verb https://www.jstor.org/stable/2335942
+      \endverb
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

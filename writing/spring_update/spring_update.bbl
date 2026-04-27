@@ -1,0 +1,223 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nyt/global//global/global/global}
+    \entry{angrist_leveraging_2017}{article}{}{}
+      \name{author}{4}{}{%
+        {{un=0,uniquepart=base,hash=ee326f34eea24952d04c41cef1771bfc}{%
+           family={Angrist},
+           familyi={A\bibinitperiod},
+           given={Joshua\bibnamedelima D.},
+           giveni={J\bibinitperiod\bibinitdelim D\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=46a05e33649372bde6622c4415dffa41}{%
+           family={Hull},
+           familyi={H\bibinitperiod},
+           given={Peter\bibnamedelima D.},
+           giveni={P\bibinitperiod\bibinitdelim D\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=e75d96917751be05beac30ccd106dc84}{%
+           family={Pathak},
+           familyi={P\bibinitperiod},
+           given={Parag\bibnamedelima A.},
+           giveni={P\bibinitperiod\bibinitdelim A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=5274cf4d6ae8b9cd307590bef3c54969}{%
+           family={Walters},
+           familyi={W\bibinitperiod},
+           given={Christopher\bibnamedelima R.},
+           giveni={C\bibinitperiod\bibinitdelim R\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{2cbd3e0434d1aadcbfd10ad5525540b5}
+      \strng{fullhash}{c7b609ff7d47090561d425f379b75536}
+      \strng{fullhashraw}{c7b609ff7d47090561d425f379b75536}
+      \strng{bibnamehash}{c7b609ff7d47090561d425f379b75536}
+      \strng{authorbibnamehash}{c7b609ff7d47090561d425f379b75536}
+      \strng{authornamehash}{2cbd3e0434d1aadcbfd10ad5525540b5}
+      \strng{authorfullhash}{c7b609ff7d47090561d425f379b75536}
+      \strng{authorfullhashraw}{c7b609ff7d47090561d425f379b75536}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{Conventional value-added models (VAMs) compare average test scores across schools after regression-adjusting for students’ demographic characteristics and previous scores. This article tests for VAM bias using a procedure that asks whether VAM estimates accurately predict the achievement consequences of random assignment to specific schools. Test results from admissions lotteries in Boston suggest conventional VAM estimates are biased, a finding that motivates the development of a hierarchical model describing the joint distribution of school value-added, bias, and lottery compliance. We use this model to assess the substantive importance of bias in conventional VAM estimates and to construct hybrid value-added estimates that optimally combine ordinary least squares and lottery-based estimates of VAM parameters. The hybrid estimation strategy provides a general recipe for combining nonexperimental and quasi-experimental estimates. While still biased, hybrid school value-added estimates have lower mean squared error than conventional VAM estimates. Simulations calibrated to the Boston data show that, bias notwithstanding, policy decisions based on conventional VAMs that control for lagged achievement are likely to generate substantial achievement gains. Hybrid estimates that incorporate lotteries yield further gains.}
+      \field{issn}{0033-5533}
+      \field{journaltitle}{The Quarterly Journal of Economics}
+      \field{month}{5}
+      \field{number}{2}
+      \field{shorttitle}{Leveraging {Lotteries} for {School} {Value}-{Added}}
+      \field{title}{Leveraging {Lotteries} for {School} {Value}-{Added}: {Testing} and {Estimation}*}
+      \field{urlday}{28}
+      \field{urlmonth}{3}
+      \field{urlyear}{2026}
+      \field{volume}{132}
+      \field{year}{2017}
+      \field{urldateera}{ce}
+      \field{pages}{871\bibrangedash 919}
+      \range{pages}{49}
+      \verb{doi}
+      \verb 10.1093/qje/qjx001
+      \endverb
+      \verb{file}
+      \verb Full Text PDF:C\:\\Users\\xd-br\\Zotero\\storage\\KAJ5HJ7X\\Angrist et al. - 2017 - Leveraging Lotteries for School Value-Added Testing and Estimation.pdf:application/pdf;Snapshot:C\:\\Users\\xd-br\\Zotero\\storage\\RRW93N65\\qjx001.html:text/html
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1093/qje/qjx001
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1093/qje/qjx001
+      \endverb
+    \endentry
+    \entry{chetty_measuring_2014}{article}{}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=7a853740afbc544905334cf607b3cd51}{%
+           family={Chetty},
+           familyi={C\bibinitperiod},
+           given={Raj},
+           giveni={R\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=fb2eb6a3bea93fb3238fb8e1de2cf006}{%
+           family={Friedman},
+           familyi={F\bibinitperiod},
+           given={John\bibnamedelima N.},
+           giveni={J\bibinitperiod\bibinitdelim N\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=df06c866e3052c06bdecc6a70e4fa14d}{%
+           family={Rockoff},
+           familyi={R\bibinitperiod},
+           given={Jonah\bibnamedelima E.},
+           giveni={J\bibinitperiod\bibinitdelim E\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{language}{1}{%
+        {en}%
+      }
+      \strng{namehash}{de9f176c59c95a4d2de134921515d461}
+      \strng{fullhash}{4ac3e93cd8d6105cb22835b171955f57}
+      \strng{fullhashraw}{4ac3e93cd8d6105cb22835b171955f57}
+      \strng{bibnamehash}{4ac3e93cd8d6105cb22835b171955f57}
+      \strng{authorbibnamehash}{4ac3e93cd8d6105cb22835b171955f57}
+      \strng{authornamehash}{de9f176c59c95a4d2de134921515d461}
+      \strng{authorfullhash}{4ac3e93cd8d6105cb22835b171955f57}
+      \strng{authorfullhashraw}{4ac3e93cd8d6105cb22835b171955f57}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{Are teachers' impacts on students' test scores ("value-added") a good measure of their quality? This question has sparked debate partly because of a lack of evidence on whether high value-added (VA) teachers improve students' long-term outcomes. Using school district and tax records for more than one million children, we find that students assigned to high-VA teachers are more likely to attend college, earn higher salaries, and are less likely to have children as teenagers. Replacing a teacher whose VA is in the bottom 5\% with an average teacher would increase the present value of students' lifetime income by approximately \$250,000 per classroom.}
+      \field{issn}{0002-8282}
+      \field{journaltitle}{American Economic Review}
+      \field{month}{9}
+      \field{number}{9}
+      \field{shorttitle}{Measuring the {Impacts} of {Teachers} {II}}
+      \field{title}{Measuring the {Impacts} of {Teachers} {II}: {Teacher} {Value}-{Added} and {Student} {Outcomes} in {Adulthood}}
+      \field{urlday}{15}
+      \field{urlmonth}{12}
+      \field{urlyear}{2025}
+      \field{volume}{104}
+      \field{year}{2014}
+      \field{urldateera}{ce}
+      \field{pages}{2633\bibrangedash 2679}
+      \range{pages}{47}
+      \verb{doi}
+      \verb 10.1257/aer.104.9.2633
+      \endverb
+      \verb{file}
+      \verb Full Text PDF:C\:\\Users\\xd-br\\Zotero\\storage\\TBRYYH2B\\Chetty et al. - 2014 - Measuring the Impacts of Teachers II Teacher Value-Added and Student Outcomes in Adulthood.pdf:application/pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://www.aeaweb.org/articles?id=10.1257/aer.104.9.2633
+      \endverb
+      \verb{url}
+      \verb https://www.aeaweb.org/articles?id=10.1257/aer.104.9.2633
+      \endverb
+      \keyw{Occupational Choice,Skills,Analysis of Education,Education,State and Local Government: Health,Welfare,Human Capital; Skills; Occupational Choice; Labor Productivity,State and Local Government: Health; Education; Welfare; Public Pensions,Labor Productivity,Public Sector Labor Markets,Public Pensions,Analysis of Education,Human Capital,Public Sector Labor Markets}
+    \endentry
+    \entry{kirkeboen_field_2016}{article}{}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=c447ca944c23f77e96acd93d7c2e1efa}{%
+           family={Kirkeboen},
+           familyi={K\bibinitperiod},
+           given={Lars\bibnamedelima J.},
+           giveni={L\bibinitperiod\bibinitdelim J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=73617459d7b5ec52c55e78a4cae26169}{%
+           family={Leuven},
+           familyi={L\bibinitperiod},
+           given={Edwin},
+           giveni={E\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=98a93a8ebb93b69e901fdf1b9926a748}{%
+           family={Mogstad},
+           familyi={M\bibinitperiod},
+           given={Magne},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{a46ad78b1f83f00fd3c45fe2c337a68d}
+      \strng{fullhash}{4709612fce85652ecf0f1561bf32f69f}
+      \strng{fullhashraw}{4709612fce85652ecf0f1561bf32f69f}
+      \strng{bibnamehash}{4709612fce85652ecf0f1561bf32f69f}
+      \strng{authorbibnamehash}{4709612fce85652ecf0f1561bf32f69f}
+      \strng{authornamehash}{a46ad78b1f83f00fd3c45fe2c337a68d}
+      \strng{authorfullhash}{4709612fce85652ecf0f1561bf32f69f}
+      \strng{authorfullhashraw}{4709612fce85652ecf0f1561bf32f69f}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{This article examines the labor market payoffs to different types of postsecondary education, including field and institution of study. Instrumental variables (IV) estimation of the payoff to choosing one type of education compared to another is made particularly challenging by individuals choosing between several types of education. Not only does identification require one instrument per alternative, but it is also necessary to deal with the issue that individuals who choose the same education may have different next-best alternatives. We address these difficulties using rich administrative data for Norway’s postsecondary education system. A centralized admission process creates credible instruments from discontinuities that effectively randomize applicants near unpredictable admission cutoffs into different institutions and fields of study. The admission process also provides information on preferred and next-best alternatives from strategy-proof measures of individuals’ ranking of institutions and fields. The results from our IV approach may be summarized with three broad conclusions. First, different fields of study have substantially different labor market payoffs, even after accounting for institution and peer quality. Second, the effect on earnings from attending a more selective institution tends to be relatively small compared to payoffs to field of study. Third, the estimated payoffs to field of study are consistent with individuals choosing fields in which they have a comparative advantage. Comparing our estimates to those obtained from other approaches highlights the importance of using instruments to correct for selection bias and information on individuals’ ranking of institutions and fields to measure their preferred and next-best alternatives.}
+      \field{issn}{0033-5533}
+      \field{journaltitle}{The Quarterly Journal of Economics}
+      \field{month}{8}
+      \field{number}{3}
+      \field{title}{Field of {Study}, {Earnings}, and {Self}-{Selection}*}
+      \field{urlday}{12}
+      \field{urlmonth}{9}
+      \field{urlyear}{2025}
+      \field{volume}{131}
+      \field{year}{2016}
+      \field{urldateera}{ce}
+      \field{pages}{1057\bibrangedash 1111}
+      \range{pages}{55}
+      \verb{doi}
+      \verb 10.1093/qje/qjw019
+      \endverb
+      \verb{file}
+      \verb EBSCO-FullText-09_12_2025 (2):C\:\\Users\\xd-br\\Zotero\\storage\\ZDGBU9C5\\EBSCO-FullText-09_12_2025 (2).pdf:application/pdf;Submitted Version:C\:\\Users\\xd-br\\Zotero\\storage\\GCI5ETJ7\\Kirkeboen et al. - 2016 - Field of Study, Earnings, and Self-Selection.pdf:application/pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1093/qje/qjw019
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1093/qje/qjw019
+      \endverb
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+
