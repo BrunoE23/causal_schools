@@ -379,3 +379,19 @@ The older December 2025 draft still uses a "beyond achievement" headline. The mo
 - The paper narrative focuses on oversubscribed high schools identified through the Chilean centralized assignment system.
 - The assignment-probability exercise is treated as a practical cornerstone of identification, not just a technical appendix item.
 - Avoid relying on provisional result counts, coverage numbers, or draft-specific estimates in reusable project summaries unless those details are explicitly needed for the task at hand.
+
+## SAE Support and Particular Pagado Schools
+
+When using the school directory dependency codes, `Particular Pagado` or non-subsidized private schools are identified as:
+
+- `COD_DEPE == 4` in the detailed dependency code
+- `COD_DEPE2 == 3` in the grouped dependency code
+
+A diagnostic run on the current `k100_timely_risk` SAE probability-support file found no `Particular Pagado` schools in the supported SAE set. Using the latest available school directory at the time of the check, `2025/20250926_Directorio_Oficial_EE_2025_20250430_WEB.csv`, the supported set contained:
+
+- `1,012` supported RBDs
+- `1,005` supported RBDs with more than `100` students with positive assignment probability
+- `0` supported RBDs with `COD_DEPE == 4`
+- `0` supported RBDs with `COD_DEPE2 == 3`
+
+This matches the substantive expectation that `Particular Pagado` schools are outside the SAE system. This does not mean that all private-sector schools are absent from SAE: `Particular Subvencionado` schools are present in the SAE support and should be distinguished from `Particular Pagado` in plots, summaries, and binary-treatment definitions.
