@@ -1,0 +1,611 @@
+\documentclass[notes,11pt,aspectratio=169]{beamer}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{booktabs}
+\usepackage{threeparttable}
+\usepackage{graphicx}
+\usepackage{adjustbox}
+\usepackage{xspace}
+\usepackage{appendixnumberbeamer}
+
+\usepackage[
+  backend=biber,
+  style=authoryear,
+  maxcitenames=2,
+  mincitenames=1,
+  maxbibnames=10,
+  minbibnames=1,
+  uniquelist=false,
+  uniquename=false
+]{biblatex}
+
+\let\oldparencite\parencite
+\renewcommand{\parencite}[2][]{%
+  \footnotesize {\tiny \oldparencite[#1]{#2}} \normalsize %
+}
+
+\renewcommand*{\bibfont}{\footnotesize}
+
+\addbibresource{causal_effect_schools.bib}
+
+\usetheme[progressbar=frametitle]{metropolis}
+
+\newcommand{\blue}[1]{\textcolor{blue}{#1}}
+\newcommand{\red}[1]{\textcolor{red}{#1}}
+\newcommand{\green}[1]{\textcolor{teal}{#1}}
+
+\newenvironment{wideitemize}{%
+  \begin{minipage}{0.90\textwidth}
+  \begin{itemize}
+  \addtolength{\itemsep}{1em}
+}{%
+  \end{itemize}
+  \end{minipage}
+}
+
+\newenvironment{cwideitemize}{%
+  \begin{center}
+  \begin{minipage}{0.90\textwidth}
+  \begin{itemize}
+  \addtolength{\itemsep}{1em}
+}{%
+  \end{itemize}
+  \end{minipage}
+  \end{center}
+}
+
+\title{\texorpdfstring{\centering{How Much Do High Schools Matter?\\[0.35em]
+Causal Effects on Achievement and Major Choice} \\ }{How Much Do High Schools Matter? Causal Effects on Achievement and Major Choice}}
+\author[BEAM]{%
+  \texorpdfstring{%
+    \begin{columns}
+      \column{.3\linewidth}
+      \centering
+      \column{.3\linewidth}
+      \centering
+      Bruno E. Aravena-Magüida\\ UChicago
+      \column{.3\linewidth}
+      \centering
+    \end{columns}
+  }
+  {BEAM}
+}
+\date{\vspace{20pt}\hfill April 2026}
+
+\begin{document}
+
+\maketitle
+
+\section{Motivation}
+
+\begin{frame}{Question}
+\begin{cwideitemize}
+  \item How much do high schools matter for students' later academic achievement and higher-education major choice?
+
+  \item The economics literature has strong evidence on school effects on test scores, but much less on whether schools affect \textit{field of study}. \parencite{angrist_stand_2016,dobbie_medium-term_2015,angrist_leveraging_2017,angrist_credible_2024}
+
+  \item One empirical challenge is that ``school attended'' is a high-dimensional treatment: one treatment for each high school.
+\end{cwideitemize}
+\end{frame}
+
+\begin{frame}{Original Problem: Many Treatments}
+\begin{wideitemize}
+  \item My original goal was to estimate idiosyncratic effects of each school.
+
+  \item A fully flexible treatment would include one indicator for each high school:
+  \[
+    D_i^{\mathrm{full}}
+    =
+    \left(
+    \mathbf{1}\{S_i=1\},
+    \mathbf{1}\{S_i=2\},
+    \ldots,
+    \mathbf{1}\{S_i=J\}
+    \right).
+  \]
+
+  \item The lottery shifts students across schools, but generally does not identify a separate causal effect for every school.
+\end{wideitemize}
+\end{frame}
+
+\begin{frame}{Original Problem: Common Fallback}
+\begin{wideitemize}
+  \item Suppose all students rank three schools \(A \succ B \succ C\).
+
+  \item Suppose they all have the same guaranteed fallback school \(G\).
+
+  \item Then lottery-induced comparisons can be interpreted relative to the same counterfactual:
+  \[
+    \beta_{AG}, \qquad \beta_{BG}, \qquad \beta_{CG}.
+  \]
+
+  \item Because the comparison school is common, these objects are comparable across target schools.
+\end{wideitemize}
+\end{frame}
+
+\begin{frame}{Original Problem: Different Fallbacks}
+\begin{wideitemize}
+  \item In practice, students have different fallback schools:
+  \[
+    G_i \in \{G^1, G^2, \ldots, G^K\}.
+  \]
+
+  \item The relevant objects become target-school-by-fallback effects:
+  \[
+    \beta_{AG^1}, \beta_{AG^2}, \ldots, \beta_{CG^K}.
+  \]
+
+  \item A gain from \(G^1\) to \(A\) is not automatically comparable to a gain from \(G^7\) to \(B\).
+
+  \item This motivates projecting schools into a scalar value index instead of trying to recover every pairwise school contrast.
+\end{wideitemize}
+\end{frame}
+
+\begin{frame}{Collapsing to meaningful margins: \textcite{kirkeboen_field_2016}}
+\begin{wideitemize}
+  \item \textcite{kirkeboen_field_2016} study field-of-study effects using centralized assignment in Norway. 
+
+  \item Because applicants have different next-best alternatives, comparing each program would put us in a similar situation than the one described before.
+  
+ \item Their solution: collapse programs into broad fields and estimate next-best effects across fields. 
+ 
+ \item The cost of this approach is that it requires ignoring effects(variation) coming from differences in institution in their main specification.
+
+\end{wideitemize}
+\end{frame}
+
+\begin{frame}{Collapsing to meaningful margins: Next-Best Effects}
+\begin{figure}
+  \centering
+  \includegraphics[width=1.2\linewidth,height=1.2\textheight,keepaspectratio,angle=270]{C:/Users/xd-br/Desktop/PhD/Research/causal_schools/writing/spring_update/magne_table.png}
+\end{figure}
+\vspace{-0.8em}
+\begin{center}
+  \tiny Source: \oldparencite{kirkeboen_field_2016}.
+\end{center}
+\end{frame}
+
+\begin{frame}{Main Pivot}
+\begin{wideitemize}
+  \item Instead of estimating one causal effect for each school, collapse school attendance into a scalar school-value treatment.
+
+  \item For each school \(s\), construct an observational school value \(\beta_s\).
+
+  \item A student's treatment is the value of the school they attend:
+  \[
+    D_i = \beta_{S_i}.
+  \]
+
+  \item The IV asks whether lottery-induced movement toward higher-value schools (in a given metric) causally improves outcomes.
+  \item Since the variation comes from lottery offers, the effects tells us about the causal effects of schools. But at the same time, these results are mediated by a certain projection, which might nor not be relevant. 
+\end{wideitemize}
+\end{frame}
+
+%\begin{frame}{Interpretation}
+%\begin{wideitemize}
+%  \item The object is not the effect of attending a particular school.
+
+%  \item The parameter summarizes the causal return to moving along a pre-specified school-value index.
+
+%  \item In words:
+
+%  \vspace{0.4em}
+%  \begin{center}
+%    \textit{When lottery offers induce students to attend schools with higher observational value, do their outcomes improve?}
+%  \end{center}
+%\end{wideitemize}
+%\end{frame}
+
+\section{Data and School Values}
+
+\begin{frame}{Data}
+\begin{wideitemize}
+  \item Universe: students observed in regular grade 8 in Chile between 2017 and 2020.
+
+  \item Approx. 945,000 unique students.
+
+  \item Linked records:
+  \begin{itemize}
+    \item grade-4 SIMCE math and language scores;
+    \item grade-8 cohort, gender, age, and home comuna;
+    \item school enrollment histories after grade 8;
+    \item PSU/PAES math and language scores;
+    \item higher-education enrollment and STEM field indicators.
+  \end{itemize}
+\end{wideitemize}
+\end{frame}
+
+\begin{frame}{Assigning a High School}
+\begin{wideitemize}
+  \item For each student, I track school enrollment during the four years after grade 8.
+
+  \item Main school assignment:
+  \[
+    S_i = \text{school code attended for the most post-grade-8 years}.
+  \]
+
+  \item Ties are broken toward the most recent school.
+
+  \item This maps each student in the broad grade-8 universe to one high-school code when available.
+\end{wideitemize}
+\end{frame}
+
+\begin{frame}{Raw and Adjusted School Values}
+\small
+\textbf{Raw school mean}
+\[
+\beta_s^{\mathrm{raw}}
+=
+\frac{1}{N_s}
+\sum_{i:S_i=s}Y_i.
+\]
+
+\vspace{0.5em}
+\textbf{Adjusted observational value-added}
+\[
+Y_i
+=
+\mu
++
+\beta_{S_i}
++
+\sum_{p=1}^{3}\lambda_{Mp}M_i^p
++
+\sum_{p=1}^{3}\lambda_{Lp}L_i^p
++
+\gamma_{\mathrm{cohort}(i)}
++
+\delta_{\mathrm{gender}(i)}
++
+\rho_{\mathrm{age}(i)}
++
+\kappa_{\mathrm{comuna}(i)}
++
+\varepsilon_i .
+\]
+
+\vspace{0.3em}
+\begin{itemize}
+  \item \footnotesize \(\beta_s\) is the school fixed effect. I use this as an observational, selection-contaminated measure of school value. \parencite{chetty_measuring_2014,angrist_leveraging_2017}
+  \item \footnotesize For these results to be causal, we would need to assume that the controls remove all selection on unobservables that is correlated with the school attended. \textit{(CIA)}
+  \item \footnotesize I have also a noisy measure of family income (G4), attendance and performance within schools (G 1-8). Some signal there but skeptical. 
+\end{itemize}
+
+
+\end{frame}
+
+\begin{frame}{Adjustment Matters and Patterns Are Sensible}
+\begin{figure}
+  \centering
+  \includegraphics[width=0.82\linewidth]{C:/Users/xd-br/Desktop/PhD/Research/causal_schools/output/figures/school_rbd_observational_values/math_values_by_region_raw_adjusted.png}
+\end{figure}
+\end{frame}
+
+\section{IV Design}
+
+\begin{frame}{Lottery Sample}
+\begin{wideitemize}
+  \item I use students who enter the grade-9 centralized assignment mechanism \textit{(SAE)} on time (i.e.  same year they are observed in grade 8). 
+
+  \item I restrict to students with non-trivial assignment risk:
+  \[
+    \max_{s\in\mathcal{S}} p_{is}<1,
+  \]
+  where \(p_{is}\) is the simulated prob. that student \(i\) is assigned to school \(s\).
+
+  \item This implies going from $\approx$ 320,000 students that enter SAE, to $\approx$ 165,000 students with assignment risk. This is roughly 1/6 of students in the universe having assignment risk. 
+
+  \item The lottery offer provides exogenous variation in the value of the school attended, conditional on assignment-probability controls.
+\end{wideitemize}
+\end{frame}
+
+\begin{frame}{Supported School Set}
+\begin{wideitemize}
+  \item Full probability controls are high-dimensional. Concretely 2 per school: one for the probability and one for the zero-probability indicator.
+
+  \item I define the supported lottery school set as schools with positive assignment probability for at least 100 at-risk students:
+  \[
+  \mathcal{S}^{100}
+  =
+  \left\{
+  s:
+  \sum_i \mathbf{1}\{p_{is}>0\}
+  \geq 100
+  \right\}.
+  \]
+
+  \item This keeps the current design computationally feasible while covering a large share of students.
+\end{wideitemize}
+\end{frame}
+
+\begin{frame}{Support Tradeoff}
+\centering
+\tiny
+\begin{tabular}{llrrr}
+\toprule
+Threshold students at risk & School group & Schools & Students & Share \\
+\midrule
+100 & SAE \(<100\) & 1,491 & 315,261 & 33.4\% \\
+100 & SAE \(\geq100\) & 1,011 & 493,955 & 52.3\% \\
+100 & Particular Pagado & 497 & 87,373 & 9.3\% \\
+100 & Other non-SAE schools & 1,134 & 47,771 & 5.1\% \\
+\midrule
+50 & SAE \(<50\) & 940 & 174,922 & 18.5\% \\
+50 & SAE \(\geq50\) & 1,562 & 634,294 & 67.2\% \\
+50 & Particular Pagado & 497 & 87,373 & 9.3\% \\
+50 & Other non-SAE schools & 1,134 & 47,771 & 5.1\% \\
+\midrule
+25 & SAE \(<25\) & 530 & 89,266 & 9.5\% \\
+25 & SAE \(\geq25\) & 1,972 & 719,950 & 76.2\% \\
+25 & Particular Pagado & 497 & 87,373 & 9.3\% \\
+25 & Other non-SAE schools & 1,134 & 47,771 & 5.1\% \\
+\bottomrule
+\end{tabular}
+\end{frame}
+
+\begin{frame}{Using the Value-Added Metric: Treatment and Instrument}
+\small
+The endogenous school-value treatment is
+\[
+D_i
+=
+\beta_{S_i}.
+\]
+
+The excluded instrument is
+\[
+Z_i
+=
+\mathbf{1}\{O_i\in\mathcal{S}^{100}\}
+\beta_{O_i}.
+\]
+
+\vspace{0.5em}
+\begin{wideitemize}
+  \item \(S_i\): school attended after grade 8.
+  \item \(O_i\): first-round lottery offer.
+  \item Offers outside \(\mathcal{S}^{100}\) are assigned zero in the excluded instrument.
+\end{wideitemize}
+\end{frame}
+
+\begin{frame}{2SLS System}
+\small
+\[
+D_i
+=
+\pi_0
++
+\pi_1 Z_i
++
+P_i'\psi_D
++
+X_i'\lambda_D
++
+u_i .
+\]
+
+\[
+Y_i
+=
+\alpha
++
+\theta \widehat{D}_i
++
+P_i'\psi_Y
++
+X_i'\lambda_Y
++
+\varepsilon_i .
+\]
+
+\vspace{0.6em}
+\begin{wideitemize}
+  \item \(P_i\): assignment-probability controls for schools in \(\mathcal{S}^{100}\), including probabilities and zero-probability indicators.
+  \item \(X_i\): grade-8 cohort, gender, grade-8 age, fourth-grade math score, and fourth-grade language score. Probably moving to higher-order polynomials.
+  \item \(\theta\): causal return to a lottery-induced increase in the scalar school-value index.
+\end{wideitemize}
+\end{frame}
+
+\section{Preliminary Results}
+
+
+\begin{frame}{How to Read \(\theta\)}
+\begin{wideitemize}
+  \item The general interpretation is that a student induced by a lottery offer to attend a school (a complier) with a 1-unit higher value in the respective metric is expected to have a $\theta$-unit higher outcome.
+
+  \item Here, \(\theta\) compares causal gains to the observational school-value metric.
+   If \(\theta=1\), then a one-unit difference in observational school value maps one-for-one into a causal effect. \ This idea is formalized and a test for it is proposed in \textcite{angrist_leveraging_2017}.
+
+\end{wideitemize}
+\end{frame}
+
+\begin{frame}{Main Results}
+\centering
+\scriptsize
+\begin{tabular}{lcccccc}
+\toprule
+ & \multicolumn{2}{c}{Math VA} & \multicolumn{2}{c}{Language VA} & \multicolumn{2}{c}{STEM VA} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7}
+ & Unadj. & Adj. & Unadj. & Adj. & Unadj. & Adj. \\
+\midrule
+\(\theta\) & 0.208 & 0.431 & 0.167 & 0.393 & 0.345 & 0.584 \\
+SE & 0.033 & 0.057 & 0.032 & 0.062 & 0.046 & 0.068 \\
+\midrule
+First-stage coef. & 0.455 & 0.457 & 0.439 & 0.435 & 0.471 & 0.455 \\
+First-stage F & 4399 & 3656 & 5481 & 4899 & 6509 & 5086 \\
+N & 105,902 & 105,893 & 105,902 & 105,894 & 135,588 & 135,588 \\
+\bottomrule
+\end{tabular}
+
+\vspace{0.7em}
+\footnotesize
+All \(p\)-values are below 0.001.
+\end{frame}
+
+
+
+\begin{frame}{Interpretation}
+\begin{wideitemize}
+
+%  \item Current estimates are positive and substantial, but below one.
+
+%  \item Adjusted metrics perform better than raw means, consistent with the idea that controls remove part of the selection component.
+
+\item VA metrics are predictive of lottery-induced causal effects across specifications. 
+\item Results are metric-specific, but also show that exogenous changes in school assignments do change outcomes for individuals. 
+
+\item To my knowledge, results are among the first to show that school assignment lotteries induce changes in higher education major choice, which is an important contribution in itself.
+
+\end{wideitemize}
+\end{frame}
+
+\begin{frame}{STEM Enrollment by Gender}
+\centering
+\scriptsize
+\begin{tabular}{lcccccc}
+\toprule
+ & \multicolumn{3}{c}{STEM VA} & \multicolumn{3}{c}{STEM gender gap reduc. VA} \\
+\cmidrule(lr){2-4} \cmidrule(lr){5-7}
+ & All & Boys & Girls & All & Boys & Girls \\
+\midrule
+\(\theta\) & 0.584 & 0.535 & 0.695 & -0.254 & -0.477 & 0.000 \\
+SE & 0.068 & 0.088 & 0.097 & 0.078 & 0.122 & 0.087 \\
+p-value & \(<0.001\) & \(<0.001\) & \(<0.001\) & 0.001 & \(<0.001\) & 0.998 \\
+\midrule
+First-stage coef. & 0.455 & 0.460 & 0.443 & 0.443 & 0.457 & 0.429 \\
+First-stage F & 5086 & 3198 & 2003 & 4954 & 2810 & 2154 \\
+N & 135,588 & 67,221 & 68,367 & 125,672 & 63,669 & 62,003 \\
+\bottomrule
+\end{tabular}
+\end{frame}
+
+\begin{frame}{STEM Gender Interpretation}
+\begin{wideitemize}
+  \item Schools with higher adjusted STEM VA raise STEM enrollment for both boys and girls.
+
+  \item The point estimate is larger for girls than boys, but the difference is not statistically significant in the current separate-sample comparison.
+
+  \item The gender-gap-reduction VA is defined as female minus male STEM value-added.
+
+  \item Preliminary evidence suggests that schools with higher gender-gap-reduction VA reduce the male-favored gap mainly through lower boys' STEM enrollment, rather than clear increases for girls.
+\end{wideitemize}
+\end{frame}
+
+
+\begin{frame}{School Funding Per Person}
+\begin{wideitemize}
+  \item I also apply the same scalar-treatment framework to school resources.
+
+  \item For each school, I construct public funding per student from MINEDUC subsidy payments to schools.
+
+  \item I use two school-level measures:
+  \begin{itemize}
+    \item average public funding per student over 2017--2021;
+    \item growth in public funding per student from 2017--2018 to 2019--2021.
+  \end{itemize}
+
+  \item Both measures are expressed in millions of 2021 pesos per student, roughly thousands of 2021 USD per student.
+\end{wideitemize}
+\end{frame}
+
+\begin{frame}{Funding Per Person Results}
+\centering
+\scriptsize
+\begin{tabular}{lcccccc}
+\toprule
+ & \multicolumn{3}{c}{Funding per student} & \multicolumn{3}{c}{Growth in funding per student} \\
+\cmidrule(lr){2-4} \cmidrule(lr){5-7}
+ & Math & Language & STEM & Math & Language & STEM \\
+\midrule
+\(\theta\) & -0.022 & -0.041 & 0.029 & -0.020 & -0.001 & 0.031 \\
+SE & 0.027 & 0.028 & 0.014 & 0.048 & 0.050 & 0.021 \\
+p-value & 0.416 & 0.144 & 0.042 & 0.685 & 0.979 & 0.132 \\
+\midrule
+First-stage coef. & 0.339 & 0.339 & 0.268 & 0.398 & 0.398 & 0.343 \\
+First-stage F & 73.6 & 73.6 & 53.4 & 139.7 & 139.7 & 127.7 \\
+N & 97,303 & 97,303 & 123,953 & 96,501 & 96,501 & 123,052 \\
+\bottomrule
+\end{tabular}
+
+\vspace{0.7em}
+\footnotesize
+Treatments are measured in millions of 2021 pesos per student.
+\end{frame}
+
+\begin{frame}{Funding Interpretation}
+\begin{wideitemize}
+  \item The expenditure-based scalar metric is not consistently predictive of lottery-induced gains in test scores or STEM enrollment.
+
+  \item The first stages are strong, so the null-ish reduced relationship is not coming from a weak instrument.
+  However, the first-stage is much weaker than in the previous specifications.
+
+  \item \textbf{What these metrics capture matters for the results:} public funding for these schools is largely determined by enrollment and thus should be constant per student within schools.
+  \item The non-enrolmment component of funding tends to target specific student populations, so higher funding per student is not automatically a pure resource shock.
+
+\end{wideitemize}
+\end{frame}
+
+\begin{frame}{Takeaways}
+\small
+\begin{wideitemize}
+  \item The scalar school-value approach makes the lottery variation tractable without estimating one effect per school.
+
+  \item Observational school VA predicts lottery-induced causal gains in achievement and STEM enrollment.
+
+  \item Adjusted VA performs better than raw means.
+
+  \item The current design suggests schools affect higher-education major choice, not only test scores.
+
+%  \item Funding per student has strong first stages, but does not currently predict causal gains as clearly as the outcome-based VA metrics.
+\end{wideitemize}
+\end{frame}
+
+\begin{frame}{Next Short-Term Steps}
+\small
+\begin{wideitemize}
+%  \item Formalize the estimand and support restriction in the write-up.
+  \item Further clean, impute and include family income in the VA metrics. 
+
+  \item Explore run-time of the \(50\)- and \(25\)-student support thresholds.
+
+  \item Test gender differences using pooled interaction specifications.
+
+%  \item Refine the interpretation of the funding exercise and separate formula-driven funding from components closer to discretionary resources.
+\end{wideitemize}
+\end{frame}
+
+\begin{frame}{Extension: Do students moved into STEM programs actually do better?}
+  \begin{wideitemize}
+    
+    \item Discretize the STEM VA metric and characterize compliers using \textcite{abadie_semiparametric_2003}.
+    
+    \item If I had data, I can run a regression of wages on STEM enrollment --and controls-- for the (school-lottery) compliers above i.e. 
+    using the $\kappa$ weights from the \textcite{abadie_semiparametric_2003} characterization.   
+    
+    \item This might be possible in 5 years or so since these individuals are just starting college.  An alternative is to look at intermediate outcomes like college grades or persistence in STEM majors.
+    
+    \item Another alternative is to look at similar populations in STEM programs in the past, under a version of Conditional Effects Ignorability (CEI) \parencite{angrist_extrapolate-ing_2010}.  
+
+
+  \end{wideitemize}
+
+
+\end{frame}
+
+
+\begin{frame}{Distribution of STEM School VA}
+\begin{figure}
+  \centering
+  \includegraphics[width=0.82\linewidth,height=0.72\textheight,keepaspectratio]{C:/Users/xd-br/Desktop/PhD/Research/causal_schools/output/figures/scalar_school_value_iv/stem_adj_va_distribution_sae_gt100_private_paid_n_legend.png}
+\end{figure}
+\end{frame}
+
+
+
+\begin{frame}[standout]
+Thanks!
+\end{frame}
+
+\end{document}

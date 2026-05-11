@@ -191,6 +191,7 @@ threshold_summary <- function(data, threshold_value) {
 
 summary_df <- bind_rows(
   threshold_summary(base_df, 100),
+  threshold_summary(base_df, 50),
   threshold_summary(base_df, 25)
 )
 
@@ -225,7 +226,7 @@ latex_rows <- vapply(seq_len(nrow(latex_df)), function(i) {
     sep = " & "
   )
 
-  if (i == 5) {
+  if (i > 1 && latex_df[["Threshold students at risk"]][i] != latex_df[["Threshold students at risk"]][i - 1]) {
     line <- paste("\\midrule", line, sep = "\n")
   }
 
@@ -246,6 +247,7 @@ latex_table <- c(
   "\\label{tab:student_shares_by_sae_support_thresholds}",
   "\\begin{tabular}{llrrr}",
   "\\toprule",
+  " & (1) & (2) & (3) & (4) \\\\",
   "Threshold students at risk & School group & Schools & Students & Share \\\\",
   "\\midrule",
   latex_rows,

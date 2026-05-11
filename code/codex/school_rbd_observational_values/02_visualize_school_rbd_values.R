@@ -682,6 +682,61 @@ if (!is.null(metadata)) {
       axis.text.x = element_text(angle = 45, hjust = 1)
     )
 
+  region_sd_plot_data <- wide_values %>%
+    filter(!is.na(region_name)) %>%
+    transmute(
+      region_name,
+      math_unadjusted = .data[[value_col("raw_mean", primary_score_outcome)]],
+      math_adjusted = .data[[value_col("controlled_value_added", primary_score_outcome)]],
+      stem_unadjusted = .data[[value_col("raw_mean", primary_stem_outcome)]],
+      stem_adjusted = .data[[value_col("controlled_value_added", primary_stem_outcome)]]
+    ) %>%
+    pivot_longer(
+      cols = c(math_unadjusted, math_adjusted, stem_unadjusted, stem_adjusted),
+      names_to = "series",
+      values_to = "school_value"
+    ) %>%
+    group_by(region_name, series) %>%
+    summarise(
+      n_schools = sum(!is.na(school_value)),
+      sd_value = sd(school_value, na.rm = TRUE),
+      .groups = "drop"
+    ) %>%
+    mutate(
+      region_name = factor(region_name, levels = region_order_north_to_south),
+      series = factor(
+        series,
+        levels = c("math_unadjusted", "math_adjusted", "stem_unadjusted", "stem_adjusted"),
+        labels = c("Math Unadjusted", "Math Adjusted", "Stem Unadjusted", "Stem Adjusted")
+      )
+    )
+
+  write_csv(region_sd_plot_data, file.path(csv_dir, "region_math_stem_sd_values.csv"))
+
+  region_sd_plot <- region_sd_plot_data %>%
+    ggplot(aes(x = region_name, y = sd_value, fill = series)) +
+    geom_col(position = position_dodge(width = 0.78), width = 0.68) +
+    scale_fill_manual(
+      values = c(
+        "Math Unadjusted" = "#4c78a8",
+        "Math Adjusted" = "#f58518",
+        "Stem Unadjusted" = "#54a24b",
+        "Stem Adjusted" = "#e45756"
+      )
+    ) +
+    labs(
+      x = "Region",
+      y = "Within-region SD of school values",
+      fill = NULL,
+      title = "Dispersion of Math and STEM Values by Region",
+      subtitle = "Standard deviations computed within region; no recentering or relative normalization"
+    ) +
+    theme_minimal(base_size = 10) +
+    theme(
+      legend.position = "top",
+      axis.text.x = element_text(angle = 45, hjust = 1)
+    )
+
   region_plot_data_no_rm_relative <- wide_values %>%
     filter(!is.na(region_name), region_name != "RM") %>%
     transmute(
@@ -897,6 +952,7 @@ if (!is.null(metadata)) {
     )
 
   write_plot(region_plot, "math_values_by_region_raw_adjusted.png", width = 10, height = 5.5)
+  write_plot(region_sd_plot, "math_stem_sd_by_region.png", width = 10, height = 5.5)
   write_plot(region_plot_no_rm_relative, "math_values_by_region_no_rm_relative.png", width = 10, height = 5.5)
   write_plot(dependency_plot, "score_adjustment_by_dependency_code.png", width = 8, height = 5)
   write_plot(dependency_plot_no_fee, "score_adjustment_by_dependency_code_no_private_paid.png", width = 8, height = 5)

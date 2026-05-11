@@ -395,3 +395,35 @@ A diagnostic run on the current `k100_timely_risk` SAE probability-support file 
 - `0` supported RBDs with `COD_DEPE2 == 3`
 
 This matches the substantive expectation that `Particular Pagado` schools are outside the SAE system. This does not mean that all private-sector schools are absent from SAE: `Particular Subvencionado` schools are present in the SAE support and should be distinguished from `Particular Pagado` in plots, summaries, and binary-treatment definitions.
+
+## School Public Funding Per Student
+
+A first-pass school resource measure is constructed from the MINEDUC `Subvenciones-a-EE` files for 2017-2021.
+
+The current construction lives in:
+
+- `code/codex/school_expenditure_values/01_construct_public_funding_per_student.R`
+
+The outputs are:
+
+- `data/clean/school_expenditure_values/school_public_funding_per_student_year.csv`
+- `data/clean/school_expenditure_values/school_public_funding_per_student_2017_2021.csv`
+- `data/clean/school_expenditure_values/school_public_funding_per_student_diagnostics.csv`
+
+The school-year measure is:
+
+`annual public funding per student = annual sum of selected monthly subsidy/payment components / average monthly enrollment`
+
+Monetary values are converted to 2021 pesos using annual CPI index values for Chile from World Bank indicator `FP.CPI.TOTL`, sourced from IMF International Financial Statistics. Nominal variables are retained, but the preferred first-pass 2017-2021 school-level scalar is:
+
+- `enrollment_weighted_public_funding_per_student_2021_pesos_2017_2021`
+
+This is public funding received through the subsidy files, not total school expenditure. `Reliquidacion-FICOM` files are excluded because FICOM is not the relevant resource margin for the current lottery-supported schools; the SAE support contains no `Particular Pagado` schools.
+
+The construction also creates a growth/change version of the real funding measure. It compares average real public funding per student in the early period, 2017-2018, to average real public funding per student in the later period, 2019-2021. The candidate variables are:
+
+- `change_public_funding_per_student_2021_pesos_2019_2021_vs_2017_2018`
+- `pct_change_public_funding_per_student_2021_pesos_2019_2021_vs_2017_2018`
+- `log_change_public_funding_per_student_2021_pesos_2019_2021_vs_2017_2018`
+
+The level and growth measures should be treated as different school characteristics. The level measure asks whether students benefit from being induced into higher-funded schools. The growth measure asks whether students benefit from being induced into schools whose real public funding per student increased more over the period.

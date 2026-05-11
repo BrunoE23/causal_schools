@@ -645,7 +645,6 @@
     <bcf:option datatype="boolean">eprint</bcf:option>
     <bcf:option datatype="boolean">related</bcf:option>
     <bcf:option datatype="boolean">dashed</bcf:option>
-    <bcf:option datatype="boolean">ibidpage</bcf:option>
     <bcf:option datatype="boolean">bibtexcaseprotection</bcf:option>
     <bcf:option datatype="integer">mincrossrefs</bcf:option>
     <bcf:option datatype="integer">minxrefs</bcf:option>
@@ -2375,13 +2374,19 @@
     <bcf:datasource type="file" datatype="bibtex" glob="false">causal_effect_schools.bib</bcf:datasource>
   </bcf:bibdata>
   <bcf:section number="0">
-    <bcf:citekey order="1" intorder="1">kirkeboen_field_2016</bcf:citekey>
+    <bcf:citekey order="1" intorder="1">angrist_stand_2016</bcf:citekey>
+    <bcf:citekey order="1" intorder="2">dobbie_medium-term_2015</bcf:citekey>
+    <bcf:citekey order="1" intorder="3">angrist_leveraging_2017</bcf:citekey>
+    <bcf:citekey order="1" intorder="4">angrist_credible_2024</bcf:citekey>
     <bcf:citekey order="2" intorder="1">kirkeboen_field_2016</bcf:citekey>
     <bcf:citekey order="3" intorder="1">kirkeboen_field_2016</bcf:citekey>
-    <bcf:citekey order="4" intorder="1">chetty_measuring_2014</bcf:citekey>
-    <bcf:citekey order="4" intorder="2">angrist_leveraging_2017</bcf:citekey>
-    <bcf:citekey order="5" intorder="1">angrist_leveraging_2017</bcf:citekey>
+    <bcf:citekey order="4" intorder="1">kirkeboen_field_2016</bcf:citekey>
+    <bcf:citekey order="5" intorder="1">chetty_measuring_2014</bcf:citekey>
+    <bcf:citekey order="5" intorder="2">angrist_leveraging_2017</bcf:citekey>
     <bcf:citekey order="6" intorder="1">angrist_leveraging_2017</bcf:citekey>
+    <bcf:citekey order="7" intorder="1">abadie_semiparametric_2003</bcf:citekey>
+    <bcf:citekey order="8" intorder="1">abadie_semiparametric_2003</bcf:citekey>
+    <bcf:citekey order="9" intorder="1">angrist_extrapolate-ing_2010</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="nyt">
@@ -2413,14 +2418,4 @@
     </bcf:sort>
   </bcf:sortingtemplate>
   <!-- DATALISTS -->
-  <bcf:datalist section="0"
-                name="nyt/global//global/global/global"
-                type="entry"
-                sortingtemplatename="nyt"
-                sortingnamekeytemplatename="global"
-                labelprefix=""
-                uniquenametemplatename="global"
-                labelalphanametemplatename="global"
-                namehashtemplatename="global">
-  </bcf:datalist>
 </bcf:controlfile>

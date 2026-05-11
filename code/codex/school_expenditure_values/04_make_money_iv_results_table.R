@@ -4,35 +4,35 @@ suppressPackageStartupMessages({
   library(tidyr)
 })
 
-# Build a compact LaTeX table for the main scalar school-value IV estimates.
+# Build a compact LaTeX table for the school funding scalar IV estimates.
 
 repo_wd <- Sys.getenv(
   "CAUSAL_SCHOOLS_REPO_WD",
   unset = "C:/Users/xd-br/Desktop/PhD/Research/causal_schools"
 )
 
-results_dir <- file.path(repo_wd, "output/tables/scalar_school_value_iv")
+results_dir <- file.path(repo_wd, "output/tables/school_expenditure_values")
 results_path <- file.path(
   results_dir,
-  "scalar_school_value_iv_results_k100_timely_risk_prob_iszero.csv"
+  "money_scalar_iv_results_k100_timely_risk_prob_iszero.csv"
 )
 output_tex_path <- file.path(
   results_dir,
-  "scalar_school_value_iv_main_results.tex"
+  "money_scalar_iv_results.tex"
 )
 output_csv_path <- file.path(
   results_dir,
-  "scalar_school_value_iv_main_results.csv"
+  "money_scalar_iv_results_table.csv"
 )
 
-main_specs <- tibble::tribble(
-  ~spec,          ~outcome_group, ~adjustment,   ~column_id,
-  "math_unadj",  "Math",         "Unadjusted",  "math_unadj",
-  "math_adj",    "Math",         "Adjusted",    "math_adj",
-  "leng_unadj",  "Language",     "Unadjusted",  "leng_unadj",
-  "leng_adj",    "Language",     "Adjusted",    "leng_adj",
-  "stem_unadj",  "STEM",         "Unadjusted",  "stem_unadj",
-  "stem_adj",    "STEM",         "Adjusted",    "stem_adj"
+money_specs <- tibble::tribble(
+  ~spec,                 ~measure_group,                  ~outcome_group, ~column_id,
+  "math_money_level",    "Funding per student",           "Math",         "level_math",
+  "leng_money_level",    "Funding per student",           "Language",     "level_leng",
+  "stem_money_level",    "Funding per student",           "STEM",         "level_stem",
+  "math_money_growth",   "Growth in funding per student", "Math",         "growth_math",
+  "leng_money_growth",   "Growth in funding per student", "Language",     "growth_leng",
+  "stem_money_growth",   "Growth in funding per student", "STEM",         "growth_stem"
 )
 
 format_estimate <- function(x) {
@@ -48,10 +48,10 @@ format_p_value <- function(x) {
 }
 
 results <- read_csv(results_path, show_col_types = FALSE) %>%
-  filter(group == "all", spec %in% main_specs$spec) %>%
+  filter(spec %in% money_specs$spec) %>%
   select(spec, beta, se, p_value, n_obs, fs_beta, fs_se, fs_f) %>%
-  right_join(main_specs, by = "spec") %>%
-  arrange(match(spec, main_specs$spec))
+  right_join(money_specs, by = "spec") %>%
+  arrange(match(spec, money_specs$spec))
 
 if (any(is.na(results$beta))) {
   missing_specs <- results %>%
@@ -63,8 +63,8 @@ if (any(is.na(results$beta))) {
 table_csv <- results %>%
   transmute(
     spec,
+    measure_group,
     outcome_group,
-    adjustment,
     beta,
     se,
     p_value,
@@ -105,30 +105,21 @@ display_wide <- bind_rows(
         "N"
       )
     ),
-    column_id = factor(column_id, levels = main_specs$column_id)
+    column_id = factor(column_id, levels = money_specs$column_id)
   ) %>%
   arrange(stat, column_id) %>%
   pivot_wider(names_from = column_id, values_from = value) %>%
   arrange(stat)
 
-latex_escape <- function(x) {
-  x %>%
-    as.character() %>%
-    gsub("\\\\", "\\\\textbackslash{}", ., fixed = TRUE) %>%
-    gsub("([_&%$#{}])", "\\\\\\1", ., perl = TRUE) %>%
-    gsub("~", "\\\\textasciitilde{}", ., fixed = TRUE) %>%
-    gsub("\\^", "\\\\textasciicircum{}", ., perl = TRUE)
-}
-
 row_values <- function(row) {
   c(
     as.character(row[["stat"]]),
-    as.character(row[["math_unadj"]]),
-    as.character(row[["math_adj"]]),
-    as.character(row[["leng_unadj"]]),
-    as.character(row[["leng_adj"]]),
-    as.character(row[["stem_unadj"]]),
-    as.character(row[["stem_adj"]])
+    as.character(row[["level_math"]]),
+    as.character(row[["level_leng"]]),
+    as.character(row[["level_stem"]]),
+    as.character(row[["growth_math"]]),
+    as.character(row[["growth_leng"]]),
+    as.character(row[["growth_stem"]])
   )
 }
 
@@ -145,14 +136,14 @@ latex_rows <- unlist(lapply(seq_len(nrow(display_wide)), function(i) {
 latex_table <- c(
   "\\begin{table}[!htbp]",
   "\\centering",
-  "\\caption{Scalar school-value IV estimates}",
-  "\\label{tab:scalar_school_value_iv_main_results}",
+  "\\caption{School funding per person scalar IV estimates, millions of 2021 pesos}",
+  "\\label{tab:money_scalar_iv_results}",
   "\\begin{tabular}{lcccccc}",
   "\\toprule",
-  " & \\multicolumn{2}{c}{Math VA} & \\multicolumn{2}{c}{Language VA} & \\multicolumn{2}{c}{STEM VA} \\\\",
-  "\\cmidrule(lr){2-3} \\cmidrule(lr){4-5} \\cmidrule(lr){6-7}",
+  " & \\multicolumn{3}{c}{Funding per student} & \\multicolumn{3}{c}{Growth in funding per student} \\\\",
+  "\\cmidrule(lr){2-4} \\cmidrule(lr){5-7}",
   " & (1) & (2) & (3) & (4) & (5) & (6) \\\\",
-  " & Unadjusted & Adjusted & Unadjusted & Adjusted & Unadjusted & Adjusted \\\\",
+  " & Math & Language & STEM & Math & Language & STEM \\\\",
   "\\midrule",
   latex_rows,
   "\\bottomrule",

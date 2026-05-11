@@ -58,3 +58,13 @@
 - Why it matters: This is intended to mirror the school-value construction, but the denominator/source-of-truth should be explicit. Reconstructing the outcome inside the scalar IV construction could add zero cases for students without observed higher-education enrollment if the upstream data do not already define the outcome.
 - Current workaround: Leave the guard as-is for now; if `stem_enrollment_m1` exists upstream, the script does not overwrite it.
 - Follow-up: Decide whether `stem_enrollment_m1` should be created upstream in `universe_reg_df` and required by the scalar IV script, or whether reconstruction in the scalar IV construction is acceptable with explicit denominator documentation.
+
+### 2017 timely-SAE entrants lack probability rows
+
+- Status: Open
+- Date noted: 2026-04-27
+- Context: Before applying any supported-school-set threshold, the broad grade-8 universe contains 318,813 timely SAE entrants, but only 296,173 are matched to assignment-probability rows.
+- What was found: The full gap of 22,640 students comes from `cohort_gr8 == 2017` and `sae_proceso == 2017`. The current probability files used by the support and scalar-IV scripts start at `DA_probs_2018.csv`, so these 2017 process entrants have no probability rows.
+- Why it matters: The lottery-risk sample is currently defined only among entrants with probability rows. If 2017 process entrants are valid lottery participants, excluding them reduces the sample. If they are not part of the grade-9 assignment window we can instrument, then `timely_sae` or the scalar-IV sample documentation should make this exclusion explicit.
+- Current workaround: Risk and support calculations use the matched probability files for 2018-2021. This yields 296,173 entrants with probability rows and 163,600 at-risk entrants before school-support trimming.
+- Follow-up: Check whether 2017 SAE probability simulations exist or whether `sae_proceso == 2017` should be excluded/reclassified for the grade-8 cohort design. Then update the sample definition in `univ_gr8_df`/`universe_reg_df` documentation and the scalar-IV construction scripts if needed.

@@ -1,0 +1,15 @@
+[0] Config.pm:328> INFO - This is Biber 2.21
+[0] Config.pm:331> INFO - Logfile is 'spring_update_slides.blg'
+[121] biber-MSWIN64:342> INFO - === 
+[164] Biber.pm:421> INFO - Reading 'spring_update_slides.bcf'
+[262] Biber.pm:1002> INFO - Found 8 citekeys in bib section 0
+[272] Biber.pm:4487> INFO - Processing section 0
+[283] Biber.pm:4678> INFO - Looking for bibtex file 'causal_effect_schools.bib' for section 0
+[364] bibtex.pm:1713> INFO - LaTeX decoding ...
+[503] bibtex.pm:1519> INFO - Found BibTeX data source 'causal_effect_schools.bib'
+[584] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[584] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[584] Biber.pm:4307> INFO - Sorting list 'nyt/global//global/global/global' of type 'entry' with template 'nyt' and locale 'en-US'
+[584] Biber.pm:4313> INFO - No sort tailoring available for locale 'en-US'
+[598] bbl.pm:676> INFO - Writing 'spring_update_slides.bbl' with encoding 'UTF-8'
+[604] bbl.pm:779> INFO - Output to spring_update_slides.bbl

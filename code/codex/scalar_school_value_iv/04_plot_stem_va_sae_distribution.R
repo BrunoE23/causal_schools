@@ -55,6 +55,11 @@ plot_path <- file.path(
   paste0("stem_adj_va_distribution_sae_gt", positive_prob_student_threshold, "_private_paid.png")
 )
 
+plot_path_n_legend <- file.path(
+  figure_dir,
+  paste0("stem_adj_va_distribution_sae_gt", positive_prob_student_threshold, "_private_paid_n_legend.png")
+)
+
 summary_path <- file.path(
   table_dir,
   paste0("stem_adj_va_distribution_sae_gt", positive_prob_student_threshold, "_private_paid_summary.csv")
@@ -161,27 +166,51 @@ summary_df <- plot_df %>%
 
 write_csv(summary_df, summary_path)
 
+legend_labels <- summary_df %>%
+  transmute(
+    school_group,
+    label = paste0(
+      case_when(
+        as.character(school_group) == sae_group_label ~ "SAE support schools",
+        as.character(school_group) == private_group_label ~ "Private paid schools",
+        TRUE ~ "Other schools"
+      ),
+      " (N = ",
+      comma(n_schools),
+      ")"
+    )
+  ) %>%
+  tibble::deframe()
+
+legend_levels <- unname(legend_labels[levels(plot_df$school_group)])
+
+plot_df <- plot_df %>%
+  mutate(
+    school_group = factor(
+      legend_labels[as.character(school_group)],
+      levels = legend_levels
+    )
+  )
+
+summary_df <- summary_df %>%
+  mutate(
+    school_group = factor(
+      legend_labels[as.character(school_group)],
+      levels = legend_levels
+    )
+  )
+
 mean_lines <- summary_df %>%
   transmute(
     school_group,
     mean_stem_adj_va
   )
 
-annotation_df <- summary_df %>%
-  transmute(
-    school_group,
-    x = mean_stem_adj_va,
-    label = paste0(
-      "N = ", comma(n_schools),
-      "\nMean = ", number(mean_stem_adj_va, accuracy = 0.001)
-    )
-  )
-
 fill_values <- c("#2563eb", "#f59e0b", "#e11d48")
-names(fill_values) <- c(sae_group_label, private_group_label, other_group_label)
+names(fill_values) <- legend_levels
 
 color_values <- c("#1d4ed8", "#b45309", "#be123c")
-names(color_values) <- c(sae_group_label, private_group_label, other_group_label)
+names(color_values) <- legend_levels
 
 dist_plot <- ggplot(plot_df, aes(x = stem_adj_va, fill = school_group, color = school_group)) +
   geom_density(alpha = 0.26, linewidth = 0.8, adjust = 1.1) +
@@ -190,17 +219,6 @@ dist_plot <- ggplot(plot_df, aes(x = stem_adj_va, fill = school_group, color = s
     aes(xintercept = mean_stem_adj_va, color = school_group),
     linewidth = 0.7,
     linetype = "dashed",
-    show.legend = FALSE
-  ) +
-  geom_label(
-    data = annotation_df,
-    aes(x = x, y = Inf, label = label, color = school_group),
-    inherit.aes = FALSE,
-    vjust = 1.08,
-    size = 3.2,
-    label.size = 0.2,
-    fill = "white",
-    label.padding = unit(0.16, "lines"),
     show.legend = FALSE
   ) +
   scale_x_continuous(
@@ -246,5 +264,15 @@ ggsave(
   bg = "white"
 )
 
+ggsave(
+  filename = plot_path_n_legend,
+  plot = dist_plot,
+  width = 9,
+  height = 5.5,
+  dpi = 300,
+  bg = "white"
+)
+
 message("Wrote plot: ", plot_path)
+message("Wrote plot: ", plot_path_n_legend)
 message("Wrote summary: ", summary_path)

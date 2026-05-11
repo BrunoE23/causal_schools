@@ -1,0 +1,7 @@
+spec,outcome,treatment,instrument,beta,se,zstat,p_value,n_obs,fs_beta,fs_se,fs_f,iv_seconds,fs_seconds,rc
+math_money_level,z_year_math_max,d_money_level_millions,z_money_level_millions,-.021904040742049,.026946269,-.81287843,.41628775,97303,.33875045,.03949827,73.553551,1165.014,183.05901,0
+leng_money_level,z_year_leng_max,d_money_level_millions,z_money_level_millions,-.0407831732461779,.027923664,-1.4605236,.1441462,97303,.33875045,.03949827,73.553551,1199.808,194.68201,0
+stem_money_level,stem_enrollment_m1,d_money_level_millions,z_money_level_millions,.0286799637522562,.014086938,2.0359261,.041757777,123953,.26829225,.036729794,53.355515,1351.286,233.81599,0
+math_money_growth,z_year_math_max,d_money_growth_millions,z_money_growth_millions,-.0196567244801059,.048498735,-.40530387,.68525416,96501,.39769575,.033647649,139.69875,1214.6021,199.377,0
+leng_money_growth,z_year_leng_max,d_money_growth_millions,z_money_growth_millions,-.0013257632558626,.04991325,-.02656135,.9788096,96501,.39769575,.033647649,139.69875,1225.542,208.261,0
+stem_money_growth,stem_enrollment_m1,d_money_growth_millions,z_money_growth_millions,.0311240132585046,.020644248,1.5076362,.13164768,123052,.34320226,.030376589,127.65041,1247.145,183.83299,0

@@ -9,7 +9,8 @@
   mincitenames=1,  % use "et al." if more than 2
   maxbibnames=10,  % show up to 10 names in bibliography
   minbibnames=1,
-    uniquelist=false   
+    uniquelist=false,
+    uniquename=false
 ]{biblatex}
 
 
@@ -101,6 +102,12 @@ Given that the lottery offers encode exogenous variation we can interpret the re
 \section{Methodology}
   \subsection{Computing Observational Value-Added for each school}
 
+To compute observational value-added for each school, I use the universe of students who ever attended grade 8 in the Chilean education system between 2017 and 2020, defining their cohort by the first year they show up in grade 8 in this period.
+ This corresponds to roughly 945,000 unique individuals. I track their performance in national mathematics and verbal achievement exams \textit{(SIMCE)} (grade 4 for all, grade 8 for some). I have demograhpic controls such as gender, their age at grade 8, and their commune. 
+ I consider the 4 years after a student shows up in grade 8, and define their high school attended by institution attended the longest, prioirtizing the most recent in case of ties. For outcomes, I currently focus in achievement in a standarized higher-education entrace exams \textit{(PSU/PAES)} in both verbal and mathematics, as well as enrolmment into a STEM program. 
+
+
+
 Following the value-added literature \parencite{chetty_measuring_2014,angrist_leveraging_2017}, I run a regression of the following form to compute the observational value-added for each school for each of these outcomes:
 \[ Y_i = \mu + \beta_{S_i}  + \sum_{p=1}^{3} \lambda_{Mp} M_i^p + \sum_{p=1}^{3} \lambda_{Lp} L_i^p 
 + \gamma_{\mathrm{cohort}(i)} + \delta_{\mathrm{gender}(i)} + \rho_{\mathrm{age}(i)} + \kappa_{\mathrm{comuna}(i)}
@@ -109,24 +116,9 @@ Following the value-added literature \parencite{chetty_measuring_2014,angrist_le
 
 where \(Y_i\) is the outcome for student \(i\), and \(S_i\) is the school attended by student \(i\), as defined above. The coefficient \(\beta_{S_i}\) is a school fixed effect. \(M_i\) and \(L_i\) are the student's standardized fourth-grade math and language scores, respectively, which enter as third-order polynomials. The terms \(\gamma_{\mathrm{cohort}(i)}\), \(\delta_{\mathrm{gender}(i)}\), \(\rho_{\mathrm{age}(i)}\), and \(\kappa_{\mathrm{comuna}(i)}\) are fixed effects for the student's grade-8 cohort, gender, grade-8 age, and home commune, respectively. The error term is \(\varepsilon_i\).
 
-%The adjusted observational value-added of school \(s\) is the estimated school fixed effect,
-%\[
-%V_s^{\mathrm{VA}} = \widehat{\beta}_s .
-%\]
-
-%In the empirical implementation, I use the centered version of this estimate,
-%\[
-%\widetilde{V}_s^{\mathrm{VA}}
-%=
-%\widehat{\beta}_s
-%-
-%\sum_r \omega_r \widehat{\beta}_r ,
-%\]
-%where \(\omega_r\) is the share of students in the value-added regression sample who attend school \(r\). Thus, \(\widetilde{V}_s^{\mathrm{VA}}\) measures school \(s\)'s adjusted observational value relative to the student-weighted average school in the estimation sample.
-
 I also construct an unadjusted measure which corresponds to the raw school mean:
 \[
-V_s^{\mathrm{raw}} = \frac{1}{N_s}\sum_{i:S_i=s}Y_i.
+\beta_s^{\mathrm{raw}} = \frac{1}{N_s}\sum_{i:S_i=s}Y_i.
 \]
 
 We can partially see the role of these adjustments in Figure \ref{fig:VA by region}.
@@ -141,16 +133,7 @@ Figure \ref{fig:VA by region} shows the average value-added for math scores and 
 \end{figure}
 
 
-%By no means, this part of the methodology attempts to claim that the 
-
-%\begin{figure}[htbp]
-%\centering
-%\includegraphics[width=0.85\textwidth]{C:/Users/xd-br/Desktop/PhD/Research/causal_schools/output/figures/school_rbd_observational_values/math_values_by_region_no_rm_relative.png}
-%\caption{Average VA in math score and stem enrollment, by region. Comparing unadjusted and adjusted metrics. Results displayed are recentered without Metropolitan Region}
-%\label{fig:main_result}
-%\end{figure}
-
-
+It is important to clarify that by no means I intend to claim that these value-added metrics are causal. I propose thinking of them as a (selection-contaminated) measure of the causal school effect. We will use the IV regression to determine how informative these are. 
 
   \subsection{IV Regression: Projecting lottery-induced variation into Value-Added}
 
@@ -187,24 +170,30 @@ s : N_s^{+} \geq 100
 
 While the number 100 is an arbitrary threshold, I present its relevance in Table~\ref{tab:student_shares_by_sae_support_thresholds}. 
 Table~\ref{tab:student_shares_by_sae_support_thresholds} reports how students in the broad grade-8 universe are distributed across schools by whether their attended school belongs to the SAE support set under alternative support thresholds.
-With this approach we can estimate the 2SLS for schools that span over 50 \% of the population of students by using roughly 2000 controls (2 for each school, probability of assignment and indicator for zero probability). 
+With the 100-student threshold, we can estimate the 2SLS for supported schools that span 52.3 \% of the broad grade-8 universe using roughly 2,000 assignment-probability controls (2 for each supported school: probability of assignment and an indicator for zero probability).
+An intermediate 50-student threshold would increase coverage to 67.2 \% while increasing the supported set from 1,011 to 1,562 schools.
 
-\textcite{angrist_leveraging_2017} uses a threshold of 25 in their paper, but their number of schools is much smaller (lower than 50). Note that such a threshold would increase the number of controls by another 2000 to represent an extra 25\% of the population. I intend to move in that direction but estimation is currently very computationally intensive. 
+\textcite{angrist_leveraging_2017} uses a threshold of 25 in their paper, but their number of schools is much smaller (lower than 50). In my setting, a 25-student threshold would cover 76.2 \% of the broad grade-8 universe but would require controls for 1,972 supported schools. I intend to move in that direction, potentially through the 50-student threshold first, but estimation is currently very computationally intensive. 
 
 \input{C:/Users/xd-br/Desktop/PhD/Research/causal_schools/output/tables/scalar_school_value_iv/student_shares_by_sae_support_thresholds.tex}
 
 
 \subsubsection{2SLS Regression}
 
+
+
+
 For each school-value measure \(\beta_s\), I assign to each student the value of the school they attend:
 \[
-D_i = \beta_{S_i},
+D_i = \beta_{S_i}, 
 \]
 where \(S_i\) is the school attended by student \(i\). I instrument this attended-school value with the value of the school offered through the lottery:
 \[
-Z_i = \beta_{O_i},
+Z_i
+=
+\mathbf{1}\{O_i \in \mathcal{S}^{100}\}\beta_{O_i},
 \]
-where \(O_i\) is the school offered to student \(i\) in the first round of the centralized assignment process.
+where \(O_i\) is the school offered to student \(i\) in the first round of the centralized assignment process. Offers outside the supported set are assigned zero in the excluded instrument.
 
 The 2SLS system is:
 \[
@@ -214,9 +203,9 @@ D_i
 +
 \pi_1 Z_i
 +
-P_i'\psi
+P_i'\psi_D
 +
-X_i'\lambda
+X_i'\lambda_D
 +
 u_i ,
 \]
@@ -227,15 +216,16 @@ Y_i
 +
 \theta \widehat{D}_i
 +
-P_i'\psi
+P_i'\psi_Y
 +
-X_i'\lambda
+X_i'\lambda_Y
 +
 \varepsilon_i .
 \]
 
-Here \(Y_i\) is the student outcome of interest, \(D_i\) is the observational value of the school attended by the student, and \(Z_i\) is the observational value of the school offered by the lottery. 
-The vector \(P_i\) contains assignment-probability controls, and \(X_i\) contains additional student-level controls.
+Where \(Y_i\) is the student outcome of interest, \(D_i\) is the observational value of the school attended by the student, and \(Z_i\) is the observational value of the school offered by the lottery. 
+The vector \(P_i\) contains assignment-probability controls\footnote{As discussed above, it includes for each school $\in \mathcal{S}^{100}$ the probability of assignment and an indicator for whether the probability is zero.}, and \(X_i\) contains additional student-level controls. 
+These are grade-8 cohort fixed effects, gender fixed effects, grade-8 age fixed effects, standardized fourth-grade math score, and standardized fourth-grade language score.
  The parameter of interest  \(\theta\) measures the causal effect of a lottery-induced increase in the observational school-value index.
 
 
@@ -247,13 +237,36 @@ The vector \(P_i\) contains assignment-probability controls, and \(X_i\) contain
 
 Table~\ref{tab:scalar_school_value_iv_main_results} shows the results of the 2SLS regression above for each of the three outcome variables, comparing both the adjusted and unadjusted value-added metrics.
 
-Overall, this allows us to conclude that the VA metrics are predictive of lottery-induced causal effects across specifications. The fact that the adjusted estimates are larger suggests that adjusted value-added metrics are better at predicting the causal effects of schools on these outcomes, in line with prior literature.
+Interpretation of $\theta$ can be a bit tricky. The general interpretation is that a student induced by a lottery offer to attend a school (a complier) with a 1-unit higher value in the respective metric is expected to have a $\theta$-unit higher outcome.
+So a student induced to attend a school with a 1 standard deviation higher value-added (adjusted) in math scores is expected to have a 0.431 standard deviation higher math score in the standardized test. 
+Similarly, a student induced to attend a school with a 1 extra probability (adjusted) in STEM enrollment is expected to have a 0.584 higher probability of enrolling into a STEM program.
 
+Given that the treatment and the outcome are in the same scale, we can also interpret $\theta$ as a measure of the predictive power of the value-added metric. \textcite{angrist_leveraging_2017} formalizes this and considers $\theta = 1$ as a test for the value-added metric being a perfect predictor of the causal effect of schools on the outcome.
+This is equivalent to testing whether the conditions under which value-added recover a causal effect (e.g. selection -only- on observables) hold in this context.
+Thus we expect metrics more correlated with the causal effects to have a higher $\theta$. This is what we see when we compare across the unadjusted and adjusted specification. Adjusted specifications have higher $\theta$ values and are closer to 1, as they are less prone to selection bias.
+
+
+Overall, this allows us to conclude that the VA metrics (especially the adjusted ones) are predictive of lottery-induced causal effects across specifications. 
+While these results are metric-specific, they also show that exogenous values in school assignments do change outcomes for individuals. 
+To my knowledge, these are the first results to show that school assignment lotteries induce changes in higher education major choice, which is an important contribution in itself.
+
+\subsection{STEM Enrollment results by gender}
+
+\input{C:/Users/xd-br/Desktop/PhD/Research/causal_schools/output/tables/scalar_school_value_iv/scalar_school_value_iv_stem_gender_results.tex}
+The first 3 columns of table \ref{tab:scalar_school_value_iv_stem_gender_results} shows the results of the 2SLS regression for STEM enrollment in the complete IV sample, but also running regressions separately by gender. Note that column (1) matches column (6) in \ref{tab:scalar_school_value_iv_main_results}. 
+Columns (2) and (3) suggests that schools with higher value-added in STEM enrollment are slightly more effective at increasing STEM enrollment for girls, although the difference is not statistically significant (p = 0.219). 
+Columns (4) - (6) repeat this exercise, but instead of using the value-added metric in STEM enrollment they consider as value-added the female-male difference in STEM enrollment. Higher values imply relatively higher STEM enrollment rates for females. 
+Through this projection, we identify schools that are better at closing the gender gap in STEM enrollment. However, we can see that in such schools the gap is closed through a reduction the probability of boys entering to STEM instead of inducing females to enter STEM. 
+
+\subsection{Results by school funding differences}
+
+\input{C:/Users/xd-br/Desktop/PhD/Research/causal_schools/output/tables/school_expenditure_values/money_scalar_iv_results.tex}
+Table \ref{tab:money_scalar_iv_results} shows the results of the 2SLS regression when we use as value-added metric the average per-student expenditure of each school (and the growth over time).
+The results suggest that the expenditure-based metric is not predictive of lottery-induced causal effects on any of the specifications. It must be said that school funding in this set of schools is determined mostly by number of students attending.
+As a result, the core of the funding per student should be mostly similar across schools. There are components which are not determined by the number of students. Some of these attempt to target specific populations, so interpretation is not straightforward. 
 
 
 %\section{Extensions}
-%  \subsection{Characterization of Compliers}
-%  \subsection{Are individuals induced to STEM fields by their schools better off?}
 %  \subsection{Testing formally whether }
 %  \subsection{Implement Empirical Bayes}
 
@@ -278,10 +291,6 @@ Overall, this allows us to conclude that the VA metrics are predictive of lotter
 \printbibliography
 
 \end{document}
-
-
-
-
 
 
 

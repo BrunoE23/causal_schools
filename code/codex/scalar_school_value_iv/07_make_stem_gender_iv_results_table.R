@@ -4,7 +4,7 @@ suppressPackageStartupMessages({
   library(tidyr)
 })
 
-# Build a compact LaTeX table for the main scalar school-value IV estimates.
+# Build a compact LaTeX table for STEM enrollment IV estimates by gender.
 
 repo_wd <- Sys.getenv(
   "CAUSAL_SCHOOLS_REPO_WD",
@@ -18,21 +18,21 @@ results_path <- file.path(
 )
 output_tex_path <- file.path(
   results_dir,
-  "scalar_school_value_iv_main_results.tex"
+  "scalar_school_value_iv_stem_gender_results.tex"
 )
 output_csv_path <- file.path(
   results_dir,
-  "scalar_school_value_iv_main_results.csv"
+  "scalar_school_value_iv_stem_gender_results.csv"
 )
 
-main_specs <- tibble::tribble(
-  ~spec,          ~outcome_group, ~adjustment,   ~column_id,
-  "math_unadj",  "Math",         "Unadjusted",  "math_unadj",
-  "math_adj",    "Math",         "Adjusted",    "math_adj",
-  "leng_unadj",  "Language",     "Unadjusted",  "leng_unadj",
-  "leng_adj",    "Language",     "Adjusted",    "leng_adj",
-  "stem_unadj",  "STEM",         "Unadjusted",  "stem_unadj",
-  "stem_adj",    "STEM",         "Adjusted",    "stem_adj"
+table_specs <- tibble::tribble(
+  ~spec,           ~group, ~column_group,           ~sample,  ~column_id,
+  "stem_adj",      "all",  "STEM VA",               "All",    "stem_adj_all",
+  "stem_adj",      "boys", "STEM VA",               "Boys",   "stem_adj_boys",
+  "stem_adj",      "girls","STEM VA",               "Girls",  "stem_adj_girls",
+  "stem_gap_adj",  "all",  "STEM gender gap reduc. VA",    "All",    "stem_gap_all",
+  "stem_gap_adj",  "boys", "STEM gender gap reduc. VA",    "Boys",   "stem_gap_boys",
+  "stem_gap_adj",  "girls","STEM gender gap reduc. VA",    "Girls",  "stem_gap_girls"
 )
 
 format_estimate <- function(x) {
@@ -48,23 +48,24 @@ format_p_value <- function(x) {
 }
 
 results <- read_csv(results_path, show_col_types = FALSE) %>%
-  filter(group == "all", spec %in% main_specs$spec) %>%
-  select(spec, beta, se, p_value, n_obs, fs_beta, fs_se, fs_f) %>%
-  right_join(main_specs, by = "spec") %>%
-  arrange(match(spec, main_specs$spec))
+  select(spec, group, beta, se, p_value, n_obs, fs_beta, fs_se, fs_f) %>%
+  right_join(table_specs, by = c("spec", "group")) %>%
+  arrange(match(column_id, table_specs$column_id))
 
 if (any(is.na(results$beta))) {
   missing_specs <- results %>%
     filter(is.na(beta)) %>%
-    pull(spec)
-  stop("Missing requested IV result spec(s): ", paste(missing_specs, collapse = ", "), call. = FALSE)
+    transmute(label = paste(spec, group, sep = " / ")) %>%
+    pull(label)
+  stop("Missing requested IV result(s): ", paste(missing_specs, collapse = ", "), call. = FALSE)
 }
 
 table_csv <- results %>%
   transmute(
     spec,
-    outcome_group,
-    adjustment,
+    group,
+    column_group,
+    sample,
     beta,
     se,
     p_value,
@@ -105,7 +106,7 @@ display_wide <- bind_rows(
         "N"
       )
     ),
-    column_id = factor(column_id, levels = main_specs$column_id)
+    column_id = factor(column_id, levels = table_specs$column_id)
   ) %>%
   arrange(stat, column_id) %>%
   pivot_wider(names_from = column_id, values_from = value) %>%
@@ -123,12 +124,12 @@ latex_escape <- function(x) {
 row_values <- function(row) {
   c(
     as.character(row[["stat"]]),
-    as.character(row[["math_unadj"]]),
-    as.character(row[["math_adj"]]),
-    as.character(row[["leng_unadj"]]),
-    as.character(row[["leng_adj"]]),
-    as.character(row[["stem_unadj"]]),
-    as.character(row[["stem_adj"]])
+    as.character(row[["stem_adj_all"]]),
+    as.character(row[["stem_adj_boys"]]),
+    as.character(row[["stem_adj_girls"]]),
+    as.character(row[["stem_gap_all"]]),
+    as.character(row[["stem_gap_boys"]]),
+    as.character(row[["stem_gap_girls"]])
   )
 }
 
@@ -145,14 +146,14 @@ latex_rows <- unlist(lapply(seq_len(nrow(display_wide)), function(i) {
 latex_table <- c(
   "\\begin{table}[!htbp]",
   "\\centering",
-  "\\caption{Scalar school-value IV estimates}",
-  "\\label{tab:scalar_school_value_iv_main_results}",
+  "\\caption{STEM enrollment scalar school-value IV estimates by gender}",
+  "\\label{tab:scalar_school_value_iv_stem_gender_results}",
   "\\begin{tabular}{lcccccc}",
   "\\toprule",
-  " & \\multicolumn{2}{c}{Math VA} & \\multicolumn{2}{c}{Language VA} & \\multicolumn{2}{c}{STEM VA} \\\\",
-  "\\cmidrule(lr){2-3} \\cmidrule(lr){4-5} \\cmidrule(lr){6-7}",
+  " & \\multicolumn{3}{c}{STEM VA} & \\multicolumn{3}{c}{STEM gender gap reduc. VA} \\\\",
+  "\\cmidrule(lr){2-4} \\cmidrule(lr){5-7}",
   " & (1) & (2) & (3) & (4) & (5) & (6) \\\\",
-  " & Unadjusted & Adjusted & Unadjusted & Adjusted & Unadjusted & Adjusted \\\\",
+  " & All & Boys & Girls & All & Boys & Girls \\\\",
   "\\midrule",
   latex_rows,
   "\\bottomrule",
