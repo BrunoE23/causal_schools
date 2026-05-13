@@ -82,7 +82,7 @@ The current construction details are documented in `project_documentation.md` un
 
 - `C:/Users/xd-br/Dropbox/causal_schools/data/clean/school_rbd_observational_values/school_rbd_observational_values.csv`
 
-Current controlled VA controls include cohort, gender, grade-8 age, student grade-8 comuna, imputed SIMCE parent-survey income decile, and cubic baseline SIMCE math/language controls. The income control is `income_decile_imputed`, which is recomputed from `income_mid_imputed` after filling missing income midpoints with baseline-context medians using minimum donor-cell size `15`. Remaining missing income values are left missing, so the VA regression still uses complete cases for the listed controls.
+Current controlled VA controls include cohort, gender, grade-8 age, student grade-8 comuna, imputed SIMCE parent-survey income decile, imputed parent education years, imputed parent indigenous indicators, imputed early-childhood attendance indicators, and cubic baseline SIMCE math/language controls. The income control is `income_decile_imputed`, which is recomputed from `income_mid_imputed` after filling missing income midpoints with baseline-context medians using minimum donor-cell size `15`. The other CPAD controls use the same median-imputation hierarchy and donor-cell threshold. Remaining missing values are left missing, so the VA regression still uses complete cases for the listed controls.
 
 ### IV System
 

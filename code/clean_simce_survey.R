@@ -15,6 +15,86 @@ library(readxl)
 
 #Simce 4to basico
 
+cpad_var_name <- function(year, var) {
+  dplyr::case_when(
+    var == "income" & year == 2013 ~ "cpad_p09",
+    var == "income" & year == 2014 ~ "cpad_p06",
+    var == "income" & year %in% c(2015, 2016) ~ "cpad_p10",
+    var == "father_educ" & year == 2014 ~ "cpad_p04",
+    var == "mother_educ" & year == 2014 ~ "cpad_p05",
+    var == "father_educ" & year %in% c(2013, 2015, 2016) ~ "cpad_p07",
+    var == "mother_educ" & year %in% c(2013, 2015, 2016) ~ "cpad_p08",
+    var == "father_indigenous" & year == 2014 ~ "cpad_p07_01",
+    var == "mother_indigenous" & year == 2014 ~ "cpad_p07_02",
+    var == "father_indigenous" & year %in% c(2015, 2016) ~ "cpad_p09_01",
+    var == "mother_indigenous" & year %in% c(2015, 2016) ~ "cpad_p09_02",
+    var == "sala_cuna" & year == 2013 ~ "cpad_p10",
+    var == "jardin" & year == 2013 ~ "cpad_p11",
+    var == "prekinder" & year == 2013 ~ "cpad_p12",
+    var == "kinder" & year == 2013 ~ "cpad_p13",
+    var == "sala_cuna" & year == 2014 ~ "cpad_p08",
+    var == "jardin" & year == 2014 ~ "cpad_p09",
+    var == "prekinder" & year == 2014 ~ "cpad_p10",
+    var == "kinder" & year == 2014 ~ "cpad_p11",
+    var == "sala_cuna" & year %in% c(2015, 2016) ~ "cpad_p11",
+    var == "jardin" & year %in% c(2015, 2016) ~ "cpad_p12",
+    var == "prekinder" & year %in% c(2015, 2016) ~ "cpad_p13",
+    var == "kinder" & year %in% c(2015, 2016) ~ "cpad_p14",
+    TRUE ~ NA_character_
+  )
+}
+
+get_cpad_var <- function(data, year, var) {
+  col <- cpad_var_name(year, var)
+  if (is.na(col) || !(col %in% names(data))) {
+    return(rep(NA_real_, nrow(data)))
+  }
+  as.numeric(data[[col]])
+}
+
+clean_yes_no <- function(x) {
+  dplyr::case_when(
+    x == 1 ~ 1,
+    x == 2 ~ 0,
+    TRUE ~ NA_real_
+  )
+}
+
+clean_parent_education_years <- function(x, year) {
+  # Codes are year-specific in 2014: the first category is 1st grade
+  # rather than "no schooling". Post-secondary categories are approximate.
+  if (year == 2014) {
+    return(dplyr::case_when(
+      x %in% 1:8 ~ as.numeric(x),
+      x == 9 ~ 9,
+      x == 10 ~ 10,
+      x == 11 ~ 11,
+      x %in% c(12, 13) ~ 12,
+      x == 14 ~ 13,
+      x %in% c(15, 16) ~ 14,
+      x == 17 ~ 16,
+      x == 18 ~ 18,
+      x == 19 ~ 21,
+      TRUE ~ NA_real_
+    ))
+  }
+
+  dplyr::case_when(
+    x == 1 ~ 0,
+    x %in% 2:9 ~ as.numeric(x - 1),
+    x == 10 ~ 9,
+    x == 11 ~ 10,
+    x == 12 ~ 11,
+    x %in% c(13, 14) ~ 12,
+    x == 15 ~ 13,
+    x %in% c(16, 17) ~ 14,
+    x == 18 ~ 16,
+    x == 19 ~ 18,
+    x == 20 ~ 21,
+    TRUE ~ NA_real_
+  )
+}
+
 #Parent survey
 read_simce4b_cpad <- function(year) {
   
@@ -42,25 +122,48 @@ read_simce4b_cpad <- function(year) {
     stop("❌ Multiple CPAD XLSX files found: ", paste(xlsx_files, collapse = ", "))
   }
 
-  # pick the column name (string) for each year
-  income_code <- dplyr::case_when(
-    year == 2013 ~ "cpad_p09",
-    year == 2014 ~ "cpad_p06",
-    year == 2015 ~ "cpad_p10",
-    year == 2016 ~ "cpad_p10",
-    TRUE ~ NA_character_
-  )
+  income_code <- cpad_var_name(year, "income")
   
   if (is.na(income_code)) {
     stop("❌ No income_code mapping for year = ", year)
   }
   
-  readxl::read_xlsx(xlsx_files[[1]]) %>%
+  cpad_raw <- readxl::read_xlsx(xlsx_files[[1]])
+
+  cpad_raw %>%
     dplyr::mutate(
       income = .data[[income_code]],
-      simce_year = agno
+      simce_year = agno,
+      father_educ = get_cpad_var(cpad_raw, year, "father_educ"),
+      mother_educ = get_cpad_var(cpad_raw, year, "mother_educ"),
+      father_educ_years = clean_parent_education_years(father_educ, year),
+      mother_educ_years = clean_parent_education_years(mother_educ, year),
+      father_indigenous = clean_yes_no(
+        get_cpad_var(cpad_raw, year, "father_indigenous")
+      ),
+      mother_indigenous = clean_yes_no(
+        get_cpad_var(cpad_raw, year, "mother_indigenous")
+      ),
+      sala_cuna = clean_yes_no(get_cpad_var(cpad_raw, year, "sala_cuna")),
+      jardin = clean_yes_no(get_cpad_var(cpad_raw, year, "jardin")),
+      prekinder = clean_yes_no(get_cpad_var(cpad_raw, year, "prekinder")),
+      kinder = clean_yes_no(get_cpad_var(cpad_raw, year, "kinder"))
     ) %>%
-    dplyr::select(idalumno, income, simce_year) %>% 
+    dplyr::select(
+      idalumno,
+      income,
+      simce_year,
+      father_educ,
+      mother_educ,
+      father_educ_years,
+      mother_educ_years,
+      father_indigenous,
+      mother_indigenous,
+      sala_cuna,
+      jardin,
+      prekinder,
+      kinder
+    ) %>%
     dplyr::mutate(
       income_mid = dplyr::case_when(
         income == 1  ~  50000,

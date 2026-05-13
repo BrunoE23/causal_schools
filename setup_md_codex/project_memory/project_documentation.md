@@ -201,7 +201,16 @@ Income-control rule:
 - `income_decile_imputed` is then recomputed from the observed-plus-imputed `income_mid_imputed` distribution among students with both baseline SIMCE score controls
 - diagnostic variables include `income_mid_observed`, `income_mid_impute_source`, `income_mid_impute_n`, `income_mid_was_imputed`, `income_decile_was_imputed`, `income_decile_imputation_min_n`, `income_mid_missing_after_impute`, and `income_decile_missing_after_impute`
 
-The controlled VA specification now includes `income_decile_imputed` as an additional student-level control.
+Additional CPAD baseline controls:
+
+- `clean_simce_survey.R` now extracts parent education, parent indigenous-status indicators, and early-childhood attendance indicators from the 4th-grade SIMCE parent survey
+- household size is not used in the current VA control set because it is only available for 2015-2016 in the current 4th-grade CPAD files
+- father and mother education are converted from questionnaire categories into approximate years of education as `father_educ_years` and `mother_educ_years`
+- `universe_reg_df.R` imputes the CPAD controls with the same `n >= 15` median hierarchy used for income: `simce_rbd_4to` x `COD_COM_ALU` x `simce_year`, then `simce_rbd_4to` x `COD_COM_ALU`, then `simce_rbd_4to` x `simce_year`, then `simce_rbd_4to`
+- imputed CPAD controls are named with the `_imputed` suffix and have corresponding `_observed`, `_missing`, `_impute_source`, `_impute_n`, `_was_imputed`, and `_missing_after_impute` diagnostics
+- binary CPAD controls are imputed by median, so tied donor cells can produce `0.5`; these values are intentionally kept as fractional contextual controls for now
+
+The controlled VA specification now includes `income_decile_imputed`, imputed parent education years, imputed parent indigenous indicators, and imputed early-childhood attendance indicators as additional student-level controls.
 
 The school fixed effect from this regression is stored as:
 

@@ -11,6 +11,16 @@ setwd(data_wd)
 library(tidyverse)
 
 income_imputation_min_n <- 15L
+baseline_cpad_imputation_vars <- c(
+  "father_educ_years",
+  "mother_educ_years",
+  "father_indigenous",
+  "mother_indigenous",
+  "sala_cuna",
+  "jardin",
+  "prekinder",
+  "kinder"
+)
 
 impute_income_decile <- function(df, min_cell_n = income_imputation_min_n) {
   imputation_steps <- list(
@@ -86,7 +96,7 @@ impute_income_decile <- function(df, min_cell_n = income_imputation_min_n) {
       income_decile_imputed = ntile(income_mid_imputed, 10)
     )
 
-  df %>%
+  df <- df %>%
     left_join(income_deciles, by = "mrun") %>%
     mutate(
       income_mid_was_imputed = as.integer(
@@ -103,6 +113,63 @@ impute_income_decile <- function(df, min_cell_n = income_imputation_min_n) {
         has_baseline_simce_scores & is.na(income_decile_imputed)
       )
     )
+
+  for (var in baseline_cpad_imputation_vars) {
+    observed_var <- paste0(var, "_observed")
+    imputed_var <- paste0(var, "_imputed")
+    missing_var <- paste0(var, "_missing")
+    source_var <- paste0(var, "_impute_source")
+    n_var <- paste0(var, "_impute_n")
+    was_imputed_var <- paste0(var, "_was_imputed")
+    missing_after_var <- paste0(var, "_missing_after_impute")
+
+    df[[observed_var]] <- df[[var]]
+    df[[imputed_var]] <- df[[var]]
+    df[[missing_var]] <- as.integer(is.na(df[[var]]))
+    df[[source_var]] <- ifelse(is.na(df[[var]]), NA_character_, "observed")
+    df[[n_var]] <- ifelse(is.na(df[[var]]), NA_integer_, 1L)
+
+    donor_df <- df %>%
+      filter(has_baseline_simce_scores, !is.na(.data[[var]]))
+
+    for (step_name in names(imputation_steps)) {
+      group_vars <- imputation_steps[[step_name]]
+
+      donor_medians <- donor_df %>%
+        group_by(across(all_of(group_vars))) %>%
+        summarise(
+          fill_value = median(.data[[var]], na.rm = TRUE),
+          fill_n = n(),
+          .groups = "drop"
+        ) %>%
+        filter(fill_n >= min_cell_n)
+
+      df <- df %>%
+        left_join(donor_medians, by = group_vars)
+
+      should_fill <- df$has_baseline_simce_scores &
+        is.na(df[[imputed_var]]) &
+        !is.na(df$fill_value)
+
+      df[[imputed_var]][should_fill] <- df$fill_value[should_fill]
+      df[[source_var]][should_fill] <- step_name
+      df[[n_var]][should_fill] <- as.integer(df$fill_n[should_fill])
+
+      df <- df %>%
+        select(-fill_value, -fill_n)
+    }
+
+    df[[was_imputed_var]] <- as.integer(
+      df$has_baseline_simce_scores &
+        is.na(df[[observed_var]]) &
+        !is.na(df[[imputed_var]])
+    )
+    df[[missing_after_var]] <- as.integer(
+      df$has_baseline_simce_scores & is.na(df[[imputed_var]])
+    )
+  }
+
+  df
 }
 
 

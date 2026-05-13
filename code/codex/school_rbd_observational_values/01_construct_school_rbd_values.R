@@ -96,6 +96,16 @@ baseline_score_vars <- c("z_sim_mat_4to", "z_sim_leng_4to")
 baseline_score_poly_terms <- unlist(lapply(baseline_score_vars, function(var) {
   c(var, paste0("I(", var, "^", 2:3, ")"))
 }), use.names = FALSE)
+baseline_cpad_control_vars <- c(
+  "father_educ_years_imputed",
+  "mother_educ_years_imputed",
+  "father_indigenous_imputed",
+  "mother_indigenous_imputed",
+  "sala_cuna_imputed",
+  "jardin_imputed",
+  "prekinder_imputed",
+  "kinder_imputed"
+)
 
 control_terms <- c(
   "factor(cohort_gr8)",
@@ -103,6 +113,7 @@ control_terms <- c(
   "factor(EDAD_ALU)",
   "factor(COD_COM_ALU)",
   "income_decile_imputed",
+  baseline_cpad_control_vars,
   baseline_score_poly_terms
 )
 
@@ -112,6 +123,7 @@ control_vars <- c(
   "EDAD_ALU",
   "COD_COM_ALU",
   "income_decile_imputed",
+  baseline_cpad_control_vars,
   "z_sim_mat_4to",
   "z_sim_leng_4to"
 )

@@ -33,7 +33,6 @@
 - Why it matters: Including a noisy or inconsistently constructed income control could distort controlled school/RBD observational values and make interpretation harder.
 - Current rule: `universe_reg_df.R` now constructs `income_mid_imputed` first. It keeps observed SIMCE parent-survey income midpoint values and fills missing values only for students with both baseline SIMCE score controls using median income midpoint from baseline-context cells with at least `15` donor students. It then recomputes `income_decile_imputed` from the observed-plus-imputed midpoint distribution.
 - Current VA use: The `school_rbd_observational_values` task includes `income_decile_imputed` in the controlled VA regressions.
-- Follow-up: Parent-education controls from the CPAD files may be useful later, but they were not added in this task.
 
 ### Consider score-threshold STEM outcome
 
