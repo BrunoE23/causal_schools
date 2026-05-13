@@ -41,6 +41,11 @@ impute_income_decile <- function(df, min_cell_n = income_imputation_min_n) {
         NA_character_,
         "observed"
       ),
+      income_mid_impute_level = if_else(
+        is.na(income_mid),
+        NA_integer_,
+        0L
+      ),
       income_mid_impute_n = if_else(
         is.na(income_mid),
         NA_integer_,
@@ -79,6 +84,11 @@ impute_income_decile <- function(df, min_cell_n = income_imputation_min_n) {
           should_fill_income,
           step_name,
           income_mid_impute_source
+        ),
+        income_mid_impute_level = if_else(
+          should_fill_income,
+          match(step_name, names(imputation_steps)),
+          income_mid_impute_level
         ),
         income_mid_impute_n = if_else(
           should_fill_income,
@@ -119,6 +129,7 @@ impute_income_decile <- function(df, min_cell_n = income_imputation_min_n) {
     imputed_var <- paste0(var, "_imputed")
     missing_var <- paste0(var, "_missing")
     source_var <- paste0(var, "_impute_source")
+    level_var <- paste0(var, "_impute_level")
     n_var <- paste0(var, "_impute_n")
     was_imputed_var <- paste0(var, "_was_imputed")
     missing_after_var <- paste0(var, "_missing_after_impute")
@@ -127,6 +138,7 @@ impute_income_decile <- function(df, min_cell_n = income_imputation_min_n) {
     df[[imputed_var]] <- df[[var]]
     df[[missing_var]] <- as.integer(is.na(df[[var]]))
     df[[source_var]] <- ifelse(is.na(df[[var]]), NA_character_, "observed")
+    df[[level_var]] <- ifelse(is.na(df[[var]]), NA_integer_, 0L)
     df[[n_var]] <- ifelse(is.na(df[[var]]), NA_integer_, 1L)
 
     donor_df <- df %>%
@@ -153,6 +165,7 @@ impute_income_decile <- function(df, min_cell_n = income_imputation_min_n) {
 
       df[[imputed_var]][should_fill] <- df$fill_value[should_fill]
       df[[source_var]][should_fill] <- step_name
+      df[[level_var]][should_fill] <- match(step_name, names(imputation_steps))
       df[[n_var]][should_fill] <- as.integer(df$fill_n[should_fill])
 
       df <- df %>%

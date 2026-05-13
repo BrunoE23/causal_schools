@@ -78,7 +78,16 @@ Implemented in:
 - `code/universe_reg_df.R`
 - `code/codex/school_rbd_observational_values/01_construct_school_rbd_values.R`
 
-The universe build writes `_observed`, `_missing`, `_impute_source`, `_impute_n`, `_was_imputed`, and `_missing_after_impute` companion fields for each CPAD-imputed control.
+The universe build writes `_observed`, `_missing`, `_impute_source`, `_impute_level`, `_impute_n`, `_was_imputed`, and `_missing_after_impute` companion fields for each CPAD-imputed control.
+
+The `_impute_level` fields are coded as:
+
+- `0`: observed
+- `1`: 4th-grade SIMCE school x grade-8 student comuna x SIMCE year
+- `2`: 4th-grade SIMCE school x grade-8 student comuna
+- `3`: 4th-grade SIMCE school x SIMCE year
+- `4`: 4th-grade SIMCE school
+- missing: still missing or outside the baseline-SIMCE imputation population
 
 ## Risks and Follow-Up
 

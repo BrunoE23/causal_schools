@@ -199,7 +199,7 @@ Income-control rule:
 - the hierarchy is `simce_rbd_4to` x `COD_COM_ALU` x `simce_year`, then `simce_rbd_4to` x `COD_COM_ALU`, then `simce_rbd_4to` x `simce_year`, then `simce_rbd_4to`
 - remaining missing values are left as missing rather than filled with a broad year or national median
 - `income_decile_imputed` is then recomputed from the observed-plus-imputed `income_mid_imputed` distribution among students with both baseline SIMCE score controls
-- diagnostic variables include `income_mid_observed`, `income_mid_impute_source`, `income_mid_impute_n`, `income_mid_was_imputed`, `income_decile_was_imputed`, `income_decile_imputation_min_n`, `income_mid_missing_after_impute`, and `income_decile_missing_after_impute`
+- diagnostic variables include `income_mid_observed`, `income_mid_impute_source`, `income_mid_impute_level`, `income_mid_impute_n`, `income_mid_was_imputed`, `income_decile_was_imputed`, `income_decile_imputation_min_n`, `income_mid_missing_after_impute`, and `income_decile_missing_after_impute`
 
 Additional CPAD baseline controls:
 
@@ -208,6 +208,7 @@ Additional CPAD baseline controls:
 - father and mother education are converted from questionnaire categories into approximate years of education as `father_educ_years` and `mother_educ_years`
 - `universe_reg_df.R` imputes the CPAD controls with the same `n >= 15` median hierarchy used for income: `simce_rbd_4to` x `COD_COM_ALU` x `simce_year`, then `simce_rbd_4to` x `COD_COM_ALU`, then `simce_rbd_4to` x `simce_year`, then `simce_rbd_4to`
 - imputed CPAD controls are named with the `_imputed` suffix and have corresponding `_observed`, `_missing`, `_impute_source`, `_impute_n`, `_was_imputed`, and `_missing_after_impute` diagnostics
+- each imputed CPAD control also has an `_impute_level` diagnostic, where `0` means observed, `1` means `simce_rbd_4to` x `COD_COM_ALU` x `simce_year`, `2` means `simce_rbd_4to` x `COD_COM_ALU`, `3` means `simce_rbd_4to` x `simce_year`, `4` means `simce_rbd_4to`, and missing means still missing or not in the baseline-SIMCE imputation population
 - binary CPAD controls are imputed by median, so tied donor cells can produce `0.5`; these values are intentionally kept as fractional contextual controls for now
 
 The controlled VA specification now includes `income_decile_imputed`, imputed parent education years, imputed parent indigenous indicators, and imputed early-childhood attendance indicators as additional student-level controls.

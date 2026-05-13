@@ -65,6 +65,7 @@ Implemented in:
 - `income_mid_imputed`
 - `income_mid_missing`
 - `income_mid_impute_source`
+- `income_mid_impute_level`
 - `income_mid_impute_n`
 - `income_mid_was_imputed`
 - `income_decile_observed`
@@ -73,6 +74,15 @@ Implemented in:
 - `income_decile_imputation_min_n`
 - `income_mid_missing_after_impute`
 - `income_decile_missing_after_impute`
+
+`income_mid_impute_level` is coded as:
+
+- `0`: observed
+- `1`: 4th-grade SIMCE school x grade-8 student comuna x SIMCE year
+- `2`: 4th-grade SIMCE school x grade-8 student comuna
+- `3`: 4th-grade SIMCE school x SIMCE year
+- `4`: 4th-grade SIMCE school
+- missing: still missing or outside the baseline-SIMCE imputation population
 
 The controlled VA script includes `income_decile_imputed` in the main control set. In the gender-gap VA model, it is included in the baseline controls and is interacted with gender under the current interaction rule.
 
