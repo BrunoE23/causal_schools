@@ -25,12 +25,15 @@
 
 ### Income decile control is not ready for value-added work
 
-- Status: Open
+- Status: Resolved for current VA pass
 - Date noted: 2026-04-24
+- Date resolved: 2026-05-13
+- Related decision: `decisions/2026-05-13-use-imputed-simce-income-control-in-va.md`
 - Context: While planning school/RBD observational value-added measures, `income_decile` was flagged as messy and not yet reliable enough to use as a student-level control.
 - Why it matters: Including a noisy or inconsistently constructed income control could distort controlled school/RBD observational values and make interpretation harder.
-- Current workaround: The `school_rbd_observational_values` task excludes `income_decile` from the control set. It uses cohort, student gender, student comuna (`COD_COM_ALU`), and prior SIMCE math/language instead.
-- Follow-up: Clean and validate the income measure before adding it to controlled value-added specifications.
+- Current rule: `universe_reg_df.R` now constructs `income_mid_imputed` first. It keeps observed SIMCE parent-survey income midpoint values and fills missing values only for students with both baseline SIMCE score controls using median income midpoint from baseline-context cells with at least `15` donor students. It then recomputes `income_decile_imputed` from the observed-plus-imputed midpoint distribution.
+- Current VA use: The `school_rbd_observational_values` task includes `income_decile_imputed` in the controlled VA regressions.
+- Follow-up: Parent-education controls from the CPAD files may be useful later, but they were not added in this task.
 
 ### Consider score-threshold STEM outcome
 

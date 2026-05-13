@@ -89,7 +89,9 @@ controlled_value_added_outcomes <- c(
 
 # Main individual-level control set for controlled observational value-added.
 # COD_COM_ALU is the student's comuna, not the school's comuna.
-# income_decile is intentionally excluded for now because it is currently messy.
+# income_decile_imputed is the observed SIMCE parent-survey income decile when
+# available, otherwise a baseline-context median imputation documented in
+# setup_md_codex/project_memory/decisions/.
 baseline_score_vars <- c("z_sim_mat_4to", "z_sim_leng_4to")
 baseline_score_poly_terms <- unlist(lapply(baseline_score_vars, function(var) {
   c(var, paste0("I(", var, "^", 2:3, ")"))
@@ -100,6 +102,7 @@ control_terms <- c(
   "factor(GEN_ALU)",
   "factor(EDAD_ALU)",
   "factor(COD_COM_ALU)",
+  "income_decile_imputed",
   baseline_score_poly_terms
 )
 
@@ -108,6 +111,7 @@ control_vars <- c(
   "GEN_ALU",
   "EDAD_ALU",
   "COD_COM_ALU",
+  "income_decile_imputed",
   "z_sim_mat_4to",
   "z_sim_leng_4to"
 )

@@ -10,6 +10,101 @@ setwd(data_wd)
 
 library(tidyverse)
 
+income_imputation_min_n <- 15L
+
+impute_income_decile <- function(df, min_cell_n = income_imputation_min_n) {
+  imputation_steps <- list(
+    school_comuna_year = c("simce_rbd_4to", "COD_COM_ALU", "simce_year"),
+    school_comuna = c("simce_rbd_4to", "COD_COM_ALU"),
+    school_year = c("simce_rbd_4to", "simce_year"),
+    school = c("simce_rbd_4to")
+  )
+
+  df <- df %>%
+    mutate(
+      income_mid_observed = income_mid,
+      income_mid_imputed = income_mid,
+      income_decile_observed = income_decile,
+      income_mid_missing = as.integer(is.na(income_mid)),
+      income_mid_impute_source = if_else(
+        is.na(income_mid),
+        NA_character_,
+        "observed"
+      ),
+      income_mid_impute_n = if_else(
+        is.na(income_mid),
+        NA_integer_,
+        1L
+      ),
+      has_baseline_simce_scores = !is.na(z_sim_mat_4to) & !is.na(z_sim_leng_4to)
+    )
+
+  donor_df <- df %>%
+    filter(has_baseline_simce_scores, !is.na(income_mid))
+
+  for (step_name in names(imputation_steps)) {
+    group_vars <- imputation_steps[[step_name]]
+
+    donor_medians <- donor_df %>%
+      group_by(across(all_of(group_vars))) %>%
+      summarise(
+        income_mid_fill = median(income_mid, na.rm = TRUE),
+        income_mid_fill_n = n(),
+        .groups = "drop"
+      ) %>%
+      filter(income_mid_fill_n >= min_cell_n)
+
+    df <- df %>%
+      left_join(donor_medians, by = group_vars) %>%
+      mutate(
+        should_fill_income = has_baseline_simce_scores &
+          is.na(income_mid_imputed) &
+          !is.na(income_mid_fill),
+        income_mid_imputed = if_else(
+          should_fill_income,
+          income_mid_fill,
+          income_mid_imputed
+        ),
+        income_mid_impute_source = if_else(
+          should_fill_income,
+          step_name,
+          income_mid_impute_source
+        ),
+        income_mid_impute_n = if_else(
+          should_fill_income,
+          as.integer(income_mid_fill_n),
+          income_mid_impute_n
+        )
+      ) %>%
+      select(-income_mid_fill, -income_mid_fill_n, -should_fill_income)
+  }
+
+  income_deciles <- df %>%
+    filter(has_baseline_simce_scores, !is.na(income_mid_imputed)) %>%
+    transmute(
+      mrun,
+      income_decile_imputed = ntile(income_mid_imputed, 10)
+    )
+
+  df %>%
+    left_join(income_deciles, by = "mrun") %>%
+    mutate(
+      income_mid_was_imputed = as.integer(
+        has_baseline_simce_scores &
+          is.na(income_mid_observed) &
+          !is.na(income_mid_imputed)
+      ),
+      income_decile_was_imputed = income_mid_was_imputed,
+      income_decile_imputation_min_n = min_cell_n,
+      income_mid_missing_after_impute = as.integer(
+        has_baseline_simce_scores & is.na(income_mid_imputed)
+      ),
+      income_decile_missing_after_impute = as.integer(
+        has_baseline_simce_scores & is.na(income_decile_imputed)
+      )
+    )
+}
+
 
 
 ##### 
@@ -81,7 +176,8 @@ reg_df <- left_join(base, offers_1R_first, by = "mrun") %>%
   mutate(completed_psu = as.integer(ifelse(leng_math_total> 0,  1, 0))) %>% 
   left_join(stem_outcome, by = "mrun")  %>% 
   left_join(mat_first, by = "MRUN") %>% 
-  left_join(mat_last, by = "MRUN") 
+  left_join(mat_last, by = "MRUN") %>%
+  impute_income_decile()
   
 
 rm(list = setdiff(ls(), "reg_df"))

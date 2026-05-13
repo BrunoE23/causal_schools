@@ -1,9 +1,9 @@
 ####################################
-#data_wd        <-  "C:/Users/xd-br/Dropbox/causal_schools"
-#code_output_wd <-  "C:/Users/xd-br/Desktop/PhD/Research/causal_schools"
+data_wd        <-  "C:/Users/xd-br/Dropbox/causal_schools"
+code_output_wd <-  "C:/Users/xd-br/Desktop/PhD/Research/causal_schools"
 
-data_wd <- "C:/Users/brunem/Dropbox/causal_schools"
-code_output_wd <-  "C:/Users/brunem/Research/causal_schools"
+#data_wd <- "C:/Users/brunem/Dropbox/causal_schools"
+#code_output_wd <-  "C:/Users/brunem/Research/causal_schools"
 
 #Datawd (Dropbox) 
 setwd(data_wd)
@@ -133,6 +133,7 @@ read_simce4b_alu <- function(year) {
   df %>%
     dplyr::select(
       idalumno, mrun, simce_year,
+      simce_rbd_4to = rbd,
       ptje_lect4b_alu,
       ptje_mate4b_alu,
     )

@@ -190,9 +190,18 @@ Interpretation of the controls:
 - `COD_COM_ALU` is the student's comuna, not the school's comuna
 - `z_sim_mat_4to` and `z_sim_leng_4to` adjust for prior achievement through third-order polynomials
 
-Important current restriction:
+Income-control rule:
 
-- `income_decile` is intentionally excluded because it is currently messy and not yet clean enough for use as a control
+- `income_decile` comes from the 4th-grade SIMCE parent survey income question
+- `simce_rbd_4to` is retained from the 4th-grade SIMCE student file
+- `universe_reg_df.R` constructs `income_mid_imputed`, preserving observed `income_mid` where available and imputing missing income only for students with both baseline SIMCE score controls
+- the imputation uses median observed `income_mid` with a minimum of `15` donor students per cell
+- the hierarchy is `simce_rbd_4to` x `COD_COM_ALU` x `simce_year`, then `simce_rbd_4to` x `COD_COM_ALU`, then `simce_rbd_4to` x `simce_year`, then `simce_rbd_4to`
+- remaining missing values are left as missing rather than filled with a broad year or national median
+- `income_decile_imputed` is then recomputed from the observed-plus-imputed `income_mid_imputed` distribution among students with both baseline SIMCE score controls
+- diagnostic variables include `income_mid_observed`, `income_mid_impute_source`, `income_mid_impute_n`, `income_mid_was_imputed`, `income_decile_was_imputed`, `income_decile_imputation_min_n`, `income_mid_missing_after_impute`, and `income_decile_missing_after_impute`
+
+The controlled VA specification now includes `income_decile_imputed` as an additional student-level control.
 
 The school fixed effect from this regression is stored as:
 
