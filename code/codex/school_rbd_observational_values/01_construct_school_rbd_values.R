@@ -14,6 +14,10 @@ data_wd <- Sys.getenv(
 )
 
 input_path <- file.path(data_wd, "data/clean/univ_gr8_df.csv")
+middle_school_controls_path <- file.path(
+  data_wd,
+  "data/clean/middle_school_controls/middle_school_controls.csv"
+)
 output_dir <- file.path(data_wd, "data/clean/school_rbd_observational_values")
 output_path <- file.path(output_dir, "school_rbd_observational_values.csv")
 score_diagnostics_path <- file.path(output_dir, "score_scale_diagnostics_by_year.csv")
@@ -107,6 +111,13 @@ baseline_cpad_control_vars <- c(
   "kinder_imputed"
 )
 
+middle_school_control_vars <- c(
+  "z_gpa_middle_mean",
+  "z_att_middle_mean"
+)
+
+middle_school_fixed_effect_vars <- c("most_time_RBD_middle")
+
 control_terms <- c(
   "factor(cohort_gr8)",
   "factor(GEN_ALU)",
@@ -114,6 +125,8 @@ control_terms <- c(
   "factor(COD_COM_ALU)",
   "income_decile_imputed",
   baseline_cpad_control_vars,
+  middle_school_control_vars,
+  "factor(middle_years_observed)",
   baseline_score_poly_terms
 )
 
@@ -124,9 +137,13 @@ control_vars <- c(
   "COD_COM_ALU",
   "income_decile_imputed",
   baseline_cpad_control_vars,
+  middle_school_control_vars,
+  "middle_years_observed",
   "z_sim_mat_4to",
   "z_sim_leng_4to"
 )
+
+fixed_effect_vars <- c("school_rbd", middle_school_fixed_effect_vars)
 
 gender_gap_base_outcomes <- c("z_year_math_max", "stem_enrollment_m1")
 gender_gap_control_terms <- control_terms[control_terms != "factor(GEN_ALU)"]
@@ -310,14 +327,19 @@ add_field_outcomes <- function(data,
   list(data = data, outcome_specs = outcome_specs)
 }
 
-estimate_school_value_added <- function(data, outcome, controls, control_vars) {
+estimate_school_value_added <- function(data,
+                                        outcome,
+                                        controls,
+                                        control_vars,
+                                        fixed_effect_vars = "school_rbd",
+                                        analysis_sample = "All") {
   regression_data <- data %>%
-    select(school_rbd, all_of(outcome), all_of(control_vars)) %>%
+    select(all_of(fixed_effect_vars), all_of(outcome), all_of(control_vars)) %>%
     filter(
       !is.na(school_rbd),
       !is.na(.data[[outcome]])
     ) %>%
-    drop_na(all_of(control_vars))
+    drop_na(all_of(c(control_vars, fixed_effect_vars)))
 
   if (
     nrow(regression_data) == 0 ||
@@ -325,6 +347,7 @@ estimate_school_value_added <- function(data, outcome, controls, control_vars) {
   ) {
     return(tibble(
       school_rbd = numeric(),
+      analysis_sample = analysis_sample,
       outcome = outcome,
       controlled_value_added = numeric(),
       controlled_value_added_centered = numeric(),
@@ -335,7 +358,13 @@ estimate_school_value_added <- function(data, outcome, controls, control_vars) {
   }
 
   model_formula <- as.formula(
-    paste0(outcome, " ~ ", paste(controls, collapse = " + "), " | school_rbd")
+    paste0(
+      outcome,
+      " ~ ",
+      paste(controls, collapse = " + "),
+      " | ",
+      paste(fixed_effect_vars, collapse = " + ")
+    )
   )
 
   model <- feols(model_formula, data = regression_data, notes = FALSE)
@@ -346,6 +375,7 @@ estimate_school_value_added <- function(data, outcome, controls, control_vars) {
 
   fe_values <- tibble(
     school_rbd = as.numeric(names(school_fe)),
+    analysis_sample = analysis_sample,
     outcome = outcome,
     controlled_value_added = as.numeric(school_fe),
     n_students_regression_total = nobs(model)
@@ -536,7 +566,36 @@ setFixest_nthreads(0)
 
 df <- read_csv(input_path, show_col_types = FALSE)
 
-stop_if_missing(df, c(school_var, control_vars, age_var), "Main input")
+if (!file.exists(middle_school_controls_path)) {
+  stop(
+    "Middle-school controls file does not exist: ",
+    middle_school_controls_path,
+    call. = FALSE
+  )
+}
+
+middle_school_controls <- read_csv(
+  middle_school_controls_path,
+  show_col_types = FALSE
+) %>%
+  mutate(MRUN = as.character(MRUN)) %>%
+  select(
+    MRUN,
+    most_time_RBD_middle,
+    middle_years_observed,
+    z_gpa_middle_mean,
+    z_att_middle_mean
+  )
+
+df <- df %>%
+  mutate(MRUN = as.character(MRUN)) %>%
+  left_join(middle_school_controls, by = "MRUN")
+
+stop_if_missing(
+  df,
+  c(school_var, control_vars, middle_school_fixed_effect_vars, age_var),
+  "Main input"
+)
 
 student_id_var <- if ("mrun" %in% names(df)) {
   "mrun"
@@ -598,17 +657,59 @@ school_counts <- analytic %>%
 
 # ------------------------- Raw school means -------------------------
 
-raw_values <- map_dfr(outcome_specs$outcome, function(outcome_name) {
-  analytic %>%
-    group_by(school_rbd) %>%
-    summarise(
-      raw_mean = mean_or_na(.data[[outcome_name]]),
-      n_students_outcome = sum(!is.na(.data[[outcome_name]])),
-      .groups = "drop"
-    ) %>%
-    mutate(outcome = outcome_name)
+analysis_samples <- tibble(
+  analysis_sample = c("All", "Male", "Female"),
+  gender_code = c(NA_real_, male_gender_code, female_gender_code)
+)
+
+sample_data <- function(data, gender_code) {
+  if (is.na(gender_code)) {
+    return(data)
+  }
+  data %>% filter(.data[[gender_var]] == gender_code)
+}
+
+sample_control_terms <- function(analysis_sample) {
+  if (analysis_sample == "All") {
+    return(control_terms)
+  }
+  setdiff(control_terms, "factor(GEN_ALU)")
+}
+
+sample_control_vars <- function(analysis_sample) {
+  if (analysis_sample == "All") {
+    return(control_vars)
+  }
+  setdiff(control_vars, gender_var)
+}
+
+school_counts_by_sample <- pmap_dfr(
+  analysis_samples,
+  function(analysis_sample, gender_code) {
+    sample_data(analytic, gender_code) %>%
+      count(school_rbd, name = "n_students_school") %>%
+      mutate(analysis_sample = analysis_sample)
+  }
+)
+
+raw_values <- pmap_dfr(analysis_samples, function(analysis_sample, gender_code) {
+  sample_analytic <- sample_data(analytic, gender_code)
+
+  map_dfr(outcome_specs$outcome, function(outcome_name) {
+    sample_analytic %>%
+      group_by(school_rbd) %>%
+      summarise(
+        raw_mean = mean_or_na(.data[[outcome_name]]),
+        n_students_outcome = sum(!is.na(.data[[outcome_name]])),
+        .groups = "drop"
+      ) %>%
+      mutate(
+        analysis_sample = analysis_sample,
+        outcome = outcome_name
+      )
+  })
 }) %>%
-  group_by(outcome) %>%
+  group_by(analysis_sample, outcome) %>%
   mutate(
     raw_mean_centered = raw_mean - mean(raw_mean, na.rm = TRUE),
     raw_mean_centered_student = raw_mean - weighted.mean(raw_mean, n_students_outcome, na.rm = TRUE)
@@ -624,12 +725,16 @@ if (length(controlled_outcomes) == 0) {
 }
 
 controlled_values <- map_dfr(controlled_outcomes, function(outcome_name) {
-  estimate_school_value_added(
-    data = analytic,
-    outcome = outcome_name,
-    controls = control_terms,
-    control_vars = control_vars
-  )
+  pmap_dfr(analysis_samples, function(analysis_sample, gender_code) {
+    estimate_school_value_added(
+      data = sample_data(analytic, gender_code),
+      outcome = outcome_name,
+      controls = sample_control_terms(analysis_sample),
+      control_vars = sample_control_vars(analysis_sample),
+      fixed_effect_vars = fixed_effect_vars,
+      analysis_sample = analysis_sample
+    )
+  })
 })
 
 # ------------------------- Gender-gap school values -------------------------
@@ -662,11 +767,15 @@ gender_gap_controlled_values <- map_dfr(gender_gap_outcomes, function(outcome_na
 # ------------------------- Final output -------------------------
 
 base_final_values <- raw_values %>%
-  left_join(controlled_values, by = c("school_rbd", "outcome")) %>%
+  left_join(controlled_values, by = c("school_rbd", "analysis_sample", "outcome")) %>%
   left_join(outcome_specs, by = "outcome") %>%
-  left_join(school_counts, by = "school_rbd") %>%
+  left_join(school_counts_by_sample, by = c("school_rbd", "analysis_sample")) %>%
   mutate(
-    control_set = paste(control_terms, collapse = " + "),
+    control_set = case_when(
+      analysis_sample == "All" ~ paste(control_terms, collapse = " + "),
+      TRUE ~ paste(setdiff(control_terms, "factor(GEN_ALU)"), collapse = " + ")
+    ),
+    fixed_effect_set = paste(fixed_effect_vars, collapse = " + "),
     school_definition = school_definition,
     base_outcome = outcome,
     n_girls_outcome = NA_integer_,
@@ -683,7 +792,9 @@ gender_gap_final_values <- gender_gap_raw_values %>%
   left_join(gender_gap_specs, by = "outcome") %>%
   left_join(school_counts, by = "school_rbd") %>%
   mutate(
+    analysis_sample = "All",
     control_set = paste(gender_gap_control_terms, collapse = " + "),
+    fixed_effect_set = "school_gender_fe",
     school_definition = school_definition,
     low_outcome_count = n_students_outcome < low_count_threshold,
     low_gender_count = pmin(n_girls_outcome, n_boys_outcome) < low_count_threshold,
@@ -693,6 +804,7 @@ gender_gap_final_values <- gender_gap_raw_values %>%
 final_values <- bind_rows(base_final_values, gender_gap_final_values) %>%
   select(
     school_rbd,
+    analysis_sample,
     outcome,
     outcome_family,
     base_outcome,
@@ -713,15 +825,16 @@ final_values <- bind_rows(base_final_values, gender_gap_final_values) %>%
     n_girls_regression,
     n_boys_regression,
     control_set,
+    fixed_effect_set,
     school_definition,
     low_outcome_count,
     low_gender_count,
     missing_controlled_value
   ) %>%
-  arrange(outcome_family, outcome, school_rbd)
+  arrange(outcome_family, outcome, analysis_sample, school_rbd)
 
-if (anyDuplicated(final_values[c("school_rbd", "outcome")]) > 0) {
-  stop("Final output has duplicate school_rbd-outcome rows.", call. = FALSE)
+if (anyDuplicated(final_values[c("school_rbd", "analysis_sample", "outcome")]) > 0) {
+  stop("Final output has duplicate school_rbd-analysis_sample-outcome rows.", call. = FALSE)
 }
 
 write_csv(final_values, output_path)
@@ -730,3 +843,4 @@ message("Wrote: ", output_path)
 message("Rows: ", nrow(final_values))
 message("Outcomes: ", n_distinct(final_values$outcome))
 message("Schools: ", n_distinct(final_values$school_rbd))
+message("Analysis samples: ", paste(unique(final_values$analysis_sample), collapse = ", "))

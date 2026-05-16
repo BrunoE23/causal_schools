@@ -41,6 +41,7 @@
 - "Be concise unless I ask for detail"
 - For substantial tasks, use a "deep research" workflow: first clarify the objective, inspect lightly, and present a short plan before doing heavier execution.
 - Treat large data loads, long-running scripts, broad searches, and output-generating jobs as "heavy" work that should wait for my go-ahead after the plan.
+- If a file or loaded data object is over roughly 100MB, first think through an efficient implementation before running it: inspect size/columns, filter early, avoid unnecessary full-object copies, and use faster tools such as `data.table` when appropriate.
 
 # Other 
 

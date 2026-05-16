@@ -181,6 +181,24 @@ The current control set is:
 - `z_sim_leng_4to`
 - `I(z_sim_leng_4to^2)`
 - `I(z_sim_leng_4to^3)`
+- `income_decile_imputed`
+- imputed CPAD parent education, parent indigenous-status, and early-childhood attendance controls
+- `z_gpa_middle_mean`
+- `z_att_middle_mean`
+- `factor(middle_years_observed)`
+
+The controlled regular school-value regressions also absorb:
+
+- `school_rbd`
+- `most_time_RBD_middle`
+
+The regular school-value output now includes an `analysis_sample` column. Values are estimated separately for:
+
+- `All`
+- `Male`
+- `Female`
+
+For the sex-specific regressions, `factor(GEN_ALU)` is removed from the control set because gender is constant within the estimation sample. The existing gender-gap outcomes remain separate objects under `outcome_family == "gender_gap"`.
 
 Interpretation of the controls:
 
@@ -211,7 +229,18 @@ Additional CPAD baseline controls:
 - each imputed CPAD control also has an `_impute_level` diagnostic, where `0` means observed, `1` means `simce_rbd_4to` x `COD_COM_ALU` x `simce_year`, `2` means `simce_rbd_4to` x `COD_COM_ALU`, `3` means `simce_rbd_4to` x `simce_year`, `4` means `simce_rbd_4to`, and missing means still missing or not in the baseline-SIMCE imputation population
 - binary CPAD controls are imputed by median, so tied donor cells can produce `0.5`; these values are intentionally kept as fractional contextual controls for now
 
-The controlled VA specification now includes `income_decile_imputed`, imputed parent education years, imputed parent indigenous indicators, and imputed early-childhood attendance indicators as additional student-level controls.
+The controlled VA specification includes `income_decile_imputed`, imputed parent education years, imputed parent indigenous indicators, imputed early-childhood attendance indicators, middle-school GPA/attendance summaries, and absorbed middle-school RBD fixed effects as additional controls.
+
+Middle-school controls:
+
+- `code/codex/middle_school_controls/01_construct_middle_school_controls.R` constructs student-level middle-school controls for the grade-8 universe
+- the output file is `data/clean/middle_school_controls/middle_school_controls.csv`, with diagnostics in `data/clean/middle_school_controls/middle_school_controls_diagnostics.csv`
+- middle-school records are observed grade 5-8 enrollment rows from three years before through the student's first observed grade-8 cohort year
+- the construction uses `tracking_univ8gr.RData` for 2017-2020 and reads raw 2014-2016 enrollment files to complete the historical grade 5-8 window for the full grade-8 universe
+- `most_time_RBD_middle` is the RBD where the student spent the most observed middle-school years, breaking ties by latest observed year and then RBD
+- `z_gpa_middle_mean` and `z_att_middle_mean` average annual GPA and attendance z-scores across observed middle-school records
+- for 2017-2020 records, the z-scores reuse the school-grade GPA and attendance means and standard deviations already stored in `tracking_univ8gr.RData`; for 2014-2016 records, the script computes the same school-grade moments from the full raw year file before filtering to the grade-8 universe
+- duplicate student-year enrollment records are resolved by preferring nonzero attendance, then passed records, then highest attendance, with any remaining exact ties broken deterministically by RBD
 
 The school fixed effect from this regression is stored as:
 

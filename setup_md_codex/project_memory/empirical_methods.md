@@ -131,6 +131,28 @@ The k=25 threshold is a practical support rule. It reduces the dimensionality of
 
 For the first-pass scalar IV dataframe, score outcomes such as `z_year_math_max` and `z_year_leng_max` are constructed on the broad `univ_gr8_df` by PSU year before merging the reduced probability controls. This keeps the score scale from being redefined by the narrower IV estimation sample.
 
+### Expected-VA Risk Control Variant
+
+The expected-VA scalar-IV variant replaces the high-dimensional `prob_<rbd>` and `iszero_<rbd>` controls with one scalar risk control for each school-value index:
+
+`expected_VA_i = sum_s p_is * V_s`
+
+where `p_is` is the simulated assignment probability that student `i` is assigned to school `s`, and `V_s` is the All-sample school value for the relevant value metric.
+
+This variant is implemented in `code/codex/scalar_school_value_iv/08_run_expected_va_scalar_iv.R`. It uses the long DA probability files directly (`DA_probs_2018.csv` through `DA_probs_2021.csv`) rather than the wide probability-control matrices. It keeps the IV sample restricted to timely at-risk students with probability rows.
+
+For this variant:
+
+- `D_i = V_{most_time_RBD}` is the value of the student's attended/linked school.
+- `Z_i = V_{rbd_treated_1R}` is the value of the first-round offered school.
+- `expected_VA_i` is included as the scalar assignment-risk control.
+- no-offer cases are coded with `Z_i = 0`; offered schools without an available All-sample value are left missing for that value metric.
+
+The first table from this variant is written to:
+
+- `output/tables/scalar_school_value_iv/scalar_school_value_iv_main_results_expected_va.csv`
+- `output/tables/scalar_school_value_iv/scalar_school_value_iv_main_results_expected_va.tex`
+
 ### Current Scalar Offer-Instrument Normalization
 
 The current first-pass scalar IV uses the value of the attended school as the endogenous treatment:

@@ -15,6 +15,7 @@
 - Store exploratory or analysis figures in the repository output figures area, usually `output/figures/<task_name>/`.
 - Store paper-ready tables, especially `.tex` tables meant for manuscripts, in the repository output tables area, usually `output/tables/<task_name>/`.
 - Do not put paper `.tex` tables in `data/clean/`. Do not put ordinary analysis CSVs in `output/tables/` unless they are temporary companions to paper table generation.
+- Before reading or processing a file/object over roughly 100MB, pause to consider efficiency. Prefer a light preflight first: check file size, row count, columns needed, and whether a faster tool (`data.table`, database/arrow readers, column selection, filtering before joins, or cached clean objects) is appropriate. Do not launch expensive grouped operations over large data just to answer a small diagnostic count.
 
 ## Code location
 - Place new Codex-written code in `code/codex/` by default.
@@ -35,6 +36,7 @@
 - If ambiguity is low-risk, choose a sensible default and state it.
 - Escalate early when a command is blocked by permissions or environment limits.
 - For larger research tasks, prefer a staged workflow: light inspection first, then a concise plan, then heavy execution only after user confirmation.
+- For diagnostics on large data, timebox the first attempt and report quickly if the approach is too slow instead of letting a command run silently for many minutes.
 
 ## Coding and Review Rules
 - Preserve existing behavior unless change is requested.

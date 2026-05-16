@@ -264,7 +264,13 @@ rm(list = setdiff(ls(), "reg_df"))
 gc()
 
 write.csv(reg_df, "data/clean/univ_gr8_df.csv", row.names = FALSE)
-haven::write_dta(reg_df,    "data/clean/univ_gr8_df.dta")
+
+reg_df_stata <- reg_df %>%
+  rename_with(
+    ~ stringr::str_replace(.x, "_missing_after_impute$", "_miss_after_imp")
+  )
+
+haven::write_dta(reg_df_stata, "data/clean/univ_gr8_df.dta")
 
 
 #prob of treatment

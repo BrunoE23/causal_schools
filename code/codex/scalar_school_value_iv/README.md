@@ -79,3 +79,23 @@ The script reports:
 The current Stata scripts include both `prob_*` and `iszero_*` probability controls and write to `scalar_school_value_iv_results_k100_timely_risk_prob_iszero.*`, so earlier `prob_*`-only estimates are not overwritten. If this is too slow, temporarily change `local prob_controls prob_* iszero_*` to `local prob_controls prob_*` and change `controls_stub` to a matching label.
 
 The append script `03_append_gender_gap_by_gender.do` runs `stem_adj` and `stem_gap_adj` separately for boys and girls, then appends those rows to the existing results table without rerunning the main seven specifications. It assumes `GEN_ALU == 1` for boys and `GEN_ALU == 2` for girls.
+
+## Expected-VA Risk-Control Variant
+
+The expected-VA variant is implemented in:
+
+- `08_run_expected_va_scalar_iv.R`
+
+This variant drops the k-support probability-control restriction. Instead of carrying `prob_<rbd>` and `iszero_<rbd>` controls for a supported school set, it uses all numeric RBDs appearing in the long DA probability files and constructs one scalar risk control per value metric:
+
+`expected_VA_i = sum_s p_is * V_s`
+
+where `p_is` is the simulated assignment probability and `V_s` is the All-sample school value for that metric. Non-school `unmatched` probability mass contributes zero.
+
+The expected-VA outputs are:
+
+- `data/clean/scalar_school_value_iv/scalar_school_value_iv_expected_va.csv`
+- `data/clean/scalar_school_value_iv/scalar_school_value_iv_expected_va_diagnostics.csv`
+- `output/tables/scalar_school_value_iv/scalar_school_value_iv_results_expected_va.csv`
+- `output/tables/scalar_school_value_iv/scalar_school_value_iv_main_results_expected_va.csv`
+- `output/tables/scalar_school_value_iv/scalar_school_value_iv_main_results_expected_va.tex`
