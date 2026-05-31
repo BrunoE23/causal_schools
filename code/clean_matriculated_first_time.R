@@ -1,13 +1,38 @@
 ####################################
-#data_wd        <-  "C:/Users/xd-br/Dropbox/causal_schools"
-#code_output_wd <-  "C:/Users/xd-br/Desktop/PhD/Research/causal_schools"
+find_existing_path <- function(candidates, label) {
+  candidates <- candidates[dir.exists(candidates)]
 
-data_wd <- "C:/Users/brunem/Dropbox/causal_schools"
-code_output_wd <-  "C:/Users/brunem/Research/causal_schools"
+  if (length(candidates) == 0) {
+    stop("Could not find ", label, ". Update candidates.", call. = FALSE)
+  }
+
+  candidates[[1]]
+}
+
+data_wd <- find_existing_path(
+  c(
+    "C:/Users/xd-br/Dropbox/causal_schools",
+    "C:/Users/brunem/Dropbox/causal_schools"
+  ),
+  "data_wd"
+)
+code_output_wd <- find_existing_path(
+  c(
+    "C:/Users/xd-br/Desktop/PhD/Research/causal_schools",
+    "C:/Users/brunem/Research/causal_schools"
+  ),
+  "code_output_wd"
+)
 
 #Datawd (Dropbox) 
 setwd(data_wd)
 #####################################
+
+suppressPackageStartupMessages({
+  library(data.table)
+  library(dplyr)
+  library(stringr)
+})
 
 
 #I will do now matriculas 2022-2025 which encompass my first 3 cohorts
@@ -19,6 +44,39 @@ setwd(data_wd)
 #I can also add a variable for `timely entering`.
 
 
+matricula_cols <- c(
+  "MRUN", "ANIO_ING_CARR_ORI", "SEM_ING_CARR_ORI", "ANIO_ING_CARR_ACT",
+  "FORMA_INGRESO", "NIVEL_CARRERA_2",
+  "CODIGO_UNICO", "COD_CARRERA", "CODIGO_DEMRE",
+  "NOMB_CARRERA", "TIPO_INST_1", "NOMB_INST", "COD_INST",
+  "AREA_CARRERA_GENERICA",
+  "REGION_SEDE", "PROVINCIA_SEDE", "COMUNA_SEDE",
+  "CINE_F_97_AREA_AREA", "CINE_F_97_SUBAREA",
+  "ACREDITADA_CARR", "ACREDITADA_INST", "ACRE_INST_ANIO"
+)
+
+read_matricula_cols <- function(file_path, requested_cols) {
+  header <- names(fread(file_path, nrows = 0, encoding = "UTF-8"))
+  lookup <- setNames(header, toupper(header))
+  missing_cols <- setdiff(requested_cols, names(lookup))
+
+  if (length(missing_cols) > 0) {
+    stop(
+      "Missing matricula columns in ", file_path, ": ",
+      paste(missing_cols, collapse = ", "),
+      call. = FALSE
+    )
+  }
+
+  fread(
+    file_path,
+    select = unname(lookup[requested_cols]),
+    encoding = "UTF-8",
+    showProgress = TRUE
+  ) %>%
+    rename_with(~ toupper(.x))
+}
+
 # Read data
 load_student_mat_info <- function(year_input) {
   
@@ -29,12 +87,7 @@ load_student_mat_info <- function(year_input) {
     "_PUBL_MRUN.csv"
   )
   
-  read_csv2(file_path,
-            locale = locale(decimal_mark = ",", grouping_mark = ".")) %>%
-    
-    rename_with(~ toupper(.x)) %>%
-    
-
+  read_matricula_cols(file_path, matricula_cols) %>%
     filter(NIVEL_CARRERA_2 %in% c("Carreras Profesionales", 
                                   "Carreras Técnicas")) %>%
     
@@ -49,10 +102,28 @@ load_student_mat_info <- function(year_input) {
            AREA_CARRERA_GENERICA,
            REGION_SEDE, PROVINCIA_SEDE, COMUNA_SEDE, 
            CINE_F_97_AREA_AREA, CINE_F_97_SUBAREA, 
-           ACREDITADA_CARR, ACREDITADA_INST) %>%
+           ACREDITADA_CARR, ACREDITADA_INST, ACRE_INST_ANIO) %>%
     
     mutate(
-        year_info = year_input,
+      year_info = year_input,
+      ACREDITADA_CARR = str_squish(ACREDITADA_CARR),
+      ACREDITADA_INST = str_squish(ACREDITADA_INST),
+      ACRE_INST_ANIO = as.numeric(ACRE_INST_ANIO),
+      program_accredited = case_when(
+        ACREDITADA_CARR == "ACREDITADA" ~ 1L,
+        ACREDITADA_CARR == "NO ACREDITADA" ~ 0L,
+        TRUE ~ NA_integer_
+      ),
+      institution_accredited = case_when(
+        ACREDITADA_INST == "ACREDITADA" ~ 1L,
+        ACREDITADA_INST %in% c("NO ACREDITADA", "BAJO TUTELA") ~ 0L,
+        TRUE ~ NA_integer_
+      ),
+      program_certified_years = case_when(
+        program_accredited == 1L ~ ACRE_INST_ANIO,
+        program_accredited == 0L ~ 0,
+        TRUE ~ NA_real_
+      ),
       
         
       #my implementation of Campos et al. 2026
@@ -156,6 +227,9 @@ student_mat_1st_small <- student_mat_first %>%
     select(MRUN, year_info, 
            COD_SIES, COD_CARRERA, CODIGO_DEMRE, 
            NOMB_CARRERA, TIPO_INST_1, NOMB_INST, COD_INST,
+           ACREDITADA_CARR, ACREDITADA_INST, ACRE_INST_ANIO,
+           program_accredited, institution_accredited,
+           program_certified_years,
            field_reclassified,
            #field binaries
            f_science ,
@@ -176,6 +250,9 @@ student_mat_last_small <- student_mat_last %>%
   select(MRUN, year_info, 
          COD_SIES, COD_CARRERA, CODIGO_DEMRE, 
          NOMB_CARRERA, TIPO_INST_1, NOMB_INST, COD_INST,
+         ACREDITADA_CARR, ACREDITADA_INST, ACRE_INST_ANIO,
+         program_accredited, institution_accredited,
+         program_certified_years,
          field_reclassified,
          #field binaries
          f_science ,

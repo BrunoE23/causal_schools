@@ -155,6 +155,8 @@ This workflow uses one scalar expected-value risk control per school-value metri
 
 For example, estimates using `d_math_adj` and `z_math_adj` should control for `expected_math_adj`.
 
+For full-sample grade-4 SIMCE achievement heterogeneity, use `code/codex/scalar_school_value_iv/12_run_expected_va_grade4_quintile_all_sample.R`. It constructs grade-4 math quintiles directly from `z_sim_mat_4to` in `data/clean/scalar_school_value_iv/scalar_school_value_iv_expected_va.csv` and reports adjusted Math, Language, and STEM theta/SE columns.
+
 The older wide probability-control workflow, based on `prob_<rbd>` and `iszero_<rbd>` columns from `01_build_scalar_school_value_iv_df.R` and `02_run_scalar_school_value_iv.do`, is now a legacy/robustness path. It should not be used for new heterogeneity tables unless the task explicitly asks for a wide-probability-control robustness check.
 
 ### Main Construction Logic
@@ -193,10 +195,23 @@ Higher-education outcomes are built from:
 - `field_reclassified_m1`
 - `field_reclassified_ml`
 - existing binary field indicators such as `f_science_m1`, `f_eng_m1`, and related `*_ml` versions
+- higher-education matricula accreditation fields from `clean_matriculated_first_time.R`, including `ACREDITADA_CARR_m1`, `ACRE_INST_ANIO_m1`, and `program_certified_years_m1` plus the matching `*_ml` variables
 
 The current main enrollment outcome for STEM-style summaries is:
 
 - `stem_enrollment_m1`
+
+`program_certified_years` is defined as the interaction between program accreditation and institution accreditation years:
+
+`program_certified_years = 1[ACREDITADA_CARR == "ACREDITADA"] * ACRE_INST_ANIO`
+
+For non-accredited programs the value is zero; if the program is accredited but institution accreditation years are missing, the interaction remains missing.
+
+The corresponding institution-years outcome is `inst_certified_years_m1`, defined as:
+
+`inst_certified_years_m1 = 1[ACREDITADA_INST == "ACREDITADA"] * ACRE_INST_ANIO`
+
+For current school-value construction, these accreditation-years outcomes are treated as unconditional first-enrollment outcomes: students without observed higher-ed enrollment are coded as zero, while observed matricula rows with genuinely missing accreditation-years inputs remain missing.
 
 During the current estimation-development pass, controlled VA is only estimated for:
 
@@ -204,8 +219,12 @@ During the current estimation-development pass, controlled VA is only estimated 
 - `z_year_leng_max`
 - `z_year_leng_math_total`
 - `stem_enrollment_m1`
+- `program_certified_years_m1`
+- `inst_certified_years_m1`
 
-The gender-gap VA is only estimated for:
+As of May 31, 2026, the default school-value construction is All-sample only. Male/Female sample-specific value-added and gender-gap value-added are on hold unless explicitly requested.
+
+When gender-gap VA is explicitly requested, the previous configured outcomes were:
 
 - `gender_gap__z_year_math_max`
 - `gender_gap__stem_enrollment_m1`

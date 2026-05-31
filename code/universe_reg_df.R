@@ -272,8 +272,14 @@ load("./data/clean/stem_outcome.RData")
 
 
 #matricula
-mat_first<- read.csv("./data/clean/mat_ingresos_22-24/mat_1st_ing.csv")
-mat_last <- read.csv("./data/clean/mat_ingresos_22-24/mat_last_ing.csv")
+mat_first <- data.table::fread(
+  "./data/clean/mat_ingresos_22-24/mat_1st_ing.csv",
+  na.strings = c("", "NA")
+)
+mat_last <- data.table::fread(
+  "./data/clean/mat_ingresos_22-24/mat_last_ing.csv",
+  na.strings = c("", "NA")
+)
 
 
 

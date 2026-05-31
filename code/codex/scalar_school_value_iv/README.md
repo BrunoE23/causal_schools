@@ -10,6 +10,7 @@ The current preferred estimation path is the expected-VA scalar-risk-control app
 - `09_run_expected_va_quintile_heterogeneity.R`
 - `10_run_expected_va_grade4_quintile_heterogeneity.R`
 - `11_run_expected_va_grade4_tercile_heterogeneity.R`
+- `12_run_expected_va_grade4_quintile_all_sample.R`
 
 Use this path for new main estimates and heterogeneous-effects tables. It replaces the high-dimensional `prob_*` and `iszero_*` controls with one scalar expected-value risk control per school-value metric:
 
@@ -33,6 +34,11 @@ The expected-VA outputs are:
 - `output/tables/scalar_school_value_iv/scalar_school_value_iv_expected_va_by_simce4_math_tercile_same_sample.csv`
 - `output/tables/scalar_school_value_iv/scalar_school_value_iv_expected_va_by_simce4_math_tercile_same_sample_main.csv`
 - `output/tables/scalar_school_value_iv/scalar_school_value_iv_expected_va_by_simce4_math_tercile_same_sample_main.tex`
+- `output/tables/scalar_school_value_iv/scalar_school_value_iv_expected_va_by_simce4_math_quintile_all_sample.csv`
+- `output/tables/scalar_school_value_iv/scalar_school_value_iv_expected_va_by_simce4_math_quintile_all_sample_main.csv`
+- `output/tables/scalar_school_value_iv/scalar_school_value_iv_expected_va_by_simce4_math_quintile_all_sample_main.tex`
+- `output/tables/scalar_school_value_iv/scalar_school_value_iv_accreditation_results_expected_va.csv`
+- `output/tables/scalar_school_value_iv/scalar_school_value_iv_accreditation_results_expected_va.tex`
 
 Do not use the older wide `prob_*` / `iszero_*` Stata path for new heterogeneity work unless the task is explicitly a robustness or legacy comparison.
 
@@ -130,10 +136,14 @@ This variant drops the k-support probability-control restriction. Instead of car
 
 where `p_is` is the simulated assignment probability and `V_s` is the All-sample school value for that metric. Non-school `unmatched` probability mass contributes zero.
 
-For heterogeneous-effects tables, split or interact on the expected-VA regression dataframe and keep the matching `expected_<metric>` control for each `d_<metric>` / `z_<metric>` pair.
+For heterogeneous-effects tables, split or interact on the expected-VA regression dataframe and keep the matching `expected_<metric>` control for each `d_<metric>` / `z_<metric>` pair. Current default school values are All-sample only; do not rerun Male/Female sample-specific or gender-gap value-added unless explicitly requested.
+
+`08_run_expected_va_scalar_iv.R` also reports the accreditation-years scalar IV table for `program_certified_years_m1` and `inst_certified_years_m1`. These are unconditional first-enrollment outcomes: students without observed higher-ed enrollment are coded as zero; observed matricula rows with genuinely missing accreditation-years inputs remain missing.
 
 `09_run_expected_va_quintile_heterogeneity.R` implements the first grade-8 SIMCE heterogeneity table. It merges `simce8_math_quintile` from `data/clean/simce8_heterogeneity/cohort_2019_math_heterogeneity.csv` into the expected-VA regression dataframe and reports theta by grade-8 math quintile. The main table uses adjusted Math, Language, and STEM school values; the full CSV also keeps the unadjusted specifications.
 
 `10_run_expected_va_grade4_quintile_heterogeneity.R` repeats the exercise by grade-4 math SIMCE quintile. It keeps the same SIMCE-8-linked 2019 sample as the grade-8 quintile table, excluding students with grade-4 controls but missing grade-8 math quintile so the grade-4 and grade-8 splits are directly comparable.
 
 `11_run_expected_va_grade4_tercile_heterogeneity.R` uses the same sample as `10_run_expected_va_grade4_quintile_heterogeneity.R`, but constructs terciles directly from the grade-4 math score rather than collapsing deciles.
+
+`12_run_expected_va_grade4_quintile_all_sample.R` is the full-sample grade-4 math heterogeneity table. It constructs quintiles directly from `z_sim_mat_4to` in the expected-VA regression dataframe and reports the adjusted Math, Language, and STEM specifications with theta and SE columns.

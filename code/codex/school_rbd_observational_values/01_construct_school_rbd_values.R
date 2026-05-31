@@ -1,4 +1,5 @@
 suppressPackageStartupMessages({
+  library(data.table)
   library(dplyr)
   library(fixest)
   library(purrr)
@@ -88,7 +89,9 @@ controlled_value_added_outcomes <- c(
   "z_year_math_max",
   "z_year_leng_max",
   "z_year_leng_math_total",
-  "stem_enrollment_m1"
+  "stem_enrollment_m1",
+  "program_certified_years_m1",
+  "inst_certified_years_m1"
 )
 
 # Main individual-level control set for controlled observational value-added.
@@ -145,7 +148,8 @@ control_vars <- c(
 
 fixed_effect_vars <- c("school_rbd", middle_school_fixed_effect_vars)
 
-gender_gap_base_outcomes <- c("z_year_math_max", "stem_enrollment_m1")
+# Keep gender-specific and gender-gap VA on hold unless explicitly requested.
+gender_gap_base_outcomes <- character()
 gender_gap_control_terms <- control_terms[control_terms != "factor(GEN_ALU)"]
 gender_gap_control_vars <- setdiff(control_vars, gender_var)
 gender_gap_interacted_control_terms <- setdiff(gender_gap_control_terms, "factor(COD_COM_ALU)")
@@ -325,6 +329,43 @@ add_field_outcomes <- function(data,
   )
 
   list(data = data, outcome_specs = outcome_specs)
+}
+
+add_accreditation_outcomes <- function(data) {
+  accreditation_vars <- c(
+    "ACREDITADA_CARR_m1",
+    "ACREDITADA_INST_m1",
+    "ACRE_INST_ANIO_m1",
+    "program_certified_years_m1",
+    "institution_accredited_m1"
+  )
+  stop_if_missing(data, accreditation_vars, "Accreditation outcome construction")
+
+  data <- data %>%
+    mutate(
+      observed_matricula_m1 = !is.na(ACREDITADA_CARR_m1) |
+        !is.na(ACREDITADA_INST_m1) |
+        !is.na(ACRE_INST_ANIO_m1),
+      program_certified_years_m1 = case_when(
+        is.na(program_certified_years_m1) & !observed_matricula_m1 ~ 0,
+        TRUE ~ as.numeric(program_certified_years_m1)
+      ),
+      inst_certified_years_m1 = case_when(
+        institution_accredited_m1 == 1L ~ as.numeric(ACRE_INST_ANIO_m1),
+        institution_accredited_m1 == 0L ~ 0,
+        is.na(institution_accredited_m1) & !observed_matricula_m1 ~ 0,
+        TRUE ~ NA_real_
+      )
+    ) %>%
+    select(-observed_matricula_m1)
+
+  list(
+    data = data,
+    outcome_specs = tibble(
+      outcome = c("program_certified_years_m1", "inst_certified_years_m1"),
+      outcome_family = "accreditation"
+    )
+  )
 }
 
 estimate_school_value_added <- function(data,
@@ -564,7 +605,8 @@ if (!file.exists(input_path)) {
 dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
 setFixest_nthreads(0)
 
-df <- read_csv(input_path, show_col_types = FALSE)
+df <- fread(input_path, na.strings = c("", "NA"), showProgress = TRUE) %>%
+  as_tibble()
 
 if (!file.exists(middle_school_controls_path)) {
   stop(
@@ -645,7 +687,14 @@ field_result <- add_field_outcomes(
 )
 analytic <- field_result$data
 
-outcome_specs <- bind_rows(score_result$outcome_specs, field_result$outcome_specs) %>%
+accreditation_result <- add_accreditation_outcomes(analytic)
+analytic <- accreditation_result$data
+
+outcome_specs <- bind_rows(
+  score_result$outcome_specs,
+  field_result$outcome_specs,
+  accreditation_result$outcome_specs
+) %>%
   distinct(outcome, .keep_all = TRUE)
 
 if (nrow(outcome_specs) == 0) {
@@ -658,8 +707,8 @@ school_counts <- analytic %>%
 # ------------------------- Raw school means -------------------------
 
 analysis_samples <- tibble(
-  analysis_sample = c("All", "Male", "Female"),
-  gender_code = c(NA_real_, male_gender_code, female_gender_code)
+  analysis_sample = "All",
+  gender_code = NA_real_
 )
 
 sample_data <- function(data, gender_code) {
@@ -741,28 +790,46 @@ controlled_values <- map_dfr(controlled_outcomes, function(outcome_name) {
 
 gender_gap_outcomes <- intersect(gender_gap_base_outcomes, names(analytic))
 
-gender_gap_specs <- tibble(
-  outcome = paste(gender_gap_prefix, gender_gap_outcomes, sep = "__"),
-  outcome_family = "gender_gap",
-  base_outcome = gender_gap_outcomes
-)
-
-gender_gap_raw_values <- map_dfr(gender_gap_outcomes, function(outcome_name) {
-  compute_raw_gender_gap(
-    data = analytic,
-    outcome = outcome_name
+if (length(gender_gap_outcomes) > 0) {
+  gender_gap_specs <- tibble(
+    outcome = paste(gender_gap_prefix, gender_gap_outcomes, sep = "__"),
+    outcome_family = "gender_gap",
+    base_outcome = gender_gap_outcomes
   )
-})
 
-gender_gap_controlled_values <- map_dfr(gender_gap_outcomes, function(outcome_name) {
-  estimate_gender_gap_value_added(
-    data = analytic,
-    outcome = outcome_name,
-    controls = gender_gap_control_terms,
-    interacted_controls = gender_gap_interacted_control_terms,
-    control_vars = gender_gap_control_vars
-  )
-})
+  gender_gap_raw_values <- map_dfr(gender_gap_outcomes, function(outcome_name) {
+    compute_raw_gender_gap(
+      data = analytic,
+      outcome = outcome_name
+    )
+  })
+
+  gender_gap_controlled_values <- map_dfr(gender_gap_outcomes, function(outcome_name) {
+    estimate_gender_gap_value_added(
+      data = analytic,
+      outcome = outcome_name,
+      controls = gender_gap_control_terms,
+      interacted_controls = gender_gap_interacted_control_terms,
+      control_vars = gender_gap_control_vars
+    )
+  })
+
+  gender_gap_final_values <- gender_gap_raw_values %>%
+    left_join(gender_gap_controlled_values, by = c("school_rbd", "outcome")) %>%
+    left_join(gender_gap_specs, by = "outcome") %>%
+    left_join(school_counts, by = "school_rbd") %>%
+    mutate(
+      analysis_sample = "All",
+      control_set = paste(gender_gap_control_terms, collapse = " + "),
+      fixed_effect_set = "school_gender_fe",
+      school_definition = school_definition,
+      low_outcome_count = n_students_outcome < low_count_threshold,
+      low_gender_count = pmin(n_girls_outcome, n_boys_outcome) < low_count_threshold,
+      missing_controlled_value = is.na(controlled_value_added)
+    )
+} else {
+  gender_gap_final_values <- tibble()
+}
 
 # ------------------------- Final output -------------------------
 
@@ -784,20 +851,6 @@ base_final_values <- raw_values %>%
     n_boys_regression = NA_integer_,
     low_outcome_count = n_students_outcome < low_count_threshold,
     low_gender_count = NA,
-    missing_controlled_value = is.na(controlled_value_added)
-  )
-
-gender_gap_final_values <- gender_gap_raw_values %>%
-  left_join(gender_gap_controlled_values, by = c("school_rbd", "outcome")) %>%
-  left_join(gender_gap_specs, by = "outcome") %>%
-  left_join(school_counts, by = "school_rbd") %>%
-  mutate(
-    analysis_sample = "All",
-    control_set = paste(gender_gap_control_terms, collapse = " + "),
-    fixed_effect_set = "school_gender_fe",
-    school_definition = school_definition,
-    low_outcome_count = n_students_outcome < low_count_threshold,
-    low_gender_count = pmin(n_girls_outcome, n_boys_outcome) < low_count_threshold,
     missing_controlled_value = is.na(controlled_value_added)
   )
 

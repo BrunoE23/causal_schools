@@ -1,0 +1,351 @@
+\documentclass[a4paper, article, english, oneside, unknownkeysallowed, 12pt]{memoir} 
+\usepackage{preamble}
+
+
+\usepackage[
+  backend=biber,
+  style=authoryear-ibid,
+  maxcitenames=2,  % show up to 2 authors in citations
+  mincitenames=1,  % use "et al." if more than 2
+  maxbibnames=10,  % show up to 10 names in bibliography
+  minbibnames=1,
+    uniquelist=false   
+]{biblatex}
+
+
+\addbibresource{causal_effect_schools.bib}
+
+\AtEveryBibitem{%
+  \clearfield{urlyear}%
+  \clearfield{urlmonth}%
+  \clearfield{urlday}%
+  \clearfield{urldate}%
+}
+
+% Name and Title
+\title{ High school value-added beyond achievement: effects on higher education application behavior}
+\author{ Bruno E. Aravena-Magüida}
+\date{May 2026}
+
+% Header (top) and footer (bottom)
+\pagestyle{fancy}
+\fancyhead[R]{\emph{May Draft}}
+ \fancyhead[L]{BEAM} % keep section names
+\fancyfoot[R]{}
+\fancyfoot[L]{}
+
+
+\begin{document}
+
+% Prints title block from macros given above
+\maketitle
+
+% Prints a table of contents
+\setcounter{tocdepth}{2}
+\renewcommand\contentsname{}
+%\tableofcontents* 
+%\clearpage
+
+\section{Introduction}
+
+%Higher education good and choices relevant
+Economics literature has spent a lot of time measuring the returns to accessing higher education. 
+Choice of institution and of major have been proven to be very relevant. 
+
+
+
+%Choices higher ed. bad
+Despite stakes very high, many reasons to think that these choices are sub-optimal.
+Do people go to college enough ? 
+Many interventions have identified a series of frictions. 
+In a context where these frictions are pervasive, reducing them is highly valuable. 
+
+%-However, we do not know much how these frictions look in "equilibrium". 
+
+High schools potentially playing an important role in alleviating such frictions, suggesting a different way to think about their value-added on top of achievement metrics.
+However, measuring such effects requires both exogenous variation in school assignment as well as being able to observe both applications and enrollment in higher education. 
+
+### In this paper 
+
+
+In this paper, I take advantage of the Chilean policy and data landscape to estimate value added of schools of both traditional (achievement) and non-traditional (higher education choices) outcomes. 
+The centralized school assignment system in Chile (SAE), which breaks ties through lotteries provides exogenous variation to study these effects at a national scale. Moreover, the centralized higher education application system allows me to observe both application and enrollment choices. 
+
+I proceed in 2 steps in order to make my results easier to understand. 
+I first compute observational value-added for each school for a given outcome. 
+This is equivalent to estimating a school-fixed effect in a regression with rich student controls. 
+These estimated values play an important role in the second step. 
+
+In my second step I estimate an IV regression on the same outcome using the observational value-added as the value of the school offered (instrument) and the school attended (endogenous variable). 
+This design allows me to answer the question of whether gains in the observational value-added metric induced by the lottery offers imply causal effects.
+In particular, I can summarize my answers in a single number per outcome which will be reported across specifications. 
+$\theta$ represents the 'pass-through' of the observational value-added metric to causal effects. 
+If $\theta$ is close to one, that would indicate that gains in the value-added metric perfectly predict lottery-induced effects in that outcome. 
+My estimates suggest that $\theta$ is between 0.835-0.841 for achievement tests and 0.674 for STEM enrollment. 
+
+%(these effects are meaningless without a sense of variance of the metric)
+
+%(orthogonal VA?)
+
+%### Small Conclusion (check content)
+
+The results in this paper suggest that schools play an important role not only in higher educational choices not only through academic achievement, but also with measureable effects on important elements such as institutional quality or major choice. 
+I take this to be the first paper that paints such a detailed picture of the effects of the high school system on higher education. 
+All in all, these results invite families, researchers, and policy-makers to think about the school value-added in a far more comprehensive way than it has been previously discussed by the literature.
+
+
+This paper contributes to a broad literature on the importance of teachers. 
+
+
+#Lit Review
+
+
+The rest of the paper is organized as follows.
+Section 2 reviews the relevant literature.
+Section 3 describes the context and data.   
+
+
+
+\clearpage
+\section{Context and Data}
+
+
+%In 2015, Chile passed a law that prohibited discrimination on admission to schools that received any type of public funding on the base of academic achievement or family circumstances, as well as the prohibition of application fees. The law also makes explicit that oversubscribed spots must be randomized among students of the same priority level\footnote{Priority is given to -- in respective order-- students who are already enrolled at a school, those who have siblings on the school,  children of a school staff, and those who were part of the school earlier on.}.
+
+%In the system that resulted from this law, families are able to rank their preferences for schools with available spots. The system then runs a Deferred Acceptance algorithm, known to be strategy-proof, to allocate spots. 
+
+\subsection{Chilean High School System}
+
+
+\subsection{Pre-treatment controls: School Assessment Data}
+
+The Ministry of Education also runs a different set of exams and surveys to assess school quality. These are taken on a some combination of grades 4, 8 and 10 every year. However, these were not implemented during 2020 and 2021, which are important years for the study. In practice, this means that I observe every cohort at least once -at grade 4 or 8- before their application for high school. I only observe one of this cohorts with an examination on grade 10. 
+
+From this data source, I construct a universally (across schools, unlike GPA) comparable measure of skills in verbal and mathematics before treatment. I also recover data from parents survey and relevant questions such as income level fo the family and family expectations for the student achievement in the near future.
+
+
+
+%\subsection{Higher education application system}
+\subsection{Centralized School Assignment in Chile: Exogenous variation and lottery sample}
+
+The Chilean system of school assignment \textit{(SAE)} was established in 2016, making it a relatively recent policy innovation in the country. 
+Attempting to avoid discrimination on school admissions on the basis of academic achievement or family circumstances, policy-makers centralized this process. 
+
+Families can rank any school in the system (i.e. excluding private schools) at no cost.  
+The system then uses a version of the Deferred Acceptance algorithm to allocate spots, which ensures that the rankings are strategy-proof. 
+When there are more applicants than spots, the system breaks ties through lotteries. 
+This provides exogenous variation in school assignment, which is the key to the identification strategy of this paper.
+
+
+%The system gives priority spots to --in respective order-- students who are already enrolled at a school, those who have siblings on the school, those who are children of a school staff, and those who were part of the school earlier on. 
+%There are also a fraction of spots reserved for low-income students. 
+
+
+I construct the lottery sample from the universe of applications to vacancies in grade 9 during the 2017-2020 processes. 
+
+%Check clean_sae_apps_data_frame.R
+
+
+I am also able to observe enrollment of individuals to schools each years, together with whether they passed their course, their attendance level and GPA. I use these as important pre-treatment controls as a measure of cognitive (GPA relative to their school) and non-cognitive (attendance relative to their school) skills.
+
+
+\subsection{Outcomes: Higher Education Data}
+
+Application to higher education in Chile is centralized and it takes place at the program-institution (from here on: programs) level.  The allocation of students to programs is fully determined by 3 components: the scores of applying students, their ranked preferences of programs, and the weights that each program assigns to each of the score components. 
+
+
+Graduating students who want to access higher education are required to take the higher education entrance exam (PSU until 2020; PTU in 2021-22; PAES from 2023 onward). These exams consist of a standardized test on mathematics and verbal skills. Students must choose to take at least one of either the history and social sciences exam or the natural sciences exam. Students can also choose to take an advanced mathematics exam. I track as outcomes the scores in the mandatory exams, as well as which optional exams were taken. Students are also assigned a score depending on their GPA (GPA-score) as well as their GPA relative to their school distribution (from here on Ranking score). 
+
+Programs choose how much weight to give to each exam as well as the GPA and Ranking scores, within some general rules. These weights are made public and students know about them before they apply. Each program application is given a weighted score, and the system computes a Deferred Acceptance Algorithm using the student's preferences for programs and the weighted scores as programs' preferences for students. 
+
+
+My main outcome of interest are program application and enrollment choices. A straight-forward way to collapse these choices is the monetary return associated to them. For this purpose, I use data from the platform \texttt{mifuturo.cl}: a site where the Ministry of Education provides information on labor market outcomes for each program-institution. They inform average wages 4 years post-graduation, as well as employability levels 1 and 2 years after graduation. While there is some missingness on the data, I am fairly certain I can have reasonable imputation. Two-way fixed effect regressions (i.e. regression labor market outcome on generic major and 
+instititution) yield $R^2$ values of 0.934 for the wage variable and $\approx$ 0.860 for the employment variables. 
+
+
+
+To study major choice more directly, I use the aforementioned weights to construct a student-level that quantifies the STEM content in their portfolio (top-5) of applications.  This adds up the weights of the program associated to the mathematics, science and advanced mathematics. The assumption here is that these weights capture reasonably well the STEM content of the program and thus are a useful way to describe major choice across programs. Other related variables that I use to describe programs in terms of their fields are indicators for health, engineering, technology and natural sciences based on the ISCED-F (International Standard Classification of Education) 2013 \footnote{These are }. I then average these metrics for up to the first 5 applications of the student, to create an outcome at the individual level. 
+
+On top of that, I plan to use enrollment data each year to track in which program is a student enrolled each year. This allows me to identify whether students stay in their program or higher education as a whole, while noting switches across programs and/or institutions. 
+
+
+
+
+
+\clearpage 
+\section{Methodology}
+
+
+
+This document presents an update on the progress of my research project. I begin by outlining the conceptual framework and identification strategy guiding the analysis.
+
+The project focuses on estimating the effect of schools on students’ choice of major in higher education, with particular attention to whether these effects operate through academic achievement (test scores) or through non-score mechanisms.
+
+I then introduce the reduced-form specifications used to estimate school effects on the main outcomes, along with a strategy to provide evidence on non-score channels in major choice.
+In addition, I discuss a structural model of major choice that may help disentangle these mechanisms. Finally, I describe progress in replicating school assignments in the Chilean centralized system and outline procedures to compute assignment probabilities.
+
+\section{Conceptual Framework and Identification Strategy} \label{framework}
+
+In this section I describe how I am currently thinking of my analysis. I review the assumptions and methodologies related to the estimation of school specific effects using centralized assignment mechanisms, and then I present the main reduced-form regressions I intend to run, as well as some challenges and how I intend to address them.
+
+\subsection{Potential Outcomes and School Effects}
+
+For this section I borrow from \textcite{angrist_credible_2024} and \textcite{abdulkadiroglu_research_2017}
+
+Suppose $N$ students and $J$ schools. 
+Following the value-added literature on school effectiveness,  I assume a constant-effects model. Then, the potential outcome $Y_{ij}$ of a student $i$ in a school $j$ is additively separable and can be written as: 
+\begin{equation}
+  Y_{ij} = \nu_j + \epsilon_i
+  \label{linear-separable}
+\end{equation}
+
+Hence, the causal effect of attending a school $j$ relative to $k$ would be given by $\nu_j - \nu_k$.
+
+
+By adding a constant, we can renormalize this model relative to the average achievement ($\beta_0 = \frac{1}{J}\sum_{j=1}^J \nu_j$ )
+As a result, we can rewrite the model as: 
+
+\begin{equation}
+ Y_i = \beta_0 + \sum_{j=1}^J \beta_j D_{ij} + \epsilon_i 
+  \label{base}
+\end{equation}
+
+where now $\beta_j = \nu_j - \beta_0$. 
+
+Unless school assignment is completely random, the evident threat to running this regression is the fact that $\cov(\epsilon_i, D_{ij})$ might be different than zero. 
+This selection bias would bias our estimates and prevent a causal interpretation.
+
+
+\subsubsection{Assignment Mechanisms and Assignment Risk}
+A common strategy used in research to overcome this issue is the use of individual school lotteries, and more recently, centralized school assignments. 
+In centralized assignment mechanisms, applicants submit rank-ordered preferences over schools ($\succ_i$) at which they might also have different priority levels\footnote{e.g. in the Chilean case being the child of a member of the school staff gives a student priority in that school.}.
+These priorities operate as the school's preferences for students. An algorithm in place (most commonly student-proposing Deferred Acceptance) takes these preferences and outputs a school assignment ($Z_{ij}$) with one offer per student.
+In order to break ties of students with the same preference and priority level, these systems randomize. 
+
+If we refer to a student's priority at each school as $\rho_i = (\rho_{i1}, ...,\rho_{iJ})'$, we can define a student's type as the combination of both $\theta_i \equiv (\succ_i, \rho_i)$.
+Let the probabilities of admission at a school be given by $p_i = (p_{i1}, ..., p_{ij})'$, with $p_{ij} = Pr(Z_{ij} = 1)$.
+
+The mechanism described above implies that students with the same preferences and priority vector have the same probability of being assigned to the schools in their portfolio, which is called by \textcite{abdulkadiroglu_research_2017} the `equal treatment of equals' (ETE) property. 
+Formally ETE states $\theta_i = \theta_j \implies p_i = p_j$. 
+
+They also prove that under ETE that for any observed characteristic fixed under re-randomization $W_i$ (i.e. pre-assignment or not affected by assignment) we have that:
+\begin{equation}
+ Pr[Z_{ij} = 1|\, W_i = w, \theta_i = \theta] = Pr[Z_{ij} = 1 | \, \theta_i = \theta]  
+\end{equation}
+
+Hence, for any such variable $W_i$ we can write 
+\begin{equation}
+ W_i \ind Z_i \, | \, \theta_i 
+ \label{w ind}  
+\end{equation}
+
+In particular, and as a consequence of equation \ref{linear-separable}, where we assumed ability $\epsilon_i$ to be fixed under re-randomization, partly due to the absence of match effects, we can write
+\begin{equation}
+  \epsilon_i \ind Z_i \, | \, \theta_i   
+\end{equation}
+
+This is the key identifying assumption of the design.
+It states that conditional on the student type, the school offer is exogenous to the error term (in this example student's ability).
+Under this assumption and perfect compliance ($Z_i = D_i$), we could estimate equation \ref{base} by saturating on an indicator for each student type $\theta_i$. 
+
+However, that is often not feasible as these strata are too granular to have enough variation within each of them to estimate the model. 
+As described by \textcite{angrist_credible_2024}: "In practice (...) we see nearly as many preference and priority combinations as there are students in a match."  
+A solution to this issue is to use the probabilities of admissions as propensity scores to pool over student types, as proposed by \textcite{abdulkadiroglu_research_2017}. 
+This is an application of the propensity score methods \parencite{rosenbaum_central_1983} and it yields:  
+\begin{equation}
+  \epsilon_i \ind Z_i \, | \, p_i 
+  \label{CRA}
+\end{equation}
+
+Note that by eq. \ref{w ind} we can also consider other control variables (as long as they are fixed under re-randomization). Thus for any pre-treatment covariate $X_i$ it must be the case that 
+($\epsilon_i, X_i) \ind Z_i | \theta_i$, so we can rewrite Eq \ref{CRA} as $  \epsilon_i \ind Z_i \, | \, (p_i, X_i) $ to allow for such controls.
+
+\subsubsection{Towards Conditional Independence Assignment}
+
+Although an instrumental variables approach may seem natural given the availability of many exogenous instruments, estimation of school-specific effects suggests otherwise. The issue arises from the multiplicity of (unordered) outside options. 
+Individuals instrumented into a school may come from different margins, and as a result interpretation becomes challenging unless strong assumptions are made \parencite{angrist_methods_2023} \parencite{kirkeboen_field_2016}.  
+To see this, consider students with an identical ranked list of three schools who are guaranteed admission to their third choice if they are not successful in their first two applications. An offer to the first school then generates two margins of compliance.
+The problem becomes more complex when students have different fallback options or when identical preference lists are rare in the data.
+
+Instead, to compute effects at the school level, the literature typically relies on selection on observables i.e. the construction of a control vector $X_i$ such that $ \epsilon_i \ind D_i \, | \, (X_i)$.
+Note that under the constant effects assumption and the ETE property of lotteries, equation \ref{CRA} is closely related to this framework. 
+
+An additional assumption that allows us to move from equation \ref{CRA} to a conditional independence framework is that compliance with offers is as good as random.
+The argument for this assumption is that all sorting occurs at the application stage, and thus captured by the individual type $\theta_i$, and that post-offer compliance is determined by idiosyncratic shocks uncorrelated with the error term (in this case ability $\epsilon_i$).
+This argument is often credited to \textcite{dale_estimating_2002}. 
+
+\begin{equation}
+  \epsilon_i \ind D_i  \mid (p_i) 
+  \label{CIA}
+\end{equation}
+
+Compliance being as good as random yields a traditional conditional independence assumption, from where estimation is straightforward. 
+%Note that we can add controls to the conditioning set 
+%In particular, if covariates used are lagged (pre-treatment) outcomes we end up with a Risk Controlled Value Added Model (RC VAM) as constructed in (centralized VAM paper). 
+
+%\begin{equation}
+%  Y_i = \alpha_0 + \sum_j \alpha_j D_{ij} + X_i' \Gamma + g(p_i) + \eta_i 
+%\end{equation}
+
+\subsection{Estimation in specific outcomes}
+
+In this subsection I present the main regressions I intend to run, as well as an approach to provide reduced-form evidence for a non-score mechanism of schools on major choice.
+Let $Y^{MATH}_i$ represent the outcome of a student in the standardized exam for mathematics and $Y^{STEM}_i$ an indicator variable for whether the student enrolls in a STEM program. 
+
+Let $X_i$ be a vector of characteristics not changed by treatment (e.g. demographics), and $Y^{MATH}_{pre,i}$ a measure of pre-treatment math achievement .
+
+Following equation \ref{CIA} I write:
+
+\begin{equation}
+  Y^{MATH}_i = b_0 + \sum_j b_j D_{ij} +  X_i' B + b_{pre} Y^{MATH}_{pre,i} +   g(p_i) + \epsilon_i 
+  \label{Math}
+\end{equation}
+
+
+\begin{equation}
+  Y^{STEM}_i = c_0 + \sum_j c_j D_{ij} + X_i' C + g(p_i) + \eta_i 
+  \label{STEM_prev}
+\end{equation}
+
+The only difference between these two regressions is the fact that I propose to include a lagged outcome (pre-treatment math achievement) on the first regression.
+I do not have a similar lagged outcome for STEM enrollment. 
+The inclusion of lagged outcome for math achievement makes \ref{Math} an `RC VAM' regression under the \textcite{angrist_credible_2024} terminology. While \ref{STEM_prev} is a Risk-Controlled OLS or what \textcite{angrist_credible_2024} calls `Risk only'. 
+
+Remember that, under the CIA assumption above, these regressions could be run without any of the controls and should still hold causal interpretation: the CIA assumption only needs the $p_i$ to be included.
+
+
+
+\clearpage 
+\section{Results}
+
+
+
+\clearpage 
+\section{Conclusion}
+
+
+\clearpage
+\printbibliography
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{document}

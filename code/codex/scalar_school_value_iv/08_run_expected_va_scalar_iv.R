@@ -78,6 +78,22 @@ table_tex <- file.path(
   table_dir,
   "scalar_school_value_iv_main_results_expected_va.tex"
 )
+table_adjusted_csv <- file.path(
+  table_dir,
+  "scalar_school_value_iv_adjusted_results_expected_va.csv"
+)
+table_adjusted_tex <- file.path(
+  table_dir,
+  "scalar_school_value_iv_adjusted_results_expected_va.tex"
+)
+table_accreditation_csv <- file.path(
+  table_dir,
+  "scalar_school_value_iv_accreditation_results_expected_va.csv"
+)
+table_accreditation_tex <- file.path(
+  table_dir,
+  "scalar_school_value_iv_accreditation_results_expected_va.tex"
+)
 diagnostics_csv <- file.path(
   scalar_dir,
   "scalar_school_value_iv_expected_va_diagnostics.csv"
@@ -87,17 +103,23 @@ value_specs <- data.table::data.table(
   spec = c(
     "math_unadj", "math_adj",
     "leng_unadj", "leng_adj",
-    "stem_unadj", "stem_adj"
+    "stem_unadj", "stem_adj",
+    "progcert_unadj", "progcert_adj",
+    "instcert_unadj", "instcert_adj"
   ),
   outcome = c(
     "z_year_math_max", "z_year_math_max",
     "z_year_leng_max", "z_year_leng_max",
-    "stem_enrollment_m1", "stem_enrollment_m1"
+    "stem_enrollment_m1", "stem_enrollment_m1",
+    "program_certified_years_m1", "program_certified_years_m1",
+    "inst_certified_years_m1", "inst_certified_years_m1"
   ),
   value_outcome = c(
     "z_year_math_max", "z_year_math_max",
     "z_year_leng_max", "z_year_leng_max",
-    "stem_enrollment_m1", "stem_enrollment_m1"
+    "stem_enrollment_m1", "stem_enrollment_m1",
+    "program_certified_years_m1", "program_certified_years_m1",
+    "inst_certified_years_m1", "inst_certified_years_m1"
   ),
   value_column = c(
     "raw_mean_centered_student",
@@ -105,11 +127,43 @@ value_specs <- data.table::data.table(
     "raw_mean_centered_student",
     "controlled_value_added_centered_student",
     "raw_mean_centered_student",
+    "controlled_value_added_centered_student",
+    "raw_mean_centered_student",
+    "controlled_value_added_centered_student",
+    "raw_mean_centered_student",
     "controlled_value_added_centered_student"
   ),
-  outcome_group = c("Math", "Math", "Language", "Language", "STEM", "STEM"),
-  adjustment = c("Unadjusted", "Adjusted", "Unadjusted", "Adjusted", "Unadjusted", "Adjusted"),
-  column_id = c("math_unadj", "math_adj", "leng_unadj", "leng_adj", "stem_unadj", "stem_adj")
+  outcome_group = c(
+    "Math", "Math",
+    "Language", "Language",
+    "STEM", "STEM",
+    "Program-certified years", "Program-certified years",
+    "Institution-certified years", "Institution-certified years"
+  ),
+  adjustment = c(
+    "Unadjusted", "Adjusted",
+    "Unadjusted", "Adjusted",
+    "Unadjusted", "Adjusted",
+    "Unadjusted", "Adjusted",
+    "Unadjusted", "Adjusted"
+  ),
+  column_id = c(
+    "math_unadj", "math_adj",
+    "leng_unadj", "leng_adj",
+    "stem_unadj", "stem_adj",
+    "progcert_unadj", "progcert_adj",
+    "instcert_unadj", "instcert_adj"
+  )
+)
+
+core_value_specs <- c(
+  "math_unadj", "math_adj",
+  "leng_unadj", "leng_adj",
+  "stem_unadj", "stem_adj"
+)
+accreditation_value_specs <- c(
+  "progcert_unadj", "progcert_adj",
+  "instcert_unadj", "instcert_adj"
 )
 
 z_within_group <- function(x) {
@@ -186,6 +240,11 @@ universe_cols <- c(
   "rbd_treated_1R", "most_time_RBD", "GEN_ALU", "EDAD_ALU",
   "z_sim_mat_4to", "z_sim_leng_4to", "math_max", "leng_max", "psu_year",
   "f_science_m1", "f_eng_m1",
+  "ACREDITADA_CARR_m1",
+  "ACREDITADA_INST_m1",
+  "ACRE_INST_ANIO_m1",
+  "program_certified_years_m1",
+  "institution_accredited_m1",
   "simce_year_8b",
   "ptje_mate8b_alu",
   "simce4_math_decile",
@@ -218,6 +277,19 @@ universe[
 universe[, stem_enrollment_m1 := as.integer(
   fifelse(is.na(f_science_m1), 0, as.numeric(f_science_m1)) == 1 |
     fifelse(is.na(f_eng_m1), 0, as.numeric(f_eng_m1)) == 1
+)]
+universe[, observed_matricula_m1 := !is.na(ACREDITADA_CARR_m1) |
+  !is.na(ACREDITADA_INST_m1) |
+  !is.na(ACRE_INST_ANIO_m1)]
+universe[
+  is.na(program_certified_years_m1) & !observed_matricula_m1,
+  program_certified_years_m1 := 0
+]
+universe[, inst_certified_years_m1 := fcase(
+  institution_accredited_m1 == 1L, as.numeric(ACRE_INST_ANIO_m1),
+  institution_accredited_m1 == 0L, 0,
+  is.na(institution_accredited_m1) & !observed_matricula_m1, 0,
+  default = NA_real_
 )]
 
 message("Reading long DA probability files and computing expected VA.")
@@ -330,6 +402,7 @@ keep_cols <- c(
   "n_positive_probability_options", "GEN_ALU", "EDAD_ALU",
   "z_sim_mat_4to", "z_sim_leng_4to", "math_max", "leng_max", "psu_year",
   "z_year_math_max", "z_year_leng_max", "stem_enrollment_m1",
+  "program_certified_years_m1", "inst_certified_years_m1",
   "simce_year_8b",
   "ptje_mate8b_alu",
   "simce4_math_decile",
@@ -443,46 +516,38 @@ table_out <- merge(
 )
 fwrite(
   table_out[, .(
-    spec, outcome_group, adjustment, beta, se, p_value, n_obs, fs_beta, fs_se, fs_f
+    spec, outcome_group, adjustment, beta, se, p_value, n_obs, fs_beta, fs_se
   )],
   table_csv
 )
 
-display_rows <- rbindlist(list(
-  table_out[, .(stat = "$\\theta$", column_id, value = format_estimate(beta))],
-  table_out[, .(stat = "SE", column_id, value = format_estimate(se))],
-  table_out[, .(stat = "p-value", column_id, value = format_p_value(p_value))],
-  table_out[, .(stat = "First-stage coef.", column_id, value = format_estimate(fs_beta))],
-  table_out[, .(stat = "First-stage SE", column_id, value = format_estimate(fs_se))],
-  table_out[, .(stat = "First-stage F", column_id, value = format_estimate(fs_f))],
-  table_out[, .(stat = "N", column_id, value = format(n_obs, big.mark = ",", scientific = FALSE, trim = TRUE))]
-), use.names = TRUE)
+main_latex <- copy(table_out[spec %chin% core_value_specs])
+main_latex[, outcome_group := factor(
+  outcome_group,
+  levels = c("Math", "Language", "STEM")
+)]
+main_latex[, adjustment := factor(
+  adjustment,
+  levels = c("Unadjusted", "Adjusted")
+)]
+setorder(main_latex, adjustment, outcome_group)
 
-display_wide <- dcast(display_rows, stat ~ column_id, value.var = "value")
-stat_order <- c("$\\theta$", "SE", "p-value", "First-stage coef.", "First-stage SE", "First-stage F", "N")
-display_wide[, stat := factor(stat, levels = stat_order)]
-setorder(display_wide, stat)
-display_wide[, stat := as.character(stat)]
+main_wide <- dcast(
+  main_latex,
+  adjustment ~ outcome_group,
+  value.var = c("beta", "se")
+)
+main_wide[, adjustment := as.character(adjustment)]
 
-row_values <- function(row) {
-  c(
-    row[["stat"]],
-    row[["math_unadj"]],
-    row[["math_adj"]],
-    row[["leng_unadj"]],
-    row[["leng_adj"]],
-    row[["stem_unadj"]],
-    row[["stem_adj"]]
-  )
-}
-
-latex_rows <- unlist(lapply(seq_len(nrow(display_wide)), function(i) {
-  row <- paste(row_values(display_wide[i]), collapse = " & ")
-  if (display_wide$stat[i] == "p-value") {
-    return(c(paste0(row, " \\\\"), "\\midrule"))
-  }
-  paste0(row, " \\\\")
-}), use.names = FALSE)
+latex_rows <- paste0(
+  main_wide$adjustment, " & ",
+  format_estimate(main_wide$beta_Math), " & ",
+  format_estimate(main_wide$se_Math), " & ",
+  format_estimate(main_wide$beta_Language), " & ",
+  format_estimate(main_wide$se_Language), " & ",
+  format_estimate(main_wide$beta_STEM), " & ",
+  format_estimate(main_wide$se_STEM), " \\\\"
+)
 
 latex_table <- c(
   "\\begin{table}[!htbp]",
@@ -493,8 +558,7 @@ latex_table <- c(
   "\\toprule",
   " & \\multicolumn{2}{c}{Math VA} & \\multicolumn{2}{c}{Language VA} & \\multicolumn{2}{c}{STEM VA} \\\\",
   "\\cmidrule(lr){2-3} \\cmidrule(lr){4-5} \\cmidrule(lr){6-7}",
-  " & (1) & (2) & (3) & (4) & (5) & (6) \\\\",
-  " & Unadjusted & Adjusted & Unadjusted & Adjusted & Unadjusted & Adjusted \\\\",
+  "Specification & $\\theta$ & SE & $\\theta$ & SE & $\\theta$ & SE \\\\",
   "\\midrule",
   latex_rows,
   "\\bottomrule",
@@ -502,6 +566,112 @@ latex_table <- c(
   "\\end{table}"
 )
 writeLines(latex_table, table_tex)
+
+adjusted_specs <- value_specs[
+  adjustment == "Adjusted" &
+    spec %chin% core_value_specs
+]
+adjusted_out <- table_out[spec %chin% adjusted_specs$spec]
+fwrite(
+  adjusted_out[, .(
+    spec, outcome_group, beta, se, p_value, n_obs, fs_beta, fs_se
+  )],
+  table_adjusted_csv
+)
+
+adjusted_latex <- copy(adjusted_out)
+adjusted_latex[, outcome_group := factor(
+  outcome_group,
+  levels = c("Math", "Language", "STEM")
+)]
+setorder(adjusted_latex, outcome_group)
+
+adjusted_wide <- dcast(
+  adjusted_latex,
+  adjustment ~ outcome_group,
+  value.var = c("beta", "se")
+)
+adjusted_wide[, adjustment := as.character(adjustment)]
+
+adjusted_latex_rows <- paste0(
+  adjusted_wide$adjustment, " & ",
+  format_estimate(adjusted_wide$beta_Math), " & ",
+  format_estimate(adjusted_wide$se_Math), " & ",
+  format_estimate(adjusted_wide$beta_Language), " & ",
+  format_estimate(adjusted_wide$se_Language), " & ",
+  format_estimate(adjusted_wide$beta_STEM), " & ",
+  format_estimate(adjusted_wide$se_STEM), " \\\\"
+)
+
+adjusted_latex_table <- c(
+  "\\begin{table}[!htbp]",
+  "\\centering",
+  "\\caption{Adjusted scalar school-value IV estimates with expected-VA risk control}",
+  "\\label{tab:scalar_school_value_iv_adjusted_expected_va}",
+  "\\begin{tabular}{lcccccc}",
+  "\\toprule",
+  " & \\multicolumn{2}{c}{Math VA} & \\multicolumn{2}{c}{Language VA} & \\multicolumn{2}{c}{STEM VA} \\\\",
+  "\\cmidrule(lr){2-3} \\cmidrule(lr){4-5} \\cmidrule(lr){6-7}",
+  "Specification & $\\theta$ & SE & $\\theta$ & SE & $\\theta$ & SE \\\\",
+  "\\midrule",
+  adjusted_latex_rows,
+  "\\bottomrule",
+  "\\end{tabular}",
+  "\\end{table}"
+)
+writeLines(adjusted_latex_table, table_adjusted_tex)
+
+accreditation_out <- table_out[spec %chin% accreditation_value_specs]
+fwrite(
+  accreditation_out[, .(
+    spec, outcome_group, adjustment, beta, se, p_value, n_obs, fs_beta, fs_se
+  )],
+  table_accreditation_csv
+)
+
+accreditation_latex <- copy(accreditation_out)
+accreditation_latex[, outcome_group := factor(
+  outcome_group,
+  levels = c("Program-certified years", "Institution-certified years")
+)]
+accreditation_latex[, adjustment := factor(
+  adjustment,
+  levels = c("Unadjusted", "Adjusted")
+)]
+setorder(accreditation_latex, adjustment, outcome_group)
+
+accreditation_wide <- dcast(
+  accreditation_latex,
+  adjustment ~ outcome_group,
+  value.var = c("beta", "se")
+)
+accreditation_wide[, adjustment := as.character(adjustment)]
+
+accreditation_latex_rows <- paste0(
+  accreditation_wide$adjustment, " & ",
+  format_estimate(accreditation_wide$`beta_Program-certified years`), " & ",
+  format_estimate(accreditation_wide$`se_Program-certified years`), " & ",
+  format_estimate(accreditation_wide$`beta_Institution-certified years`), " & ",
+  format_estimate(accreditation_wide$`se_Institution-certified years`), " \\\\"
+)
+
+accreditation_latex_table <- c(
+  "\\begin{table}[!htbp]",
+  "\\centering",
+  "\\caption{Accreditation-years scalar school-value IV estimates with expected-VA risk control}",
+  "\\label{tab:scalar_school_value_iv_accreditation_expected_va}",
+  "\\begin{tabular}{lcccc}",
+  "\\toprule",
+  " & \\multicolumn{2}{c}{Program-certified years} & \\multicolumn{2}{c}{Institution-certified years} \\\\",
+  "\\cmidrule(lr){2-3} \\cmidrule(lr){4-5}",
+  "Specification & $\\theta$ & SE & $\\theta$ & SE \\\\",
+  "\\midrule",
+  accreditation_latex_rows,
+  "\\bottomrule",
+  "\\end{tabular}",
+  "\\end{table}"
+)
+writeLines(accreditation_latex_table, table_accreditation_tex)
 
 diagnostics <- data.table(
   measure = c(
@@ -527,5 +697,9 @@ message("Wrote: ", regression_csv)
 message("Wrote: ", results_csv)
 message("Wrote: ", table_csv)
 message("Wrote: ", table_tex)
+message("Wrote: ", table_adjusted_csv)
+message("Wrote: ", table_adjusted_tex)
+message("Wrote: ", table_accreditation_csv)
+message("Wrote: ", table_accreditation_tex)
 message("Wrote: ", diagnostics_csv)
 print(table_out[, .(spec, beta, se, p_value, n_obs, fs_beta, fs_se, fs_f)])

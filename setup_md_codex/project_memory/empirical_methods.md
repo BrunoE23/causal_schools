@@ -14,6 +14,10 @@ Student-school links are defined in `def_school` by looking at where each studen
 
 The merged broad-universe analysis file is assembled in `universe_reg_df.R`. It starts from `universe_controls.csv` and merges in SAE indicators, baseline SIMCE controls, post-grade-8 school links, PSU outcomes, STEM outcomes, and higher-education matricula files. The resulting files are `data/clean/univ_gr8_df.csv` and `data/clean/univ_gr8_df.dta`.
 
+The higher-education matricula cleaner now carries program and institution accreditation information from the raw matricula files. It keeps `ACREDITADA_CARR`, `ACREDITADA_INST`, and `ACRE_INST_ANIO` for first and last ingreso, and defines `program_certified_years = 1[ACREDITADA_CARR == "ACREDITADA"] * ACRE_INST_ANIO`.
+
+As of May 31, 2026, current school-value and scalar-IV development uses All-sample school values by default. Male/Female sample-specific value-added and gender-gap value-added are on hold unless explicitly requested.
+
 The SAE participation/process marker comes from `sae_binary_prep.RData`. The loaded object is `sae_apps_grade9`, with variables `mrun` and `sae_proceso`. In this file, `sae_proceso` indicates the SAE grade-9 admission process in which the student appears; if a student appears in multiple SAE processes, the construction keeps the first observed process.
 
 The first-round school assignment/offer file is `data/clean/treatment_1R_v2.RData`. It contains the object `all_treatments`. For the scalar school-value IV, the key variables are:
@@ -158,6 +162,7 @@ Current workflow rule:
 - Use the expected-VA regression dataframe for new estimates.
 - For each scalar treatment/instrument pair, include its matching scalar risk control, for example `expected_math_adj` with `d_math_adj` and `z_math_adj`.
 - For heterogeneous-effects tables, split or interact this expected-VA dataframe by the heterogeneity variable. Do not default back to the wide `prob_*` / `iszero_*` controls unless the task is explicitly a legacy robustness comparison.
+- For full-sample grade-4 achievement heterogeneity, use `code/codex/scalar_school_value_iv/12_run_expected_va_grade4_quintile_all_sample.R`. It constructs grade-4 math quintiles directly from `z_sim_mat_4to` and reports adjusted Math, Language, and STEM expected-VA IV estimates.
 
 The older k-support probability-control matrix path is retained only as a legacy or robustness path. It constructs wide `prob_<rbd>` and `iszero_<rbd>` controls and uses the restricted supported-school set. That path should not be described as the current default.
 
