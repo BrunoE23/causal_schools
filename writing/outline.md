@@ -37,7 +37,11 @@
 
 - I proceed in 2 steps in order to make my results easier to understand. I first compute observational value-added for each school for a given outcome. This is equivalent to estimating a school-fixed effect in a regression with rich student controls. These estimated values play an important role in the second step. In my second step I estimate an IV regression on the same outcome using the observational value-added as the value of the school offered (instrument) and the school attended (endogenous variable). This design allows me to answer the question of whether gains in the observational value-added metric induced by the lottery offers imply causal effects.
 
-- In particular I can summarize my answers in a single number per outcome which will be reported across specifications. $\theta$ represents the 'pass-through' of the observational value-added metric to causal effects. If $\theta$ is close to one, that would indicate that gains in the value-added metric perfectly predict lottery-induced effects in that outcome. 
+- In particular, I can summarize my answers in a single number per outcome which will be reported across specifications. $\theta$ represents the 'pass-through' of the observational value-added metric to causal effects. If $\theta$ is close to one, that would indicate that gains in the value-added metric perfectly predict lottery-induced effects in that outcome. My estimates suggest that $\theta$ is between 0.80-0.86 for achievement tests and 0.55 for STEM enrollment. 
+
+
+
+(orthogonal VA?)
 
 
 
