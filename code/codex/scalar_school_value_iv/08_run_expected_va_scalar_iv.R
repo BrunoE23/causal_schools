@@ -1,6 +1,11 @@
 ###############################################################################
 # Scalar school-value IV with expected-VA assignment-risk control
 #
+# CURRENT DEFAULT PATH:
+# Use this script for main scalar-IV estimates and heterogeneous-effects tables.
+# It avoids the legacy high-dimensional prob_* / iszero_* controls by carrying
+# one scalar expected-value risk control for each school-value metric.
+#
 # This replaces the high-dimensional prob_* / iszero_* controls with one
 # scalar risk control for each value metric:
 #
@@ -15,8 +20,35 @@ suppressPackageStartupMessages({
   library(fixest)
 })
 
-data_wd <- "C:/Users/xd-br/Dropbox/causal_schools"
-repo_wd <- "C:/Users/xd-br/Desktop/PhD/Research/causal_schools"
+find_existing_path <- function(env_var, candidates, label) {
+  candidates <- c(Sys.getenv(env_var), candidates)
+  candidates <- candidates[nzchar(candidates)]
+  candidates <- candidates[dir.exists(candidates)]
+
+  if (length(candidates) == 0) {
+    stop("Could not find ", label, ". Set ", env_var, " or update candidates.")
+  }
+
+  candidates[[1]]
+}
+
+data_wd <- find_existing_path(
+  "CAUSAL_SCHOOLS_DATA_WD",
+  c(
+    "C:/Users/brunem/Dropbox/causal_schools",
+    "C:/Users/xd-br/Dropbox/causal_schools"
+  ),
+  "data_wd"
+)
+repo_wd <- find_existing_path(
+  "CAUSAL_SCHOOLS_REPO_WD",
+  c(
+    getwd(),
+    "C:/Users/brunem/Research/causal_schools",
+    "C:/Users/xd-br/Desktop/PhD/Research/causal_schools"
+  ),
+  "repo_wd"
+)
 
 clean_dir <- file.path(data_wd, "data", "clean")
 prob_dir <- file.path(clean_dir, "DA_probs")
@@ -153,9 +185,19 @@ universe_cols <- c(
   "student_id", "mrun", "cohort_gr8", "sae_proceso", "timely_sae",
   "rbd_treated_1R", "most_time_RBD", "GEN_ALU", "EDAD_ALU",
   "z_sim_mat_4to", "z_sim_leng_4to", "math_max", "leng_max", "psu_year",
-  "f_science_m1", "f_eng_m1"
+  "f_science_m1", "f_eng_m1",
+  "simce_year_8b",
+  "ptje_mate8b_alu",
+  "simce4_math_decile",
+  "simce8_math_decile",
+  "simce8_math_quintile",
+  "simce8_vs_4to_math_decile_change",
+  "simce8_math_decile_movement",
+  "simce8_math_improved_gt1_decile",
+  "simce8_math_within1_decile",
+  "simce8_math_worsened_gt1_decile"
 )
-universe <- fread(universe_path, select = universe_cols)
+universe <- fread(universe_path, select = universe_cols, na.strings = c("", "NA"))
 universe[, `:=`(
   student_id = as.numeric(student_id),
   sae_proceso = as.integer(sae_proceso),
@@ -288,6 +330,16 @@ keep_cols <- c(
   "n_positive_probability_options", "GEN_ALU", "EDAD_ALU",
   "z_sim_mat_4to", "z_sim_leng_4to", "math_max", "leng_max", "psu_year",
   "z_year_math_max", "z_year_leng_max", "stem_enrollment_m1",
+  "simce_year_8b",
+  "ptje_mate8b_alu",
+  "simce4_math_decile",
+  "simce8_math_decile",
+  "simce8_math_quintile",
+  "simce8_vs_4to_math_decile_change",
+  "simce8_math_decile_movement",
+  "simce8_math_improved_gt1_decile",
+  "simce8_math_within1_decile",
+  "simce8_math_worsened_gt1_decile",
   paste0("expected_", value_names),
   paste0("mass_with_value_", value_names),
   paste0("d_", value_names),

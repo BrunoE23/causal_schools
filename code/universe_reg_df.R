@@ -206,6 +206,46 @@ load("./data/clean/sae_binary_prep.RData")
 #controls
 load("./data/clean/simce_4to.Rdata")
 
+simce8_math_heterogeneity_path <- "./data/clean/simce8_heterogeneity/cohort_2019_math_heterogeneity.csv"
+
+simce8_math_heterogeneity <- tibble(
+  mrun = numeric(),
+  simce_year_8b = numeric(),
+  ptje_mate8b_alu = numeric(),
+  simce4_math_decile = numeric(),
+  simce8_math_decile = numeric(),
+  simce8_math_quintile = numeric(),
+  simce8_vs_4to_math_decile_change = numeric(),
+  simce8_math_decile_movement = character(),
+  simce8_math_improved_gt1_decile = integer(),
+  simce8_math_within1_decile = integer(),
+  simce8_math_worsened_gt1_decile = integer()
+)
+
+if (file.exists(simce8_math_heterogeneity_path)) {
+  simce8_math_heterogeneity <- read.csv(simce8_math_heterogeneity_path) %>%
+    select(
+      mrun,
+      simce_year_8b,
+      ptje_mate8b_alu,
+      simce4_math_decile,
+      simce8_math_decile,
+      simce8_math_quintile,
+      simce8_vs_4to_math_decile_change,
+      simce8_math_decile_movement,
+      simce8_math_improved_gt1_decile,
+      simce8_math_within1_decile,
+      simce8_math_worsened_gt1_decile
+    ) %>%
+    distinct(mrun, .keep_all = TRUE)
+} else {
+  warning(
+    "SIMCE 8B heterogeneity file not found: ",
+    simce8_math_heterogeneity_path,
+    ". Run code/codex/simce8_heterogeneity/01_clean_simce8_2019.R first."
+  )
+}
+
 
 #treatment?
 schools_attended <- read.csv("./data/clean/rbd_universe.csv") %>% 
@@ -241,6 +281,7 @@ mat_last <- read.csv("./data/clean/mat_ingresos_22-24/mat_last_ing.csv")
 reg_df <- left_join(base, offers_1R_first, by = "mrun") %>% 
   mutate(timely_sae = ifelse(cohort_gr8 == sae_proceso, 1L, 0L)) %>% 
   left_join(simce_4to, by = "mrun") %>% 
+  left_join(simce8_math_heterogeneity, by = "mrun") %>%
   left_join(schools_attended, by = "MRUN") %>% 
   left_join(students_apps, by = "mrun") %>% 
   rename(psu_year = year) %>% 

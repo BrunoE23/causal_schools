@@ -1,6 +1,12 @@
 ####################################
 # Build scalar school-value IV regression dataframe.
 #
+# LEGACY / ROBUSTNESS PATH:
+# This construction creates the wide prob_* / iszero_* probability-control
+# dataframe. The current preferred path for main estimates and heterogeneity
+# tables is 08_run_expected_va_scalar_iv.R, which uses scalar expected-VA risk
+# controls instead of the high-dimensional probability matrix.
+#
 # This script is the construction layer. It starts from the broad grade-8
 # universe produced by universe_reg_df.R, merges reduced probability
 # controls, constructs the scalar school-value treatments and instruments, and
@@ -13,7 +19,24 @@ suppressPackageStartupMessages({
   library(tidyr)
 })
 
-data_wd <- "C:/Users/xd-br/Dropbox/causal_schools"
+find_data_wd <- function() {
+  candidates <- c(
+    Sys.getenv("CAUSAL_SCHOOLS_DATA_WD"),
+    "C:/Users/brunem/Dropbox/causal_schools",
+    "C:/Users/xd-br/Dropbox/causal_schools"
+  )
+
+  candidates <- candidates[nzchar(candidates)]
+  candidates <- candidates[dir.exists(candidates)]
+
+  if (length(candidates) == 0) {
+    stop("Could not find data_wd. Set CAUSAL_SCHOOLS_DATA_WD or update candidates.")
+  }
+
+  candidates[[1]]
+}
+
+data_wd <- find_data_wd()
 
 write_stata_dta <- FALSE
 support_k <- 100L
@@ -65,7 +88,9 @@ write_csv_fast <- function(x, path) {
 
 read_csv_fast <- function(path) {
   if (requireNamespace("data.table", quietly = TRUE)) {
-    tibble::as_tibble(data.table::fread(path, showProgress = TRUE))
+    tibble::as_tibble(
+      data.table::fread(path, showProgress = TRUE, na.strings = c("", "NA"))
+    )
   } else {
     readr::read_csv(path, show_col_types = FALSE)
   }
@@ -120,6 +145,11 @@ supported_rbd <- read_csv(support_path, show_col_types = FALSE) %>%
 message("Reading school observational values: ", school_values_path)
 school_values_raw <- read_csv(school_values_path, show_col_types = FALSE) %>%
   mutate(school_rbd = as.numeric(school_rbd))
+
+if ("analysis_sample" %in% names(school_values_raw)) {
+  school_values_raw <- school_values_raw %>%
+    filter(analysis_sample == "All")
+}
 
 build_value_spec <- function(spec_row, school_values) {
   spec <- as.list(spec_row)
@@ -230,6 +260,16 @@ core_export_vars <- c(
   "EDAD_ALU",
   "z_sim_mat_4to",
   "z_sim_leng_4to",
+  "simce_year_8b",
+  "ptje_mate8b_alu",
+  "simce4_math_decile",
+  "simce8_math_decile",
+  "simce8_math_quintile",
+  "simce8_vs_4to_math_decile_change",
+  "simce8_math_decile_movement",
+  "simce8_math_improved_gt1_decile",
+  "simce8_math_within1_decile",
+  "simce8_math_worsened_gt1_decile",
   "math_max",
   "leng_max",
   "psu_year",

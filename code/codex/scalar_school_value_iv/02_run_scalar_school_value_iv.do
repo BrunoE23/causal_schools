@@ -1,6 +1,13 @@
 *******************************************************
 * Scalar school-value IV regressions
 *
+* LEGACY / ROBUSTNESS PATH:
+* This script uses wide prob_* and iszero_* probability controls.
+* The current preferred path for main estimates and heterogeneity tables is
+* code/codex/scalar_school_value_iv/08_run_expected_va_scalar_iv.R, which uses
+* scalar expected-VA risk controls instead of the high-dimensional probability
+* matrix.
+*
 * Estimation-only Stata layer. All construction is done in R by
 * 01_build_scalar_school_value_iv_df.R.
 *******************************************************

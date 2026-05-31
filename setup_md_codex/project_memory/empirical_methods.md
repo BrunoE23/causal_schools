@@ -133,7 +133,7 @@ For the first-pass scalar IV dataframe, score outcomes such as `z_year_math_max`
 
 ### Expected-VA Risk Control Variant
 
-The expected-VA scalar-IV variant replaces the high-dimensional `prob_<rbd>` and `iszero_<rbd>` controls with one scalar risk control for each school-value index:
+The expected-VA scalar-IV variant is the current preferred path for new main estimates and heterogeneous-effects tables. It replaces the high-dimensional `prob_<rbd>` and `iszero_<rbd>` controls with one scalar risk control for each school-value index:
 
 `expected_VA_i = sum_s p_is * V_s`
 
@@ -152,6 +152,14 @@ The first table from this variant is written to:
 
 - `output/tables/scalar_school_value_iv/scalar_school_value_iv_main_results_expected_va.csv`
 - `output/tables/scalar_school_value_iv/scalar_school_value_iv_main_results_expected_va.tex`
+
+Current workflow rule:
+
+- Use the expected-VA regression dataframe for new estimates.
+- For each scalar treatment/instrument pair, include its matching scalar risk control, for example `expected_math_adj` with `d_math_adj` and `z_math_adj`.
+- For heterogeneous-effects tables, split or interact this expected-VA dataframe by the heterogeneity variable. Do not default back to the wide `prob_*` / `iszero_*` controls unless the task is explicitly a legacy robustness comparison.
+
+The older k-support probability-control matrix path is retained only as a legacy or robustness path. It constructs wide `prob_<rbd>` and `iszero_<rbd>` controls and uses the restricted supported-school set. That path should not be described as the current default.
 
 ### Current Scalar Offer-Instrument Normalization
 

@@ -2,6 +2,42 @@
 
 This folder contains the construction and estimation code for the scalar school-value IV regressions.
 
+## Current Default: Expected-VA Risk Control
+
+The current preferred estimation path is the expected-VA scalar-risk-control approach implemented in:
+
+- `08_run_expected_va_scalar_iv.R`
+- `09_run_expected_va_quintile_heterogeneity.R`
+- `10_run_expected_va_grade4_quintile_heterogeneity.R`
+- `11_run_expected_va_grade4_tercile_heterogeneity.R`
+
+Use this path for new main estimates and heterogeneous-effects tables. It replaces the high-dimensional `prob_*` and `iszero_*` controls with one scalar expected-value risk control per school-value metric:
+
+`expected_VA_i = sum_s p_is * V_s`
+
+where `p_is` is the simulated assignment probability and `V_s` is the All-sample school value for that metric.
+
+The expected-VA outputs are:
+
+- `data/clean/scalar_school_value_iv/scalar_school_value_iv_expected_va.csv`
+- `data/clean/scalar_school_value_iv/scalar_school_value_iv_expected_va_diagnostics.csv`
+- `output/tables/scalar_school_value_iv/scalar_school_value_iv_results_expected_va.csv`
+- `output/tables/scalar_school_value_iv/scalar_school_value_iv_main_results_expected_va.csv`
+- `output/tables/scalar_school_value_iv/scalar_school_value_iv_main_results_expected_va.tex`
+- `output/tables/scalar_school_value_iv/scalar_school_value_iv_expected_va_by_simce8_math_quintile.csv`
+- `output/tables/scalar_school_value_iv/scalar_school_value_iv_expected_va_by_simce8_math_quintile_main.csv`
+- `output/tables/scalar_school_value_iv/scalar_school_value_iv_expected_va_by_simce8_math_quintile_main.tex`
+- `output/tables/scalar_school_value_iv/scalar_school_value_iv_expected_va_by_simce4_math_quintile_same_sample.csv`
+- `output/tables/scalar_school_value_iv/scalar_school_value_iv_expected_va_by_simce4_math_quintile_same_sample_main.csv`
+- `output/tables/scalar_school_value_iv/scalar_school_value_iv_expected_va_by_simce4_math_quintile_same_sample_main.tex`
+- `output/tables/scalar_school_value_iv/scalar_school_value_iv_expected_va_by_simce4_math_tercile_same_sample.csv`
+- `output/tables/scalar_school_value_iv/scalar_school_value_iv_expected_va_by_simce4_math_tercile_same_sample_main.csv`
+- `output/tables/scalar_school_value_iv/scalar_school_value_iv_expected_va_by_simce4_math_tercile_same_sample_main.tex`
+
+Do not use the older wide `prob_*` / `iszero_*` Stata path for new heterogeneity work unless the task is explicitly a robustness or legacy comparison.
+
+## Legacy Wide-Probability-Control Path
+
 The construction layer is:
 
 - `01_build_scalar_school_value_iv_df.R`
@@ -10,6 +46,8 @@ The estimation layer is:
 
 - `02_run_scalar_school_value_iv.do`
 - `03_append_gender_gap_by_gender.do`
+
+These scripts implement the older wide probability-control design. They are kept for reproducibility and robustness checks, not as the default path for new estimates.
 
 The R construction script starts from:
 
@@ -76,11 +114,11 @@ The script reports:
 - `fs_f`: robust first-stage F statistic from testing the scalar offer instrument
 - `iv_seconds` and `fs_seconds`: elapsed time for the IV and first-stage diagnostic regressions
 
-The current Stata scripts include both `prob_*` and `iszero_*` probability controls and write to `scalar_school_value_iv_results_k100_timely_risk_prob_iszero.*`, so earlier `prob_*`-only estimates are not overwritten. If this is too slow, temporarily change `local prob_controls prob_* iszero_*` to `local prob_controls prob_*` and change `controls_stub` to a matching label.
+The legacy Stata scripts include both `prob_*` and `iszero_*` probability controls and write to `scalar_school_value_iv_results_k100_timely_risk_prob_iszero.*`, so earlier `prob_*`-only estimates are not overwritten. This path should not be the starting point for current heterogeneity work.
 
 The append script `03_append_gender_gap_by_gender.do` runs `stem_adj` and `stem_gap_adj` separately for boys and girls, then appends those rows to the existing results table without rerunning the main seven specifications. It assumes `GEN_ALU == 1` for boys and `GEN_ALU == 2` for girls.
 
-## Expected-VA Risk-Control Variant
+## Expected-VA Risk-Control Details
 
 The expected-VA variant is implemented in:
 
@@ -92,10 +130,10 @@ This variant drops the k-support probability-control restriction. Instead of car
 
 where `p_is` is the simulated assignment probability and `V_s` is the All-sample school value for that metric. Non-school `unmatched` probability mass contributes zero.
 
-The expected-VA outputs are:
+For heterogeneous-effects tables, split or interact on the expected-VA regression dataframe and keep the matching `expected_<metric>` control for each `d_<metric>` / `z_<metric>` pair.
 
-- `data/clean/scalar_school_value_iv/scalar_school_value_iv_expected_va.csv`
-- `data/clean/scalar_school_value_iv/scalar_school_value_iv_expected_va_diagnostics.csv`
-- `output/tables/scalar_school_value_iv/scalar_school_value_iv_results_expected_va.csv`
-- `output/tables/scalar_school_value_iv/scalar_school_value_iv_main_results_expected_va.csv`
-- `output/tables/scalar_school_value_iv/scalar_school_value_iv_main_results_expected_va.tex`
+`09_run_expected_va_quintile_heterogeneity.R` implements the first grade-8 SIMCE heterogeneity table. It merges `simce8_math_quintile` from `data/clean/simce8_heterogeneity/cohort_2019_math_heterogeneity.csv` into the expected-VA regression dataframe and reports theta by grade-8 math quintile. The main table uses adjusted Math, Language, and STEM school values; the full CSV also keeps the unadjusted specifications.
+
+`10_run_expected_va_grade4_quintile_heterogeneity.R` repeats the exercise by grade-4 math SIMCE quintile. It keeps the same SIMCE-8-linked 2019 sample as the grade-8 quintile table, excluding students with grade-4 controls but missing grade-8 math quintile so the grade-4 and grade-8 splits are directly comparable.
+
+`11_run_expected_va_grade4_tercile_heterogeneity.R` uses the same sample as `10_run_expected_va_grade4_quintile_heterogeneity.R`, but constructs terciles directly from the grade-4 math score rather than collapsing deciles.

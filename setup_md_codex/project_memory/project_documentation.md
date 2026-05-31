@@ -91,6 +91,72 @@ Current sample-definition note:
 - the current observational-value constructor additionally restricts to `12 <= EDAD_ALU <= 16`
 - this age restriction is currently imposed inside the VA constructor, not upstream in the general universe build
 
+## SIMCE Grade-8 Heterogeneity Inputs
+
+The current grade-8 SIMCE heterogeneity input is limited to the 2019 8th-grade private SIMCE files:
+
+- `data/raw/simce/Simce octavo básico 2019 - Versión privada/Archivos TXT (Planos)/simce8b2019_alu_privada_final-SEG.csv`
+- `data/raw/simce/Simce octavo básico 2019 - Versión privada/Archivos TXT (Planos)/simce8b2019_cpad_final_SEG.csv`
+
+The cleaning script is:
+
+- `code/codex/simce8_heterogeneity/01_clean_simce8_2019.R`
+
+The main score variables are:
+
+- `ptje_mate8b_alu`: SIMCE math score
+- `ptje_lect8b_alu`: SIMCE reading/verbal score
+
+The parent-survey household-income variable is:
+
+- `cpad_p11`
+
+The 2019 glosses define `cpad_p11` as the same 15-bin household-income question used in the 4th-grade SIMCE cleaner. Codes `0` and `99` are treated as missing. The script maps valid codes `1` through `15` to the same income midpoints used by `clean_simce_survey.R`, then constructs `income_decile_8b`.
+
+The script also constructs:
+
+- `z_sim_mat_8b`
+- `z_sim_leng_8b`
+- `simce8_math_decile`
+- `simce8_math_quintile`
+- `simce8_leng_decile`
+- `simce8_score_avg_decile`
+
+For a first diagnostic on heterogeneity-bin quality, the script compares grade-4 SIMCE score deciles and grade-4 CPAD income deciles from `simce_4to.Rdata` against the corresponding grade-8 SIMCE and CPAD deciles in 2019.
+
+For the first heterogeneous-effects pass, the intended simple grade-8-achievement split is math-only. The reusable cohort-level file is:
+
+- `data/clean/simce8_heterogeneity/cohort_2019_math_heterogeneity.csv`
+
+It keeps one row per student in the 2019 grade-8 cohort and includes:
+
+- `simce8_math_decile`
+- `simce8_math_quintile`
+- `simce8_vs_4to_math_decile_change`
+- `simce8_math_improved_gt1_decile`
+- `simce8_math_within1_decile`
+- `simce8_math_worsened_gt1_decile`
+- `simce8_math_decile_movement`
+
+The movement categories compare grade-8 math decile to grade-4 math decile: improved by more than one decile, remained within one decile, or worsened by more than one decile. Students in the 2019 cohort without matched grade-8 or grade-4 SIMCE math deciles are retained in the cohort-level file with missing movement fields.
+
+The broad regression dataset construction in `code/universe_reg_df.R` now merges these grade-8 SIMCE math heterogeneity variables by `mrun` when the cohort-level file exists. For an already-built `univ_gr8_df`, `code/codex/simce8_heterogeneity/02_append_to_univ_gr8_df.R` appends the same columns to `data/clean/univ_gr8_df.csv` and `data/clean/univ_gr8_df.dta`. The compact scalar school-value IV construction scripts also carry these fields through to their regression-ready exports.
+
+## Current Scalar-IV Risk-Control Convention
+
+For current main scalar-IV estimates and heterogeneous-effects tables, use the expected-VA risk-control workflow:
+
+- `code/codex/scalar_school_value_iv/08_run_expected_va_scalar_iv.R`
+- `data/clean/scalar_school_value_iv/scalar_school_value_iv_expected_va.csv`
+
+This workflow uses one scalar expected-value risk control per school-value metric:
+
+`expected_VA_i = sum_s p_is * V_s`
+
+For example, estimates using `d_math_adj` and `z_math_adj` should control for `expected_math_adj`.
+
+The older wide probability-control workflow, based on `prob_<rbd>` and `iszero_<rbd>` columns from `01_build_scalar_school_value_iv_df.R` and `02_run_scalar_school_value_iv.do`, is now a legacy/robustness path. It should not be used for new heterogeneity tables unless the task explicitly asks for a wide-probability-control robustness check.
+
 ### Main Construction Logic
 
 The observational-value task constructs school-level measures for both score outcomes and higher-education enrollment or field outcomes.
