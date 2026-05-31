@@ -50,12 +50,13 @@
 
 %Higher education good and choices relevant
 Economics literature has spent a lot of time measuring the returns to accessing higher education. 
-Choice of institution and of major have been proven to be very relevant. 
+Choice of institution and especially of major have also been proven to be very relevant in terms of labor market outcomes \parencite{kirkeboen_field_2016}.
 
 
 
 %Choices higher ed. bad
-Despite stakes very high, many reasons to think that these choices are sub-optimal.
+Despite the stakes of this decision being very high, we have many reasons to think that these choices are sub-optimal.
+
 Do people go to college enough ? 
 Many interventions have identified a series of frictions. 
 In a context where these frictions are pervasive, reducing them is highly valuable. 
@@ -65,7 +66,47 @@ In a context where these frictions are pervasive, reducing them is highly valuab
 High schools potentially playing an important role in alleviating such frictions, suggesting a different way to think about their value-added on top of achievement metrics.
 However, measuring such effects requires both exogenous variation in school assignment as well as being able to observe both applications and enrollment in higher education. 
 
-### In this paper 
+
+
+
+
+
+
+Assessing a school's quality has been an important concern for families, governments and researchers. 
+For the most part, the economics literature has focused for in outcomes such as achievement scores in  standardized tests and college exams, considering them as proxies for later relevant variables such as college or labor market outcomes. \parencite{chetty_measuring_2014}\footnote{ More recently, the literature has also measured other socially-relevant outcomes such as teenage pregnancy, incarceration and substance use \parencite{dobbie_medium-term_2015, beuermann_what_2023}.}. 
+
+Many of the attempts to measure direct effects on higher education have been limited to a crude set of outcomes such as college enrollment or number of academic semesters \parencite{angrist_stand_2016, dobbie_medium-term_2015}\footnote{An important exception on this regard is \parencite{dobbie_charter_2020} where the authors can directly observe labor market outcomes, but giving up exogenous variation in their study.}.
+
+
+I argue that this is an insufficient way to characterize the effects of schools on later outcomes: There are important differences across institutions and programs that make the time spent at a higher education institution too coarse.
+I discuss on this paper the role of selectivity/quality of the higher education institution, as well as the choice of field of occupation. Intuitively: a school with that places their students in more selective institutions or higher pay programs will have alumni should be considered to have a different causal effect than another one -with a similar incoming student pool- that places their students in less selective institutions or lower pay programs, even if they have similar college enrollment and retention rates. 
+ In line with these arguments,  \parencite{abdulkadiroglu_elite_2014} and 
+\parencite{abdulkadiroglu_parents_2020} are some of the only papers to report causal effect of schools on some measure of quality of college enrolled. Yet, these papers are unable to assess whether these effects operate through increases in application rates, acceptance rates or enrollment rate. Moreover, they do not speak to how schools might affect major choice. 
+
+Evidently these effects could entirely be driven by achievement effects. 
+However, there is evidence to think that there are important margins on the college choice decision that are not determined by scores.  
+For instance, the fact that lower-income students are less likely to apply to selective institutions than their higher-income peers of the same achievement level has been documented multiple times  \parencite{dynarski_closing_2021} \parencite{chetty_diversifying_2025}, and simple interventions  \parencite{hoxby_what_2015} have proven successful in closing this gap.
+ If schools differ on the type of institutions they might induce their students to apply to, there might be important effects that the metrics such as college enrollment or number of semesters would fail to capture. 
+
+
+Another example is how information about returns might change major choice.
+ We know that the returns to higher education education vary enormously across fields \parencite{kirkeboen_field_2016} and that interventions such as information provision -which do not change achievement- can help move students move towards higher return programs \parencite{hastings_informed_2016}. 
+
+To the extent that different schools provide more accurate information about the returns to college and fields, they might nudge students int higher education and into high-pay majors.
+ However, incomplete or wrong information might push into other fields. Other than education, schools might also affect this choice through other channels such as non-tested cognitive skills, non-cognitive skills or preferences.  
+ In this paper I attempt to show that schools induce differences on higher education choices through both achievement and non-achievement channels.
+
+
+
+
+
+
+
+
+
+
+
+In this paper 
 
 
 In this paper, I take advantage of the Chilean policy and data landscape to estimate value added of schools of both traditional (achievement) and non-traditional (higher education choices) outcomes. 
@@ -94,15 +135,19 @@ I take this to be the first paper that paints such a detailed picture of the eff
 All in all, these results invite families, researchers, and policy-makers to think about the school value-added in a far more comprehensive way than it has been previously discussed by the literature.
 
 
-This paper contributes to a broad literature on the importance of teachers. 
+This paper connects many strands of literatures. 
+Firstly, it hopes to extend existing work on the value-added of schools and teachers. 
+Many 
 
 
 #Lit Review
 
 
 The rest of the paper is organized as follows.
-Section 2 reviews the relevant literature.
-Section 3 describes the context and data.   
+Section 2 describes the context and data.  (easy)
+Section 3 describes the methodology employed.  (mid)
+Section 4 presents the results. (mid)
+Section 5 concludes. (easy)
 
 
 
@@ -173,7 +218,7 @@ On top of that, I plan to use enrollment data each year to track in which progra
 
 
 \clearpage 
-\section{Methodology}
+\section{Empirical Framework}
 
 
 
@@ -184,7 +229,6 @@ The project focuses on estimating the effect of schools on students’ choice of
 I then introduce the reduced-form specifications used to estimate school effects on the main outcomes, along with a strategy to provide evidence on non-score channels in major choice.
 In addition, I discuss a structural model of major choice that may help disentangle these mechanisms. Finally, I describe progress in replicating school assignments in the Chilean centralized system and outline procedures to compute assignment probabilities.
 
-\section{Conceptual Framework and Identification Strategy} \label{framework}
 
 In this section I describe how I am currently thinking of my analysis. I review the assumptions and methodologies related to the estimation of school specific effects using centralized assignment mechanisms, and then I present the main reduced-form regressions I intend to run, as well as some challenges and how I intend to address them.
 

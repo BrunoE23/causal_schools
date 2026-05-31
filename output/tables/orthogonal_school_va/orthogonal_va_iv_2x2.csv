@@ -1,0 +1,3 @@
+regressor_label,Math score,STEM enrollment
+Math VA,0.844 (0.072),-0.058 (0.039)
+STEM VA orthogonal to math,0.017 (0.111),0.656 (0.066)
