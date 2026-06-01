@@ -3,13 +3,14 @@
 
 
 \usepackage[
-  backend=biber,
-  style=authoryear-ibid,
-  maxcitenames=2,  % show up to 2 authors in citations
-  mincitenames=1,  % use "et al." if more than 2
-  maxbibnames=10,  % show up to 10 names in bibliography
-  minbibnames=1,
-    uniquelist=false   
+backend=biber,
+style=authoryear-ibid,
+maxcitenames=2, % show up to 2 authors in citations
+mincitenames=1, % use "et al." if more than 2
+maxbibnames=10, % show up to 10 names in bibliography
+minbibnames=1,
+uniquelist=false,
+uniquename=false
 ]{biblatex}
 
 
@@ -23,13 +24,13 @@
 }
 
 % Name and Title
-\title{ High school value-added beyond achievement: effects on higher education application behavior}
+\title{Do High Schools Shape College Choices? Evidence from Centralized Assignment in Chile}
 \author{ Bruno E. Aravena-Magüida}
 \date{May 2026}
 
 % Header (top) and footer (bottom)
 \pagestyle{fancy}
-\fancyhead[R]{\emph{May Draft}}
+\fancyhead[R]{\emph{Do High Schools Shape College Choices?}}
  \fancyhead[L]{BEAM} % keep section names
 \fancyfoot[R]{}
 \fancyfoot[L]{}
@@ -40,356 +41,423 @@
 % Prints title block from macros given above
 \maketitle
 
+\begin{abstract}
+Education is one of the central investments through which societies build human capital, yet we know less about whether high schools shape students' later choices beyond raising test scores.
+This paper studies that question in Chile, where a centralized school assignment system creates lottery variation in high school offers.
+I link assignment records to administrative data on school enrollment, standardized achievement, and higher-education enrollment, and ask whether high schools causally affect both achievement and college choices.
+The empirical strategy proceeds in two steps.
+First, I estimate observational school value added using rich pre-treatment controls, including grade-4 test scores, family background, and middle-school histories.
+Second, I use lottery-generated offers to test whether attending schools with higher observational value added improves later outcomes, controlling for the expected value added implied by each student's assignment risk.
+The results suggest that observational value added contains substantial causal signal.
+Achievement value added passes through strongly to math and language scores, while higher-education value added also predicts later STEM enrollment and institution quality.
+An orthogonal value-added exercise shows that the component of STEM value added unrelated to math value added predicts STEM enrollment but not math achievement.
+These findings suggest that high schools differ not only in their ability to raise test scores, but also in dimensions that shape students' transition into higher education.
+\end{abstract}
+
 % Prints a table of contents
 \setcounter{tocdepth}{2}
 \renewcommand\contentsname{}
 %\tableofcontents* 
-%\clearpage
 
+\clearpage
 \section{Introduction}
 
-%Higher education good and choices relevant
-Economics literature has spent a lot of time measuring the returns to accessing higher education. 
-Choice of institution and especially of major have also been proven to be very relevant in terms of labor market outcomes \parencite{kirkeboen_field_2016}.
+School quality is usually summarized by achievement.
+This is natural: test scores are widely available, comparable across schools, and predictive of later outcomes.
+But school and teacher effects are not necessarily one-dimensional.
+Recent work shows that schools and teachers can affect attendance, behavior, crime, teenage motherhood, labor-market outcomes, and other long-run outcomes in ways that are only weakly related to test-score effects \parencite{jackson_what_2018, beuermann_what_2023, rose_effects_2022, angrist_methods_2023}.
+Families and policy-makers might therefore care about school quality measures that capture more than achievement.
 
+This broader view of school quality is especially relevant for high schools.
+High schools are the last formal educational institutions students attend before making higher-education choices, and those choices are consequential.
+Whether students enter higher education, which institutions they attend, and which fields they choose all matter because returns vary substantially across institutions and fields of study \parencite{kirkeboen_field_2016}.
+Yet many measures of school effects on higher education are coarse, focusing on enrollment or persistence rather than on the type of institution or field students enter.
 
+There are also good reasons to think that higher-education choices are shaped by frictions that schools may influence.
+Prior work documents large differences in application and enrollment behavior across groups of students, and shows that relatively small interventions can change college search, application, and major choice \parencite{hoxby_what_2015, dynarski_closing_2021, hastings_informed_2016, chetty_diversifying_2025}.
+If high schools differ in counseling, information provision, expectations, peer norms, academic confidence, or preparation for particular fields, then their effects on higher education may extend beyond their effects on achievement.
 
-%Choices higher ed. bad
-Despite the stakes of this decision being very high, we have many reasons to think that these choices are sub-optimal.
+This paper asks whether high schools causally affect higher-education choices, and whether those effects are captured by traditional achievement value added.
+The empirical challenge is that students and families sort across schools.
+Families choose schools based on resources, preferences, networks, location, and expectations; these same characteristics may also shape later higher-education choices.
+As a result, differences across schools may reflect both causal school effects and the underlying characteristics of the students and families who select into them.
 
-Do people go to college enough ? 
-Many interventions have identified a series of frictions. 
-In a context where these frictions are pervasive, reducing them is highly valuable. 
+I address this challenge using Chile's centralized school assignment system, the Sistema de Admision Escolar (SAE).
+SAE assigns students to public and private-subsidized schools through a centralized mechanism that uses random tie-breakers when schools are oversubscribed.
+The system covers a large national school sector, allowing me to study school effects at a scale that is unusual in lottery-based designs.
+I combine this assignment variation with administrative data linking school enrollment, standardized tests, and higher-education enrollment.
 
-%-However, we do not know much how these frictions look in "equilibrium". 
+The analysis proceeds in two steps.
+First, I estimate observational value added for each school and outcome in the broad student panel.
+These measures are school fixed effects from regressions that adjust for rich pre-treatment controls, including grade-4 SIMCE scores, family-background variables, and middle-school controls.
+Second, I use SAE lottery offers to ask whether schools that look better in observational value-added terms also produce larger causal effects.
+For each outcome, I compare the value added of the school a student attends with the value added of the school the student is offered, while controlling for the expected value added implied by the student's assignment probabilities.
 
-High schools potentially playing an important role in alleviating such frictions, suggesting a different way to think about their value-added on top of achievement metrics.
-However, measuring such effects requires both exogenous variation in school assignment as well as being able to observe both applications and enrollment in higher education. 
+I summarize this relationship with a pass-through coefficient, $\theta$.
+If $\theta=1$, then a lottery-induced increase in observational value added translates one-for-one into a causal gain in the corresponding outcome.
+If $\theta=0$, the observational value-added measure has no causal predictive content along the lottery-induced margin.
+The main estimates suggest substantial pass-through.
+For achievement, the estimates are 0.841 for math and 0.835 for language.
+For higher-education outcomes, the pass-through is 0.674 for STEM enrollment and 0.680 for institution quality, measured using institutional accreditation years.
+In practical terms, schools that observationally look better at raising achievement or higher-education outcomes also tend to have causal effects in those same outcomes, though the causal effects are smaller than the observational differences.
 
+I then ask for whom observational value-added measures are most informative.
+Splitting the sample by baseline grade-4 math achievement shows that achievement value added is more predictive of causal effects for higher-achieving students, while the higher-education value-added measures are more stable across the baseline achievement distribution.
+This does not imply that schools matter only for high achievers; rather, it suggests that the usefulness of a given value-added metric depends on the population to which it is applied.
 
+Finally, I examine whether STEM effects are simply achievement effects in another form.
+To do this, I construct an orthogonal value-added measure that removes from STEM-enrollment value added the part predicted by math value added.
+Math and STEM value added are already weakly related, and the IV results confirm that the orthogonal STEM component predicts STEM enrollment but not math achievement.
+Conversely, math value added predicts math achievement but not STEM enrollment.
+These results suggest that high schools differ along multiple dimensions, and that value added should not be treated as a single-dimensional measure of school quality.
 
+The paper contributes to three literatures.
+First, it contributes to work on teacher and school value added.
+A large literature estimates the effects of teachers and schools on test scores and longer-run outcomes \parencite{chetty_measuring_2014, dobbie_medium-term_2015, jackson_what_2018, beuermann_what_2023, rose_effects_2022}.
+This work increasingly emphasizes that test-score value added may miss important dimensions of educational production.
+I extend this idea to high-school effects on higher-education choices, where the relevant outcomes include field and institution quality rather than only enrollment or achievement.
 
+Second, the paper contributes to the literature using lotteries and centralized assignment systems to estimate school effects \parencite{abdulkadiroglu_elite_2014, abdulkadiroglu_research_2017, angrist_credible_2024}.
+In the spirit of \textcite{angrist_leveraging_2017}, I ask whether observational value-added measures are useful guides to causal school effects.
+The contribution here is to apply this pass-through logic to a national high-school assignment system and to outcomes observed after students transition into higher education.
 
-
-
-Assessing a school's quality has been an important concern for families, governments and researchers. 
-For the most part, the economics literature has focused for in outcomes such as achievement scores in  standardized tests and college exams, considering them as proxies for later relevant variables such as college or labor market outcomes. \parencite{chetty_measuring_2014}\footnote{ More recently, the literature has also measured other socially-relevant outcomes such as teenage pregnancy, incarceration and substance use \parencite{dobbie_medium-term_2015, beuermann_what_2023}.}. 
-
-Many of the attempts to measure direct effects on higher education have been limited to a crude set of outcomes such as college enrollment or number of academic semesters \parencite{angrist_stand_2016, dobbie_medium-term_2015}\footnote{An important exception on this regard is \parencite{dobbie_charter_2020} where the authors can directly observe labor market outcomes, but giving up exogenous variation in their study.}.
-
-
-I argue that this is an insufficient way to characterize the effects of schools on later outcomes: There are important differences across institutions and programs that make the time spent at a higher education institution too coarse.
-I discuss on this paper the role of selectivity/quality of the higher education institution, as well as the choice of field of occupation. Intuitively: a school with that places their students in more selective institutions or higher pay programs will have alumni should be considered to have a different causal effect than another one -with a similar incoming student pool- that places their students in less selective institutions or lower pay programs, even if they have similar college enrollment and retention rates. 
- In line with these arguments,  \parencite{abdulkadiroglu_elite_2014} and 
-\parencite{abdulkadiroglu_parents_2020} are some of the only papers to report causal effect of schools on some measure of quality of college enrolled. Yet, these papers are unable to assess whether these effects operate through increases in application rates, acceptance rates or enrollment rate. Moreover, they do not speak to how schools might affect major choice. 
-
-Evidently these effects could entirely be driven by achievement effects. 
-However, there is evidence to think that there are important margins on the college choice decision that are not determined by scores.  
-For instance, the fact that lower-income students are less likely to apply to selective institutions than their higher-income peers of the same achievement level has been documented multiple times  \parencite{dynarski_closing_2021} \parencite{chetty_diversifying_2025}, and simple interventions  \parencite{hoxby_what_2015} have proven successful in closing this gap.
- If schools differ on the type of institutions they might induce their students to apply to, there might be important effects that the metrics such as college enrollment or number of semesters would fail to capture. 
-
-
-Another example is how information about returns might change major choice.
- We know that the returns to higher education education vary enormously across fields \parencite{kirkeboen_field_2016} and that interventions such as information provision -which do not change achievement- can help move students move towards higher return programs \parencite{hastings_informed_2016}. 
-
-To the extent that different schools provide more accurate information about the returns to college and fields, they might nudge students int higher education and into high-pay majors.
- However, incomplete or wrong information might push into other fields. Other than education, schools might also affect this choice through other channels such as non-tested cognitive skills, non-cognitive skills or preferences.  
- In this paper I attempt to show that schools induce differences on higher education choices through both achievement and non-achievement channels.
-
-
-
-
-
-
-
-
-
-
-
-In this paper 
-
-
-In this paper, I take advantage of the Chilean policy and data landscape to estimate value added of schools of both traditional (achievement) and non-traditional (higher education choices) outcomes. 
-The centralized school assignment system in Chile (SAE), which breaks ties through lotteries provides exogenous variation to study these effects at a national scale. Moreover, the centralized higher education application system allows me to observe both application and enrollment choices. 
-
-I proceed in 2 steps in order to make my results easier to understand. 
-I first compute observational value-added for each school for a given outcome. 
-This is equivalent to estimating a school-fixed effect in a regression with rich student controls. 
-These estimated values play an important role in the second step. 
-
-In my second step I estimate an IV regression on the same outcome using the observational value-added as the value of the school offered (instrument) and the school attended (endogenous variable). 
-This design allows me to answer the question of whether gains in the observational value-added metric induced by the lottery offers imply causal effects.
-In particular, I can summarize my answers in a single number per outcome which will be reported across specifications. 
-$\theta$ represents the 'pass-through' of the observational value-added metric to causal effects. 
-If $\theta$ is close to one, that would indicate that gains in the value-added metric perfectly predict lottery-induced effects in that outcome. 
-My estimates suggest that $\theta$ is between 0.835-0.841 for achievement tests and 0.674 for STEM enrollment. 
-
-%(these effects are meaningless without a sense of variance of the metric)
-
-%(orthogonal VA?)
-
-%### Small Conclusion (check content)
-
-The results in this paper suggest that schools play an important role not only in higher educational choices not only through academic achievement, but also with measureable effects on important elements such as institutional quality or major choice. 
-I take this to be the first paper that paints such a detailed picture of the effects of the high school system on higher education. 
-All in all, these results invite families, researchers, and policy-makers to think about the school value-added in a far more comprehensive way than it has been previously discussed by the literature.
-
-
-This paper connects many strands of literatures. 
-Firstly, it hopes to extend existing work on the value-added of schools and teachers. 
-Many 
-
-
-#Lit Review
-
+Third, the paper contributes to work on higher-education choice.
+Prior research shows that the field and institution students choose matter for later outcomes, and that information and application frictions can change those choices \parencite{kirkeboen_field_2016, hoxby_what_2015, dynarski_closing_2021, hastings_informed_2016, chetty_diversifying_2025}.
+I study high schools as a possible upstream source of these differences.
+Rather than evaluating a particular counseling or information intervention, the paper measures whether the high-school system itself generates causal differences in students' higher-education paths.
 
 The rest of the paper is organized as follows.
-Section 2 describes the context and data.  (easy)
-Section 3 describes the methodology employed.  (mid)
-Section 4 presents the results. (mid)
-Section 5 concludes. (easy)
-
-
+Section 2 describes the Chilean setting and the linked administrative data.
+Section 3 presents the empirical framework.
+Section 4 reports the main results, heterogeneity by baseline achievement, and the orthogonal math/STEM value-added exercise.
+Section 5 concludes.
 
 \clearpage
 \section{Context and Data}
 
+\subsection{Institutional Setting}
 
-%In 2015, Chile passed a law that prohibited discrimination on admission to schools that received any type of public funding on the base of academic achievement or family circumstances, as well as the prohibition of application fees. The law also makes explicit that oversubscribed spots must be randomized among students of the same priority level\footnote{Priority is given to -- in respective order-- students who are already enrolled at a school, those who have siblings on the school,  children of a school staff, and those who were part of the school earlier on.}.
+Chile is a useful setting for this project because both school enrollment and higher-education choices are recorded in national administrative data.
+Formal secondary education begins in grade 9 and lasts four years.
+Students may attend public, private-subsidized, or private non-subsidized schools.
+Public and private-subsidized schools are publicly financed and participate in the centralized school assignment system described below; private non-subsidized schools remain outside that assignment mechanism.
+In the broad grade-8 universe used in the analysis, private non-subsidized schools account for about 9.3\% of students.
+The lottery-based analysis is therefore drawn from the public and private-subsidized sector, with additional sample restrictions for timely SAE application and assignment risk described below.
 
-%In the system that resulted from this law, families are able to rank their preferences for schools with available spots. The system then runs a Deferred Acceptance algorithm, known to be strategy-proof, to allocate spots. 
+I construct a student panel that follows students across schools and years using a scrambled individual identifier.
+The panel records annual enrollment, school identifiers, grade progression, attendance, and grades.
+I use these histories to define the main high-school exposure as the school identifier (RBD) where a student spends the most time after grade 8.
+This definition smooths over short enrollment spells and transfers, and it gives a single high-school measure for each student.
+The same panel also lets me construct pre-treatment middle-school controls, including the school most attended in grades 5 to 8 and standardized measures of grades and attendance before high school.
 
-\subsection{Chilean High School System}
+\subsection{Student Panel and Baseline Controls}
 
+The broad analysis panel starts from the universe of students first observed in grade 8 between 2017 and 2020.
+This produces 944,360 students across four cohorts.
+The panel contains 238,467 students in the 2017 grade-8 cohort, 232,498 in 2018, 233,401 in 2019, and 239,994 in 2020.
+Students can be followed over time with a scrambled individual identifier, and the main high-school exposure is observed for 4,133 RBDs.
 
-\subsection{Pre-treatment controls: School Assessment Data}
+Baseline achievement comes from SIMCE, Chile's national standardized assessment system.
+SIMCE is administered in different grades depending on the year, including grades 4, 8, and 10.
+Because the COVID-19 pandemic disrupted testing in 2020 and 2021, grade-8 and grade-10 measures are not available for all cohorts in the same way.
+I therefore use grade-4 SIMCE as the main pre-treatment achievement control.
+This gives a nationally comparable measure of math and language skills before high-school assignment for 771,968 students in the broad panel.
 
-The Ministry of Education also runs a different set of exams and surveys to assess school quality. These are taken on a some combination of grades 4, 8 and 10 every year. However, these were not implemented during 2020 and 2021, which are important years for the study. In practice, this means that I observe every cohort at least once -at grade 4 or 8- before their application for high school. I only observe one of this cohorts with an examination on grade 10. 
+The SIMCE files also contain parent-survey information.
+I use these surveys to measure family background before treatment, including household income, parental education, indigenous origin of the parents, and early-childhood attendance.
+These variables are useful because they proxy for family resources and prior investments that may influence both high-school choices and later higher-education outcomes.
+When parent-survey variables are missing, I use pre-treatment school and neighborhood cells to impute medians where enough donor observations are available; remaining missing values are left missing.
 
-From this data source, I construct a universally (across schools, unlike GPA) comparable measure of skills in verbal and mathematics before treatment. I also recover data from parents survey and relevant questions such as income level fo the family and family expectations for the student achievement in the near future.
+\begin{table}[H]
+\centering
+\caption{Main data sources and sample sizes}
+\label{tab:data-samples}
+\begin{tabular}{lr}
+\toprule
+Sample or outcome availability & Students \\
+\midrule
+Broad grade-8 universe, 2017--2020 & 944,360 \\
+With grade-4 SIMCE math and language controls & 771,968 \\
+With valid higher-education math admission-test outcome & 640,078 \\
+\midrule
+SAE lottery sample with assignment risk & 163,600 \\
+SAE lottery sample with math outcome & 103,941 \\
+\bottomrule
+\end{tabular}
+\end{table}
 
+\subsection{Centralized School Assignment}
 
+Chile's centralized school assignment system, the Sistema de Admision Escolar (SAE), assigns students to participating schools through a version of student-proposing Deferred Acceptance.
+Families submit ranked lists of schools.
+The mechanism combines these rankings with school vacancies and priority rules, and it uses random tie-breakers when there are more applicants than seats within a priority group.
+Conditional on the information that determines assignment probabilities, these tie-breakers generate the quasi-experimental variation used in the empirical design.
 
-%\subsection{Higher education application system}
-\subsection{Centralized School Assignment in Chile: Exogenous variation and lottery sample}
+I use applications to grade-9 vacancies to construct the lottery sample.
+The estimation sample consists of timely SAE applicants with assignment risk, meaning that no single school is assigned with probability one in the simulated assignment data.
+This sample contains 163,600 students from the 2018--2020 cohorts.
+On average, these students have positive simulated assignment probability at about 3.1 schools; the median is 3 and the 90th percentile is 5.
+About 86.5\% receive a nonzero first-round offer.
+The first-round offered RBD is the source of the instrument, while the student's realized high-school exposure is measured by the most-time RBD described above.
 
-The Chilean system of school assignment \textit{(SAE)} was established in 2016, making it a relatively recent policy innovation in the country. 
-Attempting to avoid discrimination on school admissions on the basis of academic achievement or family circumstances, policy-makers centralized this process. 
+The value-added exercise uses the broader student panel, while the causal estimates use the smaller lottery-risk sample.
+This distinction is important.
+The broad panel improves precision in estimating school-level outcome gradients.
+The lottery sample then asks whether lottery-induced movement toward schools with higher measured value added causes improvements in the same outcomes.
 
-Families can rank any school in the system (i.e. excluding private schools) at no cost.  
-The system then uses a version of the Deferred Acceptance algorithm to allocate spots, which ensures that the rankings are strategy-proof. 
-When there are more applicants than spots, the system breaks ties through lotteries. 
-This provides exogenous variation in school assignment, which is the key to the identification strategy of this paper.
+\subsection{Higher-Education Outcomes}
 
+The higher-education system also generates administrative data at the student-program level.
+Students applying to selective higher education take a national entrance exam: the PSU through 2020, the PTU in 2021--2022, and the PAES from 2023 onward.
+The mandatory components measure math and verbal skills.
+Students may also take optional exams in history and social sciences, natural sciences, and advanced mathematics.
+I use the mandatory math and language scores as achievement outcomes, standardizing them within test year to make them comparable across test regimes.
 
-%The system gives priority spots to --in respective order-- students who are already enrolled at a school, those who have siblings on the school, those who are children of a school staff, and those who were part of the school earlier on. 
-%There are also a fraction of spots reserved for low-income students. 
+Higher-education applications and admissions are organized at the program-institution level.
+A student's admission depends on entrance-exam scores, school GPA-based scores, ranked program preferences, and the weights each program assigns to score components.
+This structure is useful because it makes higher-education choices much richer than a single college-enrollment indicator: students choose not only whether to enroll, but also which institution, program, and field to pursue.
 
+I link the school panel to higher-education matricula records for first observed enrollment.
+The main non-achievement outcome is an indicator for enrollment in a STEM program, defined from the field classification of the first higher-education enrollment.
+I also construct measures of program and institution accreditation.
+In the main results, I focus on institution quality measured by the number of years for which the institution is accredited, without interacting this measure with program accreditation.
+These outcomes allow me to study whether high schools affect the type and quality of higher-education option students enter, not just whether students enter higher education at all.
 
-I construct the lottery sample from the universe of applications to vacancies in grade 9 during the 2017-2020 processes. 
+Students without an observed higher-education enrollment are coded as zero for unconditional enrollment outcomes such as STEM enrollment.
+For accreditation-years outcomes, non-enrollment is also coded as zero, while observed enrollment records with missing accreditation inputs are left missing.
+In the broad panel, 626,413 students have a first higher-education enrollment record, and the unconditional STEM enrollment rate is 20.9\%.
 
-%Check clean_sae_apps_data_frame.R
+\subsection{School Value-Added Measures}
 
+For each outcome, I construct observational school value added using the broad student panel.
+The adjusted value-added measure is the school fixed effect from a student-level regression with cohort, demographic, baseline SIMCE, family-background, and middle-school controls.
+The All-sample value-added file contains 4,068 schools and 42 outcome transformations.
+Controlled math value added is available for 3,365 schools, controlled language value added for 3,374 schools, and controlled STEM and accreditation value added for 3,685 schools.
 
-I am also able to observe enrollment of individuals to schools each years, together with whether they passed their course, their attendance level and GPA. I use these as important pre-treatment controls as a measure of cognitive (GPA relative to their school) and non-cognitive (attendance relative to their school) skills.
-
-
-\subsection{Outcomes: Higher Education Data}
-
-Application to higher education in Chile is centralized and it takes place at the program-institution (from here on: programs) level.  The allocation of students to programs is fully determined by 3 components: the scores of applying students, their ranked preferences of programs, and the weights that each program assigns to each of the score components. 
-
-
-Graduating students who want to access higher education are required to take the higher education entrance exam (PSU until 2020; PTU in 2021-22; PAES from 2023 onward). These exams consist of a standardized test on mathematics and verbal skills. Students must choose to take at least one of either the history and social sciences exam or the natural sciences exam. Students can also choose to take an advanced mathematics exam. I track as outcomes the scores in the mandatory exams, as well as which optional exams were taken. Students are also assigned a score depending on their GPA (GPA-score) as well as their GPA relative to their school distribution (from here on Ranking score). 
-
-Programs choose how much weight to give to each exam as well as the GPA and Ranking scores, within some general rules. These weights are made public and students know about them before they apply. Each program application is given a weighted score, and the system computes a Deferred Acceptance Algorithm using the student's preferences for programs and the weighted scores as programs' preferences for students. 
-
-
-My main outcome of interest are program application and enrollment choices. A straight-forward way to collapse these choices is the monetary return associated to them. For this purpose, I use data from the platform \texttt{mifuturo.cl}: a site where the Ministry of Education provides information on labor market outcomes for each program-institution. They inform average wages 4 years post-graduation, as well as employability levels 1 and 2 years after graduation. While there is some missingness on the data, I am fairly certain I can have reasonable imputation. Two-way fixed effect regressions (i.e. regression labor market outcome on generic major and 
-instititution) yield $R^2$ values of 0.934 for the wage variable and $\approx$ 0.860 for the employment variables. 
-
-
-
-To study major choice more directly, I use the aforementioned weights to construct a student-level that quantifies the STEM content in their portfolio (top-5) of applications.  This adds up the weights of the program associated to the mathematics, science and advanced mathematics. The assumption here is that these weights capture reasonably well the STEM content of the program and thus are a useful way to describe major choice across programs. Other related variables that I use to describe programs in terms of their fields are indicators for health, engineering, technology and natural sciences based on the ISCED-F (International Standard Classification of Education) 2013 \footnote{These are }. I then average these metrics for up to the first 5 applications of the student, to create an outcome at the individual level. 
-
-On top of that, I plan to use enrollment data each year to track in which program is a student enrolled each year. This allows me to identify whether students stay in their program or higher education as a whole, while noting switches across programs and/or institutions. 
-
-
+These school measures are not interpreted as causal by themselves.
+They summarize how students linked to a school perform after adjusting for rich pre-treatment information.
+The causal analysis uses the SAE lotteries to ask whether being offered and then attending schools with higher observational value added improves student outcomes.
 
 
 
 \clearpage 
 \section{Empirical Framework}
 
+This section describes the empirical object and the research design.
+The goal is not to estimate a separate causal effect for every school and every possible margin of substitution.
+Instead, I ask whether an outcome-specific observational value-added measure is informative about causal effects generated by lottery-induced changes in school attendance.
+The design therefore collapses school effects into scalar measures and estimates a pass-through coefficient for each outcome.
 
+\subsection{School Effects and Observational Value Added}
 
-This document presents an update on the progress of my research project. I begin by outlining the conceptual framework and identification strategy guiding the analysis.
-
-The project focuses on estimating the effect of schools on students’ choice of major in higher education, with particular attention to whether these effects operate through academic achievement (test scores) or through non-score mechanisms.
-
-I then introduce the reduced-form specifications used to estimate school effects on the main outcomes, along with a strategy to provide evidence on non-score channels in major choice.
-In addition, I discuss a structural model of major choice that may help disentangle these mechanisms. Finally, I describe progress in replicating school assignments in the Chilean centralized system and outline procedures to compute assignment probabilities.
-
-
-In this section I describe how I am currently thinking of my analysis. I review the assumptions and methodologies related to the estimation of school specific effects using centralized assignment mechanisms, and then I present the main reduced-form regressions I intend to run, as well as some challenges and how I intend to address them.
-
-\subsection{Potential Outcomes and School Effects}
-
-For this section I borrow from \textcite{angrist_credible_2024} and \textcite{abdulkadiroglu_research_2017}
-
-Suppose $N$ students and $J$ schools. 
-Following the value-added literature on school effectiveness,  I assume a constant-effects model. Then, the potential outcome $Y_{ij}$ of a student $i$ in a school $j$ is additively separable and can be written as: 
+Let $Y_i^m(j)$ denote student $i$'s potential outcome for outcome $m$ if assigned to high school $j$.
+I use a constant-effects value-added model as a guide:
 \begin{equation}
-  Y_{ij} = \nu_j + \epsilon_i
-  \label{linear-separable}
+  Y_i^m(j) = \mu^m + V_j^m + \epsilon_i^m,
+  \label{eq:potential-va}
+\end{equation}
+where $V_j^m$ is the contribution of school $j$ to outcome $m$, measured relative to an average school.
+The main outcomes are achievement in math and language, STEM enrollment, and institution quality in higher education.
+
+The first step constructs observational value added in the broad grade-8 panel.
+For each outcome $m$, I estimate
+\begin{equation}
+  Y_i^m = \alpha^m + \lambda_{s(i)}^m + X_i'\Gamma^m + u_i^m,
+  \label{eq:observational-va}
+\end{equation}
+where $s(i)$ is the student's main high-school RBD and $X_i$ contains pre-treatment controls.
+These include cohort, gender, age, grade-4 SIMCE math and language, family-background measures from SIMCE parent surveys, and middle-school controls from grades 5 to 8.
+The observational value-added measure $\widehat{V}_j^m$ is the centered school fixed effect $\widehat{\lambda}_j^m$ from equation \ref{eq:observational-va}.
+
+These fixed effects are not interpreted as causal by themselves.
+They combine true school effects with any remaining selection not absorbed by controls.
+The second step asks whether the part of $\widehat{V}_j^m$ shifted by the SAE lotteries corresponds to causal effects in the same outcome.
+
+
+\subsection{Assignment Risk and Expected Value Added}
+
+SAE applicants submit rank-ordered lists of schools.
+Let $Z_i$ denote the first-round school offer and $D_i$ denote the school attended, measured by the post-grade-8 most-time RBD.
+A student has a preference and priority type $\theta_i$, and the assignment mechanism implies an assignment-probability vector $p_i=(p_{i1},...,p_{iJ})$, where $p_{ij}=Pr(Z_i=j)$.
+Under equal treatment of equals, students with the same type have the same assignment probabilities \parencite{abdulkadiroglu_research_2017}.
+For pre-treatment characteristics and potential outcomes fixed under re-randomization,
+\begin{equation}
+  (Y_i^m(1),...,Y_i^m(J), X_i) \ind Z_i \mid p_i.
+  \label{eq:offer-independence}
 \end{equation}
 
-Hence, the causal effect of attending a school $j$ relative to $k$ would be given by $\nu_j - \nu_k$.
-
-
-By adding a constant, we can renormalize this model relative to the average achievement ($\beta_0 = \frac{1}{J}\sum_{j=1}^J \nu_j$ )
-As a result, we can rewrite the model as: 
-
+The raw vector $p_i$ is high-dimensional, because students can rank many different combinations of schools.
+For an outcome-specific scalar value-added measure, I summarize assignment risk by the expected value added in the student's portfolio:
 \begin{equation}
- Y_i = \beta_0 + \sum_{j=1}^J \beta_j D_{ij} + \epsilon_i 
-  \label{base}
+  E_i^m = \sum_j p_{ij}\widehat{V}_j^m.
+  \label{eq:expected-va}
 \end{equation}
+This is the average value added the student would receive over repeated randomizations of the assignment mechanism, holding the submitted application and priorities fixed.
+In the main IV specification, this scalar expected value replaces a large set of school-specific probability controls.
 
-where now $\beta_j = \nu_j - \beta_0$. 
-
-Unless school assignment is completely random, the evident threat to running this regression is the fact that $\cov(\epsilon_i, D_{ij})$ might be different than zero. 
-This selection bias would bias our estimates and prevent a causal interpretation.
-
-
-\subsubsection{Assignment Mechanisms and Assignment Risk}
-A common strategy used in research to overcome this issue is the use of individual school lotteries, and more recently, centralized school assignments. 
-In centralized assignment mechanisms, applicants submit rank-ordered preferences over schools ($\succ_i$) at which they might also have different priority levels\footnote{e.g. in the Chilean case being the child of a member of the school staff gives a student priority in that school.}.
-These priorities operate as the school's preferences for students. An algorithm in place (most commonly student-proposing Deferred Acceptance) takes these preferences and outputs a school assignment ($Z_{ij}$) with one offer per student.
-In order to break ties of students with the same preference and priority level, these systems randomize. 
-
-If we refer to a student's priority at each school as $\rho_i = (\rho_{i1}, ...,\rho_{iJ})'$, we can define a student's type as the combination of both $\theta_i \equiv (\succ_i, \rho_i)$.
-Let the probabilities of admission at a school be given by $p_i = (p_{i1}, ..., p_{ij})'$, with $p_{ij} = Pr(Z_{ij} = 1)$.
-
-The mechanism described above implies that students with the same preferences and priority vector have the same probability of being assigned to the schools in their portfolio, which is called by \textcite{abdulkadiroglu_research_2017} the `equal treatment of equals' (ETE) property. 
-Formally ETE states $\theta_i = \theta_j \implies p_i = p_j$. 
-
-They also prove that under ETE that for any observed characteristic fixed under re-randomization $W_i$ (i.e. pre-assignment or not affected by assignment) we have that:
+For each outcome $m$, define the value added of the attended school and offered school as
 \begin{equation}
- Pr[Z_{ij} = 1|\, W_i = w, \theta_i = \theta] = Pr[Z_{ij} = 1 | \, \theta_i = \theta]  
+  A_i^m = \widehat{V}_{D_i}^m,
+  \qquad
+  O_i^m = \widehat{V}_{Z_i}^m.
+  \label{eq:attended-offered-va}
 \end{equation}
+The instrument is $O_i^m$, the value added of the school generated by the lottery offer.
+The endogenous variable is $A_i^m$, the value added of the school actually attended.
+Because assignment offers vary randomly conditional on the assignment probabilities, variation in $O_i^m$ around $E_i^m$ provides quasi-experimental variation in the quality of the school offer.
 
-Hence, for any such variable $W_i$ we can write 
+
+\subsection{Pass-Through IV Specification}
+
+The main estimating equation is
 \begin{equation}
- W_i \ind Z_i \, | \, \theta_i 
- \label{w ind}  
+  Y_i^m = \alpha^m + \theta^m A_i^m + \rho^m E_i^m + X_i'\delta^m + \eta_i^m,
+  \label{eq:pass-through}
 \end{equation}
-
-In particular, and as a consequence of equation \ref{linear-separable}, where we assumed ability $\epsilon_i$ to be fixed under re-randomization, partly due to the absence of match effects, we can write
+where $A_i^m$ is instrumented with $O_i^m$.
+Equivalently, the first stage is
 \begin{equation}
-  \epsilon_i \ind Z_i \, | \, \theta_i   
+  A_i^m = a^m + \kappa^m O_i^m + \rho_A^m E_i^m + X_i'\delta_A^m + \nu_i^m.
+  \label{eq:first-stage}
 \end{equation}
+All reported specifications use heteroskedasticity-robust standard errors.
 
-This is the key identifying assumption of the design.
-It states that conditional on the student type, the school offer is exogenous to the error term (in this example student's ability).
-Under this assumption and perfect compliance ($Z_i = D_i$), we could estimate equation \ref{base} by saturating on an indicator for each student type $\theta_i$. 
+The coefficient $\theta^m$ is the key object.
+It measures how much of the observational value-added difference induced by the lottery offer passes through into causal effects on the same outcome.
+If $\theta^m=1$, then a one-unit increase in observational value added causes a one-unit increase in the outcome.
+If $\theta^m=0$, the observational measure has no causal predictive content along the lottery-induced margin.
+Values between zero and one imply that observational value added is directionally informative, but overstates the causal effect of attending higher-value-added schools.
 
-However, that is often not feasible as these strata are too granular to have enough variation within each of them to estimate the model. 
-As described by \textcite{angrist_credible_2024}: "In practice (...) we see nearly as many preference and priority combinations as there are students in a match."  
-A solution to this issue is to use the probabilities of admissions as propensity scores to pool over student types, as proposed by \textcite{abdulkadiroglu_research_2017}. 
-This is an application of the propensity score methods \parencite{rosenbaum_central_1983} and it yields:  
+This approach differs from estimating a full vector of school-specific causal effects.
+With many schools and many possible fallback options, individual school instruments can mix several margins of substitution, making school-specific IV effects difficult to interpret \parencite{angrist_methods_2023, kirkeboen_field_2016}.
+The scalar design instead asks a simpler question: whether movement toward schools with higher measured value added causes better outcomes, after controlling for the expected value added implied by each student's assignment risk.
+
+\subsection{Heterogeneity and Orthogonal Value Added}
+
+I use two extensions of equation \ref{eq:pass-through}.
+First, I estimate the same pass-through coefficient separately by quintiles of baseline grade-4 math achievement.
+Because grade-4 SIMCE is measured before high-school assignment, these splits describe heterogeneity by pre-treatment achievement without conditioning on a post-treatment outcome.
+
+Second, I construct two-dimensional value added for math achievement and STEM enrollment.
+The purpose is to ask whether STEM value added is only another expression of math value added, or whether it contains an independent school dimension.
+Let $\widehat{V}_j^{M}$ be math value added and $\widehat{V}_j^{S}$ be STEM-enrollment value added.
+I residualize STEM value added on math value added:
 \begin{equation}
-  \epsilon_i \ind Z_i \, | \, p_i 
-  \label{CRA}
+  \widehat{V}_{j}^{S \perp M}
+  =
+  \widehat{V}_{j}^{S}
+  -
+  \widehat{\phi}\widehat{V}_{j}^{M}.
+  \label{eq:orthogonal-va}
 \end{equation}
-
-Note that by eq. \ref{w ind} we can also consider other control variables (as long as they are fixed under re-randomization). Thus for any pre-treatment covariate $X_i$ it must be the case that 
-($\epsilon_i, X_i) \ind Z_i | \theta_i$, so we can rewrite Eq \ref{CRA} as $  \epsilon_i \ind Z_i \, | \, (p_i, X_i) $ to allow for such controls.
-
-\subsubsection{Towards Conditional Independence Assignment}
-
-Although an instrumental variables approach may seem natural given the availability of many exogenous instruments, estimation of school-specific effects suggests otherwise. The issue arises from the multiplicity of (unordered) outside options. 
-Individuals instrumented into a school may come from different margins, and as a result interpretation becomes challenging unless strong assumptions are made \parencite{angrist_methods_2023} \parencite{kirkeboen_field_2016}.  
-To see this, consider students with an identical ranked list of three schools who are guaranteed admission to their third choice if they are not successful in their first two applications. An offer to the first school then generates two margins of compliance.
-The problem becomes more complex when students have different fallback options or when identical preference lists are rare in the data.
-
-Instead, to compute effects at the school level, the literature typically relies on selection on observables i.e. the construction of a control vector $X_i$ such that $ \epsilon_i \ind D_i \, | \, (X_i)$.
-Note that under the constant effects assumption and the ETE property of lotteries, equation \ref{CRA} is closely related to this framework. 
-
-An additional assumption that allows us to move from equation \ref{CRA} to a conditional independence framework is that compliance with offers is as good as random.
-The argument for this assumption is that all sorting occurs at the application stage, and thus captured by the individual type $\theta_i$, and that post-offer compliance is determined by idiosyncratic shocks uncorrelated with the error term (in this case ability $\epsilon_i$).
-This argument is often credited to \textcite{dale_estimating_2002}. 
-
+I then estimate a two-regressor IV model in which attended math value added and attended orthogonal STEM value added are both endogenous, and their offered analogues are the instruments.
+For outcome $m \in \{M,S\}$:
 \begin{equation}
-  \epsilon_i \ind D_i  \mid (p_i) 
-  \label{CIA}
+  Y_i^m =
+  \alpha^m
+  + \theta_M^m A_i^M
+  + \theta_{S\perp M}^m A_i^{S\perp M}
+  + \rho_M^m E_i^M
+  + \rho_{S\perp M}^m E_i^{S\perp M}
+  + X_i'\delta^m
+  + \eta_i^m.
+  \label{eq:orthogonal-iv}
 \end{equation}
-
-Compliance being as good as random yields a traditional conditional independence assumption, from where estimation is straightforward. 
-%Note that we can add controls to the conditioning set 
-%In particular, if covariates used are lagged (pre-treatment) outcomes we end up with a Risk Controlled Value Added Model (RC VAM) as constructed in (centralized VAM paper). 
-
-%\begin{equation}
-%  Y_i = \alpha_0 + \sum_j \alpha_j D_{ij} + X_i' \Gamma + g(p_i) + \eta_i 
-%\end{equation}
-
-\subsection{Estimation in specific outcomes}
-
-In this subsection I present the main regressions I intend to run, as well as an approach to provide reduced-form evidence for a non-score mechanism of schools on major choice.
-Let $Y^{MATH}_i$ represent the outcome of a student in the standardized exam for mathematics and $Y^{STEM}_i$ an indicator variable for whether the student enrolls in a STEM program. 
-
-Let $X_i$ be a vector of characteristics not changed by treatment (e.g. demographics), and $Y^{MATH}_{pre,i}$ a measure of pre-treatment math achievement .
-
-Following equation \ref{CIA} I write:
-
-\begin{equation}
-  Y^{MATH}_i = b_0 + \sum_j b_j D_{ij} +  X_i' B + b_{pre} Y^{MATH}_{pre,i} +   g(p_i) + \epsilon_i 
-  \label{Math}
-\end{equation}
-
-
-\begin{equation}
-  Y^{STEM}_i = c_0 + \sum_j c_j D_{ij} + X_i' C + g(p_i) + \eta_i 
-  \label{STEM_prev}
-\end{equation}
-
-The only difference between these two regressions is the fact that I propose to include a lagged outcome (pre-treatment math achievement) on the first regression.
-I do not have a similar lagged outcome for STEM enrollment. 
-The inclusion of lagged outcome for math achievement makes \ref{Math} an `RC VAM' regression under the \textcite{angrist_credible_2024} terminology. While \ref{STEM_prev} is a Risk-Controlled OLS or what \textcite{angrist_credible_2024} calls `Risk only'. 
-
-Remember that, under the CIA assumption above, these regressions could be run without any of the controls and should still hold causal interpretation: the CIA assumption only needs the $p_i$ to be included.
-
-
+This exercise follows the logic of orthogonal value-added measures used to distinguish achievement and non-achievement dimensions of educational production \parencite{jackson_what_2018, rose_effects_2022}.
+In this setting, it tests whether schools with high STEM-enrollment value added are simply high math-value-added schools, or whether they have a distinct effect on students' higher-education field choices.
 
 \clearpage 
 \section{Results}
 
+I organize the results in three blocks.
+First, I report the main pass-through estimates for four scalar value-added measures: two achievement measures and two higher-education measures.
+Second, I ask whether these pass-through estimates vary by baseline achievement, using grade-4 math achievement quintiles.
+Third, I use the two-dimensional value-added construction to separate math value added from the component of STEM value added that is orthogonal to math value added.
 
+\subsection{Main Value-Added Estimates}
+
+Table~\ref{tab:main-four-va-results} reports the main IV estimates.
+Each column uses the same outcome to construct the observational school value-added measure, the lottery-induced expected value-added instrument, and the realized attended school value-added treatment.
+The coefficients can therefore be read as pass-through estimates: how much a lottery-induced increase in a school's observational value added translates into a causal gain in the corresponding student outcome.
+
+The achievement estimates are close to one.
+A one standard deviation increase in school math value added raises math achievement by 0.841 standard deviations, while the analogous estimate for language is 0.835.
+The higher-education estimates are also positive, though somewhat smaller and less precise.
+The estimated pass-through is 0.674 for STEM enrollment and 0.680 for institution quality, measured using institutional accreditation years without interacting it with program accreditation.
+Taken together, the estimates suggest that the observational school value-added measures are informative not only about test score production, but also about later higher-education choices.
+
+\input{../../output/tables/results_section/main_four_va_metrics.tex}
+
+\subsection{Heterogeneity by Baseline Achievement}
+
+Figure~\ref{fig:simce4-math-quintile-four-metrics} repeats the same four estimates separately by quintiles of baseline grade-4 math achievement.
+This comparison is useful because it keeps the heterogeneity split pre-treatment and available for the full analysis sample.
+
+The achievement pass-through estimates increase with baseline math achievement, especially for math value added.
+In the bottom quintile, the math estimate is small and imprecise, while in the top quintile it is above one.
+The language estimates follow a similar, though less monotone, pattern.
+In contrast, the STEM enrollment estimates are stable across the baseline achievement distribution, with point estimates between 0.64 and 0.73 in all five quintiles.
+The institution-quality estimates are positive in all quintiles and are generally below the unit-pass-through benchmark.
+This pattern suggests that the test-score value-added measures may be more predictive for higher-achieving baseline students, while the higher-education value-added measures appear to travel more evenly across baseline achievement groups.
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=.9\textwidth]{../../output/figures/results_section/simce4_math_quintile_four_metrics.png}
+\caption{Scalar school-value IV estimates by baseline grade-4 math achievement quintile}
+\label{fig:simce4-math-quintile-four-metrics}
+\end{figure}
+\FloatBarrier
+
+\subsection{Orthogonal Math and STEM Value Added}
+
+The scalar estimates above treat each outcome-specific value-added measure one at a time.
+I also construct a two-dimensional measure that separates math value added from STEM-enrollment value added.
+Figure~\ref{fig:math-stem-va-correlation} shows that the raw school-level relationship between math value added and STEM enrollment value added is positive but weak.
+This makes it possible to ask whether schools that improve STEM enrollment are doing so only because they are also high math value-added schools, or whether there is a distinct STEM-related component.
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=.72\textwidth]{../../output/figures/results_section/math_stem_va_correlation.png}
+\caption{Relationship between math and STEM observational value added}
+\label{fig:math-stem-va-correlation}
+\end{figure}
+\FloatBarrier
+
+Table~\ref{tab:orthogonal_school_va_iv_2x2} reports the corresponding two-regressor IV estimates.
+Math value added strongly predicts math achievement, with an estimate of 0.844, but it does not predict STEM enrollment once the orthogonal STEM component is included.
+Conversely, the STEM component orthogonalized against math value added strongly predicts STEM enrollment, with an estimate of 0.656, while it has essentially no relationship with math achievement.
+This supports the interpretation that schools differ along at least two dimensions: one dimension that raises measured achievement, and another that raises STEM enrollment conditional on achievement value added.
+
+\input{../../output/tables/orthogonal_school_va/orthogonal_va_iv_2x2.tex}
+
+\FloatBarrier
 
 \clearpage 
 \section{Conclusion}
 
+This paper studies whether high schools affect higher-education choices in ways that are captured by, or distinct from, traditional achievement value added.
+Using Chile's centralized school assignment system and linked administrative data, I first estimate observational school value added in a broad national panel and then use SAE lottery offers to test whether those measures predict causal effects.
+
+The results suggest that observational value added contains substantial causal signal.
+Achievement value added passes through strongly to achievement: the estimates are 0.841 for math and 0.835 for language.
+Higher-education value added also predicts lottery-induced changes in later choices, with pass-through estimates of 0.674 for STEM enrollment and 0.680 for institution quality.
+These estimates are smaller than the achievement estimates, but they are economically meaningful and statistically precise.
+
+The heterogeneity and orthogonal-value-added results sharpen the interpretation.
+Achievement pass-through is stronger for students with higher baseline grade-4 math achievement, while the higher-education estimates are more stable across baseline achievement groups.
+In the two-dimensional model, math value added predicts math achievement but not STEM enrollment, while the STEM component orthogonal to math value added predicts STEM enrollment but not math achievement.
+This pattern is consistent with high schools affecting higher-education choices through dimensions not fully summarized by test-score production.
+
+For policy, the results suggest that school quality information based only on achievement is incomplete.
+Test-score value added is clearly informative, but it does not exhaust the ways in which high schools shape later educational paths.
+A broader school-quality framework should consider both academic production and the channels through which schools affect students' transition into higher education.
+
+Several limitations remain.
+The higher-education outcomes used here capture enrollment and institution quality rather than the full application process, and future work should use the centralized application data more directly to distinguish application, admission, and enrollment margins.
+The value-added measures are also estimated observationally before being validated with lottery variation, so precision and shrinkage choices remain important.
+Finally, the orthogonal STEM results point to a distinct school dimension, but they do not by themselves identify the mechanism.
+Understanding whether that dimension reflects information, counseling, peer effects, curricular exposure, or preferences is the next step.
 
 \clearpage
 \printbibliography
-\end{document}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 \end{document}

@@ -57,3 +57,6 @@
 - When Bruno says he wants to explain, discuss, "tell you what's up", or is still deciding the target, pause and listen. Do not run code, inspect files, or make edits unless explicitly asked. If the next action is ambiguous, first restate the understood goal and wait for confirmation.
 - When a conversation resolves a documentation question or clarifies a project convention, add that information to `setup_md_codex/project_memory/project_documentation.md`.
 - When a task uncovers a data, code, or workflow issue that may matter later, record it in `setup_md_codex/project_memory/issues.md`.
+
+## Writing and Text Editing Rules
+- When editing manuscript prose, especially `.tex` files, keep the source formatted as one sentence per line. Preserve LaTeX commands, equations, tables, figures, and comments in their natural format unless the user asks for a different reflow.
