@@ -88,6 +88,8 @@ The current construction details are documented in `project_documentation.md` un
 
 Current controlled VA controls include cohort, gender, grade-8 age, student grade-8 comuna, imputed SIMCE parent-survey income decile, imputed parent education years, imputed parent indigenous indicators, imputed early-childhood attendance indicators, and cubic baseline SIMCE math/language controls. The income control is `income_decile_imputed`, which is recomputed from `income_mid_imputed` after filling missing income midpoints with baseline-context medians using minimum donor-cell size `15`. The other CPAD controls use the same median-imputation hierarchy and donor-cell threshold. Remaining missing values are left missing, so the VA regression still uses complete cases for the listed controls.
 
+Current paper-facing school VA estimates restrict the broad panel to admission-exam takers, defined as students with an observed math or language national admission-test score. Higher-education outcomes such as STEM enrollment and institutional accreditation years are therefore zero-coded only within this exam-taker sample.
+
 ### IV System
 
 For a given school-value index `V_s`, merge the school values back to the student-level estimation data and define:
@@ -143,7 +145,7 @@ The expected-VA scalar-IV variant is the current preferred path for new main est
 
 where `p_is` is the simulated assignment probability that student `i` is assigned to school `s`, and `V_s` is the All-sample school value for the relevant value metric.
 
-This variant is implemented in `code/codex/scalar_school_value_iv/08_run_expected_va_scalar_iv.R`. It uses the long DA probability files directly (`DA_probs_2018.csv` through `DA_probs_2021.csv`) rather than the wide probability-control matrices. It keeps the IV sample restricted to timely at-risk students with probability rows.
+This variant is implemented in `code/codex/scalar_school_value_iv/08_run_expected_va_scalar_iv.R`. It uses the long DA probability files directly (`DA_probs_2018.csv` through `DA_probs_2021.csv`) rather than the wide probability-control matrices. It keeps the IV sample restricted to timely at-risk students with probability rows and an observed math or language national admission-test score.
 
 For this variant:
 

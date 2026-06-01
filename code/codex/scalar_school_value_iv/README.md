@@ -17,6 +17,7 @@ Use this path for new main estimates and heterogeneous-effects tables. It replac
 `expected_VA_i = sum_s p_is * V_s`
 
 where `p_is` is the simulated assignment probability and `V_s` is the All-sample school value for that metric.
+The current VA and IV samples are restricted to students with an observed math or language national admission-test score.
 
 The expected-VA outputs are:
 
@@ -61,6 +62,8 @@ The R construction script starts from:
 - `data/clean/DA_probs/probs_columns_wide_k<support>_timely_risk.csv`
 - `data/clean/DA_probs/probability_support_k<support>_timely_risk.csv`
 - `data/clean/school_rbd_observational_values/school_rbd_observational_values.csv`
+
+The current school-value file is built on the admission-exam-taker sample, defined as students with an observed math or language national admission-test score.
 
 It writes the regression-ready dataframe to:
 
@@ -138,7 +141,7 @@ where `p_is` is the simulated assignment probability and `V_s` is the All-sample
 
 For heterogeneous-effects tables, split or interact on the expected-VA regression dataframe and keep the matching `expected_<metric>` control for each `d_<metric>` / `z_<metric>` pair. Current default school values are All-sample only; do not rerun Male/Female sample-specific or gender-gap value-added unless explicitly requested.
 
-`08_run_expected_va_scalar_iv.R` also reports the accreditation-years scalar IV table for `program_certified_years_m1` and `inst_certified_years_m1`. These are unconditional first-enrollment outcomes: students without observed higher-ed enrollment are coded as zero; observed matricula rows with genuinely missing accreditation-years inputs remain missing.
+`08_run_expected_va_scalar_iv.R` also reports the accreditation-years scalar IV table for `program_certified_years_m1` and `inst_certified_years_m1`. These are unconditional first-enrollment outcomes within the admission-exam-taker sample: students without observed higher-ed enrollment are coded as zero; observed matricula rows with genuinely missing accreditation-years inputs remain missing.
 
 `09_run_expected_va_quintile_heterogeneity.R` implements the first grade-8 SIMCE heterogeneity table. It merges `simce8_math_quintile` from `data/clean/simce8_heterogeneity/cohort_2019_math_heterogeneity.csv` into the expected-VA regression dataframe and reports theta by grade-8 math quintile. The main table uses adjusted Math, Language, and STEM school values; the full CSV also keeps the unadjusted specifications.
 

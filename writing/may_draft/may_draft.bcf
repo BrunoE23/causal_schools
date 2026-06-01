@@ -2384,25 +2384,32 @@
     <bcf:citekey order="3" intorder="2">dynarski_closing_2021</bcf:citekey>
     <bcf:citekey order="3" intorder="3">hastings_informed_2016</bcf:citekey>
     <bcf:citekey order="3" intorder="4">chetty_diversifying_2025</bcf:citekey>
-    <bcf:citekey order="4" intorder="1">chetty_measuring_2014</bcf:citekey>
-    <bcf:citekey order="4" intorder="2">dobbie_medium-term_2015</bcf:citekey>
-    <bcf:citekey order="4" intorder="3">jackson_what_2018</bcf:citekey>
-    <bcf:citekey order="4" intorder="4">beuermann_what_2023</bcf:citekey>
-    <bcf:citekey order="4" intorder="5">rose_effects_2022</bcf:citekey>
-    <bcf:citekey order="5" intorder="1">abdulkadiroglu_elite_2014</bcf:citekey>
-    <bcf:citekey order="5" intorder="2">abdulkadiroglu_research_2017</bcf:citekey>
-    <bcf:citekey order="5" intorder="3">angrist_credible_2024</bcf:citekey>
-    <bcf:citekey order="6" intorder="1">angrist_leveraging_2017</bcf:citekey>
-    <bcf:citekey order="7" intorder="1">kirkeboen_field_2016</bcf:citekey>
-    <bcf:citekey order="7" intorder="2">hoxby_what_2015</bcf:citekey>
-    <bcf:citekey order="7" intorder="3">dynarski_closing_2021</bcf:citekey>
-    <bcf:citekey order="7" intorder="4">hastings_informed_2016</bcf:citekey>
-    <bcf:citekey order="7" intorder="5">chetty_diversifying_2025</bcf:citekey>
-    <bcf:citekey order="8" intorder="1">abdulkadiroglu_research_2017</bcf:citekey>
-    <bcf:citekey order="9" intorder="1">angrist_methods_2023</bcf:citekey>
-    <bcf:citekey order="9" intorder="2">kirkeboen_field_2016</bcf:citekey>
-    <bcf:citekey order="10" intorder="1">jackson_what_2018</bcf:citekey>
-    <bcf:citekey order="10" intorder="2">rose_effects_2022</bcf:citekey>
+    <bcf:citekey order="4" intorder="1">angrist_leveraging_2017</bcf:citekey>
+    <bcf:citekey order="5" intorder="1">chetty_measuring_2014</bcf:citekey>
+    <bcf:citekey order="5" intorder="2">dobbie_medium-term_2015</bcf:citekey>
+    <bcf:citekey order="5" intorder="3">jackson_what_2018</bcf:citekey>
+    <bcf:citekey order="5" intorder="4">beuermann_what_2023</bcf:citekey>
+    <bcf:citekey order="5" intorder="5">rose_effects_2022</bcf:citekey>
+    <bcf:citekey order="6" intorder="1">abdulkadiroglu_elite_2014</bcf:citekey>
+    <bcf:citekey order="6" intorder="2">abdulkadiroglu_research_2017</bcf:citekey>
+    <bcf:citekey order="6" intorder="3">angrist_credible_2024</bcf:citekey>
+    <bcf:citekey order="7" intorder="1">angrist_leveraging_2017</bcf:citekey>
+    <bcf:citekey order="8" intorder="1">kirkeboen_field_2016</bcf:citekey>
+    <bcf:citekey order="8" intorder="2">hoxby_what_2015</bcf:citekey>
+    <bcf:citekey order="8" intorder="3">dynarski_closing_2021</bcf:citekey>
+    <bcf:citekey order="8" intorder="4">hastings_informed_2016</bcf:citekey>
+    <bcf:citekey order="8" intorder="5">chetty_diversifying_2025</bcf:citekey>
+    <bcf:citekey order="9" intorder="1">abdulkadiroglu_research_2017</bcf:citekey>
+    <bcf:citekey order="10" intorder="1">abdulkadiroglu_research_2017</bcf:citekey>
+    <bcf:citekey order="11" intorder="1">angrist_methods_2023</bcf:citekey>
+    <bcf:citekey order="11" intorder="2">kirkeboen_field_2016</bcf:citekey>
+    <bcf:citekey order="12" intorder="1">rose_effects_2022</bcf:citekey>
+    <bcf:citekey order="13" intorder="1">jackson_what_2018</bcf:citekey>
+    <bcf:citekey order="13" intorder="2">rose_effects_2022</bcf:citekey>
+    <bcf:citekey order="14" intorder="1">angrist_leveraging_2017</bcf:citekey>
+    <bcf:citekey order="15" intorder="1">beuermann_what_2023</bcf:citekey>
+    <bcf:citekey order="15" intorder="2">abdulkadiroglu_parents_2020</bcf:citekey>
+    <bcf:citekey order="15" intorder="3">hastings_preferences_2007</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="nyt">

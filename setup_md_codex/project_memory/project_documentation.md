@@ -87,6 +87,7 @@ Current sample-definition note:
 - `rbd_treated_1R` is the RBD offered/admitted in the first round for the application row, and equals `0` when that application row did not generate a first-round offer
 - equivalently, `rbd_treated_1R != 0` is the first-round offer indicator, and the nonzero value is the offered RBD
 - `treatment_1R_v2.RData` is at the `mrun`-`br_code` level, so estimation code needs an explicit rule to create the student-level first-round offered RBD or offer instrument
+- the replicated SAE assignment algorithm has been checked against the original lottery numbers for the 2018-2021 regular grade-9 processes and reproduces more than 99% of observed first-round assignments in each of the four cohorts
 - this universe is the broad student universe used to construct observational school values
 - the current observational-value constructor additionally restricts to `12 <= EDAD_ALU <= 16`
 - this age restriction is currently imposed inside the VA constructor, not upstream in the general universe build
@@ -211,7 +212,9 @@ The corresponding institution-years outcome is `inst_certified_years_m1`, define
 
 `inst_certified_years_m1 = 1[ACREDITADA_INST == "ACREDITADA"] * ACRE_INST_ANIO`
 
-For current school-value construction, these accreditation-years outcomes are treated as unconditional first-enrollment outcomes: students without observed higher-ed enrollment are coded as zero, while observed matricula rows with genuinely missing accreditation-years inputs remain missing.
+For current school-value construction, these accreditation-years outcomes are treated as unconditional first-enrollment outcomes within the admission-exam-taker sample: students without observed higher-ed enrollment are coded as zero, while observed matricula rows with genuinely missing accreditation-years inputs remain missing.
+
+The current paper-facing VA and IV workflow restricts to students with an observed math or language national admission-test score before estimating higher-education outcome value added or validating it in the SAE lottery sample.
 
 During the current estimation-development pass, controlled VA is only estimated for:
 

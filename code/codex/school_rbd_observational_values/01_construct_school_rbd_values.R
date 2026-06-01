@@ -605,7 +605,31 @@ if (!file.exists(input_path)) {
 dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
 setFixest_nthreads(0)
 
-df <- fread(input_path, na.strings = c("", "NA"), showProgress = TRUE) %>%
+input_cols <- unique(c(
+  "MRUN",
+  school_var,
+  gender_var,
+  age_var,
+  score_year_var,
+  raw_score_outcomes,
+  unname(field_vars),
+  field_indicator_vars,
+  "ACREDITADA_CARR_m1",
+  "ACREDITADA_INST_m1",
+  "ACRE_INST_ANIO_m1",
+  "program_certified_years_m1",
+  "institution_accredited_m1",
+  setdiff(control_vars, c(middle_school_control_vars, "middle_years_observed"))
+))
+available_cols <- names(fread(input_path, nrows = 0, showProgress = FALSE))
+input_cols <- intersect(input_cols, available_cols)
+
+df <- fread(
+  input_path,
+  select = input_cols,
+  na.strings = c("", "NA"),
+  showProgress = TRUE
+) %>%
   as_tibble()
 
 if (!file.exists(middle_school_controls_path)) {
@@ -678,6 +702,10 @@ score_result <- prepare_score_outcomes(
 )
 analytic <- score_result$data
 write_csv(score_result$diagnostics, score_diagnostics_path)
+
+analytic <- analytic %>%
+  mutate(admission_exam_taker = !is.na(math_max) | !is.na(leng_max)) %>%
+  filter(admission_exam_taker)
 
 field_result <- add_field_outcomes(
   analytic,

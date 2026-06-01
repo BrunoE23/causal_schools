@@ -61,14 +61,14 @@ dir.create(orthogonal_dir, recursive = TRUE, showWarnings = FALSE)
 dir.create(table_dir, recursive = TRUE, showWarnings = FALSE)
 setFixest_nthreads(0)
 
-orthogonal_va_path <- file.path(orthogonal_dir, "school_orthogonal_va.csv")
+orthogonal_va_path <- file.path(orthogonal_dir, "school_orthogonal_va_exam_takers.csv")
 base_regression_path <- file.path(
   scalar_iv_dir,
   "scalar_school_value_iv_expected_va.csv"
 )
 regression_output <- file.path(
   orthogonal_dir,
-  "orthogonal_va_iv_regression_df.csv"
+  "orthogonal_va_iv_regression_df_exam_takers.csv"
 )
 results_output <- file.path(
   table_dir,
@@ -171,6 +171,7 @@ base_cols <- c(
   "z_sim_mat_4to",
   "z_sim_leng_4to",
   "z_year_math_max",
+  "z_year_leng_max",
   "stem_enrollment_m1"
 )
 estimation_df <- fread(
@@ -180,6 +181,7 @@ estimation_df <- fread(
 )
 stop_if_missing(names(estimation_df), base_cols, "Base regression dataframe")
 estimation_df <- estimation_df[timely_sae == 1 & any_risk == 1]
+estimation_df <- estimation_df[!is.na(z_year_math_max) | !is.na(z_year_leng_max)]
 estimation_df[, `:=`(
   student_id = as.numeric(student_id),
   sae_proceso = as.integer(sae_proceso),

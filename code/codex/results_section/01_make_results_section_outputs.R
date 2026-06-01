@@ -57,7 +57,7 @@ expected_va_path <- file.path(
 )
 orthogonal_va_path <- file.path(
   orthogonal_dir,
-  "school_orthogonal_va.csv"
+  "school_orthogonal_va_exam_takers.csv"
 )
 
 main_table_csv <- file.path(table_dir, "main_four_va_metrics.csv")
@@ -110,7 +110,7 @@ specs <- data.table(
     "Math",
     "Language",
     "STEM enrollment",
-    "Institution quality"
+    "Institutional quality"
   ),
   plot_label = c(
     "Math VA",
@@ -333,14 +333,12 @@ for (i in seq_along(specs$plot_label)) {
     lwd = 1.2
   )
   points(x, sub$beta, pch = pchs[i], col = cols[i], bg = cols[i], cex = 1.15)
-  lines(x, sub$beta, col = cols[i], lwd = 1.2)
 }
 legend(
   "topleft",
   legend = specs$plot_label,
   col = cols,
   pch = pchs,
-  lwd = 1.2,
   bty = "n",
   cex = 0.85
 )

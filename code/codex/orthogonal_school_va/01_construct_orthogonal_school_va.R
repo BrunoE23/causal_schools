@@ -50,10 +50,10 @@ school_values_path <- file.path(
   "school_rbd_observational_values.csv"
 )
 
-school_va_output <- file.path(output_dir, "school_orthogonal_va.csv")
-school_cohort_output <- file.path(output_dir, "school_cohort_residual_means.csv")
-covariance_inputs_output <- file.path(output_dir, "orthogonal_va_covariance_inputs.csv")
-diagnostics_output <- file.path(output_dir, "orthogonal_va_diagnostics.csv")
+school_va_output <- file.path(output_dir, "school_orthogonal_va_exam_takers.csv")
+school_cohort_output <- file.path(output_dir, "school_cohort_residual_means_exam_takers.csv")
+covariance_inputs_output <- file.path(output_dir, "orthogonal_va_covariance_inputs_exam_takers.csv")
+diagnostics_output <- file.path(output_dir, "orthogonal_va_diagnostics_exam_takers.csv")
 
 dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
 setFixest_nthreads(0)
@@ -175,6 +175,7 @@ universe_cols <- c(
   "most_time_RBD",
   "psu_year",
   "math_max",
+  "leng_max",
   "f_science_m1",
   "f_eng_m1",
   "income_decile_imputed",
@@ -229,6 +230,12 @@ dt[
   z_year_math_max := z_within_group(math_max),
   by = psu_year
 ]
+dt[, admission_exam_taker := (
+  !is.na(math_max) & math_max > 0
+) | (
+  !is.na(leng_max) & leng_max > 0
+)]
+dt <- dt[admission_exam_taker == TRUE]
 dt[, stem_enrollment_m1 := as.integer(
   fifelse(is.na(f_science_m1), 0, as.numeric(f_science_m1)) == 1 |
     fifelse(is.na(f_eng_m1), 0, as.numeric(f_eng_m1)) == 1

@@ -1,5 +1,5 @@
 outcome_id,outcome,outcome_label,regressor,regressor_label,beta,se,zstat,p_value,n_obs,rc
-math_score,z_year_math_max,Math score,d_math_va,Math VA,0.844011164990123,0.0721697258480666,11.6948090777974,1.35491566903731e-31,90906,0
-math_score,z_year_math_max,Math score,d_stem_orth_va,STEM VA orthogonal to math,0.0166678203393271,0.111048714695123,0.150094671379922,0.880689923984747,90906,0
-stem_enrollment,stem_enrollment_m1,STEM enrollment,d_math_va,Math VA,-0.0578174880457603,0.0394011749322334,-1.46740517624668,0.142265867227451,135659,0
-stem_enrollment,stem_enrollment_m1,STEM enrollment,d_stem_orth_va,STEM VA orthogonal to math,0.65616172870914,0.0657533223287588,9.97914182082556,1.8808645392881e-23,135659,0
+math_score,z_year_math_max,Math score,d_math_va,Math VA,0.847103056148916,0.0720013730551535,11.7650958614363,5.90592259333823e-32,90906,0
+math_score,z_year_math_max,Math score,d_stem_orth_va,STEM VA orthogonal to math,0.0464074280992115,0.0901974639269618,0.51450923428169,0.606896005906131,90906,0
+stem_enrollment,stem_enrollment_m1,STEM enrollment,d_math_va,Math VA,-0.0624219331955842,0.0437169330499083,-1.42786624863006,0.153330359927749,92958,0
+stem_enrollment,stem_enrollment_m1,STEM enrollment,d_stem_orth_va,STEM VA orthogonal to math,0.678241458706008,0.0673910702914849,10.0642630510604,7.94803346953381e-24,92958,0

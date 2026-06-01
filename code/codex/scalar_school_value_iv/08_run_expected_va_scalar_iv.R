@@ -351,6 +351,10 @@ estimation_df <- merge(
   sort = FALSE
 )
 estimation_df <- estimation_df[timely_sae == 1 & any_risk == 1]
+estimation_df[, admission_exam_taker := as.integer(
+  !is.na(z_year_math_max) | !is.na(z_year_leng_max)
+)]
+estimation_df <- estimation_df[admission_exam_taker == 1L]
 
 attended_values <- copy(school_values_wide)
 setnames(
@@ -399,7 +403,7 @@ for (v in value_names) {
 keep_cols <- c(
   "student_id", "mrun", "cohort_gr8", "sae_proceso", "timely_sae",
   "rbd_treated_1R", "most_time_RBD", "any_risk", "total_probability_mass",
-  "n_positive_probability_options", "GEN_ALU", "EDAD_ALU",
+  "n_positive_probability_options", "admission_exam_taker", "GEN_ALU", "EDAD_ALU",
   "z_sim_mat_4to", "z_sim_leng_4to", "math_max", "leng_max", "psu_year",
   "z_year_math_max", "z_year_leng_max", "stem_enrollment_m1",
   "program_certified_years_m1", "inst_certified_years_m1",
@@ -677,7 +681,7 @@ diagnostics <- data.table(
   measure = c(
     "universe_rows",
     "probability_student_process_rows",
-    "estimation_rows_timely_at_risk",
+    "estimation_rows_exam_takers_timely_at_risk",
     "mean_total_probability_mass",
     paste0("mean_mass_with_value_", value_names)
   ),

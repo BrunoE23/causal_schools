@@ -1,5 +1,30 @@
 # Session Log
 
+## 2026-05-31: May Draft Final Specification Pass
+
+The May draft was brought into alignment with the current empirical workflow and results.
+
+The durable decisions from this pass are recorded in `setup_md_codex/project_memory/decisions/2026-05-31-current-paper-specification-and-draft-decisions.md`.
+
+Key paper-facing choices:
+
+- use All-sample value added for main regressions, with Male/Female and gender-gap value added on hold unless explicitly requested
+- use the expected-VA scalar risk-control workflow for current main and heterogeneity estimates
+- treat the older wide probability-control and k-support workflow as legacy or robustness code
+- restrict paper-facing VA and IV analyses to admission-exam takers, defined as students with an observed math or language national admission-test score
+- focus the main four outcomes on math achievement, language achievement, STEM enrollment, and institutional quality measured by institutional accreditation years
+- use grade-4 SIMCE math quintiles for the main heterogeneity figure
+- present the heterogeneity figure as points by quintile without connecting lines
+- use the math/STEM orthogonal-value-added exercise as a separate mechanism test
+- describe assignment-algorithm replication as above 99% in each of the four 2018-2021 cohorts
+
+Writing conventions and metadata:
+
+- manuscript title: `Do High Schools Shape College Choices? Evidence from Centralized Assignment in Chile`
+- abstract revised to 229 words, under the 250-word target
+- recommended keywords: `school value added, higher education, college major choice, centralized school assignment, Chile`
+- manuscript `.tex` prose should remain one sentence per source line
+
 ## 2026-04-26: Scalar School-Value IV Setup and VA Rebuild
 
 ### Main Thread

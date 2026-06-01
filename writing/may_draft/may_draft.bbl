@@ -147,6 +147,75 @@
       \endverb
       \keyw{Peer effects,deferred acceptance,school choice,selective education}
     \endentry
+    \entry{abdulkadiroglu_parents_2020}{article}{}{}
+      \name{author}{4}{}{%
+        {{hash=9210d7a0646d485f1f21951c61c52cd2}{%
+           family={Abdulkadiroğlu},
+           familyi={A\bibinitperiod},
+           given={Atila},
+           giveni={A\bibinitperiod}}}%
+        {{hash=e75d96917751be05beac30ccd106dc84}{%
+           family={Pathak},
+           familyi={P\bibinitperiod},
+           given={Parag\bibnamedelima A.},
+           giveni={P\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{hash=2ab1348ea81f7a3ddc12ff3524649461}{%
+           family={Schellenberg},
+           familyi={S\bibinitperiod},
+           given={Jonathan},
+           giveni={J\bibinitperiod}}}%
+        {{hash=5274cf4d6ae8b9cd307590bef3c54969}{%
+           family={Walters},
+           familyi={W\bibinitperiod},
+           given={Christopher\bibnamedelima R.},
+           giveni={C\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {en}%
+      }
+      \strng{namehash}{009b8760f2c3c4cd564591d9c91799d7}
+      \strng{fullhash}{7f8b1f9b6f29a9247492f7b4f14d9af2}
+      \strng{fullhashraw}{7f8b1f9b6f29a9247492f7b4f14d9af2}
+      \strng{bibnamehash}{7f8b1f9b6f29a9247492f7b4f14d9af2}
+      \strng{authorbibnamehash}{7f8b1f9b6f29a9247492f7b4f14d9af2}
+      \strng{authornamehash}{009b8760f2c3c4cd564591d9c91799d7}
+      \strng{authorfullhash}{7f8b1f9b6f29a9247492f7b4f14d9af2}
+      \strng{authorfullhashraw}{7f8b1f9b6f29a9247492f7b4f14d9af2}
+      \field{extraname}{3}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{School choice may lead to improvements in school productivity if parents' choices reward effective schools and punish ineffective ones. This mechanism requires parents to choose schools based on causal effectiveness rather than peer characteristics. We study relationships among parent preferences, peer quality, and causal effects on outcomes for applicants to New York City's centralized high school assignment mechanism. We use applicants' rank-ordered choice lists to measure preferences and to construct selection-corrected estimates of treatment effects on test scores, high school graduation, college attendance, and college quality. Parents prefer schools that enroll high-achieving peers, and these schools generate larger improvements in short- and long-run student outcomes. Preferences are unrelated to school effectiveness and academic match quality after controlling for peer quality.}
+      \field{issn}{0002-8282}
+      \field{journaltitle}{American Economic Review}
+      \field{month}{5}
+      \field{number}{5}
+      \field{title}{Do {Parents} {Value} {School} {Effectiveness}?}
+      \field{urlday}{31}
+      \field{urlmonth}{10}
+      \field{urlyear}{2025}
+      \field{volume}{110}
+      \field{year}{2020}
+      \field{urldateera}{ce}
+      \field{pages}{1502\bibrangedash 1539}
+      \range{pages}{38}
+      \verb{doi}
+      \verb 10.1257/aer.20172040
+      \endverb
+      \verb{file}
+      \verb Full Text:C\:\\Users\\xd-br\\Zotero\\storage\\U7XZZDFF\\Abdulkadiroğlu et al. - 2020 - Do Parents Value School Effectiveness.pdf:application/pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://www.aeaweb.org/articles?id=10.1257/aer.20172040
+      \endverb
+      \verb{url}
+      \verb https://www.aeaweb.org/articles?id=10.1257/aer.20172040
+      \endverb
+      \keyw{Analysis of Education,Education,Welfare,Returns to Education,Education: Government Policy,Consumer Economics: Empirical Analysis,Consumer Economics: Empirical Analysis,State and Local Government: Health,Public Pensions,Analysis of Education,Returns to Education,Education: Government Policy,State and Local Government: Health; Education; Welfare; Public Pensions}
+    \endentry
     \entry{angrist_credible_2024}{article}{}{}
       \name{author}{4}{}{%
         {{hash=71a74466a85192690bb7668576e4f2f3}{%
@@ -687,6 +756,7 @@
       \strng{authornamehash}{5c4ed39e23bdd9af2f0d25c22ac70a59}
       \strng{authorfullhash}{2e294c6079b1022f6b8d190c0e942a13}
       \strng{authorfullhashraw}{2e294c6079b1022f6b8d190c0e942a13}
+      \field{extraname}{1}
       \field{sortinit}{H}
       \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
       \field{extradatescope}{labelyear}
@@ -721,6 +791,68 @@
       \verb https://www.sciencedirect.com/science/article/pii/S0272775715000813
       \endverb
       \keyw{Higher education,College access,Subjective expectations}
+    \endentry
+    \entry{hastings_preferences_2007}{misc}{}{}
+      \name{author}{3}{}{%
+        {{hash=5eda248b84717a540b06ce69e5774cde}{%
+           family={Hastings},
+           familyi={H\bibinitperiod},
+           given={Justine\bibnamedelima S.},
+           giveni={J\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+        {{hash=501babc4730d9d4aa0a9b616cc87c73c}{%
+           family={Van\bibnamedelima Weelden},
+           familyi={V\bibinitperiod\bibinitdelim W\bibinitperiod},
+           given={Richard},
+           giveni={R\bibinitperiod}}}%
+        {{hash=40372cb105a5aa48e7d0fca2b66d8b71}{%
+           family={Weinstein},
+           familyi={W\bibinitperiod},
+           given={Jeffrey},
+           giveni={J\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {en}%
+      }
+      \list{location}{1}{%
+        {Rochester, NY}%
+      }
+      \list{publisher}{1}{%
+        {Social Science Research Network}%
+      }
+      \strng{namehash}{5c4ed39e23bdd9af2f0d25c22ac70a59}
+      \strng{fullhash}{792c18107677cf93692bc754ec02d630}
+      \strng{fullhashraw}{792c18107677cf93692bc754ec02d630}
+      \strng{bibnamehash}{792c18107677cf93692bc754ec02d630}
+      \strng{authorbibnamehash}{792c18107677cf93692bc754ec02d630}
+      \strng{authornamehash}{5c4ed39e23bdd9af2f0d25c22ac70a59}
+      \strng{authorfullhash}{792c18107677cf93692bc754ec02d630}
+      \strng{authorfullhashraw}{792c18107677cf93692bc754ec02d630}
+      \field{extraname}{2}
+      \field{sortinit}{H}
+      \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{The incentives and outcomes generated by public school choice depend to a large degree on parents' choice behavior. There is growing empirical evidence that low-income parents place lower weights on academics when choosing schools, but there is little evidence as to why. We use a field experiment in the Charlotte-Mecklenburg Public School district (CMS) to examine the degree to which information costs impact parental choices and their revealed preferences for academic achievement. We provided simplified information sheets on school average test scores or test scores coupled with estimated odds of admission to students in randomly selected schools along with their CMS school choice forms. We find that receiving simplified information leads to a significant increase in the average test score of the school chosen. This increase is equivalent to a doubling in the implicit preference for academic performance in a random utility model of school choice. Receiving information on odds of admission further increases the effect of simplified test score information on preferences for test scores among low-income families, but dampens the effect among higher-income families. Using within-family changes in choice behavior, we provide evidence that the estimated impact of simplified information is more consistent with lowered information costs than with suggestion or saliency.}
+      \field{month}{3}
+      \field{title}{Preferences, {Information}, and {Parental} {Choice} {Behavior} in {Public} {School} {Choice}}
+      \field{type}{{SSRN} {Scholarly} {Paper}}
+      \field{urlday}{28}
+      \field{urlmonth}{3}
+      \field{urlyear}{2026}
+      \field{year}{2007}
+      \field{urldateera}{ce}
+      \verb{file}
+      \verb Full Text PDF:C\:\\Users\\xd-br\\Zotero\\storage\\BLZLELAE\\Hastings et al. - 2007 - Preferences, Information, and Parental Choice Behavior in Public School Choice.pdf:application/pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://papers.ssrn.com/abstract=977406
+      \endverb
+      \verb{url}
+      \verb https://papers.ssrn.com/abstract=977406
+      \endverb
+      \keyw{SSRN,and Parental Choice Behavior in Public School Choice,Information,Jeffrey Weinstein,Justine S. Hastings,Preferences,Richard Van Weelden}
     \endentry
     \entry{hoxby_what_2015}{article}{}{}
       \name{author}{2}{}{%
