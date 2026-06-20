@@ -2407,9 +2407,6 @@
     <bcf:citekey order="13" intorder="1">jackson_what_2018</bcf:citekey>
     <bcf:citekey order="13" intorder="2">rose_effects_2022</bcf:citekey>
     <bcf:citekey order="14" intorder="1">angrist_leveraging_2017</bcf:citekey>
-    <bcf:citekey order="15" intorder="1">beuermann_what_2023</bcf:citekey>
-    <bcf:citekey order="15" intorder="2">abdulkadiroglu_parents_2020</bcf:citekey>
-    <bcf:citekey order="15" intorder="3">hastings_preferences_2007</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="nyt">

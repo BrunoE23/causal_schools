@@ -26,7 +26,7 @@ uniquename=false
 % Name and Title
 \title{Do High Schools Shape College Choices? Evidence from Centralized Assignment in Chile}
 \author{ Bruno E. Aravena-Magüida}
-\date{May 2026}
+\date{June 2026}
 
 % Header (top) and footer (bottom)
 \pagestyle{fancy}
@@ -52,6 +52,7 @@ Higher-education value added also predicts causal changes in later choices: pass
 Heterogeneity estimates suggest that the pass-through of math value added varies substantially across the baseline math achievement distribution.
 Although the correlation between estimated math and STEM value added is low (0.061), an orthogonal value-added exercise shows that causal effects on STEM enrollment are not explained by math value added.
 High schools therefore shape college choices through dimensions of school value that achievement value added alone does not capture.
+Choices that appear to reveal student preferences may thus partly reflect the information, expectations, and preparation produced by the high school attended.
 \end{abstract}
 
 % Prints a table of contents
@@ -76,6 +77,12 @@ Yet many measures of school effects on higher education are coarse, focusing on 
 There are also good reasons to think that higher-education choices are shaped by frictions that schools may influence.
 Prior work documents large differences in application and enrollment behavior across groups of students, and shows that relatively small interventions can change college search, application, and major choice \parencite{hoxby_what_2015, dynarski_closing_2021, hastings_informed_2016, chetty_diversifying_2025}.
 If high schools differ in counseling, information provision, expectations, peer norms, academic confidence, or preparation for particular fields, then their effects on higher education may extend beyond their effects on achievement.
+
+This possibility also changes how higher-education choices should be interpreted.
+Decisions not to continue to higher education, to avoid particular fields, or to attend lower-quality institutions are often viewed as revealing stable preferences or privately optimal responses to expected returns.
+Yet expected returns and the options students perceive may themselves depend on the information, preparation, and support provided by their high school.
+A choice can therefore be privately optimal given beliefs and preparation that the school helped produce, while still being causally affected by the school attended.
+This distinction is especially relevant in settings where families have limited information about educational options and access to counseling varies across schools.
 
 This paper asks whether high schools causally affect higher-education choices, and whether those effects are captured by traditional achievement value added.
 The main empirical challenge arises from the fact that students and families sort across schools.
@@ -107,9 +114,9 @@ The achievement estimates are close to comparable validation estimates in \textc
 This validates the rich set of pre-treatment controls used here, which can also be applied to outcomes, such as higher-education choices, for which lagged measures are unavailable.
 
 I then ask for whom observational value-added measures are most informative.
-Splitting the sample by baseline grade-4 math achievement shows that math value added is much more predictive for higher-achieving students, rising from 0.145 in the bottom quintile to 1.317 in the top quintile.
-The language and higher-education value-added measures have more stable pass-through estimates across the baseline achievement distribution.
-This result suggests that, at least for math achievement, students differ in how much they benefit from policies that provide information about school value added.
+Splitting the sample by baseline grade-4 math achievement shows that, relative to students in the middle quintile, math value added is substantially less predictive in the bottom quintile and marginally more predictive in the top quintile.
+STEM value added is less predictive in the second quintile and marginally less predictive in the fourth, while none of the language or institutional-quality differences relative to the middle quintile is statistically significant.
+These results point to differences across some groups and outcomes, rather than a common pattern across the baseline achievement distribution.
 
 
 Finally, I examine whether STEM effects are simply achievement effects in another form.
@@ -512,42 +519,40 @@ This uncovers a distinct dimension of school value added that matters for studen
 \clearpage 
 \section{Conclusion}
 
-This paper studies whether high schools affect higher-education choices in ways that are captured by, or distinct from, traditional achievement value added.
-Using Chile's centralized school assignment system and linked administrative data, I first estimate observational school value added in a broad national panel and then use SAE lottery offers to test whether those measures predict causal effects.
+This paper asks whether high schools causally affect higher-education choices, and to what extent those effects are captured by observational value added.
+I address this question by combining Chile's centralized school assignment system with linked administrative data.
+I first estimate school value added for achievement and higher-education outcomes in a broad national panel, and then use lottery offers to ask whether schools that look better in observational value-added terms also produce larger causal effects.
 
-The results suggest that the value-added measures constructed for new higher-education outcomes contain meaningful causal signal.
-Achievement value added provides a useful benchmark: the pass-through estimates are 0.841 for math and 0.835 for language.
-These estimates are somewhat below the unit benchmark, but they are close to comparable achievement-validity estimates in \textcite{angrist_leveraging_2017}, where lagged-score forecast coefficients are 0.864 for sixth-grade lotteries and 0.880 for all middle-school grades.
-The similarity is reassuring because the present setting differs in two important ways.
-First, the analysis is national in scope and covers a large, heterogeneous set of high schools rather than a narrower local market.
-Second, and more importantly, I do not condition on a lagged version of the outcome.
-This is a limitation for achievement, but it is also a deliberate feature of the design: the same value-added control set can be used for outcomes such as STEM enrollment and institutional quality, for which there is no natural lagged outcome before high school.
-The close achievement benchmark therefore suggests that the value-added control set is strong enough to recover useful school value added even without a lagged outcome.
-This makes the positive higher-education estimates more credible: value added for STEM enrollment and institutional quality predicts lottery-induced changes in those outcomes, with pass-through estimates of 0.689 and 1.153, respectively.
+The main estimates suggest substantial pass-through.
+The estimates are 0.841 for math, 0.835 for language, 0.689 for STEM enrollment, and 1.153 for institutional quality.
+In practical terms, schools that observationally look better at raising achievement or higher-education outcomes also tend to have causal effects on those same outcomes.
+The achievement estimates are close to comparable lottery-based estimates in \textcite{angrist_leveraging_2017}, despite the absence of immediately lagged outcomes.
+This supports the use of rich pre-treatment controls for outcomes, such as higher-education choices, for which lagged measures are unavailable.
 
-The heterogeneity results provide a separate lesson.
-They suggest that value-added metrics need not be equally informative for every student group.
-For math, the pass-through estimate rises from 0.145 in the bottom baseline-achievement quintile to 1.317 in the top quintile.
-This gradient is hard to reconcile with a strict constant-effects interpretation, and it suggests that value-added validation exercises can be used to study heterogeneity itself.
-At the same time, the STEM and institutional-quality estimates remain positive across baseline-achievement quintiles and show less of a monotone achievement gradient.
-Taken at face value, this contrast is informative: heterogeneity may be substantial for some value-added dimensions but muted for others, and different baseline variables may reveal different gradients.
+The heterogeneity results show that this relationship is not the same for all students.
+Relative to students in the middle quintile of baseline math achievement, math value added is substantially less predictive in the bottom quintile and marginally more predictive in the top quintile.
+STEM value added is less predictive in the second quintile and marginally less predictive in the fourth.
+For language and institutional quality, none of the differences relative to the middle quintile is statistically significant.
+These results point to differences across some groups and outcomes, rather than a common pattern across the baseline achievement distribution.
 
-The orthogonal-value-added result speaks to a different and central question: are the STEM effects just achievement effects in another form?
-The answer appears to be no.
-The weak school-level correlation between math value added and STEM value added already suggests that these are not the same object.
-More powerfully, the two-dimensional IV estimates show that math value added predicts math achievement but not STEM enrollment, while the STEM component orthogonal to math value added predicts STEM enrollment but not math achievement.
-This leaves little evidence that the STEM enrollment effect is mediated through the math value-added dimension measured here.
-Instead, the results point to multiple channels through which high schools shape later choices.
-One channel is achievement production, which is visible in the math and language results and has been the focus of much of the value-added literature.
-Another channel affects higher-education field choices in a way that is not reducible to test-score value added.
-That distinction is the central punchline of the paper: high schools shape college choices, and STEM value added captures a dimension of school value that achievement value added misses.
+Finally, I ask whether school effects on STEM enrollment are simply achievement effects in another form.
+Math and STEM value added are weakly related across schools, and the IV results show that math value added predicts math achievement but not STEM enrollment, while the part of STEM value added unrelated to math predicts STEM enrollment but not math achievement.
+These results suggest that high schools differ along multiple dimensions.
+In particular, schools affect higher-education decisions, such as field choice, beyond their effects on achievement.
+The analysis does not determine whether these differences arise from counseling, information, expectations, peer norms, academic preparation, or other school practices.
 
-For families and policymakers, the results imply that school quality information based only on achievement is incomplete.
-Test-score value added is clearly informative, but it does not exhaust the ways in which high schools shape educational paths.
-A deeper view of school quality should recognize that schools may affect both academic production and the later choices students make about fields and institutions.
-This connects to evidence that school output is multidimensional and that families may or may not fully value the causal dimensions of school effectiveness when choosing schools \parencite{beuermann_what_2023, abdulkadiroglu_parents_2020, hastings_preferences_2007}.
-The next question is whether families already anticipate these less visible dimensions of school value, or whether they would respond to information about them if it were made available.
-Now that the paper shows that STEM-oriented school value added exists, the natural next step is to understand whether families internalize it ex ante, how it is produced inside schools, and whether information about it would change school choices.
+These results show why achievement-based measures of school quality are incomplete.
+As access to secondary and higher education expands, the consequences of schooling increasingly depend not only on learning and enrollment, but also on the decisions students make thereafter.
+Accountability systems and school-choice policies centered on achievement may therefore overlook school effects that matter for the allocation of skills across fields, occupations, and sectors.
+
+The results also qualify how higher-education choices should be interpreted.
+Decisions not to continue to higher education, to avoid particular fields, or to attend lower-quality institutions are often interpreted as revealing stable preferences or privately optimal responses to expected returns.
+Yet both expected returns and the options students perceive can be shaped by the information, expectations, academic preparation, and support they receive in high school.
+A decision may therefore be privately optimal given beliefs and preparation that the high school helped produce, while still being causally affected by the school attended.
+This possibility is especially important in settings where families have limited information about educational options and where access to counseling and other supports varies across schools.
+
+Future work should identify the channels that generate these effects and examine whether families value and respond to nontraditional measures of school value added.
+It should also study whether providing information on multiple dimensions of school quality changes school demand and later educational choices, and estimate the aggregate consequences of systematically ignoring these dimensions when students are allocated across schools.
 
 \clearpage
 \printbibliography
