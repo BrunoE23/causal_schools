@@ -44,13 +44,13 @@ uniquename=false
 \begin{abstract}
 School quality is usually measured with test scores, but high schools may also shape students' college choices.
 This paper studies this question in Chile, where centralized assignment creates lottery variation in high-school offers.
-I link assignment records to administrative data on school enrollment, standardized achievement, and higher-education enrollment.
-I estimate observational school value added for math, language, STEM enrollment, and institutional quality, measured by accreditation years, using pre-treatment controls that include grade-4 test scores, family background, and middle-school histories.
+I link assignment records to administrative data on school enrollment, standardized achievement, and higher-education applications and enrollment.
+I estimate observational school value added for math, language, STEM enrollment, and institutional quality, using a rich set of pre-treatment controls.
 I then test whether lottery-induced attendance at higher-value-added schools improves the corresponding outcome, controlling for expected value added in each student's assignment portfolio.
 Achievement pass-through estimates are 0.841 for math and 0.835 for language, close to benchmarks from settings with lagged test scores.
 Higher-education value added also predicts causal changes in later choices: pass-through is 0.689 for STEM enrollment and 1.153 for institutional quality.
-Heterogeneity estimates show that math value added is more predictive for higher-achieving baseline students, while higher-education value-added measures remain positive across baseline achievement.
-Finally, an orthogonal value-added exercise shows that the component of STEM value added unrelated to math value added predicts STEM enrollment but not math achievement.
+Heterogeneity estimates suggest that the pass-through of math value added varies substantially across the baseline math achievement distribution.
+Although the correlation between estimated math and STEM value added is low (0.061), an orthogonal value-added exercise shows that causal effects on STEM enrollment are not explained by math value added.
 High schools therefore shape college choices through dimensions of school value that achievement value added alone does not capture.
 \end{abstract}
 
@@ -66,7 +66,7 @@ School quality is usually summarized by achievement.
 This is natural: test scores are widely available, comparable across schools, and predictive of later outcomes.
 But school and teacher effects are not necessarily one-dimensional.
 Recent work shows that schools and teachers can affect attendance, behavior, crime, teenage motherhood, labor-market outcomes, and other long-run outcomes in ways that are only weakly related to test-score effects \parencite{jackson_what_2018, beuermann_what_2023, rose_effects_2022, angrist_methods_2023}.
-Families and policymakers might therefore care about school quality measures that capture more than achievement.
+Families and policymakers might therefore care about school quality measures that capture more than just achievement.
 
 This broader view of school quality is especially relevant for high schools.
 High schools are the last formal educational institutions students attend before making higher-education choices, and those choices are consequential.
@@ -78,40 +78,46 @@ Prior work documents large differences in application and enrollment behavior ac
 If high schools differ in counseling, information provision, expectations, peer norms, academic confidence, or preparation for particular fields, then their effects on higher education may extend beyond their effects on achievement.
 
 This paper asks whether high schools causally affect higher-education choices, and whether those effects are captured by traditional achievement value added.
-The empirical challenge is that students and families sort across schools.
+The main empirical challenge arises from the fact that students and families sort across schools.
 Families choose schools based on resources, preferences, networks, location, and expectations; these same characteristics may also shape later higher-education choices.
 As a result, differences across schools may reflect both causal school effects and the underlying characteristics of the students and families who select into them.
 
-I address this challenge using Chile's centralized school assignment system, the Sistema de Admision Escolar (SAE).
+I address this challenge using Chile's centralized school assignment system, the Sistema de Admisi\'on Escolar (SAE).
 SAE assigns students to public and private-subsidized schools through a centralized mechanism that uses random tie-breakers when schools are oversubscribed.
 The system covers a large national school sector, allowing me to study school effects at a scale that is unusual in lottery-based designs.
-I combine this assignment variation with administrative data linking school enrollment, standardized tests, and higher-education enrollment.
+This assignment variation can be linked to administrative data covering school enrollment, standardized tests, and higher-education applications and enrollment.
+Linking random assignment in the mechanism to higher-education choices allows me to answer this question in a national context.
+
 
 The analysis proceeds in two steps.
 First, I estimate observational value added for each school and outcome in the broad exam-taker panel.
-These measures are school fixed effects from regressions that adjust for rich pre-treatment controls, including grade-4 SIMCE scores, family-background variables, and middle-school controls.
-Second, I use SAE lottery offers to ask whether schools that look better in observational value-added terms also produce larger causal effects.
-For each outcome, I compare the value added of the school a student attends with the value added of the school the student is offered, while controlling for the expected value added implied by the student's assignment probabilities.
+These measures are school fixed effects from regressions that adjust for rich pre-treatment controls, including grade-4 standardized test scores, family-background variables, and middle-school controls.
+Second, I use SAE lottery offers to ask whether schools that look better in observational value-added terms also produce larger causal effects, while controlling for expected value added in each student's assignment portfolio.
+
 
 I summarize this relationship with a pass-through coefficient, $\theta$.
-If $\theta=1$, then a lottery-induced increase in observational value added translates one-for-one into a causal gain in the corresponding outcome.
+If $\theta=1$, then the causal effect induced by complying with a lottery offer equals the gain predicted by observational value added for that outcome.
 If $\theta=0$, the observational value-added measure has no causal predictive content along the lottery-induced margin.
 The main estimates suggest substantial pass-through.
 For achievement, the estimates are 0.841 for math and 0.835 for language.
-For higher-education outcomes, the pass-through is 0.689 for STEM enrollment and 1.153 for institutional quality, measured using institutional accreditation years.
-In practical terms, schools that observationally look better at raising achievement or higher-education outcomes also tend to have causal effects in those same outcomes, though the causal effects are smaller than the observational differences.
-The achievement estimates are close to comparable validation estimates in \textcite{angrist_leveraging_2017} based on lagged test-score models, even though the value-added measures here use a common pre-treatment control set that can also be applied to higher-education outcomes.
+For higher-education outcomes, the pass-through is 0.689 for STEM enrollment and 1.153 for institutional quality.
+
+In practical terms, schools that observationally look better at raising achievement or higher-education outcomes also tend to have causal effects on those same outcomes, though the causal effects are smaller than the observational differences.
+The achievement estimates are close to comparable validation estimates in \textcite{angrist_leveraging_2017} despite the absence of immediately lagged outcomes.
+This validates the rich set of pre-treatment controls used here, which can also be applied to outcomes, such as higher-education choices, for which lagged measures are unavailable.
 
 I then ask for whom observational value-added measures are most informative.
 Splitting the sample by baseline grade-4 math achievement shows that math value added is much more predictive for higher-achieving students, rising from 0.145 in the bottom quintile to 1.317 in the top quintile.
-The higher-education value-added measures are more stable across the baseline achievement distribution.
-This does not imply that schools matter only for high achievers; rather, it suggests that the usefulness of a given value-added metric depends on the population to which it is applied.
+The language and higher-education value-added measures have more stable pass-through estimates across the baseline achievement distribution.
+This result suggests that, at least for math achievement, students differ in how much they benefit from policies that provide information about school value added.
+
 
 Finally, I examine whether STEM effects are simply achievement effects in another form.
 To do this, I construct an orthogonal value-added measure that removes from STEM-enrollment value added the part predicted by math value added.
 Math and STEM value added are already weakly related, and the IV results confirm that the orthogonal STEM component predicts STEM enrollment but not math achievement.
 Conversely, math value added predicts math achievement but not STEM enrollment.
 These results suggest that high schools differ along multiple dimensions, and that value added should not be treated as a single-dimensional measure of school quality.
+In particular, they show that schools affect higher-education decisions, such as field choice, beyond their effects on achievement.
 
 The paper contributes to three literatures.
 First, it contributes to work on teacher and school value added.
@@ -191,7 +197,7 @@ The broad exam-taker panel is used to estimate the main school value-added measu
 
 \subsection{Centralized School Assignment}
 
-Chile's centralized school assignment system, the Sistema de Admision Escolar (SAE), assigns students to participating schools through a version of student-proposing Deferred Acceptance.
+Chile's centralized school assignment system, the Sistema de Admisi\'on Escolar (SAE), assigns students to participating schools through a version of student-proposing Deferred Acceptance.
 Families submit ranked lists of schools.
 The mechanism combines these rankings with school vacancies and priority rules, and it uses random tie-breakers when there are more applicants than seats within a priority group.
 Conditional on the information that determines priorities and assignment probabilities, these tie-breakers generate the quasi-experimental variation used in the empirical design, following the centralized-assignment research design described by \textcite{abdulkadiroglu_research_2017}.
@@ -327,29 +333,23 @@ The first empirical question is whether observational value added predicts causa
 Specifically, when the assignment mechanism moves a student toward a school with higher $\widehat{V}_j^m$, does outcome $m$ rise, and by how much relative to the observational difference encoded in $\widehat{V}_j^m$?
 The main IV system is given by the following pair of equations:
 \noindent
-\begin{minipage}[t]{0.49\textwidth}
   \begin{equation}
     \begin{aligned}
-      Y_i^m ={}& \alpha^m + \theta^m A_i^m + \rho^m E_i^m \\
-                &+ W_i'\delta^m + \eta_i^m,
+      Y_i^m ={}& \alpha^m + \theta^m A_i^m + \rho^m E_i^m +  W_i'\delta^m + \eta_i^m,
     \end{aligned}
     \label{eq:pass-through}
   \end{equation}
-\end{minipage}%
-\hfill
-\begin{minipage}[t]{0.49\textwidth}
+
   \begin{equation}
     \begin{aligned}
-      A_i^m ={}& a^m + \kappa^m O_i^m + \rho_A^m E_i^m \\
-                &+ W_i'\delta_A^m + \nu_i^m.
+      A_i^m ={}& a^m + \kappa^m O_i^m + \rho_A^m E_i^m +  W_i'\delta_A^m + \nu_i^m.
     \end{aligned}
     \label{eq:first-stage}
   \end{equation}
-\end{minipage}
-Thus, $A_i^m$ is instrumented with $O_i^m$.
-Here, $Y_i^m$ is student $i$'s realized value of outcome $m$.
-$A_i^m$ is the value added of the school the student actually attends, $O_i^m$ is the value added of the school offered by the assignment mechanism, and $E_i^m$ is the expected value added implied by the student's assignment-probability vector.
-$W_i$ is a parsimonious lottery-sample control vector containing cohort, gender, age, and grade-4 SIMCE math and language.
+
+Here, $Y_i^m$ is student $i$'s realized value of outcome $m$. We can see that the value-added of the attended school ($A_i^m$) is instrumented with the value added of the school offered through the assignment mechanism ($O_i^m$).
+$E_i^m$ is the expected value added implied by the student's assignment-probability vector.
+Finally, $W_i$ is a parsimonious lottery-sample control vector containing cohort, gender, age, and grade-4 SIMCE math and language.
 This differs from the richer control vector used to construct $\widehat{V}_j^m$ in equation~\eqref{eq:observational-va}, which also includes family-background and middle-school controls.
 The rich controls enter through the construction of the school value-added measures, while equation~\eqref{eq:pass-through} asks whether those pre-constructed measures pass through in the SAE lottery sample after conditioning on assignment risk and core baseline covariates.
 All reported specifications use heteroskedasticity-robust standard errors.
@@ -403,12 +403,31 @@ In this setting, it tests whether schools with high STEM-enrollment value added 
 \clearpage 
 \section{Results}
 
-I organize the results in three blocks.
-First, I report the main pass-through estimates for four scalar value-added measures: two achievement measures and two higher-education measures.
-Second, I ask whether these pass-through estimates vary by baseline achievement, using grade-4 math achievement quintiles.
-Third, I use the two-dimensional value-added construction to separate math value added from the component of STEM value added that is orthogonal to math value added.
+I organize the results in four blocks.
+First, I describe the scale of the underlying outcomes and the distribution of the four observational school value-added measures.
+Second, I report the main pass-through estimates for each outcome.
+Third, I examine heterogeneity in pass-through by baseline grade-4 math achievement.
+Finally, I use the two-dimensional value-added construction to separate math value added from the component of STEM value added that is orthogonal to math value added.
 
-\subsection{Main Value-Added Estimates}
+\subsection{Distribution of Value-Added Estimates}
+
+Table~\ref{tab:school-va-distribution} reports the mean and standard deviation of each underlying student outcome alongside the student-weighted distribution of the corresponding school value-added measure.
+The former capture variation across students; the latter capture estimated differences in school contributions.
+
+\input{../../output/tables/results_section/school_va_distribution.tex}
+
+The achievement outcomes are standardized measures, so their sample means are close to zero and their standard deviations are close to one.
+The mean STEM enrollment rate is 0.252, with a student-level standard deviation of 0.434, while institutional quality averages 4.678 accreditation years, with a standard deviation of 2.379 years.
+
+The school value-added measures also display substantial dispersion.
+The standard deviation of math value added is 0.258, and the gap between the 90th and 10th percentiles is 0.544 standard deviations.
+For language, the corresponding standard deviation is 0.188 and the 90--10 gap is 0.440 standard deviations.
+Among the higher-education outcomes, the standard deviation of STEM-enrollment value added is 0.078, or 7.8 percentage points, and its 90--10 gap is 0.164.
+Institutional-quality value added has a standard deviation of 0.375 years and a 90--10 gap of 0.917 years.
+These distributions show that the observational measures contain economically meaningful variation and provide the scale needed to interpret the pass-through estimates below.
+
+\subsection{IV Pass-through Estimates}
+
 
 Table~\ref{tab:main-four-va-results} reports the main IV estimates.
 Each column uses the same outcome to construct the observational school value-added measure, the lottery-induced expected value-added instrument, and the realized attended school value-added treatment.
@@ -426,25 +445,23 @@ It does show, however, that the school assignment margin shifts later higher-edu
 
 \input{../../output/tables/results_section/main_four_va_metrics.tex}
 
-Table~\ref{tab:school-va-distribution} reports the student-weighted distribution of the four observational value-added measures.
-The 90--10 percentile gap is 0.544 standard deviations for math achievement and 0.440 standard deviations for language achievement.
-For the higher-education outcomes, the corresponding gap is 0.164 for STEM enrollment, or 16.4 percentage points, and 0.917 years for institutional quality.
-The standard deviations are 0.258, 0.188, 0.078, and 0.375, respectively.
-These distributions show that the school value-added measures contain economically meaningful variation and provide scale for interpreting the pass-through coefficients in Table~\ref{tab:main-four-va-results}.
-
-\input{../../output/tables/results_section/school_va_distribution.tex}
 
 \subsection{Heterogeneity by Baseline Achievement}
 
 Figure~\ref{fig:simce4-math-quintile-four-metrics} repeats the same four estimates separately by quintiles of baseline grade-4 math achievement.
 This comparison is useful because it keeps the heterogeneity split pre-treatment and available for the full exam-taker analysis sample.
+Table~\ref{tab:simce4-math-quintile-contrasts-q3} formally tests each quintile coefficient against the middle quintile, reporting $\widehat{\theta}_{Q_q}-\widehat{\theta}_{Q_3}$ for $q\in\{1,2,4,5\}$.
 
-The achievement pass-through estimates increase with baseline math achievement, especially for math value added.
-In the bottom quintile, the math estimate is 0.145 and imprecise, while in the top quintile it is 1.317.
-The language estimates follow a similar, though less monotone, pattern, increasing from 0.596 in the bottom quintile to 0.891 in the top quintile.
-In contrast, the STEM enrollment estimates are positive but do not show the same baseline-achievement gradient: the bottom- and top-quintile estimates are 0.735 and 0.707.
-The institutional-quality estimates are positive in all quintiles and are generally close to or above the unit-pass-through benchmark, with estimates of 1.075 in the bottom quintile and 1.201 in the top quintile.
-This pattern suggests that the test-score value-added measures may be more predictive for higher-achieving baseline students, while the higher-education value-added measures remain informative across baseline achievement groups.
+The clearest heterogeneity appears in math.
+The bottom-quintile estimate is 0.145, compared with 0.940 in the middle quintile, a difference of $-0.795$ ($p<0.01$).
+The top-quintile estimate is 1.317, or 0.377 above the middle quintile, although this difference is significant only at the 10 percent level ($p=0.093$).
+The math estimates for the second and fourth quintiles are not statistically different from the middle-quintile estimate.
+
+For language, none of the four contrasts with the middle quintile is statistically significant.
+STEM-enrollment pass-through is lower in the second quintile by 0.469 ($p=0.026$) and lower in the fourth quintile by 0.388, with the latter difference significant at the 10 percent level ($p=0.085$).
+The first- and fifth-quintile STEM estimates do not differ significantly from the middle-quintile estimate.
+Institutional-quality pass-through is positive in every quintile, and none of its contrasts with the middle quintile is statistically significant.
+Thus, the formal tests support meaningful heterogeneity in selected math and STEM contrasts, but not a uniform monotonic gradient across the baseline achievement distribution.
 
 \begin{figure}[!htbp]
 \centering
@@ -452,6 +469,7 @@ This pattern suggests that the test-score value-added measures may be more predi
 \caption{Scalar school-value IV estimates by baseline grade-4 math achievement quintile}
 \label{fig:simce4-math-quintile-four-metrics}
 \end{figure}
+\input{../../output/tables/results_section/simce4_math_quintile_contrasts_vs_q3.tex}
 \FloatBarrier
 
 \subsection{Orthogonal Math and STEM Value Added}
@@ -478,7 +496,7 @@ This makes it possible to ask whether schools that improve STEM enrollment are d
 \end{figure}
 \FloatBarrier
 
-Table~\ref{tab:orthogonal_school_va_iv_2x2} reports the corresponding two-regressor IV estimates.
+Table~\ref{tab:orthogonal_school_va_iv_2x2} reports the corresponding two-regressor IV estimates where each column estimating equation \ref{eq:orthogonal-iv} on the corresponding outcome. 
 Math value added strongly predicts math achievement, with an estimate of 0.847, but it does not predict STEM enrollment once the orthogonal STEM component is included.
 Conversely, the STEM component orthogonalized against math value added strongly predicts STEM enrollment, with an estimate of 0.678, while it has essentially no relationship with math achievement.
 The punchline is that STEM value added is not simply math value added translated into a higher-education outcome.

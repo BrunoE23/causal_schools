@@ -77,6 +77,14 @@ va_distribution_csv <- file.path(table_dir, "school_va_distribution.csv")
 va_distribution_tex <- file.path(table_dir, "school_va_distribution.tex")
 outcome_sample_stats_csv <- file.path(table_dir, "outcome_sample_stats.csv")
 heterogeneity_csv <- file.path(table_dir, "simce4_math_quintile_four_metrics.csv")
+heterogeneity_contrasts_csv <- file.path(
+  table_dir,
+  "simce4_math_quintile_contrasts_vs_q3.csv"
+)
+heterogeneity_contrasts_tex <- file.path(
+  table_dir,
+  "simce4_math_quintile_contrasts_vs_q3.tex"
+)
 heterogeneity_plot <- file.path(
   figure_dir,
   "simce4_math_quintile_four_metrics.png"
@@ -101,6 +109,18 @@ format_estimate <- function(x) {
 
 format_se <- function(x) {
   ifelse(is.na(x), "", paste0("(", sprintf("%.3f", x), ")"))
+}
+
+significance_stars <- function(p_value) {
+  fifelse(
+    is.na(p_value),
+    "",
+    fifelse(
+      p_value < 0.01,
+      "***",
+      fifelse(p_value < 0.05, "**", fifelse(p_value < 0.10, "*", ""))
+    )
+  )
 }
 
 specs <- data.table(
@@ -631,6 +651,74 @@ heterogeneity[, group_label := factor(
 heterogeneity[, plot_label := factor(plot_label, levels = specs$plot_label)]
 fwrite(heterogeneity, heterogeneity_csv)
 
+q3_reference <- heterogeneity[
+  quintile == 3L,
+  .(spec, beta_q3 = beta, se_q3 = se)
+]
+heterogeneity_contrasts <- merge(
+  heterogeneity[quintile != 3L],
+  q3_reference,
+  by = "spec",
+  all.x = TRUE,
+  sort = FALSE
+)
+heterogeneity_contrasts[, `:=`(
+  comparison = paste0("Q", quintile, " - Q3"),
+  difference = beta - beta_q3,
+  difference_se = sqrt(se^2 + se_q3^2)
+)]
+heterogeneity_contrasts[, `:=`(
+  z_stat = difference / difference_se,
+  p_value = 2 * stats::pnorm(abs(difference / difference_se), lower.tail = FALSE),
+  ci_low = difference - 1.96 * difference_se,
+  ci_high = difference + 1.96 * difference_se,
+  spec_order = match(spec, specs$spec)
+)]
+setorder(heterogeneity_contrasts, quintile, spec_order)
+fwrite(heterogeneity_contrasts, heterogeneity_contrasts_csv)
+
+contrast_latex_rows <- unlist(lapply(c(1L, 2L, 4L, 5L), function(q) {
+  comparison <- heterogeneity_contrasts[quintile == q][order(spec_order)]
+  estimates <- paste0(
+    format_estimate(comparison$difference),
+    significance_stars(comparison$p_value)
+  )
+  c(
+    paste0("$Q", q, "-Q3$ & ", paste(estimates, collapse = " & "), " \\\\"),
+    paste0(" & ", paste(format_se(comparison$difference_se), collapse = " & "), " \\\\")
+  )
+}), use.names = FALSE)
+
+heterogeneity_contrasts_latex <- c(
+  "\\begin{table}[!htbp]",
+  "\\centering",
+  "\\begin{threeparttable}",
+  "\\caption{Differences in pass-through relative to the middle quintile}",
+  "\\label{tab:simce4-math-quintile-contrasts-q3}",
+  "\\small",
+  "\\begin{tabular}{lcccc}",
+  "\\toprule",
+  "Comparison & Math & Language & STEM enrollment & Institutional quality \\\\",
+  "\\midrule",
+  contrast_latex_rows,
+  "\\bottomrule",
+  "\\end{tabular}",
+  "\\begin{tablenotes}[flushleft]",
+  "\\footnotesize",
+  paste0(
+    "\\item Notes: Each entry reports $\\widehat{\\theta}_{Q_q} - ",
+    "\\widehat{\\theta}_{Q3}$ for the indicated baseline grade-4 math ",
+    "achievement quintile. Heteroskedasticity-robust standard errors are ",
+    "reported in parentheses. Because quintile samples are disjoint, the ",
+    "contrast variance is the sum of the two coefficient variances. ",
+    "$^{*}p<0.10$, $^{**}p<0.05$, $^{***}p<0.01$."
+  ),
+  "\\end{tablenotes}",
+  "\\end{threeparttable}",
+  "\\end{table}"
+)
+writeLines(heterogeneity_contrasts_latex, heterogeneity_contrasts_tex)
+
 message("Drawing heterogeneity plot.")
 png(heterogeneity_plot, width = 1800, height = 1200, res = 200)
 par(mar = c(5.2, 5.2, 1.5, 1.2), family = "serif")
@@ -772,6 +860,7 @@ fwrite(correlation_summary, correlation_summary_csv)
 
 message("Wrote: ", main_table_tex)
 message("Wrote: ", va_distribution_tex)
+message("Wrote: ", heterogeneity_contrasts_tex)
 message("Wrote: ", heterogeneity_plot)
 message("Wrote: ", math_language_correlation_plot)
 message("Wrote: ", math_stem_correlation_plot)
