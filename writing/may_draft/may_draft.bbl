@@ -346,11 +346,11 @@
     \endentry
     \entry{angrist_leveraging_2017}{article}{}{}
       \name{author}{4}{}{%
-        {{hash=71a74466a85192690bb7668576e4f2f3}{%
+        {{hash=ee326f34eea24952d04c41cef1771bfc}{%
            family={Angrist},
            familyi={A\bibinitperiod},
-           given={Joshua},
-           giveni={J\bibinitperiod}}}%
+           given={Joshua\bibnamedelima D.},
+           giveni={J\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
         {{hash=46a05e33649372bde6622c4415dffa41}{%
            family={Hull},
            familyi={H\bibinitperiod},
@@ -367,14 +367,14 @@
            given={Christopher\bibnamedelima R.},
            giveni={C\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
       }
-      \strng{namehash}{08066f46f89322d1d81cf67cefb9a866}
-      \strng{fullhash}{0e4e3f4ff46ba55fb30b469b91fedfb2}
-      \strng{fullhashraw}{0e4e3f4ff46ba55fb30b469b91fedfb2}
-      \strng{bibnamehash}{0e4e3f4ff46ba55fb30b469b91fedfb2}
-      \strng{authorbibnamehash}{0e4e3f4ff46ba55fb30b469b91fedfb2}
-      \strng{authornamehash}{08066f46f89322d1d81cf67cefb9a866}
-      \strng{authorfullhash}{0e4e3f4ff46ba55fb30b469b91fedfb2}
-      \strng{authorfullhashraw}{0e4e3f4ff46ba55fb30b469b91fedfb2}
+      \strng{namehash}{2cbd3e0434d1aadcbfd10ad5525540b5}
+      \strng{fullhash}{c7b609ff7d47090561d425f379b75536}
+      \strng{fullhashraw}{c7b609ff7d47090561d425f379b75536}
+      \strng{bibnamehash}{c7b609ff7d47090561d425f379b75536}
+      \strng{authorbibnamehash}{c7b609ff7d47090561d425f379b75536}
+      \strng{authornamehash}{2cbd3e0434d1aadcbfd10ad5525540b5}
+      \strng{authorfullhash}{c7b609ff7d47090561d425f379b75536}
+      \strng{authorfullhashraw}{c7b609ff7d47090561d425f379b75536}
       \field{extraname}{3}
       \field{sortinit}{A}
       \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}

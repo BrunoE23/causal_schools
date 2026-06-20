@@ -325,22 +325,33 @@ Because assignment offers vary randomly conditional on the assignment probabilit
 
 The first empirical question is whether observational value added predicts causal effects on the same outcome.
 Specifically, when the assignment mechanism moves a student toward a school with higher $\widehat{V}_j^m$, does outcome $m$ rise, and by how much relative to the observational difference encoded in $\widehat{V}_j^m$?
-The main estimating equation is
-\begin{equation}
-  Y_i^m = \alpha^m + \theta^m A_i^m + \rho^m E_i^m + W_i'\delta^m + \eta_i^m,
-  \label{eq:pass-through}
-\end{equation}
-where $A_i^m$ is instrumented with $O_i^m$.
+The main IV system is given by the following pair of equations:
+\noindent
+\begin{minipage}[t]{0.49\textwidth}
+  \begin{equation}
+    \begin{aligned}
+      Y_i^m ={}& \alpha^m + \theta^m A_i^m + \rho^m E_i^m \\
+                &+ W_i'\delta^m + \eta_i^m,
+    \end{aligned}
+    \label{eq:pass-through}
+  \end{equation}
+\end{minipage}%
+\hfill
+\begin{minipage}[t]{0.49\textwidth}
+  \begin{equation}
+    \begin{aligned}
+      A_i^m ={}& a^m + \kappa^m O_i^m + \rho_A^m E_i^m \\
+                &+ W_i'\delta_A^m + \nu_i^m.
+    \end{aligned}
+    \label{eq:first-stage}
+  \end{equation}
+\end{minipage}
+Thus, $A_i^m$ is instrumented with $O_i^m$.
 Here, $Y_i^m$ is student $i$'s realized value of outcome $m$.
 $A_i^m$ is the value added of the school the student actually attends, $O_i^m$ is the value added of the school offered by the assignment mechanism, and $E_i^m$ is the expected value added implied by the student's assignment-probability vector.
 $W_i$ is a parsimonious lottery-sample control vector containing cohort, gender, age, and grade-4 SIMCE math and language.
 This differs from the richer control vector used to construct $\widehat{V}_j^m$ in equation~\eqref{eq:observational-va}, which also includes family-background and middle-school controls.
 The rich controls enter through the construction of the school value-added measures, while equation~\eqref{eq:pass-through} asks whether those pre-constructed measures pass through in the SAE lottery sample after conditioning on assignment risk and core baseline covariates.
-Equivalently, the first stage is
-\begin{equation}
-  A_i^m = a^m + \kappa^m O_i^m + \rho_A^m E_i^m + W_i'\delta_A^m + \nu_i^m.
-  \label{eq:first-stage}
-\end{equation}
 All reported specifications use heteroskedasticity-robust standard errors.
 
 The coefficient $\theta^m$ is the key object.
@@ -415,6 +426,14 @@ It does show, however, that the school assignment margin shifts later higher-edu
 
 \input{../../output/tables/results_section/main_four_va_metrics.tex}
 
+Table~\ref{tab:school-va-distribution} reports the student-weighted distribution of the four observational value-added measures.
+The 90--10 percentile gap is 0.544 standard deviations for math achievement and 0.440 standard deviations for language achievement.
+For the higher-education outcomes, the corresponding gap is 0.164 for STEM enrollment, or 16.4 percentage points, and 0.917 years for institutional quality.
+The standard deviations are 0.258, 0.188, 0.078, and 0.375, respectively.
+These distributions show that the school value-added measures contain economically meaningful variation and provide scale for interpreting the pass-through coefficients in Table~\ref{tab:main-four-va-results}.
+
+\input{../../output/tables/results_section/school_va_distribution.tex}
+
 \subsection{Heterogeneity by Baseline Achievement}
 
 Figure~\ref{fig:simce4-math-quintile-four-metrics} repeats the same four estimates separately by quintiles of baseline grade-4 math achievement.
@@ -439,14 +458,23 @@ This pattern suggests that the test-score value-added measures may be more predi
 
 The scalar estimates above treat each outcome-specific value-added measure one at a time.
 I also construct a two-dimensional measure that separates math value added from STEM-enrollment value added.
-Figure~\ref{fig:math-stem-va-correlation} shows that the raw school-level relationship between math value added and STEM enrollment value added is positive but weak.
+Figure~\ref{fig:va-correlation-panels}, panel (a), first compares math and verbal value added as an achievement benchmark.
+The two achievement measures are strongly related across schools, with a correlation of 0.645.
+Panel (b) then compares math value added with STEM-enrollment value added.
+In contrast to the two achievement measures, the school-level relationship between math and STEM value added is close to zero, with a correlation of 0.061.
 This makes it possible to ask whether schools that improve STEM enrollment are doing so only because they are also high math value-added schools, or whether there is a distinct STEM-related component.
 
 \begin{figure}[!htbp]
 \centering
-\includegraphics[width=.72\textwidth]{../../output/figures/results_section/math_stem_va_correlation.png}
-\caption{Relationship between math and STEM observational value added}
-\label{fig:math-stem-va-correlation}
+\subbottom[Math and verbal value added\label{fig:math-verbal-va-correlation}]{%
+\includegraphics[width=.48\textwidth]{../../output/figures/results_section/math_language_va_correlation.png}%
+}
+\hfill
+\subbottom[Math and STEM enrollment value added\label{fig:math-stem-va-correlation}]{%
+\includegraphics[width=.48\textwidth]{../../output/figures/results_section/math_stem_va_correlation.png}%
+}
+\caption{Relationships between math, verbal, and STEM observational value added}
+\label{fig:va-correlation-panels}
 \end{figure}
 \FloatBarrier
 

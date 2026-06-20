@@ -59,20 +59,43 @@ orthogonal_va_path <- file.path(
   orthogonal_dir,
   "school_orthogonal_va_exam_takers.csv"
 )
+school_values_path <- file.path(
+  clean_dir,
+  "school_rbd_observational_values",
+  "school_rbd_observational_values.csv"
+)
+universe_path <- file.path(clean_dir, "univ_gr8_df.csv")
+middle_school_controls_path <- file.path(
+  clean_dir,
+  "middle_school_controls",
+  "middle_school_controls.csv"
+)
 
 main_table_csv <- file.path(table_dir, "main_four_va_metrics.csv")
 main_table_tex <- file.path(table_dir, "main_four_va_metrics.tex")
+va_distribution_csv <- file.path(table_dir, "school_va_distribution.csv")
+va_distribution_tex <- file.path(table_dir, "school_va_distribution.tex")
+outcome_sample_stats_csv <- file.path(table_dir, "outcome_sample_stats.csv")
 heterogeneity_csv <- file.path(table_dir, "simce4_math_quintile_four_metrics.csv")
 heterogeneity_plot <- file.path(
   figure_dir,
   "simce4_math_quintile_four_metrics.png"
 )
-correlation_plot <- file.path(
+math_language_correlation_plot <- file.path(
+  figure_dir,
+  "math_language_va_correlation.png"
+)
+math_stem_correlation_plot <- file.path(
   figure_dir,
   "math_stem_va_correlation.png"
 )
+correlation_summary_csv <- file.path(
+  table_dir,
+  "school_va_correlations.csv"
+)
 
 format_estimate <- function(x) {
+  x[!is.na(x) & abs(x) < 0.0005] <- 0
   ifelse(is.na(x), "", sprintf("%.3f", x))
 }
 
@@ -121,6 +144,227 @@ specs <- data.table(
   family = c("Achievement", "Achievement", "Higher education", "Higher education")
 )
 
+message("Reading paper-facing school VA values.")
+paper_school_values <- fread(
+  school_values_path,
+  select = c(
+    "school_rbd",
+    "analysis_sample",
+    "outcome",
+    "controlled_value_added_centered_student",
+    "controlled_adjusted_mean_student",
+    "n_students_regression",
+    "n_students_regression_total"
+  ),
+  na.strings = c("", "NA")
+)[
+  analysis_sample == "All" & outcome %chin% specs$outcome
+]
+paper_school_values <- merge(
+  paper_school_values,
+  specs[, .(spec, outcome, label, family)],
+  by = "outcome",
+  all.x = TRUE,
+  sort = FALSE
+)
+
+if (paper_school_values[, anyDuplicated(paste(school_rbd, outcome))]) {
+  stop("Paper-facing school VA input has duplicate school-outcome rows.")
+}
+
+paper_school_values[, sample_outcome_mean :=
+  controlled_adjusted_mean_student - controlled_value_added_centered_student]
+sample_mean_ranges <- paper_school_values[
+  is.finite(sample_outcome_mean),
+  .(
+    sample_mean_min = min(sample_outcome_mean),
+    sample_mean_max = max(sample_outcome_mean)
+  ),
+  by = outcome
+]
+if (sample_mean_ranges[, any(abs(sample_mean_max - sample_mean_min) > 1e-10)]) {
+  stop("Recovered outcome sample mean is not constant within outcome.")
+}
+
+z_within_group <- function(x) {
+  sigma <- stats::sd(x, na.rm = TRUE)
+  if (is.na(sigma) || sigma == 0) {
+    return(rep(NA_real_, length(x)))
+  }
+  (x - mean(x, na.rm = TRUE)) / sigma
+}
+
+message("Computing underlying outcome moments in the VA regression samples.")
+baseline_cpad_control_vars <- c(
+  "father_educ_years_imputed",
+  "mother_educ_years_imputed",
+  "father_indigenous_imputed",
+  "mother_indigenous_imputed",
+  "sala_cuna_imputed",
+  "jardin_imputed",
+  "prekinder_imputed",
+  "kinder_imputed"
+)
+universe_control_vars <- c(
+  "cohort_gr8",
+  "GEN_ALU",
+  "EDAD_ALU",
+  "COD_COM_ALU",
+  "income_decile_imputed",
+  baseline_cpad_control_vars,
+  "z_gpa_middle_mean",
+  "z_att_middle_mean",
+  "middle_years_observed",
+  "z_sim_mat_4to",
+  "z_sim_leng_4to"
+)
+universe_cols <- unique(c(
+  "MRUN",
+  "most_time_RBD",
+  "psu_year",
+  "math_max",
+  "leng_max",
+  "field_reclassified_m1",
+  "f_science_m1",
+  "f_eng_m1",
+  "ACREDITADA_CARR_m1",
+  "ACREDITADA_INST_m1",
+  "ACRE_INST_ANIO_m1",
+  "program_certified_years_m1",
+  "institution_accredited_m1",
+  setdiff(
+    universe_control_vars,
+    c(
+      "z_gpa_middle_mean",
+      "z_att_middle_mean",
+      "middle_years_observed"
+    )
+  )
+))
+
+universe_sample <- fread(
+  universe_path,
+  select = universe_cols,
+  na.strings = c("", "NA"),
+  showProgress = FALSE
+)
+universe_sample[, school_rbd := as.numeric(most_time_RBD)]
+universe_sample <- universe_sample[
+  !is.na(school_rbd) & school_rbd > 0 &
+    !is.na(EDAD_ALU) & EDAD_ALU >= 12 & EDAD_ALU <= 16
+]
+
+for (score in c("math_max", "leng_max")) {
+  universe_sample[is.na(get(score)) | get(score) <= 0, (score) := NA_real_]
+  z_score <- paste0("z_year_", score)
+  universe_sample[, (z_score) := z_within_group(get(score)), by = psu_year]
+}
+
+universe_sample <- universe_sample[!is.na(math_max) | !is.na(leng_max)]
+universe_sample[, stem_enrollment_m1 := as.integer(
+  fifelse(is.na(f_science_m1), 0, as.numeric(f_science_m1)) == 1 |
+    fifelse(is.na(f_eng_m1), 0, as.numeric(f_eng_m1)) == 1
+)]
+universe_sample[, observed_matricula_m1 :=
+  !is.na(ACREDITADA_CARR_m1) |
+    !is.na(ACREDITADA_INST_m1) |
+    !is.na(ACRE_INST_ANIO_m1)]
+universe_sample[, inst_certified_years_m1 := fcase(
+  institution_accredited_m1 == 1L,
+  as.numeric(ACRE_INST_ANIO_m1),
+  institution_accredited_m1 == 0L,
+  0,
+  is.na(institution_accredited_m1) & !observed_matricula_m1,
+  0,
+  default = NA_real_
+)]
+
+middle_school_controls <- fread(
+  middle_school_controls_path,
+  select = c(
+    "MRUN",
+    "most_time_RBD_middle",
+    "middle_years_observed",
+    "z_gpa_middle_mean",
+    "z_att_middle_mean"
+  ),
+  na.strings = c("", "NA"),
+  showProgress = FALSE
+)
+universe_sample[, MRUN := as.character(MRUN)]
+middle_school_controls[, MRUN := as.character(MRUN)]
+universe_sample <- merge(
+  universe_sample,
+  middle_school_controls,
+  by = "MRUN",
+  all.x = TRUE,
+  sort = FALSE
+)
+
+outcome_sample_stats <- rbindlist(lapply(specs$outcome, function(outcome_name) {
+  required <- c(
+    outcome_name,
+    universe_control_vars,
+    "school_rbd",
+    "most_time_RBD_middle"
+  )
+  regression_sample <- universe_sample[complete.cases(universe_sample[, ..required])]
+  data.table(
+    outcome = outcome_name,
+    sample_mean = mean(regression_sample[[outcome_name]]),
+    sample_sd = stats::sd(regression_sample[[outcome_name]]),
+    n_students = nrow(regression_sample)
+  )
+}))
+
+va_sample_check_rows <- paper_school_values[
+  is.finite(sample_outcome_mean) & is.finite(n_students_regression_total)
+]
+va_sample_checks <- va_sample_check_rows[, .(
+  va_sample_mean = stats::median(sample_outcome_mean),
+  va_sample_mean_range = max(sample_outcome_mean) - min(sample_outcome_mean),
+  va_n_students = unique(n_students_regression_total)[[1]],
+  n_distinct_va_samples = uniqueN(n_students_regression_total)
+), by = outcome]
+if (va_sample_checks[, any(
+  va_sample_mean_range > 1e-10 | n_distinct_va_samples != 1L
+)]) {
+  stop("VA output contains inconsistent sample checks within an outcome.")
+}
+outcome_sample_stats <- merge(
+  outcome_sample_stats,
+  va_sample_checks,
+  by = "outcome",
+  all.x = TRUE,
+  sort = FALSE
+)
+if (outcome_sample_stats[, any(
+  abs(sample_mean - va_sample_mean) > 1e-10 |
+    n_students != va_n_students
+)]) {
+  stop("Reconstructed outcome sample does not match the VA regression sample.")
+}
+fwrite(outcome_sample_stats, outcome_sample_stats_csv)
+
+weighted_quantile <- function(x, weights, probs) {
+  valid <- is.finite(x) & is.finite(weights) & weights > 0
+  x <- x[valid]
+  weights <- weights[valid]
+  ord <- order(x)
+  x <- x[ord]
+  weights <- weights[ord]
+  cumulative_weight <- cumsum(weights) / sum(weights)
+  vapply(probs, function(p) x[which(cumulative_weight >= p)[1]], numeric(1))
+}
+
+weighted_sd <- function(x, weights) {
+  valid <- is.finite(x) & is.finite(weights) & weights > 0
+  x <- x[valid]
+  weights <- weights[valid]
+  weighted_mean <- sum(weights * x) / sum(weights)
+  sqrt(sum(weights * (x - weighted_mean)^2) / sum(weights))
+}
+
 message("Writing main four-metric table.")
 results <- fread(scalar_results_path, na.strings = c("", "NA"))
 main <- merge(
@@ -161,6 +405,93 @@ main_tex <- c(
   "\\end{table}"
 )
 writeLines(main_tex, main_table_tex)
+
+message("Writing school VA distribution table.")
+va_distribution <- paper_school_values[, {
+  quantiles <- weighted_quantile(
+    controlled_value_added_centered_student,
+    n_students_regression,
+    probs = c(0.10, 0.25, 0.50, 0.75, 0.90)
+  )
+  valid <- is.finite(controlled_value_added_centered_student) &
+    is.finite(n_students_regression) &
+  n_students_regression > 0
+
+  .(
+    p10 = quantiles[[1]],
+    p25 = quantiles[[2]],
+    p50 = quantiles[[3]],
+    p75 = quantiles[[4]],
+    p90 = quantiles[[5]],
+    p90_p10 = quantiles[[5]] - quantiles[[1]],
+    va_sd = weighted_sd(
+      controlled_value_added_centered_student,
+      n_students_regression
+    ),
+    n_schools = sum(valid),
+    n_students = sum(n_students_regression[valid])
+  )
+}, by = .(spec, outcome, label, family)]
+va_distribution <- merge(
+  va_distribution,
+  outcome_sample_stats[, .(outcome, sample_mean, sample_sd)],
+  by = "outcome",
+  all.x = TRUE,
+  sort = FALSE
+)
+va_distribution[, spec := factor(spec, levels = specs$spec)]
+setorder(va_distribution, spec)
+va_distribution[, spec := as.character(spec)]
+fwrite(va_distribution, va_distribution_csv)
+
+distribution_latex_rows <- vapply(seq_len(nrow(specs)), function(i) {
+  values <- unlist(va_distribution[
+    spec == specs$spec[[i]],
+    .(sample_mean, sample_sd, va_sd, p10, p25, p50, p75, p90)
+  ], use.names = FALSE)
+  paste0(
+    specs$label[[i]],
+    " & ",
+    paste(format_estimate(values), collapse = " & "),
+    " \\\\"
+  )
+}, character(1))
+
+va_distribution_latex <- c(
+  "\\begin{table}[!htbp]",
+  "\\centering",
+  "\\begin{threeparttable}",
+  "\\caption{Distribution of observational school value added}",
+  "\\label{tab:school-va-distribution}",
+  "\\small",
+  "\\setlength{\\tabcolsep}{3.5pt}",
+  "\\begin{tabular}{lcc|cccccc}",
+  "\\toprule",
+  " & \\multicolumn{2}{c|}{Outcome distribution} & \\multicolumn{6}{c}{Value-added distribution} \\\\",
+  "\\cmidrule(lr){2-3} \\cmidrule(lr){4-9}",
+  "Outcome & \\shortstack{Sample\\\\Mean} & \\shortstack{Sample\\\\SD} & VA SD & P10 & P25 & P50 & P75 & P90 \\\\",
+  "\\midrule",
+  distribution_latex_rows,
+  "\\bottomrule",
+  "\\end{tabular}",
+  "\\begin{tablenotes}[flushleft]",
+  "\\footnotesize",
+  paste0(
+    "\\item Notes: The table reports the student-weighted distribution of ",
+    "All-sample adjusted school value added. Schools are weighted by the ",
+    "number of students used to estimate the corresponding value-added ",
+    "measure. Sample Mean and Sample SD refer to the underlying outcome ",
+    "in the outcome-specific value-added regression sample; the remaining ",
+    "columns describe the value-added distribution. Math and language are ",
+    "measured in admission-test standard ",
+    "deviations, STEM enrollment in probability units, and institutional ",
+    "quality in accreditation years."
+  ),
+  "\\end{tablenotes}",
+  "\\end{threeparttable}",
+  "\\end{table}"
+)
+writeLines(va_distribution_latex, va_distribution_tex)
 
 make_rank_group <- function(x, n_groups = 5L) {
   out <- rep(NA_integer_, length(x))
@@ -344,47 +675,104 @@ legend(
 )
 dev.off()
 
-message("Drawing math/STEM VA correlation plot.")
+message("Reading paper-facing school VA for correlation plots.")
 school_va <- fread(
   orthogonal_va_path,
   select = c(
+    "school_rbd",
     "math_controlled_value_added_centered_student",
     "stem_controlled_value_added_centered_student"
   ),
   na.strings = c("", "NA")
 )
-school_va <- school_va[complete.cases(school_va)]
-va_cor <- cor(
-  school_va$math_controlled_value_added_centered_student,
-  school_va$stem_controlled_value_added_centered_student
+
+language_va <- paper_school_values[
+  outcome == "z_year_leng_max",
+  .(
+    school_rbd,
+    language_controlled_value_added_centered_student =
+      controlled_value_added_centered_student
+  )
+]
+
+if (anyDuplicated(language_va$school_rbd)) {
+  stop("Language VA input has duplicate school_rbd rows.")
+}
+
+school_va <- merge(
+  school_va,
+  language_va,
+  by = "school_rbd",
+  all.x = TRUE,
+  sort = FALSE
 )
-png(correlation_plot, width = 1500, height = 1200, res = 200)
-par(mar = c(5.1, 5.2, 1.2, 1.1), family = "serif")
-plot(
-  school_va$math_controlled_value_added_centered_student,
-  school_va$stem_controlled_value_added_centered_student,
-  pch = 16,
-  col = grDevices::adjustcolor("#1B4D89", alpha.f = 0.35),
-  xlab = "Math value added",
-  ylab = "STEM enrollment value added",
-  bty = "l"
+
+draw_correlation_plot <- function(
+    dt,
+    y_col,
+    y_label,
+    output_path,
+    point_color = "#1B4D89",
+    line_color = "#B6422E") {
+  x_col <- "math_controlled_value_added_centered_student"
+  plot_dt <- dt[complete.cases(dt[, c(x_col, y_col), with = FALSE])]
+  correlation <- stats::cor(plot_dt[[x_col]], plot_dt[[y_col]])
+  fit <- stats::lm(plot_dt[[y_col]] ~ plot_dt[[x_col]])
+
+  png(output_path, width = 1500, height = 1200, res = 200)
+  par(mar = c(5.1, 5.2, 1.2, 1.1), family = "serif")
+  plot(
+    plot_dt[[x_col]],
+    plot_dt[[y_col]],
+    pch = 16,
+    col = grDevices::adjustcolor(point_color, alpha.f = 0.35),
+    xlab = "Math value added",
+    ylab = y_label,
+    bty = "l"
+  )
+  abline(fit, col = line_color, lwd = 2)
+  legend(
+    "topleft",
+    legend = paste0("Correlation = ", sprintf("%.3f", correlation)),
+    bty = "n"
+  )
+  dev.off()
+
+  data.table(
+    comparison = paste0("math_vs_", sub("_controlled.*$", "", y_col)),
+    correlation = correlation,
+    n_schools = nrow(plot_dt),
+    figure = basename(output_path)
+  )
+}
+
+message("Drawing math/verbal VA correlation plot.")
+math_language_summary <- draw_correlation_plot(
+  school_va,
+  y_col = "language_controlled_value_added_centered_student",
+  y_label = "Verbal value added",
+  output_path = math_language_correlation_plot,
+  point_color = "#1B4D89"
 )
-abline(
-  lm(
-    stem_controlled_value_added_centered_student ~
-      math_controlled_value_added_centered_student,
-    data = school_va
-  ),
-  col = "#B6422E",
-  lwd = 2
+
+message("Drawing math/STEM VA correlation plot.")
+math_stem_summary <- draw_correlation_plot(
+  school_va,
+  y_col = "stem_controlled_value_added_centered_student",
+  y_label = "STEM enrollment value added",
+  output_path = math_stem_correlation_plot,
+  point_color = "#1B7F5A"
 )
-legend(
-  "topleft",
-  legend = paste0("Correlation = ", sprintf("%.3f", va_cor)),
-  bty = "n"
-)
-dev.off()
+
+correlation_summary <- rbindlist(list(
+  math_language_summary,
+  math_stem_summary
+))
+fwrite(correlation_summary, correlation_summary_csv)
 
 message("Wrote: ", main_table_tex)
+message("Wrote: ", va_distribution_tex)
 message("Wrote: ", heterogeneity_plot)
-message("Wrote: ", correlation_plot)
+message("Wrote: ", math_language_correlation_plot)
+message("Wrote: ", math_stem_correlation_plot)
+message("Wrote: ", correlation_summary_csv)
