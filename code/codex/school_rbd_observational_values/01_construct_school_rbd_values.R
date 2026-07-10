@@ -83,6 +83,11 @@ field_vars <- c(
   ml = "field_reclassified_ml"
 )
 
+direct_higher_ed_enrollment_vars <- c(
+  m1 = "COD_SIES_m1",
+  ml = "COD_SIES_ml"
+)
+
 field_indicator_stems <- c(
   "science",
   "social",
@@ -116,6 +121,8 @@ controlled_value_added_outcomes <- c(
   "z_year_math_max",
   "z_year_leng_max",
   "z_year_leng_math_total",
+  "admission_exam_taker",
+  "higher_ed_enrolled_m1",
   "stem_enrollment_m1",
   "log_program_income_clp_m1",
   "program_certified_years_m1",
@@ -528,6 +535,42 @@ add_field_outcomes <- function(data,
   list(data = data, outcome_specs = outcome_specs)
 }
 
+add_direct_higher_ed_enrollment_outcomes <- function(data,
+                                                     direct_enrollment_vars) {
+  stop_if_missing(
+    data,
+    unname(direct_enrollment_vars),
+    "Direct higher-education enrollment outcome construction"
+  )
+
+  outcome_specs <- tibble(
+    outcome = character(),
+    outcome_family = character()
+  )
+
+  for (suffix in names(direct_enrollment_vars)) {
+    enrollment_var <- unname(direct_enrollment_vars[[suffix]])
+    enrollment_outcome <- paste0("higher_ed_enrolled_", suffix)
+    enrollment_code <- trimws(as.character(data[[enrollment_var]]))
+
+    data[[enrollment_outcome]] <- as.integer(
+      !is.na(enrollment_code) &
+        nzchar(enrollment_code) &
+        enrollment_code != "NA"
+    )
+
+    outcome_specs <- bind_rows(
+      outcome_specs,
+      tibble(
+        outcome = enrollment_outcome,
+        outcome_family = "higher_ed_enrollment"
+      )
+    )
+  }
+
+  list(data = data, outcome_specs = outcome_specs)
+}
+
 add_accreditation_outcomes <- function(data) {
   accreditation_vars <- c(
     "ACREDITADA_CARR_m1",
@@ -842,6 +885,7 @@ input_cols <- unique(c(
   age_var,
   score_year_var,
   raw_score_outcomes,
+  unname(direct_higher_ed_enrollment_vars),
   unname(field_vars),
   field_indicator_vars,
   "ACREDITADA_CARR_m1",
@@ -939,8 +983,18 @@ analytic <- score_result$data
 write_csv(score_result$diagnostics, score_diagnostics_path)
 
 analytic <- analytic %>%
-  mutate(admission_exam_taker = !is.na(math_max) | !is.na(leng_max)) %>%
-  filter(admission_exam_taker)
+  mutate(admission_exam_taker = !is.na(math_max) | !is.na(leng_max))
+
+exam_taking_specs <- tibble(
+  outcome = "admission_exam_taker",
+  outcome_family = "exam_taking"
+)
+
+direct_enrollment_result <- add_direct_higher_ed_enrollment_outcomes(
+  analytic,
+  direct_higher_ed_enrollment_vars
+)
+analytic <- direct_enrollment_result$data
 
 field_result <- add_field_outcomes(
   analytic,
@@ -963,6 +1017,8 @@ program_income_specs <- tibble(
 
 outcome_specs <- bind_rows(
   score_result$outcome_specs,
+  exam_taking_specs,
+  direct_enrollment_result$outcome_specs,
   field_result$outcome_specs,
   accreditation_result$outcome_specs,
   program_income_specs
@@ -1003,6 +1059,19 @@ sample_data <- function(data, gender_code) {
   data %>% filter(.data[[gender_var]] == gender_code)
 }
 
+outcome_requires_exam_taker <- function(outcome_name) {
+  !(outcome_name == "admission_exam_taker" ||
+      grepl("^higher_ed_enrolled_", outcome_name))
+}
+
+sample_data_for_outcome <- function(data, gender_code, outcome_name) {
+  out <- sample_data(data, gender_code)
+  if (outcome_requires_exam_taker(outcome_name)) {
+    out <- out %>% filter(admission_exam_taker)
+  }
+  out
+}
+
 sample_control_terms <- function(analysis_sample) {
   if (analysis_sample == "All") {
     return(control_terms)
@@ -1020,16 +1089,25 @@ sample_control_vars <- function(analysis_sample) {
 school_counts_by_sample <- pmap_dfr(
   analysis_samples,
   function(analysis_sample, gender_code) {
-    sample_data(analytic, gender_code) %>%
-      count(school_rbd, name = "n_students_school") %>%
-      mutate(analysis_sample = analysis_sample)
+    map_dfr(outcome_specs$outcome, function(outcome_name) {
+      sample_data_for_outcome(analytic, gender_code, outcome_name) %>%
+        count(school_rbd, name = "n_students_school") %>%
+        mutate(
+          analysis_sample = analysis_sample,
+          outcome = outcome_name
+        )
+    })
   }
 )
 
 raw_values <- pmap_dfr(analysis_samples, function(analysis_sample, gender_code) {
-  sample_analytic <- sample_data(analytic, gender_code)
-
   map_dfr(outcome_specs$outcome, function(outcome_name) {
+    sample_analytic <- sample_data_for_outcome(
+      analytic,
+      gender_code,
+      outcome_name
+    )
+
     sample_analytic %>%
       group_by(school_rbd) %>%
       summarise(
@@ -1061,7 +1139,7 @@ if (length(controlled_outcomes) == 0) {
 controlled_values <- map_dfr(controlled_outcomes, function(outcome_name) {
   pmap_dfr(analysis_samples, function(analysis_sample, gender_code) {
     estimate_school_value_added(
-      data = sample_data(analytic, gender_code),
+      data = sample_data_for_outcome(analytic, gender_code, outcome_name),
       outcome = outcome_name,
       controls = sample_control_terms(analysis_sample),
       control_vars = sample_control_vars(analysis_sample),
@@ -1121,7 +1199,7 @@ if (length(gender_gap_outcomes) > 0) {
 base_final_values <- raw_values %>%
   left_join(controlled_values, by = c("school_rbd", "analysis_sample", "outcome")) %>%
   left_join(outcome_specs, by = "outcome") %>%
-  left_join(school_counts_by_sample, by = c("school_rbd", "analysis_sample")) %>%
+  left_join(school_counts_by_sample, by = c("school_rbd", "analysis_sample", "outcome")) %>%
   mutate(
     control_set = case_when(
       analysis_sample == "All" ~ paste(control_terms, collapse = " + "),

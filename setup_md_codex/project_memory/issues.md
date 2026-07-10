@@ -81,3 +81,34 @@
 - Why it matters: These are ordinary programs with plausible generic areas. Leaving them to institution-only or global-mean fallback weakens the interpretation of `program_income` as program/field expected income.
 - Current workaround: Keep the hierarchy and preserve `program_income_source_*` diagnostics so regressions can report or exclude fallback-heavy cases.
 - Follow-up: Repair the `COD_SIES` to `AREA_CARRERA_GENERICA` mapping for high-volume blank-area programs, rerun `03_construct_person_level_income_outcomes.R`, and recheck the number of students using institution/global fallbacks. Consider dropping institution-only FE from the main hierarchy after mapping repair if area coverage becomes adequate.
+
+### Full SIES 2026 is still missing for grade-8 2021 higher-ed outcomes
+
+- Status: Open
+- Date noted: 2026-07-10
+- Context: PAES 2026 corresponds to students who finish high school in 2025. A
+  natural next extension is therefore the grade-8 2021 cohort.
+- What was found: After adding raw `student_tracking/2025`, the main universe
+  inputs were rebuilt through grade-8 cohort 2021 with
+  `code/codex/paes_2026_update/05_extend_main_universe_to_2021.R`. The rebuilt
+  `univ_gr8_df.csv` covers cohorts 2017-2021, has 1,197,982 one-row-per-student
+  records, and includes 253,472 students in cohort 2021. Cohort 2021 has 251,024
+  matched `most_time_RBD` values using the same four-year post-grade-8 window,
+  190,187 timely PAES 2026 records, and 79,475 `paes_matriculated_2026` records.
+- Current limitation: `data/raw/2026/Matricula-Ed-Superior-2026` is still not
+  present. PAES matricula 2026 is admissions-process matricula, not full SIES
+  enrollment. It is mapped and kept in separate PAES-only variables, including
+  `paes_matriculated_2026`; it should not be used to fill `COD_SIES_m1`,
+  accreditation, or program-income outcomes.
+- Current workaround: Use cohort 2021 for PAES score/application and PAES-only
+  matricula diagnostics where explicitly labeled. Do not treat 2021 full
+  higher-ed enrollment, accreditation, or program-income outcomes as complete
+  until full SIES 2026 is integrated.
+- Latest audit: `code/codex/paes_2026_update/03_audit_paes_2026_integration.R`
+  reports `min_cohort_gr8 == 2017`, `max_cohort_gr8 == 2021`,
+  `cohort_2021_present == TRUE`, `student_tracking_2025_exists == TRUE`, and
+  `full_sies_matricula_2026_exists == FALSE`.
+- Follow-up: When full SIES `Matricula-Ed-Superior-2026` arrives, extend
+  `clean_matriculated_first_time.R`, rebuild person-level MiFuturo/program
+  outcomes, and then regenerate VA/EB outcomes only after confirming the outcome
+  definitions are complete.

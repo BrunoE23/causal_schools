@@ -190,7 +190,8 @@ bysort psu_year: egen z_year_math_max = std(math_max)
 bysort psu_year: egen z_year_leng_max = std(leng_max)
 
 gen byte admission_exam_taker = !missing(math_max) | !missing(leng_max)
-keep if admission_exam_taker
+
+gen byte higher_ed_enrolled_m1 = !missing(COD_SIES_m1)
 
 replace f_science_m1 = 0 if missing(f_science_m1)
 replace f_eng_m1 = 0 if missing(f_eng_m1)
@@ -235,6 +236,8 @@ local controls ///
 local outcomes ///
     z_year_math_max ///
     z_year_leng_max ///
+    admission_exam_taker ///
+    higher_ed_enrolled_m1 ///
     stem_enrollment_m1 ///
     log_program_income_clp_m1 ///
     program_certified_years_m1 ///
@@ -243,6 +246,9 @@ local outcomes ///
 local write_mode "w"
 foreach y of local outcomes {
     use `analytic', clear
+    if "`y'" != "higher_ed_enrolled_m1" & "`y'" != "admission_exam_taker" {
+        keep if admission_exam_taker
+    }
     di as txt "Estimating school VA in Stata for outcome: `y'"
     quietly areg `y' ib(first).school_rbd `controls', absorb(most_time_RBD_middle)
     gen byte __esample = e(sample)

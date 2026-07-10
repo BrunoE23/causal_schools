@@ -168,7 +168,17 @@ program_info_all <- bind_rows(
 
 saveRDS(program_info_all, "./data/clean/program_info_22-24.rds")
 
-program_info_all <- readRDS("./data/clean/program_info_22-24.rds")
+program_info_all_22_25 <- bind_rows(
+  program_info_all,
+  load_program_info(2025)
+) %>%
+  group_by(COD_SIES) %>%
+  filter(year_info == max(year_info)) %>%
+  ungroup()
+
+saveRDS(program_info_all_22_25, "./data/clean/program_info_22-25.rds")
+
+program_info_all <- readRDS("./data/clean/program_info_22-25.rds")
 
 
 program_info_all %>% 
@@ -190,25 +200,50 @@ map_codes_2025 <- read_csv("./data/raw/2025/PAES-2025-Oferta-Definitiva-Programa
   rename(COD_CARRERA_PREF = COD_CARRERA) %>% 
   mutate(year_info = 2025)
 
-map_codes_most_recent<- bind_rows(
+map_codes_2026 <- read_csv("./data/raw/2026/PAES-2026-Oferta-Definitiva-Programas/OFERTA_DEFINITIVA_PROGRAMAS_PAES_2026.csv") %>%
+  select(COD_CARRERA, COD_SIES,
+         NEM, RANKING, CLEC, M1, HSCO, CIEN, M2) %>%
+  rename(COD_CARRERA_PREF = COD_CARRERA) %>%
+  mutate(year_info = 2026)
+
+map_codes_most_recent_24_25 <- bind_rows(
   map_codes_2024,
   map_codes_2025
+) %>%
+  group_by(COD_CARRERA_PREF) %>%
+  filter(year_info == max(year_info)) %>%
+  ungroup()
+
+map_codes_all_24_25 <- bind_rows(
+  map_codes_2024,
+  map_codes_2025
+)
+
+map_codes_most_recent <- bind_rows(
+  map_codes_2024,
+  map_codes_2025,
+  map_codes_2026
 ) %>% 
   group_by(COD_CARRERA_PREF) %>% 
   filter(year_info == max(year_info)) %>% 
   ungroup() 
 
 
-map_codes_all<- bind_rows(
+map_codes_all <- bind_rows(
   map_codes_2024,
-  map_codes_2025
+  map_codes_2025,
+  map_codes_2026
 ) 
 
-saveRDS(map_codes_most_recent, "./data/clean/oferta_codes_24_25_rec.rds")
-saveRDS(map_codes_all,         "./data/clean/oferta_codes_24_25_all.rds")
+# Keep the original 24-25 file names untouched for legacy replication. The
+# current PAES integration writes explicit 24-26 maps.
+saveRDS(map_codes_most_recent_24_25, "./data/clean/oferta_codes_24_25_rec.rds")
+saveRDS(map_codes_all_24_25,         "./data/clean/oferta_codes_24_25_all.rds")
+saveRDS(map_codes_most_recent, "./data/clean/oferta_codes_24_26_rec.rds")
+saveRDS(map_codes_all,         "./data/clean/oferta_codes_24_26_all.rds")
 
 
-map_codes_most_recent <- readRDS ("./data/clean/oferta_codes_24_25_rec.rds")
+map_codes_most_recent <- readRDS("./data/clean/oferta_codes_24_26_rec.rds")
 
 
 apps_field <- college_apps %>%  

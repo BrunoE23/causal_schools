@@ -138,6 +138,22 @@ program_income_table_tex <- Sys.getenv(
   "EB_IV_PROGRAM_INCOME_TABLE_TEX",
   unset = file.path(table_dir, "scalar_school_value_iv_program_income_expected_va_eb.tex")
 )
+enrollment_table_csv <- Sys.getenv(
+  "EB_IV_ENROLLMENT_TABLE_CSV",
+  unset = file.path(table_dir, "scalar_school_value_iv_higher_ed_enrollment_expected_va_eb.csv")
+)
+enrollment_table_tex <- Sys.getenv(
+  "EB_IV_ENROLLMENT_TABLE_TEX",
+  unset = file.path(table_dir, "scalar_school_value_iv_higher_ed_enrollment_expected_va_eb.tex")
+)
+exam_table_csv <- Sys.getenv(
+  "EB_IV_EXAM_TABLE_CSV",
+  unset = file.path(table_dir, "scalar_school_value_iv_exam_taking_expected_va_eb.csv")
+)
+exam_table_tex <- Sys.getenv(
+  "EB_IV_EXAM_TABLE_TEX",
+  unset = file.path(table_dir, "scalar_school_value_iv_exam_taking_expected_va_eb.tex")
+)
 diagnostics_csv <- Sys.getenv(
   "EB_IV_DIAGNOSTICS_OUTPUT_PATH",
   unset = file.path(eb_dir, "scalar_school_value_iv_expected_va_eb_diagnostics.csv")
@@ -147,7 +163,12 @@ value_specs <- data.table(
   spec = c(
     "math_adj_eb",
     "leng_adj_eb",
+    "exam_adj_eb",
+    "highered_adj_eb",
     "stem_adj_eb",
+    "program_income_area_adj_eb",
+    "program_income_institution_adj_eb",
+    "program_income_full_adj_eb",
     "program_income_adj_eb",
     "progcert_adj_eb",
     "instcert_adj_eb"
@@ -155,7 +176,12 @@ value_specs <- data.table(
   outcome = c(
     "z_year_math_max",
     "z_year_leng_max",
+    "admission_exam_taker",
+    "higher_ed_enrolled_m1",
     "stem_enrollment_m1",
+    "log_program_income_area_clp_m1",
+    "log_program_income_institution_clp_m1",
+    "log_program_income_full_clp_m1",
     "log_program_income_clp_m1",
     "program_certified_years_m1",
     "inst_certified_years_m1"
@@ -163,7 +189,12 @@ value_specs <- data.table(
   value_outcome = c(
     "z_year_math_max",
     "z_year_leng_max",
+    "admission_exam_taker",
+    "higher_ed_enrolled_m1",
     "stem_enrollment_m1",
+    "log_program_income_area_clp_m1",
+    "log_program_income_institution_clp_m1",
+    "log_program_income_full_clp_m1",
     "log_program_income_clp_m1",
     "program_certified_years_m1",
     "inst_certified_years_m1"
@@ -172,14 +203,64 @@ value_specs <- data.table(
   outcome_group = c(
     "Math",
     "Language",
+    "Exam taking",
+    "Higher-ed enrollment",
     "STEM enrollment",
+    "Program income: area FE",
+    "Program income: institution FE",
+    "Program income: full",
     "Program income",
     "Program-certified years",
     "Institutional quality"
+  ),
+  require_exam_taker = c(
+    TRUE,
+    TRUE,
+    FALSE,
+    FALSE,
+    TRUE,
+    TRUE,
+    TRUE,
+    TRUE,
+    TRUE,
+    TRUE,
+    TRUE
   )
 )
 
+decomposition_value_specs <- data.table(
+  spec = c(
+    "program_income_full_exam_component_adj_eb",
+    "program_income_full_math_component_adj_eb",
+    "program_income_full_institution_component_adj_eb",
+    "program_income_full_area_component_adj_eb"
+  ),
+  outcome = rep("log_program_income_full_clp_m1", 4),
+  value_outcome = c(
+    "log_program_income_full_component_exam_taking_va",
+    "log_program_income_full_component_math_va",
+    "log_program_income_full_component_institution_income_va",
+    "log_program_income_full_component_area_income_va"
+  ),
+  value_column = "controlled_value_added_eb_centered_student",
+  outcome_group = c(
+    "Full income: exam-taking component",
+    "Full income: math component",
+    "Full income: institution component",
+    "Full income: area component"
+  ),
+  require_exam_taker = TRUE
+)
+
 configured_spec_filter <- parse_env_list("EB_IV_VALUE_SPECS")
+include_decomposition_specs <- identical(
+  Sys.getenv("EB_IV_INCLUDE_PROGRAM_INCOME_DECOMPOSITION", unset = "0"),
+  "1"
+) || any(configured_spec_filter %chin% decomposition_value_specs$spec)
+if (include_decomposition_specs) {
+  value_specs <- rbind(value_specs, decomposition_value_specs, use.names = TRUE)
+}
+
 if (length(configured_spec_filter) > 0) {
   missing_filtered_specs <- setdiff(configured_spec_filter, value_specs$spec)
   if (length(missing_filtered_specs) > 0) {
@@ -197,7 +278,16 @@ if (nrow(value_specs) == 0) {
 
 main_specs <- c("math_adj_eb", "leng_adj_eb", "stem_adj_eb", "instcert_adj_eb")
 accreditation_specs <- c("progcert_adj_eb", "instcert_adj_eb")
-program_income_specs <- c("program_income_adj_eb")
+program_income_specs <- c(
+  "program_income_area_adj_eb",
+  "program_income_institution_adj_eb",
+  "program_income_full_adj_eb"
+)
+if (include_decomposition_specs) {
+  program_income_specs <- c(program_income_specs, decomposition_value_specs$spec)
+}
+enrollment_specs <- c("highered_adj_eb")
+exam_specs <- c("exam_adj_eb")
 
 message("Reading EB-shrunken school values: ", school_values_path)
 school_values_raw <- fread(school_values_path, na.strings = c("", "NA"))
@@ -257,6 +347,7 @@ universe_cols <- c(
   "student_id", "mrun", "cohort_gr8", "sae_proceso", "timely_sae",
   "rbd_treated_1R", "most_time_RBD", "GEN_ALU", "EDAD_ALU",
   "z_sim_mat_4to", "z_sim_leng_4to", "math_max", "leng_max", "psu_year",
+  "COD_SIES_m1",
   "f_science_m1", "f_eng_m1",
   "ACREDITADA_CARR_m1",
   "ACREDITADA_INST_m1",
@@ -270,8 +361,10 @@ universe[, `:=`(
   mrun = as.numeric(mrun),
   sae_proceso = as.integer(sae_proceso),
   rbd_treated_1R = as.numeric(rbd_treated_1R),
-  most_time_RBD = as.numeric(most_time_RBD)
+  most_time_RBD = as.numeric(most_time_RBD),
+  COD_SIES_m1 = trimws(as.character(COD_SIES_m1))
 )]
+universe[COD_SIES_m1 %chin% c("", "NA"), COD_SIES_m1 := NA_character_]
 
 message("Reading program_income outcome columns: ", program_income_path)
 if (!file.exists(program_income_path)) {
@@ -286,6 +379,18 @@ program_income <- fread(
   program_income_path,
   select = c(
     "mrun",
+    "program_income_area_clp_m1",
+    "log_program_income_area_clp_m1",
+    "program_income_area_source_m1",
+    "program_income_area_missing_m1",
+    "program_income_institution_clp_m1",
+    "log_program_income_institution_clp_m1",
+    "program_income_institution_source_m1",
+    "program_income_institution_missing_m1",
+    "program_income_full_clp_m1",
+    "log_program_income_full_clp_m1",
+    "program_income_full_source_m1",
+    "program_income_full_missing_m1",
     "program_income_clp_m1",
     "log_program_income_clp_m1",
     "program_income_source_m1",
@@ -319,6 +424,7 @@ universe[, stem_enrollment_m1 := as.integer(
   fifelse(is.na(f_science_m1), 0, as.numeric(f_science_m1)) == 1 |
     fifelse(is.na(f_eng_m1), 0, as.numeric(f_eng_m1)) == 1
 )]
+universe[, higher_ed_enrolled_m1 := as.integer(!is.na(COD_SIES_m1))]
 universe[, observed_matricula_m1 := !is.na(ACREDITADA_CARR_m1) |
   !is.na(ACREDITADA_INST_m1) |
   !is.na(ACRE_INST_ANIO_m1)]
@@ -395,7 +501,6 @@ estimation_df <- estimation_df[timely_sae == 1 & any_risk == 1]
 estimation_df[, admission_exam_taker := as.integer(
   !is.na(z_year_math_max) | !is.na(z_year_leng_max)
 )]
-estimation_df <- estimation_df[admission_exam_taker == 1L]
 
 attended_values <- copy(school_values_wide)
 setnames(
@@ -446,7 +551,13 @@ keep_cols <- c(
   "rbd_treated_1R", "most_time_RBD", "any_risk", "total_probability_mass",
   "n_positive_probability_options", "admission_exam_taker", "GEN_ALU", "EDAD_ALU",
   "z_sim_mat_4to", "z_sim_leng_4to",
-  "z_year_math_max", "z_year_leng_max", "stem_enrollment_m1",
+  "z_year_math_max", "z_year_leng_max", "higher_ed_enrolled_m1", "stem_enrollment_m1",
+  "program_income_area_clp_m1", "log_program_income_area_clp_m1",
+  "program_income_area_source_m1", "program_income_area_missing_m1",
+  "program_income_institution_clp_m1", "log_program_income_institution_clp_m1",
+  "program_income_institution_source_m1", "program_income_institution_missing_m1",
+  "program_income_full_clp_m1", "log_program_income_full_clp_m1",
+  "program_income_full_source_m1", "program_income_full_missing_m1",
   "program_income_clp_m1", "log_program_income_clp_m1",
   "program_income_source_m1", "program_income_missing_m1",
   "program_certified_years_m1", "inst_certified_years_m1",
@@ -466,6 +577,7 @@ run_iv_spec <- function(dt, spec_row) {
   d <- paste0("d_", spec)
   z <- paste0("z_", spec)
   expected <- paste0("expected_", spec)
+  require_exam_taker <- isTRUE(spec_row$require_exam_taker[[1]])
 
   controls <- c(
     "factor(cohort_gr8)",
@@ -477,7 +589,13 @@ run_iv_spec <- function(dt, spec_row) {
   )
 
   needed <- c(y, d, z, expected, "cohort_gr8", "z_sim_mat_4to", "z_sim_leng_4to", "GEN_ALU", "EDAD_ALU")
+  if (require_exam_taker) {
+    needed <- c(needed, "admission_exam_taker")
+  }
   reg_dt <- dt[complete.cases(dt[, ..needed])]
+  if (require_exam_taker) {
+    reg_dt <- reg_dt[admission_exam_taker == 1L]
+  }
 
   if (nrow(reg_dt) == 0 || uniqueN(reg_dt[[z]]) < 2 || uniqueN(reg_dt[[d]]) < 2) {
     return(data.table(
@@ -641,11 +759,34 @@ written_paths <- c(
     "tab:scalar_school_value_iv_program_income_expected_va_eb"
   )
 )
+written_paths <- c(
+  written_paths,
+  write_spec_table(
+    table_out,
+    enrollment_specs,
+    enrollment_table_csv,
+    enrollment_table_tex,
+    "Higher-education enrollment scalar school-value IV estimate using EB-shrunken value added",
+    "tab:scalar_school_value_iv_higher_ed_enrollment_expected_va_eb"
+  )
+)
+written_paths <- c(
+  written_paths,
+  write_spec_table(
+    table_out,
+    exam_specs,
+    exam_table_csv,
+    exam_table_tex,
+    "Exam-taking scalar school-value IV estimate using EB-shrunken value added",
+    "tab:scalar_school_value_iv_exam_taking_expected_va_eb"
+  )
+)
 
 diagnostics <- data.table(
   measure = c(
     "universe_rows",
     "probability_student_process_rows",
+    "estimation_rows_timely_at_risk",
     "estimation_rows_exam_takers_timely_at_risk",
     "mean_total_probability_mass",
     paste0("mean_mass_with_value_", value_names)
@@ -654,6 +795,7 @@ diagnostics <- data.table(
     nrow(universe),
     nrow(prob_summary),
     nrow(estimation_df),
+    sum(estimation_df$admission_exam_taker == 1L, na.rm = TRUE),
     mean(estimation_df$total_probability_mass, na.rm = TRUE),
     sapply(paste0("mass_with_value_", value_names), function(col) {
       mean(estimation_df[[col]], na.rm = TRUE)

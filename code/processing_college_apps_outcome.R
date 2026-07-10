@@ -35,7 +35,13 @@ oferta_2020 <- read_xlsx("./data/raw/2020/PSU2020/PostulaciónySelección_Admisi
 #Enrollment data, but has a lot of info I use.
 
 
-program_info_all <- readRDS("./data/clean/program_info_22-24.rds") %>% 
+program_info_path <- if (file.exists("./data/clean/program_info_22-25.rds")) {
+  "./data/clean/program_info_22-25.rds"
+} else {
+  "./data/clean/program_info_22-24.rds"
+}
+
+program_info_all <- readRDS(program_info_path) %>%
   mutate(
     NOMB_INST = str_remove(NOMB_INST, 
                            "\\s*\\(\\*.*?\\)")
@@ -335,7 +341,13 @@ sum(is.na(program_info_2024_joint$income_4th_year_clp))
 
 
 
-oferta_codes_all_info <- readRDS("./data/clean/oferta_codes_24_25.rds") %>% 
+oferta_codes_path <- if (file.exists("./data/clean/oferta_codes_24_26_rec.rds")) {
+  "./data/clean/oferta_codes_24_26_rec.rds"
+} else {
+  "./data/clean/oferta_codes_24_25.rds"
+}
+
+oferta_codes_all_info <- readRDS(oferta_codes_path) %>%
   mutate(stem_share = rowSums(across(c(CIEN, M1, M2)), na.rm = TRUE),
          stem_proxy_low = ifelse(stem_share >= 40, 1L, 0L),
          stem_proxy_high = ifelse(stem_share > 40, 1L, 0L)) %>% 
@@ -489,4 +501,3 @@ apps_all_info %>%
   sum(is.na(stem_outcome$avg_income_y4))
   
   save(stem_outcome, file = "./data/clean/stem_outcome.RData")
-  

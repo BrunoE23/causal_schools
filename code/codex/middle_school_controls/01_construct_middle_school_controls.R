@@ -16,17 +16,33 @@
 #   years before and the year of the student's first observed grade-8 cohort.
 #   The saved full-universe tracking object starts in 2017, so this script reads
 #   raw 2014-2016 enrollment files to complete the historical middle-school
-#   window for 2017-2020 grade-8 cohorts.
+#   window for the earliest grade-8 cohorts.
 ###############################################################################
 
 suppressPackageStartupMessages({
   library(data.table)
 })
 
-data_wd <- "C:/Users/xd-br/Dropbox/causal_schools"
+find_existing_path <- function(candidates, label) {
+  candidates <- candidates[dir.exists(candidates)]
+
+  if (length(candidates) == 0L) {
+    stop("Could not find ", label, ". Update candidates.", call. = FALSE)
+  }
+
+  candidates[[1L]]
+}
+
+data_wd <- find_existing_path(
+  c(
+    "C:/Users/xd-br/Dropbox/causal_schools",
+    "C:/Users/brunem/Dropbox/causal_schools"
+  ),
+  "data_wd"
+)
 
 input_universe <- file.path(data_wd, "data/clean/universe.csv")
-input_tracking_2017_2020 <- file.path(data_wd, "data/clean/tracking_univ8gr.RData")
+input_tracking_recent <- file.path(data_wd, "data/clean/tracking_univ8gr.RData")
 input_raw_tracking_dir <- file.path(data_wd, "data/raw/student_tracking")
 output_dir <- file.path(data_wd, "data/clean/middle_school_controls")
 output_controls <- file.path(output_dir, "middle_school_controls.csv")
@@ -103,8 +119,8 @@ read_raw_tracking_year <- function(year, universe_dt) {
   dt[, ..needed_cols]
 }
 
-message("Loading full-universe tracking object for 2017-2020: ", input_tracking_2017_2020)
-load(input_tracking_2017_2020)
+message("Loading full-universe tracking object: ", input_tracking_recent)
+load(input_tracking_recent)
 setDT(tracking_all)
 
 missing_cols <- setdiff(needed_cols, names(tracking_all))
@@ -112,8 +128,9 @@ if (length(missing_cols) > 0) {
   stop("tracking_all is missing required columns: ", paste(missing_cols, collapse = ", "))
 }
 
+max_recent_year <- max(universe$cohort_gr8, na.rm = TRUE)
 tracking_recent <- tracking_all[
-  AGNO >= 2017 & AGNO <= 2020,
+  AGNO >= 2017 & AGNO <= max_recent_year,
   ..needed_cols
 ]
 rm(tracking_all)

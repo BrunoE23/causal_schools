@@ -197,6 +197,50 @@ The raw score variables currently considered are:
 - `scien_max`
 - `math2_max`
 
+PAES 2026 has been added to the clean score/application inputs. In the PAES/PTU
+cleaning code, PAES 2026 is treated as the admissions process for students with
+high-school graduation year 2025, following the same modern rule
+`ANYO_DE_EGRESO == psu_year - 1`.
+
+The July 2026 integration audit is in
+`output/tables/paes_2026_update/paes_2026_integration_audit.*`. The latest run
+finds all five raw PAES 2026 file families present, 215,142 clean 2026 score
+rows, 1,694,081 clean 2026 application rows, and 141,178 `stem_outcome.RData`
+first-application rows in 2026. The main `univ_gr8_df.csv` now covers grade-8
+cohorts 2017-2021 with 1,197,982 one-row-per-student records. Cohort 2021 has
+253,472 students, 251,024 matched `most_time_RBD` values from the full
+2022-2025 post-grade-8 tracking window, 190,187 timely PAES 2026 records, and
+79,475 separately labeled `paes_matriculated_2026` records. The PAES 2026
+oferta map is available as
+`data/clean/oferta_codes_24_26_all.rds` and
+`data/clean/oferta_codes_24_26_rec.rds`; the older `24_25` maps are left in
+place for legacy replication.
+
+The script `code/codex/paes_2026_update/05_extend_main_universe_to_2021.R`
+rebuilds the canonical universe/RBD/SAE inputs through cohort 2021. It uses raw
+`student_tracking/2025`, so `most_time_RBD` for cohort 2021 uses the same
+four-year post-grade-8 attended-school definition as earlier cohorts.
+
+The current program metadata supplement is `data/clean/program_info_22-25.rds`,
+built from the old `program_info_22-24.rds` plus full SIES
+`Matricula-Ed-Superior-2025`. It is not built from PAES matricula. The latest
+audit finds 15,826 total `COD_SIES` rows after the most-recent collapse,
+including 11,743 rows whose latest source year is full SIES 2025. For PAES
+oferta 2026, this improves metadata coverage from 1,910 matched `COD_SIES` rows
+under `program_info_22-24.rds` to 2,060 matched rows under
+`program_info_22-25.rds`.
+
+In `universe_reg_df.R`, `psu_year` is the higher-education admissions process
+year, not the high-school grade-12 calendar year. For a regular student first
+observed in grade 8 in `cohort_gr8`, the expected admissions-process year is now
+constructed as:
+
+`expected_psu_year = cohort_gr8 + 5`
+
+and `timely_psu` is defined as `1[psu_year == expected_psu_year]`. The previous
+`cohort_gr8 + 4` rule marked the high-school grade-12 calendar year rather than
+the admissions-process year.
+
 Because score scales differ across years, the constructor also creates two transformed versions of each score outcome:
 
 - `scale1000_*`: older 850-scale years are multiplied by `1000 / 850`
@@ -206,10 +250,29 @@ For pooled score comparisons across years, the current preferred object is the `
 
 Higher-education outcomes are built from:
 
+- `COD_SIES_m1`
 - `field_reclassified_m1`
 - `field_reclassified_ml`
 - existing binary field indicators such as `f_science_m1`, `f_eng_m1`, and related `*_ml` versions
 - higher-education matricula accreditation fields from `clean_matriculated_first_time.R`, including `ACREDITADA_CARR_m1`, `ACRE_INST_ANIO_m1`, and `program_certified_years_m1` plus the matching `*_ml` variables
+
+The current preferred binary higher-education enrollment outcome is:
+
+- `higher_ed_enrolled_m1 = 1[COD_SIES_m1 is observed]`
+
+The current preferred admission-exam-taking outcome is:
+
+- `admission_exam_taker = 1[math_max or leng_max is observed]`
+
+Both `higher_ed_enrolled_m1` and `admission_exam_taker` are extensive-margin
+outcomes. They should be estimated on the full eligible school/age/control
+sample, not conditional on admission-exam taking.
+
+The higher-education enrollment definition uses the direct clean-matricula
+program-code signal. It is intentionally not defined from
+`field_reclassified_m1`, accreditation fields, or MiFuturo income availability,
+because those variables can be missing for classification, accreditation, or
+merge-support reasons even when an enrollment record exists.
 
 The current main enrollment outcome for STEM-style summaries is:
 
@@ -227,13 +290,25 @@ The corresponding institution-years outcome is `inst_certified_years_m1`, define
 
 For current school-value construction, these accreditation-years outcomes are treated as unconditional first-enrollment outcomes within the admission-exam-taker sample: students without observed higher-ed enrollment are coded as zero, while observed matricula rows with genuinely missing accreditation-years inputs remain missing.
 
-The current paper-facing VA and IV workflow restricts to students with an observed math or language national admission-test score before estimating higher-education outcome value added or validating it in the SAE lottery sample.
+The current principal VA/EB stage-1 workflow uses grade-8 cohorts 2017-2020.
+These are the four cohorts with the current grade-4 SIMCE controls. Cohort 2021
+is available in the rebuilt universe and has PAES 2026 records, but it is not in
+the principal VA/EB specification until a comparable grade-4 control strategy is
+chosen. Cohort 2017 stays in VA/EB; any later SAE/IV exclusion of 2017 is due to
+missing `DA_probs_2017` lottery-probability support, not because it lacks VA
+controls.
+
+Within the 2017-2020 VA sample, score outcomes are naturally restricted by
+observed PAES/PSU scores. STEM, high-paying field, program-income, and
+admission-exam-taking value added are not restricted to admission-exam takers.
 
 During the current estimation-development pass, controlled VA is only estimated for:
 
 - `z_year_math_max`
 - `z_year_leng_max`
 - `z_year_leng_math_total`
+- `admission_exam_taker`
+- `higher_ed_enrolled_m1`
 - `stem_enrollment_m1`
 - `log_program_income_clp_m1`
 - `program_certified_years_m1`

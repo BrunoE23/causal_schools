@@ -17,7 +17,13 @@ library(stringi)
 
 #### Step 1:  Distance matrix 
 
-program_info_most_recent <- readRDS("./data/clean/program_info_22-24.rds") %>% 
+program_info_path <- if (file.exists("./data/clean/program_info_22-25.rds")) {
+  "./data/clean/program_info_22-25.rds"
+} else {
+  "./data/clean/program_info_22-24.rds"
+}
+
+program_info_most_recent <- readRDS(program_info_path) %>%
   mutate(COMUNA_SEDE = stri_trans_general(COMUNA_SEDE, "Latin-ASCII"))
 
 
@@ -106,12 +112,16 @@ setkey(dist_sym, CODIGO_COMUNA_EGRESO, CODIGO_COMUNA_SEDE)
 ###################################
 #2) Construct feasible set 
 
-#Only using 2024 and 2025
+# Use the 2024-2026 oferta map when available. The older 2024-2025 map is kept
+# as a fallback so legacy runs still work before the PAES 2026 auxiliary step.
+oferta_codes_path <- if (file.exists("./data/clean/oferta_codes_24_26_all.rds")) {
+  "./data/clean/oferta_codes_24_26_all.rds"
+} else {
+  "./data/clean/oferta_codes_24_25_all.rds"
+}
 
-
-
-map_codes_all <- readRDS ("./data/clean/oferta_codes_24_25_all.rds") %>% 
-          rename(year = year_info) 
+map_codes_all <- readRDS(oferta_codes_path) %>%
+  rename(year = year_info)
 
 mifuturo_imputed<- readRDS( "./data/clean/mifuturo_imputed.rds")
 

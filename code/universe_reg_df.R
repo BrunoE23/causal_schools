@@ -1,9 +1,28 @@
 ####################################
-data_wd        <-  "C:/Users/xd-br/Dropbox/causal_schools"
-code_output_wd <-  "C:/Users/xd-br/Desktop/PhD/Research/causal_schools"
+find_existing_path <- function(candidates, label) {
+  candidates <- candidates[dir.exists(candidates)]
 
-#data_wd <- "C:/Users/brunem/Dropbox/causal_schools"
-#code_output_wd <-  "C:/Users/brunem/Research/causal_schools"
+  if (length(candidates) == 0) {
+    stop("Could not find ", label, ". Update candidates.", call. = FALSE)
+  }
+
+  candidates[[1]]
+}
+
+data_wd <- find_existing_path(
+  c(
+    "C:/Users/xd-br/Dropbox/causal_schools",
+    "C:/Users/brunem/Dropbox/causal_schools"
+  ),
+  "data_wd"
+)
+code_output_wd <- find_existing_path(
+  c(
+    "C:/Users/xd-br/Desktop/PhD/Research/causal_schools",
+    "C:/Users/brunem/Research/causal_schools"
+  ),
+  "code_output_wd"
+)
 
 setwd(data_wd)
 #####################################
@@ -191,8 +210,8 @@ impute_income_decile <- function(df, min_cell_n = income_imputation_min_n) {
 #Read all 
 
 #universe  + controls
-base <- read.csv("data/clean/universe_controls.csv") %>% 
-  select(-X) %>% 
+base <- read.csv("data/clean/universe_controls.csv") %>%
+  select(-any_of(c("X", "...1"))) %>%
   mutate(mrun = MRUN) %>% 
   mutate(student_id = MRUN) %>% 
   select(mrun, MRUN, student_id, everything())
@@ -249,7 +268,7 @@ if (file.exists(simce8_math_heterogeneity_path)) {
 
 #treatment?
 schools_attended <- read.csv("./data/clean/rbd_universe.csv") %>% 
-  select(-X)
+  select(-any_of(c("X", "...1")))
 
 load("./data/clean/offers_1R_p_proceso.RData")
 
@@ -272,14 +291,49 @@ load("./data/clean/stem_outcome.RData")
 
 
 #matricula
-mat_first <- data.table::fread(
-  "./data/clean/mat_ingresos_22-24/mat_1st_ing.csv",
-  na.strings = c("", "NA")
-)
 mat_last <- data.table::fread(
-  "./data/clean/mat_ingresos_22-24/mat_last_ing.csv",
+  if (dir.exists("./data/clean/mat_ingresos_22-25")) {
+    "./data/clean/mat_ingresos_22-25/mat_last_ing.csv"
+  } else {
+    "./data/clean/mat_ingresos_22-24/mat_last_ing.csv"
+  },
   na.strings = c("", "NA")
 )
+
+mat_first <- data.table::fread(
+  if (dir.exists("./data/clean/mat_ingresos_22-25")) {
+    "./data/clean/mat_ingresos_22-25/mat_1st_ing.csv"
+  } else {
+    "./data/clean/mat_ingresos_22-24/mat_1st_ing.csv"
+  },
+  na.strings = c("", "NA")
+)
+
+paes_matricula_2026_path <- "./data/clean/paes_2026_update/paes_matricula_2025_2026_mapped.rds"
+paes_matricula_2026 <- tibble(MRUN = numeric(), paes_matriculated_2026 = integer())
+
+if (file.exists(paes_matricula_2026_path)) {
+  paes_matricula_2026 <- readRDS(paes_matricula_2026_path) %>%
+    filter(ANYO_PROCESO == 2026) %>%
+    mutate(
+      MRUN = as.numeric(MRUN),
+      PREFERENCIA = suppressWarnings(as.numeric(PREFERENCIA)),
+      LUGAR_EN_LA_LISTA = suppressWarnings(as.numeric(LUGAR_EN_LA_LISTA))
+    ) %>%
+    group_by(MRUN) %>%
+    arrange(PREFERENCIA, LUGAR_EN_LA_LISTA, CODIGO_CARRERA, .by_group = TRUE) %>%
+    slice_head(n = 1) %>%
+    ungroup() %>%
+    transmute(
+      MRUN,
+      paes_matriculated_2026 = 1L,
+      paes_cod_carrera_2026 = CODIGO_CARRERA,
+      paes_cod_sies_2026 = COD_SIES,
+      paes_nombre_carrera_2026 = NOMBRE_CARRERA,
+      paes_sigla_universidad_2026 = SIGLA_UNIVERSIDAD,
+      paes_matricula_source_2026 = "PAES-2026-Matricula"
+    )
+}
 
 
 
@@ -292,7 +346,10 @@ reg_df <- left_join(base, offers_1R_first, by = "mrun") %>%
   left_join(students_apps, by = "mrun") %>% 
   rename(psu_year = year) %>% 
   rename(grad_rbd_psu = RBD) %>% 
-  mutate(timely_psu =  ifelse(cohort_gr8 + 4 == psu_year, 1L, 0L)) %>% 
+  mutate(
+    expected_psu_year = cohort_gr8 + 5L,
+    timely_psu = ifelse(expected_psu_year == psu_year, 1L, 0L)
+  ) %>%
   mutate(took_only_science = as.integer(ifelse(hist_max == 0 & scien_max > 0  , 1, 0))) %>% 
   mutate(took_only_history = as.integer(ifelse(hist_max > 0 & scien_max == 0  , 1, 0))) %>% 
   mutate(took_both = as.integer(ifelse(hist_max > 0 & scien_max > 0  , 1, 0))) %>% 
@@ -304,6 +361,11 @@ reg_df <- left_join(base, offers_1R_first, by = "mrun") %>%
   left_join(stem_outcome, by = "mrun")  %>% 
   left_join(mat_first, by = "MRUN") %>% 
   left_join(mat_last, by = "MRUN") %>%
+  left_join(paes_matricula_2026, by = "MRUN") %>%
+  mutate(
+    paes_matriculated_2026 = replace_na(paes_matriculated_2026, 0L),
+    paes_matricula_is_full_sies_2026 = 0L
+  ) %>%
   impute_income_decile()
   
 

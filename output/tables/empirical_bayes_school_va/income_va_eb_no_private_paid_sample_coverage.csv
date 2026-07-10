@@ -1,0 +1,13 @@
+cohort_gr8,income_measure_key,income_measure_label,income_measure_order,n_students_with_income_and_rbd,n_with_school_directory_match,n_without_school_directory_match,n_attended_private_paid,n_kept_no_private_paid,share_with_school_directory_match,share_attended_private_paid,share_kept_no_private_paid
+2017,direct_or_school_median,Direct income + school median fallback,1,187754,187754,0,19430,168324,1,0.103486476985843,0.896513523014157
+2018,direct_or_school_median,Direct income + school median fallback,1,202043,202043,0,20016,182027,1,0.0990680201739234,0.900931979826077
+2019,direct_or_school_median,Direct income + school median fallback,1,203184,203184,0,20104,183080,1,0.0989447988030554,0.901055201196945
+2020,direct_or_school_median,Direct income + school median fallback,1,207113,207113,0,20483,186630,1,0.0988977031861834,0.901102296813817
+2013,school_median_for_everyone,School median for everyone,2,197202,197202,0,20614,176588,1,0.104532408393424,0.895467591606576
+2014,school_median_for_everyone,School median for everyone,2,204007,204007,0,20840,183167,1,0.102153357482831,0.897846642517169
+2015,school_median_for_everyone,School median for everyone,2,199483,199483,0,20464,179019,1,0.102585182697272,0.897414817302728
+2016,school_median_for_everyone,School median for everyone,2,199123,199123,0,20515,178608,1,0.103026772396961,0.896973227603039
+2017,school_median_for_everyone,School median for everyone,2,185256,185256,0,19408,165848,1,0.104763138575809,0.895236861424191
+2018,school_median_for_everyone,School median for everyone,2,199665,199665,0,19989,179676,1,0.100112688753662,0.899887311246338
+2019,school_median_for_everyone,School median for everyone,2,201100,201100,0,20075,181025,1,0.0998259572352064,0.900174042764794
+2020,school_median_for_everyone,School median for everyone,2,204934,204934,0,20430,184504,1,0.0996906321059463,0.900309367894054

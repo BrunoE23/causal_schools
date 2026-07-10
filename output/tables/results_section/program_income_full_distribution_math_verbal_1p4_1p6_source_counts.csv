@@ -1,0 +1,6 @@
+program_income_full_source_m1,matriculated_m1,n_students,share
+matriculated_two_way_fe_institution_area_generica,TRUE,931,0.719474497681607
+matriculated_fallback_institution_fe,TRUE,177,0.136785162287481
+not_matriculated_minimum_wage_floor,FALSE,161,0.124420401854714
+matriculated_fallback_area_generica_fe,TRUE,22,0.0170015455950541
+matriculated_fallback_global_mifuturo_mean,TRUE,3,0.00231839258114374

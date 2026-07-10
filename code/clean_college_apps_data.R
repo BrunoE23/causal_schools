@@ -14,6 +14,27 @@ library(tidyverse)
 
 #Reading student outcome data
 
+# PAES 2026 corresponds to students with high-school graduation year 2025.
+# The common modern rule below keeps ANYO_DE_EGRESO == year - 1.
+students_apps2026 <- read_csv2("./data/raw/2026/PAES-2026-Inscritos-Puntajes/A_INSCRITOS_PUNTAJES_PAES_2026_PUB_MRUN.csv") %>%
+  mutate(year = 2026)  %>%
+  rename(mrun = MRUN) %>%
+  rename(PROM_NOTAS = PROMEDIO_NOTAS,
+         RAMA = RAMA_EDUCACIONAL,
+         GRUPO_DEPENDENCIA = DEPENDENCIA) %>%
+  filter(ANYO_DE_EGRESO == (year - 1)) %>%
+  filter(PROM_NOTAS != 0) %>%
+  mutate(leng_max   = CLEC_MAX,
+         math_max   = MATE1_MAX,
+         hist_max   = HCSOC_MAX,
+         scien_max  = CIEN_MAX) %>%
+  select(mrun, year, COD_SEXO, FECHA_NACIMIENTO,
+         RBD, RAMA,
+         PROM_NOTAS, PTJE_NEM, PTJE_RANKING,
+         leng_max, math_max, hist_max, scien_max,
+         RAMA, GRUPO_DEPENDENCIA,
+         CODIGO_REGION_EGRESO, CODIGO_COMUNA_EGRESO)
+
 students_apps2025 <- read_csv2("./data/raw/2025/PAES_2025_Inscritos_Puntajes/A_INSCRITOS_PUNTAJES_PAES_2025_PUB_MRUN.csv") %>%
   mutate(year = 2025)  %>% 
   rename(mrun = MRUN) %>% 
@@ -26,7 +47,7 @@ students_apps2025 <- read_csv2("./data/raw/2025/PAES_2025_Inscritos_Puntajes/A_I
          math_max   = MATE1_MAX,
          hist_max   = HCSOC_MAX,
          scien_max  = CIEN_MAX) %>% 
-  select(mrun, COD_SEXO, FECHA_NACIMIENTO,
+  select(mrun, year, COD_SEXO, FECHA_NACIMIENTO,
          RBD, RAMA, 
          PROM_NOTAS, PTJE_NEM, PTJE_RANKING,
          leng_max, math_max, hist_max, scien_max,
@@ -53,7 +74,7 @@ students_apps2024 <- read_csv2("./data/raw/2024/PAES-2024-Inscritos-Puntajes/A_I
          math_max   = MATE1_MAX,
          hist_max   = HCSOC_MAX,
          scien_max  = CIEN_MAX) %>% 
-  select(mrun, COD_SEXO, FECHA_NACIMIENTO,
+  select(mrun, year, COD_SEXO, FECHA_NACIMIENTO,
          RBD, RAMA, 
          PROM_NOTAS, PTJE_NEM, PTJE_RANKING,
          leng_max, math_max, hist_max, scien_max,
@@ -73,7 +94,7 @@ students_apps2023 <- read_csv2("./data/raw/2023/PAES2023-Inscritos-Puntajes-1/A_
          math_max   = MATE1_MAX,
          hist_max   = HCSOC_MAX,
          scien_max  = CIEN_MAX) %>% 
-  select(mrun, COD_SEXO, FECHA_NACIMIENTO,
+  select(mrun, year, COD_SEXO, FECHA_NACIMIENTO,
          RBD, RAMA, 
          PROM_NOTAS, PTJE_NEM, PTJE_RANKING,
          leng_max, math_max, hist_max, scien_max,
@@ -93,7 +114,7 @@ students_apps2022 <- read_csv2("./data/raw/2022/PTU2022-Inscritos-Puntajes/A_INS
          math_max  = pmax(MATE_ACTUAL, MATE_ANTERIOR, na.rm = TRUE),
          hist_max  = pmax(HCSO_ACTUAL, HCSO_ANTERIOR, na.rm = TRUE),
          scien_max = pmax(CIEN_ACTUAL, CIEN_ANTERIOR, na.rm = TRUE)) %>% 
-  select(mrun, COD_SEXO, FECHA_NACIMIENTO,
+  select(mrun, year, COD_SEXO, FECHA_NACIMIENTO,
          RBD, RAMA, 
          PROM_NOTAS, PTJE_NEM, PTJE_RANKING,
          leng_max, math_max, hist_max, scien_max,
@@ -112,7 +133,7 @@ students_apps2021 <- read_csv2("./data/raw/2021/PTU2021-Inscritos-Puntajes/A_INS
          math_max  = pmax(MATE_ACTUAL, MATE_ANTERIOR, na.rm = TRUE),
          hist_max  = pmax(HCSO_ACTUAL, HCSO_ANTERIOR, na.rm = TRUE),
          scien_max = pmax(CIEN_ACTUAL, CIEN_ANTERIOR, na.rm = TRUE)) %>% 
-  select(mrun, COD_SEXO, FECHA_NACIMIENTO,
+  select(mrun, year, COD_SEXO, FECHA_NACIMIENTO,
          RBD, RAMA, 
          PROM_NOTAS, PTJE_NEM, PTJE_RANKING,
          leng_max, math_max, hist_max, scien_max,
@@ -127,13 +148,15 @@ students_apps <- rbind(students_apps2021,
                        students_apps2022, 
                        students_apps2023,
                        students_apps2024,
-                       students_apps2025)
+                       students_apps2025,
+                       students_apps2026)
 
 rm(students_apps2021, 
    students_apps2022, 
    students_apps2023,
    students_apps2024,
-   students_apps2025)
+   students_apps2025,
+   students_apps2026)
 
 
 # 5 odd MRUN ? 
@@ -153,6 +176,19 @@ save(students_apps, file = "./data/clean/psu_students.RData")
 #Reading college app data
 # and making it long data
 
+college_apps2026 <- read_csv2("./data/raw/2026/PAES-2026-Postulantes/C_POSTULANTES_SELECCION_PAES_2026_PUB_MRUN.csv") %>%
+  rename(mrun = MRUN) %>%
+  rename(year = ANYO_PROCESO) %>%
+  arrange(mrun, ORDEN_PREF) %>%
+  select(        mrun,
+                 year,
+                 SEXO,
+                 ORDEN_PREF,
+                 COD_CARRERA_PREF,
+                 ESTADO_PREF,
+                 PTJE_PREF,
+                 LUGAR_PREF,
+                 TIPO_PREF )
 
 college_apps2025 <- read_csv2("./data/raw/2025/PAES_2025_Postulantes_Totales/C_POSTULANTES_SELECCION_PAES_2025_PUB_MRUN.csv") %>%
   rename(mrun = MRUN) %>% 
@@ -254,14 +290,16 @@ college_apps2021_long <- cast_applications_long(
 #2021 is now long! 
 
 
-college_apps <- rbind(college_apps2025,
+college_apps <- rbind(college_apps2026,
+                      college_apps2025,
                       college_apps2024,
                       college_apps2023_long,
                       college_apps2022_long,
                       college_apps2021_long)
 
 
-rm(college_apps2025,
+rm(college_apps2026,
+   college_apps2025,
    college_apps2024,
    college_apps2023_long,
    college_apps2022_long,

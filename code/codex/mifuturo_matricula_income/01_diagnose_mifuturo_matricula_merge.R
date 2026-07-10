@@ -48,7 +48,11 @@ dollar_clp_conversion <- 913
 
 clean_dir <- file.path(data_wd, "data", "clean")
 raw_mifuturo_dir <- file.path(data_wd, "data", "raw", "mifuturo")
-mat_dir <- file.path(clean_dir, "mat_ingresos_22-24")
+mat_dir <- if (dir.exists(file.path(clean_dir, "mat_ingresos_22-25"))) {
+  file.path(clean_dir, "mat_ingresos_22-25")
+} else {
+  file.path(clean_dir, "mat_ingresos_22-24")
+}
 output_dir <- file.path(repo_wd, "output", "tables", "mifuturo_matricula_income")
 dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
 
@@ -56,7 +60,11 @@ mifuturo_csv <- file.path(
   raw_mifuturo_dir,
   "Buscador_Empleabilidad_ingresos_2025_2026_SIES(Carreras e IES (2025-2026)).csv"
 )
-program_info_path <- file.path(clean_dir, "program_info_22-24.rds")
+program_info_path <- if (file.exists(file.path(clean_dir, "program_info_22-25.rds"))) {
+  file.path(clean_dir, "program_info_22-25.rds")
+} else {
+  file.path(clean_dir, "program_info_22-24.rds")
+}
 mat_first_path <- file.path(mat_dir, "mat_1st_ing.csv")
 mat_last_path <- file.path(mat_dir, "mat_last_ing.csv")
 
@@ -256,7 +264,7 @@ read_program_info <- function(path) {
   missing_cols <- setdiff(required_cols, names(dt))
   if (length(missing_cols) > 0) {
     stop(
-      "program_info_22-24.rds is missing expected columns: ",
+      basename(path), " is missing expected columns: ",
       paste(missing_cols, collapse = ", "),
       call. = FALSE
     )
@@ -324,7 +332,7 @@ read_clean_matricula <- function(path, suffix, enrollment_measure, program_info)
   dt <- merge(dt, program_info, by = "COD_SIES", all.x = TRUE, sort = FALSE)
   dt[, area_source := fcase(
     !is.na(AREA_CARRERA_GENERICA), "matricula_clean",
-    is.na(AREA_CARRERA_GENERICA) & !is.na(program_info_AREA_CARRERA_GENERICA), "program_info_22_24",
+    is.na(AREA_CARRERA_GENERICA) & !is.na(program_info_AREA_CARRERA_GENERICA), "program_info",
     default = NA_character_
   )]
   dt[is.na(AREA_CARRERA_GENERICA), AREA_CARRERA_GENERICA := program_info_AREA_CARRERA_GENERICA]
@@ -547,7 +555,7 @@ candidate_out <- candidate_program_income(matched)
 source_map <- data.table(
   source = c(
     "matricula_clean",
-    "program_info_22_24",
+    "program_info",
     "mifuturo_income_csv",
     "oferta_codes_24_25",
     "college_applications"

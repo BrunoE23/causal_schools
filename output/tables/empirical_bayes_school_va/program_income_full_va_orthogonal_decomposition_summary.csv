@@ -1,0 +1,5 @@
+component,source_outcome,orthogonalized_against,coefficient,weighted_sd_component,share_of_program_income_full_va_variance,weighted_correlation_with_program_income_full_va,n_schools_common,n_schools_input,weighted_r2,max_abs_reconstruction_error
+math_va,z_year_math_max,weighted mean only,0.121220083550431,0.0269900373528807,0.262810968287445,0.512650922448644,3365,3375,0.948833714153036,2.77555756156289e-17
+institution_income_va_orthogonalized,log_program_income_institution_clp_m1,math_va,0.913609277486471,0.0376921369500903,0.512552122102456,0.715927455893722,3365,3375,0.948833714153036,2.77555756156289e-17
+area_income_va_orthogonalized,log_program_income_area_clp_m1,math_va + institution_income_va_orthogonalized,0.827020112093042,0.0219277823825008,0.173470623763135,0.41649804773028,3365,3375,0.948833714153036,2.77555756156289e-17
+residual,,,,0.0119089559486867,0.0511662858469636,0.226199659254748,3365,3375,0.948833714153036,2.77555756156289e-17

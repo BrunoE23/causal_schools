@@ -35,8 +35,8 @@ suppressPackageStartupMessages({
 })
 
 
-#I will do now matriculas 2022-2025 which encompass my first 3 cohorts
-#I am waiting for matricula 2026 data to complete the 4 cohorts.
+# This currently uses full SIES Matricula-Ed-Superior 2022-2025. PAES
+# Matricula 2026 is not a substitute for full SIES Matricula-Ed-Superior 2026.
 
 
 #I am only gonna save students in their first year, 
@@ -268,6 +268,14 @@ student_mat_last_small <- student_mat_last %>%
 
 
 #export
+dir.create("./data/clean/mat_ingresos_22-25", recursive = TRUE, showWarnings = FALSE)
+dir.create("./data/clean/mat_ingresos_22-24", recursive = TRUE, showWarnings = FALSE)
+
+write.csv(student_mat_1st_small,  "./data/clean/mat_ingresos_22-25/mat_1st_ing.csv", row.names = FALSE)
+write.csv(student_mat_last_small, "./data/clean/mat_ingresos_22-25/mat_last_ing.csv", row.names = FALSE)
+
+# Legacy alias: older scripts still point to this folder, but the content is
+# 2022-2025 after the current SIES update.
 write.csv(student_mat_1st_small,  "./data/clean/mat_ingresos_22-24/mat_1st_ing.csv", row.names = FALSE)
 write.csv(student_mat_last_small, "./data/clean/mat_ingresos_22-24/mat_last_ing.csv", row.names = FALSE)
 

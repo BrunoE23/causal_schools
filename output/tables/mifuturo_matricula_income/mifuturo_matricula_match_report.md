@@ -1,15 +1,15 @@
 # MiFuturo Matricula Income Merge Diagnostic
 
-Generated: 2026-06-30 12:12:37
+Generated: 2026-07-10 15:44:27
 
 This is a diagnostic merge only. It does not modify the official matricula or universe files.
 
 ## Inputs
 
 - MiFuturo income CSV: `C:/Users/brunem/Dropbox/causal_schools/data/raw/mifuturo/Buscador_Empleabilidad_ingresos_2025_2026_SIES(Carreras e IES (2025-2026)).csv`
-- First ingreso matricula: `C:/Users/brunem/Dropbox/causal_schools/data/clean/mat_ingresos_22-24/mat_1st_ing.csv`
-- Last ingreso matricula: `C:/Users/brunem/Dropbox/causal_schools/data/clean/mat_ingresos_22-24/mat_last_ing.csv`
-- Program info supplement: `C:/Users/brunem/Dropbox/causal_schools/data/clean/program_info_22-24.rds`
+- First ingreso matricula: `C:/Users/brunem/Dropbox/causal_schools/data/clean/mat_ingresos_22-25/mat_1st_ing.csv`
+- Last ingreso matricula: `C:/Users/brunem/Dropbox/causal_schools/data/clean/mat_ingresos_22-25/mat_last_ing.csv`
+- Program info supplement: `C:/Users/brunem/Dropbox/causal_schools/data/clean/program_info_22-25.rds`
 
 ## Code Map
 
@@ -34,22 +34,22 @@ This is a diagnostic merge only. It does not modify the official matricula or un
 4:       last_ingreso inst_type_generic_title      1266733
    rows_matched_observed_income rows_matched_missing_income
                           <int>                       <int>
-1:                       524844                       99414
-2:                       374942                       77932
-3:                       521742                       96873
-4:                       370149                       75706
+1:                       531103                      100832
+2:                       379511                       79047
+3:                       528939                       98468
+4:                       375371                       76943
    rows_no_mifuturo_key rows_missing_key_component rows_mifuturo_duplicate_key
                   <int>                      <int>                       <int>
-1:               618245                      24230                           0
-2:               789629                      24230                           0
-3:               619441                      28677                           0
-4:               792201                      28677                           0
+1:               634798                          0                           0
+2:               808175                          0                           0
+3:               639326                          0                           0
+4:               814419                          0                           0
    share_rows_observed_income share_rows_any_mifuturo_match
                         <num>                         <num>
-1:                  0.4143288                     0.4928095
-2:                  0.2959913                     0.3575134
-3:                  0.4118800                     0.4883547
-4:                  0.2922076                     0.3519724
+1:                  0.4192699                     0.4988699
+2:                  0.2995983                     0.3620005
+3:                  0.4175616                     0.4952954
+4:                  0.2963300                     0.3570713
 
 ## Outputs
 

@@ -24,15 +24,20 @@ The chosen carrera variable is `AREA_CARRERA_GENERICA`. Title/career names are
 kept only as a diagnostic of within-generic-career variation.
 
 `03_construct_person_level_income_outcomes.R` builds candidate person-level
-income outcomes for the grade-8 universe. Matriculated students receive the
-MiFuturo model prediction. The preferred tier is the two-way FE prediction from
-`institution + AREA_CARRERA_GENERICA`; programs outside two-way support are
-filled by `AREA_CARRERA_GENERICA` FE, institution FE, then the global MiFuturo
-mean. Students with no observed matriculation receive a configurable wage floor.
-The wage floor is not used for matriculated students.
-The current default floor is `350000` CLP, labelled
-`raw_minimum_wage_proxy_2020_2023`, because MiFuturo income measures likely
-reflect wage years before the 2025-2026 publication window.
+income outcomes for the grade-8 universe. Matriculated students receive
+MiFuturo model predictions under three explicit rules:
+
+- `program_income_area`: one-way `AREA_CARRERA_GENERICA` FE.
+- `program_income_institution`: one-way institution FE.
+- `program_income_full`: two-way `institution + AREA_CARRERA_GENERICA` FE, then
+  area FE, then institution FE, then the global MiFuturo mean.
+
+For the area-only and institution-only variants, matriculated cases outside the
+estimable model support use the global MiFuturo mean with an explicit source
+flag. Students with no observed matriculation receive a configurable wage floor.
+The wage floor is not used for matriculated students. The current default floor
+is `553553` CLP, labelled `current_minimum_wage_proxy_553553`, following the
+paper's conservative current-minimum-wage imputation choice.
 
 ## Code Map
 
@@ -75,10 +80,12 @@ The preferred join/imputation dimension is `AREA_CARRERA_GENERICA`.
 `inst_type_generic_title` remains useful for auditing multiplicity and naming
 variation, but it is not the main specification.
 
-The current clean matricula exports do not carry `AREA_CARRERA_GENERICA`, so the
-diagnostic fills it from `data/clean/program_info_22-24.rds` by `COD_SIES` and
-reports that source. This is a diagnostic supplement, not a silent merge rule for
-the main pipeline.
+The current clean matricula exports do not always carry `AREA_CARRERA_GENERICA`,
+so the diagnostic fills it from the most recent program metadata available by
+`COD_SIES`. After the PAES 2026 update this is
+`data/clean/program_info_22-25.rds`, with `data/clean/program_info_22-24.rds`
+kept as a fallback for older replications. This is a diagnostic supplement, not
+a silent merge rule for the main pipeline.
 
 ## Outputs
 
@@ -104,6 +111,7 @@ Main outputs:
 - `mifuturo_income_fe_report.md`
 - `mifuturo_income_fe_model_artifact.rds`
 - `mifuturo_person_level_income_outcomes.csv`
+- `mifuturo_person_level_income_outcomes_stata_va.csv`
 - `mifuturo_person_level_income_source_summary.csv`
 - `mifuturo_enrolled_program_income_summary.csv`
 - `mifuturo_enrolled_income_unsupported_programs.csv`
@@ -121,14 +129,56 @@ coverage, unmatched programs, and key multiplicity.
 For the log-income imputation, use the generic-career prediction output rather
 than title-specific career names.
 
-For the all-student outcome, use:
+For the all-student outcomes, use:
 
 ```text
-program_income_clp_m1
-log_program_income_clp_m1
-program_income_source_m1
+program_income_area_clp_m1
+log_program_income_area_clp_m1
+program_income_area_source_m1
+
+program_income_institution_clp_m1
+log_program_income_institution_clp_m1
+program_income_institution_source_m1
+
+program_income_full_clp_m1
+log_program_income_full_clp_m1
+program_income_full_source_m1
 ```
 
 for first enrollment, with the analogous `_ml` variables for last enrollment.
-The longer `mifuturo_income_hier_or_minwage_*` variables are retained as
-traceability aliases, but `program_income` is the working outcome name.
+The shorter `program_income_*` variables are retained as backward-compatible
+aliases to `program_income_full_*` for existing VA/Stata scripts. The longer
+`mifuturo_income_hier_or_minwage_*` variables are retained as traceability
+aliases.
+
+The first-enrollment high-paying-field binary is:
+
+```text
+high_paying_field_m1
+```
+
+It codes non-matriculated students as `0`. Matriculated students are coded `1`
+when the program is in Science, Law, Engineering/Manufacturing/Construction, or
+the presentation category `Medicine +`: `Medicina`, `Quimica y Farmacia`,
+`Enfermeria`, `Obstetricia y Puericultura`, `Tecnologia Medica`, or
+`Odontologia`. Matriculated students with insufficient field classification are
+left missing rather than silently coded as non-high-paying.
+The analytical variable itself is only `1`, `0`, or missing; source diagnostics
+are kept only in the separate coverage summary table.
+
+Because Stata variable names are capped at 32 characters, the person-level CSV
+also includes short aliases used only by Stata VA/EB runners:
+
+```text
+log_proginc_area_clp_m1
+log_proginc_inst_clp_m1
+log_proginc_full_clp_m1
+highpay_field_m1
+```
+
+These aliases duplicate the canonical log outcomes above; the canonical names
+remain the research-facing variables. `highpay_field_m1` is the Stata-safe alias
+for the canonical high-paying-field binary.
+`mifuturo_person_level_income_outcomes_stata_va.csv` is a thin export containing
+only these Stata-safe variables plus `MRUN`, so Stata VA/EB does not need to
+import the full wide person-level file.

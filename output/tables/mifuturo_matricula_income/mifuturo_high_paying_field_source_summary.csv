@@ -1,0 +1,6 @@
+high_paying_field_source_m1,n_students,n_high_paying_field,n_non_high_paying_field,n_missing_high_paying_field,share_high_paying_field
+not_matriculated_zero,317948,0,317948,0,0
+matriculated_classified_non_high_paying,288771,0,288771,0,0
+matriculated_high_paying_existing_field,225945,225945,0,0,1
+matriculated_high_paying_medicine_plus_area,60095,60095,0,0,1
+matriculated_missing_field_classification,51601,0,0,51601,

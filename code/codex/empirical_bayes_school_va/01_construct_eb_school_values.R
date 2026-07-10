@@ -82,6 +82,8 @@ dir.create(dirname(diagnostics_path), recursive = TRUE, showWarnings = FALSE)
 target_outcomes <- c(
   "z_year_math_max",
   "z_year_leng_max",
+  "admission_exam_taker",
+  "higher_ed_enrolled_m1",
   "stem_enrollment_m1",
   "log_program_income_clp_m1",
   "program_certified_years_m1",

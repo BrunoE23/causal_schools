@@ -4,8 +4,11 @@
  Usage from Stata:
    do code/codex/empirical_bayes_school_va/05_construct_va_eb_one_outcome_stata.do math
 
- Outcome keys:
-   math, language, stem, program_income, progcert, instcert
+Outcome keys:
+   math, language, exam, enrolled, stem,
+   highpay,
+   program_income_area, program_income_institution, program_income_full,
+   program_income, progcert, instcert
 
  The script caches the prepared analytic student file, then estimates only
  one school value-added regression. It records preparation, VA, and EB times.
@@ -19,7 +22,7 @@ set maxvar 30000
 
 args outcome_key rebuild_cache
 if "`outcome_key'" == "" {
-    di as error "Pass an outcome key: math, language, stem, program_income, progcert, instcert"
+    di as error "Pass an outcome key: math, language, exam, enrolled, stem, highpay, program_income_area, program_income_institution, program_income_full, program_income, progcert, instcert"
     exit 198
 }
 if "`rebuild_cache'" == "" {
@@ -37,16 +40,43 @@ cap mkdir "$output_dir"
 
 global universe_dta "$clean_dir/univ_gr8_df.dta"
 global middle_csv "$clean_dir/middle_school_controls/middle_school_controls.csv"
-global program_income_csv "$repo_wd/output/tables/mifuturo_matricula_income/mifuturo_person_level_income_outcomes.csv"
+global program_income_csv "$repo_wd/output/tables/mifuturo_matricula_income/mifuturo_person_level_income_outcomes_stata_va.csv"
 global analytic_dta "$output_dir/stata_va_analytic_cache.dta"
 
 local outcome_var ""
+local outcome_label ""
 if "`outcome_key'" == "math" local outcome_var "z_year_math_max"
 if "`outcome_key'" == "language" local outcome_var "z_year_leng_max"
+if "`outcome_key'" == "exam" local outcome_var "admission_exam_taker"
+if "`outcome_key'" == "enrolled" local outcome_var "higher_ed_enrolled_m1"
 if "`outcome_key'" == "stem" local outcome_var "stem_enrollment_m1"
-if "`outcome_key'" == "program_income" local outcome_var "log_program_income_clp_m1"
+if "`outcome_key'" == "highpay" {
+    local outcome_var "highpay_field_m1"
+    local outcome_label "high_paying_field_m1"
+}
+if "`outcome_key'" == "highpay_field" {
+    local outcome_var "highpay_field_m1"
+    local outcome_label "high_paying_field_m1"
+}
+if "`outcome_key'" == "program_income_area" {
+    local outcome_var "log_proginc_area_clp_m1"
+    local outcome_label "log_program_income_area_clp_m1"
+}
+if "`outcome_key'" == "program_income_institution" {
+    local outcome_var "log_proginc_inst_clp_m1"
+    local outcome_label "log_program_income_institution_clp_m1"
+}
+if "`outcome_key'" == "program_income_full" {
+    local outcome_var "log_proginc_full_clp_m1"
+    local outcome_label "log_program_income_full_clp_m1"
+}
+if "`outcome_key'" == "program_income" {
+    local outcome_var "log_proginc_full_clp_m1"
+    local outcome_label "log_program_income_clp_m1"
+}
 if "`outcome_key'" == "progcert" local outcome_var "program_certified_years_m1"
 if "`outcome_key'" == "instcert" local outcome_var "inst_certified_years_m1"
+if "`outcome_label'" == "" local outcome_label "`outcome_var'"
 
 if "`outcome_var'" == "" {
     di as error "Unknown outcome key: `outcome_key'"
@@ -100,9 +130,9 @@ void _write_centered_school_fe_short(
     string matrix cstripe
     string vector names
     real matrix sample_data
-    real vector pos, coef_ids, sid, resid, ids, counts, w_ids, w_coef
+    real vector pos, coef_ids, sid, resid, ids, counts, w_ids, w_coef, Vw
     real vector centered, se, rawcoef, resid_sd
-    real scalar i, j, dot, idx, mean_fe, fh, ncoef, nids
+    real scalar i, j, dot, idx, mean_fe, fh, ncoef, nids, wVw, se2
     string scalar nm, prefix, line
 
     b = st_matrix("e(b)")
@@ -159,19 +189,23 @@ void _write_centered_school_fe_short(
         }
     }
     mean_fe = school_b * w_coef
+    Vw = Vschool * w_coef
+    wVw = w_coef' * Vw
 
     rawcoef = J(nids, 1, 0)
     centered = J(nids, 1, .)
     se = J(nids, 1, .)
     for (i = 1; i <= nids; i++) {
         idx = selectindex(coef_ids :== ids[i])
-        l = -w_coef'
         if (rows(idx) == 1) {
             rawcoef[i] = school_b[idx[1]]
-            l[idx[1]] = l[idx[1]] + 1
+            se2 = Vschool[idx[1], idx[1]] - 2 * Vw[idx[1]] + wVw
+        }
+        else {
+            se2 = wVw
         }
         centered[i] = rawcoef[i] - mean_fe
-        se[i] = sqrt(l * Vschool * l')
+        se[i] = sqrt(max((se2, 0)))
     }
 
     fh = fopen(outfile, "w")
@@ -209,7 +243,12 @@ if _rc | "`rebuild_cache'" == "1" {
     save `middle_controls', replace
 
     import delimited using "$program_income_csv", clear varnames(1) case(preserve)
-    keep MRUN program_income_clp_m1 log_program_income_clp_m1 program_income_source_m1 program_income_missing_m1
+    keep MRUN ///
+        proginc_area_clp_m1 log_proginc_area_clp_m1 proginc_area_src_m1 proginc_area_miss_m1 ///
+        proginc_inst_clp_m1 log_proginc_inst_clp_m1 proginc_inst_src_m1 proginc_inst_miss_m1 ///
+        proginc_full_clp_m1 log_proginc_full_clp_m1 proginc_full_src_m1 proginc_full_miss_m1 ///
+        program_income_clp_m1 log_program_income_clp_m1 program_income_source_m1 program_income_missing_m1 ///
+        highpay_field_m1
     duplicates drop MRUN, force
     compress
     save `program_income', replace
@@ -221,6 +260,7 @@ if _rc | "`rebuild_cache'" == "1" {
     gen double school_rbd = most_time_RBD
     keep if !missing(school_rbd) & school_rbd > 0
     keep if !missing(EDAD_ALU) & EDAD_ALU >= 12 & EDAD_ALU <= 16
+    keep if cohort_gr8 >= 2017 & cohort_gr8 <= 2020
 
     foreach v in math_max leng_max {
         replace `v' = . if missing(`v') | `v' <= 0
@@ -230,19 +270,37 @@ if _rc | "`rebuild_cache'" == "1" {
     bysort psu_year: egen z_year_leng_max = std(leng_max)
 
     gen byte admission_exam_taker = !missing(math_max) | !missing(leng_max)
-    keep if admission_exam_taker
 
-    replace f_science_m1 = 0 if missing(f_science_m1)
-    replace f_eng_m1 = 0 if missing(f_eng_m1)
-    gen byte stem_enrollment_m1 = (f_science_m1 == 1 | f_eng_m1 == 1)
+    gen byte higher_ed_enrolled_m1 = !missing(COD_SIES_m1)
+    gen byte sies_m1_followup_observed = cohort_gr8 <= 2020
+    replace higher_ed_enrolled_m1 = . if !sies_m1_followup_observed
+
+    replace f_science_m1 = 0 if missing(f_science_m1) & sies_m1_followup_observed
+    replace f_eng_m1 = 0 if missing(f_eng_m1) & sies_m1_followup_observed
+    gen byte stem_enrollment_m1 = .
+    replace stem_enrollment_m1 = (f_science_m1 == 1 | f_eng_m1 == 1) if sies_m1_followup_observed
 
     gen byte observed_matricula_m1 = !missing(ACREDITADA_CARR_m1) | !missing(ACREDITADA_INST_m1) | !missing(ACRE_INST_ANIO_m1)
-    replace program_certified_years_m1 = 0 if missing(program_certified_years_m1) & !observed_matricula_m1
+    replace program_certified_years_m1 = 0 if missing(program_certified_years_m1) & !observed_matricula_m1 & sies_m1_followup_observed
+    replace program_certified_years_m1 = . if !sies_m1_followup_observed
 
     gen double inst_certified_years_m1 = .
     replace inst_certified_years_m1 = ACRE_INST_ANIO_m1 if institution_accredited_m1 == 1
     replace inst_certified_years_m1 = 0 if institution_accredited_m1 == 0
-    replace inst_certified_years_m1 = 0 if missing(institution_accredited_m1) & !observed_matricula_m1
+    replace inst_certified_years_m1 = 0 if missing(institution_accredited_m1) & !observed_matricula_m1 & sies_m1_followup_observed
+    replace inst_certified_years_m1 = . if !sies_m1_followup_observed
+
+    foreach v in ///
+        log_proginc_area_clp_m1 ///
+        log_proginc_inst_clp_m1 ///
+        log_proginc_full_clp_m1 ///
+        log_program_income_clp_m1 ///
+        highpay_field_m1 {
+        capture confirm variable `v'
+        if !_rc {
+            replace `v' = . if !sies_m1_followup_observed
+        }
+    }
 
     gen double z_sim_mat_4to_sq = z_sim_mat_4to^2
     gen double z_sim_mat_4to_cu = z_sim_mat_4to^3
@@ -260,6 +318,22 @@ else {
 }
 
 use "$analytic_dta", clear
+keep if cohort_gr8 >= 2017 & cohort_gr8 <= 2020
+capture confirm variable higher_ed_enrolled_m1
+if _rc {
+    capture confirm variable COD_SIES_m1
+    if _rc {
+        di as error "Analytic cache lacks COD_SIES_m1; rerun with rebuild_cache=1."
+        exit 111
+    }
+    gen byte higher_ed_enrolled_m1 = !missing(COD_SIES_m1)
+}
+
+capture confirm variable `outcome_var'
+if _rc {
+    di as error "Analytic cache lacks `outcome_var'; rerun with rebuild_cache=1 after regenerating MiFuturo outcomes."
+    exit 111
+}
 
 local controls ///
     i.cohort_gr8 ///
@@ -281,7 +355,7 @@ local controls ///
     z_sim_mat_4to z_sim_mat_4to_sq z_sim_mat_4to_cu ///
     z_sim_leng_4to z_sim_leng_4to_sq z_sim_leng_4to_cu
 
-di as txt "Estimating one-outcome school VA: `outcome_key' -> `outcome_var'"
+di as txt "Estimating one-outcome school VA: `outcome_key' -> `outcome_label' (Stata variable: `outcome_var')"
 capture erase "$va_csv"
 capture erase "$eb_csv"
 capture erase "$eb_diag_csv"
@@ -291,7 +365,7 @@ quietly areg `outcome_var' ib(first).school_rbd `controls', absorb(most_time_RBD
 gen byte __esample = e(sample)
 predict double __resid if __esample, resid
 local n_obs = e(N)
-mata: _write_centered_school_fe_short("`outcome_var'", "school_rbd", "__esample", "__resid", "$va_csv", st_numscalar("e(N)"))
+mata: _write_centered_school_fe_short("`outcome_label'", "school_rbd", "__esample", "__resid", "$va_csv", st_numscalar("e(N)"))
 timer off 2
 
 di as txt "Constructing one-outcome EB shrinkage: `outcome_key'"
@@ -348,7 +422,7 @@ local n_schools = r(N)
 
 file open timing using "$timing_csv", write replace text
 file write timing "outcome_key,outcome,prep_seconds,va_seconds,eb_seconds,total_seconds,n_obs,n_schools" _n
-file write timing "`outcome_key',`outcome_var',`prep_seconds',`va_seconds',`eb_seconds',`total_seconds',`n_obs',`n_schools'" _n
+file write timing "`outcome_key',`outcome_label',`prep_seconds',`va_seconds',`eb_seconds',`total_seconds',`n_obs',`n_schools'" _n
 file close timing
 
 di as result "Wrote VA input: $va_csv"

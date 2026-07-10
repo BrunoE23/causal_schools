@@ -1,0 +1,13 @@
+year,rows,unique_mrun,source
+2021,190942,190942,psu_students
+2022,183548,183548,psu_students
+2023,194714,194714,psu_students
+2024,201146,201146,psu_students
+2025,207078,207078,psu_students
+2026,215142,215142,psu_students
+2026,1694081,189399,psu_applications
+2025,1738995,189982,psu_applications
+2024,1733891,188707,psu_applications
+2023,1523896,187226,psu_applications
+2022,803613,148819,psu_applications
+2021,761883,141417,psu_applications

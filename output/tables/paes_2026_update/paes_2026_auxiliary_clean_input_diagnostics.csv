@@ -1,0 +1,7 @@
+year,rows,students,unique_program_codes,unique_cod_sies,missing_cod_sies,file_family
+2024,2048,,2048,2048,0,oferta
+2025,2080,,2080,1949,132,oferta
+2026,2150,,2150,2064,87,oferta
+2025,140687,140687,2057,1931,5839,paes_matricula
+2026,146873,146873,2139,2054,3747,paes_matricula
+2026,320087,320087,,,,paes_socioeconomics

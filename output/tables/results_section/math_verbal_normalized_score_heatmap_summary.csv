@@ -1,0 +1,2 @@
+n_students,n_years,min_psu_year,max_psu_year,bin_width,corr_z_math_z_verbal,min_z_math,max_z_math,min_z_verbal,max_z_verbal
+637481,5,2021,2025,0.1,0.683388048104033,-3.56067083676518,3.87173307863384,-4.18165225584202,3.49047262022178
