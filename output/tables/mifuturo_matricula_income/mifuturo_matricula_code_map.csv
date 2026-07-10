@@ -1,0 +1,6 @@
+source,relevant_codes,documented_or_inferred,role_in_this_script
+matricula_clean,"MRUN, COD_SIES/CODIGO_UNICO, COD_CARRERA, CODIGO_DEMRE, COD_INST",documented in ER_Matricula_Educacion_Superior_2007_2025_PUBL_MRUN.pdf,student-program rows to which income is attached for diagnostics
+program_info_22_24,"COD_SIES/CODIGO_UNICO, COD_CARRERA, CODIGO_DEMRE, COD_INST, AREA_CARRERA_GENERICA",documented in matricula PDF; assembled by code/facts_major_choice_prep.R,fills AREA_CARRERA_GENERICA because current clean matricula exports do not carry it
+mifuturo_income_csv,"Código (institution code), Tipo de institución, Nombre de institución, Nombre carrera genérica, Nombre carrera (del título)",inferred from MiFuturo headers and checked against institution-code behavior,source of income/employment measures
+oferta_codes_24_25,"COD_CARRERA_PREF, COD_SIES",assembled by code/facts_major_choice_prep.R from oferta definitiva files,not used for matricula merge diagnostic
+college_applications,COD_CARRERA_PREF,assembled by code/clean_college_apps_data.R,not used for matricula merge diagnostic

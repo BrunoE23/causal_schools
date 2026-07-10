@@ -1,0 +1,2 @@
+spec,group,outcome,treatment,instrument,risk_control,beta,se,zstat,p_value,n_obs,fs_beta,fs_se,fs_f,rc
+program_income_adj_eb,all,log_program_income_clp_m1,d_program_income_adj_eb,z_program_income_adj_eb,expected_program_income_adj_eb,1.30219288167837,0.152293350707743,8.55055638100263,1.2249657741937e-17,92947,0.447390254843172,0.00644855967471167,4813.35167746657,0

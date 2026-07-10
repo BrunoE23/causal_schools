@@ -1,0 +1,7 @@
+"outcome_key","outcome","prep_seconds","va_seconds","eb_seconds","total_seconds","n_obs","n_schools"
+"math","z_year_math_max","0","450.403",".479","451.297","556607","3365"
+"language","z_year_leng_max","0","502.398",".471","503.271","563429","3374"
+"stem","stem_enrollment_m1","0","476.195",".474","477.086","565432","3375"
+"program_income","log_program_income_clp_m1","0","472.109",".479","472.992","565432","3375"
+"progcert","program_certified_years_m1","0","464.45",".476","465.336","565229","3375"
+"instcert","inst_certified_years_m1","0","474.007",".474","474.89","565432","3375"

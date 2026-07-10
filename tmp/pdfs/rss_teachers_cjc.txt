@@ -1,0 +1,3609 @@
+
+
+===== PAGE 1 / 71: rss_teachers_cjc.pdf =====
+
+The Eﬀects of Teacher Quality
+on Adult Criminal Justice Contact
+Evan K. Rose, Jonathan Schellenberg, and Yotam Shem-Tov ∗
+September 2025
+Abstract
+This paper develops new approaches for estimating multi-dimensional teacher
+eﬀects and uses them to understand teachers’ impacts on their students’ future
+criminal justice contact (CJC). Using a unique data set linking the universe of
+North Carolina public school data to administrative arrest records, we ﬁnd a
+standard deviation of teacher eﬀects on students’ future arrests of 2.7 percent-
+age points (11% of the sample mean). Teachers’ eﬀects on CJC are orthogonal
+to their eﬀects on academic achievement, implying assignment to a high test
+score value-added teacher does not reduce future CJC. However, teachers who
+reduce suspensions and improve attendance substantially reduce future arrests.
+Similar patterns emerge when allowing teacher impacts to vary by student sex,
+race, and socio-economic status. The results suggest that the development of
+non-cognitive skills is central to the returns to education for crime and highlight
+an important dimension of teachers’ social value not targeted by test score-based
+quality metrics.
+∗Rose: Associate Professor, University of Chicago and NBER; ekrose@uchicago.edu. Schellen-
+berg: Economist at Amazon Web Services; jschellenberg@econ.berkeley.edu. Shem-Tov: Assistant
+Professor, University of California, Los Angeles and NBER; shemtov@econ.ucla.edu. We are ex-
+tremely grateful to Christopher Walters, David Card, Jesse Rothstein, and Patrick Kline, who pro-
+vided invaluable support and advice. We thank the North Carolina Education Research Data Center
+for assistance in the construction of our data set and to Justin McCrary and the Spencer Foundation,
+who helped fund this project. Thanks also go to Natalie Bau, Gordon Dahl, Zarek Brot-Goldberg,
+Amanda Dahlstrand, Alessandra Fenizia, Kevin Todd, Nicholas Y. Li, Conrad Miller, Hilary Hoynes,
+Jonathan Holmes, Juliana Londo˜ no-V´ elez, Jennifer Kwok, Julien LaFortune, John Loeser, Justin Mc-
+Crary, Enrico Moretti, Derek Neal, Nestor Le Nestour, Elena Pastorino, Avner Shlain, and Isaac
+Sorkin for their helpful comments and suggestions. A previous version of this paper was entitled
+“The Eﬀects of Teacher Quality on Criminal Behavior.” Software to implement the methods in this
+paper is available at https://pypi.org/project/ustat-var/.
+
+===== PAGE 2 / 71: rss_teachers_cjc.pdf =====
+
+The social costs of crime and any resulting arrest and incarceration are large. Cohen
+and Piquero (2009), for example, estimate the value of averting a high-risk youth from
+future crime at $3.8 to $5.3 million. One way to reduce these costs is through the
+education system. Little is known, however, about how teachers aﬀect crime, despite
+their central role in providing education. Even less is known about which skills good
+teachers foster to reduce their students’ future crime, and how those skills diﬀer from
+those most important for other outcomes (Chetty et al., 2014b; Jackson, 2018; Jackson
+et al., 2020; Petek and Pope, 2021; Gilraine and Pope, 2021). Since diﬀerent students
+may beneﬁt from focusing on diﬀerent skills and approaches, an important related
+question is whether some teachers are better at reaching particular types of students
+(Dee, 2005; Gershenson et al., 2022).
+Studying these questions requires estimating and relating teachers’ impacts on mul-
+tiple outcomes and types of students, which can be diﬃcult with noisy estimates of
+each teacher’s eﬀects. The standard approach is to estimate teachers’ value-added
+on each outcome or student type separately while adjusting for sampling error using
+Empirical Bayes (EB) techniques. 1 Recent work has highlighted potential violations
+of the parametric assumptions embedded in standard EB approaches (Gilraine et al.,
+2021; Chen, 2023). Even if the model is correctly speciﬁed, however, the distribution
+of EB estimates does not consistently estimate the distribution of teacher eﬀects. The
+variance of shrunken value-added estimates can approach zero, for example, even if
+teachers’ true impacts vary widely, and covariances across groups or outcomes can
+diﬀer in sign and magnitude from the covariances of true eﬀects.
+To help overcome these issues, this paper develops new, EB-free approaches for study-
+ing multi-dimensional teacher eﬀects. We then apply these tools to nearly two decades
+of linked administrative schooling and criminal justice records. We estimate the vari-
+ance of elementary and middle school teachers’ eﬀects on their students’ future crime
+as measured by rates of criminal justice contact (CJC) including arrest, conviction,
+and incarceration. To study the drivers of these eﬀects, we estimate their covariance
+with teachers’ eﬀects on standardized test scores, behavioral proxies for non-cognitive
+skills, and study skills. Doing so allows us to ask whether teachers who boost test
+scores, for example, also decrease their students’ future crime. After establishing a
+1Studies using this approach include Jackson (2018) and Petek and Pope (2021) for impacts on
+test scores and behaviors, and Bates et al. (2022) and Biasi et al. (2021) for impacts on disadvantaged
+and non-disadvantaged students, among others.
+1
+
+===== PAGE 3 / 71: rss_teachers_cjc.pdf =====
+
+set of baseline, homogeneous eﬀects, we explore the importance of accounting for
+heterogeneity across student characteristics.
+The analysis is made possible by a novel merge of administrative criminal justice and
+education records from North Carolina. The combined data set includes almost two
+million students and 40,000 teachers. The education records cover all students in
+public schools in grades 3 to 12 from 1996 to 2013 and include rich data on students
+and their outcomes. The criminal justice data include the universe of arrests and de-
+tailed data on case outcomes, including conviction status and sentences. The data are
+linked by name and date of birth; comparisons of match rates to external benchmarks
+suggest the merge quality is high.
+Our empirical strategy uses non-parametric estimators of the variance-covariance
+structure of teacher eﬀects, building on the literature on variance component esti-
+mation (e.g., Krueger and Summers, 1988; Aaronson et al., 2007; Kline et al., 2020).
+The approach separates the problem of estimating the joint distribution of teacher
+eﬀects—the goal of our analysis—from obtaining good estimates of a set of individual
+teacher’s eﬀects—the goal of EB and other forecasting techniques. Many parameters
+sought in the value-added literature, such as the implied impacts of a one standard
+deviation increase in teacher quality, can be easily recovered using our approach. As
+is common practice, the analysis relies on a rich set of characteristics available as
+controls to justify a conditional independence assumption, which is supported by a
+battery of validation tests.
+We ﬁnd large teacher eﬀects on both short and long-run outcomes. The estimated
+standard deviation of teacher eﬀects on future arrests, for example, is 2.7 percentage
+points (p.p.), or 11.3% of the sample mean, and is 2.1 p.p. (23.6%) for incarceration.
+The pattern of eﬀects across crime types and severity suggest that reductions stem
+from decreases in criminal behavior as opposed to better evasion of police. We ﬁnd
+similarly large eﬀects on long-run academic outcomes studied in previous analyses,
+such as high school graduation and students’ plans to attend college. Estimated
+impacts on short-run outcomes are similar to recent estimates in other geographies
+(Kane and Staiger, 2008; Chetty et al., 2014a).
+Relating eﬀects on short- and long-run outcomes reveals that teachers who boost
+test scores do not meaningfully decrease students’ future CJC. Shifting a student to
+2
+
+===== PAGE 4 / 71: rss_teachers_cjc.pdf =====
+
+a teacher with a one standard deviation higher eﬀect on test scores decreases their
+likelihood of arrest between the ages of 16 and 21 by less than 0.001 p.p.; we cannot
+reject zero eﬀect at conventional signiﬁcance levels. Teachers who boost study skills
+have similarly limited eﬀects on CJC. High test score eﬀect teachers do, however,
+improve students’ long-run academic outcomes, with estimated impacts on college
+attendance similar to those in Chetty et al. (2014b).
+By contrast, teachers’ impacts on behavioral outcomes are closely connected to their
+impacts on CJC. Assignment to a teacher with a standard deviation more beneﬁcial
+impact on a summary index of discipline, attendance, and grade repetition decreases
+the likelihood of future CJC by 2-4%, depending on the outcome. If teacher eﬀects on
+short-run behaviors are evidence of inﬂuence over non-cognitive and socio-emotional
+skills and traits such as conscientiousness, perseverance, and sociability (Lleras, 2008;
+Bertrand and Pan, 2013), our results support a growing body of research suggesting
+that the accumulation of “soft skills” may lie at the heart of the return to education
+for crime (Heckman and Rubinstein, 2001; Heckman et al., 2006; Reynolds et al.,
+2010; Heckman and Kautz, 2012; Heckman et al., 2013; Jackson et al., 2020). 2
+While the estimates rely on non-experimental teacher assignments, multiple tests
+demonstrate that all eﬀects are measured with limited bias. The estimates are insen-
+sitive to the inclusion of covariates unlikely to be used by administrators assigning
+teachers to students, including parental education, twin indicators, and twice-lagged
+test scores, all of which strongly predict outcomes conditional on the baseline controls.
+Using teacher switches across schools and school-grades to instrument for teacher as-
+signments, we cannot reject that estimates are unbiased. Nevertheless, we also show
+that our estimates provide a lower bound on the variance of causal eﬀects and that
+covariances in causal eﬀects are still identiﬁed under certain forms of bias, including
+if estimates of test score eﬀects are unbiased but direct eﬀects on CJC are not.
+Teachers have substantive impacts on future CJC for many types of students, in-
+cluding groups deﬁned by sex, race, socio-economic status, and predicted CJC risk
+using all covariates. But eﬀects are not perfectly correlated across student types.
+The correlation of a teacher’s eﬀects on their white and non-white students’ criminal
+2A large literature documents the importance of non-cognitive and socio-emotional skills for long-
+run outcomes, including Heckman and Rubinstein (2001), Cunha and Heckman (2008), Cunha et al.
+(2010), Lindqvist and Vestman (2011), Deming (2017), and Gray-Lobe et al. (2023).
+3
+
+===== PAGE 5 / 71: rss_teachers_cjc.pdf =====
+
+arrests is roughly 0.5, for example, indicating important heterogeneity in teachers’
+impacts. Eﬀects on short-run outcomes, on the other hand, show tight correlation
+across groups. The correlation between a teacher’s test score eﬀects for boys and
+girls is 0.96, for example. The impact of assignment to a teacher good at boosting
+test scores or improving behaviors for observably similar students is thus similar to
+the average eﬀect, since heterogeneous eﬀects on short-run outcomes provide a poor
+proxy for heterogeneous eﬀects on long-run outcomes.
+To conclude, we simulate the impacts of replacing the bottom 5% of teachers based
+on various measures. Retention policies based on teachers’ direct eﬀects on long-run
+outcomes would result in large improvements, including up to 10 p.p. increases in
+college attendance and 6 p.p. reductions in criminal arrests for exposed students.
+Policies that target teachers using their impacts on short-run measures, however,
+achieve a fraction of these gains, underscoring the scope of teacher impacts not cap-
+tured by these measures. Putting emphasis on diﬀerent short-run outcomes trades
+oﬀ eﬀects on long-run academic and CJC outcomes, with policies that emphasize test
+score impacts most strongly aﬀecting academic outcomes and policies that emphasize
+behaviors primarily inﬂuencing criminal justice outcomes.
+This paper contributes to a broad literature on the importance of teachers. Related
+work has shown that teacher quality—as measured by their inﬂuence on students’
+test scores—varies widely (Rivkin et al., 2005; Kane and Staiger, 2008; Chetty et al.,
+2014a; Bacher-Hicks et al., 2014; Bau and Das, 2020) and has important consequences
+(Chetty et al., 2014b). Teachers, however, impact a broad set of skills beyond those
+measured by standardized tests (Jackson, 2018; Petek and Pope, 2021; Mulhern and
+Opper, 2022). The skills rewarded in one domain, such as the labor market, may
+diﬀer from those rewarded in another, implying that what makes a teacher “good”
+depends on the outcome considered. Our results provide the ﬁrst evidence of teachers’
+eﬀects on a life-altering and socially costly long-run outcome and show that the set
+of short-run impacts that predict these eﬀects is strikingly diﬀerent than for teacher
+eﬀects on adult earnings, complementing related work on the impacts of overall school
+quality (Jackson et al., 2020; Bacher-Hicks et al., 2019; Jordan et al., 2024).
+We also make progress methodologically by providing new tools for studying the
+impacts of teachers. While recent work has suggested a variety of alternatives to
+traditional EB estimators (e.g., Kwon, 2023; Chen, 2023; Giacomini et al., 2023), the
+4
+
+===== PAGE 6 / 71: rss_teachers_cjc.pdf =====
+
+results of any forecasting technique will depend simultaneously on how much teachers
+impact outcomes and the researcher’s ability to accurately estimate those impacts. In
+standard approaches, for example, the impacts of a one standard deviation increase in
+teacher quality would change if estimated in the same data but dropping half of each
+teacher’s observations, making it diﬃcult to reach ﬁrm conclusions about the relative
+importance of teachers’ impacts across outcome dimensions and contexts. By directly
+estimating the parameters of interest under weak assumptions, our approach sidesteps
+these issues. Building on recent work by Kline et al. (2020), we also derive analytic
+standard errors that avoid the complications of inference on generated regressors in
+traditional two-step procedures. A Python implementation of our method is available
+at https://pypi.org/project/ustat-var/.
+Our work also connects to the literature on how student skills respond to investments
+(Cunha and Heckman, 2008; Cunha et al., 2010, 2021). That literature typically
+exploits repeated, noisy measurements of latent skills (e.g., Agostinelli and Wiswall
+(2025) use sub-tests of the Peabody Individual Achievement Test) and independence
+restrictions to achieve identiﬁcation (Schennach, 2016; Cunha et al., 2021). Our focus
+is similar in that we also seek to estimate distributions of latent parameters and use
+long-run outcomes to anchor eﬀects on outcomes without a natural scale such as test
+scores. However, we focus on teachers’ direct eﬀects on short- and long-run outcomes,
+rather than estimating dynamic human capital production functions. As a result, we
+do not explicitly model achievement and disciplinary outcomes as proxies for latent
+underlying skill stocks. Our identiﬁcation arguments and estimation approach do
+not rely on repeated, contemporaneous measurements, knowledge of investments, or
+latent factor structures, and require generally weaker restrictions.
+Finally, we contribute to the growing literature on whether teachers have a compara-
+tive advantage in teaching certain students (Dee, 2005; Condie et al., 2014; Gershenson
+et al., 2022; Delgado, 2021; Biasi et al., 2021; Bates et al., 2022). We document mean-
+ingful heterogeneity in teachers’ direct eﬀects on long-run outcomes such as CJC or
+college attendance. However, we also ﬁnd that latent teacher eﬀects on short-run
+outcomes are highly correlated across students, suggesting there is limited teacher
+comparative advantage for students’ performance on test scores, behaviors, and study
+skills. Identifying strong predictors of teachers’ heterogeneous long-run eﬀects is an
+important topic for future research.
+5
+
+===== PAGE 7 / 71: rss_teachers_cjc.pdf =====
+
+1 Data and setting
+1.1 Education records
+We utilize administrative education records provided by the North Carolina Education
+Research Data Center (NCERDC). These data cover the universe of public school
+students in the state from 1996 through 2013. Key data elements include test scores,
+teacher and classroom assignments, demographic characteristics of students, parents,
+and teachers, and disciplinary and attendance records.
+Our analyses focus on the impacts of elementary and middle school teachers in grades
+four through eight. In elementary school, students are usually assigned to a single
+homeroom teacher, although some students have separate math and reading teachers.
+In middle school, students typically have separate teachers for math and reading
+courses. From 2006 onwards, the NCERDC provides “course membership” ﬁles that
+directly link students to their teachers. Prior to 2006, we follow Rothstein (2017) and
+use the identity of students’ test proctor to link students to their teachers. 3
+1.1.1 The teacher assignment process
+Typically, central administrators (e.g., the principal) assign students to teachers seek-
+ing to balance class size, student ability, and student needs (e.g., special education
+status). Our empirical strategy controls for the student characteristics used as po-
+tential inputs in this process, such as the student’s academically gifted status and
+behavioral or educational special needs, their lagged academic achievement, as well
+as lagged school discipline and absences. A key concern is whether assignment also
+depends on student characteristics we do not observe, leading to potentially biased
+estimates of teachers’ causal eﬀects. We discuss tests of this issue using student
+characteristics likely not used in the assignment process below.
+Because students are not randomly assigned to schools or cohorts, and teacher quality
+varies across both schools and time, our models will also control for year-grade-subject
+ﬁxed eﬀects to proxy for the implicit “strata” at which administrators assign teachers
+to students, and means of student characteristics at the school level to control for
+between-school sorting. Finally, we include classroom means of student characteristics
+to account for the possibility that some students are “tracked” into diﬀerent sets of
+3Replicating this strategy in the post-2006 data conﬁrms that proctors provide a reliable source
+of teacher identities.
+6
+
+===== PAGE 8 / 71: rss_teachers_cjc.pdf =====
+
+courses and teachers (e.g., the honors track) (Jackson, 2014).
+1.1.2 Short-run outcome measures
+We construct three primary measures of short-run outcomes from the NCERDC data.
+The ﬁrst proxies for cognitive skills using scores on standardized state-wide examina-
+tions in math and reading taken by all students. Test scores are normalized within
+each year and grade to have a mean of zero and a standard deviation of one in the full
+student population. For homeroom teachers, we use the ﬁrst principal component of
+math and reading scores as the relevant outcome. Math and reading scores are used
+for math and reading teachers, respectively.
+The second measure follows a large literature that uses student behaviors to proxy
+for non-cognitive skills (Heckman et al., 2006; Lleras, 2008; Bertrand and Pan, 2013;
+Petek and Pope, 2021). As in Jackson (2018), we take the ﬁrst principal component
+of standardized indicators for school discipline (primarily in- and out-of-school sus-
+pensions), days absent, and grade repetition in each year. Prior research documents
+that these behaviors are strongly associated with important non-cognitive skills and
+traits (e.g., Duckworth et al., 2007). Unlike test scores, eﬀects on these measures may
+capture both changes in students’ behavior and teachers’ propensity to punish their
+students or record absences. To isolate the former component, we measure suspen-
+sions and absences the year after the student was assigned to a teacher (i.e., int+1). 4
+We normalize the sign of the behavioral index so that improved behaviors (e.g., fewer
+suspensions) correspond to more positive values of the index.
+The third and ﬁnal measure uses data on students’ time spent on homework, reading,
+and watching television, which we interpret as proxies for students’ study skills and
+eﬀort. These variables are reported categorically with discretization that changes
+year-to-year. We convert values to hours using the mid-point of each category and
+normalize within grade and year. As with behaviors, we then combine the three
+measures into a single summary index using the ﬁrst principal component. Although
+test scores are available over the full panel, behaviors and study skill measures are
+not. Absences are available for all students beginning in 2004, and disciplinary records
+begin in 2001 for a subset of the schools and for all schools beginning in 2006. When
+4Related work also uses grades as a behavioral measure (Jackson, 2018; Petek and Pope, 2021).
+Since grades likely capture some of the skills also measured by test scores, we omit them from our
+behavioral summary measure to focus estimates on non-cognitive skills.
+7
+
+===== PAGE 9 / 71: rss_teachers_cjc.pdf =====
+
+estimating teacher eﬀects on each outcome, we use all data available.
+1.2 Criminal justice records
+We use administrative information on arrests, charges, and sentencing from the NC
+Administrative Oﬃce of the Courts (AOC). The data cover all cases disposed be-
+tween 2006 and mid-2020 and include rich information on defendants, oﬀenses, initial
+charges, convictions, and sentences. Because criminal charges in NC are initially ﬁled
+by law enforcement oﬃcers (as opposed to prosecutors), the charges in these data
+closely approximate arrests. In Charlotte-Mecklenburg County, where we have col-
+lected arrest records directly from the Sheriﬀ, over 90% of arrests appear in the AOC
+data.5
+The data include a large set of oﬀenses ranging from speeding tickets to homicides.
+We focus our analysis on actual criminal arrests as deﬁned by NC statutes, although
+we also consider impacts on non-criminal traﬃc and municipal ordinance violations.
+To examine eﬀects on the most severe categories of crimes, we also deﬁne indicators
+for arrest for one of the Uniform Crime Reporting program’s index crimes: aggravated
+assault, forcible rape, murder, robbery, arson, burglary, larceny/theft, or motor vehicle
+theft. Throughout, we refer to outcomes in this data as indicators of “criminal justice
+contact” rather than crime, since arrests can occur without commission of a crime and
+vice versa. We focus on CJC between the ages of 16 to 21, allowing us to measure
+CJC for a large number of cohorts in the education data. 6
+1.3 Data linking
+Education records were linked to criminal justice data on the basis of name and date of
+birth.7 Since not all students are arrested as young adults, we do not expect 100% of
+the education records to match the criminal justice data. Comparisons of our match
+rates to external benchmarks suggest the link is accurate, however. Bacher-Hicks
+et al. (2019), for example, estimate that 19% of Charlotte-Mecklenburg students are
+arrested between the ages of 16 and 21, a ﬁgure close to our rate of criminal arrest
+5The rest is non-arrest booking events recorded by the Sheriﬀ such as federal prisoner transfers.
+6The age of criminal responsibility in NC was 16 until December 1st, 2019, when “Raise the Age”
+legislation increased it to 18.
+7We also experimented with using social security numbers, which are available for a subset of the
+arrest records, and found similar match rates.
+8
+
+===== PAGE 10 / 71: rss_teachers_cjc.pdf =====
+
+reported below.8
+1.4 Sample construction
+Following Chetty et al. (2014a), we treat the student-subject-year as the unit of obser-
+vation. Each row in our data therefore includes a student’s subject-speciﬁc outcomes
+(e.g., their math test scores for the math subject), their assigned teacher, their be-
+havioral and study skill outcomes for that year, and long-run outcomes. The full data
+set constructed in this way includes 13 million observations. We drop teachers who
+appear in multiple schools (0.7% of records) or grades (3.7%) in the same year, since
+their students are likely only partially exposed to their potential eﬀects, alternative
+and special education schools (0.1%), and students with an invalid contemporary or
+lag math and reading score, which serve as crucial controls (8.4%). Finally, to mitigate
+any potential mismatches of students to teachers, we keep teacher-subject pairs with
+between 15 and 100 students per year (excluding a further 6.6% of observations).
+1.5 Summary statistics
+Table 1 presents summary statistics for the ﬁnal analysis sample. The sample includes
+9,779,708 student-subject-year observations for 1,953,547 students with 39,707 diﬀer-
+ent teachers. Roughly 25% of the sample are black—close to the state average, 58%
+are economically disadvantaged, 22% have a parent with a four-year college degree,
+while 40% have a parent with a high-school education or less. Test scores are nor-
+malized to be mean zero and have a standard deviation of one in the full population
+of students. However, in the analysis sample (Columns 1 and 2) the average math
+and reading test scores are slightly higher (0.061 and 0.046), primarily due to the
+exclusion of students without a lag score. 17% of the students have some disciplinary
+infraction in an average year and 8% have an out-of-school suspension.
+Contact with the justice system is common. A quarter of the students have a criminal
+arrest between ages 16 to 21. A substantial share of the children have a serious incident
+between ages 16 to 21: 10% are arrested for an index crime, 10% are convicted of a
+crime, and 9% are incarcerated (including both jail and prison). Columns 3 and 4
+8Other benchmarks include Cook and Kang (2016), who estimate that 6% of the 1987-89 NC
+birth cohorts were convicted of serious crimes between the ages of 17 and 19; Brame et al. (2014)’s
+analysis of the National Longitudinal Survey of Youth, who ﬁnd a self-reported arrest rate between
+the ages of 18 and 23 of 30% when non-response is treated as missing at random; and data from the
+CJARS project (Papp and Mueller-Smith, 2021), which ﬁnds median felony conviction rates across
+commuting zones comparable to our CJC rates.
+9
+
+===== PAGE 11 / 71: rss_teachers_cjc.pdf =====
+
+report statistics for the sub-sample of the students in cohorts for whom we observe
+CJC outcomes. This sample is remarkably similar to our full analysis sample.
+Table 1 also reports summary statistics for children who have a criminal arrest between
+ages 16 and 21 (Columns 5 and 6). These students are more likely to be economically
+disadvantaged, their parents have less education, and they are more likely to be
+male and black. In terms of short-run measures, these children have lower academic
+achievement, more disciplinary infractions, and more out-of-school suspensions. They
+also have lower 12th grade GPA and are less likely to graduate.
+2 Econometric framework
+This section lays out the econometric framework we use to deﬁne and estimate teacher
+eﬀects on short- and long-run outcomes and their correlation structure. We deﬁne the
+population parameters and estimands ﬁrst, then turn to estimation. As is common in
+the literature, the main results use a model where teachers have homogeneous eﬀects
+on all students (Chetty et al., 2014a; Angrist et al., 2017), an assumption we later
+relax. We defer details on tests of our identifying assumptions until after we have
+presented the main results.
+2.1 Causal and observational eﬀects of teachers
+Consider a population of students indexed by i assigned to one of J possible teachers
+in year t. Let Yijt denote the potential value of a generic outcome for student i
+if assigned to teacher j at time t.9 Short-run outcomes, such as test scores, vary
+across t within student. Long-run outcomes do not, but we preserve the t subscript
+because Yijt reﬂect impacts of potential teacher assignment at time t conditional on
+the student’s history as of time t. Let Xit denote the student’s exogenous observable
+characteristics. If all potential outcomes were observed, they could be decomposed
+into the causal eﬀects of teachers and student observed and unobserved heterogeneity
+using regression:
+Yijt = µj
+Teacher eﬀects
++ X′
+itγ
+Observed heterogeneity
++ ϵijt
+Unobserved heterogeneity
+(1)
+9Our unit of observations is a student-subject-year triplet. However, to simplify the notation and
+exposition, we follow Chetty et al. (2014a) and focus on the case in which a student has only a single
+teacher in each year. Alternatively, i can be deﬁned as indexing student-subject pair.
+10
+
+===== PAGE 12 / 71: rss_teachers_cjc.pdf =====
+
+where E[ϵijt] = E[ϵijtXit] = 0 by construction. We normalize the mean of µj to
+be zero and include a constant, so that the average causal eﬀect on the outcome of
+assignment to teacherj for a random student isE[Yijt|j]−E[Yijt] =µj. Teacher eﬀects
+are therefore constant over time, an assumption we relax in robustness exercises.
+Since E[µj] = 0, µj captures teacher j’s eﬀects relative to the average teacher. Since
+Equation 1 is a simple linear projection of potential outcomes onto observables, as
+written it imposes no additional structure on the nature of treatment eﬀects. In the
+ﬁrst part of our analysis, however, we follow the prior literature and assume teacher
+eﬀects are homogeneous across students, allowing us to write ϵijt =ϵit (Chetty et al.,
+2014a; Angrist et al., 2017).
+We deﬁne “observational” teacher eﬀects as the population projection version of Equa-
+tion 1 that relates actual teacher assignments to realized outcomes:
+Yit =
+∑
+j
+αjDijt +X′
+itΓ +uit (2)
+where Dijt = 1 if student i is assigned to teacher j in year t and = 0 otherwise, and
+Yit = ∑
+jYijtDijt is student i’s realized outcome in year t. Equation 2 is a projection
+deﬁned by the population requirement that E[uitDijt] = 0 ∀ j. Observational and
+causal eﬀects of teachers only coincide, however, when E[ϵitDijt] = 0 ∀j, implying
+that teacher assignments are uncorrelated with unobserved determinants of potential
+outcomes. If this is the case, αj = µj∀j,γ = Γ, and uit = ϵit, and unbiased causal
+eﬀects of teachers can be estimated using sample analogues of Equation 2. We call
+this assumption conditional independence:
+Assumption 1 Conditional independence: E[ϵitDijt] = 0∀j.
+Conditional independence does not necessarily require random assignment of students
+to teachers. Instead, teacher assignments must be uncorrelated with unobserved fac-
+tors that inﬂuence outcomes. This assumption rules out, for example, some teachers
+being systematically assigned students who are more likely to do well on standard-
+ized tests than observationally similar peers regardless of their teacher. But it allows
+teachers to be assigned students with diﬀerent observed or unobserved characteristics
+so long as their inﬂuence on outcomes is accounted for by the controls. 10
+10This distinction is important in light of Rothstein (2010)’s inﬂuential ﬁnding that teacher as-
+signments are correlated with observables such as twice-lagged test scores in a subset of the same
+NC data we use. Rothstein’s result is not necessarily inconsistent with Assumption 1.
+11
+
+===== PAGE 13 / 71: rss_teachers_cjc.pdf =====
+
+The consensus in the education literature is that Assumption 1 is a plausible restric-
+tion due to the richness of available controls (Bacher-Hicks and Koedel, 2023). As
+noted in Section 1.1.1, these controls both proxy for the student characteristics admin-
+istrators use when making teacher assignments and account for student sorting across
+schools and cohorts. In our case, the controls include year-grade-subject ﬁxed eﬀects;
+third-order polynomials in lagged math and reading test scores interacted with grade
+and subject; indicators for the student’s academically gifted status, behavioral or
+educational special needs, economic disadvantage indicators, and English proﬁciency
+status; race and gender; lagged school discipline and grade repetition indicators and
+lagged days absent; and school and classroom means of lagged math and reading test
+scores and student characteristics. If a variable is missing for a particular student, it
+is replaced with zero and a dummy variable for missing is included.
+We discuss several tests of Assumption 1 in what follows, all of which support its
+validity. Nevertheless, we also consider a weaker assumption known as “forecast
+unbiasedness” that allows for a restricted form of bias in teacher eﬀects:
+Assumption 2 Forecast unbiased eﬀects: µj =αj +ηj and Cov(αj,ηj) = 0.
+where ηj is the diﬀerence between causal and observational eﬀects. If observational
+eﬀects were forecast unbiased and observed without measurement error, a regres-
+sion of teachers’ causal eﬀects on their observational eﬀects would yield a coeﬃcient
+of one. 11 Observational eﬀects are therefore unbiased linear predictors of causal ef-
+fects. Assumption 2 requires that the causal eﬀects of teachers who appear high
+quality given the students they are actually assigned cannot be systematically over-
+or under-estimated. This restricted form of bias is plausible if high quality teachers
+are sometimes assigned students likely to excel no matter what, but also sometimes
+assigned students who face more challenges.
+The discussion so far has considered a generic outcome Yit. In what follows, we
+consider multiple short- and long-run outcomes, including math and reading test
+scores, proxies for non-cognitive skills such as attendance and suspensions, and future
+CJC. Each teacher is therefore characterized by vectors of causal and observational
+eﬀectsµj ={µ1
+j,µ 2
+j,...,µ K
+j} andαj ={α1
+j,α 2
+j,...,α K
+j}, one for each of K outcomes.
+11In practice, αj is estimated with error and ˆαj is not a forecast unbiased predictor of µj even if
+Assumption 2 holds (i.e., projecting µj on ˆαj will not yield a coeﬃcient of one). We detail how we
+overcome this issue when testing this assumption below.
+12
+
+===== PAGE 14 / 71: rss_teachers_cjc.pdf =====
+
+Likewise, Assumptions 1 and 2 can be invoked for the causal and observational eﬀects
+of teachers on each outcome separately.
+2.2 Parameters of interest and estimation
+We focus on estimating the variance-covariance matrix of observational teacher eﬀects
+αj. The variance of elements of αj measures how important eﬀects are for particular
+outcomes. The covariance of elementsαj measures how teachers’ impacts relate across
+outcomes. Because αj are deﬁned as population projection coeﬃcients, they are easy
+to consistently estimate using OLS. But these estimates will also be noisy. As a
+result, the variance of ˆαj will overstate the true variance of αj. Due to correlated
+sampling error across outcomes, sample covariances between elements of ˆαj may also
+yield biased estimates of the covariances between elements of αj.
+We use variations on established approaches to obtain unbiased estimates of latent
+eﬀect variances and covariances (Kline et al., 2020). Our approach allows us to non-
+parametrically characterize the distribution of teacher eﬀects without the use of an
+intermediate shrinkage step or specifying a complete statistical model.
+To begin, deﬁne the variance of teacher eﬀects (for a single generic outcome) as:
+Var (αj) = 1
+J
+J∑
+j=1
+α2
+j−
+
+ 1
+J
+J∑
+j=1
+αj
+
+
+2
+=
+(J− 1
+J
+) 1
+J
+J∑
+j=1
+α2
+j− 2 1
+J2
+J−1∑
+j=1
+J∑
+k>j
+αjαk (3)
+where the second expression follows from expanding the squares and some careful
+algebraic rearrangement. The key challenge in estimating Var (αj) is that the plug-in
+estimator Var (ˆαj) will be biased because E[ˆα2
+j] > E[ˆαj]2 by Jensen’s inequality. To
+overcome this issue, we construct unbiased estimates ofα2
+j for each teacher motivated
+by a simple restriction on teacher-year mean population residuals from Equation 2.
+Speciﬁcally, we assume that for ¯ujt = 1
+njt
+∑
+i|j(i,t)=juit, where njt is the number of
+students assigned to teacher j at time t, the following holds:
+Assumption 3 Uncorrelated teacher-year residuals: E[¯ujt ¯ujt′] = 0∀j,t̸=t′
+If Assumption 1 holds, then Assumption 3 can be understood as requiring that any
+sorting on unobservables is uncorrelated across t for each teacher. This restriction is
+not imposed by Assumption 1 alone, which simply requires that unobservable sorting
+be mean zero for each teacher when averaging across all t. Assumption 3 rules out
+13
+
+===== PAGE 15 / 71: rss_teachers_cjc.pdf =====
+
+in addition any “runs” across years in unobserved student quality within teacher. It
+is straightforward to relax Assumption 3, however, by assuming that it holds across
+t separated by at least m years: E[¯ujt ¯ujt′] = 0∀j,|t−t′|≥ m. This allows for runs
+that die out after at least m years, a possibility we explore further below.
+The key ingredient in our estimator of Var (αj) is teacher-year mean residuals from
+OLS estimates of Equation 2:
+¯Yjt = 1
+njt
+∑
+i|j(i,t)=j
+Yit−X′
+itˆΓ =αj + ˆ¯ujt
+where ˆ¯ujt = ¯ujt + ¯X′
+jt(Γ− ˆΓ) for ¯Xjt = 1
+njt
+∑
+i|j(i,t)=jXit.12 Our estimator uses these
+mean residuals as follows:
+ˆVar (αj) =
+(J− 1
+J
+) 1
+J
+J∑
+j=1
+(
+Tj
+2
+)−1Tj−1∑
+t=1
+Tj∑
+k=t+1
+¯Yjt ¯Yjk− 2 1
+J2·
+J−1∑
+j=1
+J∑
+k>j
+¯Yj ¯Yk (4)
+where Tj is the number of years observed for teacher j and ¯Yj = 1
+Tj
+∑Tj
+t=1 ¯Yjt. This
+estimator can be viewed as the second expression in Equation 3 with ¯Yj substituted
+for αj and
+(
+Tj
+2
+)−1 ∑Tj−1
+t=1
+∑Tj
+k=t+1 ¯Yjt ¯Yjk substituted for α2
+j. The latter term is the
+average product of mean residuals across all pairs of years for a given teacher.
+Under Assumption 3, Et̸=t′
+[¯Yjt ¯Yjt′
+]
+= α2
+j because each residual consists of αj plus
+uncorrelated noise. 13 Related estimators have been used in prior work to estimate
+the variance of teacher eﬀects on short-run outcomes, typically by taking the average
+product of mean residuals across random pairs of classrooms (e.g., Kane and Staiger,
+2008; Chetty et al., 2014a; Jackson, 2018). 14
+12ˆΓ is estimated with teacher dummies as in Equation 2. This implies that the teacher-level means
+of Yit−X′
+itˆΓ are identical to estimates of teacher ﬁxed eﬀects obtained by estimating Equation 2
+directly. They would not necessarily be identical if ˆΓ were estimated without teacher dummies, a
+version of “improper” Frisch–Waugh–Lovell.
+13Population residuals are estimated because Γ is not known. As a result, ¯X′
+jt(Γ− ˆΓ) appears in
+ˆ¯ujt. The presence of this term may generate bias if ¯Xjt is correlated across years within teacher
+and Γ ̸= ˆΓ even under Assumption 3. Our very large sample makes estimation error in Γ small,
+mitigating this concern. In fact, bias can be estimated because under Assumption 3 for any j and
+t̸=t′, E[ ¯Yjt ¯Yjt′]−α2
+j =E[ ¯X′
+jt(Γ− ˆΓ)(Γ− ˆΓ)′ ¯Xjt′] = ¯X′
+jtΣΓ ¯Xjt′. For test scores, this evaluates to
+10−5 when averaged overall all j and t, implying a < 0.1% upwards bias in our estimated variance.
+The same residualization approach is standard in related methods. When estimating two-way ﬁrm
+and worker ﬁxed eﬀect models for log wages, for example, covariates such as year dummies are
+commonly partialled out before estimating the variance of ﬁrm eﬀects (Kline et al., 2020).
+14For example, Jackson (2018) used the estimatorEt,t′
+[
+1
+J
+∑J
+j=1( ¯Yjt− ¯Yt)( ¯Yjt′− ¯Yt′)
+]
+and approx-
+imated the expectation using the median value in 200 Monte Carlo simulations. Our estimator uses
+all possible pairs of years within a teacher instead of simulations.
+14
+
+===== PAGE 16 / 71: rss_teachers_cjc.pdf =====
+
+ˆVar (αj) is also numerically equivalent to the variance of the estimated ˆ αj minus a
+correction due to sampling variance based on the standard error of each ˆ αj (Kline
+et al., 2020):
+ˆVar (αj) = 1
+J
+J∑
+j=1
+(¯Yj− ¯Y
+)2
+  
+Variance of
+observed ˆαj
+−
+(
+1− 1
+J
+) ˆσ2
+j
+Tj  
+Correction for
+sampling variation
+(5)
+where ¯Y = 1
+J
+∑J
+j=1
+¯Yj, and ˆσ2
+j = 1
+Tj−1
+∑Tj
+t=1( ¯Yjt− ¯Yj)2. Similar estimators have been
+used in a variety of applications, including estimates of the variance of teacher eﬀects
+(e.g., Krueger and Summers, 1988; Aaronson et al., 2007; Kline et al., 2021).
+Our second object of interest is the covariance of teacher eﬀects across outcomes.
+Using test score and CJC eﬀects—αA
+j andαC
+j —as an example, this estimand is:
+Cov(αA
+j,αC
+j ) = 1
+J
+J∑
+j=1
+αA
+jαC
+j −
+
+ 1
+J
+J∑
+j=1
+αA
+j
+
+
+
+ 1
+J
+J∑
+j=1
+αC
+j
+
+ (6)
+=
+(J− 1
+J
+) 1
+J
+J∑
+j=1
+αA
+jαC
+j − 2 1
+J2·
+J−1∑
+j=1
+J∑
+k>j
+αA
+jαC
+j
+where the second line again follows from expanding the product of sums and re-
+arranging. Now the source of potential bias is correlated sampling error in teacher
+eﬀects estimates across outcomes. Unlike variance estimation, where measurement
+error leads to over-dispersion, correlated measurement error across outcomes can bias
+covariance estimates in either direction.
+Our covariance estimator is constructed assuming that a version of Assumption 3 holds
+across outcomes. Speciﬁcally, we assume that for generic outcomes A and C:
+Assumption 4 Uncorrelated cross-outcome-year residuals:E[¯uA
+jt ¯uC
+jt′] = 0∀j,t̸=t′
+where ¯uk
+jt are the teacher-year mean residuals from Equation 2 with outcomeYk
+it on the
+left-hand side. Much like ˆVar (αj), our covariance estimator exploits this restriction
+by excluding products of mean residuals from the same year:
+ˆCov(αA
+j,αC
+j ) =
+(J− 1
+J
+) 1
+J
+J∑
+j=1
+1
+T 2
+j−Tj
+Tj∑
+t=1
+Tj∑
+k̸=t
+¯YA
+jt ¯YC
+jk− 2 1
+J2·
+J−1∑
+j=1
+J∑
+k>j
+¯YA
+j ¯YC
+k (7)
+where ¯Yk
+jt and ¯Yk
+j are deﬁned as above but for outcome Yk
+it . As above, this estimator
+can be viewed as Equation 6 with unbiased estimators of αA
+jαC
+j formed from average
+15
+
+===== PAGE 17 / 71: rss_teachers_cjc.pdf =====
+
+cross-year products for each j plugged in. It is also numerically equivalent to taking
+the covariance of estimated eﬀects across outcomes and subtracting a correction for
+within-teacher correlated measurement error:
+ˆCov(αA
+j,αC
+j ) = 1
+J
+J∑
+j=1
+(¯YA
+j − ¯YA) (¯YC
+j − ¯YC)
+  
+Covariance of
+observed ˆαA
+j and ˆαC
+j
+−
+(
+1− 1
+J
+)σAC
+j
+Tj  
+Correction for correlated
+sampling variation
+(8)
+where σAC
+j = 1
+Tj−1
+∑Tj
+t=1
+(
+YA
+jt− ¯YA
+j
+) (
+YC
+jt− ¯YC
+j
+)
+.15
+Comparison to alternative approaches . The prior literature often uses the co-
+variance of EB posteriors to study how teachers’ impacts across multiple outcomes
+or groups are related. Standard linear EB posteriors typically shrink observational
+estimates towards the overall mean with weights related to each estimate’s sampling
+variance. The variance of EB posteriors is generally smaller than the variance of latent
+eﬀects as a result of this shrinkage step, however. This can make it diﬃcult to compare
+eﬀects across groups or outcomes, since both the variance of latent eﬀects and degree
+of shrinkage may be changing. In Appendix B, we show that the covariance of EB
+posteriors across outcomes or student groups also does not identify the covariance in
+latent true teacher eﬀects. A simple simulation calibrated to the variance-covariance
+of teacher eﬀects and sampling error in our data illustrates the potential biases—the
+covariances of EB posteriors across outcomes can be signiﬁcantly biased and wrongly
+signed, even with over 1,000 student observations per teacher.
+Inference. An additional beneﬁt of our approach is that it is possible to construct
+analytic expressions for the sampling variances of the estimators in Equations 4 and 7,
+as well as their sampling co-variances. Appendix C explains how. We use this result
+to conduct inference instead of relying on bootstrap routines that may be misleading
+in high-dimensional models (El Karoui and Purdom, 2018). Doing so also allows us to
+avoid the inferential complications that arise when using EB posteriors as explanatory
+variables in second-step regressions.
+2.2.1 Interpretation under Assumption 1
+When Assumption 1 holds, these estimators provide unbiased estimates of the variance-
+covariance of causal eﬀects of teachers across outcomes because the distribution of
+15So far, we assumed that all outcomes are observed in all the years. In Appendix C, we present
+a generalization of our estimator that relaxes this requirement.
+16
+
+===== PAGE 18 / 71: rss_teachers_cjc.pdf =====
+
+observational (αj) and causal (µj) teacher eﬀects coincide.
+2.2.2 Interpretation under Assumption 2
+When only Assumption 2 holds, observational variance estimates provide a lower
+bound on the variance of causal eﬀects, since Var (µj) =Var (αj) +Var (ηj) (Abaluck
+et al., 2021). However, the diﬀerence between observational and causal covariance
+estimates—e.g., between Cov(µA
+j,µC
+j ) and Cov(αA
+j,αC
+j )—depends on the correlation
+in teacher-level bias across outcomes. For example, if biases are uncorrelated across
+outcomes and with underlying causal eﬀects—e.g., Cov(ηA
+j ,ηC
+j ) = Cov(µA
+j,ηC
+j ) =
+Cov(ηA
+j ,µC
+j ) = 0—the observational covariance equals the causal covariance.
+It is possible that Assumption 1 holds for short-run outcomes such as test scores
+but not for long-run outcomes such as CJC. In this case, observational and causal
+covariances are related byCov(αA
+j,αC
+j ) =Cov(µA
+j,µC
+j )−Cov(µA
+j,ηC
+j ). They therefore
+coincide whenever Cov(µA
+j,ηC
+j ) = 0, implying that bias in teacher eﬀects on future
+CJC is orthogonal to teachers’ causal eﬀects on test scores. This expression also
+makes the direction of any potential bias clear. It seems plausible, for example, that
+the teachers with the most positive causal eﬀects on test scores are assigned the
+students least likely to be arrested. This pattern would make estimated observational
+correlations more negative than causal correlations. As we show below, however, we
+estimate a near zero correlation between teachers’ test score and CJC eﬀects, leaving
+little scope for large negative correlations in causal eﬀects.
+3 The causal eﬀects of teachers
+This section begins by estimating teacher eﬀects on students’ future CJC and other
+long-run outcomes, as well as on short-run outcomes. We then examine the cor-
+relation structure of eﬀects on short- and long-run outcomes. Finally, we conduct
+multiple tests of Assumptions 1 and 2 to support the causal interpretation of our
+estimates and demonstrate the robustness of our results to alternative speciﬁcations
+and assumptions.
+3.1 Eﬀects on future CJC
+Table 2 presents the estimated variance-covariance of structure of teachers’ direct
+eﬀects on long-run outcomes. The diagonal entries are standard deviations and the
+oﬀ-diagonals are correlations. The ﬁrst four columns show eﬀects on four measures
+17
+
+===== PAGE 19 / 71: rss_teachers_cjc.pdf =====
+
+of CJC: any interaction (including traﬃc tickets and other non-criminal violations),
+criminal arrests, arrests for index crimes, and incarceration. The ﬁnal three columns
+show eﬀects on 12th grade GPA (measured on a six point scale), graduation, and
+plans for four-year college attendance.
+Teacher eﬀects on future CJC are large. A one standard deviation increase in eﬀects
+would increase the likelihood of future criminal arrest, arrests for index crimes, and
+incarceration by 0.027, 0.018, and 0.021 p.p., respectively, or 11.25%, 18%, and 23.6%
+of the outcome mean. Teacher eﬀects are thus larger proportionally for more severe
+CJC outcomes. Substantial eﬀects on both severe crimes and more minor crimes (e.g.,
+traﬃc tickets) suggest broad inﬂuence on criminal behavior as opposed to increased
+ability to evade detection in crime categories with low clearance rates. Eﬀects on 12th
+grade GPA, graduation, and college attendance are also large with, for example, an
+estimated standard deviation of teacher eﬀects on the latter of roughly 0.05 p.p.
+Eﬀects on these long-run outcomes are correlated in ways one would expect. Teachers
+who decrease their students’ odds of future CJC also make them more likely to attend
+college and to have better grades as seniors. Moreover, teachers’ eﬀects on future
+arrests are positively correlated with their eﬀects on the probability of incarceration, as
+would be expected given that incarceration typically requires a preceding arrest.
+3.2 Eﬀects on short-run outcomes
+Table 3 presents estimates of the variance-covariance structure of teacher eﬀects on
+short-run outcomes based on the estimators in Equations 4 and 7. The diagonal
+entries reﬂect estimated standard deviations for the outcome in the row/column. The
+oﬀ-diagonals are estimated correlations of eﬀects on the row/column outcomes. The
+top-left entry, for example, shows that the estimated standard deviation of teacher
+eﬀects on test scores—combining homeroom, math, and reading teachers—is 0.121.
+Since test scores are normalized to have a mean of zero and standard deviation of one
+in the full population of students, this means that a one standard deviation increase in
+teacher test score quality increases students’ scores by 12.1% of a standard deviation
+on average. The following two columns break test score eﬀects into eﬀects on math
+and reading. As in other studies, we estimate a standard deviation of teacher reading
+eﬀects that is roughly half as large as teachers’ math eﬀects. 16
+16Figure A.1 shows these estimates are comparable to results from other recent studies.
+18
+
+===== PAGE 20 / 71: rss_teachers_cjc.pdf =====
+
+The fourth column of Table 3 shows wide variation in teacher eﬀects on study skills.
+The estimated standard deviation is 0.183. Unsurprisingly, study skills eﬀects are cor-
+related with eﬀects on test scores (0.317), suggesting teachers whose students complete
+more homework and substitute from watching television to reading also tend to see
+increases in test scores.
+The ﬁfth column shows that the estimated standard deviation of teacher eﬀects on
+behaviors is 0.125. Recall that the behavioral index is normalized to have a standard
+deviation of one in our sample, so this estimate also implies that a standard devia-
+tion increase in teacher behavioral eﬀects improves behaviors by 12.5% of a standard
+deviation of the outcome. Interestingly, teacher eﬀects on behaviors are only weakly
+correlated with teacher eﬀects on test scores. The correlation between behavioral
+eﬀects and overall test score eﬀects, for example, is 0.056. Similarly, behaviors and
+study skills eﬀects are only weakly related with a correlation of 0.033. While perhaps
+surprising, similar results have been found in other contexts. Jackson (2018) and
+Petek and Pope (2021) ﬁnd a correlation of 0.15 between teacher value-added on a
+behavioral index and test scores. 17
+3.3 Predicting teacher eﬀects
+Table A.1 examines how teacher eﬀects on short- and long-run outcomes correlate
+with their demographic and professional observables. In our framework, predicting
+teacher eﬀects is straightforward since ¯Yk
+jt or ¯Yk
+j can be simply regressed on covari-
+ates without further adjustment. We ﬁnd relatively few strong predictors of teacher
+impacts. Female, older, better paid, and stronger testing teachers have larger test
+score eﬀects, for example, but diﬀerences are relatively small. The strongest predictor
+is likely experience, with coeﬃcients that imply an additional 10 years predicts 0.03
+higher test score eﬀects. There are few signiﬁcant predictors of teachers’ long-run
+criminal justice impacts, although female, non-white, and lower-paid teachers tend to
+have more crime-reducing impacts.
+17Petek and Pope (2021) is the only other estimate, to our knowledge, of the correlation between
+teacher eﬀects on study skills and test scores or a behavioral index. Interestingly, they ﬁnd the
+opposite pattern: a strong correlation between teacher eﬀects on learning skills and behaviors (0.459)
+and a weaker correlation between learning skills and test score teacher value-added (0.174). Study
+skills are measured in diﬀerent ways in Petek and Pope (2021), possibly explaining the diﬀerences.
+19
+
+===== PAGE 21 / 71: rss_teachers_cjc.pdf =====
+
+3.4 Connecting short- and long-run eﬀects
+One way to summarize the relationship between long- and short-run eﬀects is the
+coeﬃcient from a regression of the former on the latter—e.g., for long-run outcome
+C and short-run outcome A,
+Cov(αC
+j ,αA
+j )
+Var (αA
+J ) . Using our methods, it is straightforward to
+obtain a plug-in estimate of this object. Figure 1 reports these estimates for the long-
+and short-run outcomes studied above. Each coeﬃcient has been re-scaled by the
+standard deviation of short-run outcome eﬀects so that they can be interpreted as the
+implied impact on the long-run outcome of exposing a student to a teacher with one
+standard deviation higher eﬀects on the short-run outcome.
+The signs of eﬀects are normalized so that the hypothetical change always results in an
+improvement in the short-run outcome (e.g., higher test scores, fewer suspensions).
+The bars are grouped by short-run outcome, with each bar showing the estimated
+eﬀect on each long-run outcome. The ﬁgures above the bars report eﬀects as a per-
+centage of the outcome’s baseline mean. Because we measure the variance-covariance
+structure of latent teacher eﬀects, these estimates reﬂect impacts of assignment to
+teachers whose actual impacts on the short-run outcome are one standard deviation
+higher. We return to the costs of needing to estimate individual teachers’ eﬀects in
+ﬁnite samples in the last section of the paper.
+Panel (a) presents the results for any CJC, criminal arrests, index crime arrests, and
+incarceration. Consistent with the small estimated correlations, shifting students to
+teachers who increase test scores has limited impacts on future arrests. Eﬀects on any
+CJC and criminal arrests are small, with conﬁdence intervals that include zero. Eﬀects
+on arrests for index crimes and incarceration are larger but still no more than 0.7
+percentage points. Teachers’ eﬀects on study skills show similar patterns, with eﬀects
+statistically indistinguishable from zero. For the purposes of recruiting, retaining,
+or rewarding teachers who help their students avoid criminal careers, therefore, test
+score and study skill value-added is not likely to be a particularly useful metric.
+Unlike CJC outcomes, we ﬁnd that teachers who increase test scores do increase
+students’ 12th grade GPA, their likelihood of graduation, and their plans to attend
+four-year college. The estimated eﬀect of a one standard deviation shift in teacher
+quality on the latter is roughly 1.3% (roughly 0.6 p.p., similar to the estimated impact
+20
+
+===== PAGE 22 / 71: rss_teachers_cjc.pdf =====
+
+on actual college attendance in Chetty et al. (2014b) of 0.86 p.p.). 18
+By contrast, Panel (b) shows that exposing students to teachers with more positive
+eﬀects on behaviors has a large impact on future CJC. A one standard deviation shift
+in behavioral eﬀects is associated with a 2.3% decrease in the likelihood of a criminal
+arrest and a 3% reduction in the likelihood of being incarcerated between ages 16 to
+21. Teacher quality measured through their impacts on these outcomes, therefore, is
+very relevant for improving students’ long-run criminal justice outcomes. 19
+Tables A.2 and A.3 show that we ﬁnd similar patterns but diﬀerent magnitudes when
+using conventional methods that regress students’ future CJC outcomes on assigned
+teachers’ value-added estimated in a multi-step EB procedure. For example, assign-
+ment to a teacher with a one standard deviation higher test score value-added reduces
+future criminal arrests by 0.08 p.p. By contrast, our estimate is 0.023 p.p., more than
+three times smaller and not statistically signiﬁcant. Conventional estimates suggest
+assignment to a one standard deviation better behavioral value-added teacher reduces
+arrests by 0.08 p.p., whereas our estimate implies eﬀects roughly twice as large.
+3.5 Multivariate relationships between teacher eﬀects
+Estimates of the variance-covariance structure of teacher eﬀects can be used to es-
+timate the infeasible regression of teachers’ eﬀects on CJC on all of their short-run
+eﬀects simultaneously:
+αC
+j =β0αA
+j +β1αB
+j +β2αS
+j +ej
+where superscripts A,B , and S indicate eﬀects on test scores, behaviors and study
+skills, respectively. β = (β0 β1 β2)′ is straightforward to calculate given variance-
+covariance estimates, since:
+β =E[(αA
+j αB
+j αS
+j )′· (αA
+j αB
+j αS
+j )]−1E[(αA
+j αB
+j αS
+j )′αC
+j ]
+18It is possible that teachers’ eﬀects on future instead of contemporaneous test scores better
+measure their inﬂuence on cognitive skills (Gilraine and Pope, 2021). Figure A.2 shows the long-run
+impacts of teacher quality as measured by their impacts on test scores and study skills in year t + 1.
+These estimates generally show larger impacts, although teacher impacts on behaviors continue to
+be associated with substantially larger future reductions in CJC.
+19Part of the long-run eﬀects of exposure to teachers with positive eﬀects on behaviors may ﬂow
+through development of certain skills and part may ﬂow through the impacts of the behavior itself.
+Bacher-Hicks et al. (2019), for example, ﬁnd that assignment to schools with more strict discipline
+policies results in more criminal justice contact. Sorensen et al. (2019) report similar ﬁndings.
+Consistent with our results, Bacher-Hicks et al. (2019) also ﬁnd that schools that improve test scores
+do not impact future arrests or incarceration.
+21
+
+===== PAGE 23 / 71: rss_teachers_cjc.pdf =====
+
+Table 4 presents estimates of β. Consistent with Figure 1, horse-racing the short-
+run eﬀects shows that the key predictor of teachers’ CJC eﬀects is their eﬀects on
+behaviors. Test score eﬀects have a negligible relationship with eﬀects on future CJC,
+while behavioral eﬀects have a much larger one. For 12th grade GPA, graduation,
+and college attendance, both eﬀects matter independently and substantially.
+Given estimates of the total variation in eﬀects on long-run outcomes from Table 2,
+it is straightforward to calculate the implied R2 from these regressions. For criminal
+arrests, theR2 is 0.042, while for college attendance it is 0.02. Thus, only a small share
+of the total variance in long-run teacher eﬀects is jointly explained by their short-run
+eﬀects. This result implies that while behavioral eﬀects are strongly correlated with
+criminal arrests, teachers also impact CJC in many ways orthogonal to their impacts
+on suspensions, attendance and grade repetition. The same is true to an even greater
+degree for 12th grade GPA, high school graduation, and college attendance. Any
+policy focused on these short-run outcomes will therefore likely neglect substantial
+heterogeneity in teachers’ importance for each of these long-run outcomes.
+3.6 Validating eﬀects
+In this section, we present multiple analyses that support the causal interpretation
+of eﬀects on both short- and long-run outcomes. The robustness analyses include
+tests for omitted variable bias, checks for forecast unbiasedness, analyses that relax
+Assumption 1 and allow for unrestricted school eﬀects, and investigations of sensitivity
+to diﬀerent speciﬁcation and modeling choices.
+3.6.1 Omitted variables tests of Assumption 1
+Interpreting teacher eﬀects as causal under Assumption 1 requires that student unob-
+servables relevant for the outcomes studied are conditionally uncorrelated with teacher
+assignments. A natural test of this assumption is to assess the sensitivity of teacher
+eﬀect estimates to the inclusion of proxies for these unobservables (Altonji et al.,
+2005). To do so, we follow Chetty et al. (2014a) and study the impact of controls
+excluded from the original model because they are likely unobserved or unused by ad-
+ministrators making teacher assignments. Chetty et al. (2014a) use parental income
+from merged tax records; we use information on parental education, deeper test score
+lags, and family ﬁxed eﬀects.
+To deﬁne the test, consider the “long” regression model that includes the additional
+22
+
+===== PAGE 24 / 71: rss_teachers_cjc.pdf =====
+
+controlsWit:
+Yit =
+∑
+j
+˜αjDijt +X′
+it˜Γ +W′
+itρ + ˜uit (9)
+The canonical omitted variable bias formula implies that the sensitivity of ˆαj to the
+omission of Wit is identiﬁed by a regression of W′
+itρ on Dijt. Likewise, the sensitivity
+of the relationship between ˆαit = ∑
+j ˆαjDijt and outcomes is identiﬁed by a regression
+of W′
+itρ on ˆαit.20 Critically, it must be that Var (W′
+itρ)> 0, otherwise such tests will
+show no sensitivity mechanically. We show below, however, that our omitted variables
+are strongly predictive of outcomes conditional on the regular controls Xit, and are
+therefore potentially useful proxies for student unobservables.
+Results: Figure 2 depicts the correlation between estimated teacher eﬀects (ˆ αit =∑
+j ˆαjDijt) and predicted outcomes (ˆYit =W′
+itˆρ) using twice-lagged test scores, parental
+education, and family ﬁxed eﬀects for twins as omitted variables. 21 Estimates of
+teacher eﬀects come from OLS estimates of Equation 2 with our standard set of con-
+trols. Estimates of ρ come from OLS estimates of Equation 9.
+For all outcomes, teacher eﬀects are uncorrelated with predicted outcomes. The mag-
+nitude of each slope coeﬃcient is extremely small. The slope coeﬃcient for any crim-
+inal arrest between ages 16-21, for example, is 0.00135, implying that the impact of a
+one standard deviation increase in teacher eﬀects on future arrests ( σy = 0.027—see
+Table 2) may be biased by 0.027·0.00135 = 0.000036 due to omitted variables. Similar
+results hold for test scores, behaviors, and long-run outcomes, as is shown in Figure
+A.3 and Tables A.4, and A.5.). Results change little when regressing ˆYit on ˆαit in a
+sample that includes only twins.
+Columns 1, 3, and 5 of Table A.4 demonstrate that these omitted variables strongly
+predict test scores, behavioral measures, and study skills. 22 Table A.5 reports analo-
+gous estimates for long-term CJC outcomes. The patterns are similar. Reassuringly,
+the omitted variables are especially predictive of criminal arrests, our main outcome
+20These are the “short” regressions. Any sensitivity of observational estimates to omitted variables
+may occur due to either sorting bias or heterogeneous eﬀects of teachers. Including additional controls
+in the model implicitly changes the conditional variance of Dijt and the types of students—in terms
+of their Xit—given most weight in estimating each teacher’s eﬀects. Although we ﬁnd that our
+primary estimates are not sensitive to omitted variables, we extend the model to allow for potential
+heterogeneity in teacher eﬀects in the ﬁnal part of the paper.
+21Non-twins are also included and grouped into a single ﬁxed eﬀect.
+22Columns 2, 4, and 6 report the regression coeﬃcients underlying Figure 2.
+23
+
+===== PAGE 25 / 71: rss_teachers_cjc.pdf =====
+
+of interest. Including them in the teacher eﬀect speciﬁcation increases the R2 from
+0.089 to 0.107, a 20% increase in the model’s explanatory power.
+We emphasize that the identifying assumption in our model is not that teachers are
+conditionally randomly assigned. Instead, Assumption 1 requires only that teacher
+assignments are conditionally mean independent of the relevant unobservables. Al-
+though Rothstein (2010) shows that teacher assignments are correlated with twice-
+lagged scores, the preceding exercises show that including these variables in the model
+does not impact estimated teacher eﬀects, consistent with Assumption 1 and the ar-
+guments in Chetty et al. (2016, 2017) and Jackson (2018).
+3.6.2 Instrumental variable tests of Assumptions 1 and 2
+Deﬁne the population projection of teachers’ causal onto observational eﬀects as:
+µj =λαj +ηj
+Assumption 1 implies that λ = 1 and ηj = 0 ∀j. Assumption 2 implies only that
+λ = 1. With an appropriate instrument, it is possible to test whether λ = 1. To see
+how, consider the relationship between estimated observational eﬀects and outcomes
+implied by the causal model:
+Yit =λˆαit +X′
+itγ +ϵit +ηit +λξit (10)
+where ˆαit = ∑
+j ˆαjDijt, ˆαj =αj−ξj,ξit = ∑
+jξjDijt, and ηit = ∑
+jηjDijt.
+OLS estimates of λ are inappropriate because ˆαit may be correlated with ϵit, ηit, and
+ξit. In fact, if ˆαit is estimated in the same data as Equation 10, ˆλ = 1 mechanically.
+However, given an instrumentZit that is relevant (i.e., Cov(Zit, ˆαit)̸= 0) and exclud-
+able (i.e., Cov(Zit,ϵit) =Cov(Zit,ηit) =Cov(Zit,ξit) = 0), it is possible to estimate λ
+using 2SLS.23
+We use teacher switches across schools and grades to develop instruments. Intuitively,
+these tests ask whether teachers’ impacts when they enter a new school or school-grade
+match what we would predict based on their impacts in other places. To deﬁne the
+instrument, let Eit be an indicator for whether a new teacher enters school-grade
+sg(i,t ). Let ˜αsgt be the mean of ˆαj for all new teachers in sg and time t, where ˆαj is
+estimated using all school-grades except sg. The instrument at the school-grade level
+23Angrist et al. (2017) develop related tests for bias in observational estimates of school eﬀects
+using lottery-based admissions oﬀers. Since we use a single instrument, our test is equivalent to the
+“omnibus” test for bias they propose.
+24
+
+===== PAGE 26 / 71: rss_teachers_cjc.pdf =====
+
+is Zit =Eit ˜αsg(i,t)t and is deﬁned analogously at the school level. 24
+We assume that new teacher entry is uncorrelated with student unobservables, or
+Cov(Zit,ϵit) = 0. Because the instrument is deﬁned at the school-grade (or school)
+level, any within school-grade (or school) sorting is not a concern. This assump-
+tion rules out, however, teachers with higher estimated eﬀects systematically enter-
+ing schools or school-grades where students are more likely to excel on average. 25
+We also assume that the instrument is uncorrelated with teacher-level bias (i.e.,
+Cov(Zit,ηit) = 0) and estimation error in teacher eﬀects (i.e., Cov(Zit,ξit) = 0).
+Estimating ˜αsgt using all school-grades beside sg bolsters this assumption.
+Results: Table 5 reports estimates of λ using teacher switches at the school and
+school-grade level. Panel (a) shows that for all short-run outcomes we cannot reject
+λ = 1. For test scores, for example, the point estimate using teacher switches across
+school-grades is 1.002 (0.012). Estimates for behavioral measures and study skills are
+similar, but slightly less precise due to the shorter panel over which they are observed.
+Estimates for teachers’ direct eﬀects on long-run outcomes in Panel (b) are likewise
+consistent with no bias. In each case, we cannot reject λ = 1, although λ is less
+precisely estimated than for short-run outcomes. 26
+The appendix contains several variations on Table 5 that probe the robustness of
+these results. Table A.6, for example, demonstrates that we also cannot reject un-
+biased eﬀects when school-grade ﬁxed eﬀects are included, so that only variation in
+which teachers are assigned to a given school-grade is exploited. Table A.7 shows
+the sensitivity of our estimates of λ for our primary long-run outcome, any criminal
+arrests, with increasingly ﬁne-grained sets of ﬁxed eﬀects, and demonstrates that the
+instrument is uncorrelated with predicted outcomes based on parental education and
+twice-lagged test scores.27
+24Chetty et al. (2014a) and Bacher-Hicks et al. (2014) exploit changes in estimated teacher eﬀects
+and changes in outcomes within a school-grade to estimateλ. This approach is equivalent to stacking
+the data for each pair of consecutive years, controlling for school-grade-pair eﬀects, and using the
+interaction of school-grade indicators and indicator for the second year in each pair as the instrument.
+Since this approach exploits many instruments, an important concern is whether a weak ﬁrst stage
+may bias estimates towards the OLS estimate of 1.
+25This assumption need hold only conditional our standard student-level controls, as well as addi-
+tional ones such as district-grade-year ﬁxed eﬀects.
+26The large ﬁrst-stage F-statistics reported at the bottom of the table also indicate that the
+instruments induce substantial variation in exposure to high and low quality teachers.
+27Although Rothstein (2017) argues that teacher switches in NC are correlated with student pre-
+25
+
+===== PAGE 27 / 71: rss_teachers_cjc.pdf =====
+
+3.6.3 Are teacher eﬀects actually school eﬀects?
+To show that our estimates are not confounded by omitted school eﬀects, we conduct
+two complementary analyses. The ﬁrst allows for arbitrary sorting of students within
+a school, but assumes that any within-school bias is uncorrelated across schools. The
+second allows for arbitrary sorting of teachers across schools but assumes that assign-
+ment of teachers to students within a school satisﬁes Assumption 1.
+To conduct the ﬁrst exercise, we use teachers who switch schools and examine the
+relationship between their short- and long-run eﬀects on students in diﬀerent schools.
+If school eﬀects drove our estimates, we would expect meaningful attenuation, since
+these schools would likely have diﬀerent impacts on student outcomes.
+The variance-covariance estimators are analogous to those in Equations 4 and 7:
+(J− 1
+J
+) 1
+J
+J∑
+j=1
+(
+Sj
+2
+)−1Sj−1∑
+s=1
+Sj∑
+k=s+1
+¯Yjs ¯Yjk− 2· 1
+J2·
+J−1∑
+j=1
+J∑
+k>j
+¯Yj ¯Yk (11)
+whereSj is the number of schools where teacherj is employed and ¯Yjs is the teacher’s
+mean residual in schools, or 1
+njs
+∑
+t|s(j,t)=s
+∑
+i|j(i,t)=jYit−X′
+itˆΓ wherenjs is the number
+of students taught byj in schools. Only teachers who move across schools, i.e., those
+with Sj≥ 2, are included.
+In addition to testing for omitted school eﬀects, the estimator deﬁned in Equation 11
+signiﬁcantly weakens our assumptions by allowing for arbitrary sorting of students to
+teachers within a school. It rules out however, common sorting across schools, such
+as a scenario where students who are more likely to excel on standardized tests are
+assigned to teacher j both in school A and in school B to a similar degree.
+Results: Table A.8 reports coeﬃcient estimates from the infeasible regression of long-
+on short-run eﬀects using this approach. As in the baseline estimates, behavioral
+eﬀects are strongly related to eﬀects on future CJC, while test score eﬀects are not.
+The impact of a one standard deviation increase in teacher behavioral eﬀects is similar
+to our baseline estimate. The standard deviations of teachers’ direct eﬀects on long-
+run outcomes are smaller for some outcomes, but still large. The standard deviation
+of eﬀects on any criminal arrest, for example, is 1.9 p.p. (vs. 2.7 in the baseline
+paredness, our tests only require switches to be conditionally orthogonal to unobserved determinants
+of outcomes. Table A.7 shows that this holds for CJC.
+26
+
+===== PAGE 28 / 71: rss_teachers_cjc.pdf =====
+
+model).28
+Our second robustness analysis estimates the variance-covariance of latent teacher
+eﬀects on all outcomes separately for each school using Equation 4 and computes
+the teacher-weighted average. These estimates exploit purely within-school variation,
+washing out any school eﬀects along with any between-school variation in eﬀects.
+Results: Table A.9 reports the implied regression coeﬃcients summarizing the rela-
+tionship between short- and long-run eﬀects using this approach. Estimates are very
+similar to those in Table 4. Teachers’ eﬀects on behaviors strongly predict eﬀects on
+long-run CJC outcomes, while their eﬀects on test scores are not. The total variance
+of teachers’ direct eﬀects on each long-run outcome is naturally lower, reﬂecting the
+fact that we have excluded all between-school variation.
+3.6.4 Sensitivity to Assumptions 3 and 4
+Table A.10 explores how our key results change when varying the gap between years
+required for Assumptions 3 and 4 to hold. Adjusting the maximum gap, such that
+E[¯uA
+jt ¯uC
+jt′] = 0 ∀j,t ̸= t′,|t−t′|≤ ¯m, is useful for assessing the importance of drift.
+If teacher eﬀects change substantially over time, setting a smaller ¯ m should lead
+to larger estimated variances. Adjusting the minimum gap, such that E[¯uA
+jt ¯uC
+jt′] =
+0∀j,t̸=t′,|t−t′|≥ m, is useful for assessing sensitivity to short-lived runs in student
+unobservables. The results show a striking degree of stability across ¯ m and m. The
+estimated standard deviations of teacher eﬀects on test scores, behaviors, and criminal
+justice outcomes change little across assumptions. Our core conclusion that teacher
+eﬀects on criminal justice outcomes are weakly correlated with test score eﬀects and
+strongly correlated with behavioral eﬀects is robust to a wide range of choices.
+3.6.5 Speciﬁcation robustness
+Even if the controls included in our model are suﬃcient to account for student observ-
+ables and unobservables correlated with teacher assignments, our main speciﬁcation
+makes several choices over both which speciﬁc variables to use and functional form.
+To explore how sensitive our results are to these modeling choices, we estimate a large
+number of speciﬁcations using 811 diﬀerent potential sets of controls and, in each case,
+construct estimates of the impact of a one standard deviation increase in a teacher’s
+28Because the set of teachers who switch schools may be diﬀerent than the overall population,
+there is no reason to expect direct eﬀect variances to be identical to the primary estimates.
+27
+
+===== PAGE 29 / 71: rss_teachers_cjc.pdf =====
+
+test score and behavioral eﬀects on the likelihood of a future criminal arrest. 29 The
+results reported in Figure A.4 show that our preferred speciﬁcation is not an outlier.
+For test scores eﬀects, our preferred estimate is close to the median estimate found
+when including most potential controls. For behavioral eﬀects, the estimate is among
+the most conservative possible.
+4 Heterogeneous eﬀects
+The preceding analysis assumes that teacher eﬀects are the same across students and
+schools. It is possible, however, that some teachers excel at reaching particular types
+of students or adjust their teaching priorities based on the classroom environment. To
+examine this question, we extend the model in Equation 2 to allow for heterogeneous
+teacher eﬀects:
+Yijt =
+∑
+j
+(
+µj +U′
+itβj
+)
+Dijt +X′
+itΓ +ϵit
+whereUit is a subset ofXit, such as race, gender, or socio-economic status normalized
+to be mean zero. Teacher eﬀects depend on these observables, with µj(x) =µj +x′βj
+denoting teacher j’s eﬀects on students with observables x. Estimating this model
+allows us to estimate the variance-covariance structure of teachers’ eﬀects within and
+across groups.
+The estimation strategy laid out in Section 2.2 makes incorporating heterogeneity in
+teacher eﬀects simple. For example, to estimate the covariate in teacher eﬀects on
+test scores between boys and girls, all that is needed is to change the teacher-year
+average residuals in Equation 7 to be of boys test scores in one year and girls test
+scores in another year, rather than of test scores and CJC.
+We focus on four sets of student characteristics: white vs. non-white students, boys vs.
+girls, students who are economically disadvantaged vs. not, and student with above
+vs. below median predicted arrest risk. Table A.11 presents averages of student
+characteristics and short- and long-run outcomes for these groups. A few disparities
+are worth noting. White students are meaningfully less likely to have CJC than non-
+white students, including a seven p.p. (33%) lower likelihood of a criminal arrest and
+3.7 p.p. (51%) lower likelihood of being incarcerated. Similarly, girls and students
+from higher socioeconomic backgrounds have lower CJC rates.
+29Study skills eﬀects are omitted for brevity and to speed computation.
+28
+
+===== PAGE 30 / 71: rss_teachers_cjc.pdf =====
+
+Wide variation in the incidence of CJC suggests that teacher eﬀects on CJC may vary
+considerably across groups. Table A.13 presents estimates of teacher eﬀects on CJC
+outcomes for diﬀerent students. Eﬀect variances are often larger for groups with a
+higher prevalence of CJC, but remain substantial for all student types and for both
+moderate and more serious contact types. Columns 1 and 2, for example, show that
+teacher eﬀects are more dispersed for non-white than for white students. Estimates
+are similar, however, for some groups with large diﬀerences in baseline CJC rates. The
+standard deviation of teacher eﬀects on criminal arrests is 2.72 p.p. for economically
+disadvantaged students and 2.97 p.p for non-disadvantaged students, despite a nearly
+100% diﬀerence in average arrest rates.
+Even if teacher eﬀects vary widely in multiple sub-populations, any individual teacher’s
+eﬀects may diﬀer across students. Figure 3 examines this possibility by plotting the
+correlation of teachers’ eﬀects across student types. For test scores and study skills,
+we ﬁnd remarkably high correlations. Teachers’ eﬀects on boys vs. girls, white vs.
+non-white students, economically disadvantaged vs. not disadvantaged students, and
+students with above vs. below median predicted arrest risk all have correlations of
+about 0.9. Eﬀects on behaviors are also strongly correlated, although less so. For
+example, the correlation of eﬀects on boys vs. girls is roughly 0.75. Good teachers, as
+measured by short-run outcomes, thus appear to largely be good for everyone.
+Panels (b) and (c) of Figure 3 show that teachers’ eﬀects on long-run outcomes, how-
+ever, display much weaker correlations for some groups. The correlation of eﬀects on
+white and non-white students’ criminal arrests, for example, is roughly 0.5. As noted
+earlier, teacher eﬀects on short-run outcomes explain a small share of the variation in
+eﬀects on long-run outcomes. Teachers’ impacts on students through channels poten-
+tially uncorrelated to short-run outcomes are therefore highly heterogeneous. 30
+Finally, we connect these estimates by calculating the implied eﬀects on long-run
+outcomes of exposing students to teachers with higher student type-speciﬁc quality.
+Figure 4 shows that across various groups, teachers who improve behaviors also reduce
+the likelihood of future arrests and incarceration. However, as Figure A.5 shows,
+30Table A.12 shows little evidence of a strong demographic match component to either short- or
+long-run eﬀects. For test scores, female teachers have marginally higher relative eﬀects on girls’
+and non-white teachers have marginally higher eﬀects on non-white students. Non-white teachers
+also tend to reduce crime less for boys, although there is no evidence that teacher race predicts
+heterogeneous eﬀects on criminal justice outcomes by student race.
+29
+
+===== PAGE 31 / 71: rss_teachers_cjc.pdf =====
+
+across all student types teachers who improve test scores do not reduce CJC. The
+results highlight the generality of the ﬁndings in Figure 1.
+5 Implications for teacher retention policies
+There has been substantial discussion of how teachers’ impacts on student outcomes
+can be incorporated into retention policies (Rothstein, 2010; Neal, 2011; Chetty et al.,
+2014a). Ideally, a district would evaluate teachers based on their impacts on students’
+long-run well being. Doing so is not typically feasible, however, since long-run out-
+comes are by deﬁnition not observed for many years. As a result, in practice teachers
+are evaluated using their impacts on short-run outcomes such as test scores.
+To demonstrate the implications of our ﬁndings for policy, we compare the potential
+impacts of policies that replace the worst-performing teachers based on various mea-
+sures with an average teacher. Since there are multiple relevant long-run outcomes, we
+construct possibility frontiers that illustrate the tradeoﬀs from emphasizing diﬀerent
+measures of teacher quality.31
+We begin with the ideal (and infeasible) measures that directly capture teachers’
+eﬀects on long-run outcomes. Speciﬁcally, consider a district that seeks to increase
+college attendance and reduce criminal arrests. As demonstrated above, teachers who
+increase the former do not necessarily reduce the latter. Denote the weighted average
+of teacher eﬀects on college attendance (µA
+j ) and on future criminal arrests (µC
+j , signed
+such that positive values indicate crime reductions) by:
+Indexlong-run
+j =ωµC
+j + (1−ω)µA
+j, ω ∈ [0, 1] (12)
+By varying ω, it is straightforward to trace out potential gains from replacing the
+5% of teachers with the lowest Index long-run
+j . The rightmost dotted curve in Figure
+5 reports the results of this exercise. If long-run eﬀects were directly observed, the
+district could achieve increases in college attendance of up to 10 p.p. and decreases
+in criminal arrests of up to 5 p.p. for exposed students. Naturally, increasing one
+outcome requires reducing eﬀects on the other. Where a district should locate on this
+frontier depends on their preferences over these long-run goals.
+Since teachers’ long-run eﬀects are not observed, these estimates represent an upper
+31To provide a simple connection between our variance estimates and the relevant quantities for
+these simulations, throughout this section we assume that teacher eﬀects are normally distributed.
+Appendix D presents more details on the calculations of each policy counterfactual.
+30
+
+===== PAGE 32 / 71: rss_teachers_cjc.pdf =====
+
+bound on what any policy could achieve. In practice, districts must rely on teacher’s
+impacts on short-run outcomes to proxy for teacher quality. The next set of lines in
+Figure 5 demonstrates the maximum feasible gains from doing so. We construct a
+weighted average of eﬀects on test scores ( µT
+j ), behaviors (µB
+j ), and study skills (µS
+j )
+as:
+Indexshort-run
+j =ω1µT
+j +ω2µB
+j + (1−ω1−ω2)µS
+j (13)
+and examine the impacts of replacing the bottom 5% scoring teachers with the average
+teacher for diﬀerent values of ω1∈ [0, 1] and ω2∈ [0, 1], where ω1 +ω2≤ 1.
+The red dashed line in Figure 5 reports the results of these exercises. Using eﬀects
+on short-run outcomes, the district could achieve increases of nearly 2 p.p. in college
+attendance and decreases of no more than about 1 p.p. in criminal arrests for exposed
+students. Thus, while there are still meaningful potential improvements in long-run
+outcomes, the frontier lies far to the interior of the infeasible policy.
+The green triangle, blue square, and purple circle show the impacts of placing full
+weight on study skills, behaviors, or test scores, respectively. The score that maxi-
+mizes impacts on future CJC places almost full weight on behavioral outcomes. The
+green triangle shows that scores that maximize impacts on college attendance place
+signiﬁcantly more emphasis on test scores. This point is slightly inside the frontier,
+however, demonstrating that even if the district sought to increase college attendance
+as much as possible they should place at least some weight on behaviors.
+In practice, teacher eﬀects on short-run outcomes are also not observed and must be
+estimated instead. The red dashed-line demonstrates what could be achieved with
+the best possible estimates, i.e., that coincide with the truth. The costs of estimating
+scores instead will depend on the information the district has available—how many
+years teachers are observed, how many students they teach, etc.—and the quality of
+the models they use to predict teacher eﬀects on short-run outcomes.
+To illustrate the potential losses from estimating instead of observing teacher eﬀects
+on short-run outcomes, we adopt common Empirical Bayes methods proposed in the
+value-added literature (e.g., Kane and Staiger, 2008; Chetty et al., 2014a; Gilraine
+et al., 2021). These results are shown in the solid orange line in Figure 5. Naturally,
+only a portion of the gains from using true eﬀects on short-run outcomes are achievable
+when these eﬀects must be estimated. Using our data, the cost implies reductions in
+31
+
+===== PAGE 33 / 71: rss_teachers_cjc.pdf =====
+
+arrests or improvements in college attendance that are roughly half as large.
+6 Conclusion
+Teachers help students develop a variety of skills necessary to be successful, healthy,
+and happy adults. The skills needed to excel in one aspect of life, such as the labor
+market, may diﬀer from those needed in another, such as avoiding entanglement in
+the criminal justice system. Although prior work demonstrates that teachers who
+increase students’ cognitive skills captured by standardized tests scores increase their
+college attendance and adult earnings, we ﬁnd that teachers’ test score impacts are
+orthogonal to students’ criminal justice contact as young adults. One of the most
+common and widespread measures of teacher quality is thus irrelevant for an outcome
+with life-changing consequences for a large share of the population (Brame et al.,
+2014).
+Instead, teachers who improve proxies for non-cognitive skills such as rates of school
+discipline and attendance have meaningful impacts on students’ future arrest, con-
+viction, and incarceration rates. Our results are consistent with a growing number
+of studies showing that educational policies and interventions that decrease CJC of-
+ten primarily operate through development of these non-cognitive channels (Deming,
+2009, 2011; Heckman et al., 2013).
+References
+Aaronson, D., L. Barrow, and W. Sander (2007). Teachers and student achievement
+in the chicago public high schools. Journal of Labor Economics 25 , 95–135.
+Abaluck, J., M. Caceres Bravo, P. Hull, and A. Starc (2021). Mortality eﬀects
+and choice across private health insurance plans. The quarterly journal of eco-
+nomics 136 (3), 1557–1610.
+Agostinelli, F. and M. Wiswall (2025). Estimating the technology of children’s skill
+formation. Journal of Political Economy 133 (3), 846–887.
+Altonji, J., T. Elder, and C. Taber (2005). Selection on observed and unobserved
+variables: Assessing the eﬀectiveness of catholic schools. Journal of Political Econ-
+omy 113 (1), 151–184.
+Angrist, J. D., P. D. Hull, P. A. Pathak, and C. R. Walters (2017, 02). Leveraging
+Lotteries for School Value-Added: Testing and Estimation. The Quarterly Journal
+of Economics 132 (2), 871–919.
+32
+
+===== PAGE 34 / 71: rss_teachers_cjc.pdf =====
+
+Bacher-Hicks, A., S. B. Billings, and D. J. Deming (2019, September). The school to
+prison pipeline: Long-run impacts of school suspensions on adult crime. Working
+Paper 26257, National Bureau of Economic Research.
+Bacher-Hicks, A., T. J. Kane, and D. O. Staiger (2014). Validating teacher eﬀects
+estimates using changes in teacher assignments in los angeles. NBER Working
+Paper No. 20657.
+Bacher-Hicks, A. and C. Koedel (2023). Estimation and interpretation of teacher
+value added in research applications. Handbook of the Economics of Education 6 ,
+93–134.
+Backes, B., J. Cowan, D. Goldhaber, and R. Theobald (2022). Teachers and students’
+postsecondary outcomes: Testing the predictive power of test and nontest teacher
+quality measures. Technical report, CALDER Working Paper.
+Bates, M. D., M. Dinerstein, A. C. Johnston, and I. Sorkin (2022). Teacher labor
+market equilibrium and student achievement. Technical report, National Bureau of
+Economic Research.
+Bau, N. and J. Das (2020). Teacher value added in a low-income country. American
+Economic Journal: Economic Policy 12 (1), 62–96.
+Bertrand, M. and J. Pan (2013, January). The trouble with boys: Social inﬂuences
+and the gender gap in disruptive behavior. American Economic Journal: Applied
+Economics 5 (1), 32–64.
+Biasi, B., C. Fu, and J. Stromme (2021). Equilibrium in the market for public school
+teachers: District wage strategies and teacher comparative advantage. Technical
+report, National Bureau of Economic Research.
+Brame, R., S. D. Bushway, R. Paternoster, and M. G. Turner (2014). Demographic
+patterns of cumulative arrest prevalence by ages 18 and 23. Crime and Delin-
+quency 60 (3), 471–486.
+Chen, J. (2023). Empirical bayes when estimation precision predicts parameters.
+Chetty, R., J. N. Friedman, and J. E. Rockoﬀ (2014a). Measuring the impacts of
+teachers i: Evaluating bias in teacher value-added estimates. American Economic
+Review 104 (9).
+Chetty, R., J. N. Friedman, and J. E. Rockoﬀ (2014b). Measuring the impacts of
+teachers ii: Teacher value-added and student outcomes in adulthood. American
+Economic Review 104 (9).
+Chetty, R., J. N. Friedman, and J. E. Rockoﬀ (2016, May). Using lagged outcomes to
+evaluate bias in value-added models. American Economic Review 106 (5), 393–99.
+33
+
+===== PAGE 35 / 71: rss_teachers_cjc.pdf =====
+
+Chetty, R., J. N. Friedman, and J. E. Rockoﬀ (2017, June). Measuring the impacts
+of teachers: Reply. American Economic Review 107 (6), 1685–1717.
+Cohen, M. A. and A. R. Piquero (2009). New evidence on the monetary value of
+saving a high risk youth. Journal of Quantitative Criminology 25 , 25–49.
+Condie, S., L. Lefgren, and D. Sims (2014). Teacher heterogeneity, value-added and
+education policy. Economics of Education Review 40 , 76–92.
+Cook, P. J. and S. Kang (2016, January). Birthdays, schooling, and crime: Regression-
+discontinuity analysis of school performance, delinquency, dropout, and crime ini-
+tiation. American Economic Journal: Applied Economics 8 (1), 33–57.
+Cunha, F. and J. J. Heckman (2008). Formulating, identifying and estimating the
+technology of cognitive and noncognitive skill formation. Journal of human re-
+sources 43 (4), 738–782.
+Cunha, F., J. J. Heckman, and S. M. Schennach (2010). Estimating the technology
+of cognitive and noncognitive skill formation. Econometrica 78 (3), 883–931.
+Cunha, F., E. Nielsen, and B. Williams (2021). The econometrics of early childhood
+human capital and investments. Annual Review of Economics 13 , 487–513.
+Dee, T. S. (2005). A teacher like me: Does race, ethnicity, or gender matter? The
+American Economic Review 95 (2), 158–165.
+Delgado, W. (2021). Heterogeneous teacher eﬀects, comparative advantage, and match
+quality. Technical report, Working Paper.
+Deming, D. J. (2009, July). Early childhood intervention and life-cycle skill devel-
+opment: Evidence from head start. American Economic Journal: Applied Eco-
+nomics 1 (3), 111–34.
+Deming, D. J. (2011, 10). Better Schools, Less Crime? The Quarterly Journal of
+Economics 126 (4), 2063–2115.
+Deming, D. J. (2017, 06). The Growing Importance of Social Skills in the Labor
+Market. The Quarterly Journal of Economics 132 (4), 1593–1640.
+Duckworth, A. L., C. Peterson, M. D. Matthews, and D. R. Kelly (2007). Grit:
+perseverance and passion for long-term goals. Journal of personality and social
+psychology 92, 1087–101.
+El Karoui, N. and E. Purdom (2018). Can we trust the bootstrap in high-dimensions?
+the case of linear models. Journal of Machine Learning Research 19 (5), 1–66.
+Gershenson, S., C. M. Hart, J. Hyman, C. A. Lindsay, and N. W. Papageorge (2022).
+The long-run impacts of same-race teachers. American Economic Journal: Eco-
+nomic Policy 14 (4), 300–342.
+34
+
+===== PAGE 36 / 71: rss_teachers_cjc.pdf =====
+
+Giacomini, R., S. Lee, and S. Sarpietro (2023). A robust method for microforecasting
+and estimation of random eﬀects. arXiv preprint arXiv:2308.01596 .
+Gilraine, M., J. Gu, R. McMillan, et al. (2021). A nonparametric method for esti-
+mating teacher value-added. Technical report.
+Gilraine, M. and N. G. Pope (2021). Making teaching last: Long-run value-added.
+Technical report, National Bureau of Economic Research.
+Gray-Lobe, G., P. A. Pathak, and C. R. Walters (2023). The long-term eﬀects of
+universal preschool in boston. The Quarterly Journal of Economics 138 (1), 363–
+411.
+Heckman, J., R. Pinto, and P. Savelyev (2013, October). Understanding the mech-
+anisms through which an inﬂuential early childhood program boosted adult out-
+comes. American Economic Review 103 (6), 2052–86.
+Heckman, J. J. and T. Kautz (2012). Hard evidence on soft skills. Labour Eco-
+nomics 19 (4), 451–464.
+Heckman, J. J. and Y. Rubinstein (2001, May). The importance of noncognitive skills:
+Lessons from the ged testing program. American Economic Review 91 (2), 145–149.
+Heckman, J. J., J. Stixrud, and S. Urzua (2006). The eﬀects of cognitive and noncog-
+nitive abilities on labor market outcomes and social behavior. Journal of Labor
+Economics 24 (3), 411–482.
+Jackson, C. K. (2014). Teacher quality at the high school level: The importance of
+accounting for tracks. Journal of Labor Economics 32 (4), 645–684.
+Jackson, C. K. (2018). What do test scores miss? the importance of teacher eﬀects
+on non–test score outcomes. Journal of Political Economy 126 (5), 2072–2107.
+Jackson, C. K., S. C. Porter, J. Q. Easton, A. Blanchard, and S. Kiguel (2020).
+School eﬀects on socioemotional development, school-based arrests, and educational
+attainment. American Economic Review: Insights 2 (4), 491–508.
+Jordan, A., E. Karger, and D. Neal (2024). Early predictors of racial disparities
+in criminal justice involvement. Technical report, National Bureau of Economic
+Research.
+Kane, T. J. and D. O. Staiger (2008, December). Estimating teacher impacts on
+student achievement: An experimental evaluation. Working Paper 14607, National
+Bureau of Economic Research.
+Kline, P., R. Saggio, and M. Sølvsten (2020). Leave-out estimation of variance com-
+ponents. Econometrica 88 (5), 1859–1898.
+35
+
+===== PAGE 37 / 71: rss_teachers_cjc.pdf =====
+
+Kline, P. M., E. K. Rose, and C. R. Walters (2021). Systemic discrimination among
+large u.s. employers. Technical report, National Bureau of Economic Research.
+Krueger, A. B. and L. H. Summers (1988). Eﬃciency wages and the inter-industry
+wage structure. Econometrica: Journal of the Econometric Society , 259–293.
+Kwon, S. (2023). Optimal shrinkage estimation of ﬁxed eﬀects in linear panel data
+models. arXiv preprint arXiv:2308.12485 .
+Lindqvist, E. and R. Vestman (2011, January). The labor market returns to cog-
+nitive and noncognitive ability: Evidence from the swedish enlistment. American
+Economic Journal: Applied Economics 3 (1), 101–28.
+Lleras, C. (2008). Do skills and behaviors in high school matter? the contribution of
+noncognitive factors in explaining diﬀerences in educational attainment and earn-
+ings. Social Science Research 37 (3), 888–902.
+Mulhern, C. and I. Opper (2022). Measuring and summarizing the multiple dimensions
+of teacher eﬀectiveness.
+Neal, D. (2011). The design of performance pay in education. In Handbook of the
+Economics of Education, Volume 4, pp. 495–550.
+Papp, J. and M. Mueller-Smith (2021). Benchmarking the criminal justice administra-
+tive records system’s data infrastructure. Working paper, University of Michigan.
+Petek, N. and N. Pope (2021). The multidimensional impact of teachers on students.
+Technical report, Working Paper.
+Reynolds, A. J., J. A. Temple, and S.-R. Ou (2010). Preschool education, educational
+attainment, and crime prevention: Contributions of cognitive and non-cognitive
+skills. Children and Youth Services Review 32 (8), 1054–1063.
+Rivkin, S. G., E. A. Hanushek, and J. F. Kain (2005). Teachers, schools, and academic
+achievement. Econometrica 73 (2), 417–458.
+Rothstein, J. (2010). Teacher quality in educational production: Tracking, decay, and
+student achievement. The Quarterly Journal of Economics 125 (1), 175–214.
+Rothstein, J. (2017). Measuring the impacts of teachers: Comment. American Eco-
+nomic Review 107 (6), 1656–84.
+Schennach, S. M. (2016). Recent advances in the measurement error literature.Annual
+review of economics 8 (1), 341–377.
+Sorensen, L. C., S. D. Bushway, and E. J. Giﬀord (2019). Getting tough? the eﬀects
+of discretionary principal discipline on student outcomes. Education Finance and
+Policy, 1–74.
+36
+
+===== PAGE 38 / 71: rss_teachers_cjc.pdf =====
+
+Figure 1: Eﬀects of teacher quality on long-run outcomes
+a) CJC outcomes b) Academic outcomes
+T est scores Behaviors Study skills
+Short-run outcome
+0.008
+0.006
+0.004
+0.002
+0.000
+0.002
+Effect of 1 SD increase on long-run outcomes
+-0.2%
+-1.6%
+-0.2%
+-0.1%
+-2.3%
+ 0.4%
+-0.4%
+-4.4%
+ 0.2%
+-0.7%
+-3.0%
+-2.0%
+Any CJC
+Criminal arrest
+Index crime
+Incarceration
+T est scores Behaviors Study skills
+Short-run outcome
+0.0000
+0.0025
+0.0050
+0.0075
+0.0100
+0.0125
+0.0150
+0.0175Effect of 1 SD increase on long-run outcomes
+ 0.4%
+ 0.5%
+ 0.0% 0.2%
+ 0.5%
+ 0.1%
+ 1.3%
+ 0.8%  0.7%
+12th grade GPA
+Graduation
+College attendance
+Notes: This ﬁgure presents the estimated eﬀect of a 1 standard deviation in teacher quality as measured by short-run outcomes
+(x-axis) on long-run outcomes implied by estimates of the variance-covariance of teacher eﬀects. The error bars are 95% conﬁdence
+intervals based on analytic standard errors estimated using the procedure described in Appendix C. Numbers above/below each bar
+report eﬀects as a percentage of the outcome mean. Test scores refers to the combined outcome of the ﬁrst principal component
+of math and reading scores for homeroom teachers, math scores for math teachers, and reading scores for reading teachers,
+respectively. Behaviors refers to the ﬁrst principal component of an indicator for any discipline in t + 1, total days absent in
+yeart + 1, and an indicator for grade repetition, all standardized within year and grade. Study skills refers to the ﬁrst principal
+component of standardized within year and grade reported time spent on homework, watching TV, and reading. Criminal arrest
+refers to any criminal interaction with the justice system between ages 16 and 21 (i.e., excluding traﬃc tickets and non-criminal
+violations). 12th grade GPA is a six-point-scale GPA for the student’s ﬁrst appearance in 12th grade. College attendance is an
+indicator for students’ plans to attend a four-year college reported in 12th grade. Teacher eﬀect estimators include the full set of
+covariates described in Section 2.1 and use all available years for each outcome.
+37
+
+===== PAGE 39 / 71: rss_teachers_cjc.pdf =====
+
+Figure 2: Assessing omitted variable bias in teacher eﬀect estimates
+Predicted short-run outcomes
+a) Test scores b) Behaviors
+-.03-.02-.010.01.02.03Omitted variables fit-.4-.20.2.4Estimated teacher effectSlope: .0003 (.0002)
+-.03-.02-.010.01.02.03Omitted variables fit-.4-.20.2.4Estimated teacher effectSlope: .0028 (.0005)
+Predicted long-run outcomes
+c) Criminal arrest d) Incarceration
+-.025-.02-.015-.01-.0050.005.01.015.02.025Omitted variables fit-.1-.050.05.1Estimated teacher effectSlope: .0013 (.001)
+-.025-.02-.015-.01-.0050.005.01.015.02.025Omitted variables fit-.1-.050.05.1Estimated teacher effectSlope: .0045 (.0012)
+Notes: This ﬁgure presents a diagnostic test for whether the estimated teacher eﬀects (ˆαit =∑
+j ˆαjDijt from Equation 2) are correlated with variables ( W′
+it ˆρ from Equation 9) that
+predict short- and long-run outcomes but were omitted when estimating the teacher eﬀects.
+The ﬂat slopes demonstrates that teacher eﬀect estimates are insensitive to the inclusion
+of these omitted variables. Following Chetty et al. (2014a) we include parental education
+and twice lagged test scores among the omitted variables. We also include twins indicators
+as omitted variables, with all non-twins assigned to a separate indicator. Results change
+little when regressing W′
+it ˆρ on ˆαit in the sample of twins only. Teacher eﬀect estimators
+include the full set of covariates described in Section 2.1 and use all available years for each
+outcome.
+38
+
+===== PAGE 40 / 71: rss_teachers_cjc.pdf =====
+
+Figure 3: Correlation in teacher eﬀects across groups
+a) Short-run outcomes
+T est scores Study skills Behaviors
+Short-run outcome
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0Correlation in short-run effects across groups
+Race (white vs. non-white)
+Gender
+Econ disadv
+High/low arrest risk
+b) Criminal justice contact c) Academic outcomes
+Any CJC Criminal arrest Index crime Incarceration
+Long-run outcome
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0Correlation in long-run effects across groups
+Race (white vs. non-white)
+Gender
+Econ disadv
+High/low arrest risk
+Graduation 12th grade GPA College attendance
+Long-run outcome
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0Correlation in long-run effects across groups
+Race (white vs. non-white)
+Gender
+Econ disadv
+High/low arrest risk
+Notes: This ﬁgure presents the estimated correlation in teacher eﬀects on short-run out-
+comes (panel a) and long-run outcomes (panels b and c) across groups of students. The
+error bars are 95% conﬁdence intervals based on analytic standard errors estimated using
+the procedure described in Appendix C. Test scores refers to the combined outcome of the
+ﬁrst principal component of math and reading scores for homeroom teachers, math scores
+for math teachers, and reading scores for reading teachers, respectively. Behaviors refers to
+the ﬁrst principal component of an indicator for any discipline in t + 1, total days absent
+in year t + 1, and an indicator for grade repetition, all standardized within year and grade.
+Study skills refers to the ﬁrst principal component of standardized within year and grade
+reported time spent on homework, watching TV, and reading. Criminal arrest refers to any
+criminal interaction with the justice system between ages 16 and 21 (i.e., excluding traﬃc
+tickets and non-criminal violations). 12th grade GPA is a six-point-scale GPA for the stu-
+dent’s ﬁrst appearance in 12th grade. College attendance is an indicator for students’ plans
+to attend a four-year college reported in 12th grade. Teacher eﬀect estimators include the
+full set of covariates described in Section 2.1 and use all available years for each outcome.
+39
+
+===== PAGE 41 / 71: rss_teachers_cjc.pdf =====
+
+Figure 4: Heterogeneous impacts of exposure to teachers who improve behaviors
+a) Criminal arrest
+Non-white
+White Female
+Male
+Not disadv
+Disadv Low riskHigh risk
+Demographic group
+0.012
+0.010
+0.008
+0.006
+0.004
+0.002
+0.000
+0.002
+0.004
+Effect of 1 sd increase in
+teacher effects on arrests
+-0.5%
+-4.1%
+-4.1%
+-2.0%
+-3.3%
+-2.9%
+-2.2%
+-2.9%
+b) Incarceration
+Non-white
+White Female
+Male
+Not disadv
+Disadv Low riskHigh risk
+Demographic group
+0.012
+0.010
+0.008
+0.006
+0.004
+0.002
+0.000
+0.002
+0.004
+Effect of 1 sd increase in
+teacher effects on incarceration
+-2.9% -4.9%
+-10.9%
+-3.5% -10.0% -3.7%
+-9.9%
+-3.6%
+Notes: This ﬁgure presents the estimated eﬀect of a one standard deviation in teacher qual-
+ity as measured by impacts on students’ behaviors on long-run outcomes across groups of
+students. The error bars are 95% conﬁdence intervals based on analytic standard errors
+estimated using the procedure described in Appendix C. Test scores refers to the combined
+outcome of the ﬁrst principal component of math and reading scores for homeroom teach-
+ers, math scores for math teachers, and reading scores for reading teachers, respectively.
+Behaviors refers to the ﬁrst principal component of an indicator for any discipline in t + 1,
+total days absent in yeart+1, and an indicator for grade repetition, all standardized within
+year and grade. Study skills refers to the ﬁrst principal component of standardized within
+year and grade reported time spent on homework, watching TV, and reading. Criminal ar-
+rest refers to any criminal interaction with the justice system between ages 16 and 21 (i.e.,
+excluding traﬃc tickets and non-criminal violations). 12th grade GPA is a six-point-scale
+GPA for the student’s ﬁrst appearance in 12th grade. College attendance is an indicator for
+students’ plans to attend a four-year college reported in 12th grade. Teacher eﬀect estima-
+tors include the full set of covariates described in Section 2.1 and use all available years for
+each outcome.
+40
+
+===== PAGE 42 / 71: rss_teachers_cjc.pdf =====
+
+Figure 5: Eﬀects of teacher removal policies on exposed students
+0.00 0.02 0.04 0.06 0.08 0.10
+Increase in college attendance 
+ in exposed classrooms
+0.00
+0.01
+0.02
+0.03
+0.04
+0.05
+Reduction in future criminal arrest 
+ in exposed classrooms
+Only study skills
+Only behavioral
+Only test scores
+True effects on arrest and college
+True effects on short-run outcomes
+EB posteriors of effects on short-run outcomes
+Markers indicate putting full weight
+on effects on a single short-run outcome
+Notes: This ﬁgure presents simulations of the impacts of replacing the bottom ﬁve percent
+of teachers with an average teacher on college attendance and future criminal arrests. The
+rightmost dotted maroon lines in reﬂect the frontiers achievable if teachers’ true long-run
+eﬀects were directly observed and used to identify which teachers to replace. The dashed
+red line reﬂects possibilities if teachers true short-run eﬀects on test scores, behaviors, and
+study skills were observed and used to select teachers. The leftmost solid line shows possi-
+bilities using EB estimates of teacher eﬀects on short-run outcomes instead. The markers
+indicate gains when putting full weight on a single short-run outcome to select teachers for
+replacement, with solid markers using true eﬀects and hollow markers using EB posteriors.
+Teacher eﬀect estimators include the full set of covariates described in Section 2.1 and use all
+available years for each outcome. All simulations assume teacher eﬀects are jointly normally
+distributed.
+41
+
+===== PAGE 43 / 71: rss_teachers_cjc.pdf =====
+
+Table 1: Summary statistics
+Full sample Sample for which Youth with a
+we observe CJC criminal arrest
+Mean SD Mean SD Mean SD
+(1) (2) (3) (4) (5) (6)
+Demographics
+Male 0.50 0.50 0.50 0.50 0.64 0.48
+Black 0.25 0.43 0.27 0.44 0.37 0.48
+Economically disadvantaged 0.58 0.49 0.61 0.49 0.73 0.44
+Limited English 0.043 0.20 0.055 0.23 0.036 0.19
+Parents have HS education or less 0.40 0.49 0.43 0.49 0.53 0.50
+Parents have some college 0.45 0.50 0.48 0.50 0.37 0.48
+Parents have 4-year degree 0.22 0.41 0.24 0.43 0.15 0.36
+Short-run outcomes
+Standardized reading scores 0.046 0.97 0.054 0.96 -0.23 0.94
+Standardized math scores 0.061 0.97 0.066 0.97 -0.21 0.92
+Days absent 9.11 9.20 9.08 9.44 10.9 11.1
+Any discipline 0.17 0.37 0.17 0.38 0.31 0.46
+Any out-of-school suspension 0.080 0.27 0.095 0.29 0.20 0.40
+Repeat grade 0.0088 0.093 0.0087 0.093 0.015 0.12
+Behavioral index 0 1.10 -0.025 1.12 0.44 1.37
+Time spent on homework 0.023 0.99 0.023 0.99 -0.081 1.01
+Time spent reading 0.0052 0.99 0.0041 0.99 -0.14 0.96
+Time spent watching TV -0.0052 0.98 -0.0078 0.98 0.085 1.02
+Study skills index 0 1.09 0.0054 1.09 -0.17 1.09
+Long-run outcomes
+12th grade GPA (0-6 scale) 3.13 0.95 3.12 0.95 2.64 0.87
+12th grade class rank 0.48 0.29 0.48 0.28 0.61 0.26
+Graduate high school 0.91 0.28 0.92 0.28 0.81 0.40
+Plans to attend 4-year college 0.46 0.50 0.46 0.50 0.33 0.47
+Traﬃc infraction 0.33 0.47 0.33 0.47 0.63 0.48
+Criminal arrest 0.24 0.43 0.24 0.43 1 0
+Index crime arrest 0.10 0.31 0.10 0.31 0.44 0.50
+Criminal conviction 0.10 0.30 0.10 0.30 0.43 0.49
+Incarcerated 0.089 0.29 0.089 0.29 0.36 0.48
+N student-subject-years 9779708 4159500 984349
+N teachers 39707 27236 27202
+N students 1953547 755457 179484
+N twin pairs 18213 12516 4149
+Notes: This table presents summary statistics for demographic characteristics, short-run
+outcomes, and long-run outcomes for the analysis sample, the sample of students for which
+we observe CJC outcomes, and a sub-sample of students with a criminal arrest between ages
+16 to 21. Not all outcomes are observed in all years; summary statistics reﬂect means and
+standard deviations for non-missing data only. In each analysis, we use the largest sample
+possible given when an outcome is observed. See Section 1 for additional details on data
+construction and outcome coverage by year. Note that the sample of youth with an arrest
+drops individuals for whom CJC outcomes are unobserved.42
+
+===== PAGE 44 / 71: rss_teachers_cjc.pdf =====
+
+Table 2: Direct eﬀects on long-run outcomes
+Any CJC Criminal arrest Index crime Incarceration 12th grade GPA College attendance Graduation
+Any CJC 0.035 (0.0007) 0.779 (0.018) 0.513 (0.029) 0.479 (0.025) -0.055 (0.016) -0.103 (0.026) -0.162 (0.025)
+Criminal arrest 0.027 (0.0007) 0.816 (0.021) 0.583 (0.023) -0.150 (0.018) -0.153 (0.028) -0.262 (0.029)
+Index crime 0.018 (0.0006) 0.507 (0.031) -0.126 (0.020) -0.064 (0.032) -0.352 (0.036)
+Incarceration 0.021 (0.0005) -0.101 (0.016) -0.175 (0.027) -0.281 (0.029)
+12th grade GPA 0.116 (0.0025) 0.394 (0.032) 0.312 (0.029)
+College attendance 0.050 (0.0024) 0.256 (0.041)
+Graduation 0.023 (0.0013)
+Notes: This table presents estimated standard deviations (diagonal elements) and correlations (oﬀ-diagonal elements) of teacher
+eﬀects on long-run outcomes. Analytic standard errors displayed in parentheses are estimated using the procedure described in
+Appendix C. Any CJC refers to any interaction recorded in the criminal justice records between the ages of 16 and 21 inclusive.
+Criminal arrest excludes non-criminal interactions (e.g., traﬃc infractions). 12th grade GPA is a six-point-scale GPA for the
+student’s ﬁrst appearance in 12th grade. College attendance is an indicator for students’ reported plans to attend a four-year
+college reported after graduation. Graduation is an indicator for graduating high school. Teacher eﬀect estimators include the
+full set of covariates described in Section 2.1 and using all available years for each outcome.
+Table 3: Teacher eﬀects on short-run outcomes
+Test scores Math scores Reading scores Study skills Behaviors
+Test scores 0.121 (0.0006) 0.909 (0.0020) 0.810 (0.0035) 0.317 (0.0071) 0.056 (0.0089)
+Math scores 0.134 (0.0005) 0.675 (0.0057) 0.279 (0.0067) 0.047 (0.0089)
+Reading scores 0.073 (0.0006) 0.337 (0.0090) 0.071 (0.0109)
+Study skills 0.183 (0.0018) 0.033 (0.0085)
+Behaviors 0.125 (0.0017)
+Notes: This table presents estimated standard deviations (diagonal elements) and correlations (oﬀ-diagonal elements) of teacher
+eﬀects on short-run outcomes. Analytic standard errors displayed in parentheses are estimated using the procedure described in
+Appendix C. Teacher eﬀect estimators include the full set of covariates described in Section 2.1 and using all available years for
+each outcome.
+43
+
+===== PAGE 45 / 71: rss_teachers_cjc.pdf =====
+
+Table 4: Implied regression of long-run eﬀects on short-run eﬀects
+Any CJC Criminal arrest Index crime Incarceration 12th grade GPA Graduation College attendance
+Test scores -0.001 (0.004) -0.003 (0.003) -0.003 (0.002) 0.000 (0.002) 0.097 (0.010) 0.010 (0.003) 0.045 (0.007)
+Behaviors -0.059 (0.005) -0.048 (0.004) -0.038 (0.003) -0.023 (0.003) 0.124 (0.013) 0.039 (0.004) 0.029 (0.008)
+Study skills -0.004 (0.003) 0.007 (0.002) 0.002 (0.002) -0.009 (0.002) -0.014 (0.008) 0.001 (0.002) 0.009 (0.006)
+sd(µy
+j) 0.035 (0.001) 0.027 (0.001) 0.018 (0.001) 0.021 (0.001) 0.116 (0.003) 0.023 (0.001) 0.050 (0.002)
+R2 0.039 0.042 0.059 0.023 0.025 0.041 0.020
+Notes: This table presents the coeﬃcients from a regression of long-run outcomes on short-run teacher eﬀects implied by variance-
+covariance matrix of short- and long-run teachers eﬀects. Analytic standard errors displayed in parentheses are estimated using
+the procedure described in Appendix C. The ﬁnal two rows report estimated standard deviations of teacher eﬀects on the long-run
+outcome and the R2 from the regression. See also the notes of Table 3.
+44
+
+===== PAGE 46 / 71: rss_teachers_cjc.pdf =====
+
+Table 5: Instrumental variables tests for forecast unbiased teacher eﬀects
+(a) Short-run outcomes
+Test scores Behaviors Study skills
+(1) (2) (3) (4) (5) (6)
+Schl-grd Schl Schl-grd Schl Schl-grd Schl
+ˆαj 1.002 1.052 0.938 0.984 1.043 1.087
+(0.0120) (0.0157) (0.0678) (0.117) (0.0353) (0.0595)
+Observations 9779708 9779708 5422682 5422682 3404657 3404657
+R2 0.753 0.752 0.247 0.244 0.180 0.176
+Design controls ✓ ✓ ✓ ✓ ✓ ✓
+First stage F 51914 32164 3349 1205 6865 2557
+P -value for H0 :λ = 1 .873 .001 .363 .891 .229 .145
+(b) Long-run outcomes
+Criminal arrest Incarceration College bound
+(1) (2) (3) (4) (5) (6)
+Schl-grd Schl Schl-grd Schl Schl-grd Schl
+ˆαj 1.090 1.190 1.156 1.246 0.983 0.807
+(0.0824) (0.311) (0.0890) (0.319) (0.0535) (0.167)
+Observations 4159500 4159500 4159500 4159500 3205422 3205422
+R2 0.0916 0.0899 0.0836 0.0816 0.282 0.279
+Design controls ✓ ✓ ✓ ✓ ✓ ✓
+First stage F 4825 386 4032 397 4399 651
+P -value for H0 :λ = 1 .276 .543 .079 .44 .745 .248
+Notes: This table presents instrumental variable tests for bias in estimated teacher eﬀects on
+short- and long-run outcomes, where an estimate of 1 implies forecast unbiased estimates.
+Design controls include the full set of covariates described in Section 2.1 and using all
+available years for each outcome. The reported coeﬃcient on ˆ αit is estimated via 2SLS
+using a teacher switching instrument deﬁned at the school-grade (odd columns) or school-
+level (even columns). The instrument is the product of an indicator for new teacher entry
+into student i’s school-grade or school at time t times the mean of ˆ αj for all entering
+teachers estimated in all other school-grades or schools. Only entries where at least one
+new teacher’s eﬀects are estimable in other schools or school grades are included in the
+instrument. Means are weighted by number of students assigned at time t. All regressions
+include an indicator for any teacher entry. Standard errors clustered at the student level
+are reported in parentheses.
+45
+
+===== PAGE 47 / 71: rss_teachers_cjc.pdf =====
+
+A Additional ﬁgures and tables
+Figure A.1: Teacher test score eﬀects in the literature
+0.00 0.05 0.10 0.15 0.20 0.25 0.30 0.35
+SD of math effects
+0.025
+0.050
+0.075
+0.100
+0.125
+0.150
+0.175SD of reading effects
+this paper
+CFR 2014 (elem)
+CFR 2014 (mid)
+Jackson 2018 (9th g)
+Bacher-Hicks e.a. 2014 (elem)
+Bacher-Hicks e.a. 2014 (mid)
+Kane Staiger 2008 (elem)
+Rothstein 2010 (5th g)
+Rothstein 2010 (4th g)
+Notes: This ﬁgure compares estimated standard deviation of teacher eﬀects on math and
+reading scores to comparable estimates in the literature. “Mid” indicates estimates for
+middle school students and “elem” indicates elementary school students. Our estimates
+straddle those from studies that focus on elementary students vs. those that focus on older
+students (e.g., Jackson (2018)).
+1
+
+===== PAGE 48 / 71: rss_teachers_cjc.pdf =====
+
+Figure A.2: Eﬀects of “long-run” teacher quality on outcomes
+a) CJC outcomes b) Academic outcomes
+T est scores Behaviors Study skills
+Short-run outcome
+0.008
+0.006
+0.004
+0.002
+0.000
+Effect of 1 SD increase on long-run outcomes
+-0.4%
+-1.6%
+-0.7%
+-0.6%
+-2.3%
+-0.2%
+-1.3%
+-4.4%
+-1.1%
+-0.8%
+-3.0%
+-2.2%
+Any CJC
+Criminal arrest
+Index crime
+Incarceration
+T est scores Behaviors Study skills
+Short-run outcome
+0.005
+0.000
+0.005
+0.010
+0.015
+0.020
+0.025
+Effect of 1 SD increase on long-run outcomes
+ 0.7%
+ 0.5%
+ 0.2%
+ 0.2%
+ 0.5%
+ 0.0%
+ 1.6%
+ 0.8%
+-0.3%
+12th grade GPA
+Graduation
+College attendance
+Notes: This ﬁgure presents the estimated eﬀect of a 1 standard deviation in teacher quality as measured by short-run outcomes
+(x-axis) on long-run outcomes implied by estimates of the variance-covariance of teacher eﬀects. Unlike in Figure 1, teachers
+eﬀects on test scores and study skills are measured using outcomes in t + 1 to capture their “long-run” impacts (Gilraine and
+Pope, 2021). Behavioral outcomes were already measured at t + 1 in our primary analysis, but their eﬀects are repeated here
+for comparison. The error bars are 95% conﬁdence intervals based on analytic standard errors estimated using the procedure
+described in Appendix C. Numbers above/below each bar report eﬀects as a percentage of the outcome mean. Test scores refers to
+the combined outcome of the ﬁrst principal component of math and reading scores for homeroom teachers, math scores for math
+teachers, and reading scores for reading teachers, respectively. Behaviors refers to the ﬁrst principal component of an indicator
+for any discipline in t + 1, total days absent in year t + 1, and an indicator for grade repetition, all standardized within year
+and grade. Study skills refers to the ﬁrst principal component of standardized within year and grade reported time spent on
+homework, watching TV, and reading. Criminal arrest refers to any criminal interaction with the justice system between ages
+16 and 21 (i.e., excluding traﬃc tickets and non-criminal violations). 12th grade GPA is a six-point-scale GPA for the student’s
+ﬁrst appearance in 12th grade. College attendance is an indicator for students’ plans to attend a four-year college reported in
+12th grade. Teacher eﬀect estimators include the full set of covariates described in Section 2.1 and use all available years for each
+outcome.
+2
+
+===== PAGE 49 / 71: rss_teachers_cjc.pdf =====
+
+Figure A.3: Assessing omitted variable bias in additional long-run outcomes
+Predicted long-run CJC outcomes
+a) Any CJC b) Arrest for index crime
+-.025-.02-.015-.01-.0050.005.01.015.02.025Omitted variables fit-.2-.10.1.2Estimated teacher effectSlope: .0008 (.001)
+-.025-.02-.015-.01-.0050.005.01.015.02.025Omitted variables fit-.1-.050.05.1Estimated teacher effectSlope: .0017 (.0011)
+Predicted long-run academic outcomes
+c) College bound d) 12th grade GPA
+-.025-.02-.015-.01-.0050.005.01.015.02.025Omitted variables fit-.2-.10.1.2Estimated teacher effectSlope: .0132 (.001)
+-.025-.02-.015-.01-.0050.005.01.015.02.025Omitted variables fit-.4-.20.2.4Estimated teacher effectSlope: .0071 (.0008)
+Notes: This ﬁgure presents a diagnostic test for whether the estimated teacher eﬀects (ˆαit =∑
+j ˆαjDijt from Equation 2) are correlated with predictions based on omitted variables (W′
+it ˆρ
+from Equation 9) that are predictable of the short- and long-run outcomes but have not
+been used when estimating the teacher eﬀects. Following Chetty et al. (2014a) we include
+parental education and twice lagged test scores among the omitted variables. We also include
+twins indicators as omitted variables, with all non-twins assigned to a separate indicator.
+Results change little when regressing W′
+it ˆρ on ˆαit in the sample of twins only. Teacher eﬀect
+estimators include the full set of covariates described in Section 2.1 and use all available
+years for each outcome.
+3
+
+===== PAGE 50 / 71: rss_teachers_cjc.pdf =====
+
+Figure A.4: Speciﬁcation sensitivity of teacher quality impacts on arrests
+a) Test scores
+5 10 15 20 25
+# of controls included in model
+0.0150
+0.0125
+0.0100
+0.0075
+0.0050
+0.0025
+0.0000
+0.0025
+0.0050
+Impact of 1 SD increase in
+test score effects on arrests
+Preferred estimate
+Min Max Median effect
+b) Behaviors
+5 10 15 20 25
+# of controls included in model
+0.0150
+0.0125
+0.0100
+0.0075
+0.0050
+0.0025
+0.0000
+0.0025
+0.0050
+Impact of 1 SD increase in
+behavioral effects on arrests
+Preferred estimate
+Min Max Median effect
+Notes: This ﬁgures shows the speciﬁcation sensitivity of estimated eﬀects of one standard
+deviation increase in teacher quality on future criminal arrests. We estimate the variance-
+covariance of teacher eﬀects from 811 diﬀerent models that vary the number of included
+controls. All models include lag third-degree polynomials in math and reading scores inter-
+acted with grade, and year-grade-subject FEs. The x-axis shows the quantity of other con-
+trols included from among school, school-grade-year, or school-grade-classroom-year means
+of other included covariates, lag absences and discipline, educational and behavioral special
+needs, and academically gifted indicators, limited English proﬁciency status, gender and
+race, parental education, grade repetition, and twice-lagged scores. The graph reports the
+min, median, and max eﬀect estimate among models with the same number of controls.
+4
+
+===== PAGE 51 / 71: rss_teachers_cjc.pdf =====
+
+Figure A.5: Heterogeneous impacts of exposure to teachers who improve test scores
+a) Criminal arrest
+Non-white
+White Female
+Male
+Not disadv
+Disadv Low riskHigh risk
+Demographic group
+0.012
+0.010
+0.008
+0.006
+0.004
+0.002
+0.000
+0.002
+0.004
+Effect of 1 sd increase in
+teacher effects on arrests
+-0.4%
+-1.2%
+-0.4%
+ 0.2%
+-0.8% -0.3%
+ 0.4%  0.2%
+b) Incarceration
+Non-white
+White Female
+Male
+Not disadv
+Disadv Low riskHigh risk
+Demographic group
+0.012
+0.010
+0.008
+0.006
+0.004
+0.002
+0.000
+0.002
+0.004
+Effect of 1 sd increase in
+teacher effects on incarceration
+ 0.1%
+-3.3%
+-0.0%
+-0.7% -1.8% -0.6% -2.1%
+-0.0%
+Notes: This ﬁgure presents the estimated eﬀect of a one standard deviation in teacher quality
+as measured by impacts on students’ test scores on long-run outcomes across groups of students.
+The error bars are 95% conﬁdence intervals based on analytic standard errors estimated using the
+procedure described in Appendix C. Test scores refers to the combined outcome of the ﬁrst principal
+component of math and reading scores for homeroom teachers, math scores for math teachers, and
+reading scores for reading teachers, respectively. Behaviors refers to the ﬁrst principal component of
+an indicator for any discipline in t + 1, total days absent in year t + 1, and an indicator for grade
+repetition, all standardized within year and grade. Study skills refers to the ﬁrst principal component
+of standardized within year and grade reported time spent on homework, watching TV, and reading.
+Criminal arrest refers to any criminal interaction with the justice system between ages 16 and 21
+(i.e., excluding traﬃc tickets and non-criminal violations). 12th grade GPA is a six-point-scale GPA
+for the student’s ﬁrst appearance in 12th grade. College attendance is an indicator for students’
+plans to attend a four-year college reported in 12th grade. Teacher eﬀect estimators include the full
+set of covariates described in Section 2.1 and use all available years for each outcome.
+5
+
+===== PAGE 52 / 71: rss_teachers_cjc.pdf =====
+
+Table A.1: Predictors of teacher eﬀects
+(1) (2) (3) (4) (5) (6)
+Test scores Study skills Behaviors Criminal arrest Index crime Incarceration
+Female 0.0251 ∗∗∗ 0.0632∗∗∗ 0.00684 -0.00348 ∗∗∗ -0.00170∗ -0.00195∗∗
+(0.00233) (0.00447) (0.00364) (0.00102) (0.000735) (0.000752)
+Non-white -0.0126 ∗∗∗ -0.0271∗∗∗ -0.00561 -0.00116 -0.000332 -0.00506 ∗∗∗
+(0.00247) (0.00502) (0.00407) (0.00116) (0.000869) (0.000866)
+Age 0.000171 ∗ 0.00128∗∗∗ -0.000351∗∗ 0.0000268 -0.0000210 0.0000287
+(0.0000784) (0.000169) (0.000125) (0.0000351) (0.0000251) (0.0000254)
+Prior experience 0.00318 ∗∗∗ 0.00335∗∗∗ 0.000900∗ 0.0000238 0.00000751 0.000119
+(0.000223) (0.000745) (0.000367) (0.000123) (0.0000876) (0.0000865)
+Masters or higher 0.00362 ∗ 0.0130∗∗ 0.00115 -0.00115 0.0000686 0.000516
+(0.00171) (0.00404) (0.00261) (0.000778) (0.000552) (0.000561)
+Average test score 0.00696 ∗∗∗ 0.0153∗∗∗ -0.00362∗ 0.000544 0.000327 -0.000383
+(0.00105) (0.00224) (0.00168) (0.000465) (0.000327) (0.000338)
+Pay (standardized) 0.00807 ∗∗∗ 0.00781∗∗∗ -0.00424∗∗ 0.000688 0.000339 -0.00134 ∗∗∗
+(0.000802) (0.00163) (0.00149) (0.000391) (0.000303) (0.000301)
+Constant -0.0393 ∗∗∗ -0.130∗∗∗ 0.00470 0.00289 0.00284 ∗ 0.000940
+(0.00356) (0.00726) (0.00567) (0.00160) (0.00114) (0.00114)
+N teacher-years 196344 89947 87684 82228 82228 82228
+N teachers 35044 24604 24695 24232 24232 24232
+Notes: This table presents demographic and professional predictors of teacher eﬀects on
+multiple outcomes. Each column is a single regression of ¯Yk
+jt, where k is the outcome listed
+in the column header, on several teacher characteristics for all teacher-years in which both
+the outcome and the teacher characteristic are available. Age and prior experience are
+measured in years. Average test score is the teacher-year average of standardized (within
+test-type and year) scores on Praxis licensing exams. Pay is gross total pay standardized to
+have mean zero and standard deviation one within each year.
+6
+
+===== PAGE 53 / 71: rss_teachers_cjc.pdf =====
+
+Table A.2: Regression based estimates of teacher test score eﬀects on long-run outcomes
+CJC outcomes Academic outcomes
+(1) (2) (3) (4) (5) (6) (7)
+Any CJC Criminal arrest Index crime Incarceration 12th grade GPA Graduation College bound
+Test score VA -0.0108 -0.00795 -0.00591 -0.00553 0.0781 0.0104 0.0368
+(0.00398) (0.00332) (0.00228) (0.00232) (0.00907) (0.00220) (0.00478)
+Design controls ✓ ✓ ✓ ✓ ✓ ✓ ✓
+1SD eﬀect -.0012 -.0008 -.0006 -.0006 .0083 .0011 .0039
+R2 0.0480 0.0754 0.0596 0.0663 0.542 0.106 0.253
+Observations 4159500 4159500 4159500 4159500 3429388 4623602 3205422
+Notes: This table presents regressions of teacher test score value added calculated using the method in Chetty et al. (2014a) on long-run
+outcomes. Criminal arrest refers to any criminal interaction with the justice system between ages 16 and 21 (i.e., excluding traﬃc tickets and
+non-criminal violations). 12th grade GPA is a six-point-scale GPA for the student’s ﬁrst appearance in 12th grade. College attendance is an
+indicator for students’ plans to attend a four-year college reported in 12th grade. This method allows for drift in teacher eﬀects and accounts
+for measurement error by forming the best linear predictor of teacher eﬀects in year t based on their impacts in all other years. The ﬁnal
+row of the table presents the regression coeﬃcient implied by our procedure. Standard errors clustered at the student level are reported in
+parentheses.
+Table A.3: Regression based estimates of teacher behavioral eﬀects on long-run outcomes
+CJC outcomes Academic outcomes
+(1) (2) (3) (4) (5) (6) (7)
+Any CJC Criminal arrest Index crime Incarceration 12th grade GPA Graduation College bound
+Behavioral index VA -0.0517 -0.0453 -0.0354 -0.0233 0.179 0.0259 0.0361
+(0.00639) (0.00541) (0.00376) (0.00365) (0.0130) (0.00346) (0.00753)
+Design controls ✓ ✓ ✓ ✓ ✓ ✓ ✓
+1SD eﬀect -.0042 -.0036 -.0028 -.0019 .0142 .002 .0029
+R2 0.0481 0.0751 0.0596 0.0651 0.543 0.106 0.256
+Observations 3700227 3700227 3700227 3700227 2969019 4001899 2850488
+Notes: See the notes of Table A.2.
+7
+
+===== PAGE 54 / 71: rss_teachers_cjc.pdf =====
+
+Table A.4: Omitted variables bias tests for short-run teacher eﬀects
+Test scores Behavioral index Study skills index
+(1) (2) (3) (4) (5) (6)
+Y ˆY Y ˆY Y ˆY
+No high school -0.0491 -0.102 -0.0533
+(0.000932) (0.00268) (0.00255)
+High school only -0.0329 -0.0768 -0.0239
+(0.000780) (0.00187) (0.00239)
+Some college 0.0157 0.0476 0.0439
+(0.000811) (0.00204) (0.00244)
+BA or more 0.0260 0.0327 0.0668
+(0.000643) (0.00191) (0.00170)
+Lag 2 math 0.114 0.0311 0.00129
+(0.000401) (0.000974) (0.00137)
+Lag 2 reading 0.126 0.0144 0.0582
+(0.000384) (0.000928) (0.00129)
+Teacher eﬀect 0.000309 0.00277 0.00202
+(0.000187) (0.000452) (0.000490)
+Observations 9757562 9757562 5415717 5415717 3387386 3387386
+R2 0.761 0.770 0.252 0.872 0.189 0.584
+Original R2 .7497 .2408 .1723
+Design controls ✓ ✓ ✓ ✓ ✓ ✓
+Twin FE ✓ ✓ ✓
+Notes: This table presents tests for omitted variable bias in estimated teacher eﬀects on
+short-run outcomes. Test scores refers to the combined outcome of the ﬁrst principal com-
+ponent of math and reading scores for homeroom teachers, math scores for math teachers,
+and reading scores for reading teachers, respectively. Behaviors refers to the ﬁrst principal
+component of an indicator for any discipline in t + 1, total days absent in yeart + 1, and an
+indicator for grade repetition, all standardized within year and grade. Study skills refers to
+the ﬁrst principal component of standardized within year and grade reported time spent on
+homework, watching TV, and reading. The odd columns regress the outcome listed in the
+sub-header on the excluded covariates, teacher dummies, and the full set of design controls
+described in Section 2.1. The even columns regress predicted outcomes based on the ex-
+cluded covariates on estimated teacher eﬀects ˆαit = ∑
+j ˆαjDijt. Education variables refer to
+students’ reported parental education, with an indicator for missing parental education data
+serving as the omitted category. Lag 2 math and reading refer to twice-lagged standardized
+test scores, with indicators for missing twice-lag scores included but not reported. Twin-
+eﬀects include ﬁxed eﬀects for all twin pairs and an indicator for non-twin interacted with
+year. Results change little when regressing ˆYit on ˆαit in the sample of twins only. Original
+R2 refers to the R2 of the regression without excluded covariates used to estimate teacher
+eﬀects. Standard errors clustered at the student level are reported in parentheses.
+8
+
+===== PAGE 55 / 71: rss_teachers_cjc.pdf =====
+
+Table A.5: Omitted variables bias tests for long-run teacher eﬀects on outcomes
+related to criminal justice involvement
+Any arrest Criminal arrest Index crime Incarceration
+(1) (2) (3) (4) (5) (6) (7) (8)
+Y ˆY Y ˆY Y ˆY Y ˆY
+No high school 0.00300 0.0177 0.0198 0.0270
+(0.00113) (0.000954) (0.000694) (0.000642)
+High school only -0.0000113 0.0184 0.0147 0.0173
+(0.000866) (0.000730) (0.000531) (0.000492)
+Some college -0.00307 -0.0170 -0.0150 -0.0175
+(0.000913) (0.000770) (0.000560) (0.000518)
+BA or more -0.0196 -0.0178 -0.00873 -0.00615
+(0.000781) (0.000658) (0.000479) (0.000443)
+Lag 2 math 0.0107 0.00268 -0.000369 0.000680
+(0.000562) (0.000474) (0.000345) (0.000319)
+Lag 2 reading -0.00953 -0.00776 -0.00544 -0.00499
+(0.000526) (0.000443) (0.000322) (0.000298)
+Teacher eﬀect 0.000794 0.00128 0.00169 0.00452
+(0.00101) (0.00103) (0.00115) (0.00119)
+Observations 4145532 4145532 4145532 4145532 4145532 4145532 4145532 4145532
+R2 0.0811 0.718 0.107 0.702 0.0914 0.790 0.101 0.737
+Original R2 .062 .0888 .0726 .0807
+Design controls ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓
+Twin FE ✓ ✓ ✓ ✓
+Notes: This table presents tests for omitted variable bias in estimated teacher eﬀects on
+long-run outcomes. Criminal arrest refers to any criminal interaction with the justice system
+between ages 16 and 21 (i.e., excluding traﬃc tickets and non-criminal violations). 12th
+grade GPA is a six-point-scale GPA for the student’s ﬁrst appearance in 12th grade. College
+attendance is an indicator for students’ plans to attend a four-year college reported in 12th
+grade. The odd columns regress the outcome listed in the sub-header on the excluded
+covariates, teacher dummies, and the full set of design controls described in Section 2.1.
+The even columns regress predicted outcomes based on the excluded covariates on estimated
+teacher eﬀects ˆαit = ∑
+j ˆαjDijt. Education variables refer to students’ reported parental
+education, with an indicator for missing parental education data serving as the omitted
+category. Lag 2 math and reading refer to twice-lagged standardized test scores, with
+indicators for missing twice-lag scores included but not reported. Twin-eﬀects include ﬁxed
+eﬀects for all twin pairs and an indicator for non-twin interacted with year. Results change
+little when regressing ˆYit on ˆαit in the sample of twins only. Original R2 refers to the R2 of
+the regression without excluded covariates used to estimate teacher eﬀects. Standard errors
+clustered at the student level are reported in parentheses.
+9
+
+===== PAGE 56 / 71: rss_teachers_cjc.pdf =====
+
+Table A.6: Instrumental variables bias tests for short-run teacher eﬀects
+Test scores Behaviors Study skills
+(1) (2) (3) (4) (5) (6)
+Schl-grd Schl Schl-grd Schl Schl-grd Schl
+ˆαj 1.002 1.052 1.255 1.681 1.083 1.126
+(0.0135) (0.0175) (0.270) (1.101) (0.0641) (0.0825)
+Observations 9779708 9779708 5422682 5422682 3404657 3404657
+R2 0.723 0.721 0.209 0.200 0.135 0.132
+Design controls ✓ ✓ ✓ ✓ ✓ ✓
+School-grade FE ✓ ✓ ✓ ✓ ✓ ✓
+First stage F 47960 30550 364 24 2691 1709
+P -value for H0 :λ = 1 .875 .003 .346 .536 .198 .127
+Notes: This table presents instrumental variable tests for bias in estimated teacher eﬀects on short-
+run outcomes. Design controls include the full set of covariates described in Section 2.1 and using all
+available years for each outcome. The reported coeﬃcient on ˆαit is estimated via 2SLS using a teacher
+switching instrument deﬁned at the school-grade (odd columns) or school-level (even columns). The
+instrument is the product of an indicator for new teacher entry into studenti’s school-grade or school
+at timet times the mean of ˆαj for all entering teachers estimated in all other school-grades or schools.
+Only entries where at least one new teacher’s eﬀects are estimable in other schools or school grades
+are included in the instrument. Means are weighted by number of students assigned at time t. All
+regressions include an indicator for any teacher entry. Standard errors clustered at the student level
+are reported in parentheses.
+Table A.7: Instrumental variables bias tests for teacher-eﬀects on criminal arrest
+Outcome: Y Outcome: ˆYexcluded
+(1) (2) (3) (4) (5) (6)
+ˆαj 1.090 1.456 1.390
+(0.0824) (0.386) (0.374)
+Zit 0.000191 0.000724 0.00171
+(0.000792) (0.000797) (0.000816)
+Observations 4159500 4159500 4159500 9779708 9779708 9779708
+R2 0.0916 0.0754 0.0742 0.668 0.673 0.682
+Design controls ✓ ✓ ✓ ✓ ✓ ✓
+School-grade FE ✓ ✓ ✓ ✓
+Dist-grade-year FE ✓ ✓
+First stage F 4825 1101 1207
+P -value for H0 :λ = 1 .276 .238 .297
+Notes: This table presents instrumental variable tests for bias in estimated teacher eﬀects on future
+criminal arrests. Columns 4-6 regress the instrument on predicted outcomes using parental education
+and twice-lagged test scores. All regressions include an indicator for any teacher entry. See also the
+notes to Table A.6.
+10
+
+===== PAGE 57 / 71: rss_teachers_cjc.pdf =====
+
+Table A.8: Implied regression of long-run eﬀects on short-run eﬀects using only teachers who move across schools
+Any CJC Criminal arrest Index crime Incarceration 12th grade GPA Graduation College attendance
+Test scores 0.009 (0.009) -0.011 (0.007) -0.002 (0.005) 0.006 (0.005) -0.054 (0.028) -0.005 (0.007) 0.025 (0.017)
+Behaviors -0.051 (0.029) -0.033 (0.025) -0.043 (0.021) -0.024 (0.018) 0.277 (0.093) 0.000 (0.020) 0.103 (0.046)
+Study skills -0.014 (0.008) 0.021 (0.007) 0.000 (0.005) -0.018 (0.005) 0.089 (0.024) 0.027 (0.007) 0.035 (0.016)
+sd(µy
+j) 0.023 (0.003) 0.019 (0.003) 0.009 (0.004) 0.014 (0.002) 0.072 (0.009) 0.012 (0.007) 0.033 (0.009)
+R2 0.026 0.045 0.108 0.038 0.084 0.095 0.077
+Notes: This table presents the coeﬃcients from a regression of long-run outcomes on short-run teacher eﬀects implied by variance-covariance
+matrix of short- and long-run teachers eﬀects. The estimates are based variance-covariance estimated from leaving-one-out teacher-school
+pairs rather than the leave-one-out teacher-year estimates reported in Table 4. Analytic standard errors displayed in parentheses are estimated
+using the procedure described in Appendix C. Test scores refers to the combined outcome of the ﬁrst principal component of math and reading
+scores for homeroom teachers, math scores for math teachers, and reading scores for reading teachers, respectively. Behaviors refers to the
+ﬁrst principal component of an indicator for any discipline in t + 1, total days absent in year t + 1, and an indicator for grade repetition, all
+standardized within year and grade. Study skills refers to the ﬁrst principal component of standardized within year and grade reported time
+spent on homework, watching TV, and reading. Criminal arrest refers to any criminal interaction with the justice system between ages 16
+and 21 (i.e., excluding traﬃc tickets and non-criminal violations). 12th grade GPA is a six-point-scale GPA for the student’s ﬁrst appearance
+in 12th grade. College attendance is an indicator for students’ plans to attend a four-year college reported in 12th grade. The ﬁnal two rows
+report estimate standard deviations of teacher eﬀects on the long-run outcome and the R2 from the regression. Teacher eﬀect estimators
+include the full set of covariates described in Section 2.1 and using all available years for each outcome.
+Table A.9: Implied regressions using within-school variation
+Any CJC Criminal arrest Index crime Incarceration 12th grade GPA Graduation College attendance
+Test scores -0.007 (0.006) -0.006 (0.006) -0.007 (0.004) -0.003 (0.004) 0.089 (0.016) 0.009 (0.005) 0.046 (0.012)
+Behaviors -0.069 (0.030) -0.048 (0.027) -0.026 (0.020) -0.018 (0.017) 0.011 (0.068) 0.018 (0.019) 0.009 (0.046)
+Study skills 0.001 (0.007) 0.006 (0.007) 0.002 (0.005) -0.005 (0.005) 0.013 (0.020) -0.004 (0.006) -0.001 (0.014)
+sd(αy
+j) 0.007 (0.000) 0.003 (0.000) 0.005 (0.000) 0.006 (0.000) 0.050 (0.001) 0.012 (0.000) 0.010 (0.000)
+R2 0.306 0.646 0.104 0.056 0.049 0.014 0.276
+Notes: This table presents the coeﬃcients from a regression of long-run outcomes on short-run teacher eﬀects implied by the variance-
+covariance matrix of short- and long-run teachers eﬀects using only within school variation in teacher eﬀects. Estimates are based on the
+primary model in which teacher eﬀects are constant across schools and time. See also the notes of Table A.8
+.
+11
+
+===== PAGE 58 / 71: rss_teachers_cjc.pdf =====
+
+Table A.10: Sensitivity to runs and drift
+a) Test scores, [Study skills],{Behaviors}
+Standard deviations
+max m
+min m 1 2 3 ∞
+1
+0.131
+[0.196]
+{0.143}
+0.128
+[0.191]
+{0.132}
+0.126
+[0.188]
+{0.129}
+0.121
+[0.183]
+{0.125}
+2
+0.120
+[0.183]
+{0.108}
+0.117
+[0.179]
+{0.108}
+0.112
+[0.173]
+{0.103}
+3
+0.113
+[0.175]
+{0.107}
+0.106
+[0.167]
+{0.098}
+b) Any CJC, [Crim arrest], {Index crime}
+Standard deviations
+max m
+1 2 3 ∞
+0.037
+[0.029]
+{0.020}
+0.036
+[0.029]
+{0.019}
+0.035
+[0.028]
+{0.019}
+0.035
+[0.027]
+{0.018}
+0.033
+[0.026]
+{0.017}
+0.032
+[0.025]
+{0.015}
+0.031
+[0.024]
+{0.015}
+0.030
+[0.024]
+{0.013}
+0.029
+[0.023]
+{0.013}
+c) Any CJC, [Crim arrest], {Index crime}
+Correlation with test score eﬀects
+max m
+min m 1 2 3 ∞
+1
+−0.019
+[−0.012]
+{−0.023}
+−0.019
+[−0.011]
+{−0.027}
+−0.017
+[−0.007]
+{−0.028}
+−0.022
+[−0.008]
+{−0.023}
+2
+−0.013
+[−0.024]
+{−0.041}
+−0.005
+[−0.008]
+{−0.034}
+−0.019
+[−0.013]
+{−0.027}
+3
+−0.023
+[−0.023]
+{−0.039}
+−0.035
+[−0.025]
+{−0.026}
+d) Any CJC, [Crim arrest], {Index crime}
+Correlation with behavior eﬀects
+max m
+1 2 3 ∞
+−0.177
+[−0.212]
+{−0.266}
+−0.190
+[−0.227]
+{−0.303}
+−0.202
+[−0.220]
+{−0.284}
+−0.199
+[−0.202]
+{−0.242}
+−0.208
+[−0.245]
+{−0.342}
+−0.246
+[−0.252]
+{−0.315}
+−0.262
+[−0.258]
+{−0.288}
+−0.307
+[−0.305]
+{−0.340}
+−0.326
+[−0.312]
+{−0.303}
+Notes: This table illustrates the sensitivity of our estimates to variations on Assumption
+3 and 4. Our baseline estimates assume that E[¯uA
+jt ¯uC
+jt′] = 0 ∀j,t ̸= t′. Each cell in this
+table shows estimates assuming it holds only for min m≤|t−t′|≤ max m. The minimum
+m corresponds to the rows, while the maximum m is listed in each column. our baseline
+estimates correspond to min m = 1 and max m =∞. Panel a presents estimated standard
+deviations of eﬀects on test scores, study skills, and behaviors. Panel b presents analogous
+estimates for any CJC, criminal arrests, and index crimes. Panels c and d present correla-
+tions between eﬀects on these criminal justice outcomes and test score eﬀects (panel c) and
+for behavioral eﬀects (panel d).
+12
+
+===== PAGE 59 / 71: rss_teachers_cjc.pdf =====
+
+Table A.11: Summary statistics of four diﬀerent sub-groups comparisons across race,
+sex, socioeconomic status, and predicted risk of arrest
+Full sample Race Sex Econ. disadv. Arrest risk
+(1) (2) (3) (4) (5) (6) (7) (8) (9)
+White Non-White Boys Girls Yes No High Low
+Demographics
+Male 0.50 0.51 0.49 1 0 0.50 0.51 0.72 0.28
+Black 0.25 0 0.58 0.25 0.26 0.37 0.087 0.40 0.10
+Economically disadvantaged 0.58 0.42 0.80 0.58 0.59 1 0 0.77 0.39
+Limited English 0.043 0.0037 0.095 0.045 0.042 0.069 0.0075 0.017 0.070
+Parents have HS education or less 0.40 0.33 0.50 0.40 0.40 0.55 0.19 0.56 0.23
+Parents have some college 0.45 0.52 0.34 0.45 0.44 0.26 0.69 0.30 0.59
+Parents have 4-year degree 0.22 0.28 0.14 0.22 0.22 0.064 0.43 0.096 0.35
+Short-run outcomes
+Standardized reading scores 0.046 0.29 -0.28 -0.018 0.11 -0.26 0.48 -0.33 0.42
+Standardized math scores 0.061 0.30 -0.25 0.063 0.059 -0.25 0.50 -0.30 0.43
+Days absent 9.11 9.58 8.48 9.27 8.95 10.1 7.52 10.7 7.72
+Any discipline 0.17 0.12 0.23 0.22 0.11 0.22 0.081 0.28 0.076
+Any out-of-school suspension 0.080 0.046 0.12 0.11 0.047 0.11 0.026 0.14 0.026
+Repeat grade 0.0088 0.0062 0.012 0.011 0.0062 0.013 0.0028 0.015 0.0025
+Behavioral index 4.3e-10 -0.066 0.086 0.12 -0.12 0.20 -0.32 0.35 -0.25
+Time spent on homework 0.023 0.089 -0.067 -0.015 0.061 -0.086 0.16 -0.12 0.14
+Time spent reading 0.0052 0.045 -0.053 -0.13 0.14 -0.049 0.079 -0.16 0.14
+Time spent watching TV -0.0052 -0.16 0.20 0.061 -0.071 0.15 -0.18 0.15 -0.20
+Study skills index -6.4e-10 0.11 -0.17 -0.14 0.14 -0.15 0.20 -0.23 0.30
+Long-run outcomes
+12th grade GPA (0-6 scale) 3.13 3.34 2.81 2.96 3.28 2.78 3.53 2.59 3.53
+12th grade class rank 0.48 0.44 0.55 0.54 0.43 0.56 0.39 0.62 0.38
+Graduate high school 0.91 0.92 0.90 0.90 0.93 0.87 0.97 0.86 0.96
+Plans to attend 4-year college 0.46 0.46 0.45 0.41 0.50 0.35 0.60 0.32 0.56
+Traﬃc infraction 0.33 0.33 0.34 0.39 0.28 0.35 0.31 0.39 0.29
+Criminal arrest 0.24 0.21 0.28 0.30 0.17 0.29 0.16 0.34 0.15
+Index crime arrest 0.10 0.078 0.15 0.13 0.083 0.14 0.047 0.16 0.052
+Criminal conviction 0.10 0.084 0.13 0.15 0.054 0.13 0.052 0.16 0.043
+Incarcerated 0.089 0.073 0.11 0.13 0.048 0.12 0.043 0.15 0.036
+N student-subject-years 9779708 5536382 4243307 4892705 4887002 5673880 4035391 4889854 4889854
+N teachers 39707 39366 39664 39702 39706 39683 39342 39688 39623
+N students 1953547 1048427 905112 983078 970468 1085041 818161 1212875 1105939
+N twin pairs 18213 10178 9494 11813 12072 12031 7921 13481 11390
+Notes: This table presents summary statistics for demographic characteristics, short-run
+outcomes, and long-run outcomes for the full sample (Column 1), white vs. non-white
+(Columns 2 and 3), boys vs. girls (Columns 4 and 5), economic disadvantage (Columns 6
+and 7), and students with high vs. low predicted risk of a future arrest (Columns 8 and 9).
+Not all outcomes are observed in all years; summary statistics reﬂect means and standard
+deviations for non-missing data only. In each analysis, we use the largest sample possible
+for each outcome studied. See Section 1 for additional details on data construction and
+outcome coverage by year.
+13
+
+===== PAGE 60 / 71: rss_teachers_cjc.pdf =====
+
+Table A.12: Predictors of teachers’ heterogeneous demographic eﬀects
+a) Boys - Girls eﬀects
+(1) (2) (3) (4) (5) (6)
+Test scores Study skills Behaviors Criminal arrest Index crime Incarceration
+Female -0.0135 ∗∗∗ 0.0192∗∗∗ -0.00963∗ -0.00179 -0.00210 -0.00623 ∗∗∗
+(0.00160) (0.00528) (0.00485) (0.00198) (0.00151) (0.00147)
+Non-white -0.00515 ∗∗ 0.0215∗∗∗ -0.0107∗ 0.00467∗ 0.0224∗∗∗ 0.0211∗∗∗
+(0.00163) (0.00543) (0.00539) (0.00210) (0.00171) (0.00160)
+Constant -0.0116 ∗∗∗ -0.287∗∗∗ -0.186∗∗∗ 0.126∗∗∗ 0.0399∗∗∗ 0.0849∗∗∗
+(0.00149) (0.00490) (0.00455) (0.00184) (0.00141) (0.00137)
+N teachers 39670 26856 28439 27214 27214 27214
+b) White - Non-white eﬀects
+(1) (2) (3) (4) (5) (6)
+Test scores Study skills Behaviors Criminal arrest Index crime Incarceration
+Female 0.0105 ∗∗∗ 0.00196 -0.00729 0.000734 0.00185 -0.000448
+(0.00234) (0.00742) (0.00724) (0.00296) (0.00226) (0.00213)
+Non-white -0.0105 ∗∗∗ 0.0220∗∗ 0.0252∗∗ -0.00623∗ 0.000117 -0.000323
+(0.00287) (0.00830) (0.00887) (0.00317) (0.00243) (0.00231)
+Constant -0.00733 ∗∗∗ 0.00729 -0.110 ∗∗∗ 0.0173∗∗∗ 0.00511∗ 0.00186
+(0.00218) (0.00691) (0.00681) (0.00277) (0.00212) (0.00200)
+N teachers 39292 26167 27763 26477 26477 26477
+Notes: This table presents demographic predictors of teachers’ relative eﬀects on boys vs.
+girls (panel a) and white vs. non-white students (panel b). The outcome in each regression
+is the diﬀerence in the teacher-level average of ¯Yk
+jt across groups, with positive quantities
+indicating larger eﬀects on boys (in panel a) or white students (in panel b). Each regression
+includes all teachers where it is possible to estimate ¯Yk
+jt for each sub-group and where teacher
+demographics are available.
+14
+
+===== PAGE 61 / 71: rss_teachers_cjc.pdf =====
+
+Table A.13: Heterogeneity in teacher eﬀects on CJC
+Race Sex Econ. disadvantaged Arrest risk
+(1) (2) (3) (4) (5) (6) (7) (8)
+White Non-white Boys Girls Yes No High Low
+Any CJC 0.0391 0.0370 0.0412 0.0364 0.0364 0.0367 0.0443 0.0436
+(0.00195) (0.00184) (0.00259) (0.00161) (0.00131) (0.00134) (0.00225) (0.00178)
+Criminal arrest 0.0247 0.0358 0.0298 0.0311 0.0272 0.0297 0.0342 0.0263
+(0.00274) (0.00186) (0.00358) (0.00176) (0.00114) (0.00142) (0.00308) (0.00309)
+Index crime 0.0177 0.0248 0.0147 0.0239 0.0212 0.0209 0.0276 0.0113
+(0.00290) (0.00203) (0.00625) (0.00181) (0.000967) (0.00127) (0.00339) (0.00694)
+Incarceration 0.0172 0.0308 0.0156 0.0270 0.0211 0.0303 0.0320 0.0201
+(0.00267) (0.00142) (0.00512) (0.00136) (0.000696) (0.00102) (0.00285) (0.00380)
+Observations
+Standard errors in parentheses
+Notes: This table presents estimates of the standard deviations of teacher eﬀects on future CJC across various sub-populations:
+white vs. non-white (Columns 1 and 2), boys vs. girls (Columns 3 and 4), economically disadvantaged vs. not (Columns 5 and
+6), and students with high vs. low predicted risk of a future arrest (Columns 7 and 8). Analytic standard errors displayed in
+parentheses are estimated using the procedure described in Appendix C. Criminal arrest refers to any criminal interaction with
+the justice system between ages 16 and 21 (i.e., excluding traﬃc tickets and non-criminal violations). Traﬃc citations includes
+only non-criminal traﬃc violations. Index crimes includes arrests for Uniform Crime Reporting index crimes: aggravated assault,
+forcible rape, murder, robbery, arson, burglary, larceny/theft, and motor vehicle theft. Incarceration refers to any incarceration
+sentence in local jails or state prisons. Teacher eﬀect estimators include the full set of covariates described in Section 2.1 and
+using all available years for each outcome.
+15
+
+===== PAGE 62 / 71: rss_teachers_cjc.pdf =====
+
+B What does the covariance of EB posteriors es-
+timate?
+This appendix investigates whether covariances of latent teacher eﬀects across out-
+comes or student groups can be estimated using covariances of Empirical Bayes (EB)
+estimates of individual teachers’ eﬀects. We show that covariances between EB poste-
+riors can either under- or over-estimate covariances in latent eﬀects depending on the
+data generating process (DGP). In cases calibrated to our data, the degree of bias can
+be large and either negative or positive depending on the outcomes considered.
+We begin by examining the covariance of univariate EB posteriors, which are com-
+monly used in the literature (e.g., Jackson, 2018; Petek and Pope, 2021; Backes et al.,
+2022; Bates et al., 2022; Biasi et al., 2021). In the univariate case, it is simple to
+show analytically why the covariance of EB posteriors will diﬀer from covariances of
+teacher eﬀects due to either the shrinkage factors or correlated sampling error. Next,
+we examine the case of multivariate shrinkage that takes into account the covariance
+in teacher eﬀects across outcomes as well as the covariance in sampling errors. We cal-
+ibrate parameters to our setting and present simulations that illustrate the potential
+bias and how it changes with the sample size for each teacher.
+Consider ﬁrst a simple example using univariate EB posteriors. Suppose that outcome
+k of student i assigned to teacher j is determined by:
+Yk
+ij =αk
+j +ϵk
+i
+The distribution of teacher eﬀects αk
+j is assumed to follow:
+(
+αA
+j
+αC
+j
+)
+∼N
+((
+0
+0
+)
+,
+(
+(σA
+α )2 σAC
+α
+σAC
+α (σC
+α )2
+))
+The distribution of the individual heterogeneity ϵk
+i is given by:
+(
+ϵA
+i
+ϵC
+i
+)
+∼N
+((
+0
+0
+)
+,
+(
+(σA
+ϵ )2 σAC
+ϵ
+σAC
+ϵ (σC
+ϵ )2
+))
+For simplicity, assume that each teacher is assigned n students with outcomes gener-
+16
+
+===== PAGE 63 / 71: rss_teachers_cjc.pdf =====
+
+ated by this process. The average outcome of students assigned to teacher j is:
+¯Yk
+j =αk
+j + ¯uk
+j
+where ¯uk
+j =
+∑n
+i=1ϵk
+i 1(j(i)=j)
+n . Due to the normal-normal structure of the model, the
+univariate EB posterior for teacher j’s eﬀect on outcome k, or E[αj| ¯Yj], is simply
+λk
+EB ¯Yk
+j , where
+λk
+EB = (σk
+α)2
+(σk
+α)2 +Var (¯uk
+j )
+It follows immediately that the covariance of simple, univariate EB posterior means
+does not identify the covariance of latent teacher eﬀects, since
+Cov(λA
+EB ¯YA
+j ,λC
+EB ¯YC
+j ) =λA
+EBλC
+EB
+
+
+Cov. in teacher eﬀects
+  
+Cov(αA
+j,αC
+j ) +
+Cov. in sampling error
+  
+Cov
+(
+¯uA
+j, ¯uC
+j
+)
+  
+=Cov(ϵA
+i ,ϵC
+i )/n
+
+
+The direction of bias depends on two terms: attenuation due to λA
+EBλC
+EB, which
+falls between zero and one, and correlated sampling error Cov
+(
+¯uA
+j, ¯uC
+j
+)
+. When the
+latter is zero, the covariance of EB posteriors is attenuated toward zero (and the
+correlation is biased upwards) and could in principle be corrected by undoing multi-
+plication byλA
+EBλC
+EB, although this is rarely done. Since in general Cov
+(
+¯uA
+j, ¯uC
+j
+)
+(i.e.,
+Cov
+(
+ϵA
+i ,ϵC
+i
+)
+) can take any sign, the overall bias is unclear in general settings.
+In practice, researchers may use multivariate EB estimators that take account of data
+for both outcomes simultaneously. These estimators also fail to recover unbiased
+estimates of covariances in latent eﬀects. To show how, we construct an illustration
+based on the variance-covariance of teacher eﬀects and classroom-level sampling error
+in our data. Table B.1 reports estimates of both, with the latter in brackets. The
+variances of the classroom-level sampling error are large. Indeed, in some cases they
+are bigger than that of teacher eﬀects. Additionally, there is meaningful correlations
+in classroom-level sampling error of diﬀerent signs across outcomes.
+We use the estimated variance-covariance of teacher eﬀects and classroom-level sam-
+pling error to construct the implied covariance (and correlation) in EB posteriors from
+the normal-normal model described above for diﬀerent values ofn and examine how it
+17
+
+===== PAGE 64 / 71: rss_teachers_cjc.pdf =====
+
+Table B.1: Variance-covariance of latent teacher eﬀects and student-level heterogene-
+ity
+Test scores Behaviors Criminal arrest
+Test scores 0.121 [0.1391] 0.056 [0.0614] -0.008 [-0.0404]
+Behaviors 0.125 [0.2144] -0.202 [-0.1048]
+Criminal arrest 0.027 [0.0697]
+Notes: This table presents estimated standard deviations (diagonal elements) and correla-
+tions (oﬀ-diagonal elements) of teacher eﬀects and classroom-level sampling error (i.e., ¯uk
+j )
+for key outcomes. The former is reported without brackets, while the latter is reported in
+square brackets.
+relates to the true covariances (and correlations) of latent eﬀects. The EB estimates
+use a multivariate model that constructs posterior means as:
+E[(αA
+j,αB
+j )|( ¯YA
+j , ¯YB
+j )] = Σ12Σ−1
+22 ( ¯YA
+j , ¯YB
+j ) (B.1)
+where Σ12 =
+(
+σA
+α σAC
+α
+σAC
+α σC
+α
+)
+and Σ22 =
+(
+Var ( ¯YA
+j ) Cov( ¯YA
+j , ¯YB
+j )
+Cov( ¯YA
+j , ¯YB
+j ) Var ( ¯YB
+j )
+)
+.
+Figure B.1 reports the results. Each point in the ﬁgure shows the ratio between the co-
+variance (or correlation) of EB posterior means, orCov
+(
+E[αA
+j|( ¯YA
+j , ¯YB
+j )],E [αB
+j|( ¯YA
+j , ¯YB
+j )]
+)
+and the covariance (or correlation) of latent eﬀects, or Cov(αA
+j,αB
+j ), indicating the
+proportional degree of bias. The x-axis report the number of students assigned to
+each teacher (n).
+In Panel A, we impose that there is no correlated classroom-level sampling error across
+outcomes, so that Cov
+(
+¯uk
+j, ¯uk′
+j
+)
+(i.e.,Cov(ϵk
+i,ϵk′
+i ) = 0) for any two outcomes k andk′.
+As we would expect, the bias is decreasing with the number of students per teacher
+as the shrinkage factors converge to one and teacher-speciﬁc means converge to αk
+j .
+This pattern holds for the covariance estimates across all pairs of outcomes. However,
+even with 200 students per teacher, the magnitude of the bias is non-negligible.
+In Panel B, we re-introduce the correlations in classroom-level sampling error reported
+in Table B.1. The results are consistent across the outcomes considered. The biases
+from correlation in classroom-level sampling error across outcomes and the shrinkage
+factors are large and persistent. Importantly, for the covariance of test scores and
+criminal arrest eﬀects the bias is large even with 1,000 students per teacher, implying
+18
+
+===== PAGE 65 / 71: rss_teachers_cjc.pdf =====
+
+very accurate estimates of each teacher’s eﬀects.
+Panels C and D report the bias of estimates of correlations rather than covariances
+and are analogous to Panels A and B. The results are broadly similar and show
+persistent and meaningful bias even with a large number of students per teacher. For
+the correlation between eﬀects on behaviors and test scores, the biases from correlated
+classroom-level sampling error across outcomes and the shrinkage factors happen to
+cancel each other out. The former biases the estimate up, while the latter pulls the
+estimate towards zero. However, for the other correlations the biases do not cancel
+out. Importantly, for the correlation in test scores and criminal arrest the bias is
+meaningful even with 1,000 students per teacher, implying very accurate estimates of
+each teacher’s eﬀects.
+19
+
+===== PAGE 66 / 71: rss_teachers_cjc.pdf =====
+
+Figure B.1: Bias of the covariance of EB posterior means as an estimator of the
+covariance of latent teacher eﬀects
+Bias in covariances
+0 200 400 600 800 1000
+Number of students in classroom
+0.2
+0.4
+0.6
+0.8
+1.0
+estimate/true Cov. 
+ in latent teacher effects
+Cov(Crime effects, T est scores effects)
+Cov(T est scores effects, Behavior effects)
+Cov(Crime effects, Behavior effects)
+Estimated Cov. equals true one
+0 200 400 600 800 1000
+Number of students in classroom
+0.2
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+estimate/true Cov. 
+ in latent teacher effects
+Cov(Crime effects, T est scores effects)
+Cov(T est scores effects, Behavior effects)
+Cov(Crime effects, Behavior effects)
+Estimated Cov. equals true one
+A. Imposing zero covariance B. No restrictions
+between sampling errors across outcomes
+Bias in correlations
+0 200 400 600 800 1000
+Number of students in classroom
+1.0
+1.2
+1.4
+1.6
+1.8
+2.0
+2.2
+2.4
+estimate/true Corr. 
+ in latent teacher effects
+Corr(Crime effects, T est scores effects)
+Corr(T est scores effects, Behavior effects)
+Corr(Crime effects, Behavior effects)
+Estimated Corr. equals true one
+0 200 400 600 800 1000
+Number of students in classroom
+2.0
+1.5
+1.0
+0.5
+0.0
+0.5
+1.0
+1.5
+estimate/true Corr. 
+ in latent teacher effects
+Corr(Crime effects, T est scores effects)
+Corr(T est scores effects, Behavior effects)
+Corr(Crime effects, Behavior effects)
+Estimated Corr. equals true one
+C. Imposing zero covariance D. No restrictions
+between sampling errors across outcomes
+Notes: This ﬁgure shows results of calculations from the data generating process described
+in Appendix B. The x-axis is the number of students assigned to each teacher. The y-
+axis compares the covariance (or correlation) in latent teacher eﬀects across outcomes A
+and B (e.g., test scores and criminal arrest between ages 16 to 21) to the covariance (or
+correlation) in EB posterior means. Each dot plots the ratio of covariances (or correlations),
+Cov(αA
+j,αB
+j ) to Cov
+(
+E[αA
+j|( ¯YA
+j , ¯YB
+j )],E [αB
+j|( ¯YA
+j , ¯YB
+j )]
+)
+. Panel A imposes that there is no
+correlation in classroom-level sampling error, while Panel B uses estimates from our data
+reported in Table B.1. Panels C and D are analogous to Panels A and B but report results
+for correlations rather than covariances. 20
+
+===== PAGE 67 / 71: rss_teachers_cjc.pdf =====
+
+C Inference on variance components
+Our standard errors rely on second-order U-statistic representations of the estimators
+in Equations 4 and 7. Speciﬁcally, the estimator for the covariance in latent eﬀects
+between two outcomes (e.g., A and C) or the variance of latent eﬀects (e.g., when
+A =C) can be written as:
+ˆCov(aA
+j,aC
+j ) =
+∑
+i
+∑
+k̸=i
+CAC
+ik YA
+i YC
+k
+CAC
+ik =
+
+
+
+J−1
+J 2
+1
+|T A
+j(i)||T C
+j(k)|−|T A
+j(i)∩T C
+j(k)| if j(i) =j(k)
+−1
+|T A
+j(i)||T C
+j(k)|J 2 if j(i)̸=j(k)
+where, with a slight abuse of notation, i andk index teacher-year mean residuals, i.e.,
+Yk
+i = ¯Yk
+j(i)t(i), if outcome k is observed for teacher j in year t and zero otherwise, J
+is the total number of teachers, and Tk
+j is the set of time periods where outcome k is
+observed for teacher j.
+The sampling covariance between any two covariance (or variance) estimates of eﬀects
+on outcomes A and B and C and D can be expressed as:
+Cov
+(
+ˆCov(aA
+j,aB
+j )−Cov(aA
+j,aB
+j ), ˆCov(aC
+j,aD
+j )−Cov(aC
+j,aD
+j
+)
+=Cov
+(∑
+i
+vA
+i
+∑
+k̸=i
+CAB
+ik aB
+j(k) +
+∑
+i
+vB
+i
+∑
+k̸=i
+CBA
+ik aA
+j(k) +
+∑
+i
+vA
+i
+∑
+k̸=i
+CAB
+ik vB
+k,
+∑
+i
+vC
+i
+∑
+k̸=i
+CCD
+ik aD
+j(k) +
+∑
+i
+vD
+i
+∑
+k̸=i
+CDC
+ik aC
+j(k) +
+∑
+i
+vC
+i
+∑
+k̸=i
+CCD
+ik vD
+k
+)
+=
+∑
+i
+σAC
+i
+(∑
+k̸=i
+CAB
+ik aB
+j(k)
+)(∑
+k̸=i
+CCD
+ik aD
+j(k)
+)
++
+∑
+i
+σAD
+i
+(∑
+k̸=i
+CAB
+ik aB
+j(k)
+)(∑
+k̸=i
+CDC
+ik aC
+j(k)
+)
++
+∑
+i
+σBC
+i
+(∑
+k̸=i
+CBA
+ik aA
+j(k)
+)(∑
+k̸=i
+CCD
+ik aD
+j(k)
+)
++
+∑
+i
+σBD
+i
+(∑
+k̸=i
+CBA
+ik aA
+j(k)
+)(∑
+k̸=i
+CDC
+ik aC
+j(k)
+)
++
+∑
+i
+σAD
+i
+∑
+k̸=i
+CAB
+ik CDC
+ik σBC
+k +
+∑
+i
+σAC
+i
+∑
+k̸=i
+CAB
+ik CCD
+ik σBD
+k
+where as in the main text we deﬁne ¯Yk
+j(i)t(i) = ak
+j(i) + ˆ¯uk
+j(i)t(i) and deﬁne σAB
+i as the
+covariance between ˆ¯uA
+j(i)t(i) and ˆ¯uB
+j(i)t(i).
+Special cases of this expression deliver sampling variances for objects such asVar (ˆaA
+j ),
+21
+
+===== PAGE 68 / 71: rss_teachers_cjc.pdf =====
+
+which can be written as:
+Var ( ˆVar (aA
+j )−Var (aA
+j )) = 4
+∑
+i
+(σA
+i )2
+(∑
+k̸=i
+CAA
+ik aA
+j(k)
+)2
++ 2
+∑
+i
+∑
+k̸=i
+(CAA
+ik )2(σA
+i )2(σA
+k )2
+where (σA
+i )2 =σAA
+i .
+C.1 Plug-in estimator of standard errors
+As noted in Kline et al. (2020), plug-in estimators of these variances using and ˆak
+j and
+ˆσkl
+j will generically be biased since, for example, ( ˆλml
+i )2 =
+(∑
+k̸=iCml
+ik ¯Yl
+k
+)2
+is not an
+unbiased estimate of (λml
+i )2 =
+(∑
+k̸=iCml
+ik al
+j(k)
+)2
+. It is straightforward to construct a
+correction for these terms, however, since for exampleE[(ˆλml
+i )2]−Var (ˆλml
+i ) =E[ˆλml
+i ]2,
+and:
+Var (ˆλml
+i ) =
+∑
+k̸=i
+(Cml
+ik )2σll
+k
+We can express the bias correction for the product of λml
+i and λgh
+i analogously. We
+use these corrections to construct unbiased estimates of ( λml
+i )2 and λml
+i λgh
+i . We use
+the same unbiased estimates of (σk
+i )2 and σkl
+i as in the main text to form our plug-in
+estimators of sampling variances and covariances. The remaining bias in the resulting
+plug-in estimate of sampling variances stems from terms such as (ˆσk
+i )4. Though it is
+possible to construct unbiased estimates of these objects using split sample techniques,
+we do not do so. As discussed in Kline et al. (2020), using the biased plug-in versions of
+these terms results in conservative inference but avoids the need to subset to teachers
+with suﬃcient observations to construct split sample estimates of these terms.
+C.2 Standard errors for functions of variance-covariance es-
+timates
+Wherever possible, we use the delta method to construct standard errors for functions
+of multiple variance-covariance components, such as a correlation coeﬃcient. In some
+cases, however, we use a parametric bootstrap assuming that variance-covariance es-
+timates are normally distributed around the point estimates, with sampling variance-
+covariance structure given by estimated sampling variance-covariances. Doing so pro-
+vides a convenient way to generate standard errors for more complicated objects, such
+as multivariate regression coeﬃcients.
+22
+
+===== PAGE 69 / 71: rss_teachers_cjc.pdf =====
+
+D Policy simulation details
+This appendix includes technical details for the implementation of the simulations
+discussed in Section 5. These simulations examine the implications for a given long-
+run outcome of replacing the bottom 5% of teachers, according to a given measure
+of quality, with an average teacher for exposed students. In Section 5, we discuss
+ranking teachers based on three diﬀerent options: (i) an index based on teachers’
+true direct eﬀect on long-run outcomes, (ii) an index using teachers’ true eﬀects on
+short-run outcomes, and (iii) an index using Empirical Bayes estimates of teacher
+eﬀects on short-run outcomes. In all cases, we assume that all short- and long-run
+teacher eﬀects are jointly normally distributed, allowing us to characterize the full
+distribution of teacher quality using our variance estimates.
+D.1 Index using true teacher eﬀects on long-run outcomes
+In this case, the calculations are straightforward. We are interested in the impact
+of replacing the bottom 5% of teachers according to the quality index in Equation
+12 with the average teacher. Thus, when estimating the eﬀect of such a policy on
+teachers’ eﬀect on college attendance, for example, the estimand of interest is:
+E[µA]−E[µA|ωµC + (1−ω)µA <q Ideal long-run
+0.05 ]
+where qIdeal long-run
+0.05 is the ﬁfth percentile of the distribution of µC + (1−ω)µA. The
+calculation is straightforward given the properties of a bivariate normal distribution
+and the variance-covariance matrix of (µA,ωµC + (1−ω)µA).
+D.2 Index using true teacher eﬀects on short-run outcomes
+In this case, the calculations are also straightforward. We are interested in the impact
+of replacing the bottom 5% of teachers according to the quality index in Equation 13
+with average teachers. Thus, when estimating the eﬀect of such a policy on teachers’
+eﬀect on college attendance, for example, the estimand of interest is:
+E[µA]−E[µA|ω1µT +ω2µB + (1−ω1−ω2)µS <q Ideal short-run
+0.05 ]
+where qIdeal short-run
+0.05 is the ﬁfth percentile of the distribution of ω1µT +ω2µB + (1−
+ω1−ω2)µS. The calculation is straightforward given the properties of a bivariate
+normal distribution and the variance-covariance matrix of ( µA,ω 1µT +ω2µB + (1−
+ω1−ω2)µS).
+23
+
+===== PAGE 70 / 71: rss_teachers_cjc.pdf =====
+
+D.3 Index using Empirical Bayes estimates of eﬀects on short-
+run outcomes
+In this case, the calculations require a few steps. Recall that we are interested in the
+impact of replacing the bottom 5% of teachers with average teachers according to an
+Empirical Bayes estimate of the quality index in Equation 13.
+The policy maker observes the performance of the students of teacherj along multiple
+dimensions: (ˆµT, ˆµB, ˆµS). Thus, the ﬁrst step is forming an Empirical Bayes estimate
+of the teacher quality index. We assume that all random variables are normally
+distributed and that teacher eﬀect estimates are the sum of true teacher eﬀects and
+independent, identically distributed noise. The Empirical Bayes estimate is:
+IndexEB short-run
+j =E[ω1µT +ω2µB + (1−ω1−ω2)µS
+  
+=IndexIdeal short-run
+j
+|ˆµT, ˆµB, ˆµS] (D.1)
+=E[IndexIdeal short-run
+j ] +b′
+I
+[
+(ˆµT, ˆµB, ˆµS)−E[(ˆµT, ˆµB, ˆµS)]
+]
+(D.2)
+wherebI is the linear projection of IndexEB short-run
+j on (ˆµT, ˆµB, ˆµS), i.e., Σ−1
+ˆµˆµΣˆµIndexEB short-run
+j
+with ˆµ = (ˆµT, ˆµB, ˆµS). The last equality follows from the properties of the multivari-
+ate normal distribution. Note, that as Index EB short-run
+j is a linear combination of
+normally distributed variables, then it is also normally distributed.
+The second step is to predict the eﬀect of conducting a policy that replaces all teachers
+with IndexEB short-run
+j that is below the 0.05 percentile with the average teacher. Since
+IndexEB short-run
+j is normally distributed, calculating its ﬁfth percentile is straightfor-
+ward.
+To formulate our best predictor of the impact of the policy on an outcome of interest
+Y , we use also teachers’ observed performance. We construct our estimator in two
+steps. First, we calculate the Empirical Bayes estimate of Y given (ˆµT, ˆµB, ˆµS):
+ˆY EB short-run =E[Y|ˆµT, ˆµB, ˆµS] (D.3)
+=E[Y ] +b′
+Y
+[
+(ˆµT, ˆµB, ˆµS)−E[(ˆµT, ˆµB, ˆµS)]
+]
+(D.4)
+wherebY is the linear projection ofY onto (ˆµT, ˆµB, ˆµS). The second step is to calculate
+24
+
+===== PAGE 71 / 71: rss_teachers_cjc.pdf =====
+
+the predicted change in Y due to the replacement policy:
+E[ ˆY EB short-run]  
+=E[Y ]
+−E[ ˆY EB short-run|IndexEB short-run
+j <q EB of short-run
+0.05 ] (D.5)
+= Cov( ˆY EB short-run, IndexEB short-run
+j )
+Var
+(
+IndexEB short-run
+j
+) E[IndexEB short-run
+j |IndexEB short-run
+j <q EB of short-run
+0.05 ]
+= Cov( ˆY EB short-run, IndexEB short-run
+j )
+Var
+(
+IndexEB short-run
+j
+) σIndexEB short-run
+j
+φ
+(
+qEB of short-run
+0.05 −E[IndexEB short-run
+j ]
+σIndexEB short-run
+j
+)
+Φ
+(
+qEB of short-run
+0.05 −E[IndexEB short-run
+j ]
+σIndexEB short-run
+j
+)
+and note that:
+Cov( ˆY EB short-run, IndexEB short-run
+j ) =Cov(b′
+I ˆµ,b′
+Y ˆµ)
+Implementing this homoscedastic EB-version of retention policies requires only esti-
+mating the variance-covariance of (ˆµT, ˆµB, ˆµS), which can be directly estimated given
+individual teacher eﬀect estimates, and the previously estimated variance-covariances
+of teacher eﬀects on short-run outcomes.
+25

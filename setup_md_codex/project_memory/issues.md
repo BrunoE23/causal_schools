@@ -70,3 +70,14 @@
 - Why it matters: The lottery-risk sample is currently defined only among entrants with probability rows. If 2017 process entrants are valid lottery participants, excluding them reduces the sample. If they are not part of the grade-9 assignment window we can instrument, then `timely_sae` or the scalar-IV sample documentation should make this exclusion explicit.
 - Current workaround: Risk and support calculations use the matched probability files for 2018-2021. This yields 296,173 entrants with probability rows and 163,600 at-risk entrants before school-support trimming.
 - Follow-up: Check whether 2017 SAE probability simulations exist or whether `sae_proceso == 2017` should be excluded/reclassified for the grade-8 cohort design. Then update the sample definition in `univ_gr8_df`/`universe_reg_df` documentation and the scalar-IV construction scripts if needed.
+
+### Repair missing `AREA_CARRERA_GENERICA` for `program_income`
+
+- Status: Open
+- Date noted: 2026-07-07
+- Context: The `program_income` outcome uses MiFuturo predicted income for matriculated students. The preferred prediction uses `institution + AREA_CARRERA_GENERICA`, with fallback tiers for unsupported programs.
+- What was found: In the `m1` person-level output, 51,694 matriculated students do not have an estimated area FE and therefore fall to institution FE or global MiFuturo mean. The largest subgroup is 12,568 students with blank/missing `AREA_CARRERA_GENERICA_m1`; all of these have `program_info_found_m1 == FALSE`, so this appears to be a program-info mapping gap rather than a substantive missing area category.
+- Largest blank-area programs: `INGENIERIA CIVIL INDUSTRIAL` (608 students), `ADMINISTRACION EN TURISMO Y HOSPITALIDAD` (499), `BACHILLERATO EN CIENCIAS DE LA SALUD` (429), `DERECHO` (422), `TECNICO EN EDUCACION PARVULARIA 1 Y 2 BASICO` (398), `INGENIERIA CIVIL INFORMATICA` (389), `INGENIERIA EN REDES Y TELECOMUNICACIONES` (347), `MEDICINA` (327), `INGENIERIA EN ADMINISTRACION DE EMPRESAS` (313), and `ARQUITECTURA` (231).
+- Why it matters: These are ordinary programs with plausible generic areas. Leaving them to institution-only or global-mean fallback weakens the interpretation of `program_income` as program/field expected income.
+- Current workaround: Keep the hierarchy and preserve `program_income_source_*` diagnostics so regressions can report or exclude fallback-heavy cases.
+- Follow-up: Repair the `COD_SIES` to `AREA_CARRERA_GENERICA` mapping for high-volume blank-area programs, rerun `03_construct_person_level_income_outcomes.R`, and recheck the number of students using institution/global fallbacks. Consider dropping institution-only FE from the main hierarchy after mapping repair if area coverage becomes adequate.

@@ -1,0 +1,11 @@
+income_source,enrollment_measure,n_students,n_matriculated,n_not_matriculated,n_strict_two_way_fe_matriculated,n_missing_after_rule,share_missing_after_rule,mean_income_clp,median_income_clp
+matriculated_two_way_fe_institution_area_generica,first_enrollment,432512,432512,0,432512,0,0,1559630.80165839,1419392.1957505
+not_matriculated_minimum_wage_floor,first_enrollment,317948,0,317948,0,0,0,350000,350000
+matriculated_fallback_area_generica_fe,first_enrollment,142206,142206,0,0,0,0,1251564.55975155,1252025.70600038
+matriculated_fallback_institution_fe,first_enrollment,40822,40822,0,0,0,0,1636501.11967633,1643073.16398989
+matriculated_fallback_global_mifuturo_mean,first_enrollment,10872,10872,0,0,0,0,1443832.59911894,1443832.59911894
+matriculated_two_way_fe_institution_area_generica,last_enrollment,428015,428015,0,428015,0,0,1547361.84618156,1386184.73384649
+not_matriculated_minimum_wage_floor,last_enrollment,317948,0,317948,0,0,0,350000,350000
+matriculated_fallback_area_generica_fe,last_enrollment,147898,147898,0,0,0,0,1254349.05917715,1252025.70600038
+matriculated_fallback_institution_fe,last_enrollment,38593,38593,0,0,0,0,1627001.34918692,1643073.16398989
+matriculated_fallback_global_mifuturo_mean,last_enrollment,11906,11906,0,0,0,0,1443832.59911894,1443832.59911894

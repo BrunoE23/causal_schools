@@ -168,6 +168,56 @@ Current workflow rule:
 
 The older k-support probability-control matrix path is retained only as a legacy or robustness path. It constructs wide `prob_<rbd>` and `iszero_<rbd>` controls and uses the restricted supported-school set. That path should not be described as the current default.
 
+### EB-Shrunken School-Value Robustness
+
+An Empirical-Bayes robustness path now shrinks the stage-1 adjusted observational school value-added estimates before constructing the scalar IV variables.
+
+This path is separate from the current main expected-VA workflow.
+It should not be described as hybrid causal EB or IV VAM.
+It validates an EB-shrunken observational school-value index along the same SAE lottery margin.
+
+The workflow is:
+
+- rerun `code/codex/school_rbd_observational_values/01_construct_school_rbd_values.R` so the school-value file includes `controlled_value_added_se`
+- run `code/codex/empirical_bayes_school_va/01_construct_eb_school_values.R`
+- run `code/codex/empirical_bayes_school_va/02_run_expected_va_scalar_iv_eb.R`
+
+For outcome `m`, the EB school value is constructed from the adjusted All-sample value `Vhat_s^m = controlled_value_added_centered_student` and its stage-1 regression SE.
+The current SE is:
+
+`controlled_value_added_se = SE(controlled_value_added_centered_student)`
+
+Because `fixef()` returns the fixed-effect point estimates but not their SEs, the constructor runs an auxiliary regression with `school_rbd` entered as explicit dummies and the remaining fixed effects still absorbed.
+It uses `lfe::felm()` and `lfe::getfe(se = TRUE)` with a custom estimable function for the student-weighted centered school effect.
+The relevant SE is not the SE of a raw reference-normalized fixed-effect level.
+It is the regression-derived uncertainty of `school FE - student-weighted mean(school FE)`, matching `controlled_value_added_centered_student`.
+The current stage-1 SE method label is `lfe_getfe_school_rbd_centered_student_iid_bN100`.
+`controlled_value_added_resid_sd` is only a diagnostic column.
+
+For each outcome, the EB constructor estimates:
+
+`tau_m^2 = max(weighted Var(Vhat_s^m) - weighted mean(se_s^2), 0)`
+
+using `n_students_regression` as the weight, and then sets:
+
+`lambda_s^m = tau_m^2 / (tau_m^2 + se_s^2)`
+
+`V_EB_s^m = mean_m + lambda_s^m * (Vhat_s^m - mean_m)`
+
+The EB IV defines:
+
+- `A_i^EB = V_EB_{most_time_RBD}^m`
+- `O_i^EB = V_EB_{rbd_treated_1R}^m`
+- `E_i^EB = sum_s p_is V_EB_s^m`
+
+and instruments `A_i^EB` with `O_i^EB`, controlling for `E_i^EB`.
+
+Because EB shrinkage compresses the school-value scale, EB and non-EB pass-through coefficients should be compared together with the SD of the corresponding school-value index.
+
+The EB path includes `log_program_income_clp_m1` as the program-income outcome.
+The current program-income EB-IV implementation is fully in R because the Stata license is temporarily unavailable.
+Do not rely on `.do` scripts for current program-income EB regressions unless the Stata environment is restored and the R results are intentionally cross-checked.
+
 ### Current Scalar Offer-Instrument Normalization
 
 The current first-pass scalar IV uses the value of the attended school as the endogenous treatment:

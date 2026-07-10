@@ -2,10 +2,19 @@ suppressPackageStartupMessages({
   library(data.table)
   library(dplyr)
   library(fixest)
+  library(lfe)
   library(purrr)
   library(readr)
   library(tidyr)
 })
+
+parse_env_list <- function(var) {
+  value <- Sys.getenv(var, unset = "")
+  if (!nzchar(trimws(value))) {
+    return(character())
+  }
+  trimws(strsplit(value, ",", fixed = TRUE)[[1]])
+}
 
 # ------------------------- Configuration -------------------------
 
@@ -13,15 +22,33 @@ data_wd <- Sys.getenv(
   "CAUSAL_SCHOOLS_DATA_WD",
   unset = "C:/Users/xd-br/Dropbox/causal_schools"
 )
+repo_wd <- Sys.getenv(
+  "CAUSAL_SCHOOLS_REPO_WD",
+  unset = getwd()
+)
 
 input_path <- file.path(data_wd, "data/clean/univ_gr8_df.csv")
 middle_school_controls_path <- file.path(
   data_wd,
   "data/clean/middle_school_controls/middle_school_controls.csv"
 )
+program_income_path <- Sys.getenv(
+  "PROGRAM_INCOME_OUTCOMES_PATH",
+  unset = file.path(
+    repo_wd,
+    "output/tables/mifuturo_matricula_income/mifuturo_person_level_income_outcomes.csv"
+  )
+)
 output_dir <- file.path(data_wd, "data/clean/school_rbd_observational_values")
-output_path <- file.path(output_dir, "school_rbd_observational_values.csv")
-score_diagnostics_path <- file.path(output_dir, "score_scale_diagnostics_by_year.csv")
+output_path <- Sys.getenv(
+  "SCHOOL_RBD_VALUES_OUTPUT_PATH",
+  unset = file.path(output_dir, "school_rbd_observational_values.csv")
+)
+score_diagnostics_path <- Sys.getenv(
+  "SCHOOL_RBD_SCORE_DIAGNOSTICS_OUTPUT_PATH",
+  unset = file.path(output_dir, "score_scale_diagnostics_by_year.csv")
+)
+configured_outcome_filter <- parse_env_list("SCHOOL_VA_OUTCOMES")
 
 school_var <- "most_time_RBD"
 school_definition <- "most_time_RBD"
@@ -90,6 +117,7 @@ controlled_value_added_outcomes <- c(
   "z_year_leng_max",
   "z_year_leng_math_total",
   "stem_enrollment_m1",
+  "log_program_income_clp_m1",
   "program_certified_years_m1",
   "inst_certified_years_m1"
 )
@@ -147,6 +175,18 @@ control_vars <- c(
 )
 
 fixed_effect_vars <- c("school_rbd", middle_school_fixed_effect_vars)
+school_value_added_se_vcov <- "iid"
+school_value_added_se_bootstrap_reps <- as.integer(Sys.getenv(
+  "SCHOOL_VA_SE_BOOTSTRAP_REPS",
+  unset = "100"
+))
+if (is.na(school_value_added_se_bootstrap_reps) || school_value_added_se_bootstrap_reps <= 0) {
+  stop("SCHOOL_VA_SE_BOOTSTRAP_REPS must be a positive integer.", call. = FALSE)
+}
+school_value_added_se_estimable_function <- Sys.getenv(
+  "SCHOOL_VA_SE_EF",
+  unset = "school_centered_student"
+)
 
 # Keep gender-specific and gender-gap VA on hold unless explicitly requested.
 gender_gap_base_outcomes <- character()
@@ -176,6 +216,163 @@ mean_or_na <- function(x) {
     return(NA_real_)
   }
   mean(x, na.rm = TRUE)
+}
+
+read_program_income_outcomes <- function(path) {
+  if (!file.exists(path)) {
+    stop(
+      "Program income outcome file does not exist: ",
+      path,
+      ". Run code/codex/mifuturo_matricula_income/03_construct_person_level_income_outcomes.R first.",
+      call. = FALSE
+    )
+  }
+
+  keep_cols <- c(
+    "MRUN",
+    "program_income_clp_m1",
+    "log_program_income_clp_m1",
+    "program_income_source_m1",
+    "program_income_missing_m1"
+  )
+  header <- names(fread(path, nrows = 0, showProgress = FALSE))
+  missing_cols <- setdiff(keep_cols, header)
+  if (length(missing_cols) > 0) {
+    stop(
+      "Program income outcome file is missing required columns: ",
+      paste(missing_cols, collapse = ", "),
+      call. = FALSE
+    )
+  }
+
+  out <- fread(path, select = keep_cols, na.strings = c("", "NA"), showProgress = FALSE) %>%
+    as_tibble() %>%
+    mutate(MRUN = as.character(MRUN))
+
+  if (anyDuplicated(out$MRUN) > 0) {
+    stop("Program income outcome file is not unique at MRUN level.", call. = FALSE)
+  }
+
+  out
+}
+
+estimate_school_regression_se <- function(regression_data,
+                                          outcome,
+                                          controls,
+                                          fixed_effect_vars,
+                                          regression_counts,
+                                          vcov_type = "iid",
+                                          bootstrap_reps = school_value_added_se_bootstrap_reps,
+                                          estimable_function = school_value_added_se_estimable_function) {
+  if (vcov_type != "iid") {
+    return(tibble(
+      school_rbd = regression_counts$school_rbd,
+      controlled_value_added_se = NA_real_,
+      controlled_value_added_se_method = paste0(
+        "lfe_getfe_school_rbd_",
+        vcov_type,
+        "_unsupported"
+      )
+    ))
+  }
+
+  se_formula <- as.formula(
+    paste0(
+      outcome,
+      " ~ ",
+      paste(controls, collapse = " + "),
+      " | ",
+      paste(fixed_effect_vars, collapse = " + ")
+    )
+  )
+
+  se_model <- tryCatch(
+    {
+      fit <- felm(se_formula, data = as.data.frame(regression_data))
+      fit$call$formula <- se_formula
+      fit
+    },
+    error = function(e) e
+  )
+  if (inherits(se_model, "error")) {
+    return(tibble(
+      school_rbd = regression_counts$school_rbd,
+      controlled_value_added_se = NA_real_,
+      controlled_value_added_se_method = "lfe_getfe_school_rbd_iid_failed"
+    ))
+  }
+
+  if (estimable_function == "school_centered_student") {
+    alpha_template <- getfe(se_model, se = FALSE, ef = "ref")
+    school_rows <- which(alpha_template$fe == "school_rbd")
+    school_ids <- as.character(alpha_template$idx[school_rows])
+    weight_lookup <- regression_counts$n_students_regression
+    names(weight_lookup) <- as.character(regression_counts$school_rbd)
+    school_weights <- as.numeric(weight_lookup[school_ids])
+    school_weights[is.na(school_weights)] <- 0
+    if (sum(school_weights) <= 0) {
+      school_weights <- rep(1, length(school_rows))
+    }
+    school_weights <- school_weights / sum(school_weights)
+
+    school_centered_student_ef <- function(v, addnames) {
+      school_values <- v[school_rows]
+      out <- school_values - sum(school_weights * school_values)
+      if (addnames) {
+        names(out) <- paste0("school_rbd.", school_ids)
+      }
+      out
+    }
+
+    school_se_raw <- getfe(
+      se_model,
+      se = TRUE,
+      ef = school_centered_student_ef,
+      bN = bootstrap_reps
+    )
+    school_se <- tibble(
+      term = rownames(school_se_raw),
+      controlled_value_added_se = school_se_raw$se
+    ) %>%
+      transmute(
+        school_rbd = suppressWarnings(as.numeric(sub("^school_rbd\\.", "", term))),
+        controlled_value_added_se
+      )
+    se_method <- paste0(
+      "lfe_getfe_school_rbd_centered_student_iid_bN",
+      bootstrap_reps
+    )
+  } else {
+    school_se <- getfe(
+      se_model,
+      se = TRUE,
+      ef = estimable_function,
+      bN = bootstrap_reps
+    ) %>%
+      filter(fe == "school_rbd") %>%
+      transmute(
+        school_rbd = suppressWarnings(as.numeric(as.character(idx))),
+        controlled_value_added_se = se
+      )
+    se_method <- paste0(
+      "lfe_getfe_school_rbd_iid_ef_",
+      estimable_function,
+      "_bN",
+      bootstrap_reps
+    )
+  }
+
+  regression_counts %>%
+    select(school_rbd) %>%
+    left_join(school_se, by = "school_rbd") %>%
+    mutate(
+      controlled_value_added_se = if_else(
+        is.nan(controlled_value_added_se),
+        NA_real_,
+        controlled_value_added_se
+      ),
+      controlled_value_added_se_method = se_method
+    )
 }
 
 standardize_gender_indicator <- function(x,
@@ -373,6 +570,7 @@ estimate_school_value_added <- function(data,
                                         controls,
                                         control_vars,
                                         fixed_effect_vars = "school_rbd",
+                                        school_se_vcov = school_value_added_se_vcov,
                                         analysis_sample = "All") {
   regression_data <- data %>%
     select(all_of(fixed_effect_vars), all_of(outcome), all_of(control_vars)) %>%
@@ -391,6 +589,9 @@ estimate_school_value_added <- function(data,
       analysis_sample = analysis_sample,
       outcome = outcome,
       controlled_value_added = numeric(),
+      controlled_value_added_se = numeric(),
+      controlled_value_added_resid_sd = numeric(),
+      controlled_value_added_se_method = character(),
       controlled_value_added_centered = numeric(),
       controlled_adjusted_mean = numeric(),
       n_students_regression = integer(),
@@ -410,9 +611,30 @@ estimate_school_value_added <- function(data,
 
   model <- feols(model_formula, data = regression_data, notes = FALSE)
   school_fe <- fixef(model)[["school_rbd"]]
+  model_obs <- obs(model)
+  regression_used_data <- regression_data[model_obs, , drop = FALSE]
+  regression_used_data$.model_resid <- as.numeric(residuals(model))
 
-  regression_counts <- regression_data %>%
-    count(school_rbd, name = "n_students_regression")
+  regression_counts <- regression_used_data %>%
+    group_by(school_rbd) %>%
+    summarise(
+      n_students_regression = n(),
+      controlled_value_added_resid_sd = sd(.model_resid, na.rm = TRUE),
+      .groups = "drop"
+    )
+  model_df <- df.residual(model)
+  if (is.null(model_df) || is.na(model_df) || model_df <= 0) {
+    model_df <- nrow(regression_used_data)
+  }
+  model_resid_sd <- sqrt(sum(regression_used_data$.model_resid^2, na.rm = TRUE) / model_df)
+  school_regression_se <- estimate_school_regression_se(
+    regression_data = regression_used_data,
+    outcome = outcome,
+    controls = controls,
+    fixed_effect_vars = fixed_effect_vars,
+    regression_counts = regression_counts,
+    vcov_type = school_se_vcov
+  )
 
   fe_values <- tibble(
     school_rbd = as.numeric(names(school_fe)),
@@ -421,7 +643,15 @@ estimate_school_value_added <- function(data,
     controlled_value_added = as.numeric(school_fe),
     n_students_regression_total = nobs(model)
   ) %>%
-    left_join(regression_counts, by = "school_rbd")
+    left_join(regression_counts, by = "school_rbd") %>%
+    left_join(school_regression_se, by = "school_rbd") %>%
+    mutate(
+      controlled_value_added_resid_sd = if_else(
+        is.na(controlled_value_added_resid_sd),
+        model_resid_sd,
+        controlled_value_added_resid_sd
+      )
+    )
 
   fe_weighted_mean <- weighted.mean(
     fe_values$controlled_value_added,
@@ -429,7 +659,7 @@ estimate_school_value_added <- function(data,
     na.rm = TRUE
   )
   fe_school_mean <- mean(fe_values$controlled_value_added, na.rm = TRUE)
-  outcome_mean <- mean(regression_data[[outcome]], na.rm = TRUE)
+  outcome_mean <- mean(regression_used_data[[outcome]], na.rm = TRUE)
   raw_outcome_mean <- mean(data[[outcome]], na.rm = TRUE)
 
   fe_values %>%
@@ -632,6 +862,11 @@ df <- fread(
 ) %>%
   as_tibble()
 
+program_income_outcomes <- read_program_income_outcomes(program_income_path)
+df <- df %>%
+  mutate(MRUN = as.character(MRUN)) %>%
+  left_join(program_income_outcomes, by = "MRUN")
+
 if (!file.exists(middle_school_controls_path)) {
   stop(
     "Middle-school controls file does not exist: ",
@@ -718,12 +953,34 @@ analytic <- field_result$data
 accreditation_result <- add_accreditation_outcomes(analytic)
 analytic <- accreditation_result$data
 
+program_income_specs <- tibble(
+  outcome = intersect(
+    c("program_income_clp_m1", "log_program_income_clp_m1"),
+    names(analytic)
+  ),
+  outcome_family = "program_income"
+)
+
 outcome_specs <- bind_rows(
   score_result$outcome_specs,
   field_result$outcome_specs,
-  accreditation_result$outcome_specs
+  accreditation_result$outcome_specs,
+  program_income_specs
 ) %>%
   distinct(outcome, .keep_all = TRUE)
+
+if (length(configured_outcome_filter) > 0) {
+  missing_filtered_outcomes <- setdiff(configured_outcome_filter, outcome_specs$outcome)
+  if (length(missing_filtered_outcomes) > 0) {
+    stop(
+      "SCHOOL_VA_OUTCOMES includes outcomes not found in the analytic data: ",
+      paste(missing_filtered_outcomes, collapse = ", "),
+      call. = FALSE
+    )
+  }
+  outcome_specs <- outcome_specs %>%
+    filter(outcome %in% configured_outcome_filter)
+}
 
 if (nrow(outcome_specs) == 0) {
   stop("No configured outcomes were found in the input data.", call. = FALSE)
@@ -893,6 +1150,9 @@ final_values <- bind_rows(base_final_values, gender_gap_final_values) %>%
     raw_mean_centered,
     raw_mean_centered_student,
     controlled_value_added,
+    controlled_value_added_se,
+    controlled_value_added_resid_sd,
+    controlled_value_added_se_method,
     controlled_value_added_centered,
     controlled_adjusted_mean,
     controlled_value_added_centered_student,

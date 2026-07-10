@@ -1,0 +1,2991 @@
+
+
+===== PAGE 1 / 60: hoee_methods (1).pdf =====
+
+Methods for measuring
+school effectiveness
+Joshua Angrist a,b, Peter Hull c,b, and Christopher Walters d,b
+aMIT, Cambridge, MA, United States
+bNBER, Cambridge, MA, United States
+cBrown, Providence, RI, United States
+dUC Berkeley, Berkeley, CA, United States
+1 Introduction
+Many personal and policy decisions turn on perceptions of school quality. Families
+choose schools and neighborhoods by balancing perceived school effectiveness
+against other factors, like housing costs and commute times. Questions of school
+quality also drive high-stakes policy decisions related to school closures, restructur-
+ing, and expansion. In response to the demand for quality information, achievement-
+based measures of public school effectiveness have proliferated. Such measures
+include “school report cards” distributed by some states and districts, as well as
+school quality ratings published by private organizations like GreatSchools.org.
+How should school quality be measured? This chapter reviews econometric strat-
+egies for estimating school effectiveness, defined as the causal effect of attending a par-
+ticular school or set of similar schools (likecharter schools) on student outcomes. Efforts
+to gauge school quality must confront the f undamental challenge of selection bias:
+school-to-school comparisons can reflect student ability and family background as much
+as or more than school effectiveness. Economists have devised an array of solutions to
+this problem; increasingly, these empirical strategies use elements of randomness in
+modern school assignment schemes to devise convincing natural experiments.
+Our review begins with the relatively straightforward matter of how to gauge the
+effectiveness of a single school or school sector that offers seats by lottery. For instance,
+Angrist et al. (2010) study effects of the first Knowledge is Power Program (KIPP)
+charter school in New England. In principle, lotteries for seats at a single oversub-
+scribed charter school identify the causal effects of attendance at this school. This iden-
+tification strategy is implemented using the (perhaps conditionally) randomized offer of
+seats at the school in question as an instrumental variable (IV) for school attendance.
+Although conceptually straightforward, complications arise in implementing
+school-lottery IV, even when focusing on a single school or sector. Our discussion
+of single-lottery IV covers problems related to covariates, waiting lists, and the
+Handbook of the Economics of Education, ISSN 1574-0692, https://doi.org/10.1016/bs.hesedu.2023.03.001
+Copyright © 2023 Elsevier B.V. All rights reserved.
+1
+ARTICLE IN PRESS
+
+===== PAGE 2 / 60: hoee_methods (1).pdf =====
+
+delays between random assignment, school enrollment, and measurement of out-
+comes. We also discuss the regression-discontinuity (RD) analog of single-school
+lotteries where students are admitted according to whether a test score clears a cutoff.
+A leading example here is a selective-enrollment “exam” school like those studied in
+Abdulkadiro/C21glu et al. (2014) . Finally, the single-school IV setting is used to review
+methods for the estimation of school effects on test score distributions, as in Angrist
+et al. (2016a) .
+Of course, many questions of school quality involve more than one sector or
+school. An analyst aspiring to measure multiple causal effects must establish a com-
+mon counterfactual to ensure the estimates are true apples-to-apples comparisons.
+The identification of multischool and multisector models is facilitated by centralized
+school assignment, as in the Boston, Denver, New Orleans, and New York City
+school districts (to name a few). Centralized assignment schemes randomly assign
+seats at most schools in the centralized district. But random assignment in such dis-
+tricts is conditional: different students are assigned seats at a given school at different
+rates determined by preferences and priorities.
+Abdulkadiro/C21glu et al. (2017) and
+Abdulkadiro/C21glu et al. (2022) derive the assignment probabilities arising in a central-
+ized match and show how the vector of assignment rates lays the foundation for
+causal inference with multiple sectors or schools. We synthesize and illustrate
+practical lessons from this work.
+Interest in school effectiveness predates the advent of centralized assignment.
+Conventional value-added models (VAMs) gauge school effectiveness using regres-
+sion to control for lagged outcomes and other covariates. Because VAM estimates
+for individual schools tend to be noisy, economists have long deployed empirical
+Bayes (EB) methods to reduce sampling variance.
+a More recently, Angrist et al.
+(2016b, 2017, 2021) develop a suite of EB methods designed for models using
+centralized assignment to measure school effectiveness. These methods aim to
+balance the relative precision of conventional VAMs with the bias reduction and model
+validation afforded by centralized assignment. New VAM models and methods are
+illustrated here with applications to schools in Massachusetts, Denver, and New York
+City. As in
+Angrist et al. (2021), these applications show how centralized assignment
+can shed light on school effectiveness even for schools where no seats are randomly
+assigned.
+The chapter is organized as follows.
+Section 2 reviews the basic IV framework as
+it applies to quality measures for a single school or sector. Section 3 extends the
+decentralized lottery framework to cover models with heterogeneous school effects,
+measures of effectiveness for sectors and years, and identification strategies using
+RD-style seat assignment.
+Section 4 discusses the use of centralized assignment
+to estimate the quality of multiple sectors. A leading example here is an analysis
+of different types of charter schools. Section 5 discusses regression-controlled
+aRaudenbush and Bryk (1986) are the first to apply EB methods in this context.
+2 Methods for measuring school effectiveness
+ARTICLE IN PRESS
+
+===== PAGE 3 / 60: hoee_methods (1).pdf =====
+
+VAM estimation, outlines an EB framework for the analysis of individual school
+quality using centralized assignment, and shows how quasi-experimental variation
+can be used to validate and improve on conventional VAMs. We conclude by
+highlighting remaining challenges and research frontiers in the measurement of
+school effectiveness.
+2 School lottery basics
+2.1 Single-school effects
+A large and expanding empirical literature uses randomized admission lotteries to
+gauge the effects of K-12 schools on academic outcomes in the United States.
+Examples include studies of charter schools ( Abdulkadiro/C21glu et al., 2011 ; Angrist
+et al., 2010, 2012, 2013, 2016a ; Clark et al., 2015 ; Cohodes et al., 2021 ; Davis
+and Heller, 2019 ; Dobbie and Fryer, 2011, 2013, 2015 ; Hoxby and Murarka,
+2009; Setren, 2021 ), school vouchers ( Abdulkadiro/C21glu et al., 2018 ; Chingos and
+Peterson, 2015 ; Mills and Wolf, 2017 ), small schools ( Bloom and Unterman,
+2014), magnet schools ( Engberg et al., 2014 ), boarding schools ( Curto and Fryer,
+2014), and aspects of school choice ( Cullen et al., 2006 ; Deming, 2011, 2014 ;
+Deming et al., 2014 ; Hastings et al., 2009 ).
+b We begin by reviewing econometric
+methods for the simplest question this work considers, that of the effectiveness of
+a single school.
+Consider the effects of attendance at a charter school in the KIPP network. KIPP
+is emblematic of the No Excuses approach to public education, a widely replicated
+urban charter model that features a long school day, an extended school year, selec-
+tive teacher hiring, extensive data-driven feedback for teachers, student behavior
+norms, and a focus on traditional reading and math skills. Not long ago, there was
+only one KIPP school in New England—a middle school in Lynn, MA. How good
+is KIPP Lynn?
+Angrist et al. (2010, 2012) gauge KIPP Lynn effectiveness using data
+on KIPP lottery applicants.
+The lottery strategy uses IV to identify the causal effect of a Bernoulli treatment,
+Di, indicating KIPP enrollment for student i. Let Yi(1) denote this student’s potential
+6th grade achievement level if she attends KIPP Lynn, and let Yi(0) denote her
+achievement otherwise. Observed outcome, Yi, is one or the other of these two
+potential outcomes depending on Di:
+Yi ¼ DiYi ð1Þ + ð1 /C0 DiÞYi ð0Þ
+¼ Yi ð0Þ+ ðYi ð1Þ/C0 Yi ð0ÞÞDi:
+bOutside the United States, lottery-based school evaluations include Angrist et al. (2002) , Lee et al.
+(2014), Zhang (2016) , Behaghel et al. (2017) , Lee and Nakazawa (2022) , Oosterbeek et al. (2023) ,
+and Romero and Singh (2021) .
+32 School lottery basics
+ARTICLE IN PRESS
+
+===== PAGE 4 / 60: hoee_methods (1).pdf =====
+
+To focus on the problem of selection bias, we start by assuming a constant causal
+effect, Yi(1) /C0 Y (0) ¼ β, for all i. Under constant effects, observed outcomes can
+be described by writing:
+Yi ¼ μ + βDi + εi, (1)
+where μ ≡ E[Yi(0)] and εi ¼ Yi(0) /C0 μ. The term εi can be thought of as a composite
+measure of student ability, family background, and motivation for schoolwork.
+We call this “ability” for short.
+The core challenge in estimating β comes from the fact that ability and KIPP
+attendance are likely correlated. KIPP students may be especially motivated or come
+from more educated families than the typical urban student. If so, the causal param-
+eter β in Eq. (
+1) is unlikely to coincide with the slope coefficient in a regression of Yi
+on Di or, equivalently, the difference in conditional means of Yi with Di switched
+on and off. Selection bias likely causes comparisons of mean achievement by KIPP
+enrollment status to exceed β:
+E½Y
+i|Di ¼ 1/C138/C0 E½Yi|Di ¼ 0/C138¼ β + E½εi|Di ¼ 1/C138/C0 E½εi|Di ¼ 0/C138|ﬄﬄﬄﬄﬄﬄﬄﬄﬄﬄﬄﬄﬄﬄﬄﬄﬄﬄﬄﬄﬄﬄﬄ{zﬄﬄﬄﬄﬄﬄﬄﬄﬄﬄﬄﬄﬄﬄﬄﬄﬄﬄﬄﬄﬄﬄﬄ}
+Selection bias
+> β:
+Multivariate regression estimates that control for family background and pre-
+application (i.e., lagged) achievement reduce, but do not necessarily eliminate, this
+sort of selection bias.
+IV using randomized admission lotteries addresses the challenge of selection
+bias. Suppose n applicants apply for m < n 6th grade seats at KIPP. Let dummy
+variable Z
+i indicate applicants offered a seat. We assume that Zi is determined in
+a manner both fair and consequential. Formally, this means
+Assumption 1A. Lottery offers are independent of student ability: εi ?? Zi.
+Assumption 1B. Lottery winners are more likely to enroll than losers:
+E[DijZi ¼ 1] > E[DijZi ¼ 0].
+Assumption 1A is plausible because lottery offers are randomly assigned and so
+independent of student ability, though 1A also requires offers be unrelated to
+outcomes through channels other than charter attendance. The latter requirement
+is an exclusion restriction. Assumption 1B is plausible when schools are oversub-
+scribed so that lottery losers find it harder than winners to obtain a seat.
+This pair of assumptions makes Zi a valid instrument for Di in Eq. ( 1). Since the
+instrument here is Bernoulli, the IV estimand is a Wald (1940)-type ratio of differ-
+ences in means:
+βIV ≡ E½Yi|Zi ¼ 1/C138/C0 E½Yi|Zi ¼ 0/C138
+E½Di|Zi ¼ 1/C138/C0 E½Di|Zi ¼ 0/C138¼ β: (2)
+Identification of β results from the fact that Assumption 1A implies E[εjZi] ¼ 0,
+while Assumption 1B ensures the denominator of ( 2) is nonzero.
+4 Methods for measuring school effectiveness
+ARTICLE IN PRESS
+
+===== PAGE 5 / 60: hoee_methods (1).pdf =====
+
+The numerator and denominator of ( 2) can be computed as the slope coefficients
+from bivariate regressions of achievement and charter attendance on Zi:
+Yi ¼ γ + ρZi + ui, (3)
+Di ¼ ψ + πZi + vi: (4)
+The first of these equations is the IV reduced form , while the second is the corre-
+sponding first stage . We sometimes use these terms to refer to ρ and π, rather than
+the equations containing them. Eq. ( 2)s h o w st h a tβIV ¼ ρ/π, the ratio of reduced
+form to first stage.
+2.2 Control for assignment risk and covariates
+Admissions lotteries are typically run every year. Most schools run separate lotteries
+for different entry grades and for siblings of students already enrolled, among other
+special groups. Such multilottery scenarios can be seen as a naturally occurring
+analog of the stratified randomized controlled trials (RCTs) used to gauge drug
+efficacy. In a stratified RCT, where subjects are treated at different rates in different
+strata, treatment assignment is independent of potential outcomes only within strata.
+The signal feature distinguishing lottery strata is the conditional probability of an
+offer, a probability we call assignment risk. For instance, assignment risk among ap-
+plicants might be 0.9 when a school first opens and demand is weak. But assignment
+risk might decline to 0.5 or less in later years if demand grows. Likewise, siblings are
+typically offered seats at a much higher rate than nonsiblings in a given year. A group
+of students with the same assignment risk is said to constitute a risk set.D i f f e r e n c e s
+in assignment risk are a possible source of selection bias even in a stratified RCT.
+We therefore control for assignment risk in all but the simplest, single-stratum,
+lottery-based research designs.
+Within risk sets, the single-lottery IV framework applies. Let R
+i  f1, …, Kg
+encode the identity of applicant i’s risk set, with dummies Rik ¼ 1{Ri ¼ k} indicating
+i is in the kth set. The conditional Wald estimand for applicants in risk set k is:
+βIV,k ≡ E½YijZi ¼ 1, Ri ¼ k/C138/C0 E½YijZi ¼ 0, Ri ¼ k/C138
+E½DijZi ¼ 1, Ri ¼ k/C138/C0 E½DijZi ¼ 0, Ri ¼ k/C138: (5)
+If Assumptions 1A and 1B hold conditional on Ri ¼ k, then βIV,k captures the causal
+effect of charter attendance for applicants in this group. In practice, risk-set-specific
+estimates based on the sample analog of βIV,k are likely to be noisy. But we can
+aggregate these conditional estimates into a single, more precise, summary estimate.
+A two-stage least squares (2SLS) estimator with a full set of risk set controls
+conveniently aggregates the set of βIV,k in a single weighted a verage. Augmenting
+causal model ( 1) and first-stage equation ( 4) with risk set controls leads to a 2SLS
+setup described by:
+52 School lottery basics
+ARTICLE IN PRESS
+
+===== PAGE 6 / 60: hoee_methods (1).pdf =====
+
+Yi ¼ βDi +
+XK
+k¼1
+δkRik + ηi, (6)
+Di ¼ πZi +
+XK
+k¼1
+τkRik + υi: (7)
+Parameters δk in the risk-controlled causal model, ( 6), can be viewed as coefficients
+from a regression of μ + εi in ( 1) on the set of Rik, with associated residual ηi.
+First-stage Eq. ( 7) likewise controls for risk by including the Rik as regressors
+(as a rule, a 2SLS first stage includes the controls appearing in the causal model with
+which it’s associated).
+2SLS uses the first-stage fitted values generated by (
+7) to instrument Di in (6).c
+Kolesa´r (2013) shows that this 2SLS estimand, characterized by a dummy endoge-
+nous variable with saturated control for discrete covariates, captures a weighted
+average of within-risk-set IV coefficients that can be written:
+β2SLS ¼
+XK
+k¼1
+ω kπkpkð1 /C0 pkÞX
+lω lπlplð1 /C0 plÞ
+/C20/C21
+βIV,k: (8)
+Here, ω k ¼ Pr[Rik ¼ 1] is the share of applicants in risk set k; πk ¼ E[DijZi ¼ 1,
+Rik ¼ 1] /C0 E[DijZi ¼ 0, Rik ¼ 1] is the first stage for these applicants; and pk ¼
+Pr[Zi ¼ 1jRik ¼ 1], so pk(1 /C0 pk) is the conditional offer variance. The weights
+on each βIV,k are nonnegative if Assumption 1B holds for each lottery so that πk > 0
+for all k. This weighting scheme enhances precision by putting more weight on
+strata with more students, stronger first stages, and more instrument variation. d
+An alternative 2SLS estimator adds interactions between the offer instrument and
+risk set dummies to the list of excluded instruments, leading to an overidentified
+model with a fully saturated first stage. e 2SLS with a saturated first stage generates
+a weighted average that replaces πk with π2
+k in (8), as detailed in Angrist and Imbens
+(1995). Under constant effects and homoskedasticity of the residuals in ( 6),
+2SLS estimates of this overidentified model are efficient in the sense of yielding
+cThe reduced-form equation for this system can be written:
+Yi ¼ ρZi +
+XK
+k¼1
+γkRik + ξi,
+where the γk are reduced-form risk-set effects. Because this model is just-identified (i.e., the number of
+instruments equals the number of variables to be instrumented), 2SLS coincides with an indirect least
+squares estimator that divides OLS estimates of reduced-form coefficient ρ by estimates of the corre-
+sponding first-stage coefficient, π,i n( 7).
+dGoldsmith-Pinkham et al. (2022) study the efficiency of such regression-based weighting schemes.
+eThis first stage is saturated because it includes a parameter for each value of E[Di|Zi, Ri].
+6 Methods for measuring school effectiveness
+ARTICLE IN PRESS
+
+===== PAGE 7 / 60: hoee_methods (1).pdf =====
+
+the (asymptotically) most precise estimate that can be computed given the informa-
+tion at hand. On the other hand, 2SLS estimates of heavily overidentified models are
+likely to reflect more finite-sample bias than estimates of just-identified models
+(
+Andrews et al., 2019 ; Angrist and Kolesa´r, 2023 ).
+2.2.1 Covariate control
+Beyond risk set controls, 2SLS estimators for school quality often incorporate
+additional covariates describing students’ background. Although not required to
+eliminate selection bias, nonrisk covariates typically increase the precision of
+2SLS estimates. A 2SLS setup with covariates is described by:
+Yi ¼ βDi +
+XK
+k¼1
+δkRik + X0
+iλ + ηi, (9)
+Di ¼ πZi +
+XK
+k¼1
+τkRik + X0
+iψ + υi: (10)
+Covariate vector Xi might include applicant demographic characteristics like race,
+sex, and free-lunch status, as well as baseline test scores measured prior to the lottery
+in which the applicant participates.
+Assuming lottery offers are randomly assigned within risk sets, Z
+i and Xi are
+uncorrelated conditional on assignment risk. This implies the coefficient on Xi
+should be zero in a regression of Zi on risk set dummies and Xi. Controlling for
+Xi therefore leaves the 2SLS estimand unchanged. This fact is a version of the
+Frisch–Waugh–Lovell regression-anatomy theorem for 2SLS. To the extent that
+controlling for Xi reduces the residual variance of outcomes, however, 2SLS esti-
+mates of models with Xi included can be expected to be more precise than estimates
+of models with Xi omitted (see, e.g., Angrist and Pischke, 2009 ).
+2.2.2 Multiple schools in a single sector
+Importantly, the risk set idea extends to analyses of sectors covering more than one
+school. Suppose the city of Lynn has two KIPP middle schools, KIPP A and KIPP B.
+Applicants for 5th grade seats may apply to one or both of these charter schools. In a
+multischool/single-sector analysis, applicants are coded as having attended KIPP if
+they enroll in either school; no attempt is made to identify causal effects of KIPP
+A and B separately. In a single-sector analysis, we pursue a common KIPP treatment
+effect. Moreover, in this example, the KIPP effect in Lynn is also a charter-school
+sector effect since the city of Lynn has no non-KIPP charters.
+Multischool scenarios open the door to alternative IV strategies. We might, for
+example, use two offer dummies as instruments with one for each school. With only
+one endogenous variable indicating any KIPP attendance, 2SLS estimates are over-
+identified by two instruments. Each instrument in this case generates distinct
+assignment risk. Often, however, a just-identified single-instrument estimator is
+72 School lottery basics
+ARTICLE IN PRESS
+
+===== PAGE 8 / 60: hoee_methods (1).pdf =====
+
+appealing—both for pedagogical reasons and because heavily overidentified esti-
+mates (in more elaborate real-world applications) suffer greater finite-sample bias.
+The typical just-identified setup uses a single any-offer instrument. With two
+schools, the any-offer instrument indicates applicants receiving offers from one or
+both schools; assignment risk is the probability of the union of the two underlying
+offer events. If, for instance, the A and B lotteries are independent, and if applicant
+i has risk p
+i(A) at school A and pi(B) at school B, then the risk of a KIPP offer is
+pi(A)+ pi(B) /C0 pi(A)pi(B). Applicants who apply to only one or the other school have
+either pi(A) ¼ 0o r pi(B) ¼ 0. When assignment risk takes on three values, there are
+three risk sets. Section 2.3 illustrates this scenario in an analysis of Massachusetts
+urban charter schools.
+2.3 Massachusetts urban charter effects
+An investigation of Massachusetts urban charter middle school effects highlights key
+elements of a basic lottery analysis of school effectiveness. The sample used for this
+purpose is that analyzed in Angrist et al. (2013) . The 2SLS setup here includes both
+risk set controls and baseline (nonrisk) covariates. Risk set controls consist of indi-
+cators for all combinations of charter schools applied to, separately by application
+year. The treatment effect of interest is the effect of attending one of Massachusetts’
+urban charter middle schools, mostly in Boston. This investigation compares schools
+in the urban charter sector to all other public schools, both traditional and charter.
+Table 1
+reports summary statistics for this sample. Column (2) displays baseline
+(4th grade) characteristics for 6038 students applying for 5th- or 6th-grade entry
+between 2002 and 2011 at one of 9 urban charters with available lottery records.
+Table 1 Balance and attrition for Massachusetts urban charter lotteries.
+Means
+MA urban
+students
+MA urban
+applicants Balance coefficient
+(1) (2) (3)
+A. Balance
+Female 0.484 0.498 0.002
+(0.017)
+Black 0.201 0.479 /C0 0.011
+(0.015)
+Hispanic 0.321 0.244 0.026
+(0.014)
+Asian 0.072 0.017 0.001
+(0.005)
+White 0.375 0.204 /C0 0.007
+(0.012)
+8 Methods for measuring school effectiveness
+ARTICLE IN PRESS
+
+===== PAGE 9 / 60: hoee_methods (1).pdf =====
+
+The lottery sample keeps only the earliest recorded application year for each student
+and excludes applicants receiving guaranteed seats (e.g., applicants with enrolled
+siblings), resulting in a set of students subject to random lottery admission. For
+comparison, characteristics of the full Massachusetts urban school district population
+over the same period are displayed in column (1).
+The summary statistics show some notable differences between lottery applicants
+and the broader student population. In particular, lottery applicants are more likely
+to be Black, are less likely to be classified as English language learners, and have
+somewhat higher baseline test scores. While both groups are below the state average
+in 4th grade, charter applicants have math and English scores roughly 0.1 standard
+deviations ( σ) higher than the urban average (here all test scores are normalized to
+mean zero and standard deviation one in each grade and year for the state of
+Massachusetts). These differences illustrate the potential for selection into charter
+attendance, highlighting the value of lottery-based experiments.
+Table 1 Balance and attrition for Massachusetts urban charter
+lotteries.—cont’d
+Means
+MA urban
+students
+MA urban
+applicants Balance coefficient
+(1) (2) (3)
+Special education 0.200 0.176 /C0 0.005
+(0.013)
+English language learner 0.161 0.103 0.003
+(0.010)
+Subsidized lunch status 0.688 0.688 0.008
+(0.015)
+Baseline math score /C0 0.416 /C0 0.336 /C0 0.020
+(0.033)
+Baseline English score /C0 0.454 /C0 0.359 0.002
+(0.035)
+Joint p-value 0.694
+B. Attrition
+Has outcome score 0.702 0.801 0.012
+(0.010)
+Observations 234,793 6038 6038
+Note: Columns (1) and (2) of this table report means of baseline characteristics and an attrition indicator
+(a dummy for having an outcome test score) for students in Massachusetts urban school districts and
+urban charter lottery applicants, respectively. Column (3) reports coefficients from regressions of
+covariates on charter offer dummies, controlling for lottery risk set indicators. Robust standard errors are
+reported in parentheses. The joint p-value is from a test of the hypothesis that all baseline characteristics
+are balanced by lottery offer status.
+The sample used here is that analyzed in Angrist, J.D., Walters, C.R., Pathak., P. A., 2013. Explaining
+charter school effectiveness. Am. Econ. J. Appl. Econ. 5 (4), 1–27.
+92 School lottery basics
+ARTICLE IN PRESS
+
+===== PAGE 10 / 60: hoee_methods (1).pdf =====
+
+2.3.1 Balance and attrition
+Two empirical checks probe the validity of the assumptions underlying a lottery-
+based analysis of school effectiveness. The first is a covariate balance check: with
+random lottery offers, baseline characteristics of lottery winners and losers should
+be similar. Column (3) of Table 1 displays coefficients from regressions of 4th grade
+characteristics on a lottery offer dummy, defined as an indicator equal to one if a
+student receives an offer from any charter school, controlling for assignment risk.
+Students are coded as offered if they received either an offer on lottery day or a later
+offer while on a waiting list. Distinctions between these offer types are discussed in
+Section 3.4 .
+Balance coefficient estimates, reported in column (3) of Table 1 , show differ-
+ences between winners and losers that are uniformly small and statistically insignif-
+icant, consistent with random assignment of charter offers within risk sets. A joint
+test of the null hypothesis that all characteristics are balanced fails to reject at con-
+ventional levels (p ¼ 0.69), similarly building empirical support for
+Assumption 1A
+within risk sets.
+Even where offers are randomly assigned, a lottery analysis can be compromised
+by nonrandom differences in the likelihood of sample attrition for winners and losers.
+For example, some students may exit the public school system when not offered a
+charter seat, but attend a charter when offered the opportunity to do so. Such selective
+attrition can change the composition of lottery winners and losers remaining in the
+public system, potentially generating selection bias. It’s therefore worth examining
+differences in follow-up rates between lottery winners and losers. Selection bias is
+unlikely to be a problem when follow-up rates for these two groups are similar
+(
+Lee, 2009 ).
+The bottom of Table 1 reports the coefficient from a regression of an indicator for
+outcome test score availability in the first postlottery year on an offer indicator, in a
+model with risk set controls. The overall follow-up rate in the Angrist et al. (2013)
+sample is 80.1%, with little difference in follow-up between winners and losers. This
+suggests attrition is not a major concern in this case. Engberg et al. (2014) and
+Abdulkadiro/C21glu et al. (2018) discuss bounds on school lottery treatment effects in
+cases where differential attrition is worrying.
+2.3.2 2SLS Estimates
+A well-documented 2SLS analysis reports first-stage estimates as well as 2SLS
+estimates of the causal effect of interest. The ingredients of a basic charter lottery
+analysis are laid out in Table 2. The treatment variable here is an indicator for charter
+attendance in the school year beginning in the fall of the year an application was
+submitted; the outcome is from tests taken at year’s end (in 5th or 6th grade). Results
+in the table are from models that include risk set dummies, student demographic
+characteristics, and baseline (4th grade) math and English scores.
+Boston charter offers boost charter enrollment rates by nearly 60% points, a
+large first-stage estimate that can be seen in the first pair of columns in Table 2 .
+Although unsurprising, this result establishes the validity of first-stage Assumption
+10 Methods for measuring school effectiveness
+ARTICLE IN PRESS
+
+===== PAGE 11 / 60: hoee_methods (1).pdf =====
+
+1B within risk sets. 2SLS estimates, reported in the first row of column (2) in the
+table, show charter attendance boosts math scores by an impressive 0.45 σ. Non-
+charter students in this sample score 0.32 σ below the state mean. One year in a
+Boston charter is therefore predicted t o boost math achievement to a level above
+the state average. A corresponding ordinary least squares (OLS) estimate,
+d i s p l a y e di nc o l u m n( 1 ) ,p r o d u c es a charter coefficient of 0.33 σ. Evidently, despite
+concerns of positive selection bias, th e OLS coefficient unde rstates the causal
+effect of charter attendance. One possible explanation for this is treatment effect
+heterogeneity, an issue we turn to next.
+3 Lottery IV: Implementation details and extensions
+3.1 Heterogeneous effects
+The causal model motivating Table 2 specifies a constant causal effect of charter
+attendance, at least within lottery risk sets. In practice, of course, charter effects
+may differ for different applicants. Individually varying charter effects are defined
+Table 2 2SLS estimates for Massachusetts urban charter schools.
+Treatment variable
+Attendance indicator Years attended
+OLS 2SLS OLS 2SLS OLS 2SLS
+(1) (2) (3) (4) (5) (6)
+Math score effects 0.329 0.454 0.407 0.579 0.236 0.314
+(0.020) (0.039) (0.019) (0.038) (0.009) (0.020)
+First stage 0.567 0.551 1.017
+(0.015) (0.015) (0.030)
+Noncharter outcome mean /C0 0.320 /C0 0.268 /C0 0.268
+Number of applicants 4281 4590 4590
+Sample coverage Application Year All Years All years
+Sample size 4281 11,458 11,458
+Note: This table reports OLS and 2SLS estimates of the effect of Boston charter middle school
+attendance on math test scores for applicants to urban charter schools in Massachusetts, as well as
+first-stage estimates. Columns (1) and (2) define treatment as an indicator for enrolling in a charter school
+in the academic year following application and restrict the sample to test score outcomes from this year.
+Columns (3) and (4) use the same treatment definition but pool postlottery test scores for grades 4
+through 8. Columns (5) and (6) use the full sample but define treatment as the number of years spent in a
+charter school by the outcome grade. All models control for lottery risk set indicators and student gender,
+race, special education, English language learner, subsidized lunch status, and grade and year
+indicators. Columns (1) and (2) report robust standard errors in parentheses. Standard errors are
+clustered by student in columns (3)–(6).
+The sample used here is that analyzed in Angrist, J.D., Walters, C.R., Pathak., P. A., 2013. Explaining
+charter school effectiveness. Am. Econ. J. Appl. Econ. 5 (4), 1–27.
+113 Lottery IV: Implementation details and extensions
+ARTICLE IN PRESS
+
+===== PAGE 12 / 60: hoee_methods (1).pdf =====
+
+by potential outcomes: βi ¼ Yi(1) /C0 Yi(0). Different students may likewise respond
+differently to the offer of a charter seat. A heterogeneous first stage can be described
+by a set of potential treatments, D
+i(1) and Di(0), indicating i’s charter enrollment
+status when Zi ¼ 1 and Zi ¼ 0, respectively.
+In a world of heterogeneous potential outcomes, IV captures causal effects on
+charter lottery compliers. This is formalized by the local average treatment effects
+(LATE) interpretation of the Wald estimand. Specifically, Imbens and Angrist
+(1994) and Angrist et al. (1996) show:
+βIV ¼ E½Yið1Þ/C0 Yið0ÞjDið1Þ > Dið0Þ/C138:
+This result is derived assuming independence, exclusion, the existence of a first
+stage, and monotonicity, defined as follows:
+Assumption 2A. Independence/exclusion: ( Yi(1), Yi(0), Di(1), Di(0)) ?? Zi.
+Assumption 2B. First stage: E[DijZi ¼ 1] > E[DijZi ¼ 0].
+Assumption 2C. Monotonicity: Di(1) /C21 Di(0) 8i.
+Assumption 2A adapts Assumption 1A to the heterogeneous treatment effects
+framework, while Assumption 2B aligns with Assumption 1B .f The novel require-
+ment here is Assumption 2C , which says that the lottery offer instrument must
+weakly increase charter enrollment for all students (not just on average). This mono-
+tonicity restriction seems reasonable, since it is hard to imagine a scenario in which
+lottery wins make attendance less likely.
+The LATE Theorem partitions the population of charter applicants. “Never-
+takers” are students who decline to attend charter schools even when offered
+so that D
+i(1) ¼ Di(0) ¼ 0. This group might include students whose lottery
+participation is due to the enthusiasm of a parent rather than their own.
+“Always-takers” are students who attend charter even without an offer so that
+D
+i(1) ¼ Di(0) ¼ 1. Students in this category might apply repeatedly or otherwise
+find a way in. Charter lottery “compliers” are those who attend if and only if
+they receive offers, implying that Di(1) > Di(0) (i.e., Di(1) ¼ 1a n d Di(0) ¼ 0).
+The LATE Theorem implies that βIV delivers the average causal effect of charter
+attendance for compliers. With multiple lotteries, Eq. ( 8) implies that 2SLS with
+risk set controls identifies a weighted average of lottery-specific LATEs. Estimates
+like those in
+Table 2 should therefore be interpreted as measuring causal effects for
+applicants induced to attend charter schools by randomized offers. These effects
+may be higher or lower than the overall average effect of charters, depending on
+how compliers compare to others.
+fAssumption 2A combines independence and exclusion, distinct assumptions in the LATE framework.
+12 Methods for measuring school effectiveness
+ARTICLE IN PRESS
+
+===== PAGE 13 / 60: hoee_methods (1).pdf =====
+
+3.2 Characterizing compliers
+3.2.1 Complier covariate means
+Who are charter lottery compliers? Remarkably, while individual compliers are
+not coded as such in any data set (since we never see Di(1) and Di(0) for the same
+student i), complier characteristics can be described. Tools for this are detailed in
+Abadie (2002, 2003) .
+Complier analyses build on the fact that, by virtue of Assumption 2C , the pop-
+ulation contributing to an IV analysis contains only always-takers, never-takers,
+and compliers. Moreover, unlike compliers, some always- and never-takers are
+identifiable: students with Di ¼ 0 and Zi ¼ 1 must be never-takers, while those with
+Di ¼ 1 and Zi ¼ 0 must be always-takers. The other two combinations of Di and Zi
+involve mixtures of compliers and these other groups: the population withDi ¼ Zi ¼ 1
+is a mixture of always-takers and compliers, while the group with Di ¼ Zi ¼ 0i sa
+mixture of never-takers and compliers. The relative sizes of the three groups are iden-
+tified, since the never-taker share is given by the fraction of offers that are declined,
+the always-taker share is given by the fraction of nonoffered students that attend
+charters, and the complier share equals the size of the first stage. We can therefore
+back out characteristics of lottery compliers from the mixture distributions combined
+with the observed information about always- and never-takers.
+Abadie (2002) implements this logic with a simple 2SLS procedure for charac-
+terizing compliers, described by:
+gðXi, YiÞ/C2 1fDi ¼ dg¼ ψ d + γd 1fDi ¼ dg + vid , (11)
+1fDi ¼ dg¼ ϕ d + πd Zi + eid , d  f0, 1g: (12)
+Here g(Xi, Yi) is any function of student baseline characteristics Xi and postlottery
+outcomes Yi. Setting d ¼ 1i n( 11) and ( 12) means that we are using Zi as an instru-
+ment for Di in an IV procedure with g(Xi, Yi) multiplied by Di as the outcome. Setting
+d ¼ 0 means we use Zi to instrument (1 /C0 Di) in an equation with g(Xi, Yi)(1 /C0 Di)a s
+the outcome. Under Assumptions 2A , 2B, and 2C (and the maintained assumption
+that Zi is independent of Xi), Abadie (2002) shows that these IV procedures recover
+characteristics of treated and untreated compliers:
+γd ¼ E½gðXi, YiðdÞÞjDið1Þ > Dið0Þ/C138, d  f0, 1g:
+This result has a number of useful implications. First, by setting g(Xi, Yi) ¼ Xi,w e
+obtain the average of any predetermined covariate Xi for lottery compliers, facilitat-
+ing comparisons of complier characteristics with those of other groups. Note that
+since X
+i is unaffected by the charter treatment, coefficients γ1 and γ0 should be equal.
+Complier characteristics can be summarized by reporting an estimate of either
+parameter or an average of the two estimates. It is straightforward to show that
+the difference between these two estimates is proportional to the difference in X
+i
+by offer status used as a balance check in Table 1 . We can therefore think of such
+balance checks as checking covariate balance across treatment and control groups
+in the RCT for compliers induced by a lottery with partial compliance.
+133 Lottery IV: Implementation details and extensions
+ARTICLE IN PRESS
+
+===== PAGE 14 / 60: hoee_methods (1).pdf =====
+
+Table 3 reports compliance-group conditional means for the Angrist et al. (2013)
+Massachusetts urban charter applicant sample. Columns (1) and (2) show the two
+available estimates of complier means in the untreated and treated states for a list
+of baseline characteristics. These results come from 2SLS estimation of (
+11) and
+(12) augmented with additive risk set controls; analogous to Eq. ( 8), the resulting
+estimates are weighted averages of risk set-specific complier means. As expected
+given the balance checks in Table 1 , the treated and untreated complier estimates
+are very similar for all characteristics. Column (3) shows a more efficient single
+estimate of each complier mean, constructed by stacking the data for the two systems
+Table 3 Characteristics of lottery complier groups at Massachusetts urban
+charter schools.
+Compliers
+Always-
+takers
+Never-
+takersUntreated Treated Pooled
+(1) (2) (3) (4) (5)
+Female 0.506 0.510 0.508 0.539 0.463
+(0.023) (0.021) (0.016) (0.024) (0.017)
+Black 0.401 0.380 0.390 0.623 0.490
+(0.022) (0.021) (0.016) (0.023) (0.017)
+Hispanic 0.250 0.300 0.275 0.183 0.228
+(0.02) (0.018) (0.013) (0.019) (0.014)
+Asian 0.022 0.024 0.023 0.004 0.024
+(0.007) (0.005) (0.004) (0.003) (0.005)
+White 0.229 0.216 0.223 0.154 0.215
+(0.018) (0.016) (0.012) (0.016) (0.014)
+Special education 0.190 0.181 0.186 0.158 0.177
+(0.018) (0.016) (0.012) (0.018) (0.013)
+English language learner 0.143 0.148 0.145 0.054 0.088
+(0.015) (0.013) (0.010) (0.011) (0.010)
+Subsidized lunch 0.689 0.705 0.697 0.698 0.666
+(0.021) (0.019) (0.014) (0.022) (0.016)
+Baseline math score /C0 0.274 /C0 0.312 /C0 0.293 /C0 0.394 /C0 0.301
+(0.047) (0.041) (0.032) (0.045) (0.036)
+Baseline English score /C0 0.352 /C0 0.349 /C0 0.350 /C0 0.362 /C0 0.299
+(0.050) (0.043) (0.033) (0.046) (0.038)
+Share of sample 0.546 0.197 0.257
+Note: This table reports estimates of average baseline characteristics of compliers, always-takers, and
+never-takers among lottery applicants to urban charter schools in Massachusetts. Means are computed
+as described in
+Section 3.2 . Robust standard errors are reported in parentheses.
+The sample used here is that analyzed in Angrist, J.D., Walters, C.R., Pathak., P. A., 2013. Explaining
+charter school effectiveness. Am. Econ. J. Appl. Econ. 5 (4), 1–27.
+14 Methods for measuring school effectiveness
+ARTICLE IN PRESS
+
+===== PAGE 15 / 60: hoee_methods (1).pdf =====
+
+in (11) and ( 12) and conducting 2SLS estimation imposing a common coefficient γ
+across equations, clustering standard errors by student.
+Columns (4) and (5) of Table 3 present mean characteristics for always- and
+never-takers for the purposes of comparison with the compliers. As noted above,
+characteristics of these groups can be computed based on the ( D
+i ¼ 1, Zi ¼ 0)
+and ( Di ¼ 0, Zi ¼ 1) cells of data, respectively. For comparability with the 2SLS
+weighting used to compute complier means, we estimate always-taker means by
+regressing XiDi(1 /C0 Zi)o n Di(1 /C0 Zi) with additive risk set controls, and we estimate
+never-taker means by regressing Xi(1 /C0 Di)Zi on (1 /C0 Di)Zi with risk set controls.
+These procedures automate aggregation across risk sets with regression-based
+weights, as with the IV estimands in columns (1) –(3).
+The comparisons in
+Table 3 reveal differences between behavioral response types
+for Massachusetts urban charter lotteries. Compliers are less likely to be Black and
+more likely to be White or Hispanic than always- or never-takers and are more likely
+to be classified as English language learners. Always-takers are the lowest-achieving
+group as measured by baseline test scores. As discussed further in
+Section 3.7 ,
+complier characteristics provide a partial guide to the external validity of a set of
+lottery-based IV estimates.
+3.2.2 Complier potential outcome distributions
+A second application of the Abadie (2002) method produces marginal potential out-
+come distributions for compliers.g By setting g(Xi, Yi) ¼ Yi and d ¼ 1 in Eqs. (11) and
+(12), we obtain an IV coefficient γ1 equal to the complier average of the charter out-
+come Yi(1). Similarly, setting g(Xi, Yi) ¼ Yi and d ¼ 0 gives a γ0 equal to the complier
+mean of the noncharter outcome Yi(0). This demonstrates that the levels of mean
+potential outcomes are identified for compliers, not just the difference between them
+(i.e., the LATE). These mean potential outcomes can be compared to the mean Yi(0)
+for never-takers and mean Yi(1) for always-takers, which are directly observed. Such
+comparisons serve as the basis for tests for selection into treatment ( Angrist, 2004),
+and as inputs into parametric modeling approaches that extrapolate from LATE
+to predict other treatment effect parameters ( Brinch et al., 2017 ; Kline and
+Walters, 2019 ).
+In fact, the full marginal distributions of both potential outcomes are identified
+for compliers—not just the means. By setting g(Xi, Yi) ¼ 1{Yi /C20 y} for a constant y
+and each value of d, we obtain the complier cumulative distribution functions of Yi(1)
+and Yi(0) evaluated at y.h This in turn implies that quantile treatment effects (QTEs)
+gThe joint distribution of complier potential outcomes ( Yi(1),Yi(0)) is generally not identified. Frandsen
+and Lefgren (2021) show how bounds on this joint distribution can nevertheless be formed using char-
+ter lotteries.
+hComplier potential outcome CDFs obtained this way need not be weakly increasing. Decreasing CDFs
+signal a violation of the underlying independence, exclusion, or monotonicity assumptions. Huber and
+Mellace (2015) and Kitagawa (2015) use this idea to test instrument validity.
+153 Lottery IV: Implementation details and extensions
+ARTICLE IN PRESS
+
+===== PAGE 16 / 60: hoee_methods (1).pdf =====
+
+are identified for compliers. Complier QTEs can be computed either by inverting
+the complier CDFs or via weighted quantile regression, an approach detailed in
+Abadie et al. (2002) .
+Density plots can be easier to interpret than a plot of CDFs. Complier densities at
+a point y can be estimated by setting gðXi, YiÞ¼ 1
+h K Yi /C0 y
+h
+/C0/C1
+in Eq. (11), where K(/C1 )i sa
+symmetric kernel function maximized at zero and h is a bandwidth that shrinks to
+zero asymptotically. Estimating Eqs. ( 11) and ( 12) with this choice of g(/C1 ) produces
+estimates of complier potential outcome densities evaluated at y. In an application to
+private school voucher lotteries, Abdulkadiro/C21glu et al. (2018) propose a bandwidth
+selection procedure that adapts Silverman’s (1986) rule-of-thumb approach to yield a
+bandwidth appropriate for complier density estimation. i
+Fig. 1 reports potential outcome densities for the Angrist et al. (2013) Massachu-
+setts urban charter applicant sample. A notable result in Angrist et al. (2013) is that
+urban charters generate much larger test score gains for non-White students than for
+White students, reducing racial achievement gaps.
+Fig. 1 reports complier math score
+densities separately for White and Black students, with the density of Yi(0) on the left
+and Yi(1) on the right. These results come from 2SLS estimation of Eqs. (11) and (12)
+with risk set controls added to each equation. By Eq. ( 8), the estimates capture
+weighted averages of within-risk-set complier densities. Panel A shows densities
+of baseline scores from the year prior to the lottery. As expected, score distributions
+are similar for treated and control compliers at baseline. The densities of baseline
+scores for Black students are shifted left relative to those of White students, indicat-
+ing a large racial achievement gap. A bootstrap Kolmogorov –Smirnov (KS) test
+rejects racial equality of baseline score distributions for both untreated and treated
+compliers ( p < 0.01).
+j
+Panel B in Fig. 1 suggests that urban charter attendance eliminates the racial
+achievement gap for lottery compliers. The treated densities on the right reveal a
+marked convergence of the Black distribution toward the White distribution after
+the lottery; the two distributions are virtually indistinguishable by 7th grade. The
+KS test fails to reject equality of Y
+i(1) distributions for Black and White compliers
+(p ¼ 0.94) in this grade. In contrast, the distributions on the left show a persistent
+achievement gap for compliers randomized into traditional public schools. The
+racial gap in Yi(0) distributions in 7th grade is similar to the gap at baseline, and racial
+equality of the nontreated outcome distributions is rejected ( p < 0.01).
+iSilverman’s rule-of-thumb for a Gaussian kernel K(/C1 ) sets h ¼ 1.06 /C2 N/C0 1/5σ, where N is the sample
+size and σ is the standard deviation of the outcome. Abdulkadiro/C21glu et al. (2018) plug in consistent
+estimates of these quantities for compliers, estimating the number of compliers as the first stage times
+the total sample size and the first two moments of complier potential outcomes by setting g(X
+i, Yi) ¼ Yi
+and gðXi, YiÞ¼ Y2
+i , in Eq. ( 11).
+jSee the figure notes for details on this testing procedure.
+16 Methods for measuring school effectiveness
+ARTICLE IN PRESS
+
+===== PAGE 17 / 60: hoee_methods (1).pdf =====
+
+FIG. 1
+See figure legend on next page.
+173 Lottery IV: Implementation details and extensions
+ARTICLE IN PRESS
+
+===== PAGE 18 / 60: hoee_methods (1).pdf =====
+
+3.3 Multiple years
+The analysis above is limited to outcomes in a single postlottery grade, with a treat-
+ment variable that measures school attendance in the year following the lottery.
+Postapplication outcomes for multiple grades can be pooled, possibly boosting
+precision. A 2SLS setup that stacks grades can be described by:
+Yig ¼ βDig +
+XK
+k¼1
+δkRik + X0
+igλ + ηig, (13)
+Dig ¼ πZi +
+XK
+k¼1
+τkRik + X0
+igψ + υig, (14)
+where Yig is student i’s outcome in grade g and covariate vector Xig includes grade
+and calendar year effects along with other baseline characteristics. Since assignment
+risk is fixed for a given student regardless of grade observed, risk controls needn’t
+vary by grade.
+Multigrade models typically introduce a grade-varying treatment to reflect expo-
+sure to schools or sectors of interest. The
+Abdulkadiro/C21glu et al. (2011) and Angrist
+et al. (2013) charter-school studies implement this. Specifically, endogenous vari-
+able Dig is defined as years enrolled in charter between the lottery and grade in which
+an outcome is observed. This adjusts for differences in exposure due to reapplication
+or dropout, assuming that total time enrolled in a charter satisfies the relevant exclu-
+sion restriction. We assume away, for instance, differences in timing details such as
+which particular grades were attended at a charter. Provided charter enrollment
+duration mediates charter offer effects, the 2SLS estimand in Eq. (
+13) captures an
+average causal response (ACR) of the sort defined in Angrist and Imbens (1995) .
+ACR generalizes LATE to the case of treatments with variable intensity. In this case,
+the ACR measures a weighted average of per-year impacts of school attendance for
+students whose enrollment choices are shifted by the lottery offer.
+FIG. 1—Cont’d Math score complier distributions for applicants to Massachusetts urban
+charters. (A) Before application (4th grade scores); (B) After application (6th and 7th grade
+scores). Note: This figure plots estimated distributions of untreated ( Y
+i(0)) and treated (Yi(1))
+potential outcomes for Black and White lottery compliers in the urban charter applicant
+sample. Distributions are estimated as described in
+Section 3.2 , using the rule-of-thumb
+bandwidth described in Footnote i. Vertical lines show mean potential outcomes separately by
+race. p-values for testing the equality of White and Black distributions in each panel come
+from a weighted bootstrap procedure using the maximum absolute Black–White distance in
+estimated complier CDFs as the test statistic. CDFs in each bootstrap iteration are computed
+by estimating Eq. (
+11) by 2SLS with g(Xi, Yi) ¼ 1{Yi /C20 y} for a grid of points y, weighting
+observations with iid exponential weights.
+The sample used here is that analyzed in Angrist, J.D., Walters, C.R., Pathak., P. A., 2013. Explaining charter
+school effectiveness. Am. Econ. J. Appl. Econ. 5 (4), 1 –27.
+18 Methods for measuring school effectiveness
+ARTICLE IN PRESS
+
+===== PAGE 19 / 60: hoee_methods (1).pdf =====
+
+Estimates generated by a stacked multigrade setup for Massachusetts urban char-
+ter applicants appear in columns (3) –(6) of Table 2. These estimates were computed
+by adding postlottery outcomes through 8th grade to the first-year sample. The es-
+timates in column (4) use the same dummy endogenous variable as the single-year
+analysis. The 2SLS estimate of 0.58 σ exceeds that in column (2), but the magnitude
+of this estimate is complicated by the fact that applicants experience up to four years
+of charter attendance. The estimates in column (6) were computed using years of
+exposure as the endogenous variable. The first stage for this specification is slightly
+greater than one, while the resulting ACR estimate is 0.31 σ, implying—on average
+across grades and lotteries—each year of charter enrollment boosts math scores by
+roughly one-third of a standard deviation for compliers. As in the single-grade anal-
+ysis, OLS estimates in columns (3) and (5) are positive but smaller than correspond-
+ing 2SLS estimates, suggesting a modest downward bias in regression-adjusted
+comparisons of charter and noncharter students.
+3.4 Coding lottery offer instruments
+Lottery-admitting schools often make a first round of initial offers, with students not
+initially offered a seat placed on a waiting list with students ordered by lottery num-
+ber. As some initial offers are declined, offers are made down the waiting list. Infor-
+mation on initial and waitlist offers can be used to construct multiple instruments
+for charter enrollment.
+A natural two-instrument strategy combines an initial offer dummy with a
+dummy indicating waitlist offers using 2SLS. Since take-up for initial and waitlist
+offers may differ (if, for example, waitlisted students enroll elsewhere before receiv-
+ing an offer), overidentified 2SLS may generate more precise estimates than a
+just-identified model using a single-offer dummy. The
+Abdulkadiro/C21glu et al.
+(2011) analysis of Boston charter schools shows modest efficiency gains from a
+two-instrument setup. It’s worth noting, however, that the LATE interpretation of
+overidentified 2SLS estimates requires a stronger monotonicity assumption than that
+typically invoked with single-instrument IV (
+Mogstad et al., 2021 ).
+de Chaisemartin and Behaghel (2020) discuss the use of waitlist instruments in
+settings with few students per lottery. When schools target class size, instruments
+constructed from waitlist offers in lotteries with few applicants can be correlated
+with potential outcomes. This problem arises from the fact that with a class size
+target, the last student who receives an offer must be a complier, resulting in over-
+representation of compliers among offered students.
+de Chaisemartin and Behaghel
+(2020) propose a weighted IV estimator that ameliorates the bias in IV estimates
+using waitlist offers. Initial offer instruments also circumvent this problem by using
+a predetermined offer cutoff that does not depend on take-up.
+In principle, data on randomly ordered lottery lists can be used to construct more
+precise estimates while avoiding the use of realized waitlist offers. Let L
+i denote
+the order assigned to applicant i in a charter lottery, where applicants are randomly
+ordered from f1, …, /C22Lg. An initial offer instrument is an indicator for Li below a fixed
+cutoff C. More generally, the efficient function of Li to use as instrument is the
+193 Lottery IV: Implementation details and extensions
+ARTICLE IN PRESS
+
+===== PAGE 20 / 60: hoee_methods (1).pdf =====
+
+expected charter enrollment rate at each lottery number, which can be computed
+given a model for offer take-up. Suppose, for instance, that a school plans to make
+offers until it enrolls a class size of C students, that offer take-up is independent
+across students, and that there are no always-takers. Then, the total number of offers
+equals C plus a negative binomial random variable with C successes and success
+probability equal to the offer take-up rate, π. This implies the likelihood that a student
+at lottery list position L
+i ¼ ‘ ultimately enrolls in this charter school is:
+Pr½Di ¼ 1jLi ¼ ‘/C138¼ π /C2 1 /C0 1f‘> Cg 1 /C0
+Z π
+0
+u‘/C0 C/C0 1ð1 /C0 uÞC/C0 1du /C2ð ‘ /C0 1Þ!
+ð‘ /C0 C /C0 1Þ!ðC /C0 1Þ!
+0
+BB@
+1
+CCA
+2
+664
+3
+775:
+This formula reveals that a student with Li /C20 C is assured of getting an offer, in which
+case the probability of attendance is the compliance rate π; for students with Li > C,
+the second factor captures the probability that at least one seat remains to be offered
+at their position on the waitlist. We have yet to see this optimal IV approach applied
+to lottery quasi-experiments. In practice, problems with the use of waitlist offers are
+likely to matter little when lottery sizes are large.
+3.5 Multisector models
+The lottery framework extends to models and methods that capture multiple sector
+effects in one go. We might be interested, for example, in distinguishing the effects
+of KIPP charter schools from those of schools belonging to other networks. After
+introducing the multisector framework,Section 4 outlines methods that exploit central-
+ized, algorithmic assignment for identification and estimation of sector effects.
+Section 5extends this with an overview of value-added models that allow distinct causal
+effects for each of many schools, without regard to sector. While similar in broad
+strokes, each area of analysis raises unique conceptual and implementation challenges.
+3.5.1 Counterfactual destinies for lottery compliers
+The analysis of urban charters sketched in Section 2.3 raises an important conceptual
+question: “compared to what?” Among applicants to schools in a particular charter
+sector, lottery losers might attend traditional public schools, charters belonging to
+another sector, or one of a number of exam schools, to name a few alternative sectors.
+It’s helpful, therefore, to characterize the distribution of enrollment across sectors to
+be compared. As in Abdulkadiro/C21glu et al. (2014) and Chabrier et al. (2016), we refer
+to this as the distribution of counterfactual destinies .
+k
+Data from the Cohodes et al. (2021) study of new and veteran charter schools in
+Boston illustrate the destinies idea. This analysis estimates and compares effects of
+newly opened charters (in the wake of a 2010 ballot initiative lifting the Boston char-
+ter cap) with effects of older schools. In Massachusetts charter school vernacular,
+only “proven providers” are permitted to open a new school; new schools associated
+kKline and Walters (2016) and Feller et al. (2016) analyze counterfactual destinies in the context of
+early childhood programs.
+20 Methods for measuring school effectiveness
+ARTICLE IN PRESS
+
+===== PAGE 21 / 60: hoee_methods (1).pdf =====
+
+with these are called “expansion campuses” in the study. The analysis here also
+considers the effects of other charters, unaffected by expansion, and pilot schools,
+another autonomous Boston school model.
+l
+Table 4 summarizes counterfactual destinies for compliers among applicants in
+the postreform period. These estimates are computed via 2SLS estimation of Eqs.
+(
+11) and ( 12) with d ¼ 0. Estimates are computed separately for applicants to each
+charter type, coding Zi and Di based on offers and enrollment at that charter type, and
+setting g(/C1 ) equal to an indicator for an enrollment in a specific sector (controlling for
+risk sets, as always). Column (1) shows that while 53% of compliers who do not
+receive a lottery offer at parent campuses attend traditional public schools, another
+27% enroll at expansion campuses. Similarly, among compliers in lotteries for other
+charters (neither parents nor expansions), 23% of lottery losers end up enrolled at an
+expansion charter. In contrast, column (3) shows few untreated compliers in expan-
+sion charter lotteries enroll in other charter types, so the counterfactual for this group
+is composed primarily of BPS district schools (either traditional public schools or
+pilots). These results thus establish the importance of understanding the composition
+of the counterfactual for interpreting lottery results at each charter type.
+Table 4 Counterfactual school destinies for Boston charter compliers.
+Target sector
+Proven providers Expansion charters Other charters
+Z 5 0 Z 5 1 Z 5 0 Z 5 1 Z 5 0 Z 5 1
+Destiny (1) (2) (3) (4) (5) (6)
+Proven providers 1.000 /C0 0.052 0.000
+(0.038) (0.024)
+Expansion charters 0.269 1.000 0.231
+(0.046) (0.034)
+Other charters 0.008 0.047 1.000
+(0.026) (0.026)
+Traditional publics 0.528 0.694 0.529
+(0.058) (0.058) (0.042)
+Pilots 0.180 0.174 0.118
+(0.041) (0.041) (0.023)
+Note: This table reports the share of untreated (Z ¼ 0) and treated (Z ¼ 1) compliers enrolled at particular
+fallback school types among applicants to Boston charter school lotteries. Destinies labeled at left are
+sectors enrolling treated and untreated compliers. Robust standard errors are reported in parentheses.
+The sample used here is that analyzed in Cohodes, S.R., Setren, E.M., Walters, C.R., 2021. Can
+successful schools replicate? Scaling up Boston’s charter school sector. Am. Econ. J. Econ. Policy
+13 (1), 138–167. https://doi.org/10.1257/pol.20190259.
+lMore specifically, the 2010 initiative allowed existing charter schools which met the definition of a
+proven provider to apply to increase their maximum enrollment. Schools which were granted increases
+may or may not have opened additional campuses, depending on current facility capacity.
+213 Lottery IV: Implementation details and extensions
+ARTICLE IN PRESS
+
+===== PAGE 22 / 60: hoee_methods (1).pdf =====
+
+3.5.2 Multisector 2SLS
+The counterfactual attendance patterns documented in Table 4 motivate an analysis
+of multiple school sectors in a unified framework, rather than contrasting single sec-
+tors against a composite counterfactual as in Section 2.3. We initially approach this
+with a constant-effects causal model that describes the consequences of attending
+one of several different school types.
+Suppose each student in a district attends a school in one of S sectors numbered
+from 0 to S, with sector 0 representing traditional public schools. We define a
+mutually exclusive and exhaustive set of dummy variables to represent enrollment
+in each sector, with D
+is  {0, 1} indicating attendance in sector s andPS
+s¼0 Dis ¼ 1
+for each student. A causal model with sector-specific effects is then given by:
+Yi ¼ μ +
+XS
+s¼1
+βsDis + εi:
+The parameter βs measures the effect of attending a school in sector s relative to the
+omitted sector of traditional public schools. As before, εi represents unobserved
+student heterogeneity that may be related to sector enrollment choices.
+Now suppose we have a set of lotteries for enrollment in each sector. As in
+Section 2, assume there are K mutually exclusive lottery groups and let Rik ¼ 1 in-
+dicate that student i participates in lottery k. These lottery groups should be viewed as
+corresponding to all combinations of school-specific lotteries that a student might
+enter. Let Z
+is denote an indicator equal to one if student i receives at least one offer
+from a school in sector s. Note that when students can apply to multiple lotteries,
+the Zis are not necessarily mutually exclusive, as students may receive offers from
+multiple sectors. Extending Eqs. ( 9) and ( 10) to the multisector setting results in
+the following system of equations with multiple endogenous variables:
+Yi ¼
+XS
+s¼1
+βsDis +
+XK
+k¼1
+δkRik + X0
+iλ + ηi, (15)
+Dis ¼
+XS
+m¼1
+πmsZim +
+XK
+k¼1
+τksRik + X0
+iψ s + υis, s  f1, …,Sg: (16)
+Paralleling Section 2, the δk and λ in (15) can be seen as coefficients from a projection
+of μ + εi on risk set indicators and covariates, while the first-stage equations defined
+in (16) are projections of the sector attendance indicators on lottery offers along with
+risk sets and covariates. 2SLS estimation proceeds by fitting each first-stage equation
+by OLS and then running (
+15) by OLS after substituting in first-stage predicted
+values ^Dis . By a simple extension of the above, this 2SLS procedure will recover
+consistent estimates of the sector effects βs, provided the offers Zis are independent
+of ability ηi within risk sets and induce sufficient attendance variation for each sector.
+It is straightforward to extend this setup to stack outcomes across multiple grades
+as in
+Section 3.3 .
+Table 5 reproduces Cohodes et al.’s ( 2021) estimates of the effects of several
+Boston charter school types on math scores. This analysis treats parent campuses,
+22 Methods for measuring school effectiveness
+ARTICLE IN PRESS
+
+===== PAGE 23 / 60: hoee_methods (1).pdf =====
+
+Table 5 Multisector 2SLS estimates for Boston Charter Schools.
+Before charter expansion After charter expansion
+Estimates Estimates
+Noncharter
+mean
+Proven
+providers
+Other
+charters
+Noncharter
+mean
+Proven
+providers
+Expansion
+charters
+Other
+charters
+(1) (2) (3) (4) (5) (6) (7)
+Math Score 0.117 0.320 0.183 /C0 0.074 0.365 0.326 0.193
+(0.037) (0.026) (0.070) (0.074) (0.055)
+First stage
+Immediate offer 1.304 1.554 0.795 0.659 0.930
+(0.067) (0.047) (0.054) (0.046) (0.052)
+Waitlist offer 1.027 0.984 0.400 0.348 0.853
+(0.050) (0.061) (0.048) (0.041) (0.071)
+Notes: This table reports first-stage effects of charter lottery offers on years of enrollment in charter schools and 2SLS estimates of the effects of charte r school
+attendance on math test scores for multiple types of Boston charter middle schools. The sample stacks postlottery test scores in grades five through e ight. The
+endogenous variables are counts of years spent in the different charter types (preexpansion proven providers, preexpansion other charters, postex pansion proven
+providers, expansion schools, and postexpansion other charters). The instruments are immediate and waitlist lottery offer dummies for each school type. Immediate
+offer equals one for applicants offered seats on the day of the lottery. Waitlist offer equals one for applicants offered seats from the waitlist. Controls include lottery risk
+sets, as well as gender, race, ethnicity, a female-minority interaction, special education, English language learner, subsidized lunch status, an d grade and year
+indicators. Standard errors, clustered by student, are reported in parentheses.
+The estimates reported here are drawn from Cohodes, S.R., Setren, E.M., Walters, C.R., 2021. Can successful schools replicate? Scaling up Boston’s c harter
+school sector. Am. Econ. J. Econ. Policy 13 (1), 138–167. https://doi.org/10.1257/pol.20190259.
+ARTICLE IN PRESS
+
+===== PAGE 24 / 60: hoee_methods (1).pdf =====
+
+expansion campuses, and other nonexpansion charters as separate sectors, and also
+distinguishes between attendance before and after the expansion reform. Following
+the approach described in
+Section 3.3 , the analysis stacks scores from all observed
+postlottery grades for lottery applicants, and codes the endogenous variables Dis as
+the number of years spent in each sector. The instruments are indicators for initial
+and waitlist offers to each sector type, as described in
+Section 3.4 , and the model
+controls for risk set indicators for the intersection of all school-by-year-specific
+admission lotteries.
+2SLS estimates of this multisector mode l show substantial treatment effects of
+attendance at both parent a nd expansion campuses on the order of one-third of a
+standard deviation per year. The effects of parent campuses are similar before
+and after the expansion reform, suggestin g that parent schools’ effectiveness
+was not diluted by expansion to new locat ions. Effects of other nonexpansion
+charters are positive but smaller than thos e of the parents selected for expansion,
+indicating that the state of Massachusetts designated more effective schools for
+expansion. The inclusion of each of the se charter types in a single 2SLS model
+means we can interpret the impact of each as relative to the same tr aditional Boston
+public schools benchmark.
+Two additional features of this multisector approach are of note. First, multisector
+models like (
+15) generally rely on the assumption of constant effects of each sector
+across students. The LATE result of Imbens and Angrist (1994) does not apply to
+models with multiple endogenous variables, and in general a causal interpretation
+of 2SLS estimates from such models requires strong restrictions on either effect het-
+erogeneity or behavioral responses to the instruments ( Behaghel et al., 2013; Bhuller
+and Sigstad, 2022 ; Kirkeboen et al., 2016 ). Second, and similarly, the multisector
+model described here treats all schools within the same sector as equally effective.
+Heterogeneity in school quality within sectors complicates the interpretation of the
+estimates and creates the potential for exclusion restriction violations. For example, a
+student who switches from one expansion charter to another in response to a change
+in lottery offers experiences no change in the endogenous variables in Eq. (
+15), but
+may experience a change in scores if the two schools are of differing quality, thereby
+violating exclusion. Note that this sort of exclusion violation is a potential issue even
+for single-sector evaluations that code treatment as attendance at any charter in the
+sector, including charters without lotteries.
+These issues motivate models capturing individual school value-added. The
+challenges arising in such models are addressed in
+Section 5 .
+3.6 Admission discontinuities as local lotteries
+School effectiveness research can leverage discontinuities in admissions rules based
+on admission tests or other criteria. For example, highly selective exam schools in
+Boston, New York, and elsewhere require an admission test and admit students with
+a high enough score. Lotteries can be seen as a special case of this sort of admission
+24 Methods for measuring school effectiveness
+ARTICLE IN PRESS
+
+===== PAGE 25 / 60: hoee_methods (1).pdf =====
+
+rule. When the admission score is not randomly assigned, students above and below
+the admission threshold are not immediately comparable. This problem is solved
+with regression discontinuity (RD) methods that focus on students close to cutoffs,
+assuming those just above and just below are similar.
+m
+RD methods are introduced here by returning to the potential outcomes model of
+Section 3.1, this time describing the effects of exam school attendance. Let Yi(1) and
+Yi(0) denote student i’s outcomes if she attends an exam school or a traditional public
+school, and let Di(1) and Di(0) represent i’s attendance choices with and without an
+exam school admission offer. Instead of being randomly assigned as in the charter
+lottery context, the exam offer Z
+i is assigned based on a cutoff c in an observed
+test score Ti:
+Zi ¼ 1fTi /C21 cg:
+We suppose that potential outcomes satisfy the following assumptions:
+Assumption 3A. Mean potential outcomes are smooth across the threshold:
+limt!c/C0 E[Yi(d)jTi ¼ t] ¼ limt!c+ E[Yi(d)jTi ¼ t]
+and
+limt!c/C0 E[Di(z)jTi ¼ t] ¼ limt!c+ E[Di(z)jTi ¼ t]f o r( d, z) {0, 1} 2.
+Assumption 3B. Crossing the threshold increases enrollment: limt!c+ E[DijTi ¼ t] >
+limt!c/C0 E[DijTi ¼ t].
+Assumption 3C. Local monotonicity: Pr[Di(1) /C21 Di(0)jTi ¼ c] ¼ 1.
+These three assumptions are local versions of Assumptions 2A , 2B, and 2C,
+applying only to students with scores in a neighborhood of the admission threshold.
+The smoothness condition in Assumption 3A requires that students cannot precisely
+manipulate their scores in relation to the threshold so that those just above and just
+below are similar in expectation. Under these conditions, we can think of the admis-
+sion threshold as defining a local randomized lottery for students with T
+i close to
+c and apply the lottery-based methods introduced earlier to this subpopulation. This
+idea is in keeping with recent work analyzing RD designs as local randomized trials
+(
+Cattaneo et al., 2016 ).
+mFor other examples of evaluations of education programs derived from admission cutoffs, see
+Hoekstra (2009) , Zimmerman (2014) , Card and Giuliano (2016) , Kirkeboen et al. (2016) , Dustan
+et al. (2017) , Heinesen (2018) , Hastings et al. (2014) , Zimmerman (2019) , Anelli (2020) , Sekhri
+(2020), Jia and Li (2021) , Bleemer and Mehta (2022) , Beuermann and Jackson (2022) , and de
+Roux and Riehl (2022) .
+253 Lottery IV: Implementation details and extensions
+ARTICLE IN PRESS
+
+===== PAGE 26 / 60: hoee_methods (1).pdf =====
+
+Under Assumptions 3A , 3B, 3C, a local version of the Wald ratio identifies the
+LATE for compliers at the admission threshold. Specifically, we have
+βRD ≡
+limt!c+ E½YijTi ¼ t/C138/C0 limt!c/C0 E½YijTi ¼ t/C138
+limt!c+ E½DijTi ¼ t/C138/C0 limt!c/C0 E½DijTi ¼ t/C138¼ E½Yið1Þ/C0 Yið0ÞjDið1Þ > Dið0Þ, Ti ¼ c/C138:
+This expression can be seen as using the threshold indicator Zi as an instrument for
+exam school enrollment Di in the neighborhood of the threshold c.
+Empirical implementation of the admission discontinuity design adapts the basic
+lottery 2SLS approach of Section 2 to the local lottery experiment.n Here, risk control
+involves the admission test score, Ti, known in RD vernacular as a running variable.
+Applicants with running variable values far from the cutoff have degenerate risk:
+they are either treated or not with probability one. Applicants with running variable
+values close to the cutoff may or may not clear it.
+The simplest risk control strategy in this setting is parametric: polynomial func-
+tions of the running variable included as covariates adjust for the relationship
+between running variables and outcomes in the absence of treatment. In practice,
+however, a nonparametric strategy that looks only at applicants near the relevant
+cutoffs is often more convincing. Formal motivation for the local or nonparametric
+approach comes from the fact that, in a limiting sense made precise in
+Abdulkadiro/C21glu
+et al. (2022) , the limiting probability of being offered a seat equals one-half in a
+shrinking bandwidth around the cutoff.
+Parametric and nonparametric RD estimation strategies can be described by the
+following 2SLS setup:
+Yi ¼ μ + βDi + ð1 /C0 ZiÞf ðTi /C0 c; δ0Þ + Zi f ðTi /C0 c; δ1Þ + ηi, (17)
+Di ¼ ψ + πZi + ð1 /C0 ZiÞf ðTi /C0 c; τ0Þ + Zi f ðTi /C0 c; τ1Þ + υi: (18)
+These equations replace the risk set indicators in ( 6) and ( 7) with a smooth function
+of the running variable f(t; δ) with parameter δ, satisfying f(0; δ) ¼ 0. In practice,
+this function is typically a polynomial so that f ðt; δÞ¼ PK
+k¼1δktk . The parameters
+determining the polynomial coefficients are allowed to differ on each side of the
+threshold and in the first- and second-stage equations.
+Parametric RD strategies use all or most of the sample of interest to compute
+2SLS estimates of this model, usually with flexible running variable controls.
+Nonparametric RD downweights or removes observations farther from the cutoff
+and uses a less flexible running variable control (typically linear). The latter
+requires a choice of bandwidth to determine the sample size and weights to use
+nRD-2SLS strategies, where cutoff clearance is used as an instrument for treatment exposure or inten-
+sity, are sometimes said to be fuzzy RD designs. In fuzzy RD, treatment depends on cutoff clearance
+plus other unobserved factors. This contrasts with sharp RD designs, where treatment is determined by
+cutoff clearance alone.
+26 Methods for measuring school effectiveness
+ARTICLE IN PRESS
+
+===== PAGE 27 / 60: hoee_methods (1).pdf =====
+
+in nonparametric estimation. The problem of how best to choose the bandwidth
+has stimulated substantial and ongoing theoretical work (see, e.g., Imbens and
+Kalyanaraman, 2011 and Calonico et al., 2014 ).
+Fig. 2, taken from Abdulkadiro/C21glu et al. (2014), plots RD first-stage and reduced-
+form relations for New York City’s (NYC) highly selective exam schools. Panel
+A shows NYC exam school enrollment rates for applicants to three exam schools,
+Brooklyn Tech, Bronx Science, and Stuyvesant, as a function of the distance of a
+student’s admission score to each school’s admission cutoff. The figure reveals large
+jumps in enrollment across the cutoff, indicating a strong first stage for exam school
+attendance. Panel B shows corresponding reduced-form impacts on Regents math
+standardized test scores. Regents scores are smooth through exam school admission
+cutoffs, revealing that exam school attendance has no impact on test scores for com-
+pliers. These zero impacts occur in spite of enormous differences in the level of
+achievement between exam and traditional public schools. This illustrates the power
+of discontinuity-based experiments to distinguish causal effects from selection bias.
+3.7 External validity
+The results of this section demonstrate that lottery-based research designs identify
+average treatment effects for compliers, a well-defined and interpretable subpopula-
+tion. Lottery-based estimates are also relevant for evaluating certain policy reforms.
+Kline and Walters (2016) show that, absent externalities and spillovers, the LATE is
+the policy-relevant parameter for a marginal increase in the number of available seats
+among lottery applicants. It is often of interest to ask whether the external validity of
+the lottery LATE extends to other subpopulations or policy changes. At least four
+forms of external validity are worth considering.
+o
+First, among lottery applicants, effects for lottery compliers may differ from
+effects for always- and never-takers. While treatment effects for these other groups
+of applicants are not identified, the methods of
+Section 3.2 can be used to assess
+whether their observed characteristics or levels of potential outcomes differ from
+those of compliers. This kind of analysis provides a sense of whether compliers
+are representative of the full population of applicants. It’s worth noting that in many
+school lotteries always-takers may be rare or absent, since it may be difficult for
+students to enroll in a school without receiving an offer. With such one-sided
+noncompliance LATE is equal to the effect of treatment on the treated (TOT)
+among applicants, a traditional target parameter in the program evaluation literature
+(
+Bloom, 1984 ).
+Second, effects for lottery applicants may differ from effects for students who
+choose not to apply to the lottery. Table 1 showed that characteristics of applicants
+and nonapplicants differ in the Massachusetts urban charter example, suggesting that
+oSee List (2021) and List et al. (2021) for related discussion of external validity and scaling of
+education programs.
+273 Lottery IV: Implementation details and extensions
+ARTICLE IN PRESS
+
+===== PAGE 28 / 60: hoee_methods (1).pdf =====
+
+A
+B
+FIG. 2
+First stage and reduced form for NYC exam school effects. (A) Enrollment at any NYC exam
+school; (B) Math scores. Note: (A) NYC exam school enrollment rates for applicants to
+three exam schools, Brooklyn Tech, Bronx Science, and Stuyvesant, as a function of the
+distance of a student’s admission score to each school’s admission cutoff. (B) Corresponding
+reduced-form impacts on Regents math standardized test scores.
+This figure is derived from those in Abdulkadiro /C21glu, A., Angrist, J., Pathak, P., 2014. The elite illusion:
+achievement effects at Boston and New York Exam Schools. Econometrica 82 (1), 137 –196. https://doi.org/
+10.3982/ECTA10266.
+ARTICLE IN PRESS
+
+===== PAGE 29 / 60: hoee_methods (1).pdf =====
+
+treatment effects may differ as well. To extrapolate to the population of nonappli-
+cants, it is useful to leverage other sorts of experiments that shift the composition
+of the lottery applicant pool. In one such application to Boston charter schools,
+Walters (2018) combines instruments based on distance to charter schools with ran-
+domized lotteries in a generalized Roy model framework ( Eisenhauer et al., 2015 ;
+Roy, 1951 ). Intuitively, since students in the immediate neighborhood of a charter
+school are more likely to apply, those who apply from close by are less selected than
+those who apply from far away. Under the assumption that distance is as good as
+randomly assigned conditional on other observed characteristics, variation in the
+lottery LATE by distance can therefore be used to tease out the relationship between
+the propensity to apply and treatment effects. The results of
+Walters (2018) suggest
+that charter applicants are negatively selected on achievement gains so that treatment
+effects may be even larger if charter schooling is expanded to new populations.
+Consistent with this finding,
+Cohodes et al. (2021) show that Boston charters con-
+tinued to produce large achievement gains after a reform that resulted in an applicant
+pool more representative of Boston as a whole. Along similar lines, Abdulkadiro/C21glu
+et al. (2016) combine lottery records with an alternative research design based on
+charter takeovers of traditional public schools to show similar effects for lottery
+applicants and students “grandfathered” into charter schools.
+Third, schools where lottery records are available may differ from nonlottery
+schools. For example, popular schools with more applicants than seats may be more
+effective than less popular schools, or schools with the administrative capacity to
+retain organized lottery records may be more effective.
+p Nonexperimental estimates
+reported in Abdulkadiro/C21glu et al. (2011) and Angrist et al. (2013) suggest that over-
+subscribed charter schools in Massachusetts are more effective than schools without
+lotteries, and
+Baude et al. (2020) show that more effective charter schools gain
+market share over time in Texas. On the other hand, Abdulkadiro/C21glu et al. (2018)
+report that private schools with declining enrollment are more likely to opt into a
+lotteried voucher program, and Abdulkadiro/C21glu et al. (2020) show that school pop-
+ularity is weakly related to school effectiveness among New York City high schools.
+Abdulkadiro/C21glu et al. (2014) and Dobbie and Fryer (2014) show limited effects of
+highly-sought-after exam schools in Boston and New York. It’s therefore not clear
+that we should expect oversubscribed schools to be more effective in general.
+Finally, the presence of lotteried school choice programs in education markets
+may generate spillover effects on students in other schools through competition or
+other channels. In this case, lotteries can measure internally valid partial equilibrium
+impacts on applicants but may miss broader general equilibrium effects. Identifying
+such spillover effects generally requires alternative research designs derived from
+variation in market structure rather than variation in enrollment opportunities at
+the student level. Examples of studies in this mold include
+Figlio and Hart
+(2014), Gilraine et al. (2021) , and Campos and Kearns (2023) .
+pThis idea is a version of the “site selection bias” studied by Allcott (2015) .
+293 Lottery IV: Implementation details and extensions
+ARTICLE IN PRESS
+
+===== PAGE 30 / 60: hoee_methods (1).pdf =====
+
+4 Centralized assignment
+4.1 Deferred acceptance with single tie-breaking
+Many urban school districts implement district-wide choice using algorithms for
+centralized assignment. q Like the decentralized school admissions lotteries dis-
+cussed above, many centralized assignment systems incorporate an element of
+randomness to break ties between students with otherwise identical match criteria.
+Unlike simple school lotteries, however, the nature of the underlying risk sets in a
+centralized match is typically shrouded by a seemingly elaborate iterative process.
+Abdulkadiro/C21glu et al. (2017) and Abdulkadiro/C21glu et al. (2022) show how to isolate
+the random variation in centralized assignment algorithms and how to use this
+variation to estimate causal effects.
+The celebrated Gale and Shapley (1962) deferred acceptance (DA) algorithm is
+widely used for school assignment. r To sketch this mechanism, consider a set of N
+applicants (indexed by i) applying to a set of J schools (indexed by j) with fixed
+capacities. Applicants submit rank-ordered lists of preferences over schools, defin-
+ing a set of partial preference orderings denoted by /C31
+i. Applicants are also given
+priorities at each school (e.g., those with an enrolled sibling may be highest priority,
+for instance, followed by applicants who live nearby), denoted by ϕ
+ijf1, …, P, ∞g
+where ϕ ij < ϕ kj means school j prioritizes applicant i over applicant k. The appli-
+cant’s type is defined as θi ¼ (/C31 i, ϕ i), where ϕ i ¼ð ϕ i1, …, ϕ iJ Þ collects her priorities
+over all schools; types are collected in θ ¼ð θ1, …, θN Þ. Since priorities are coarse
+(i.e., there are fewer priority categories than students), student types are further
+augmented with a set of random tie-breaking numbers g ¼ð g
+1, …, gN Þ with
+gi|θ /C24 U(0, 1). Each student’s augmented priority is given by ~ϕ ij ¼ ϕ ij + gi . The
+DA mechanism takes as inputs ( g, θ) and computes student assignments using
+the following algorithm:
+ Step 0: Each applicant applies to her most preferred school according to /C31 i. Each
+school ranks these applicants by the augmented priority ~ϕ ij and provisionally
+admits the highest-ranked applicants up to its capacity. All other applicants are
+rejected.
+ Step k > 0: Each applicant rejected in step k /C0 1 applies to her next most preferred
+school. Each school ranks (by ~ϕ ij) these new applicants along with applicants it
+admitted in step k /C0 1. From this pool, each school provisionally admits the
+highest-ranked applicants up to capacity, rejecting the rest.
+qCities with centralized school assignment systems include Baltimore, Boston, Cambridge Massachu-
+setts, Camden New Jersey, Chicago, Denver, Indianapolis, Minneapolis, Newark, New York City, New
+Orleans, Oakland, San Francisco, Seattle, Tulsa, and Washington, DC. Centralized assignment is also
+widespread and growing globally, with 51 countries using it at either the primary or secondary level as
+of 2020 (see
+https://www.ccas-project.org/).
+rThe economic field of market design encompasses the study and use of matching tools like Gale –
+Shapley. Abdulkadiro/C21glu and Andersson (2022) review the market design approach to school choice.
+30 Methods for measuring school effectiveness
+ARTICLE IN PRESS
+
+===== PAGE 31 / 60: hoee_methods (1).pdf =====
+
+DA terminates when there are no new applicants, returning a set of assignments,
+Z ¼ð Zi, …, ZN Þ, where Zi ¼ j indicates assignment of student i to school j.s
+At a high level, the DA mechanism with single tie-breaking yields a function M(/C1 )
+from the set of capacities, student types, and lottery numbers to the set of school
+assignments: M(g, θ) ¼ Z. As with the simple lottery instruments above, the central-
+ized assignments Z
+i are likely affected by the random variation in g: students with
+lower g are more likely to be assigned to a preferable school, all else equal. But
+unlike simple lotteries there is now a complex translation of this randomness into
+assignments, M(/C1 , θ), which depends on the full vector of nonrandom student types.
+Students with higher priorities and/or certain preferences are more likely to be
+assigned to certain schools, regardless of the tie-breaker they draw. Conditional
+on applicant type, school offers are ignorable: DA’s equal-treatment-of-equals
+property ensures applicants with the same θ
+i have identical school assignment prob-
+abilities. As Abdulkadiro/C21glu et al. (2017) show, however, in large districts such con-
+ditioning is impractical since there are almost as many types as students. DA in a
+high-dimensional scenario generates little useful variation conditional on type.
+The Abdulkadiro/C21glu et al. (2017) solution to this problem leverages the
+Rosenbaum and Rubin (1983) propensity score , defined as the strata-conditional
+probability of treatment in a stratified RCT. In a DA match with lottery tie-breaking,
+treatments are indicated by dummies Z
+ij ¼ 1{Zi ¼ j}. The relevant propensity scores
+are the set of probabilities pij ≡ E(Zij|θ), each a scalar function of the high-
+dimensional list of student preferences and priorities. The Rosenbaum and Rubin
+(1983) propensity-score theorem implies that in an experiment that randomizes treat-
+ment conditional on θ, control for pij eliminates any omitted variables bias arising
+from the relationship between θ and potential outcomes. In other words, the set of
+pij can be used to identify the risk sets induced by centralized assignment.
+4.2 Theoretical and simulated propensity scores
+In general, the DA propensity score is an unknown function of type. But
+Abdulkadiro/C21glu et al. (2017) derive a large-market approximations to the DA pro-
+pensity score that’s easily computed given data on student preferences and priorities.
+Specifically, Abdulkadiro/C21glu et al. (2017) derive formulas for centralized assign-
+ment propensity scores in a continuum economy with a unit mass of students applying
+to a finite number of schools. Scores for the continuum economy, which are easily
+computed, approximate finite-market scores remarkably well and are typically
+accurate enough to support using Z
+ij to estimate causal effects.
+The large-market approximation works by defining school-specific cutoffs, de-
+fined as the last lottery number seated at each school. In the continuum economy,
+sThe DA assignment is stable in the sense of there being no pair of matched students and schools which
+would prefer to swap assignments (a “blocking pair”). When students can rank all schools DA is also
+strategy-proof, in that students have nothing to gain from misreporting their preferences. See Roth and
+Sotomayor (1990) for a review of these and related concepts.
+314 Centralized assignment
+ARTICLE IN PRESS
+
+===== PAGE 32 / 60: hoee_methods (1).pdf =====
+
+cutoffs are nonrandom, so each applicant’s assignment rate is determined solely by
+the relevant cutoffs (determined by his or her priorities) and by tie-breaker variation
+around cutoffs. Applicant assignments conditional on type are independent of one
+another, a further simplification. The resulting large-market DA propensity score
+partitions applicants into three groups at each school: applicants who are always,
+never, and conditionally seated at the school, depending on where their priority
+for seats falls relative to the school’s priority cutoff.
+t
+The main payoff to the large-market score is dimension reduction: even in a
+match with thousands of types, large-market scores are determined by the (relatively)
+coarse set of school cutoffs. The large-market score also has the side-benefit of dis-
+tinguishing different sources of centralized assignment risk. Causal effects can, for
+instance, be estimated separately for conditionally seated applicants and for always
+seated applicants. Differences in causal effects for these groups can sometimes be
+linked to economic models of school choice, such as Roy-style selection-on-gains.
+Abdulkadiro/C21glu et al. (2017) show that the formulas identifying these different popu-
+lations apply to other centralized mechanisms, such as random serial dictatorship,
+and can be extended to DA with multiple tie-breaking (i.e., different lottery numbers
+at different schools) and the immediate acceptance mechanism (sometimes known
+as the “Boston mechanism”). Propensity scores for a larger class of stochastic
+mechanisms satisfying the equal-treatment-of-equals (ETE) property can be simu-
+lated by redrawing the random tie-breaking numbers many times and computing,
+separately for each applicant, the share of simulations in which the applicant is
+assigned to a given school. These simulated scores obviate the need for a large-
+market approximation.
+Some centralized assignment schemes, such as those used for Boston and
+New York City exam schools and New York City screened schools, employ nonlot-
+tery tie-breakers such as test scores instead of, or alongside, lottery numbers.
+Abdulkadiro/C21glu et al. (2022) show how nonrandom screening can be combined with
+lottery variation in a unified local DA score approach. Local scores are again derived
+in a large-market model, with a continuum of applicants and a set of continuously
+distributed tie-breakers. As before, the large-market model allows a partition of
+student types into those who are always, never, and conditionally seated and yields
+simple, coarse formulas for assignment risk.
+u This framework generalizes RD-style
+identification strategies to settings with multiple treatments and running variables.
+Further extensions of the Abdulkadiro/C21glu et al. (2017) approach to causal infer-
+ence in centralized assignment systems come from Borusyak and Hull (2023) , who
+show how the propensity score solution can apply to any variableZi ¼ Mi(g, w) which
+combines exogenous shocks g (e.g., random tie-breakers) and nonrandom data
+tFor never seated applicants pij ¼ 0, while for always seated applicants pij equals the probability that i is
+not assigned a school she prefers to j. For conditionally seated applicants, pij is the probability i clears
+the cutoff at j and does no better than j. Abdulkadiro/C21glu et al. (2017) show how the latter two prob-
+abilities, and thus pij, are determined by large-market cutoffs for the set of schools in i’s rank-order list.
+uSee Section 4.2 of Abdulkadiro/C21glu et al. (2022) for precise definitions and formulas.
+32 Methods for measuring school effectiveness
+ARTICLE IN PRESS
+
+===== PAGE 33 / 60: hoee_methods (1).pdf =====
+
+w (e.g., applicant preferences and priorities) according to known formulas Mi(/C1 )
+(e.g., the DA mechanism). v As we discuss further below, controlling for μi ¼
+E[Mi(g, w)|w], which averages Zi over the exogenous shocks holding other compo-
+nents fixed, is sufficient to eliminate selection bias in comparisons of individuals
+assigned different values of Z
+i. This generalizes the propensity score approach to set-
+tings with multivalued or continuous treatments. Importantly, this result holds even
+when Zi is not generated from a mechanism satisfying the ETE property, or indeed
+outside of the case where Zi indicates a centralized school assignment. Borusyak
+and Hull (2023) compute μi by repeatedly drawing g and averaging the resulting
+Zi over draws, holding fixed the nonrandom w. While potentially computationally
+demanding, this simulation procedure yields a general recipe for extracting useful
+variation from a complex (but known) assignment scheme.
+DA also generates a variety of other ad hoc instruments, with simpler propensity
+scores. One is a dummy for whether an applicant is offered a seat at their first-choice
+school. This first-choice assignment dummy is randomly assigned conditional
+on first-choice preference and priority risk sets, which may be simply controlled
+for. Alternatively, qualification instruments indicate whether g
+i is better than the
+worst lottery number offered a seat (controlling for the set of schools ranked).
+Although valid, first-choice and qualification instruments are likely to leave much
+useful assignment variation on the table (
+Narita, 2021); we illustrate this phenome-
+non below. w
+4.3 Estimation with score controls
+Once computed, centralized assignment propensity scores can be used in a variety
+of ways to estimate school effectiveness. Abadie (2003) , for example, proposes
+estimators for LATEs and related parameters that inversely weight by instrument
+propensity scores. Propensity score matching, as proposed by Rosenbaum and
+Rubin (1983), is another option. As always, however, when doing IV, 2SLS is best.
+For a given school j, consider second and first stages given by:
+Yi ¼ βDi + X0
+iλ + ηi, (19)
+Di ¼ π ~Zij + X0
+iψ + υi, (20)
+vBorusyak and Hull (2023) also discuss local solutions, in which g is viewed as random within a user-
+specified bandwidth.
+wExamples of the first-choice IV in centralized assignment mechanisms include Deming (2011) ,
+Abdulkadiro/C21glu et al. (2013) , Deming et al. (2014) , and Hastings et al. (2009) . Examples of the qual-
+ification IV include Dobbie and Fryer (2014) , Lucas and Mbiti (2014) , and Pop-Eleches and Urquiola
+(2013). First-choice instruments have also been used with decentralized assignment mechanisms
+(Abdulkadiro/C21glu et al., 2011 ; Cullen et al., 2006 ; Dobbie and Fryer, 2011 ; Hoxby et al., 2009 ).
+334 Centralized assignment
+ARTICLE IN PRESS
+
+===== PAGE 34 / 60: hoee_methods (1).pdf =====
+
+where here Di indicates enrollment in some school j, Xi is a vector of predetermined
+controls, and ~Zi ¼ Zij /C0 pij subtracts propensity score pij from offer indicator
+Zij. Borusyak and Hull (2023) show how such specifications identify weighted
+averages of conditional-on-type IV coefficients. In particular, the IV estimand is
+given by:
+β
+IV ¼
+Z
+wIV ðtÞβIV ðtÞdFθðtÞ, (21)
+where Fθ(/C1 ) gives the distribution of types θi and
+βIV ðtÞ¼ E½YijZij ¼ 1, θi ¼ t/C138/C0 E½YijZij ¼ 0, θi ¼ t/C138
+E½DijZij ¼ 1, θi ¼ t/C138/C0 E½DijZij ¼ 0, θi ¼ t/C138
+is the Wald estimand for students of type θi ¼ t. Analogous to the weighting function
+in ( 8), the weights wIV(t)i n( 21) integrate to 1 and are proportional to the share of
+students of type θi ¼ t, the conditional-on-type assignment variance Var(Zij|θi ¼ t),
+and the conditional first stage E[DijZij ¼ 1, θi ¼ t] /C0 E[DijZij ¼ 0, θi ¼ t]. βIV in
+(19) is therefore a weighted-average of LATEs when conditional-on-type analogs
+of Assumptions 2A and 2C hold.
+Eqs. (19) and ( 20) generalize the risk-set-controlled IV specification ( 6) and ( 7)
+for a high-dimensional type vector θi, controlling for the propensity score pij rather
+than a multitude of risk set indicators. It’s noteworthy that the 2SLS estimand is
+unchanged when p
+ij is included in the control vector Xi and ~Zij is replaced with
+the unadjusted offer Zij. This observation follows from the Frisch –Waugh–Lovell
+regression-anatomy theorem: the residual from regressing Zij on pij and Xi is ~Zi ¼
+Zij /C0 pij, since pij ¼ E[Zij|θi] predicts Zij with a coefficient of one and all other pre-
+determined variables in Xi are independent of Zij controlling for pij. Thus, we obtain
+(21) by subtracting pij or by controlling for pij.x
+As with Eq. ( 8), linear adjustment for pij contributes to precision by efficiently
+aggregating all conditionally random variation in centralized assignment schemes.
+The weights w
+IV(t) discard applicants who are always or never assigned to j regard-
+less of the random tie-breaker, while putting more weight on types where assignment
+and nonassignment are equally likely. Further precision gains can be achieved by
+adding predetermined controls that predict residual outcome variation. Controlling
+xAn additional application of the Frisch –Waugh–Lovell theorem shows that 2SLS estimation of the
+risk-set-controlled model (6) and (7) is equivalent to controlling for the empirical propensity score cal-
+culated as the mean offer rate within each risk set. Control for the theoretical score generated by the
+assignment mechanism makes estimation feasible when nonparametrically estimating the score for
+each risk set is not feasible.
+34 Methods for measuring school effectiveness
+ARTICLE IN PRESS
+
+===== PAGE 35 / 60: hoee_methods (1).pdf =====
+
+for pij instead of recentering Zij can thus lead to smaller standard errors in practice.
+Abdulkadiro/C21glu et al. (2017) go a step further by controlling for indicators for
+each value of the propensity score as well as student demographics and lagged
+achievement measures.
+Centralized school offers and propensity scores can serve as the building blocks
+for empirical examinations of the effectiveness of school sectors (such as charters)
+and the effect of assignment to schools with different characteristics (such as those
+with high district ratings or with certain peer characteristics). Formally, let C
+j denote
+a characteristic of school j, and let z(i) and d(i) denote the indices of student i’s
+assigned and enrolled schools. Consider the instrument Cz(i ) ¼P
+jCjZij and treatment
+Cd(i ) ¼ P
+jCjDij measuring, respectively, the characteristic of the assigned and
+enrolled schools. With Cj indicating charter schools, for example, Cz(i ) is an indicator
+for being assigned to a charter while Cd(i ) indicates charter enrollment. The Borusyak
+and Hull (2023) characterization extends to IV estimators which instrument Cd(i )
+with Cz(i ) while controlling for P
+jCjpij: an average of school characteristics
+weighted by the assignment propensity scores. y For examining charter school effec-
+tiveness, this would mean controlling for the total risk of assignment to charters. We
+return to other school characteristic IVs in the next section.
+Table 6 illustrates the role played by centralized assignment propensity scores
+through an analysis of charter effects in Denver Public Schools (the sample used here
+is from
+Abdulkadiro/C21glu et al., 2017 ). Column (1) shows a precise 0.42 σ charter
+attendance effect on math test scores, estimated by 2SLS with a charter offer instru-
+ment controlling flexibly for the simulated charter propensity score and other base-
+line demographics.z The remaining columns show similar but less precise estimates
+obtained from cruder instruments: an indicator for first-choice charter assignment in
+column (2) and an indicator for qualification for any-charter assignment in column
+(3), both controlling for the appropriate preference-based risk sets. These alternative
+strategies discard some of the random variation in charter assignment generated by
+the mechanism and therefore produce less precise estimates, as reflected in the
+second-stage standard errors. The second-to-last row of
+Table 6 demonstrates that
+sample sizes for the first-choice and qualification approaches would need to increase
+by factors of 1.6 and 3.5 to match the precision of the risk-controlled centralized
+assignment IV strategy.
+yAs before, this specification identifies the same coefficient as the IV procedure which instruments
+with the adjusted P
+jCj(Zij /C0 pij). Predetermined controls can be included in either regression to in-
+crease precision.
+zThe sample includes applicants for grades 4 –10 in the 2011 –2012 and 2012 –2013 school years. See
+Tables 6 and 9 of Abdulkadiro/C21glu et al. (2017) for more details.
+354 Centralized assignment
+ARTICLE IN PRESS
+
+===== PAGE 36 / 60: hoee_methods (1).pdf =====
+
+5 VAM for individual schools
+For many high-stakes decisions, knowing the effectiveness of a broad school sector
+(such as charters vs. traditional public schools) is insufficient. Parents wish to know
+which schools, in particular, deliver the most learning for their children. Policy-
+makers likewise may rely on individual school effectiveness measures when decid-
+ing whether to close, restructure, or expand schools in their district ( Abdulkadiro/C21glu
+et al., 2016; Cohodes et al., 2021; Rockoff and Turner, 2010). This demand for school
+effectiveness data is reflected in a recent proliferation of publicly available measures.
+The 2015 Every Student Succeeds Act, for example, mandated all US states to adopt
+elementary and middle school accountability systems that include public measures of
+average student achievement and growth. Private companies such as US News and
+World Report and GreatSchools.org, meanwhile, produce massively popular school
+ratings that are often featured prominently on real estate sites like Zillow and Redfin.
+Such ratings appear to affect families’ choices of where to live, as well as where
+to enroll their children ( Bergman and Hill, 2018 ; Hasan and Kumar, 2019 ).
+Virtually all public and commercial school performance measures are derived
+from observational comparisons: typically, average test score levels or growth
+Table 6 Alternative IV strategies for Denver charter effects.
+Instruments
+Offer First-choice Qualification
+(1) (2) (3)
+Math score 0.417 0.515 0.379
+(0.050) (0.064) (0.092)
+First stage 0.443 0.347 0.457
+(0.024) (0.022) (0.021)
+Risk controls DA Score First-choice risk sets Preference risk sets
+Equivalent sample
+increase vs column (1)
+1.64 3.46
+Observations 2099 2222 3502
+Note: This table reports IV estimates of the effects of charter school attendance for students in Denver
+using strategies based on centralized school assignment. The first row compares alternative 2SLS
+estimates of charter attendance effects on math scores. The second row reports the corresponding
+first-stage estimates. Estimates in column (1) were computed by instrumenting charter attendance with
+centralized assignment to a charter school, controlling for percentiles of the simulated charter
+assignment propensity score and other baseline covariates. Estimates in column (2) were computed
+by instrumenting charter attendance with a charter first-choice assignment instrument, controlling for
+first-choice fixed effects and other baseline covariates. Estimates in column (3) were computed by
+instrumenting charter attendance with a charter qualification instrument, controlling for preference fixed
+effects and other baseline covariates. The fourth row reports the sample size increase needed to achieve
+a precision gain equivalent to the gain from using the any-charter offer instrument. Robust standard
+errors are reported in parentheses.
+The estimates reported here are drawn from Abdulkadiro /C21glu, A., Angrist, J.D., Narita, Y., Pathak, P.A.,
+2017. Research design meets market design: using centralized assignment for impact evaluation.
+Econometrica 85 (5), 1373–1432. https://doi.org/10.3982/ECTA13925.
+36 Methods for measuring school effectiveness
+ARTICLE IN PRESS
+
+===== PAGE 37 / 60: hoee_methods (1).pdf =====
+
+among a school’s enrolled students, sometimes adjusted for differences in observed
+student demographics. Such levels and growth measures closely resemble the obser-
+vational value-added models (VAMs) that have long been considered and debated
+for ranking teachers and schools (e.g.,
+Chetty et al., 2014a ; Deming, 2014 ; Kane
+and Staiger, 2008 ; Rothstein, 2010 ).aa The selection-on-observables assumption
+which underlies such VAMs reflects a different approach to removing selection bias
+than the lottery and discontinuity-based identification strategies from above. Yet a
+recent literature, starting with Angrist et al. (2016b, 2017) , shows how such
+quasi-experimental variation can be incorporated in the school VAM agenda, yield-
+ing more reliable estimates of individual school effectiveness while grappling with
+certain fundamental issues with obtaining such fine-grained causal estimates.
+In this section, we first overview the basic logic of observational school VAMs
+and empirical Bayes methods that are commonly applied to value-added estimates.
+Next, we discuss how the key identifying assumptions of observational VAMs can be
+tested with school lotteries. We then describe ways such variation can be further used
+to improve observational models by partially correcting for selection bias when the
+identifying assumptions are found to be violated.
+5.1 Estimating observational VAMs
+The starting point for conventional school value-added estimation is a constant-
+effects model along the lines of those considered earlier, now extended to allow each
+school to have a distinct causal effect. Consider a setting with schools indexed by
+j ¼ 1, …, J, each with its own causal value-added, βj, measuring the effect of atten-
+dance at j on outcome Yi. Assuming value-added is measured relative to a reference
+school with mean outcome μ, observed outcomes can be written:
+Yi ¼ μ +
+XJ
+j¼1
+βjDij + εi: (22)
+As before, Dij {0, 1} indexes the enrollment of student i in school j and εi captures
+other determinants of achievement. ab
+Value-added parameters βj can be estimated by a combination of regression con-
+trols and outcome-differencing strategies. Regressing εi on a vector of covariates Xi,
+including student demographics and lagged test scores, yields an augmented causal
+model:
+aaObservational examinations of school effectiveness can be traced at least as far back as to the
+Coleman (1966) report, which famously showed in cross-sectional regressions that the fraction of var-
+iance in student achievement attributable to educational inputs was small relative to the contribution of
+family background. Suffice to say the long observational and quasi-experimental literatures that
+followed paint a more nuanced picture.
+abFormally, Eq. (22) derives from an additively separable potential outcomes model, Yi( j) ¼ μ + βj + εi,
+which implies causal effects Yi( j) /C0 Yi(k) ¼ βj /C0 βk are constant across students.
+375 VAM for individual schools
+ARTICLE IN PRESS
+
+===== PAGE 38 / 60: hoee_methods (1).pdf =====
+
+Yi ¼
+XJ
+j¼1
+βjDij + X0
+iλ + ηi: (23)
+The key selection-on-observables assumption underlying VAM estimation is that E
+[Dijηi] ¼ 0 for each j. In other words, the component of student ability that is unex-
+plained by Xi must be uncorrelated with school enrollment. Under selection-on-
+observables, an OLS regression recovers the parameters of Eq. ( 23).
+This framework nests several types of school quality measures. The simplest
+levels measures effectively set Xi equal to only a constant, thereby measuring school
+quality as the average achievement level of enrolled students. Estimates from levels
+models will be biased when schools enroll students with systematically different
+unadjusted ability ε
+i, as seems likely since schools are not randomly assigned. More
+sophisticated VAMs account for observable differences in demographics and lagged
+test scores by including these controls in Xi. In this case, the selection-on-observables
+assumption requires that there is no systematic selection into school enrollment
+among students with the same characteristics and past achievement.
+An alternative approach to adjusting for lagged achievement is a gains model that
+first-differences contemporaneous and past test scores to remove time-invariant un-
+observables. If we let ΔY
+i ¼ Yig /C0 Yi(g/C0 1) denote the change in student achievement
+relative to an earlier grade, the gains model is given by:
+ΔYi ¼ μ +
+XJ
+j¼1
+βjDij + Δεi, (24)
+where Δεi ¼ εi /C0 Yi(g/C0 1). Here, the relevant identification assumption requires
+that potential outcome trends are parallel across schools, i.e., E[Δεi|Dij ¼ 1] ¼ E
+[Δεi|Dik ¼ 1] for all j 6¼ k so that a linear regression of ΔYi on the Dij recovers the
+value-added parameters βj. The regression adjustment and outcome differencing in
+Eqs. (23) and (24) can further be combined by adding additional demographic controls
+to the gains regression.
+5.2 Empirical Bayes methods
+5.2.1 EB Shrinkage under normality
+OLS estimation of VAM models like ( 23) and ( 24) yields a set of school-specific
+value-added estimates ^βj.ac One key question, which we turn to in the next section,
+is whether the identifying assumptions underlying these observational VAM
+acIn some applications, researchers instead estimate value-added by first regressing Yi on Xi, then com-
+puting school averages of the resulting residuals. This approach generates the same estimates as OLS
+estimation of (
+23) in large samples if school enrollment is independent of the controls Xi, but generally
+yields asymptotically different estimates if enrollment is correlated with the controls. Since the inclu-
+sion of Xi is typically motivated by concerns about selection bias, it seems preferable when possible to
+use the OLS estimates which do not impose this independence assumption.
+38 Methods for measuring school effectiveness
+ARTICLE IN PRESS
+
+===== PAGE 39 / 60: hoee_methods (1).pdf =====
+
+procedures hold such that ^βj gives an unbiased estimate of the causal parameter βj
+from Eq. ( 22). Setting aside this question for the moment, another perhaps equally
+important one is whether ^βj is estimated precisely enough to be useful for decision-
+making even when these identifying assumptions hold. Compared to the sector-wide
+effect estimates discussed in Section 3 , single-school VAM estimates are likely to
+involve substantial sampling error, particularly for small or new schools with
+relatively few student observations.
+Empirical Bayes (EB) analysis offers a strategy to moderate sampling variance in
+individual estimates of ^βj. The EB approach treats the school value-added parameters
+βj as draws from a distribution of school quality, typically assumed to be normal. EB
+estimates of the hyperparameters that characterize this distribution are derived from
+the estimated ^βj ’s. This estimated distribution generates posterior predictions for
+individual school quality. The EB approach uses the full set of VAM estimates to
+reduce sampling variance in individual school quality estimates, accepting bias in
+the posterior estimates in exchange (
+Efron, 2010 ; Morris, 1983 ; Raudenbush and
+Bryk, 1986 ).
+By way of illustration, suppose ^βj is an unbiased and normally-distributed esti-
+mate of βj with known variance equal to its squared standard error s2
+j . This normality
+assumption can be viewed as an asymptotic approximation with a growing number
+of students per school. Next, suppose the latent parameters β
+j are themselves drawn
+randomly from a distribution Gβ defined in the population of schools. Assume for
+the moment that Gβ is a normal distribution and independent of sampling variance
+s2
+j across schools. This yields the following hierarchical model:
+^βjjβj, s2
+j /C24 Nðβj, s2
+j Þ, (25)
+βjjs2
+j /C24 Nðμβ, σ2
+βÞ: (26)
+This model has two hyperparameters, μβ and σ2
+β.ad Method of moments estimates of
+these hyperparameters are given by
+^μβ ¼ 1
+J
+XJ
+j¼1
+^βj, (27)
+^σ2
+β ¼ 1
+J
+XJ
+j¼1
+½ð^βj /C0 ^μβÞ
+2
+/C0 s2
+j /C138: (28)
+The variance estimator here subtracts s2
+j in (28) as a bias correction: the uncorrected
+sample variance of ^βj ’s is inflated by sampling variance. ae Maximum likelihood
+applied to the school-level model (25) and (26), or a full parametric specification start-
+ing with distributional assumptions for the residual in model ( 23) for individual out-
+comes, offers more elaborate alternatives to the simple method of moments approach.
+adGiven the model in ( 22), the mean μβ captures mean school quality relative to an omitted category.
+aeKline et al. (2020) outline general methods for bias-corrected estimation of variance components.
+395 VAM for individual schools
+ARTICLE IN PRESS
+
+===== PAGE 40 / 60: hoee_methods (1).pdf =====
+
+The final step in EB estimation constructs posteriors for the quality of each
+school. Given the model in ( 25) and ( 26), the posterior distribution for βj is given
+by βjj^βj, s2
+j /C24 Nðβ*
+j , V*
+j Þ where
+β*
+j ¼
+σ2
+β
+σ2
+β + s2
+j
+ !
+^βj +
+s2
+j
+σ2
+β + s2
+j
+ !
+μβ, (29)
+and V*
+j ¼
+s2
+j σ2
+β
+σ2
+β + s2
+j
+: Eq. (29) shows that the posterior mean β*
+j is a weighted average of
+the unbiased estimate ^βj and the prior mean μβ. The weight on ^βj approaches one as
+its sampling variance s2
+j approaches zero. By shrinking the noisy unbiased estimate
+toward the prior mean in proportion to its sampling error, the posterior mean reduces
+variance, with more shrinkage for schools with noisier estimates. An empirical Bayes
+posterior mean ^β
+*
+j plugs the estimated hyperparameters ^μβ and ^σ2
+β into ( 29).
+5.2.2 When to shrink?
+Whether the shrunk EB posterior mean should be preferred to the noisier but unbiased
+estimate ^βj depends on the goals of the analyst. To see this, note that conditional on the
+true value-added of school j, the mean squared error (MSE) of the two estimates is:af
+E½ð^βj /C0 βjÞ
+2
+jβj, s2
+j /C138¼ s2
+j ,
+E½ðβ⁎
+j /C0 βjÞ2jβj, s2
+j /C138¼
+σ2
+β
+σ2
+β + s2
+j
+ ! 2
+s2
+j +
+s2
+j
+σ2
+β + s2
+j
+ ! 2
+βj /C0 μβ
+/C0/C1 2
+:
+(30)
+If we are only interested in one specific school, this conditional MSE formula shows
+it’s not clear which of the two estimators is better; shrinkage reduces variance but
+may lead to substantial bias if the school is very different from average (as reflected
+in the second term in
+Eq. 30). On the other hand, if we are interested in evaluating
+many schools, the relevant notion of MSE integrates over the distribution of βj:
+E½ð^βj /C0 βjÞ
+2
+js2
+j /C138¼ s2
+j ,
+E½ðβ*
+j /C0 βjÞ
+2
+js2
+j /C138¼
+σ2
+β
+σ2
+β + s2
+j
+ !
+s2
+j :
+(31)
+This formula shows that in an unconditional sense the posterior mean has unambig-
+uously lower MSE than the unbiased estimate ^βj.ag In fact, by standard properties of
+afThe MSE formula for the posterior mean ignores estimation error in the hyperparameters. See Morris
+(1983) and Armstrong et al. (2022) for discussion of approaches that incorporate estimation error in the
+prior distribution.
+agThis observation is closely related to the classic James and Stein (1961) result that OLS is inadmis-
+sible and dominated by shrinkage-based estimators when estimating three or more parameters under
+quadratic loss.
+40 Methods for measuring school effectiveness
+ARTICLE IN PRESS
+
+===== PAGE 41 / 60: hoee_methods (1).pdf =====
+
+conditional mean functions, the posterior mean has lowest MSE of all functions of
+ð^βj, s2
+j Þ under the model. EB methods are therefore useful when we want an estimator
+that performs well on average across all schools.
+Once EB posterior distributions have been calculated, they can be used for sev-
+eral purposes. ah First, as shown in Eq. ( 31), EB shrinkage yields a set of estimates
+with low average MSE across schools. Second, shrinkage corrects measurement
+error in models that treat school value-added as a regressor. Putting the unbiased
+but noisy estimate ^β
+j on the right-hand side of a regression results in attenuation bias
+toward zero due to classical measurement error; the posterior mean introduces non-
+classical measurement error that corrects this so that a regression with β
+*
+j on the right
+yields the same coefficient as using the true βj. This correction is closely related to
+traditional errors-in-variables regression, which similarly corrects for measurement
+error using an estimated signal-to-noise ratio but typically uses a common shrinkage
+factor for all observations ( Draper and Smith, 1998 ).ai
+Third, EB posterior distributions can be used for making decisions about individ-
+ual schools. For this purpose, the right feature of the posterior to use will depend on
+the decision-maker’s loss function, and in general it may be optimal to use func-
+tionals other than the posterior mean. For example, a district policymaker might
+be interested in closing all schools below a quality threshold /C22β and view each
+mistaken closure as equally costly, in which case it is optimal to make decisions
+based on the posterior probability that β
+j is less than /C22β (given by Φ
+/C22β/C0 β⁎
+jﬃﬃﬃﬃ
+V⁎
+j
+p
+/C18/C19
+in the
+parametric normal/normal model). Recent work by Gu and Koenker (2023) discusses
+EB methods for ranking and tail selection decisions.
+5.2.3 EB extensions
+The simple EB framework sketched here is usefully extended by adding covariates
+that predict school quality and by allowing a more flexible form for the prior distri-
+bution. It’s useful in some cases to have βjjs2
+j , Cj /C24 NðC0
+jμ, σ2
+βÞ given a list of school
+characteristics, Cj, such as school sectors. The re sulting EB posterior mean shrinks
+^βj toward an estimated linear index C0
+j ^μ (estimable from a regression of ^βj on Cj)
+rather than a constant. It is straightforward to also allow σ2
+β to depend on school
+characteristics.
+In the same spirit, normality of ( 26) might be replaced by a more general model
+for Gβ. The linear shrinkage estimator derived under normality has desirable prop-
+erties regardless. In particular, β*
+j coincides with the fitted value from a linear
+ahAnalysts sometimes report the variance of posterior mean estimates as a summary of the dispersion in
+value-added. Such a procedure can yield misleading results because the distribution of posterior means
+is by construction underdispersed relative to the underlying distribution of latent parameters (formally,
+Varðβ*
+j Þ < σ2
+β < Varð^βjÞ). For the purpose of understanding the variance of value-added, the hyper-
+parameter estimate ^σ2
+β is more useful.
+aiNote that since classical measurement error on the left does not cause bias, putting β*
+j rather than ^βj on
+the left-hand side of a regression causes bias rather than correcting it.
+415 VAM for individual schools
+ARTICLE IN PRESS
+
+===== PAGE 42 / 60: hoee_methods (1).pdf =====
+
+regression of βj on ^βj, so it can be interpreted as a best linear predictor of value-added
+regardless of the mixing distribution. It may nonetheless be of interest to estimate a
+more flexible G
+β to obtain a more complete picture of the shape of the school quality
+distribution and form improved posteriors. Methods for this purpose include the
+Kiefer and Wolfowitz (1956) nonparametric maximum likelihood estimator
+(NPMLE; see also Robbins, 1956 and Koenker and Mizera, 2014 ) and the
+exponential family deconvolution estimator proposed by Efron (2016) . Gilraine
+et al. (2020) apply the NPMLE approach to estimation of teacher value-added
+distributions.aj
+In some other cases, it’s useful to allow βj and s2
+j to be correlated. For example, it
+could be that newer or smaller schools are less effective, in which case schools with
+more students (and therefore lower s
+2
+j ) would tend to have higher βj. A simple strat-
+egy here treats s2
+j as a covariate in the conditional distribution of Gβ; the NPMLE
+estimator can also be applied to estimate an unrestricted bivariate distribution of
+βj and s2
+j . An alternative approach is to apply a variance-stabilizing transform to
+the ^βj’s that results in approximately constant sampling variance before estimating
+the prior distribution (see, e.g., Brown, 2008 ). Since the empirical literature on
+school quality using EB methods to date has typically relied on normality and inde-
+pendence assumptions, the practical relevance of relaxing these assumptions is
+unclear.
+5.3 Testing VAM validity with lotteries
+Of course, a precise but highly biased estimate of posterior of school value-added is
+likely to be as problematic as an extremely noisy estimate. We next consider the use
+of quasi-experimental school assignment variation to test for selection bias in obser-
+vational VAMs. The key assumption of an observational VAM is selection-on-
+observables: conditional on a set of included controls X
+i, school enrollment is as good
+as randomly assigned. This assumption can be tested with the help of a regression
+of the form:
+Yi ¼
+X
+j
+αjDij + X0
+iμ + νi, (32)
+where Xi is the vector of controls in the causal model ( 23). This regression model
+differs from (23) only in that it is defined as a regression and so may have parameters
+different from those in the causal model. The error term in this model, νi, therefore
+differs from the random part of potential outcomes, ηi.
+Under selection-on-observables, the parameters of the causal model ( 23) and the
+regression ( 32) coincide so that αj ¼ βj for all schools j. Moreover, the regression
+residual coincides with residual ability: νi ¼ ηi. Student ability should, in turn, be
+ajSee Kline and Walters (2021) and Kline et al. (2021) for other recent applications of nonparametric
+EB methods outside of education.
+42 Methods for measuring school effectiveness
+ARTICLE IN PRESS
+
+===== PAGE 43 / 60: hoee_methods (1).pdf =====
+
+unrelated to any randomness in school offers for the same reasons underlying
+Assumption 1A . Thus, a consequence of selection-on-observables is orthogonality
+of OLS residuals with (adjusted) assignment indicators.
+E½ðZi‘ /C0 pi‘Þνi/C138¼ 0, (33)
+for potentially multiple schools ‘ ¼ 1, …, L. Here, we are using the assignment pro-
+pensity scores pi‘ to address any nonrandomness in offers, as in the centralized
+assignment scenario of Section 4, but the same logic can be applied to decentralized
+lotteries by adjusting for risk set fixed effects, as in Sections 2 and 3.
+A test of ( 33) is obtained by regressing the residuals from regression model ( 32)
+on the set of instruments, Zi‘ /C0 pi‘. Test rejections are symptomatic of selection bias
+in the observational VAM coefficients: i.e., νi 6¼ ηi such that αj 6¼ βj for some or all
+schools j. Angrist et al. (2016b) show how this procedure can be viewed as a
+Lagrange multiplier (LM) test of the L orthogonality restrictions, which impose
+the joint null hypothesis of VAM validity and conditionally independent school
+assignment.
+An omnibus test of ( 33) can be decomposed into two conceptually distinct tests:
+one capturing the extent to which the observational VAM coefficientsαj predict school
+effectiveness βj on average, and one capturing how any selection bias bj ≡ αj /C0 βj
+varies across schools. Formally, consider a test statistic constructed based on an
+assumption of homoskedastic νi:
+^T ¼ ðY /C0 ^YÞ0PZðY /C0 ^YÞ
+^σ2
+ν
+,
+where Y is an N /C2 1 vector of the achievement outcome, ^Y is an N /C2 1 vector of
+regression fitted values from estimating Eq. ( 32), ^σ2
+ν ¼ð Y /C0 ^YÞ0ðY /C0 ^YÞ=N estimates
+the variance of νi, and PZ is the projection matrix for the adjusted offers Zi‘ /C0 pi‘.ak
+This is a joint test of significance of the regression of VAM residuals ^νi ¼ Yi /C0 ^Yi on
+Zi‘ /C0 pi‘:
+^νi ¼ ψ 0 +
+X
+‘
+ψ ‘ðZi‘ /C0 pi‘Þ + ui,
+where the null of ψ 1…, ψ L ¼ 0 is imposed to compute the residual variance. Angrist
+et al. (2016b) show this test statistic can be rewritten as the sum of two terms:
+^T ¼ ð ^φ /C0 1Þ2
+^σ2
+νð ^Y
+0
+PZ ^YÞ
+/C0 1 + ðY /C0 ^φ ^YÞ0PZ ðY /C0 ^φ ^YÞ
+^σ2
+ν
+, (34)
+akFormally, PZ ¼ Z(Z0Z)/C0 1Z0 where Z is a N /C2 L matrix stacking observations of the adjusted assign-
+ments Zi‘ /C0 pi‘.
+435 VAM for individual schools
+ARTICLE IN PRESS
+
+===== PAGE 44 / 60: hoee_methods (1).pdf =====
+
+where ^φ ¼ð ^Y
+0
+PZ ^YÞ
+/C0 1 ^Y
+0
+PZ Y is the 2SLS coefficient estimate that uses all Zi‘ /C0 pi‘ to
+instrument ^Yi in an equation for Yi. Since these adjusted offers are by design
+uncorrelated with student demographics or lagged test scores, ^φ can be seen to
+estimate the second-stage equation
+Yi ¼ τ0 + φα dðiÞ + X0
+iτ + ηi, (35)
+where αd(i) ¼P
+j αjDij denotes the observational VAM coefficient of i’s enrolled
+school.
+The second-stage parameter φ is sometimes referred to as a “forecast coefficient,”
+when versions of Eq. (35), fit with quasi-experimental variation, are used to assess the
+on-average predictive validity of observational quality measures αj—whether for
+teachers, schools, or more recently outside of education (e.g., Abaluck et al., 2021 ;
+Chetty and Hendren, 2018; Chetty et al., 2014a; Deming, 2014). The typical null hy-
+pothesis is thatφ ¼ 1, meaning that a one-unit increase inαd(i) translates into a one-unit
+increase in Yi. Deviations from this predictive relationship indicate “forecast bias.” The
+first term of the Angrist et al. (2016b) test statistic decomposition (34) is therefore a
+Wald statistic for the null of no forecast bias. The second term is the Sargan (1958)
+statistic for an LM test of the overidentifying restrictions in 2SLS estimation of Eq.
+(35). Intuitively, this term checks whether the VAM coefficients are equally predictive
+within each lottery quasi-experiment. The omnibus test of VAM validity ^T checking
+the L restrictions (33) combines a single test of forecast bias with L /C0 1a d d i t i o n a l
+restrictions coming from various school-specific admissions lotteries.
+Table 7 illustrates these tests for Boston middle schools using the sample of
+students and lotteries analyzed in Angrist et al. (2017). The first row reports forecast
+coefficients from 2SLS models instrumenting VAM predictions ^αdðiÞ with charter
+school lottery offers and first-choice centralized assignments, controlling for the
+necessary risk set fixed effects and additional baseline covariates. Column (1) shows
+results for an uncontrolled VAM which simply compares average 6th grade math
+achievement across schools adjusting for year effects. The lagged score model in
+column (2) further adjusts for student demographics and lagged (5th grade) achieve-
+ment, while the gains model in column (3) replaces the outcome with the difference
+in achievement and lagged achievement, maintaining the demographic covariates.
+The test results reveal that VAM models adjusting for lagged achievement are
+much less biased than the naive uncontrolled specification. The 2SLS forecast
+coefficient estimate for the uncontrolled model is only 0.40, indicating substantial
+forecast bias in comparisons of unadjusted achievement levels across schools. In
+contrast, the lagged score specification generates a forecast coefficient of 0.86 that
+is only marginally statistically different from one ( p ¼ 0.07). The corresponding
+estimate for the gains model equals 0.95, and the null hypothesis of no forecast bias
+in the gains model cannot be rejected at conventional levels (p ¼ 0.55). This minimal
+forecast bias reflects a common finding in the literatures on teacher and school value-
+added: approaches that adjust for past achievement eliminate much of the selection
+bias in comparisons across classrooms and schools so that on average estimates from
+a well-controlled VAM provide reasonably reliable estimates of causal effects on
+student test scores (
+Angrist et al., 2017 ; Chetty et al., 2014a ).
+44 Methods for measuring school effectiveness
+ARTICLE IN PRESS
+
+===== PAGE 45 / 60: hoee_methods (1).pdf =====
+
+Despite this minimal forecast bias, the final row of the table shows that the om-
+nibus test of all restrictions rejects decisively for all three models. The rejection is
+driven primarily by failure of the 2SLS overidentifying restrictions: even though the
+gains model predicts student outcomes well on average, this predictive validity is
+poor for some of the L school-specific lotteries. Test results for the more sophisti-
+cated VAMs in columns (2) and (3) are depicted graphically in
+Fig. 3, which gives
+a “visual IV” representation of the 2SLS estimates. Specifically, for each of the
+Angrist et al. (2017) school lotteries we plot the reduced-form effect of assignment
+on 6th grade math scores Yi against the first-stage effect of assignment on estimated
+observational value-added ^αdðiÞ. The slopes of the weighted lines-of-best-fit through
+these points correspond to the forecast coefficient estimates ^φ from the table, and we
+plot the benchmark 45-degree line for reference. As we’ve seen, the gains model
+brings these two lines closer together, reflecting minimal forecast bias. But several
+lottery points are far from these lines, s uggesting nonzero selection bias across
+schools (colored points are statistically significantly far from this line at the
+10% level).
+Table 7 VAM bias tests for Boston schools.
+Value-added model
+Uncontrolled Lagged score Gains
+(1) (2) (3)
+Forecast coefficient 0.396 0.864 0.950
+(0.056) (0.075) (0.084)
+p-values:
+Forecast bias <0.001 0.071 0.554
+Overidentification <0.001 0.003 0.006
+Omnibus <0.001 <0.001 <0.001
+Note: This table reports the results of tests for bias in conventional VAMs
+using 6th grade math scores for students in Boston. The uncontrolled model
+includes only year-of-test indicators as controls. The lagged score VAM
+includes cubic polynomials in baseline math and ELA scores, along with
+indicators for application year, sex, race, subsidized lunch, special education,
+English language learner status, and counts of baseline absences and
+suspensions. The gains VAM drops the lagged score controls and uses score
+growth from baseline as the outcome. Forecast coefficients are from IV
+regressions of test scores on fitted values from conventional VAMs,
+instrumenting fitted values with lottery offer indicators. The IV models are
+estimated via an asymptotically efficient GMM procedure and control for
+assignment strata fixed effects, demographic variables, and lagged scores.
+The forecast bias test checks whether the forecast coefficient equals 1, and
+the overidentification test checks the IV model’s overidentifying restrictions.
+The omnibus test combines forecast bias and overidentifying restrictions.
+Standard errors are reported in parentheses.
+The estimates reported in columns (2) and (3) are drawn from
+Angrist, J., Hull, P., Pathak, P., Walters, C., 2017. Leveraging lotteries for
+school value-added: testing and estimation. Q. J. Econ. 132 (2), 871–919;
+those reported in column (1) come from a re-analysis of the same sample.
+455 VAM for individual schools
+ARTICLE IN PRESS
+
+===== PAGE 46 / 60: hoee_methods (1).pdf =====
+
+0 .2 .4 .6vam
+.2 .4 .6 .8 1
+CharterPilotTraditional
+Forecast coef. line 45 degree line
+Forecast coef.: 0.950
+Omnibus p-val.: <0.001
+-.4 -.2 0 .2 .4
+Reduced form effect on test scores
+-.4 -.2 0 .2 .4
+First stage effect on OLS value-added
+B. Gains
+Forecast coef.: 0.864
+Omnibus p-val.: <0.001
+-.4 -.2 0 .2 .4
+Reduced form effect on test scores
+-.4 -.2 0 .2 .4
+First stage effect on OLS value-added
+A. Lagged score
+FIG. 3
+Visual IV tests for VAM bias. (A) Lagged score; (B) Gains. Note: This figure plots lottery
+reduced-form estimates against value-added first stages from 28 middle school admission
+lotteries. Outcomes are standardized 6th grade math test scores. Schools are categorized
+as belonging to the charter, pilot, and traditional public sector. Filled markers indicate
+reduced-form and first-stage estimates that are significantly different from each other at the
+10% level. The solid lines have slopes equal to the forecast coefficients in
+Table 7,
+while dashed lines indicate the 45-degree line.
+This figure is taken from Angrist, J., Hull, P., Pathak, P., Walters, C., 2017. Leveraging lotteries for school value-
+added: testing and estimation. Q. J. Econ. 132 (2), 871 –919.
+ARTICLE IN PRESS
+
+===== PAGE 47 / 60: hoee_methods (1).pdf =====
+
+5.4 Bias-correction with lotteries
+5.4.1 Combining OLS and IV estimates
+Given test rejections like in Table 7, a natural question is whether quasi-experimental
+admissions variation can be used to reduce the apparent selection bias in observa-
+tional VAMs. In a setting where both lottery-based and observational VAM esti-
+mates of school quality are available, there is a tradeoff between using biased
+(but precise) observational estimates and unbiased (but noisy) lottery estimates.
+We next sketch a potential solution to this tradeoff by extending the empirical Bayes
+framework of Section 5.2 .
+Suppose we have a set of potentially biased observational OLS VAM estimates
+from Eq. ( 23) satisfying:
+^αjjβj, bj, s2
+j,α /C24 Nðβj + bj, s2
+j,α Þ: (36)
+As before, parameter βj gives the true quality of school j, s2
+j,α is the squared
+standard error of the OLS estimate ^αj, and the normality assumption is an asymptotic
+approximation with many students per school. Now, however, the estimator may be
+biased—represented by the school-specific parameter bj. A rejection of the lottery-
+based omnibus test in Section 5.3 indicates that bj 6¼ 0 for some or all schools.
+Suppose in addition to the ^αj estimates we have a quasi-experimental VAM
+estimate ^βj for each school. For example, these estimates might come from instrument-
+ing the Dij indicators in Eq. ( 23) with risk-adjusted offer instruments Zij /C0 pij as
+described in Section 4. The lottery estimates are assumed to be consistent and asymp-
+totically normal estimates of the true VAM parameters:
+^βjjβj, bj, s2
+j,β /C24 Nðβj, s2
+j,βÞ: (37)
+We generally expect s2
+j,β to be larger than s2
+j,α since IV is less precise than OLS. al
+Finally, we extend the hierarchical model ( 26) to allow for a bivariate distribution
+of school quality and selection bias across schools. Letting Θj ≡ (βj + bj, βj)0 denote
+the 2 /C2 1 vector of observational VAM and causal parameters for school j, write:
+ΘjjSj /C24 NðμΘ, ΣΘÞ: (38)
+The matrixΣΘ describes the joint distribution of causal effectiveness and selection bias
+across schools. The matrix Sj has the sampling variances s2
+j,α and s2
+j,β on the diagonal
+and the sampling covariance of the OLS and IV estimates off the diagonal. Whenbj ¼ 0
+and the OLS residualνi is homoskedastic, this covariance equalss2
+j,α (Hausman, 1978).
+Under the model described by ( 36), ( 37), and ( 38), the posterior mean for Θj
+conditional on the observed estimates ^Θj ¼ð ^αj, ^βjÞ
+0
+is given by
+Θ⁎
+j ≡ E½Θjj ^Θj, Sj/C138¼ Σ/C0 1
+Θ + S/C0 1
+j
+/C16/C17 /C0 1
+S/C0 1
+j ^Θj + Σ/C0 1
+Θ + S/C0 1
+j
+/C16/C17 /C0 1
+Σ/C0 1
+Θ μΘ: (39)
+alNote that this would be guaranteed under the classical assumptions of the Gauss –Markov model.
+475 VAM for individual schools
+ARTICLE IN PRESS
+
+===== PAGE 48 / 60: hoee_methods (1).pdf =====
+
+The second element of Θ*
+j is the posterior mean for βj using both the OLS and
+IV estimates of school quality, which is a linear combination of the two estimates
+and the prior mean. am
+Following the EB approach of Section 5.2 , the “hybrid” value-added posterior
+means in (39) can be approximated by estimating hyperparameters μΘ and ΣΘ, based
+on the observed joint distribution of OLS and IV estimates and their sampling var-
+iances and covariances, and then plugging these hyperparameter estimates into
+Eq. (
+39). By the above Hausman (1978) logic on Sj, it can be shown that when the ob-
+servational VAM is close to unbiased (Va r(bj) /C25 0) and the errors are homoskedastic
+no weight is placed on the IV estimates and we return to the conventional EB shrinkage
+formula (
+29) applied to the OLS ^αj estimates. At the opposite extreme, when selection
+bias is bad enough to make the observational VAM estimates useless (i.e., Var(bj)
+!∞), no weight is placed on ^αj and we arrive at a conventional EB shrinkage formula
+for the quasi-experimental estimates ^βj. In intermediate cases, the hybrid posterior op-
+timally trades off bias and variance between the two sets of value-added estimates.
+5.4.2 Bias-correction with undersubscription: IV VAM
+In practice, a lottery-based estimate ^βj may not be available for every school. In cen-
+tralized assignment systems, for example, there are typically some schools that lack
+quasi-experimental variation in assignment. This is a problem of undersubscription,
+formalized as Z
+ij /C0 pij ¼ 0 for all students i at some school j. Applicants who are
+assigned to such schools ( Zij ¼ 1) never face any risk of nonassignment ( pij ¼ 1),
+perhaps because the school faces weak demand and so has no need for lottery-based
+rationing, while all other students are never assigned (Zij ¼ pij ¼ 0). With Zij /C0 pij ¼ 0
+for all students, assignment at this school cannot instrument for school enrollment;
+given undersubscription, therefore, we have fewer instruments than endogenous
+variables in Eq. ( 23) and cannot use 2SLS to estimate the β
+j’s or apply the hybrid
+posterior formula ( 39).
+An instrumental variables value-added model (IV VAM) approach, introduced in
+Angrist et al. (2021) , offers a solution to the undersubscription problem. an IV VAM
+sidesteps underidentification of the βj’s with a model relating value-added to a lower-
+dimensional set of school characteristics, estimated by IV. This approach starts with
+a hypothetical school-level projection of value-added β
+j on a K /C2 1 vector of school
+characteristics Mj:
+βj ¼ M0
+jφ + νj: (40)
+Eq. ( 40) is a between-school model of the sort often used in hierarchical linear
+models for school effects ( Raudenbush and Bryk, 1986 ). The characteristics Mj
+amSee Angrist et al. (2017) for expressions for the weights on the two estimates in special cases. Chetty
+and Hendren (2018) use a similar approach to compute EB estimates of neighborhood effects combin-
+ing observational and quasi-experimental variation.
+anThe IV VAM method simplifies and generalizes a parametric approach to hybrid estimation with
+undersubscription explored in Angrist et al. (2017) .
+48 Methods for measuring school effectiveness
+ARTICLE IN PRESS
+
+===== PAGE 49 / 60: hoee_methods (1).pdf =====
+
+might include an OLS value-added coefficient αj as well as other school attributes
+like sector or demographics. Coefficient vector φ captures the systematic relation-
+ship between these predictors and causal school quality. Residual νj, defined so that
+E[Mjνj] ¼ 0, reflects variation in school quality not explained by Mj.H y p e r p a r a -
+meter σ2
+ν ≡ VarðνjÞ summarizes the extent of such residual variation.
+Plugging the school-level projection (40) into the student-level causal model (22)
+yields:
+Yi ¼ τ0 + M0
+dðiÞφ + εi + νdðiÞ, (41)
+where Md(i ) ¼ P
+j MjDij is the vector of characteristics for student i’s enrolled
+school. The first step of IV VAM is to estimate Eq. ( 41) by 2SLS, instrumenting
+Md(i ) with a vector of risk-adjusted offers for L oversubscribed schools, ~Zi ¼
+ðZi1 /C0 pi1, …, ZiL /C0 piLÞ.
+This 2SLS procedure generalizes the testing approach introduced in Section 5.3.
+When Md(i ) consists only of an OLS school value-added estimate ^αdðiÞ , the 2SLS
+estimate ^φ checks for forecast bias in the underlying OLS model, while the accom-
+panying overidentification test assesses variation in the predictive value of OLS
+across lotteries. In more general cases, the 2SLS forecast coefficient describes the
+relationship between school characteristics Mj and value-added, and the overidenti-
+fication test statistic can be used to construct an estimate of σ2
+ν (which should be zero
+if Mj includes an unbiased OLS coefficient). The mechanics of the IV VAM estima-
+tion procedure and its connection to VAM specification tests are detailed further
+in
+Angrist et al. (2021) .ao
+The second step of IV VAM constructs minimum MSE predictions of individual
+school quality given all available information, including the school characteristics Mj
+and estimates from the available lottery quasi-experiments. Let ^ρ denote the L /C2 1
+vector of coefficients from a regression of Yi on the risk-adjusted offer vector ~Zi, and
+let Vρ denote the sampling covariance matrix of ^ρ.T h e J /C2 1 vector of IV VAM
+posteriors is given by:
+β* ¼ Π0ðΠΠ0 + Vρ=σ2
+νÞ
+/C0 1
+^ρ + IJ /C0 Π0ðΠΠ0 + Vρ=σ2
+νÞ
+/C0 1
+Π
+hi
+Mφ : (42)
+Here M is a J /C2 K matrix collecting characteristics Mj for all schools, IJ is the J /C2 J
+identity matrix, and Π is an L /C2 J matrix of first-stage coefficients from regressions
+of each of the J school attendance indicators, Dij,o n ~Zi . In a special case with no
+undersubscription ( L ¼ J) and Mj equal to an OLS value-added coefficient, this
+formula collapses to the bivariate shrinkage formula (39). ap With undersubscription,
+IV VAM posteriors combine a value-added forecast M0
+jφ for each school with
+aoIn cases where Var(νj)6¼0, the exclusion restriction underlying 2SLS estimation of ( 41) requires
+school offers to be uncorrelated with residual school quality νd(i ), which is not guaranteed by indepen-
+dence of offers and potential outcomes. As detailed in Angrist et al. (2021) , this makes IV VAM a
+special case of the “many invalid instruments” framework of Kolesa´r et al. (2015) .
+apSee the Appendix to Angrist et al. (2021) for the details of this equivalence.
+495 VAM for individual schools
+ARTICLE IN PRESS
+
+===== PAGE 50 / 60: hoee_methods (1).pdf =====
+
+reduced-form offer effects ^ρ, accounting for offer compliance via the first-stage
+matrix Π. An EB implementation plugs OLS estimates of Π and Vρ into (42) along
+with 2SLS estimates of φ and σ2
+ν, obtained from the first step of IV VAM.
+5.5 Risk-controlled value-added models (RC VAM)
+An alternative strategy for using centralized assignment variation to estimate school
+value-added is the risk-controlled value-added model (RC VAM) of Angrist et al.
+(2021). This approach starts with the observation that assignment systems like the
+DA mechanism in Section 4 generate rich data on student preferences and priorities
+which may account for much of the nonrandom sorting across schools. RC VAM
+uses this data to bolster the selection-on-observables assumption in conventional
+VAM estimation, by adding functions of the assignment propensity scores p
+ij to
+the control vector Xi in regression ( 32). In other words, instead of using centralized
+assignment information to generate instruments for school assignment, RC VAM
+uses this information to construct new control variables that help to mitigate selec-
+tion bias in observational models.
+aq
+The selection-on-observables assumption underlying an RC VAM model
+with risk controls echoes that invoked in studies of college quality by Dale and
+Krueger (2002, 2014) and Mountjoy and Hickman (2021) . These studies control
+for a student’s college application portfolio and admissions offers to estimate the
+returns to enrollment at particular colleges, assuming that offer take-up decisions
+are as good as random. Similarly, RC VAM requires noncompliance with centralized
+assignment admission offers to be as good as random conditional on assignment
+risk and other observables. This connection is formalized in the following result
+of
+Angrist et al. (2021) :
+εi ?? Dijðpi, Xi, ZiÞ¼ ) εi ?? Dijðpi, XiÞ, (43)
+where Di  f1, …, Jg is the school attended by student i, Zi  f1, …, Jg is i’s school
+assignment, pi ¼ð pi1, …, piJ Þ is the vector of propensity scores for all schools, and
+εi is the student ability term from model ( 22). This result shows that if school enroll-
+ment is independent of ability among students with the same assignment risk,
+covariates, and offers, then enrollment is also independent of ability conditional
+on just risk and covariates—since offers are random conditional on risk, it is not nec-
+essary to control for offers once we’ve conditioned on the assignment propensity
+score. Knowledge of the propensity score therefore allows us to use the conditional
+randomness of offers to test the RC VAM selection-on-observables assumption
+(the right-hand side of (
+43)) rather than controlling directly for admission offers,
+even while motivating the RC VAM strategy by a Dale and Krueger-style assump-
+tion of random noncompliance with offers (the left-hand side of (
+43)).
+Tests of the RC VAM identifying assumption for NYC middle and high schools
+appear in Fig. 4. The results show that RC VAM estimates of NYC middle and high
+aqAbdulkadiro/C21glu et al. (2020) develop a related control-function approach that controls for preferences
+derived from random utility discrete-choice models fit to students’ rank-ordered preference lists.
+50 Methods for measuring school effectiveness
+ARTICLE IN PRESS
+
+===== PAGE 51 / 60: hoee_methods (1).pdf =====
+
+FIG. 4
+Visual IV tests for VAM bias. (A) Middle schools; (B) High schools. Note: This figure plots reduced-form estimates against value-added first stages
+from each of 20 bins of school assignment indicators for NYC middle and high school samples. Outcomes are 6th grade math New York State
+Assessment scores for middle schools, and SAT math scores for high schools. Assignments are binned by ventile of the estimated
+conventional VAM. Filled markers indicate reduced-form and first-stage estimates that are significantly different from each other at the 10% level.
+The solid lines have slopes equal to the forecast coefficients in Table 2 of Angrist et al. (2021) , while dashed lines indicate the 45-degree line.
+This figure is taken from Angrist, J.D., Hull, P.D., Pathak, P.A., Walters, C.R., 2021. Credible school value-added with undersubscribed school lot teries. Rev. Econ. Stat.,
+Forthcoming. https://doi.org/10.1162/rest_a_01149.
+ARTICLE IN PRESS
+
+===== PAGE 52 / 60: hoee_methods (1).pdf =====
+
+school quality are virtually unbiased, using the sample of Angrist et al. (2021) and
+same visual IV testing procedure as in Fig. 3.ar The first column of both panels shows
+again that uncontrolled VAMs, which effectively compare achievement levels, badly
+fail to predict the reduced-form effects of centralized school assignment. Remark-
+ably, the second column shows that most of this selection bias is removed by adding
+assignment risk controls; when conventional VAM controls (demographics and
+lagged test scores) are further added, the forecast coefficient is indistinguishable
+from one with all points tightly clustered around the 45-degree line. The omnibus
+test p-value for the middle and high school RC VAMs are 0.21 and 0.79, respectively.
+The seeming lack of omitted variables bias is especially impressive for high schools,
+where the NYC outcome (SAT scores) comes from a different test than the lagged
+score controls and thus may be more prone to omitted variables bias (a point made in
+a different context by
+Chetty et al., 2014b ). These results suggest that using infor-
+mation on assignment risk from centralized assignment systems is a promising
+strategy for mitigating selection bias in school VAMs.
+6 Conclusion: What next for school quality measurement?
+The increasing use of centralized assignment systems in American school districts
+offers new opportunities to apply the methods outlined in this chapter. Policymakers’
+and parents’ growing demand for reliable measures of school effectiveness will
+likewise fuel such analysis. We conclude with a brief look at new directions this work
+might take.
+Most of the research reviewed here focuses on achievement-based measures of
+school quality. Recent years have seen growing interest in school effects on out-
+comes other than student achievement. Early efforts in this direction include explo-
+rations of school effects on noncognitive outcomes like absences, suspensions, and
+socioemotional development, as well as longer-run outcomes like educational attain-
+ment, crime, political participation, employment, and earnings (
+Abdulkadiro/C21glu et al.,
+2020; Angrist et al., 2016a; Beuermann et al., 2023; Cohodes and Feigenbaum, 2023;
+Deming, 2011; Deming et al., 2014 ; Dobbie and Fryer, 2015, 2020 ; Jackson et al.,
+2020). The links between achievement-based and alternative measures of value-added
+constitute an important area for future research. Longer-term outcomes also raise
+new econometric issues, since the lagged-controls strategy used for conventional
+achievement-based VAMs is unavailable for something like earnings. Lottery-based
+methods may therefore be especially important when looking at longer-term effects.
+The individual-school value-added models discussed in
+Section 5 posit a single
+causal effect of each school common to all students. In practice, school value-added
+arSince there are many admissions instruments in NYC, Angrist et al. (2021) group them into 20 bins on
+the basis of the school’s observational VAM estimate. Angrist et al. (2021) also find RC VAM to be
+virtually unbiased in a sample of Denver middle schools.
+52 Methods for measuring school effectiveness
+ARTICLE IN PRESS
+
+===== PAGE 53 / 60: hoee_methods (1).pdf =====
+
+may be heterogeneous—for example, a school’s effect might be different for those
+attending in different years, or for students with different levels of preparation. And
+urban charter schools seem especially beneficial for students with low baseline test
+scores (
+Angrist et al., 2012 ; Chabrier et al., 2016 ; Frandsen and Lefgren, 2021 ).
+Match effects of this sort create new methodological challenges. In particular, recent
+work by
+Goldsmith-Pinkham et al. (2022) highlights problems with regression-based
+approaches in settings with many treatments and heterogeneous effects; match
+effects also complicate the interpretation of lottery-based tests for VAM validity,
+since these are sensitive to differences between LATEs and other treatment effect
+parameters in addition to selection bias. This suggests a role for more flexible,
+possibly nonparametric models beyond the linear 2SLS workhorse.
+A third research frontier combines the school quality measurement tools dis-
+cussed here with preference data generated by centralized assignment in an effort
+to understand the interplay between school choice and school effectiveness. Evi-
+dence on whether households choose schools based on causal impacts on student out-
+comes is mixed:
+Rothstein (2006) and Abdulkadiro/C21glu et al. (2020) argue that school
+choice depends more on peer achievement than on causal school effects. Other work,
+however, suggests logistical barriers and seemingly complex or opaque choice sys-
+tems prevent some households from selecting the most effective schools for their
+children (
+Bergman et al., 2020 ; Kapor et al., 2020 ; Walters, 2018). A better under-
+standing of these issues should have the double payoff of improving both school
+accountability measures and educational outcomes.
+Acknowledgments
+We thank Sarah Cohodes, Parag Pathak, and research staff at the Massachusetts Department of
+Elementary and Secondary Education for helpful comments. Jerray Chang, Nidhaan Jain,
+Russell Legate-Yang, and Hellary Zhang provided excellent research assistance.
+References
+Abadie, A., 2002. Bootstrap tests for distributional treatment effects in instrumental variable models.
+J. Am. Stat. Assoc. 97 (457), 284–292. https://doi.org/10.1198/016214502753479419.
+Abadie, A., 2003. Semiparametric instrumental variable estimation of treatment response
+models. J. Econ. 113, 231 –263. https://doi.org/10.1016/S0304-4076(02)00201-4.
+Abadie, A., Angrist, J., Imbens, G., 2002. Instrumental variables estimates of the effect of
+subsidized training on the quantiles of trainee earnings. Econometrica 70 (1), 91 –117.
+https://doi.org/10.1111/1468-0262.00270.
+Abaluck, J., Bravo, M.M.C., Hull, P., Starc, A., 2021. Mortality effects and choice across
+private health insurance plans. Q. J. Econ. 136, 1557 –1610. https://doi.org/10.1093/qje/
+qjab017.
+Abdulkadiro/C21glu, A., Angrist, J., Pathak, P., 2014. The elite illusion: achievement effects at
+Boston and New York Exam Schools. Econometrica 82 (1), 137 –196. https://doi.org/
+10.3982/ECTA10266.
+53References
+ARTICLE IN PRESS
+
+===== PAGE 54 / 60: hoee_methods (1).pdf =====
+
+Abdulkadiro/C21glu, A., Andersson, T., 2022. School choice. NBER Working Paper 29822.
+https://doi.org/10.3386/w29822.
+Abdulkadiro/C21glu, A., Angrist, J.D., Dynarski, S., Kane, T.J., Pathak, P.A., 2011. Accountability
+and flexibility in public schools: evidence from Boston’s charters and pilots. Q. J. Econ.
+126 (2), 699 –748. https://doi.org/10.1093/qje/qjr017.
+Abdulkadiro/C21glu, A., Hu, W., Pathak, P., 2013. Small high schools and student achievement:
+lottery-based evidence from New York City. NBER Working Paper 19576. https://doi.org/
+10.3386/w19576.
+Abdulkadiro/C21glu, A., Angrist, J.D., Hull, P.D., Pathak, P.A., 2016. Charters without lotteries:
+testing takeovers in New Orleans and Boston. Am. Econ. Rev. 106 (7), 1878–1920. https://
+doi.org/10.1257/aer.20150479.
+Abdulkadiro/C21glu, A., Angrist, J.D., Narita, Y., Pathak, P.A., 2017. Research design meets mar-
+ket design: using centralized assignment for impact evaluation. Econometrica 85 (5),
+1373–1432. https://doi.org/10.3982/ECTA13925.
+Abdulkadiro/C21glu, A., Pathak, P.A., Walters, C.R., 2018. Free to choose: can school choice
+reduce student achievement? Am. Econ. J. Appl. Econ. 10 (1), 175 –206. https://doi.org/
+10.1257/app.20160634.
+Abdulkadiro/C21glu, A., Pathak, P.A., Schellenberg, J., Walters, C.R., 2020. Do parents value school
+effectiveness? Am. Econ. Rev. 110 (5), 1502 –1539. https://doi.org/10.1257/aer.20172040.
+Abdulkadı̇ro/C21glu, A., Angrist, J.D., Narita, Y., Pathak, P., 2022. Breaking ties: regression dis-
+continuity design meets market design. Econometrica 90 (1), 117 –151. https://doi.org/10.
+3982/ECTA17125.
+Allcott, H., 2015. Site selection bias in program evaluation. Q. J. Econ. 130 (3), 1117 –1165.
+https://doi.org/10.1093/qje/qjv015.
+Andrews, I., Stock, J.H., Sun, L., 2019. Weak instruments in instrumental variables regression:
+theory and practice. Annu. Rev. Econ. 11 (1), 727 –753. https://doi.org/10.1146/annurev-
+economics-080218-025643.
+Anelli, M., 2020. The returns to elite university education: a quasi-experimental analysis. J.
+Eur. Econ. Assoc. 18 (6), 2824 –2868. https://doi.org/10.1093/jeea/jvz070.
+Angrist, J.D., 2004. Treatment effect heterogeneity in theory and practice. Econ. J. 114 (494),
+C52–C83. http://www.jstor.org/stable/3590307.
+Angrist, J.D., Imbens, G.W., 1995. Two-stage least squares estimation of average causal ef-
+fects in models with variable treatment intensity. J. Am. Stat. Assoc. 90 (430), 431 –442.
+http://www.jstor.org/stable/2291054.
+Angrist, J.D., Imbens, G.W., Rubin, D.B., 1996. Identification of causal effects using instru-
+mental variables. J. Am. Stat. Assoc. 91 (434), 444 –455.
+Angrist, J., Bettinger, E., Bloom, E., King, E., Kremer, M., 2002. Vouchers for private school-
+ing in Colombia: evidence from a randomized natural experiment. Am. Econ. Rev. 92 (5),
+1535–1558.
+https://doi.org/10.1257/000282802762024629.
+Angrist, J.D., Dynarski, S.M., Kane, T.J., Pathak, P.A., Walters, C.R., 2010. Inputs and
+impacts in charter schools: KIPP Lynn. Am. Econ. Rev. Papers Proc. 100 (2), 239 –243.
+Angrist, J.D., Dynarski, S.M., Kane, T.J., Pathak, P.A., Walters, C.R., 2012. Who benefits
+from KIPP? J. Policy Anal. Manage. 31 (4), 837 –860.
+Angrist, J., Kolesa´r, M., 2023. One instrument to rule them all: the bias and coverage of just-ID
+IV. J. Econom. https://doi.org/10.1016/j.jeconom.2022.12.012.
+Angrist, J.D., Pischke, J.-S., 2009. Mostly Harmless Econometrics: An Empiricist’s Compan-
+ion. Princeton University Press.
+Angrist, J.D., Pathak., P. A., Walters, C.R., 2013. Explaining charter school effectiveness. Am.
+Econ. J. Appl. Econ. 5 (4), 1 –27. https://doi.org/10.1257/app.5.4.1.
+54 Methods for measuring school effectiveness
+ARTICLE IN PRESS
+
+===== PAGE 55 / 60: hoee_methods (1).pdf =====
+
+Angrist, J.D., Cohodes, S.R., Dynarski, S.M., Pathak, P.A., Walters, C.R., 2016a. Stand and
+deliver: effects of Boston’s charter high schools on college preparation, entry, and choice.
+J. Labor Econ. 34 (2), 275 –318.
+Angrist, J.D., Hull, P.D., Pathak, P.A., Walters, C.R., 2016b. Interpreting tests of school VAM
+validity. Am. Econ. Rev. Papers Proc. 106 (5), 388 –392.
+Angrist, J., Hull, P., Pathak, P., Walters, C., 2017. Leveraging lotteries for school value-added:
+testing and estimation. Q. J. Econ. 132 (2), 871 –919.
+Angrist, J.D., Hull, P.D., Pathak, P.A., Walters, C.R., 2021. Credible school value-added with
+undersubscribed school lotteries. Rev. Econ. Stat. Forthcoming https://doi.org/10.1162/
+rest_a_01149. Forthcoming.
+Armstrong, T.B., Kolesa´r, M., Plagborg-Møller, M., 2022. Robust empirical Bayes confidence
+intervals. Econometrica 90 (1), 2567 –2602. https://doi.org/10.3982/ECTA18597.
+Baude, P.L., Casey, M., Hanushek, E.A., Phe lan, G.R., Rivkin, S.G., 2020. The evolution
+of charter school quality. Economica 87 (345), 158 –189. https://doi.org/10.1111/
+ecca.12299 .
+Behaghel, L., Cr /C19epon, B., Gurgand, M., 2013. Robustness of the encouragement design in a
+two-treatment randomized control trial. Institute for the Study of Labor (IZA) Discussion
+Paper 7447.
+Behaghel, L., de Chaisemartin, C., Gurgand, M., 2017. Ready for boarding? The effects of a
+boarding school for disadvantaged students. Am. Econ. J. Appl. Econ. 9 (1), 140 –164.
+https://doi.org/10.1257/app.20150090.
+Bergman, P., Hill, M.J., 2018. The effects of making performance information public: regres-
+sion discontinuity evidence from Los Angeles teachers. Econ. Educ. Rev. 66, 104 –113.
+https://doi.org/10.1016/j.econedurev.2018.07.005.
+Bergman, P., Chan, E.W., Kapor, A., 2020. Housing search frictions: evidence from detailed
+search data and a field experiment. NBER Working Paper 27209. https://doi.org/10.3386/
+w27209.
+Beuermann, D.W., Jackson, C.K., 2022. The short- and long-run effects of attending the
+schools that parents prefer. J. Hum. Resour. 57 (3), 725 –746. https://doi.org/10.3368/
+jhr.57.3.1019-10535R1.
+Beuermann, D., Jackson, C.K., Navarro-Sola, L., Pardo, F., 2023. What is a good school, and
+can parents tell? Evidence on the multidimensionality of school output. Rev. Econ. Stud.
+90 (1), 65 –101.
+https://doi.org/10.1093/restud/rdac025.
+Bhuller, M., Sigstad, H., 2022. 2SLS with multiple treatments. arXiv:2205.07836.
+Bleemer, Z., Mehta, A., 2022. Will studying economics make you rich? A regression discon-
+tinuity analysis of the returns to college major. Am. Econ. J. Appl. Econ. 14 (2), 1 –22.
+https://doi.org/10.1257/app.20200447.
+Bloom, H.S., 1984. Accounting for no-shows in experimental evaluation designs. Eval. Rev. 8
+(2), 225 –246. https://doi.org/10.1177/0193841X8400800205.
+Bloom, H.S., Unterman, R., 2014. Can small high schools of choice improve educational pros-
+pects for disadvantaged students? J. Policy Anal. Manage. 33 (2), 290–319. https://doi.org/
+10.1002/pam.21748.
+Borusyak, K., Hull, P., 2023. Non-random exposure to exogenous shocks. Econometrica.
+Forthcoming.
+Brinch, C.N., Mogstad, M., Wiswall, M., 2017. Beyond LATE with a discrete instrument. J.
+Polit. Econ. 125 (4), 985 –1039. https://doi.org/10.1086/692712.
+Brown, L.D., 2008. In-season prediction of batting averages: a field test of empirical Bayes
+and Bayes methodologies. Ann. Appl. Stat. 2 (1), 113 –152. https://doi.org/10.1214/07-
+AOAS138.
+55References
+ARTICLE IN PRESS
+
+===== PAGE 56 / 60: hoee_methods (1).pdf =====
+
+Calonico, S., Cattaneo, M.D., Titiunik, R., 2014. Robust nonparametric confidence intervals
+for regression-discontinuity designs. Econometrica 82 (6), 2295 –2326. https://doi.org/
+10.3982/ECTA11757.
+Campos, C.Q., Kearns, C., 2023. The impact of public school choice: evidence from Los
+Angeles’ Zones of Choice. SSRN Working Paper 3830628. https://doi.org/10.2139/
+ssrn.3830628.
+Card, D., Giuliano, L., 2016. Can tracking raise the test scores of high-ability minority stu-
+dents? Am. Econ. Rev. 106 (10), 2783 –2816. https://doi.org/10.1257/aer.20150484.
+Cattaneo, M.D., Titiunik, R., Vazquez-Bare, G., 2016. Inference in regression discontinuity
+designs under local randomization. Stata J. 16 (2), 331 –367. https://doi.org/10.1177/
+1536867X1601600205.
+Chabrier, J., Cohodes, S., Oreopoulos, P., 2016. What can we learn from charter school lot-
+teries? J. Econ. Perspect. 30 (3), 57 –84. https://doi.org/10.1257/jep.30.3.57.
+Chetty, R., Hendren, N., 2018. The impacts of neighborhoods on intergenerational mobility I:
+childhood exposure effects. Q. J. Econ. 133, 1107 –1162. https://doi.org/10.1093/qje/
+qjy007.
+Chetty, R., Friedman, J.N., Rockoff, J.E., 2014a. Measuring the impact of teachers I: evalu-
+ating bias in teacher value-added estimates. Am. Econ. Rev. 104 (9), 2593. 2563. https://
+doi.org/10.1257/aer.104.9.2593.
+Chetty, R., Friedman, J.N., Rockoff, J.E., 2014b. Measuring the impact of teachers II: teacher
+value-added and student outcomes in adulthood. Am. Econ. Rev. 104 (9), 2633 –2679.
+https://doi.org/10.1257/aer.104.9.2633.
+Chingos, M.M., Peterson, P.E., 2015. Experimentally estimated impacts of school vouchers on
+college enrollment and degree attainment. J. Public Econ. 122, 1 –12. https://doi.org/
+10.1016/j.jpubeco.2014.11.013.
+Clark, M.A., Gleason, P.M., Tuttle, C.C., Silverberg, M.K., 2015. Do charter schools improve
+student achievement? Educ. Evavl. Policy Anal. 37 (4), 419 –436. https://doi.org/10.
+3102/0162373714558292.
+Cohodes, S., Feigenbaum, J.J., 2023. Why does education increase voting? Evidence from
+Boston’s charter schools. NBER Working Paper 29308. https://doi.org/10.3386/w29308.
+Cohodes, S.R., Setren, E.M., Walters, C.R., 2021. Can successful schools replicate? Scaling up
+Boston’s charter school sector. Am. Econ. J. Econ. Policy 13 (1), 138 –167. https://doi.org/
+10.1257/pol.20190259.
+Coleman, J.S., 1966. Equality of Educational Opportunity. U.S. Department of Health, Edu-
+cation, and Welfare, Office of Education.
+Cullen, J.B., Jacob, B.A., Levitt, S.D., 2006. The effect of school choice on participants: ev-
+idence from randomized lotteries. Econometrica 74 (5), 1191 –1230. https://doi.org/10.
+1111/j.1468-0262.2006.00702.x.
+Curto, V.E., Fryer, R.G., 2014. The potential of urban boarding schools for the poor: evidence
+from SEED. J. Labor Econ. 32 (1), 65 –93. https://doi.org/10.1086/671798.
+Dale, S.B., Krueger, A.B., 2002. Estimating the payoff to attending a more selective college:
+an application of selection on observables and unobservables. Q. J. Econ. 117 (4),
+1491–1527.
+https://doi.org/10.1162/003355302320935089.
+Dale, S.B., Krueger, A.B., 2014. Estimating the effects of college characteristics over the ca-
+reer using administrative earnings data. J. Hum. Resour. 49 (2), 323 –358. https://doi.org/
+10.3368/jhr.49.2.323.
+Davis, M., Heller, B., 2019. No excuses charter schools and college enrollment: new evidence
+from a high school network in Chicago. Educ. Finance Policy 14 (3), 414 –440. https://doi.
+org/10.1162/edfp_a_00244.
+56 Methods for measuring school effectiveness
+ARTICLE IN PRESS
+
+===== PAGE 57 / 60: hoee_methods (1).pdf =====
+
+de Chaisemartin, C., Behaghel, L., 2020. Estimating the effect of treatments allocated by
+randomized waiting lists. Econometrica 88 (4), 1453 –1477. https://doi.org/10.3982/
+ECTA16032.
+de Roux, N., Riehl, E., 2022. Do college students benefit from placement into higher-achieving
+classes? J. Public Econ. 210, 104669. https://doi.org/10.1016/j.jpubeco.2022.104669.
+Deming, D.J., 2011. Better schools, less crime? Q. J. Econ. 126 (4), 2063 –2115. https://doi.
+org/10.1093/qje/qjr036.
+Deming, D., 2014. Using school choice lotteries to test measures of school effectiveness. Am.
+Econ. Rev. Papers Proc. 104 (5), 406 –411. https://doi.org/10.1257/aer.104.5.406.
+Deming, D.J., Hastings, J.S., Kane, T.J., Staiger, D.O., 2014. School choice, school quality,
+and postsecondary attainment. Am. Econ. Rev. 104 (3), 991 –1013. https://doi.org/
+10.1257/aer.104.3.991.
+Dobbie, W., Fryer, R.G., 2011. Are high-quality schools enough to increase achievement
+among the poor? Evidence from the Harlem children’s zone. Am. Econ. J. Appl. Econ.
+3 (3), 158 –187. https://doi.org/10.1257/app.3.3.158.
+Dobbie, W., Fryer, R.G., 2013. Getting beneath the veil of effective schools: evidence
+from New York City. Am. Econ. J. Appl. Econ. 5 (4), 28 –60. https://doi.org/10.1257/
+app.5.4.28.
+Dobbie, W., Fryer, R., 2014. The impact of attending a school with high-achieving peers:
+evidence from the New York City Exam Schools. Am. Econ. J. Appl. Econ. 6 (3),
+58–75. https://doi.org/10.1257/app.6.3.58.
+Dobbie, W., Fryer, R.G., 2015. The medium-term impacts of high-achieving charter schools.
+J. Polit. Econ. 123 (5), 985 –1037. https://doi.org/10.1086/682718.
+Dobbie, W., Fryer, R.G., 2020. Charter schools and labor market outcomes. J. Labor Econ.
+38 (4), 915 –957. https://doi.org/10.1086/706534.
+Draper, N., Smith, H., 1998. Applied regression analysis. Series in Probability and Statistics,
+third ed. Wiley. https://doi.org/10.1002/9781118625590.
+Dustan, A., de Janvry, A., Sadoulet, E., 2017. Flourish or fail? The risky reward of elite high
+school admission in Mexico City. J. Hum. Resour. 52 (3), 756 –799.
+Efron, B., 2010. Large-Scale Inference: Empirical Bayes Methods for Estimation, Testing and
+Prediction. vol. 1 Cambridge University Press.https://doi.org/10.1017/CBO9780511761362.
+Efron, B., 2016. Empirical Bayes deconvolution estimates. Biometrika 103 (1), 1 –20. https://
+doi.org/10.1093/biomet/asv068.
+Eisenhauer, P., Heckman, J.J., Vytlacil, E., 2015. The generalized Roy model and the cost-
+benefit analysis of social programs. J. Polit. Econ. 123 (2), 413 –443. https://doi.org/
+10.1086/679498.
+Engberg, J., Epple, D., Imbrogno, J., Sieg, H., Zimmer, R., 2014. Evaluating education pro-
+grams that have lotteried admission and selective attrition. J. Labor Econ. 32 (1), 27 –63.
+https://doi.org/10.1086/671797.
+Feller, A., Grindal, T., Miratrix, L., Page, L.C., 2016. Compared to what? Variation in the
+impacts of early childhood education by alternative care type. Ann. Appl. Stat. 10 (3),
+1245–1285. https://doi.org/10.1214/16-AOAS910.
+Figlio, D., Hart, C.M.D., 2014. Competitive effects of means-tested school vouchers. Am.
+Econ. J. Appl. Econ. 6 (1), 133 –156. https://doi.org/10.1257/app.6.1.133.
+Frandsen, B.R., Lefgren, L.J., 2021. Partial identification of the distribution of treatment
+effects with an application to the Knowledge is Power Program (KIPP). Quant. Econ.
+12 (1), 143 –171. https://doi.org/10.3982/QE1273.
+Gale, D., Shapley, L.S., 1962. College admissions and the stability of marriage. Am. Math.
+Mon. 69 (1), 9 –15. https://doi.org/10.2307/2312726.
+57References
+ARTICLE IN PRESS
+
+===== PAGE 58 / 60: hoee_methods (1).pdf =====
+
+Gilraine, M., Gu, J., McMillan, R., 2020. A new method for estimating teacher value-added.
+NBER Working Paper 27094. https://doi.org/10.3386/w27094.
+Gilraine, M., Petronijevic, U., Singleton, J.D., 2021. Horizontal differentiation and the policy
+effect of charter schools. American Econ. J. Econ. Policy 13 (3), 239 –276. https://doi.org/
+10.1257/pol.20200531.
+Goldsmith-Pinkham, P., Hull, P., Kolesa´r, M., 2022. Contamination bias in linear regressions.
+NBER Working Paper 30108. https://doi.org/10.3386/w30108.
+Gu, J., Koenker, R., 2023. Invidious comparisons: ranking and selection as compound
+decisions. Econometrica 91 (1), 1 –41. https://doi.org/10.3982/ECTA19304.
+Hasan, S., Kumar, A., 2019. Digitization and divergence: online school ratings and segregation
+in America. SSRN Working Paper 3265316. https://doi.org/10.2139/ssrn.3265316.
+Hastings, J.S., Kane, T.J., Staiger, D.O., 2009. Heterogeneous preferences and the efficacy of
+public school choice. Working Paper, Yale University.
+Hastings, J.S., Neilson, C.A., Zimmerman, S.D., 2014. Are some degrees worth more than
+others? Evidence from college admission cutoffs in Chile. NBER Working Paper
+19241. https://doi.org/10.3386/w19241.
+Hausman, J.A., 1978. Specification tests in econometrics. Econometrica 46 (6), 1251 –1271.
+https://doi.org/10.2307/1913827.
+Heinesen, E., 2018. Admission to higher education programmes and student educational out-
+comes and earnings-evidence from Denmark. Econ. Educ. Rev. 63, 1 –19. https://doi.org/
+10.1016/j.econedurev.2018.01.002.
+Hoekstra, M., 2009. The effect of attending the flagship state university on earnings: a discon-
+tinuity-based approach. Rev. Econ. Stat. 91 (4), 717 –724. https://doi.org/10.1162/rest.91.
+4.717.
+Hoxby, C.M., Murarka, S., 2009. Charter schools in New York City: who enrolls and how they
+affect their students’ achievement. NBER Working Paper 14852. https://doi.org/10.3386/
+w14852.
+Hoxby, C.M., Murarka, S., Kang, J., 2009. How New York City’s charter schools affect
+achievement. New York City Charter Schools Evaluation Project 2nd Report.
+Huber, M., Mellace, G., 2015. Testing instrument validity for LATE identification based on
+inequality moment constraints. Rev. Econ. Stat. 97 (2), 398 –411. https://doi.org/10.1162/
+REST_a_00450.
+Imbens, G.W., Angrist, J.D., 1994. Identification and estimation of local average treatment
+effects. Econometrica 62 (2), 467 –475. https://doi.org/10.2307/2951620.
+Imbens, G., Kalyanaraman, K., 2011. Optimal bandwidth choice for the regression disconti-
+nuity estimator. Rev. Econ. Stud. 79 (3), 933 –959. https://doi.org/10.1093/restud/rdr043.
+Jackson, C.K., Porter, S.C., Easton, J.Q., Blanchard, A., Kiguel, S., 2020. School effects on
+socioemotional development, school-based arrests, and educational attainment. Am. Econ.
+Rev. Insights 2 (4), 491 –508.
+https://doi.org/10.1257/aeri.20200029.
+James, W., Stein, C., 1961. Estimation with quadratic loss. In: Proceedings of the Fourth
+Berkeley Symposium on Mathematical Statistics and Probability, vol. 1, pp. 361 –379.
+Jia, R., Li, H., 2021. Just above the exam cutoff score: elite college admission and wages in
+China. J. Public Econ. 196, 104371. https://doi.org/10.1016/j.jpubeco.2021.104371.
+Kane, T.J., Staiger, D.O., 2008. Estimating teacher impacts on student achievement: an exper-
+imental evaluation. NBER Working Paper 14607. https://doi.org/10.3386/w14607.
+Kapor, A.J., Neilson, C.A., Zimmerman, S.D., 2020. Heterogeneous beliefs and school choice
+mechanisms. Am. Econ. Rev. 110 (5), 1274 –1315. https://doi.org/10.1257/aer.20170129.
+Kiefer, J., Wolfowitz, J., 1956. Consistency of the maximum likelihood estimator in the pres-
+ence of infinitely many incidental parameters. Ann. Math. Stat. 27 (4), 887 –906. https://
+doi.org/10.1214/aoms/1177728066.
+58 Methods for measuring school effectiveness
+ARTICLE IN PRESS
+
+===== PAGE 59 / 60: hoee_methods (1).pdf =====
+
+Kirkeboen, L.J., Leuven, E., Mogstad, M., 2016. Field of study, earnings, and self-selection.
+The Q. J. Econ. 131 (3), 1057 –1111. https://doi.org/10.1093/qje/qjw019.
+Kitagawa, T., 2015. A test for instrument validity. Econometrica 83 (5), 2043 –2063. https://
+doi.org/10.3982/ECTA11974.
+Kline, P., Walters, C.R., 2016. Evaluating public programs with close substitutes: the case of
+Head Start. Q. J. Econ. 131 (4), 1795 –1848. https://doi.org/10.1093/qje/qjw027.
+Kline, P., Walters, C.R., 2019. On Heckits, LATE, and numerical equivalence. Econometrica
+87 (2), 677 –696. https://doi.org/10.3982/ECTA15444.
+Kline, P.M., Walters, C.R., 2021. Reasonable doubt: experimental detection of job-level
+employment discrimination. Econometrica 89 (2), 765 –792. https://doi.org/10.3982/
+ECTA17489.
+Kline, P., Saggio, R., Sølvsten, M., 2020. Leave-out estimation of variance components.
+Econometrica 88 (5), 1859 –1898. https://doi.org/10.3982/ECTA16410.
+Kline, P.M., Rose, E.K., Walters, C.R., 2021. Systemic discrimination among large US
+employers. Q. J. Econ. 137 (4), 1963 –2036. https://doi.org/10.1093/qje/qjac024.
+Koenker, R., Mizera, I., 2014. Convex optimization, shape constraints, compound decisions,
+and empirical Bayes rules. J. Am. Stat. Assoc. 109 (506), 674 –685. https://doi.org/10.
+1080/01621459.2013.869224.
+Kolesa´r, M., 2013. Estimation in an instrumental variables model with treatment effect het-
+erogeneity. Working Paper.
+Kolesa´r, M., Chetty, R., Friedman, J., Glaeser, E., Imbens, G.W., 2015. Identification and in-
+ference with many invalid instruments. J. Bus. Econ. Stat. 33 (4), 474–484. https://doi.org/
+10.1080/07350015.2014.978175.
+Lee, D.S., 2009. Training, wages, and sample selection: estimating sharp bounds on treatment
+effects. Rev. Econ. Stud. 76 (3), 1071 –1102. https://doi.org/10.1111/j.1467-937X.2009.
+00536.x.
+Lee, Y., Nakazawa, N., 2022. Does single-sex schooling help or hurt labor market outcomes?
+Evidence from a natural experiment in South Korea. J. Pub. Econ. 214, 104729.https://doi.
+org/10.1016/j.jpubeco.2022.104729.
+Lee, S., Niederle, M., Kang, N., 2014. Do single-sex schools make girls more competitive?
+Econ. Lett. 124 (3), 474 –477. https://doi.org/10.1016/j.econlet.2014.07.001.
+List, J.A., 2021. The Voltage Effect: How to Make Good Ideas Great and Great Ideas Scale.
+Penguin.
+List, J.A., Suskind, D., Supplee, L.H., 2021. The Scale-Up Effect in Early Childhood and Public
+Policy: Why Interventions Lose Impact at Scale and What We Can Do About It. Routledge.
+Lucas, A., Mbiti, I., 2014. Effects of school quality on student achievement: discontinuity ev-
+idence from Kenya. Am. Econ. J. Appl. Econ. 6 (3), 234–263. https://doi.org/10.1257/app.
+6.3.234.
+Mills, J.N., Wolf, P.J., 2017. Vouchers in the Bayou: the effects of the Louisiana scholarship
+program on student achievement after 2 years. Educ. Evavl. Policy Anal. 39 (3), 464 –484.
+https://doi.org/10.3102/0162373717693108.
+Mogstad, M., Torgovitsky, A., Walters, C.R., 2021. The causal interpretation of two-stage
+least squares with multiple instrumental variables. Am. Econ. Rev. 111 (11), 3663 –3698.
+https://doi.org/10.1257/aer.20190221.
+Morris, C.N., 1983. Parametric empirical Bayes inference: theory and applications. J. Am.
+Stat. Assoc. 78 (381), 47 –55.
+Mountjoy, J., Hickman, B., 2021. The returns to college(s): relative value-added and match ef-
+fects in higher education. NBER Working Paper 29276. https://doi.org/10.3386/w29276.
+Narita, Y., 2021. A theory of quasi-experimental evaluation of school quality. Manag. Sci.
+67 (8), 4982 –5010. https://doi.org/10.1287/mnsc.2020.3742.
+59References
+ARTICLE IN PRESS
+
+===== PAGE 60 / 60: hoee_methods (1).pdf =====
+
+Oosterbeek, H., Ruijs, N., de Wolf, I., 2023. Heterogeneous effects of comprehensive vs.
+single-track academic schools: evidence from admission lotteries. Econ. Ed. Rev. 93,
+102363.
+https://doi.org/10.1016/j.econedurev.2023.102363.
+Pop-Eleches, C., Urquiola, M., 2013. Going to a better school: effects and behavioral
+responses. Am. Econ. Rev. 103 (4), 1289 –1324. https://doi.org/10.1257/aer.103.4.1289.
+Raudenbush, S., Bryk, A.S., 1986. A hierarchical model for studying school effects. Sociol.
+Educ. 59 (1), 1 –17. https://doi.org/10.2307/2112482.
+Robbins, H., 1956. An empirical Bayes approach to statistics. In: Proceedings of the Third
+Berkeley Symposium on Mathematical Statistics and Probability, Volume 1: Contribu-
+tions to the Theory of Statistics, vol. 3.1, pp. 157 –163.
+Rockoff, J., Turner, L.J., 2010. Short-run impacts of accountability on school quality. Am.
+Econ. J. Econ. Policy 2 (4), 119 –147. https://doi.org/10.1257/pol.2.4.119.
+Romero, M., Singh, A., 2021. The incidence of affirmative action: evidence from quotas in
+private schools in India. RISE Working Paper 22/088.
+Rosenbaum, P.R., Rubin, D.B., 1983. The central role of the propensity score in observational
+studies for causal effects. Biometrika 70 (1), 41–55. https://doi.org/10.1093/biomet/70.1.41.
+Roth, A.E., Sotomayor, M.A.O., 1990. Two-Sided Matching: A Study in Game-Theoretic
+Modeling and Analysis. Econometric Society Monographs.
+Rothstein, J.M., 2006. Good principals or good peers? Parental valuation of school character-
+istics, Tiebout equilibrium, and the incentive effects of competition among jurisdictions.
+Am. Econ. Rev. 96 (4), 1333 –1350. https://doi.org/10.1257/aer.96.4.1333.
+Rothstein, J., 2010. Teacher quality in educational production: tracking, decay, and student
+achievement. Q. J. Econ. 125 (1), 175 –214. https://doi.org/10.1162/qjec.2010.125.1.175.
+Roy, A.D., 1951. Some thoughts on the distribution of earnings. Oxford Econ. Papers 3 (2),
+135–146. https://doi.org/10.1093/oxfordjournals.oep.a041827.
+Sargan, J.D., 1958. The estimation of economic relationships using instrumental variables.
+Econometrica 26 (3), 393 –415. https://doi.org/10.2307/1907619.
+Sekhri, S., 2020. Prestige matters: wage premium and value addition in elite colleges. Am.
+Econ. J. Appl. Econ. 12 (3), 207 –225. https://doi.org/10.1257/app.20140105.
+Setren, E., 2021. Targeted vs. general education investments evidence from special education
+and English language learners in Boston charter schools. J. Hum. Resour. 56 (4),
+1073–1112. https://doi.org/10.3368/jhr.56.4.0219-10040R2.
+Silverman, B.W., 1986. Density Estimation for Statistics and Data Analysis. Chapman and Hall.
+Wald, A., 1940. The fitting of straight lines if both variables are subject to error. Ann. Math.
+Stat. 11 (3), 284 –300. http://doi.org/10.1214/aoms/1177731868.
+Walters, C.R., 2018. The demand for effective charter schools. J. Polit. Econ. 126 (6),
+2179–2223. https://doi.org/10.1086/699980.
+Zhang, H., 2016. Identification of treatment effects under imperfect matching with an appli-
+cation to Chinese elite schools. J. Pub. Econ. 142, 56 –82. https://doi.org/10.1016/j.
+jpubeco.2016.03.004.
+Zimmerman, S.D., 2014. The returns to college admission for academically marginal students.
+J. Labor Econ. 32 (4), 711 –754. https://doi.org/10.1086/676661.
+Zimmerman, S.D., 2019. Elite colleges and upward mobility to top jobs and top incomes. Am.
+Econ. Rev. 109 (1), 1 –47. https://doi.org/10.1257/aer.20171019.
+60 Methods for measuring school effectiveness
+ARTICLE IN PRESS

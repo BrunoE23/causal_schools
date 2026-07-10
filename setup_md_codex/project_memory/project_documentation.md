@@ -6,6 +6,19 @@ It should not include Codex workflow rules, collaboration preferences, or genera
 
 Empirical regression specifications are tracked separately in `empirical_methods.md`.
 
+## Research Implementation Standard
+
+No se toman atajos in research implementation.
+
+When a task asks for an estimand, standard error, regression object, sample definition, or identification object, implement that object directly.
+Do not silently replace it with a proxy, shortcut, or heuristic because the exact object is inconvenient to extract.
+
+If the exact object is not exposed by the current package or workflow, derive the equivalent object carefully or ask before proceeding.
+If a proxy is intentionally used for exploratory work or robustness, label it explicitly in code, output column names, and documentation.
+
+For empirical standard errors, the default is the SE implied by the actual regression/specification.
+Residual-spread-over-sqrt-n style quantities are diagnostics or explicitly documented approximations, not substitutes for regression-derived SEs.
+
 ## `br_code`
 
 `br_code` is a course-level school identifier, not just a school identifier. In practice, it behaves like the combination of school and specific track/course/process information, so multiple `br_code`s can sit inside the same `rbd`.
@@ -222,6 +235,7 @@ During the current estimation-development pass, controlled VA is only estimated 
 - `z_year_leng_max`
 - `z_year_leng_math_total`
 - `stem_enrollment_m1`
+- `log_program_income_clp_m1`
 - `program_certified_years_m1`
 - `inst_certified_years_m1`
 
@@ -343,6 +357,16 @@ This fixed effect is not automatically on the same level scale as the raw mean, 
 
 The centered fixed-effect versions are useful for school-to-school comparison. The adjusted-mean versions are more interpretable when raw and adjusted values need to be read on the same outcome scale.
 
+For EB shrinkage, the constructor also exports regression-derived uncertainty for the student-weighted centered school effect:
+
+- `controlled_value_added_se`
+- `controlled_value_added_resid_sd`
+- `controlled_value_added_se_method`
+
+The default SE method uses `lfe::felm()` and `lfe::getfe(se = TRUE)` with a custom estimable function for `school FE - student-weighted mean(school FE)`.
+This is intentionally the SE of `controlled_value_added_centered_student`, not the SE of a raw reference-normalized fixed-effect level.
+The current method label is `lfe_getfe_school_rbd_centered_student_iid_bN100`.
+
 ### Sample Size Flags
 
 The constructor uses a low-count threshold of `20`.
@@ -357,6 +381,66 @@ It currently records:
 - `missing_controlled_value`
 
 This allows downstream work to separate "true missing" from "estimated with a thin sample."
+
+## Higher-Ed Program Codes and MiFuturo Income
+
+The official higher-ed matricula dictionary defines `CODIGO_UNICO` as the unique career/program code considering institution, sede, career/program, jornada, and version.
+Project code usually renames this variable to `COD_SIES`.
+
+Other relevant higher-ed program codes:
+
+- `COD_CARRERA`: career/program code
+- `CODIGO_DEMRE`: DEMRE program code, available only for institutions attached to the centralized admissions system
+- `COD_INST`: higher-ed institution code
+
+For higher-ed applications, `COD_CARRERA_PREF` is the application/preference program code.
+`code/facts_major_choice_prep.R` maps `COD_CARRERA_PREF` to `COD_SIES` using 2024/2025 oferta definitiva files.
+
+The inspected MiFuturo income file does not expose `COD_SIES`.
+Its `Código` behaves as an institution code and should not be treated as a program identifier.
+MiFuturo income must therefore be audited through institution and career descriptors, not as a direct `COD_SIES` merge.
+
+The first diagnostic workflow for this lives in:
+
+- `code/codex/mifuturo_matricula_income/01_diagnose_mifuturo_matricula_merge.R`
+- `code/codex/mifuturo_matricula_income/02_regress_mifuturo_income_on_institution_carrera.R`
+
+It tests joins from matriculated programs to MiFuturo using:
+
+- `COD_INST + TIPO_INST_1 + NOMB_INST + AREA_CARRERA_GENERICA + NOMB_CARRERA`
+- `COD_INST + TIPO_INST_1 + NOMB_INST + AREA_CARRERA_GENERICA`
+
+Use `AREA_CARRERA_GENERICA` as the main career dimension for MiFuturo income imputation and program matching diagnostics.
+The title/career-name field is too sparse for the main model and should be used only to audit within-generic-career variation and key multiplicity.
+
+The diagnostic writes coverage, unmatched-program, and key-multiplicity reports to `output/tables/mifuturo_matricula_income/`.
+Because MiFuturo is not at the full `COD_SIES` level, multiple sede/jornada/version-specific `COD_SIES` values can map to one MiFuturo income row.
+Inspect multiplicity before promoting any MiFuturo income variable into the official person-level matricula pipeline.
+
+The second diagnostic revisits the older `log(income) ~ institution + carrera` imputation attempt from `code/processing_college_apps_outcome.R`.
+It estimates the chosen additive fixed-effect model, `log(income) ~ institution + AREA_CARRERA_GENERICA`, for observed MiFuturo income rows and predicts missing MiFuturo income rows only when the institution-carrera prediction is in support and estimable.
+This imputation addresses missing income within MiFuturo; it does not solve the separate lack of direct `COD_SIES` in the MiFuturo income file.
+
+The person-level candidate outcome is built in `code/codex/mifuturo_matricula_income/03_construct_person_level_income_outcomes.R`.
+It assigns values for all students in `univ_gr8_df.csv` using:
+
+- matriculated students: MiFuturo model prediction
+- preferred matriculated tier: two-way FE prediction from `log(income) ~ institution + AREA_CARRERA_GENERICA`
+- fallback matriculated tiers, when outside two-way support: `AREA_CARRERA_GENERICA` FE, institution FE, then global MiFuturo mean
+- non-matriculated students: configurable raw wage-floor proxy, currently `350000` CLP under label `raw_minimum_wage_proxy_2020_2023`
+
+The non-matriculation floor is not used for matriculated students.
+Call the outcome `program_income`.
+Use `program_income_clp_m1` and `log_program_income_clp_m1` as the first-enrollment candidate outcome, with analogous `_ml` variables for last enrollment.
+Always keep the corresponding `program_income_source_*` columns for diagnostics, since they identify whether a value comes from two-way FE, a fallback tier, or the no-matriculation floor.
+The longer `mifuturo_income_hier_or_minwage_*` variables remain in the diagnostic output as traceability aliases.
+
+The current program-income value-added, EB shrinkage, and EB expected-VA IV regressions are implemented and run in R because the Stata license is temporarily unavailable.
+Treat Stata `.do` versions of these regressions as legacy or future cross-checks until the Stata environment is restored.
+
+Open data-quality issue: 12,568 first-enrollment matriculated students currently have blank/missing `AREA_CARRERA_GENERICA_m1` because `program_info_found_m1 == FALSE`.
+Many are high-volume ordinary programs, so this likely can be improved by repairing the `COD_SIES` to generic-area mapping.
+See `setup_md_codex/project_memory/issues.md` under "Repair missing `AREA_CARRERA_GENERICA` for `program_income`".
 
 ## School Gender-Gap Measures
 

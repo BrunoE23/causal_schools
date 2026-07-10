@@ -34,6 +34,9 @@
 ## Decision Rules
 - Ask questions only when ambiguity changes implementation significantly.
 - If ambiguity is low-risk, choose a sensible default and state it.
+- For research code, no se toman atajos. Do not replace a requested estimand, standard error, regression object, sample definition, or identification object with a proxy, shortcut, or heuristic unless the user explicitly asks for an approximation.
+- If the exact research object is not exposed by the current tool or package, derive the equivalent object carefully or stop and ask. Do not silently substitute a convenient approximation.
+- When a proxy or approximation is intentionally used for exploration or robustness, name it as such in code, outputs, and documentation before relying on it.
 - Escalate early when a command is blocked by permissions or environment limits.
 - For larger research tasks, prefer a staged workflow: light inspection first, then a concise plan, then heavy execution only after user confirmation.
 - For diagnostics on large data, timebox the first attempt and report quickly if the approach is too slow instead of letting a command run silently for many minutes.
@@ -43,6 +46,8 @@
 - Do not revert unrelated user changes.
 - Prefer non-destructive commands.
 - Include file references when explaining changes.
+- The Stata license is temporarily expired. Current empirical regressions and table-generation work should have an R implementation and should be run in R unless the user explicitly says the Stata environment has been restored.
+- For empirical standard errors, use the standard error implied by the actual regression/specification unless an explicitly documented robustness or exploratory approximation is requested. In particular, do not replace regression-derived SEs with residual-spread-over-sqrt-n style proxies without prior confirmation.
 - When code introduces or changes a substantive research normalization, scaling rule, sample restriction, support definition, estimand definition, or regression specification, document it in the appropriate project-memory file before finalizing. Use `empirical_methods.md` and/or a decision-log entry for empirical-design choices; do not leave the reasoning only in code comments or task READMEs.
 
 ## Validation Rules

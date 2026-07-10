@@ -1,0 +1,3 @@
+enrollment_measure,n_enrolled_students,n_unique_cod_sies,n_unique_inst_area,n_program_info_found,n_fe_level_supported,n_fe_estimable,share_fe_estimable,n_hier_two_way_fe,n_hier_area_generica_fe,n_hier_institution_fe,n_hier_global_mean,n_hier_complete,share_hier_complete,mean_fe_income_clp,median_fe_income_clp,mean_hier_income_clp,median_hier_income_clp
+first_enrollment,626412,9325,2843,613844,432524,432512,0.690459314317095,432512,142206,40822,10872,626412,1,1559630.80165839,1419392.1957505,1492694.30310395,1386393.93003712
+last_enrollment,626412,9320,2847,611665,428025,428015,0.683280333071525,428015,147898,38593,11906,626412,1,1547361.84618156,1386184.73384649,1481119.34596059,1374705.88043477
