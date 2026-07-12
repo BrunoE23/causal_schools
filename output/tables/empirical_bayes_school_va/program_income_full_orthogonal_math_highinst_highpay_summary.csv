@@ -1,0 +1,4 @@
+component,component_col,orthogonalized_against,weighted_sd,weighted_correlation_with_income_va,n_schools_common,n_schools_input,decomposition_order
+Math VA,math_highinst_highpay_math_orth_va,weighted mean only,0.207159080783314,0.576025217057883,3371,3682,math_highinst_highpay
+High-premium-institution VA orthogonal to math,math_highinst_highpay_highinst_orth_va,Math VA,0.0871920264038404,0.259512019632268,3371,3682,math_highinst_highpay
+High-premium-field VA orthogonal to math and high-premium institution,math_highinst_highpay_highpay_orth_va,Math VA + high-premium-institution VA orthogonal to math,0.0516288469656122,0.438998157846077,3371,3682,math_highinst_highpay

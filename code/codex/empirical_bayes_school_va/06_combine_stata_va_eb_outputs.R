@@ -53,6 +53,8 @@ outcome_keys <- parse_env_list(
     "exam",
     "enrolled",
     "stem",
+    "highpay",
+    "highinst",
     "program_income_area",
     "program_income_institution",
     "program_income_full",

@@ -1,2 +1,2 @@
-"outcome_key","outcome","prep_seconds","va_seconds","eb_seconds","total_seconds","n_obs","n_schools"
-"stem","stem_enrollment_m1","0","476.195",".474","477.086","565432","3375"
+outcome_key,outcome,prep_seconds,va_seconds,eb_seconds,total_seconds,n_obs,n_schools
+stem,stem_enrollment_m1,0,390.459,.366,391.995,757999,3682

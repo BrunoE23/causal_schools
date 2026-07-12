@@ -1,0 +1,4 @@
+component,component_col,weighted_sd,weighted_correlation_with_income_va,n_schools_common,n_schools_input,specification
+Math VA,math_va_joint,0.207159080783314,0.576025217057883,3371,3682,joint_raw_horse_race
+High-premium-institution VA,highinst_va_joint,0.106467734575518,0.543086555152919,3371,3682,joint_raw_horse_race
+High-premium-field VA,highpay_va_joint,0.0528279217751858,0.56146163556723,3371,3682,joint_raw_horse_race

@@ -84,7 +84,11 @@ source_summary_path <- file.path(output_dir, "mifuturo_person_level_income_sourc
 program_summary_path <- file.path(output_dir, "mifuturo_enrolled_program_income_summary.csv")
 unsupported_programs_path <- file.path(output_dir, "mifuturo_enrolled_income_unsupported_programs.csv")
 highpay_summary_path <- file.path(output_dir, "mifuturo_high_paying_field_source_summary.csv")
+highinst_summary_path <- file.path(output_dir, "mifuturo_high_institution_source_summary.csv")
 report_path <- file.path(output_dir, "mifuturo_person_level_income_report.md")
+
+high_inst_fe_cutoff <- as.numeric(Sys.getenv("MIFUTURO_HIGH_INST_FE_CUTOFF", "0.1"))
+institution_effects_path <- file.path(output_dir, "mifuturo_income_fe_institution_effects.csv")
 
 # ------------------------- Helpers -------------------------
 
@@ -204,6 +208,60 @@ derive_high_paying_field <- function(out, suffix) {
   # Stata-safe alias for the VA/EB runner. The analytic outcome is only
   # 1/0/NA; source/missing diagnostics stay out of the analysis exports.
   out[, (paste0("highpay_field", suffix)) := get(high_paying_col)]
+
+  out[]
+}
+
+read_institution_effects <- function(path) {
+  message("Reading MiFuturo institution effects: ", path)
+  dt <- fread(required_file(path))
+  required_cols <- c("effect_type", "level", "effect_log_clp_centered")
+  missing_cols <- setdiff(required_cols, names(dt))
+  if (length(missing_cols) > 0) {
+    stop(
+      basename(path), " is missing expected columns: ",
+      paste(missing_cols, collapse = ", "),
+      call. = FALSE
+    )
+  }
+
+  dt <- dt[effect_type == "institution"]
+  dt[, .(
+    institution_key = level,
+    mifuturo_institution_fe_log_clp_centered = effect_log_clp_centered,
+    mifuturo_institution_fe_percent_vs_center = 100 * (exp(effect_log_clp_centered) - 1),
+    mifuturo_high_inst_cutoff_log_clp = high_inst_fe_cutoff
+  )]
+}
+
+attach_high_institution_fe <- function(dt, institution_effects) {
+  out <- merge(dt, institution_effects, by = "institution_key", all.x = TRUE, sort = FALSE)
+  out[]
+}
+
+derive_high_institution <- function(out, suffix) {
+  matriculated_col <- paste0("matriculated", suffix)
+  fe_col <- paste0("mifuturo_institution_fe_log_clp_centered", suffix)
+
+  high_inst_col <- paste0("high_inst", suffix)
+  high_inst_source_col <- paste0("high_inst_source", suffix)
+  high_inst_missing_col <- paste0("high_inst_missing", suffix)
+
+  out[, (high_inst_col) := fcase(
+    !get(matriculated_col), 0L,
+    get(matriculated_col) & !is.na(get(fe_col)) & get(fe_col) > high_inst_fe_cutoff, 1L,
+    get(matriculated_col) & !is.na(get(fe_col)) & get(fe_col) <= high_inst_fe_cutoff, 0L,
+    get(matriculated_col) & is.na(get(fe_col)), 0L,
+    default = NA_integer_
+  )]
+  out[, (high_inst_source_col) := fcase(
+    !get(matriculated_col), "not_matriculated_zero",
+    get(matriculated_col) & !is.na(get(fe_col)) & get(fe_col) > high_inst_fe_cutoff, "matriculated_institution_fe_above_0p1",
+    get(matriculated_col) & !is.na(get(fe_col)) & get(fe_col) <= high_inst_fe_cutoff, "matriculated_institution_fe_at_or_below_0p1",
+    get(matriculated_col) & is.na(get(fe_col)), "matriculated_missing_institution_fe",
+    default = "unclassified"
+  )]
+  out[, (high_inst_missing_col) := as.integer(is.na(get(high_inst_col)))]
 
   out[]
 }
@@ -511,6 +569,9 @@ build_person_outcome <- function(universe, enrolled_dt, suffix, enrollment_measu
     "mifuturo_institution_income_hat_clp",
     "mifuturo_institution_income_hat_usd",
     "mifuturo_institution_income_source",
+    "mifuturo_institution_fe_log_clp_centered",
+    "mifuturo_institution_fe_percent_vs_center",
+    "mifuturo_high_inst_cutoff_log_clp",
     "mifuturo_global_log_income_hat_clp",
     "mifuturo_global_smear_factor",
     "mifuturo_global_income_hat_clp",
@@ -580,6 +641,7 @@ build_person_outcome <- function(universe, enrolled_dt, suffix, enrollment_measu
 
   out[, (matriculated_col) := !is.na(get(cod_sies_col))]
   out <- derive_high_paying_field(out, suffix)
+  out <- derive_high_institution(out, suffix)
   out[, (floor_col) := non_matriculated_floor_clp]
   out[, (floor_label_col) := non_matriculated_floor_label]
 
@@ -820,12 +882,15 @@ message("Using non-matriculated floor: ", non_matriculated_floor_clp, " CLP (", 
 model_artifact <- readRDS(required_file(model_artifact_path))
 universe <- read_universe(universe_path)
 program_info <- read_program_info(program_info_path)
+institution_effects <- read_institution_effects(institution_effects_path)
 
 mat_first <- read_clean_matricula(mat_first_path, "_m1", "first_enrollment", program_info)
 mat_last <- read_clean_matricula(mat_last_path, "_ml", "last_enrollment", program_info)
 
 mat_first <- predict_fe_income(mat_first, model_artifact)
 mat_last <- predict_fe_income(mat_last, model_artifact)
+mat_first <- attach_high_institution_fe(mat_first, institution_effects)
+mat_last <- attach_high_institution_fe(mat_last, institution_effects)
 
 person_m1 <- build_person_outcome(universe, mat_first, "_m1", "first_enrollment")
 person_ml <- build_person_outcome(universe, mat_last, "_ml", "last_enrollment")
@@ -878,14 +943,26 @@ highpay_summary <- person_outcome[
   by = .(high_paying_field_source_m1)
 ][order(-n_students)]
 
-highpay_aux_cols <- grep(
-  "^(high_paying_field_source|high_paying_field_missing)",
+highinst_summary <- person_outcome[
+  ,
+  .(
+    n_students = .N,
+    n_high_inst = sum(high_inst_m1 == 1L, na.rm = TRUE),
+    n_non_high_inst = sum(high_inst_m1 == 0L, na.rm = TRUE),
+    n_missing_high_inst = sum(is.na(high_inst_m1)),
+    share_high_inst = mean(high_inst_m1 == 1L, na.rm = TRUE)
+  ),
+  by = .(high_inst_source_m1)
+][order(-n_students)]
+
+aux_cols <- grep(
+  "^(high_paying_field_source|high_paying_field_missing|high_inst_source|high_inst_missing)",
   names(person_outcome),
   value = TRUE
 )
 person_outcome_export <- copy(person_outcome)
-if (length(highpay_aux_cols) > 0L) {
-  person_outcome_export[, (highpay_aux_cols) := NULL]
+if (length(aux_cols) > 0L) {
+  person_outcome_export[, (aux_cols) := NULL]
 }
 
 fwrite(person_outcome_export, person_outcome_path)
@@ -907,13 +984,15 @@ stata_va_cols <- c(
   "log_program_income_clp_m1",
   "program_income_source_m1",
   "program_income_missing_m1",
-  "highpay_field_m1"
+  "highpay_field_m1",
+  "high_inst_m1"
 )
 fwrite(person_outcome_export[, ..stata_va_cols], stata_va_outcome_path)
 fwrite(source_summary, source_summary_path)
 fwrite(program_summary, program_summary_path)
 fwrite(unsupported, unsupported_programs_path)
 fwrite(highpay_summary, highpay_summary_path)
+fwrite(highinst_summary, highinst_summary_path)
 
 report <- c(
   "# MiFuturo Person-Level Income Outcomes",
@@ -931,6 +1010,7 @@ report <- c(
   "- The non-matriculation floor is not used for matriculated students.",
   "- Backward-compatible `program_income` columns are retained as aliases to `program_income_full` for existing VA/Stata scripts.",
   "- `high_paying_field_m1`: non-matriculated students are coded 0; matriculated students are coded 1 for Science, Law, Engineering/Manufacturing/Construction, or Medicine+ (`Medicina`, `Quimica y Farmacia`, `Enfermeria`, `Obstetricia y Puericultura`, `Tecnologia Medica`, `Odontologia`). Matriculated students with insufficient field classification remain missing rather than being silently coded 0.",
+  paste0("- `high_inst_m1`: non-matriculated students are coded 0; matriculated students are coded 1 when their institution's centered MiFuturo institution FE is above ", high_inst_fe_cutoff, " log points, and 0 otherwise, including when the matriculated institution lacks an institution FE."),
   "",
   "## Non-Matriculation Floor",
   "",
@@ -950,6 +1030,10 @@ report <- c(
   "",
   paste(capture.output(print(highpay_summary)), collapse = "\n"),
   "",
+  "## High-Institution Coverage",
+  "",
+  paste(capture.output(print(highinst_summary)), collapse = "\n"),
+  "",
   "## Outputs",
   "",
   paste0("- `", person_outcome_path, "`"),
@@ -957,7 +1041,8 @@ report <- c(
   paste0("- `", source_summary_path, "`"),
   paste0("- `", program_summary_path, "`"),
   paste0("- `", unsupported_programs_path, "`"),
-  paste0("- `", highpay_summary_path, "`")
+  paste0("- `", highpay_summary_path, "`"),
+  paste0("- `", highinst_summary_path, "`")
 )
 
 writeLines(report, report_path)
@@ -966,3 +1051,4 @@ message("Done.")
 print(source_summary)
 print(program_summary)
 print(highpay_summary)
+print(highinst_summary)

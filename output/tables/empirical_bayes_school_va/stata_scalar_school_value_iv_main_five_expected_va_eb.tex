@@ -1,0 +1,23 @@
+\begin{table}[!htbp]
+\centering
+\caption{Main scalar school-value IV estimates using EB-shrunken value added}
+\label{tab:scalar_school_value_iv_main_five_expected_va_eb}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lccccc}
+\toprule
+ & \multicolumn{2}{c}{Exams} & \multicolumn{3}{c}{Higher ed. choices} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-6}
+ & Math & Verbal & High-premium inst. & High-premium field & Program income \\
+\midrule
+$\theta^{EB}$ & 0.884*** & 0.885*** & 0.497*** & 0.803*** & 0.311*** \\
+ & (0.073) & (0.087) & (0.111) & (0.100) & (0.103) \\
+N & 93,438 & 95,107 & 95,651 & 90,338 & 95,651 \\
+\bottomrule
+\end{tabular}
+}
+\par\medskip
+\footnotesize
+\begin{minipage}{\textwidth}
+Notes: Each column reports a scalar IV estimate of the pass-through from attended-school EB value added to the corresponding student outcome. Attended-school EB value added is instrumented with first-round offered-school EB value added. All specifications control for the DA-probability expected value of the same EB measure, cohort, grade-4 SIMCE math and language, gender, and age. Heteroskedasticity-robust standard errors are reported in parentheses. $^{*}p<0.10$, $^{**}p<0.05$, $^{***}p<0.01$.
+\end{minipage}
+\end{table}

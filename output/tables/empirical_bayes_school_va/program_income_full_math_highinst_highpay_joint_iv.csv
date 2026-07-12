@@ -1,0 +1,4 @@
+outcome,treatment,treatment_label,instruments,beta,se,zstat,p_value,n_obs
+log_program_income_full_clp_m1,d_math_va,Math VA,z_math_va + z_highinst_va + z_highpay_va,-0.155300266687123,0.0516202459430584,-3.00851466028335,0.00262528135486453,95621
+log_program_income_full_clp_m1,d_highinst_va,High-premium-institution VA,z_math_va + z_highinst_va + z_highpay_va,0.273591208697669,0.143064738283237,1.9123594813141,0.0558301013257151,95621
+log_program_income_full_clp_m1,d_highpay_va,High-premium-field VA,z_math_va + z_highinst_va + z_highpay_va,0.365961151976904,0.0964319170057994,3.79502101938817,0.000147630948364887,95621

@@ -1,3 +1,3 @@
-comparison,correlation,n_schools,figure
-math_vs_language,0.644702888811371,3364,math_language_va_correlation.png
-math_vs_stem,0.0610676765356281,3365,math_stem_va_correlation.png
+comparison,correlation,n_schools,slope,intercept,figure
+math_vs_language,0.659115991374777,3371,0.577338868122808,-0.0183867908179529,math_language_va_correlation.png
+math_vs_highpay,0.273094220709511,3371,0.0872960138362915,-0.00900173144471697,math_highpay_va_correlation.png

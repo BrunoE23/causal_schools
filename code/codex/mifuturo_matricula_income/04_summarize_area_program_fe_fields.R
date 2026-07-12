@@ -596,8 +596,8 @@ field_scatter <- ggplot(
     labels = function(x) format(x, big.mark = ",", scientific = FALSE)
   ) +
   labs(
-    title = "Area Carrera Generica FE by Field",
-    subtitle = "Blue points are areas; white diamonds are unweighted field means; red points are student-weighted field means",
+    title = "Generic Program FE by Field",
+    subtitle = "Blue points are generic-programs; white diamonds are unweighted field means; red points are student-weighted field means",
     x = "Field reclassified",
     y = "Centered career FE on log income"
   ) +

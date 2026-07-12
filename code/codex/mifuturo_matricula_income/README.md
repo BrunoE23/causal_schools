@@ -151,7 +151,7 @@ aliases to `program_income_full_*` for existing VA/Stata scripts. The longer
 `mifuturo_income_hier_or_minwage_*` variables are retained as traceability
 aliases.
 
-The first-enrollment high-paying-field binary is:
+The first-enrollment high-premium-field binary is:
 
 ```text
 high_paying_field_m1
@@ -162,7 +162,7 @@ when the program is in Science, Law, Engineering/Manufacturing/Construction, or
 the presentation category `Medicine +`: `Medicina`, `Quimica y Farmacia`,
 `Enfermeria`, `Obstetricia y Puericultura`, `Tecnologia Medica`, or
 `Odontologia`. Matriculated students with insufficient field classification are
-left missing rather than silently coded as non-high-paying.
+left missing rather than silently coded as non-high-premium.
 The analytical variable itself is only `1`, `0`, or missing; source diagnostics
 are kept only in the separate coverage summary table.
 
@@ -178,7 +178,7 @@ highpay_field_m1
 
 These aliases duplicate the canonical log outcomes above; the canonical names
 remain the research-facing variables. `highpay_field_m1` is the Stata-safe alias
-for the canonical high-paying-field binary.
+for the canonical high-premium-field binary.
 `mifuturo_person_level_income_outcomes_stata_va.csv` is a thin export containing
 only these Stata-safe variables plus `MRUN`, so Stata VA/EB does not need to
 import the full wide person-level file.

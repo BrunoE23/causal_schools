@@ -264,6 +264,17 @@ The current preferred admission-exam-taking outcome is:
 
 - `admission_exam_taker = 1[math_max or leng_max is observed]`
 
+The current preferred high-institution outcome is:
+
+- `high_inst_m1 = 1[matriculated institution has centered MiFuturo institution FE > 0.1]`
+
+The institution FE comes from the MiFuturo model
+`log(income) ~ institution + AREA_CARRERA_GENERICA`. Non-matriculated students
+are coded `0`; matriculated students are coded `1` only when the observed
+centered institution FE is above `0.1`; matriculated students with FE at or
+below `0.1` or without an institution FE are coded `0`. With the current FE
+table this cutoff selects 19 institutions.
+
 Both `higher_ed_enrolled_m1` and `admission_exam_taker` are extensive-margin
 outcomes. They should be estimated on the full eligible school/age/control
 sample, not conditional on admission-exam taking.
@@ -299,7 +310,7 @@ missing `DA_probs_2017` lottery-probability support, not because it lacks VA
 controls.
 
 Within the 2017-2020 VA sample, score outcomes are naturally restricted by
-observed PAES/PSU scores. STEM, high-paying field, program-income, and
+observed PAES/PSU scores. STEM, high-premium field, program-income, and
 admission-exam-taking value added are not restricted to admission-exam takers.
 
 During the current estimation-development pass, controlled VA is only estimated for:
@@ -310,6 +321,7 @@ During the current estimation-development pass, controlled VA is only estimated 
 - `admission_exam_taker`
 - `higher_ed_enrolled_m1`
 - `stem_enrollment_m1`
+- `high_inst_m1`
 - `log_program_income_clp_m1`
 - `program_certified_years_m1`
 - `inst_certified_years_m1`

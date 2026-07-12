@@ -1,0 +1,5 @@
+high_inst_source_m1,n_students,n_high_inst,n_non_high_inst,n_missing_high_inst,share_high_inst
+not_matriculated_zero,569835,0,569835,0,0
+matriculated_institution_fe_at_or_below_0p1,354758,0,354758,0,0
+matriculated_missing_institution_fe,153815,0,153815,0,0
+matriculated_institution_fe_above_0p1,119574,119574,0,0,1

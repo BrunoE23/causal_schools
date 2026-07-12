@@ -1,0 +1,10 @@
+endogenous,endogenous_label,instrument,beta,se,tstat,n_obs
+d_math_orth_va,Math VA,z_math_orth_va,0.469316051827307,0.00822984749889463,57.0260933620388,95621
+d_math_orth_va,Math VA,z_highinst_orth_va,0.0219116151194697,0.0110831397778864,1.97702235635327,95621
+d_math_orth_va,Math VA,z_highpay_orth_va,0.00894085380789939,0.00905202033959999,0.98771914693847,95621
+d_highinst_orth_va,High-premium-institution VA orthogonal to math,z_math_orth_va,-0.0214265599931501,0.00324005295003711,-6.61302772626131,95621
+d_highinst_orth_va,High-premium-institution VA orthogonal to math,z_highinst_orth_va,0.323159676714592,0.00917005119754244,35.2407712621275,95621
+d_highinst_orth_va,High-premium-institution VA orthogonal to math,z_highpay_orth_va,0.0157532933668967,0.00463797506727586,3.39658862723241,95621
+d_highpay_orth_va,High-premium-field VA orthogonal to both,z_math_orth_va,-0.00293386549034249,0.00213655215672451,-1.37317756606528,95621
+d_highpay_orth_va,High-premium-field VA orthogonal to both,z_highinst_orth_va,-0.0053145439130409,0.00413862358040551,-1.2841331930265,95621
+d_highpay_orth_va,High-premium-field VA orthogonal to both,z_highpay_orth_va,0.490457874667405,0.00669123399368235,73.2985687140039,95621

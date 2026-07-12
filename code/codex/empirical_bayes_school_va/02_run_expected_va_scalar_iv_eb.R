@@ -55,6 +55,17 @@ format_estimate <- function(x) {
   ifelse(is.na(x), "", sprintf("%.3f", x))
 }
 
+significance_stars <- function(p) {
+  fifelse(
+    is.na(p), "",
+    fifelse(p < 0.01, "***", fifelse(p < 0.05, "**", fifelse(p < 0.10, "*", "")))
+  )
+}
+
+format_estimate_stars <- function(x, p) {
+  paste0(format_estimate(x), significance_stars(p))
+}
+
 format_se <- function(x) {
   ifelse(is.na(x), "", paste0("(", sprintf("%.3f", x), ")"))
 }
@@ -116,11 +127,11 @@ results_csv <- Sys.getenv(
 )
 main_table_csv <- Sys.getenv(
   "EB_IV_MAIN_TABLE_CSV",
-  unset = file.path(table_dir, "scalar_school_value_iv_main_four_expected_va_eb.csv")
+  unset = file.path(table_dir, "scalar_school_value_iv_main_five_expected_va_eb.csv")
 )
 main_table_tex <- Sys.getenv(
   "EB_IV_MAIN_TABLE_TEX",
-  unset = file.path(table_dir, "scalar_school_value_iv_main_four_expected_va_eb.tex")
+  unset = file.path(table_dir, "scalar_school_value_iv_main_five_expected_va_eb.tex")
 )
 accreditation_table_csv <- Sys.getenv(
   "EB_IV_ACCREDITATION_TABLE_CSV",
@@ -166,6 +177,8 @@ value_specs <- data.table(
     "exam_adj_eb",
     "highered_adj_eb",
     "stem_adj_eb",
+    "highpay_adj_eb",
+    "highinst_adj_eb",
     "program_income_area_adj_eb",
     "program_income_institution_adj_eb",
     "program_income_full_adj_eb",
@@ -179,6 +192,8 @@ value_specs <- data.table(
     "admission_exam_taker",
     "higher_ed_enrolled_m1",
     "stem_enrollment_m1",
+    "high_paying_field_m1",
+    "high_inst_m1",
     "log_program_income_area_clp_m1",
     "log_program_income_institution_clp_m1",
     "log_program_income_full_clp_m1",
@@ -192,6 +207,8 @@ value_specs <- data.table(
     "admission_exam_taker",
     "higher_ed_enrolled_m1",
     "stem_enrollment_m1",
+    "high_paying_field_m1",
+    "high_inst_m1",
     "log_program_income_area_clp_m1",
     "log_program_income_institution_clp_m1",
     "log_program_income_full_clp_m1",
@@ -202,13 +219,15 @@ value_specs <- data.table(
   value_column = "controlled_value_added_eb_centered_student",
   outcome_group = c(
     "Math",
-    "Language",
+    "Verbal",
     "Exam taking",
     "Higher-ed enrollment",
     "STEM enrollment",
+    "High-premium field",
+    "High-premium inst.",
     "Program income: area FE",
     "Program income: institution FE",
-    "Program income: full",
+    "Program income",
     "Program income",
     "Program-certified years",
     "Institutional quality"
@@ -218,6 +237,8 @@ value_specs <- data.table(
     TRUE,
     FALSE,
     FALSE,
+    TRUE,
+    TRUE,
     TRUE,
     TRUE,
     TRUE,
@@ -276,7 +297,13 @@ if (nrow(value_specs) == 0) {
   stop("No EB IV value specs configured after applying EB_IV_VALUE_SPECS.", call. = FALSE)
 }
 
-main_specs <- c("math_adj_eb", "leng_adj_eb", "stem_adj_eb", "instcert_adj_eb")
+main_specs <- c(
+  "math_adj_eb",
+  "leng_adj_eb",
+  "highinst_adj_eb",
+  "highpay_adj_eb",
+  "program_income_full_adj_eb"
+)
 accreditation_specs <- c("progcert_adj_eb", "instcert_adj_eb")
 program_income_specs <- c(
   "program_income_area_adj_eb",
@@ -391,6 +418,8 @@ program_income <- fread(
     "log_program_income_full_clp_m1",
     "program_income_full_source_m1",
     "program_income_full_missing_m1",
+    "high_paying_field_m1",
+    "high_inst_m1",
     "program_income_clp_m1",
     "log_program_income_clp_m1",
     "program_income_source_m1",
@@ -552,6 +581,7 @@ keep_cols <- c(
   "n_positive_probability_options", "admission_exam_taker", "GEN_ALU", "EDAD_ALU",
   "z_sim_mat_4to", "z_sim_leng_4to",
   "z_year_math_max", "z_year_leng_max", "higher_ed_enrolled_m1", "stem_enrollment_m1",
+  "high_paying_field_m1", "high_inst_m1",
   "program_income_area_clp_m1", "log_program_income_area_clp_m1",
   "program_income_area_source_m1", "program_income_area_missing_m1",
   "program_income_institution_clp_m1", "log_program_income_institution_clp_m1",
@@ -609,6 +639,10 @@ run_iv_spec <- function(dt, spec_row) {
       se = NA_real_,
       zstat = NA_real_,
       p_value = NA_real_,
+      expected_beta = NA_real_,
+      expected_se = NA_real_,
+      expected_zstat = NA_real_,
+      expected_p_value = NA_real_,
       n_obs = nrow(reg_dt),
       fs_beta = NA_real_,
       fs_se = NA_real_,
@@ -628,6 +662,12 @@ run_iv_spec <- function(dt, spec_row) {
   zstat <- beta / se
   p_value <- 2 * stats::pnorm(-abs(zstat))
 
+  expected_coef_term <- extract_coef(iv_model, expected)
+  expected_beta <- coef(iv_model)[[expected_coef_term]]
+  expected_se <- se(iv_model)[[expected_coef_term]]
+  expected_zstat <- expected_beta / expected_se
+  expected_p_value <- 2 * stats::pnorm(-abs(expected_zstat))
+
   fs_model <- feols(fs_formula, data = reg_dt, vcov = "hetero", notes = FALSE)
   fs_beta <- coef(fs_model)[[z]]
   fs_se <- se(fs_model)[[z]]
@@ -644,6 +684,10 @@ run_iv_spec <- function(dt, spec_row) {
     se = se,
     zstat = zstat,
     p_value = p_value,
+    expected_beta = expected_beta,
+    expected_se = expected_se,
+    expected_zstat = expected_zstat,
+    expected_p_value = expected_p_value,
     n_obs = nobs(iv_model),
     fs_beta = fs_beta,
     fs_se = fs_se,
@@ -670,23 +714,39 @@ table_out <- merge(
 message("Writing EB IV results: ", results_csv)
 fwrite(results, results_csv)
 
-make_two_row_table <- function(dt, specs, caption, label, path) {
+make_two_row_table <- function(dt, specs, caption, label, path, group_header = NULL, notes = NULL, include_expected = FALSE) {
   table_dt <- copy(dt[spec %chin% specs])
   table_dt[, spec_order := match(spec, specs)]
   setorder(table_dt, spec_order)
+  wide_table <- nrow(table_dt) > 4
 
   theta_row <- paste0(
     "$\\theta^{EB}$ & ",
-    paste(format_estimate(table_dt$beta), collapse = " & "),
+    paste(format_estimate_stars(table_dt$beta, table_dt$p_value), collapse = " & "),
     " \\\\"
   )
   se_row <- paste0(
-    "SE & ",
+    " & ",
     paste(format_se(table_dt$se), collapse = " & "),
     " \\\\"
   )
+  expected_rows <- character()
+  if (include_expected) {
+    expected_rows <- c(
+      paste0(
+        "$E_i[\\widehat{V}^{EB}]$ & ",
+        paste(format_estimate_stars(table_dt$expected_beta, table_dt$expected_p_value), collapse = " & "),
+        " \\\\"
+      ),
+      paste0(
+        " & ",
+        paste(format_se(table_dt$expected_se), collapse = " & "),
+        " \\\\"
+      )
+    )
+  }
   n_row <- paste0(
-    "Observations & ",
+    "N & ",
     paste(format(round(table_dt$n_obs), big.mark = ","), collapse = " & "),
     " \\\\"
   )
@@ -698,30 +758,45 @@ make_two_row_table <- function(dt, specs, caption, label, path) {
     "\\centering",
     paste0("\\caption{", caption, "}"),
     paste0("\\label{", label, "}"),
+    if (wide_table) "\\resizebox{\\textwidth}{!}{%",
     paste0("\\begin{tabular}{l", align, "}"),
     "\\toprule",
+    group_header,
     paste0(" & ", header, " \\\\"),
     "\\midrule",
     theta_row,
     se_row,
+    expected_rows,
     n_row,
     "\\bottomrule",
     "\\end{tabular}",
+    if (wide_table) "}",
+    if (!is.null(notes)) "\\par\\medskip",
+    if (!is.null(notes)) "\\footnotesize",
+    if (!is.null(notes)) "\\begin{minipage}{\\textwidth}",
+    if (!is.null(notes)) paste0("Notes: ", notes),
+    if (!is.null(notes)) "\\end{minipage}",
     "\\end{table}"
   )
   writeLines(latex, path)
 }
 
-write_spec_table <- function(table_out, specs, csv_path, tex_path, caption, label) {
+write_spec_table <- function(table_out, specs, csv_path, tex_path, caption, label, group_header = NULL, notes = NULL, include_expected = FALSE) {
   out <- table_out[spec %chin% specs]
   if (nrow(out) == 0) {
     return(character())
   }
+  out[, spec_order := match(spec, specs)]
+  setorder(out, spec_order)
   fwrite(
-    out[, .(spec, outcome_group, beta, se, p_value, n_obs, fs_beta, fs_se, fs_f)],
+    out[, .(
+      spec, outcome_group,
+      beta, se, p_value,
+      n_obs, fs_beta, fs_se, fs_f
+    )],
     csv_path
   )
-  make_two_row_table(out, specs, caption, label, tex_path)
+  make_two_row_table(out, specs, caption, label, tex_path, group_header, notes, include_expected)
   c(csv_path, tex_path)
 }
 
@@ -734,7 +809,12 @@ written_paths <- c(
     main_table_csv,
     main_table_tex,
     "Main scalar school-value IV estimates using EB-shrunken value added",
-    "tab:scalar_school_value_iv_main_four_expected_va_eb"
+    "tab:scalar_school_value_iv_main_five_expected_va_eb",
+    c(
+      " & \\multicolumn{2}{c}{Exams} & \\multicolumn{3}{c}{Higher ed. choices} \\\\",
+      "\\cmidrule(lr){2-3} \\cmidrule(lr){4-6}"
+    ),
+    "Each column reports a scalar IV estimate of the pass-through from attended-school EB value added to the corresponding student outcome. Attended-school EB value added is instrumented with first-round offered-school EB value added. All specifications control for the DA-probability expected value of the same EB measure, cohort, grade-4 SIMCE math and language, gender, and age. Heteroskedasticity-robust standard errors are reported in parentheses. $^{*}p<0.10$, $^{**}p<0.05$, $^{***}p<0.01$."
   )
 )
 written_paths <- c(

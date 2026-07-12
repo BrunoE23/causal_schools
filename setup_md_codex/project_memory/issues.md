@@ -82,6 +82,16 @@
 - Current workaround: Keep the hierarchy and preserve `program_income_source_*` diagnostics so regressions can report or exclude fallback-heavy cases.
 - Follow-up: Repair the `COD_SIES` to `AREA_CARRERA_GENERICA` mapping for high-volume blank-area programs, rerun `03_construct_person_level_income_outcomes.R`, and recheck the number of students using institution/global fallbacks. Consider dropping institution-only FE from the main hierarchy after mapping repair if area coverage becomes adequate.
 
+### `high_paying_field_m1` has missing values for matriculated students with insufficient field classification
+
+- Status: Open
+- Date noted: 2026-07-11
+- Context: The current five-outcome specification uses `high_paying_field_m1` as an unconditional higher-education choice outcome. Non-matriculated students are coded `0`, and matriculated students are coded `1` when their first observed enrollment is in Science, Law, Engineering/Manufacturing/Construction, or Medicine+.
+- What was found: The current person-level MiFuturo output has 51,855 students with missing `high_paying_field_m1`. All of these come from the `matriculated_missing_field_classification` source category. In the same output, `high_inst_m1` and `program_income_full` have no missing values after their outcome rules.
+- Why it matters: Unlike `high_inst_m1` and `program_income_full`, the high-premium-field outcome is not fully unconditional in the current implementation. Missing field classification among matriculated students reduces the VA/IV sample for this outcome and could matter if classification gaps are concentrated in particular programs, institutions, cohorts, or schools.
+- Current workaround: Do not silently code these cases as non-high-premium. Keep them missing and document the source category in outcome coverage checks.
+- Follow-up: Audit `matriculated_missing_field_classification` by `COD_SIES`, `NOMB_CARRERA`, `AREA_CARRERA_GENERICA`, `field_classified`, institution, cohort, and program-info match status. Repair high-volume classification gaps where the field is clear, rerun `03_construct_person_level_income_outcomes.R`, and recheck missingness before finalizing the main high-premium-field estimates.
+
 ### Full SIES 2026 is still missing for grade-8 2021 higher-ed outcomes
 
 - Status: Open
@@ -112,3 +122,26 @@
   `clean_matriculated_first_time.R`, rebuild person-level MiFuturo/program
   outcomes, and then regenerate VA/EB outcomes only after confirming the outcome
   definitions are complete.
+
+### Interpret students without a first-round SAE offer
+
+- Status: Open
+- Date noted: 2026-07-10
+- Context: In the grade-8 cohorts 2018--2021, there are 226,195 timely SAE
+  applicants with simulated assignment risk. The regular-process results record
+  a first-round admitted school (`rbd_admitido`) for 193,218 of them (85.4%),
+  leaving 32,977 students (14.6%) without a first-round admitted RBD.
+- Current coding: `05_extend_main_universe_to_2021.R` sets
+  `rbd_treated_1R` to zero when the regular-process result has no
+  `rbd_admitido` matching a school in the student's submitted portfolio. The
+  scalar offer instrument consequently takes the value zero for these students.
+- Why it matters: A missing first-round admitted RBD may mean the student was
+  unmatched in the regular process, but it may instead reflect retention at the
+  origin school, a later assignment process, or another SAE result status. These
+  cases should not be interpreted as substantively equivalent until their status
+  is established.
+- Follow-up: Inspect the complete D1 regular-process result fields and any
+  post-response/late-process files; compare no-first-offer students' grade-8 and
+  first post-grade-8 RBDs; tabulate whether they remain at the origin school,
+  receive a later offer, or enroll elsewhere. Then document and, if needed,
+  revise the zero-offer treatment/instrument definition.

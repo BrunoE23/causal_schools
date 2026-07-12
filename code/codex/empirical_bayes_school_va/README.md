@@ -220,7 +220,7 @@ The higher-education enrollment outcome is:
 higher_ed_enrolled_m1 = 1[COD_SIES_m1 is observed]
 ```
 
-The high-paying-field enrollment outcome is:
+The high-premium-field enrollment outcome is:
 
 ```text
 high_paying_field_m1 = 1[student matriculates in Science, Law,
@@ -230,16 +230,35 @@ Engineering/Manufacturing/Construction, or Medicine+]
 `Medicine+` is the presentation group containing `Medicina`, `Quimica y
 Farmacia`, `Enfermeria`, `Obstetricia y Puericultura`, `Tecnologia Medica`, and
 `Odontologia`. Other health-related and technical health programs are grouped as
-`Other Healthcare` and are not included in the high-paying-field binary. No
+`Other Healthcare` and are not included in the high-premium-field binary. No
 observed matriculation is coded `0`; matriculated students with insufficient
 field classification remain missing.
 The variable used by the VA/EB runner is only `1`, `0`, or missing.
 
-When ready, estimate the high-paying-field VA/EB with the one-outcome Stata
+The high-institution enrollment outcome is:
+
+```text
+high_inst_m1 = 1[student matriculates in an institution with centered MiFuturo institution FE > 0.1]
+```
+
+The institution FE comes from the MiFuturo regression
+`log(income) ~ institution + AREA_CARRERA_GENERICA`. Non-matriculated students
+are coded `0`. Matriculated students are coded `1` only when the observed
+centered institution FE is above `0.1`; matriculated students at institutions
+with FE at or below `0.1` or without an institution FE are coded `0`. With the
+current MiFuturo FE table, this cutoff selects 19 institutions.
+
+When ready, estimate the high-premium-field VA/EB with the one-outcome Stata
 runner:
 
 ```stata
 do code/codex/empirical_bayes_school_va/05_construct_va_eb_one_outcome_stata.do highpay 1
+```
+
+After regenerating the MiFuturo person-level outcomes with `high_inst_m1`, run:
+
+```stata
+do code/codex/empirical_bayes_school_va/05_construct_va_eb_one_outcome_stata.do highinst 1
 ```
 
 This has not been run yet in the current iteration.
@@ -300,3 +319,21 @@ The EB coefficient may be mechanically larger if the same causal movement is mea
 
 This workflow does not implement hybrid causal EB or IV VAM.
 It validates an EB-shrunken observational school-value index along the SAE lottery margin.
+
+## Orthogonal log projected income exercise
+
+`11_run_program_income_math_highinst_highpay_orthogonal_iv_eb.R` constructs a
+three-dimensional school-value exercise for `log_program_income_full_clp_m1`.
+The school-level inputs are current EB value added for math, high-premium
+institution enrollment, and high-premium-field enrollment. The order is:
+
+```text
+1. math VA
+2. high-premium-institution VA residualized on math VA
+3. high-premium-field VA residualized on both previous dimensions
+```
+
+The residual from any school-level projection is not included in the IV
+regression. The joint IV uses attended orthogonalized dimensions as endogenous
+treatments, offered-school orthogonalized dimensions as instruments, and the
+DA-probability expected values of the same dimensions as risk controls.

@@ -6,7 +6,7 @@
 
 Outcome keys:
    math, language, exam, enrolled, stem,
-   highpay,
+   highpay, highinst,
    program_income_area, program_income_institution, program_income_full,
    program_income, progcert, instcert
 
@@ -22,7 +22,7 @@ set maxvar 30000
 
 args outcome_key rebuild_cache
 if "`outcome_key'" == "" {
-    di as error "Pass an outcome key: math, language, exam, enrolled, stem, highpay, program_income_area, program_income_institution, program_income_full, program_income, progcert, instcert"
+    di as error "Pass an outcome key: math, language, exam, enrolled, stem, highpay, highinst, program_income_area, program_income_institution, program_income_full, program_income, progcert, instcert"
     exit 198
 }
 if "`rebuild_cache'" == "" {
@@ -57,6 +57,14 @@ if "`outcome_key'" == "highpay" {
 if "`outcome_key'" == "highpay_field" {
     local outcome_var "highpay_field_m1"
     local outcome_label "high_paying_field_m1"
+}
+if "`outcome_key'" == "highinst" {
+    local outcome_var "high_inst_m1"
+    local outcome_label "high_inst_m1"
+}
+if "`outcome_key'" == "high_inst" {
+    local outcome_var "high_inst_m1"
+    local outcome_label "high_inst_m1"
 }
 if "`outcome_key'" == "program_income_area" {
     local outcome_var "log_proginc_area_clp_m1"
@@ -243,12 +251,20 @@ if _rc | "`rebuild_cache'" == "1" {
     save `middle_controls', replace
 
     import delimited using "$program_income_csv", clear varnames(1) case(preserve)
+    capture confirm variable high_inst_m1
+    if _rc {
+        if inlist("`outcome_key'", "highinst", "high_inst") {
+            di as error "$program_income_csv lacks high_inst_m1. Rerun code/codex/mifuturo_matricula_income/03_construct_person_level_income_outcomes.R first."
+            exit 111
+        }
+        gen byte high_inst_m1 = .
+    }
     keep MRUN ///
         proginc_area_clp_m1 log_proginc_area_clp_m1 proginc_area_src_m1 proginc_area_miss_m1 ///
         proginc_inst_clp_m1 log_proginc_inst_clp_m1 proginc_inst_src_m1 proginc_inst_miss_m1 ///
         proginc_full_clp_m1 log_proginc_full_clp_m1 proginc_full_src_m1 proginc_full_miss_m1 ///
         program_income_clp_m1 log_program_income_clp_m1 program_income_source_m1 program_income_missing_m1 ///
-        highpay_field_m1
+        highpay_field_m1 high_inst_m1
     duplicates drop MRUN, force
     compress
     save `program_income', replace
@@ -295,7 +311,8 @@ if _rc | "`rebuild_cache'" == "1" {
         log_proginc_inst_clp_m1 ///
         log_proginc_full_clp_m1 ///
         log_program_income_clp_m1 ///
-        highpay_field_m1 {
+        highpay_field_m1 ///
+        high_inst_m1 {
         capture confirm variable `v'
         if !_rc {
             replace `v' = . if !sies_m1_followup_observed
