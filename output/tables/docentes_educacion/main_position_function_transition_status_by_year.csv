@@ -1,0 +1,515 @@
+FROM_YEAR,TO_YEAR,FROM_ID_IFP,FROM_FUNCTION,STATUS,N,SHARE_OF_STARTERS
+2018,2019,1,Classroom teacher,changed_function_changed_school,1789,0.00900692259282568
+2018,2019,1,Classroom teacher,changed_function_same_school,3084,0.0155267463813719
+2018,2019,1,Classroom teacher,not_observed_next_year,13539,0.0681636249213342
+2018,2019,1,Classroom teacher,same_function_changed_school,20911,0.105278791692889
+2018,2019,1,Classroom teacher,same_function_same_school,159302,0.80202391441158
+2018,2019,2,Technical-pedagogical staff,changed_function_changed_school,293,0.0763020833333333
+2018,2019,2,Technical-pedagogical staff,changed_function_same_school,461,0.120052083333333
+2018,2019,2,Technical-pedagogical staff,not_observed_next_year,278,0.0723958333333333
+2018,2019,2,Technical-pedagogical staff,same_function_changed_school,30,0.0078125
+2018,2019,2,Technical-pedagogical staff,same_function_same_school,2778,0.7234375
+2018,2019,3,Management staff,changed_function_changed_school,145,0.0450031036623215
+2018,2019,3,Management staff,changed_function_same_school,300,0.0931098696461825
+2018,2019,3,Management staff,not_observed_next_year,269,0.0834885164494103
+2018,2019,3,Management staff,same_function_changed_school,45,0.0139664804469274
+2018,2019,3,Management staff,same_function_same_school,2463,0.764432029795158
+2018,2019,4,Director,changed_function_changed_school,354,0.0389524647887324
+2018,2019,4,Director,changed_function_same_school,325,0.0357614436619718
+2018,2019,4,Director,not_observed_next_year,504,0.0554577464788732
+2018,2019,4,Director,same_function_changed_school,264,0.0290492957746479
+2018,2019,4,Director,same_function_same_school,7641,0.840779049295775
+2018,2019,5,Other function in school,changed_function_changed_school,1040,0.094024048458548
+2018,2019,5,Other function in school,changed_function_same_school,1042,0.094204863936353
+2018,2019,5,Other function in school,not_observed_next_year,1095,0.0989964740981828
+2018,2019,5,Other function in school,same_function_changed_school,164,0.0148268691800018
+2018,2019,5,Other function in school,same_function_same_school,7720,0.697947744326914
+2018,2019,6,Other function outside school,changed_function_changed_school,27,0.0710526315789474
+2018,2019,6,Other function outside school,changed_function_same_school,38,0.1
+2018,2019,6,Other function outside school,not_observed_next_year,57,0.15
+2018,2019,6,Other function outside school,same_function_changed_school,5,0.0131578947368421
+2018,2019,6,Other function outside school,same_function_same_school,253,0.66578947368421
+2018,2019,7,Head of UTP,changed_function_changed_school,346,0.0727655099894848
+2018,2019,7,Head of UTP,changed_function_same_school,401,0.0843322818086225
+2018,2019,7,Head of UTP,not_observed_next_year,229,0.0481598317560463
+2018,2019,7,Head of UTP,same_function_changed_school,90,0.0189274447949527
+2018,2019,7,Head of UTP,same_function_same_school,3689,0.775814931650894
+2018,2019,8,Inspector general,changed_function_changed_school,238,0.0568426080726057
+2018,2019,8,Inspector general,changed_function_same_school,289,0.0690231669453069
+2018,2019,8,Inspector general,not_observed_next_year,256,0.0611416288512061
+2018,2019,8,Inspector general,same_function_changed_school,109,0.0260329591593026
+2018,2019,8,Inspector general,same_function_same_school,3295,0.786959636971579
+2018,2019,9,Orientador,changed_function_changed_school,91,0.0418006430868167
+2018,2019,9,Orientador,changed_function_same_school,133,0.0610932475884244
+2018,2019,9,Orientador,not_observed_next_year,166,0.0762517225539734
+2018,2019,9,Orientador,same_function_changed_school,54,0.0248047772163528
+2018,2019,9,Orientador,same_function_same_school,1733,0.796049609554433
+2018,2019,10,Management,changed_function_changed_school,10,0.0684931506849315
+2018,2019,10,Management,changed_function_same_school,21,0.143835616438356
+2018,2019,10,Management,not_observed_next_year,18,0.123287671232877
+2018,2019,10,Management,same_function_same_school,97,0.664383561643836
+2018,2019,11,Technical-pedagogical,changed_function_changed_school,71,0.0958164642375169
+2018,2019,11,Technical-pedagogical,changed_function_same_school,117,0.157894736842105
+2018,2019,11,Technical-pedagogical,not_observed_next_year,104,0.140350877192982
+2018,2019,11,Technical-pedagogical,same_function_same_school,449,0.605937921727395
+2018,2019,12,Supervision,changed_function_changed_school,8,0.0930232558139535
+2018,2019,12,Supervision,changed_function_same_school,13,0.151162790697674
+2018,2019,12,Supervision,not_observed_next_year,13,0.151162790697674
+2018,2019,12,Supervision,same_function_same_school,52,0.604651162790698
+2018,2019,15,Deputy director,changed_function_changed_school,41,0.0642633228840125
+2018,2019,15,Deputy director,changed_function_same_school,73,0.114420062695925
+2018,2019,15,Deputy director,not_observed_next_year,52,0.0815047021943574
+2018,2019,15,Deputy director,same_function_changed_school,4,0.00626959247648903
+2018,2019,15,Deputy director,same_function_same_school,468,0.733542319749216
+2018,2019,16,Teacher in charge of school,changed_function_changed_school,165,0.0693568726355612
+2018,2019,16,Teacher in charge of school,changed_function_same_school,81,0.0340479192938209
+2018,2019,16,Teacher in charge of school,not_observed_next_year,100,0.0420344682639765
+2018,2019,16,Teacher in charge of school,same_function_changed_school,28,0.0117696511139134
+2018,2019,16,Teacher in charge of school,same_function_same_school,2005,0.842791088692728
+2018,2019,17,Traditional educator,changed_function_changed_school,64,0.103392568659128
+2018,2019,17,Traditional educator,changed_function_same_school,52,0.0840064620355412
+2018,2019,17,Traditional educator,not_observed_next_year,74,0.119547657512116
+2018,2019,17,Traditional educator,same_function_changed_school,1,0.00161550888529887
+2018,2019,17,Traditional educator,same_function_same_school,428,0.691437802907916
+2019,2020,1,Classroom teacher,changed_function_changed_school,1454,0.00706782486960495
+2019,2020,1,Classroom teacher,changed_function_same_school,2640,0.0128329144812635
+2019,2020,1,Classroom teacher,not_observed_next_year,16334,0.0793987974003626
+2019,2020,1,Classroom teacher,same_function_changed_school,16903,0.0821646793472713
+2019,2020,1,Classroom teacher,same_function_same_school,168390,0.818535783901498
+2019,2020,2,Technical-pedagogical staff,changed_function_changed_school,253,0.0634721525338685
+2019,2020,2,Technical-pedagogical staff,changed_function_same_school,382,0.0958354239839438
+2019,2020,2,Technical-pedagogical staff,not_observed_next_year,300,0.0752634219769192
+2019,2020,2,Technical-pedagogical staff,same_function_changed_school,34,0.00852985449071751
+2019,2020,2,Technical-pedagogical staff,same_function_same_school,3017,0.756899147014551
+2019,2020,3,Management staff,changed_function_changed_school,126,0.0378719567177638
+2019,2020,3,Management staff,changed_function_same_school,278,0.0835587616471296
+2019,2020,3,Management staff,not_observed_next_year,254,0.0763450556056507
+2019,2020,3,Management staff,same_function_changed_school,39,0.0117222723174031
+2019,2020,3,Management staff,same_function_same_school,2630,0.790501953712053
+2019,2020,4,Director,changed_function_changed_school,260,0.0286944045911047
+2019,2020,4,Director,changed_function_same_school,236,0.0260456903211566
+2019,2020,4,Director,not_observed_next_year,499,0.0550711841960049
+2019,2020,4,Director,same_function_changed_school,210,0.0231762498620461
+2019,2020,4,Director,same_function_same_school,7856,0.867012471029688
+2019,2020,5,Other function in school,changed_function_changed_school,755,0.0647901827855488
+2019,2020,5,Other function in school,changed_function_same_school,824,0.0707114047884665
+2019,2020,5,Other function in school,not_observed_next_year,1311,0.112503218055436
+2019,2020,5,Other function in school,same_function_changed_school,132,0.0113275551360165
+2019,2020,5,Other function in school,same_function_same_school,8631,0.740667639234532
+2019,2020,6,Other function outside school,changed_function_changed_school,34,0.0858585858585859
+2019,2020,6,Other function outside school,changed_function_same_school,23,0.0580808080808081
+2019,2020,6,Other function outside school,not_observed_next_year,53,0.133838383838384
+2019,2020,6,Other function outside school,same_function_changed_school,2,0.00505050505050505
+2019,2020,6,Other function outside school,same_function_same_school,284,0.717171717171717
+2019,2020,7,Head of UTP,changed_function_changed_school,269,0.0551568587246258
+2019,2020,7,Head of UTP,changed_function_same_school,295,0.060488004921058
+2019,2020,7,Head of UTP,not_observed_next_year,273,0.0559770350625385
+2019,2020,7,Head of UTP,same_function_changed_school,94,0.0192741439409473
+2019,2020,7,Head of UTP,same_function_same_school,3946,0.80910395735083
+2019,2020,8,Inspector general,changed_function_changed_school,149,0.0348456501403181
+2019,2020,8,Inspector general,changed_function_same_school,254,0.0594013096351731
+2019,2020,8,Inspector general,not_observed_next_year,297,0.0694574368568756
+2019,2020,8,Inspector general,same_function_changed_school,76,0.0177736202057998
+2019,2020,8,Inspector general,same_function_same_school,3500,0.818521983161834
+2019,2020,9,Orientador,changed_function_changed_school,72,0.0328767123287671
+2019,2020,9,Orientador,changed_function_same_school,121,0.0552511415525114
+2019,2020,9,Orientador,not_observed_next_year,151,0.0689497716894977
+2019,2020,9,Orientador,same_function_changed_school,35,0.0159817351598174
+2019,2020,9,Orientador,same_function_same_school,1811,0.826940639269406
+2019,2020,10,Management,changed_function_changed_school,13,0.0792682926829268
+2019,2020,10,Management,changed_function_same_school,18,0.109756097560976
+2019,2020,10,Management,not_observed_next_year,25,0.152439024390244
+2019,2020,10,Management,same_function_changed_school,1,0.00609756097560976
+2019,2020,10,Management,same_function_same_school,107,0.652439024390244
+2019,2020,11,Technical-pedagogical,changed_function_changed_school,66,0.0833333333333333
+2019,2020,11,Technical-pedagogical,changed_function_same_school,88,0.111111111111111
+2019,2020,11,Technical-pedagogical,not_observed_next_year,95,0.119949494949495
+2019,2020,11,Technical-pedagogical,same_function_changed_school,1,0.00126262626262626
+2019,2020,11,Technical-pedagogical,same_function_same_school,542,0.684343434343434
+2019,2020,12,Supervision,changed_function_changed_school,4,0.0421052631578947
+2019,2020,12,Supervision,changed_function_same_school,8,0.0842105263157895
+2019,2020,12,Supervision,not_observed_next_year,14,0.147368421052632
+2019,2020,12,Supervision,same_function_changed_school,1,0.0105263157894737
+2019,2020,12,Supervision,same_function_same_school,68,0.715789473684211
+2019,2020,15,Deputy director,changed_function_changed_school,30,0.0447093889716841
+2019,2020,15,Deputy director,changed_function_same_school,61,0.0909090909090909
+2019,2020,15,Deputy director,not_observed_next_year,61,0.0909090909090909
+2019,2020,15,Deputy director,same_function_changed_school,9,0.0134128166915052
+2019,2020,15,Deputy director,same_function_same_school,510,0.760059612518629
+2019,2020,16,Teacher in charge of school,changed_function_changed_school,112,0.04880174291939
+2019,2020,16,Teacher in charge of school,changed_function_same_school,72,0.0313725490196078
+2019,2020,16,Teacher in charge of school,not_observed_next_year,92,0.0400871459694989
+2019,2020,16,Teacher in charge of school,same_function_changed_school,42,0.0183006535947712
+2019,2020,16,Teacher in charge of school,same_function_same_school,1977,0.861437908496732
+2019,2020,17,Traditional educator,changed_function_changed_school,28,0.0564516129032258
+2019,2020,17,Traditional educator,changed_function_same_school,37,0.0745967741935484
+2019,2020,17,Traditional educator,not_observed_next_year,46,0.092741935483871
+2019,2020,17,Traditional educator,same_function_changed_school,4,0.00806451612903226
+2019,2020,17,Traditional educator,same_function_same_school,381,0.768145161290323
+2020,2021,1,Classroom teacher,changed_function_changed_school,791,0.00388743635613045
+2020,2021,1,Classroom teacher,changed_function_same_school,2344,0.0115197861172816
+2020,2021,1,Classroom teacher,not_observed_next_year,11635,0.0571811909021211
+2020,2021,1,Classroom teacher,same_function_changed_school,9677,0.047558434409955
+2020,2021,1,Classroom teacher,same_function_same_school,179029,0.879853152214512
+2020,2021,2,Technical-pedagogical staff,changed_function_changed_school,142,0.0339144972534034
+2020,2021,2,Technical-pedagogical staff,changed_function_same_school,351,0.0838309051827084
+2020,2021,2,Technical-pedagogical staff,not_observed_next_year,255,0.0609027943635061
+2020,2021,2,Technical-pedagogical staff,same_function_changed_school,18,0.00429902077860043
+2020,2021,2,Technical-pedagogical staff,same_function_same_school,3421,0.817052782421782
+2020,2021,3,Management staff,changed_function_changed_school,100,0.0295159386068477
+2020,2021,3,Management staff,changed_function_same_school,242,0.0714285714285714
+2020,2021,3,Management staff,not_observed_next_year,205,0.0605076741440378
+2020,2021,3,Management staff,same_function_changed_school,30,0.00885478158205431
+2020,2021,3,Management staff,same_function_same_school,2811,0.829693034238489
+2020,2021,4,Director,changed_function_changed_school,170,0.0187369117160807
+2020,2021,4,Director,changed_function_same_school,264,0.0290973217237959
+2020,2021,4,Director,not_observed_next_year,408,0.0449685881185936
+2020,2021,4,Director,same_function_changed_school,205,0.0225945111870385
+2020,2021,4,Director,same_function_same_school,8026,0.884602667254491
+2020,2021,5,Other function in school,changed_function_changed_school,452,0.038992408557626
+2020,2021,5,Other function in school,changed_function_same_school,825,0.0711697722567288
+2020,2021,5,Other function in school,not_observed_next_year,978,0.0843685300207039
+2020,2021,5,Other function in school,same_function_changed_school,73,0.00629744651483782
+2020,2021,5,Other function in school,same_function_same_school,9264,0.799171842650104
+2020,2021,6,Other function outside school,changed_function_changed_school,27,0.072
+2020,2021,6,Other function outside school,changed_function_same_school,30,0.08
+2020,2021,6,Other function outside school,not_observed_next_year,41,0.109333333333333
+2020,2021,6,Other function outside school,same_function_changed_school,6,0.016
+2020,2021,6,Other function outside school,same_function_same_school,271,0.722666666666667
+2020,2021,7,Head of UTP,changed_function_changed_school,180,0.0367797302819779
+2020,2021,7,Head of UTP,changed_function_same_school,296,0.0604822231303637
+2020,2021,7,Head of UTP,not_observed_next_year,246,0.0502656313853698
+2020,2021,7,Head of UTP,same_function_changed_school,51,0.0104209235798937
+2020,2021,7,Head of UTP,same_function_same_school,4121,0.842051491622395
+2020,2021,8,Inspector general,changed_function_changed_school,111,0.0261792452830189
+2020,2021,8,Inspector general,changed_function_same_school,228,0.0537735849056604
+2020,2021,8,Inspector general,not_observed_next_year,253,0.0596698113207547
+2020,2021,8,Inspector general,same_function_changed_school,35,0.00825471698113208
+2020,2021,8,Inspector general,same_function_same_school,3613,0.852122641509434
+2020,2021,9,Orientador,changed_function_changed_school,50,0.0232558139534884
+2020,2021,9,Orientador,changed_function_same_school,108,0.0502325581395349
+2020,2021,9,Orientador,not_observed_next_year,174,0.0809302325581395
+2020,2021,9,Orientador,same_function_changed_school,33,0.0153488372093023
+2020,2021,9,Orientador,same_function_same_school,1785,0.830232558139535
+2020,2021,10,Management,changed_function_changed_school,8,0.0449438202247191
+2020,2021,10,Management,changed_function_same_school,20,0.112359550561798
+2020,2021,10,Management,not_observed_next_year,21,0.117977528089888
+2020,2021,10,Management,same_function_same_school,129,0.724719101123596
+2020,2021,11,Technical-pedagogical,changed_function_changed_school,24,0.0281030444964871
+2020,2021,11,Technical-pedagogical,changed_function_same_school,99,0.115925058548009
+2020,2021,11,Technical-pedagogical,not_observed_next_year,94,0.110070257611241
+2020,2021,11,Technical-pedagogical,same_function_changed_school,1,0.00117096018735363
+2020,2021,11,Technical-pedagogical,same_function_same_school,636,0.744730679156909
+2020,2021,12,Supervision,changed_function_same_school,6,0.06
+2020,2021,12,Supervision,not_observed_next_year,14,0.14
+2020,2021,12,Supervision,same_function_changed_school,1,0.01
+2020,2021,12,Supervision,same_function_same_school,79,0.79
+2020,2021,15,Deputy director,changed_function_changed_school,19,0.0281481481481482
+2020,2021,15,Deputy director,changed_function_same_school,51,0.0755555555555556
+2020,2021,15,Deputy director,not_observed_next_year,40,0.0592592592592593
+2020,2021,15,Deputy director,same_function_changed_school,3,0.00444444444444444
+2020,2021,15,Deputy director,same_function_same_school,562,0.832592592592593
+2020,2021,16,Teacher in charge of school,changed_function_changed_school,55,0.0247191011235955
+2020,2021,16,Teacher in charge of school,changed_function_same_school,72,0.0323595505617978
+2020,2021,16,Teacher in charge of school,not_observed_next_year,86,0.0386516853932584
+2020,2021,16,Teacher in charge of school,same_function_changed_school,15,0.00674157303370787
+2020,2021,16,Teacher in charge of school,same_function_same_school,1997,0.89752808988764
+2020,2021,17,Traditional educator,changed_function_changed_school,16,0.0341880341880342
+2020,2021,17,Traditional educator,changed_function_same_school,23,0.0491452991452992
+2020,2021,17,Traditional educator,not_observed_next_year,38,0.0811965811965812
+2020,2021,17,Traditional educator,same_function_changed_school,2,0.00427350427350427
+2020,2021,17,Traditional educator,same_function_same_school,389,0.831196581196581
+2021,2022,1,Classroom teacher,changed_function_changed_school,1485,0.00717571563871117
+2021,2022,1,Classroom teacher,changed_function_same_school,3085,0.0149071264278949
+2021,2022,1,Classroom teacher,not_observed_next_year,15077,0.0728540502928272
+2021,2022,1,Classroom teacher,same_function_changed_school,16184,0.0782032201325937
+2021,2022,1,Classroom teacher,same_function_same_school,171117,0.826859887507973
+2021,2022,2,Technical-pedagogical staff,changed_function_changed_school,278,0.062938646139914
+2021,2022,2,Technical-pedagogical staff,changed_function_same_school,428,0.0968983472945438
+2021,2022,2,Technical-pedagogical staff,not_observed_next_year,337,0.0762961285940684
+2021,2022,2,Technical-pedagogical staff,same_function_changed_school,28,0.0063391442155309
+2021,2022,2,Technical-pedagogical staff,same_function_same_school,3346,0.757527733755943
+2021,2022,3,Management staff,changed_function_changed_school,154,0.0439372325249643
+2021,2022,3,Management staff,changed_function_same_school,248,0.070756062767475
+2021,2022,3,Management staff,not_observed_next_year,289,0.082453637660485
+2021,2022,3,Management staff,same_function_changed_school,28,0.0079885877318117
+2021,2022,3,Management staff,same_function_same_school,2786,0.794864479315264
+2021,2022,4,Director,changed_function_changed_school,259,0.0285871964679912
+2021,2022,4,Director,changed_function_same_school,323,0.0356512141280353
+2021,2022,4,Director,not_observed_next_year,533,0.0588300220750552
+2021,2022,4,Director,same_function_changed_school,214,0.0236203090507726
+2021,2022,4,Director,same_function_same_school,7731,0.853311258278146
+2021,2022,5,Other function in school,changed_function_changed_school,697,0.060767218831735
+2021,2022,5,Other function in school,changed_function_same_school,866,0.0755013077593723
+2021,2022,5,Other function in school,not_observed_next_year,1238,0.107933740191805
+2021,2022,5,Other function in school,same_function_changed_school,117,0.0102005231037489
+2021,2022,5,Other function in school,same_function_same_school,8552,0.745597210113339
+2021,2022,6,Other function outside school,changed_function_changed_school,38,0.099737532808399
+2021,2022,6,Other function outside school,changed_function_same_school,32,0.083989501312336
+2021,2022,6,Other function outside school,not_observed_next_year,56,0.146981627296588
+2021,2022,6,Other function outside school,same_function_changed_school,4,0.010498687664042
+2021,2022,6,Other function outside school,same_function_same_school,251,0.658792650918635
+2021,2022,7,Head of UTP,changed_function_changed_school,228,0.0465021415459923
+2021,2022,7,Head of UTP,changed_function_same_school,388,0.0791352233326535
+2021,2022,7,Head of UTP,not_observed_next_year,292,0.0595553742606567
+2021,2022,7,Head of UTP,same_function_changed_school,89,0.0181521517438303
+2021,2022,7,Head of UTP,same_function_same_school,3906,0.796655109116867
+2021,2022,8,Inspector general,changed_function_changed_school,158,0.0377809660449546
+2021,2022,8,Inspector general,changed_function_same_school,248,0.0593017694882831
+2021,2022,8,Inspector general,not_observed_next_year,360,0.0860832137733142
+2021,2022,8,Inspector general,same_function_changed_school,63,0.01506456241033
+2021,2022,8,Inspector general,same_function_same_school,3353,0.801769488283118
+2021,2022,9,Orientador,changed_function_changed_school,68,0.0325514600287219
+2021,2022,9,Orientador,changed_function_same_school,112,0.0536141694590713
+2021,2022,9,Orientador,not_observed_next_year,214,0.102441359502154
+2021,2022,9,Orientador,same_function_changed_school,29,0.0138822403063667
+2021,2022,9,Orientador,same_function_same_school,1666,0.797510770703686
+2021,2022,10,Management,changed_function_changed_school,13,0.0634146341463415
+2021,2022,10,Management,changed_function_same_school,28,0.136585365853659
+2021,2022,10,Management,not_observed_next_year,25,0.121951219512195
+2021,2022,10,Management,same_function_changed_school,1,0.00487804878048781
+2021,2022,10,Management,same_function_same_school,138,0.673170731707317
+2021,2022,11,Technical-pedagogical,changed_function_changed_school,87,0.0918690601900739
+2021,2022,11,Technical-pedagogical,changed_function_same_school,130,0.13727560718057
+2021,2022,11,Technical-pedagogical,not_observed_next_year,104,0.109820485744456
+2021,2022,11,Technical-pedagogical,same_function_changed_school,1,0.00105596620908131
+2021,2022,11,Technical-pedagogical,same_function_same_school,625,0.659978880675818
+2021,2022,12,Supervision,changed_function_same_school,16,0.166666666666667
+2021,2022,12,Supervision,not_observed_next_year,14,0.145833333333333
+2021,2022,12,Supervision,same_function_same_school,66,0.6875
+2021,2022,15,Deputy director,changed_function_changed_school,25,0.0355113636363636
+2021,2022,15,Deputy director,changed_function_same_school,59,0.0838068181818182
+2021,2022,15,Deputy director,not_observed_next_year,66,0.09375
+2021,2022,15,Deputy director,same_function_changed_school,6,0.00852272727272727
+2021,2022,15,Deputy director,same_function_same_school,548,0.778409090909091
+2021,2022,16,Teacher in charge of school,changed_function_changed_school,130,0.0599354541263255
+2021,2022,16,Teacher in charge of school,changed_function_same_school,71,0.0327339787920701
+2021,2022,16,Teacher in charge of school,not_observed_next_year,128,0.0590133702166897
+2021,2022,16,Teacher in charge of school,same_function_changed_school,41,0.0189027201475334
+2021,2022,16,Teacher in charge of school,same_function_same_school,1799,0.829414476717381
+2021,2022,17,Traditional educator,changed_function_changed_school,27,0.0574468085106383
+2021,2022,17,Traditional educator,changed_function_same_school,29,0.0617021276595745
+2021,2022,17,Traditional educator,not_observed_next_year,34,0.0723404255319149
+2021,2022,17,Traditional educator,same_function_changed_school,5,0.0106382978723404
+2021,2022,17,Traditional educator,same_function_same_school,375,0.797872340425532
+2022,2023,1,Classroom teacher,changed_function_changed_school,1699,0.00796019434306142
+2022,2023,1,Classroom teacher,changed_function_same_school,3525,0.0165154120419609
+2022,2023,1,Classroom teacher,not_observed_next_year,15655,0.0733471703594035
+2022,2023,1,Classroom teacher,same_function_changed_school,19621,0.0919287658653373
+2022,2023,1,Classroom teacher,same_function_same_school,172937,0.810248457390237
+2022,2023,2,Technical-pedagogical staff,changed_function_changed_school,294,0.0638575152041703
+2022,2023,2,Technical-pedagogical staff,changed_function_same_school,488,0.105994787141616
+2022,2023,2,Technical-pedagogical staff,not_observed_next_year,316,0.0686359687228497
+2022,2023,2,Technical-pedagogical staff,same_function_changed_school,23,0.00499565595134666
+2022,2023,2,Technical-pedagogical staff,same_function_same_school,3483,0.756516072980017
+2022,2023,3,Management staff,changed_function_changed_school,194,0.0528034839412085
+2022,2023,3,Management staff,changed_function_same_school,320,0.0870985302123027
+2022,2023,3,Management staff,not_observed_next_year,288,0.0783886771910724
+2022,2023,3,Management staff,same_function_changed_school,40,0.0108873162765378
+2022,2023,3,Management staff,same_function_same_school,2832,0.770821992378879
+2022,2023,4,Director,changed_function_changed_school,299,0.0330167844522968
+2022,2023,4,Director,changed_function_same_school,312,0.034452296819788
+2022,2023,4,Director,not_observed_next_year,533,0.0588560070671378
+2022,2023,4,Director,same_function_changed_school,247,0.0272747349823322
+2022,2023,4,Director,same_function_same_school,7665,0.846400176678445
+2022,2023,5,Other function in school,changed_function_changed_school,871,0.0743300904591227
+2022,2023,5,Other function in school,changed_function_same_school,976,0.0832906639358252
+2022,2023,5,Other function in school,not_observed_next_year,1137,0.0970302099334357
+2022,2023,5,Other function in school,same_function_changed_school,159,0.0135688684075781
+2022,2023,5,Other function in school,same_function_same_school,8575,0.731780167264038
+2022,2023,6,Other function outside school,changed_function_changed_school,31,0.0786802030456853
+2022,2023,6,Other function outside school,changed_function_same_school,40,0.101522842639594
+2022,2023,6,Other function outside school,not_observed_next_year,57,0.144670050761421
+2022,2023,6,Other function outside school,same_function_changed_school,3,0.00761421319796954
+2022,2023,6,Other function outside school,same_function_same_school,263,0.66751269035533
+2022,2023,7,Head of UTP,changed_function_changed_school,295,0.0595478401291885
+2022,2023,7,Head of UTP,changed_function_same_school,417,0.0841744045215987
+2022,2023,7,Head of UTP,not_observed_next_year,271,0.05470327008478
+2022,2023,7,Head of UTP,same_function_changed_school,78,0.0157448526443278
+2022,2023,7,Head of UTP,same_function_same_school,3893,0.785829632620105
+2022,2023,8,Inspector general,changed_function_changed_school,195,0.0458607714016933
+2022,2023,8,Inspector general,changed_function_same_school,311,0.0731420507996237
+2022,2023,8,Inspector general,not_observed_next_year,293,0.0689087488240828
+2022,2023,8,Inspector general,same_function_changed_school,90,0.0211665098777046
+2022,2023,8,Inspector general,same_function_same_school,3363,0.790921919096896
+2022,2023,9,Orientador,changed_function_changed_school,84,0.0397539044013251
+2022,2023,9,Orientador,changed_function_same_school,119,0.0563180312352106
+2022,2023,9,Orientador,not_observed_next_year,164,0.0776147657359205
+2022,2023,9,Orientador,same_function_changed_school,32,0.0151443445338381
+2022,2023,9,Orientador,same_function_same_school,1714,0.811168954093706
+2022,2023,10,Management,changed_function_changed_school,11,0.0536585365853659
+2022,2023,10,Management,changed_function_same_school,31,0.151219512195122
+2022,2023,10,Management,not_observed_next_year,30,0.146341463414634
+2022,2023,10,Management,same_function_changed_school,4,0.0195121951219512
+2022,2023,10,Management,same_function_same_school,129,0.629268292682927
+2022,2023,11,Technical-pedagogical,changed_function_changed_school,88,0.0866995073891626
+2022,2023,11,Technical-pedagogical,changed_function_same_school,144,0.141871921182266
+2022,2023,11,Technical-pedagogical,not_observed_next_year,107,0.105418719211823
+2022,2023,11,Technical-pedagogical,same_function_changed_school,1,0.000985221674876847
+2022,2023,11,Technical-pedagogical,same_function_same_school,675,0.665024630541872
+2022,2023,12,Supervision,changed_function_changed_school,8,0.0851063829787234
+2022,2023,12,Supervision,changed_function_same_school,16,0.170212765957447
+2022,2023,12,Supervision,not_observed_next_year,13,0.138297872340426
+2022,2023,12,Supervision,same_function_same_school,57,0.606382978723404
+2022,2023,15,Deputy director,changed_function_changed_school,35,0.0474254742547426
+2022,2023,15,Deputy director,changed_function_same_school,59,0.0799457994579946
+2022,2023,15,Deputy director,not_observed_next_year,65,0.0880758807588076
+2022,2023,15,Deputy director,same_function_changed_school,8,0.010840108401084
+2022,2023,15,Deputy director,same_function_same_school,571,0.773712737127371
+2022,2023,16,Teacher in charge of school,changed_function_changed_school,125,0.0591575958353053
+2022,2023,16,Teacher in charge of school,changed_function_same_school,78,0.0369143398012305
+2022,2023,16,Teacher in charge of school,not_observed_next_year,118,0.0558447704685282
+2022,2023,16,Teacher in charge of school,same_function_changed_school,32,0.0151443445338381
+2022,2023,16,Teacher in charge of school,same_function_same_school,1760,0.832938949361098
+2022,2023,17,Traditional educator,changed_function_changed_school,40,0.0759013282732448
+2022,2023,17,Traditional educator,changed_function_same_school,35,0.0664136622390892
+2022,2023,17,Traditional educator,not_observed_next_year,48,0.0910815939278937
+2022,2023,17,Traditional educator,same_function_changed_school,6,0.0113851992409867
+2022,2023,17,Traditional educator,same_function_same_school,398,0.755218216318786
+2023,2024,1,Classroom teacher,changed_function_changed_school,1655,0.00762574414361281
+2023,2024,1,Classroom teacher,changed_function_same_school,3901,0.0179746392170596
+2023,2024,1,Classroom teacher,not_observed_next_year,16139,0.0743636765762943
+2023,2024,1,Classroom teacher,same_function_changed_school,19385,0.089320272038631
+2023,2024,1,Classroom teacher,same_function_same_school,175948,0.810715668024402
+2023,2024,2,Technical-pedagogical staff,changed_function_changed_school,291,0.0604863853668676
+2023,2024,2,Technical-pedagogical staff,changed_function_same_school,567,0.117854915817917
+2023,2024,2,Technical-pedagogical staff,not_observed_next_year,365,0.0758678029515693
+2023,2024,2,Technical-pedagogical staff,same_function_changed_school,37,0.00769070879235086
+2023,2024,2,Technical-pedagogical staff,same_function_same_school,3551,0.738100187071295
+2023,2024,3,Management staff,changed_function_changed_school,163,0.0425921087013326
+2023,2024,3,Management staff,changed_function_same_school,404,0.105565717272015
+2023,2024,3,Management staff,not_observed_next_year,299,0.0781290828325059
+2023,2024,3,Management staff,same_function_changed_school,46,0.0120198588973086
+2023,2024,3,Management staff,same_function_same_school,2915,0.761693232296838
+2023,2024,4,Director,changed_function_changed_school,272,0.0300022060445621
+2023,2024,4,Director,changed_function_same_school,321,0.0354070152217075
+2023,2024,4,Director,not_observed_next_year,497,0.0548202073681888
+2023,2024,4,Director,same_function_changed_school,267,0.0294506949040371
+2023,2024,4,Director,same_function_same_school,7709,0.850319876461505
+2023,2024,5,Other function in school,changed_function_changed_school,919,0.0751922762232041
+2023,2024,5,Other function in school,changed_function_same_school,1109,0.0907380134184258
+2023,2024,5,Other function in school,not_observed_next_year,1256,0.10276550482736
+2023,2024,5,Other function in school,same_function_changed_school,139,0.0113729340533464
+2023,2024,5,Other function in school,same_function_same_school,8799,0.719931271477663
+2023,2024,6,Other function outside school,changed_function_changed_school,38,0.0906921241050119
+2023,2024,6,Other function outside school,changed_function_same_school,66,0.157517899761337
+2023,2024,6,Other function outside school,not_observed_next_year,68,0.162291169451074
+2023,2024,6,Other function outside school,same_function_changed_school,2,0.00477326968973747
+2023,2024,6,Other function outside school,same_function_same_school,245,0.58472553699284
+2023,2024,7,Head of UTP,changed_function_changed_school,262,0.0519326065411298
+2023,2024,7,Head of UTP,changed_function_same_school,403,0.0798810703666997
+2023,2024,7,Head of UTP,not_observed_next_year,289,0.0572844400396432
+2023,2024,7,Head of UTP,same_function_changed_school,73,0.0144697720515362
+2023,2024,7,Head of UTP,same_function_same_school,4018,0.796432111000991
+2023,2024,8,Inspector general,changed_function_changed_school,202,0.0457738499886698
+2023,2024,8,Inspector general,changed_function_same_school,334,0.0756854747337412
+2023,2024,8,Inspector general,not_observed_next_year,356,0.0806707455245864
+2023,2024,8,Inspector general,same_function_changed_school,105,0.0237933378653977
+2023,2024,8,Inspector general,same_function_same_school,3416,0.774076591887605
+2023,2024,9,Orientador,changed_function_changed_school,75,0.0337837837837838
+2023,2024,9,Orientador,changed_function_same_school,197,0.0887387387387387
+2023,2024,9,Orientador,not_observed_next_year,188,0.0846846846846847
+2023,2024,9,Orientador,same_function_changed_school,36,0.0162162162162162
+2023,2024,9,Orientador,same_function_same_school,1724,0.776576576576577
+2023,2024,10,Management,changed_function_changed_school,17,0.0769230769230769
+2023,2024,10,Management,changed_function_same_school,34,0.153846153846154
+2023,2024,10,Management,not_observed_next_year,27,0.122171945701357
+2023,2024,10,Management,same_function_changed_school,1,0.00452488687782806
+2023,2024,10,Management,same_function_same_school,142,0.642533936651584
+2023,2024,11,Technical-pedagogical,changed_function_changed_school,80,0.0763358778625954
+2023,2024,11,Technical-pedagogical,changed_function_same_school,155,0.147900763358779
+2023,2024,11,Technical-pedagogical,not_observed_next_year,135,0.12881679389313
+2023,2024,11,Technical-pedagogical,same_function_changed_school,1,0.000954198473282443
+2023,2024,11,Technical-pedagogical,same_function_same_school,677,0.645992366412214
+2023,2024,12,Supervision,changed_function_changed_school,4,0.0470588235294118
+2023,2024,12,Supervision,changed_function_same_school,20,0.235294117647059
+2023,2024,12,Supervision,not_observed_next_year,9,0.105882352941176
+2023,2024,12,Supervision,same_function_same_school,52,0.611764705882353
+2023,2024,15,Deputy director,changed_function_changed_school,37,0.0475578406169666
+2023,2024,15,Deputy director,changed_function_same_school,81,0.104113110539846
+2023,2024,15,Deputy director,not_observed_next_year,68,0.0874035989717224
+2023,2024,15,Deputy director,same_function_changed_school,1,0.0012853470437018
+2023,2024,15,Deputy director,same_function_same_school,591,0.759640102827764
+2023,2024,16,Teacher in charge of school,changed_function_changed_school,118,0.0578147966682999
+2023,2024,16,Teacher in charge of school,changed_function_same_school,63,0.0308672219500245
+2023,2024,16,Teacher in charge of school,not_observed_next_year,81,0.0396864282214601
+2023,2024,16,Teacher in charge of school,same_function_changed_school,33,0.0161685448309652
+2023,2024,16,Teacher in charge of school,same_function_same_school,1746,0.85546300832925
+2023,2024,17,Traditional educator,changed_function_changed_school,31,0.0562613430127042
+2023,2024,17,Traditional educator,changed_function_same_school,43,0.0780399274047187
+2023,2024,17,Traditional educator,not_observed_next_year,46,0.0834845735027223
+2023,2024,17,Traditional educator,same_function_changed_school,16,0.029038112522686
+2023,2024,17,Traditional educator,same_function_same_school,415,0.753176043557169
+2024,2025,1,Classroom teacher,changed_function_changed_school,1581,0.00724163044324641
+2024,2025,1,Classroom teacher,changed_function_same_school,3735,0.0171078366258857
+2024,2025,1,Classroom teacher,not_observed_next_year,15977,0.0731812331383605
+2024,2025,1,Classroom teacher,same_function_changed_school,19297,0.0883881990280367
+2024,2025,1,Classroom teacher,same_function_same_school,177731,0.814081100764471
+2024,2025,2,Technical-pedagogical staff,changed_function_changed_school,277,0.0553557154276579
+2024,2025,2,Technical-pedagogical staff,changed_function_same_school,593,0.118505195843325
+2024,2025,2,Technical-pedagogical staff,not_observed_next_year,390,0.0779376498800959
+2024,2025,2,Technical-pedagogical staff,same_function_changed_school,37,0.00739408473221423
+2024,2025,2,Technical-pedagogical staff,same_function_same_school,3707,0.740807354116707
+2024,2025,3,Management staff,changed_function_changed_school,199,0.0490994325191216
+2024,2025,3,Management staff,changed_function_same_school,431,0.10634098198865
+2024,2025,3,Management staff,not_observed_next_year,296,0.0730323217369849
+2024,2025,3,Management staff,same_function_changed_school,41,0.0101159634838391
+2024,2025,3,Management staff,same_function_same_school,3086,0.761411300271404
+2024,2025,4,Director,changed_function_changed_school,293,0.0323792684274506
+2024,2025,4,Director,changed_function_same_school,330,0.0364681180240911
+2024,2025,4,Director,not_observed_next_year,502,0.0554757431760416
+2024,2025,4,Director,same_function_changed_school,255,0.0281799093822522
+2024,2025,4,Director,same_function_same_school,7669,0.847496960990165
+2024,2025,5,Other function in school,changed_function_changed_school,886,0.0709537919436214
+2024,2025,5,Other function in school,changed_function_same_school,1367,0.109473852806919
+2024,2025,5,Other function in school,not_observed_next_year,1290,0.103307439737327
+2024,2025,5,Other function in school,same_function_changed_school,117,0.00936974453431569
+2024,2025,5,Other function in school,same_function_same_school,8827,0.706895170977817
+2024,2025,6,Other function outside school,changed_function_changed_school,51,0.142061281337047
+2024,2025,6,Other function outside school,changed_function_same_school,51,0.142061281337047
+2024,2025,6,Other function outside school,not_observed_next_year,45,0.125348189415042
+2024,2025,6,Other function outside school,same_function_changed_school,1,0.00278551532033426
+2024,2025,6,Other function outside school,same_function_same_school,211,0.587743732590529
+2024,2025,7,Head of UTP,changed_function_changed_school,283,0.0543394777265745
+2024,2025,7,Head of UTP,changed_function_same_school,439,0.0842933947772658
+2024,2025,7,Head of UTP,not_observed_next_year,281,0.0539554531490015
+2024,2025,7,Head of UTP,same_function_changed_school,95,0.0182411674347158
+2024,2025,7,Head of UTP,same_function_same_school,4110,0.789170506912442
+2024,2025,8,Inspector general,changed_function_changed_school,222,0.049686660698299
+2024,2025,8,Inspector general,changed_function_same_school,353,0.079006266786034
+2024,2025,8,Inspector general,not_observed_next_year,334,0.0747538048343778
+2024,2025,8,Inspector general,same_function_changed_school,132,0.0295434198746643
+2024,2025,8,Inspector general,same_function_same_school,3427,0.767009847806625
+2024,2025,9,Orientador,changed_function_changed_school,95,0.0424296560964716
+2024,2025,9,Orientador,changed_function_same_school,201,0.0897722197409558
+2024,2025,9,Orientador,not_observed_next_year,169,0.0754801250558285
+2024,2025,9,Orientador,same_function_changed_school,39,0.0174184903974989
+2024,2025,9,Orientador,same_function_same_school,1735,0.774899508709245
+2024,2025,10,Management,changed_function_changed_school,10,0.0411522633744856
+2024,2025,10,Management,changed_function_same_school,38,0.156378600823045
+2024,2025,10,Management,not_observed_next_year,36,0.148148148148148
+2024,2025,10,Management,same_function_same_school,159,0.654320987654321
+2024,2025,11,Technical-pedagogical,changed_function_changed_school,70,0.0619469026548673
+2024,2025,11,Technical-pedagogical,changed_function_same_school,190,0.168141592920354
+2024,2025,11,Technical-pedagogical,not_observed_next_year,143,0.126548672566372
+2024,2025,11,Technical-pedagogical,same_function_changed_school,3,0.00265486725663717
+2024,2025,11,Technical-pedagogical,same_function_same_school,724,0.64070796460177
+2024,2025,12,Supervision,changed_function_changed_school,5,0.0574712643678161
+2024,2025,12,Supervision,changed_function_same_school,13,0.149425287356322
+2024,2025,12,Supervision,not_observed_next_year,12,0.137931034482759
+2024,2025,12,Supervision,same_function_same_school,57,0.655172413793103
+2024,2025,15,Deputy director,changed_function_changed_school,35,0.0436953807740325
+2024,2025,15,Deputy director,changed_function_same_school,78,0.0973782771535581
+2024,2025,15,Deputy director,not_observed_next_year,75,0.0936329588014981
+2024,2025,15,Deputy director,same_function_changed_school,3,0.00374531835205993
+2024,2025,15,Deputy director,same_function_same_school,610,0.761548064918851
+2024,2025,16,Teacher in charge of school,changed_function_changed_school,110,0.0548354935194417
+2024,2025,16,Teacher in charge of school,changed_function_same_school,72,0.0358923230309073
+2024,2025,16,Teacher in charge of school,not_observed_next_year,116,0.057826520438684
+2024,2025,16,Teacher in charge of school,same_function_changed_school,31,0.0154536390827517
+2024,2025,16,Teacher in charge of school,same_function_same_school,1677,0.835992023928215
+2024,2025,17,Traditional educator,changed_function_changed_school,38,0.0618892508143323
+2024,2025,17,Traditional educator,changed_function_same_school,14,0.0228013029315961
+2024,2025,17,Traditional educator,not_observed_next_year,60,0.0977198697068404
+2024,2025,17,Traditional educator,same_function_changed_school,19,0.0309446254071661
+2024,2025,17,Traditional educator,same_function_same_school,483,0.786644951140065

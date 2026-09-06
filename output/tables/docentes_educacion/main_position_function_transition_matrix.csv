@@ -1,0 +1,228 @@
+FROM_ID_IFP,FROM_FUNCTION,TO_ID_IFP,TO_FUNCTION,OBSERVED_NEXT,N,SHARE_WITHIN_START_FUNCTION
+1,Classroom teacher,1,Classroom teacher,TRUE,1326432,0.906307650680944
+1,Classroom teacher,,,FALSE,104356,0.071303045459142
+1,Classroom teacher,5,Other function in school,TRUE,12428,0.00849164637362698
+1,Classroom teacher,2,Technical-pedagogical staff,TRUE,5030,0.0034368346684377
+1,Classroom teacher,7,Head of UTP,TRUE,3595,0.00245634605030487
+1,Classroom teacher,3,Management staff,TRUE,2509,0.00171431773024059
+1,Classroom teacher,8,Inspector general,TRUE,2480,0.00169450297767902
+1,Classroom teacher,4,Director,TRUE,1971,0.001346719906857
+1,Classroom teacher,9,Orientador,TRUE,1353,0.00092446069709666
+1,Classroom teacher,11,Technical-pedagogical,TRUE,1298,0.00088688099396265
+1,Classroom teacher,16,Teacher in charge of school,TRUE,986,0.000673701587093354
+1,Classroom teacher,6,Other function outside school,TRUE,373,0.000254858713981563
+1,Classroom teacher,17,Traditional educator,TRUE,231,0.000157834753162844
+1,Classroom teacher,15,Deputy director,TRUE,226,0.000154418416514298
+1,Classroom teacher,10,Management,TRUE,220,0.000150318812536042
+1,Classroom teacher,12,Supervision,TRUE,68,4.64621784202313e-05
+2,Technical-pedagogical staff,2,Technical-pedagogical staff,TRUE,23510,0.762099257674479
+2,Technical-pedagogical staff,,,FALSE,2241,0.0726441699893027
+2,Technical-pedagogical staff,1,Classroom teacher,TRUE,2129,0.0690135822879186
+2,Technical-pedagogical staff,7,Head of UTP,TRUE,1014,0.0328697850821745
+2,Technical-pedagogical staff,5,Other function in school,TRUE,480,0.0155596615773607
+2,Technical-pedagogical staff,4,Director,TRUE,390,0.0126422250316056
+2,Technical-pedagogical staff,3,Management staff,TRUE,371,0.012026321760835
+2,Technical-pedagogical staff,8,Inspector general,TRUE,219,0.00709909559467082
+2,Technical-pedagogical staff,11,Technical-pedagogical,TRUE,176,0.00570520924503225
+2,Technical-pedagogical staff,9,Orientador,TRUE,134,0.00434373885701319
+2,Technical-pedagogical staff,15,Deputy director,TRUE,80,0.00259327692956012
+2,Technical-pedagogical staff,16,Teacher in charge of school,TRUE,37,0.00119939057992155
+2,Technical-pedagogical staff,6,Other function outside school,TRUE,31,0.00100489481020454
+2,Technical-pedagogical staff,10,Management,TRUE,19,0.000615903270770527
+2,Technical-pedagogical staff,17,Traditional educator,TRUE,11,0.000356575577814516
+2,Technical-pedagogical staff,12,Supervision,TRUE,7,0.00022691173133651
+3,Management staff,3,Management staff,TRUE,19792,0.791806689070251
+3,Management staff,,,FALSE,1900,0.0760121619459113
+3,Management staff,1,Classroom teacher,TRUE,844,0.0337654024643943
+3,Management staff,4,Director,TRUE,626,0.0250440070411266
+3,Management staff,8,Inspector general,TRUE,448,0.0179228676588254
+3,Management staff,5,Other function in school,TRUE,361,0.0144423107697232
+3,Management staff,2,Technical-pedagogical staff,TRUE,312,0.0124819971195391
+3,Management staff,7,Head of UTP,TRUE,267,0.0106817090734518
+3,Management staff,15,Deputy director,TRUE,205,0.00820131220995359
+3,Management staff,9,Orientador,TRUE,115,0.00460073611777884
+3,Management staff,11,Technical-pedagogical,TRUE,37,0.00148023683789406
+3,Management staff,10,Management,TRUE,36,0.0014402304368699
+3,Management staff,6,Other function outside school,TRUE,23,0.000920147223555769
+3,Management staff,16,Teacher in charge of school,TRUE,22,0.000880140822531605
+3,Management staff,12,Supervision,TRUE,8,0.000320051208193311
+4,Director,4,Director,TRUE,55959,0.881896837028982
+4,Director,,,FALSE,3476,0.0547807038280302
+4,Director,1,Classroom teacher,TRUE,1190,0.0187540384221392
+4,Director,3,Management staff,TRUE,620,0.00977101161489606
+4,Director,8,Inspector general,TRUE,517,0.00814776291113107
+4,Director,7,Head of UTP,TRUE,426,0.00671363056120278
+4,Director,5,Other function in school,TRUE,336,0.00529525790742755
+4,Director,15,Deputy director,TRUE,261,0.00411328069594818
+4,Director,2,Technical-pedagogical staff,TRUE,244,0.00384536586134619
+4,Director,16,Teacher in charge of school,TRUE,193,0.00304162135754023
+4,Director,9,Orientador,TRUE,87,0.00137109356531606
+4,Director,6,Other function outside school,TRUE,73,0.00115045781917325
+4,Director,10,Management,TRUE,35,0.000551589365357036
+4,Director,11,Technical-pedagogical,TRUE,33,0.00052006997305092
+4,Director,12,Supervision,TRUE,2,3.15193923061163e-05
+4,Director,17,Traditional educator,TRUE,1,1.57596961530582e-05
+5,Other function in school,5,Other function in school,TRUE,61269,0.74533776139557
+5,Other function in school,1,Classroom teacher,TRUE,9497,0.115531063343187
+5,Other function in school,,,FALSE,8305,0.10103037602034
+5,Other function in school,2,Technical-pedagogical staff,TRUE,787,0.00957385983479922
+5,Other function in school,3,Management staff,TRUE,556,0.00676374341569043
+5,Other function in school,8,Inspector general,TRUE,555,0.0067515784095471
+5,Other function in school,7,Head of UTP,TRUE,261,0.00317506660340863
+5,Other function in school,9,Orientador,TRUE,260,0.00316290159726531
+5,Other function in school,11,Technical-pedagogical,TRUE,207,0.00251815627166892
+5,Other function in school,4,Director,TRUE,204,0.00248166125323893
+5,Other function in school,6,Other function outside school,TRUE,115,0.00139897570648273
+5,Other function in school,10,Management,TRUE,65,0.000790725399316327
+5,Other function in school,15,Deputy director,TRUE,53,0.000644745325596389
+5,Other function in school,16,Teacher in charge of school,TRUE,33,0.000401445202729827
+5,Other function in school,12,Supervision,TRUE,24,0.000291960147439874
+5,Other function in school,17,Traditional educator,TRUE,12,0.000145980073719937
+6,Other function outside school,6,Other function outside school,TRUE,1801,0.666050295857988
+6,Other function outside school,,,FALSE,377,0.139423076923077
+6,Other function outside school,1,Classroom teacher,TRUE,235,0.0869082840236686
+6,Other function outside school,5,Other function in school,TRUE,119,0.044008875739645
+6,Other function outside school,4,Director,TRUE,46,0.0170118343195266
+6,Other function outside school,2,Technical-pedagogical staff,TRUE,32,0.0118343195266272
+6,Other function outside school,8,Inspector general,TRUE,26,0.00961538461538462
+6,Other function outside school,7,Head of UTP,TRUE,23,0.00850591715976331
+6,Other function outside school,3,Management staff,TRUE,21,0.00776627218934911
+6,Other function outside school,11,Technical-pedagogical,TRUE,7,0.0025887573964497
+6,Other function outside school,9,Orientador,TRUE,4,0.0014792899408284
+6,Other function outside school,15,Deputy director,TRUE,4,0.0014792899408284
+6,Other function outside school,16,Teacher in charge of school,TRUE,3,0.0011094674556213
+6,Other function outside school,10,Management,TRUE,3,0.0011094674556213
+6,Other function outside school,12,Supervision,TRUE,2,0.000739644970414201
+6,Other function outside school,17,Traditional educator,TRUE,1,0.000369822485207101
+7,Head of UTP,7,Head of UTP,TRUE,28253,0.81571197597875
+7,Head of UTP,,,FALSE,1881,0.0543076567732995
+7,Head of UTP,1,Classroom teacher,TRUE,1521,0.043913846864534
+7,Head of UTP,4,Director,TRUE,1138,0.0328559879893752
+7,Head of UTP,2,Technical-pedagogical staff,TRUE,505,0.0145802055664626
+7,Head of UTP,8,Inspector general,TRUE,341,0.00984524771913616
+7,Head of UTP,3,Management staff,TRUE,298,0.00860376486892251
+7,Head of UTP,5,Other function in school,TRUE,262,0.00756438387804596
+7,Head of UTP,15,Deputy director,TRUE,130,0.00375332024483197
+7,Head of UTP,11,Technical-pedagogical,TRUE,104,0.00300265619586557
+7,Head of UTP,16,Teacher in charge of school,TRUE,79,0.0022808638410902
+7,Head of UTP,9,Orientador,TRUE,71,0.00204989028756207
+7,Head of UTP,10,Management,TRUE,26,0.000750664048966393
+7,Head of UTP,6,Other function outside school,TRUE,24,0.000692920660584363
+7,Head of UTP,12,Supervision,TRUE,2,5.77433883820303e-05
+7,Head of UTP,17,Traditional educator,TRUE,1,2.88716941910151e-05
+8,Inspector general,8,Inspector general,TRUE,24577,0.818742088080485
+8,Inspector general,,,FALSE,2149,0.0715903791058698
+8,Inspector general,1,Classroom teacher,TRUE,939,0.0312812312612433
+8,Inspector general,4,Director,TRUE,696,0.0231860883469918
+8,Inspector general,5,Other function in school,TRUE,504,0.0167899260443734
+8,Inspector general,3,Management staff,TRUE,455,0.0151575721233926
+8,Inspector general,7,Head of UTP,TRUE,163,0.00543007528816044
+8,Inspector general,9,Orientador,TRUE,152,0.00506362848957292
+8,Inspector general,15,Deputy director,TRUE,126,0.00419748151109334
+8,Inspector general,2,Technical-pedagogical staff,TRUE,123,0.00409754147511493
+8,Inspector general,10,Management,TRUE,39,0.00129922046771937
+8,Inspector general,16,Teacher in charge of school,TRUE,35,0.00116596708641482
+8,Inspector general,11,Technical-pedagogical,TRUE,27,0.000899460323805717
+8,Inspector general,6,Other function outside school,TRUE,22,0.000732893597175028
+8,Inspector general,12,Supervision,TRUE,9,0.000299820107935239
+8,Inspector general,17,Traditional educator,TRUE,2,6.66266906522753e-05
+9,Orientador,9,Orientador,TRUE,12426,0.818684938727105
+9,Orientador,,,FALSE,1226,0.0807748056397417
+9,Orientador,1,Classroom teacher,TRUE,482,0.0317564896560812
+9,Orientador,5,Other function in school,TRUE,275,0.0181183291606272
+9,Orientador,8,Inspector general,TRUE,191,0.012584003162472
+9,Orientador,3,Management staff,TRUE,167,0.0110027671629991
+9,Orientador,2,Technical-pedagogical staff,TRUE,149,0.00981684016339439
+9,Orientador,7,Head of UTP,TRUE,91,0.00599551983133483
+9,Orientador,4,Director,TRUE,75,0.00494136249835288
+9,Orientador,11,Technical-pedagogical,TRUE,35,0.00230596916589801
+9,Orientador,15,Deputy director,TRUE,22,0.00144946633285018
+9,Orientador,10,Management,TRUE,21,0.00138358149953881
+9,Orientador,16,Teacher in charge of school,TRUE,12,0.000790617999736461
+9,Orientador,6,Other function outside school,TRUE,5,0.000329424166556859
+9,Orientador,12,Supervision,TRUE,1,6.58848333113717e-05
+10,Management,10,Management,TRUE,908,0.666666666666667
+10,Management,,,FALSE,182,0.133627019089574
+10,Management,1,Classroom teacher,TRUE,59,0.0433186490455213
+10,Management,4,Director,TRUE,41,0.0301027900146843
+10,Management,3,Management staff,TRUE,39,0.0286343612334802
+10,Management,5,Other function in school,TRUE,33,0.0242290748898678
+10,Management,8,Inspector general,TRUE,25,0.0183553597650514
+10,Management,2,Technical-pedagogical staff,TRUE,24,0.0176211453744493
+10,Management,7,Head of UTP,TRUE,15,0.0110132158590308
+10,Management,11,Technical-pedagogical,TRUE,12,0.00881057268722467
+10,Management,9,Orientador,TRUE,11,0.00807635829662261
+10,Management,15,Deputy director,TRUE,9,0.0066079295154185
+10,Management,6,Other function outside school,TRUE,2,0.00146842878120411
+10,Management,16,Teacher in charge of school,TRUE,1,0.000734214390602056
+10,Management,12,Supervision,TRUE,1,0.000734214390602056
+11,Technical-pedagogical,11,Technical-pedagogical,TRUE,4336,0.664317450589858
+11,Technical-pedagogical,,,FALSE,782,0.119810019917267
+11,Technical-pedagogical,1,Classroom teacher,TRUE,706,0.108166079362647
+11,Technical-pedagogical,2,Technical-pedagogical staff,TRUE,186,0.0284970124099893
+11,Technical-pedagogical,7,Head of UTP,TRUE,163,0.0249731882947756
+11,Technical-pedagogical,5,Other function in school,TRUE,125,0.0191512180174659
+11,Technical-pedagogical,4,Director,TRUE,58,0.00888616516010418
+11,Technical-pedagogical,8,Inspector general,TRUE,50,0.00766048720698637
+11,Technical-pedagogical,3,Management staff,TRUE,49,0.00750727746284664
+11,Technical-pedagogical,9,Orientador,TRUE,35,0.00536234104489046
+11,Technical-pedagogical,16,Teacher in charge of school,TRUE,16,0.00245135590623564
+11,Technical-pedagogical,10,Management,TRUE,9,0.00137888769725755
+11,Technical-pedagogical,15,Deputy director,TRUE,5,0.000766048720698637
+11,Technical-pedagogical,6,Other function outside school,TRUE,3,0.000459629232419182
+11,Technical-pedagogical,12,Supervision,TRUE,2,0.000306419488279455
+11,Technical-pedagogical,17,Traditional educator,TRUE,2,0.000306419488279455
+12,Supervision,12,Supervision,TRUE,433,0.673405909797823
+12,Supervision,,,FALSE,89,0.138413685847589
+12,Supervision,1,Classroom teacher,TRUE,50,0.0777604976671851
+12,Supervision,5,Other function in school,TRUE,25,0.0388802488335925
+12,Supervision,2,Technical-pedagogical staff,TRUE,10,0.015552099533437
+12,Supervision,8,Inspector general,TRUE,8,0.0124416796267496
+12,Supervision,11,Technical-pedagogical,TRUE,7,0.0108864696734059
+12,Supervision,3,Management staff,TRUE,7,0.0108864696734059
+12,Supervision,7,Head of UTP,TRUE,6,0.00933125972006221
+12,Supervision,4,Director,TRUE,3,0.00466562986003111
+12,Supervision,15,Deputy director,TRUE,2,0.0031104199066874
+12,Supervision,9,Orientador,TRUE,2,0.0031104199066874
+12,Supervision,6,Other function outside school,TRUE,1,0.0015552099533437
+15,Deputy director,15,Deputy director,TRUE,3894,0.778021978021978
+15,Deputy director,,,FALSE,427,0.0853146853146853
+15,Deputy director,4,Director,TRUE,286,0.0571428571428571
+15,Deputy director,3,Management staff,TRUE,87,0.0173826173826174
+15,Deputy director,1,Classroom teacher,TRUE,85,0.016983016983017
+15,Deputy director,8,Inspector general,TRUE,61,0.0121878121878122
+15,Deputy director,7,Head of UTP,TRUE,52,0.0103896103896104
+15,Deputy director,5,Other function in school,TRUE,45,0.00899100899100899
+15,Deputy director,2,Technical-pedagogical staff,TRUE,34,0.00679320679320679
+15,Deputy director,9,Orientador,TRUE,9,0.0017982017982018
+15,Deputy director,16,Teacher in charge of school,TRUE,8,0.0015984015984016
+15,Deputy director,10,Management,TRUE,8,0.0015984015984016
+15,Deputy director,11,Technical-pedagogical,TRUE,6,0.0011988011988012
+15,Deputy director,6,Other function outside school,TRUE,2,0.0003996003996004
+15,Deputy director,12,Supervision,TRUE,1,0.0001998001998002
+16,Teacher in charge of school,16,Teacher in charge of school,TRUE,13183,0.865707906488048
+16,Teacher in charge of school,1,Classroom teacher,TRUE,798,0.0524034672970843
+16,Teacher in charge of school,,,FALSE,721,0.0473469923824534
+16,Teacher in charge of school,4,Director,TRUE,269,0.0176648279485159
+16,Teacher in charge of school,5,Other function in school,TRUE,66,0.00433412135539795
+16,Teacher in charge of school,8,Inspector general,TRUE,51,0.00334909377462569
+16,Teacher in charge of school,7,Head of UTP,TRUE,44,0.00288941423693197
+16,Teacher in charge of school,2,Technical-pedagogical staff,TRUE,36,0.00236406619385343
+16,Teacher in charge of school,3,Management staff,TRUE,25,0.00164171263462044
+16,Teacher in charge of school,11,Technical-pedagogical,TRUE,14,0.000919359075387444
+16,Teacher in charge of school,9,Orientador,TRUE,10,0.000656685053848174
+16,Teacher in charge of school,15,Deputy director,TRUE,7,0.000459679537693722
+16,Teacher in charge of school,10,Management,TRUE,3,0.000197005516154452
+16,Teacher in charge of school,6,Other function outside school,TRUE,1,6.56685053848174e-05
+17,Traditional educator,17,Traditional educator,TRUE,2922,0.780240320427236
+17,Traditional educator,1,Classroom teacher,TRUE,398,0.106275033377837
+17,Traditional educator,,,FALSE,346,0.0923898531375167
+17,Traditional educator,5,Other function in school,TRUE,41,0.0109479305740988
+17,Traditional educator,2,Technical-pedagogical staff,TRUE,11,0.00293724966622163
+17,Traditional educator,3,Management staff,TRUE,8,0.00213618157543391
+17,Traditional educator,7,Head of UTP,TRUE,6,0.00160213618157543
+17,Traditional educator,11,Technical-pedagogical,TRUE,5,0.0013351134846462
+17,Traditional educator,9,Orientador,TRUE,3,0.000801068090787717
+17,Traditional educator,15,Deputy director,TRUE,2,0.000534045393858478
+17,Traditional educator,4,Director,TRUE,2,0.000534045393858478
+17,Traditional educator,16,Teacher in charge of school,TRUE,1,0.000267022696929239

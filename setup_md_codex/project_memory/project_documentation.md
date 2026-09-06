@@ -703,6 +703,27 @@ A diagnostic run on the current `k100_timely_risk` SAE probability-support file 
 
 This matches the substantive expectation that `Particular Pagado` schools are outside the SAE system. This does not mean that all private-sector schools are absent from SAE: `Particular Subvencionado` schools are present in the SAE support and should be distinguished from `Particular Pagado` in plots, summaries, and binary-treatment definitions.
 
+## Teacher and Orientador Characteristics: Planned HS Extension
+
+On 2026-09-06, Bruno specified that the next staffing extension should construct
+school-level staff characteristics first, using observed career trajectories and
+academic credentials. The intended outputs are two separate school-year scores:
+one for teachers and one for orientadores, each combining those two blocks while
+retaining the component measures. Weights and normalization remain undecided;
+these are not yet estimated individual causal quality effects.
+
+The current teacher-directory cleaner retains all detailed main functions under
+`PERSONAS == 1`. `EVER_TEACHER` denotes anyone observed with `ID_IFP == 1` at
+least once, and `EVER_ORIENTADOR` denotes anyone observed with `ID_IFP == 9` at
+least once during 2018-2025. Both flags follow the person across all observed
+years and may overlap. The planned school-year aggregates use actual current
+function; full-window career labels are retrospective descriptions, not
+predetermined characteristics for earlier years. Prior-history construction,
+HS staffing coverage, and academic credential harmonization remain to implement.
+
+The concrete plan and open measurement choices are documented in
+`code/codex/docentes_educacion/README.md`.
+
 ## School Public Funding Per Student
 
 A first-pass school resource measure is constructed from the MINEDUC `Subvenciones-a-EE` files for 2017-2021.
