@@ -12,3 +12,21 @@ data/
 *.fls
 *.fdb_latexmk
 tmp/
+
+# Additional LaTeX build artifacts (existing tracked files remain tracked).
+*.bcf
+*.blg
+*.run.xml
+*.nav
+*.snm
+*.vrb
+*.synctex(busy)
+*.bbl-SAVE-ERROR
+$buildDir/
+
+# Individual-level research data and analytical caches must stay local.
+/output/tables/docentes_educacion/*_person_summary.csv
+/output/tables/docentes_educacion/*_all_main_positions.csv*
+/output/tables/empirical_bayes_school_va/*_regression_df.csv
+/output/tables/empirical_bayes_school_va/stata_va_analytic_cache.dta
+/output/tables/mifuturo_matricula_income/mifuturo_person_level_income_outcomes*.csv
