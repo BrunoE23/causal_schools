@@ -19,143 +19,66 @@
 
 \refsection{0}
   \datalist[entry]{nyt/global//global/global/global}
-    \entry{angrist_credible_2024}{article}{}{}
+    \entry{abdulkadiroglu_research_2017}{article}{}{}
       \name{author}{4}{}{%
+        {{hash=9210d7a0646d485f1f21951c61c52cd2}{%
+           family={Abdulkadiroğlu},
+           familyi={A\bibinitperiod},
+           given={Atila},
+           giveni={A\bibinitperiod}}}%
         {{hash=71a74466a85192690bb7668576e4f2f3}{%
            family={Angrist},
            familyi={A\bibinitperiod},
            given={Joshua},
            giveni={J\bibinitperiod}}}%
-        {{hash=37ff659ee267754271943145f8ae0ce2}{%
-           family={Hull},
-           familyi={H\bibinitperiod},
-           given={Peter},
+        {{hash=4bb6eca8ac4f0778b07f81866190ff34}{%
+           family={Narita},
+           familyi={N\bibinitperiod},
+           given={Yusuke},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=116110e566f5ce57aba815a2a1c58074}{%
+           family={Pathak},
+           familyi={P\bibinitperiod},
+           given={Parag},
            giveni={P\bibinitperiod}}}%
-        {{hash=e75d96917751be05beac30ccd106dc84}{%
-           family={Pathak},
-           familyi={P\bibinitperiod},
-           given={Parag\bibnamedelima A.},
-           giveni={P\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
-        {{hash=00f4eae9d53892723e6ec72a134e44e5}{%
-           family={Walters},
-           familyi={W\bibinitperiod},
-           given={Christopher},
-           giveni={C\bibinitperiod}}}%
-      }
-      \strng{namehash}{08066f46f89322d1d81cf67cefb9a866}
-      \strng{fullhash}{5a2b479b6b00e8793a980ed707c8177c}
-      \strng{fullhashraw}{5a2b479b6b00e8793a980ed707c8177c}
-      \strng{bibnamehash}{5a2b479b6b00e8793a980ed707c8177c}
-      \strng{authorbibnamehash}{5a2b479b6b00e8793a980ed707c8177c}
-      \strng{authornamehash}{08066f46f89322d1d81cf67cefb9a866}
-      \strng{authorfullhash}{5a2b479b6b00e8793a980ed707c8177c}
-      \strng{authorfullhashraw}{5a2b479b6b00e8793a980ed707c8177c}
-      \field{extraname}{1}
-      \field{sortinit}{A}
-      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{abstract}{We introduce two empirical strategies harnessing the randomness in school assignment mechanisms to measure school value-added. The first estimator controls for the probability of school assignment, treating take-up as ignorable. We test this assumption using randomness in assignments. The second approach uses assignments as instrumental variables (IVs) for low-dimensional models of value-added and forms empirical Bayes posteriors from these IV estimates. Both strategies solve the underidentification challenge arising from school undersubscription. Models controlling for assignment risk and lagged achievement in Denver and New York City yield reliable value-added estimates. Estimates from models with lower-quality achievement controls are improved by IV.}
-      \field{issn}{0034-6535}
-      \field{journaltitle}{The Review of Economics and Statistics}
-      \field{month}{1}
-      \field{number}{1}
-      \field{title}{Credible {School} {Value}-{Added} with {Undersubscribed} {School} {Lotteries}}
-      \field{urlday}{28}
-      \field{urlmonth}{3}
-      \field{urlyear}{2026}
-      \field{volume}{106}
-      \field{year}{2024}
-      \field{urldateera}{ce}
-      \field{pages}{1\bibrangedash 19}
-      \range{pages}{19}
-      \verb{doi}
-      \verb 10.1162/rest_a_01149
-      \endverb
-      \verb{file}
-      \verb Full Text PDF:C\:\\Users\\xd-br\\Zotero\\storage\\MWXTEJNE\\Angrist et al. - 2024 - Credible School Value-Added with Undersubscribed School Lotteries.pdf:application/pdf;Snapshot:C\:\\Users\\xd-br\\Zotero\\storage\\4DTPCE2W\\rest_a_01149.html:text/html
-      \endverb
-      \verb{urlraw}
-      \verb https://doi.org/10.1162/rest_a_01149
-      \endverb
-      \verb{url}
-      \verb https://doi.org/10.1162/rest_a_01149
-      \endverb
-    \endentry
-    \entry{angrist_stand_2016}{article}{}{}
-      \name{author}{5}{}{%
-        {{hash=ee326f34eea24952d04c41cef1771bfc}{%
-           family={Angrist},
-           familyi={A\bibinitperiod},
-           given={Joshua\bibnamedelima D.},
-           giveni={J\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
-        {{hash=722eaaf849749e49f3ae066d5c488b2e}{%
-           family={Cohodes},
-           familyi={C\bibinitperiod},
-           given={Sarah\bibnamedelima R.},
-           giveni={S\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
-        {{hash=5a83a1ec514828839322310f993597c0}{%
-           family={Dynarski},
-           familyi={D\bibinitperiod},
-           given={Susan\bibnamedelima M.},
-           giveni={S\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
-        {{hash=e75d96917751be05beac30ccd106dc84}{%
-           family={Pathak},
-           familyi={P\bibinitperiod},
-           given={Parag\bibnamedelima A.},
-           giveni={P\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
-        {{hash=5274cf4d6ae8b9cd307590bef3c54969}{%
-           family={Walters},
-           familyi={W\bibinitperiod},
-           given={Christopher\bibnamedelima R.},
-           giveni={C\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
       }
       \list{publisher}{1}{%
-        {The University of Chicago Press}%
+        {Econometric Society}%
       }
-      \strng{namehash}{2cbd3e0434d1aadcbfd10ad5525540b5}
-      \strng{fullhash}{81af2c95eb8dd5cbb62ae107e6aee04d}
-      \strng{fullhashraw}{81af2c95eb8dd5cbb62ae107e6aee04d}
-      \strng{bibnamehash}{81af2c95eb8dd5cbb62ae107e6aee04d}
-      \strng{authorbibnamehash}{81af2c95eb8dd5cbb62ae107e6aee04d}
-      \strng{authornamehash}{2cbd3e0434d1aadcbfd10ad5525540b5}
-      \strng{authorfullhash}{81af2c95eb8dd5cbb62ae107e6aee04d}
-      \strng{authorfullhashraw}{81af2c95eb8dd5cbb62ae107e6aee04d}
-      \field{extraname}{2}
+      \strng{namehash}{009b8760f2c3c4cd564591d9c91799d7}
+      \strng{fullhash}{60acc3625507789373edca21b08b3132}
+      \strng{fullhashraw}{60acc3625507789373edca21b08b3132}
+      \strng{bibnamehash}{60acc3625507789373edca21b08b3132}
+      \strng{authorbibnamehash}{60acc3625507789373edca21b08b3132}
+      \strng{authornamehash}{009b8760f2c3c4cd564591d9c91799d7}
+      \strng{authorfullhash}{60acc3625507789373edca21b08b3132}
+      \strng{authorfullhashraw}{60acc3625507789373edca21b08b3132}
       \field{sortinit}{A}
       \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
       \field{extradatescope}{labelyear}
       \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{shorttitle}
-      \field{abstract}{We use admissions lotteries to estimate effects of attendance at Boston’s charter high schools on college preparation and enrollment. Charter schools increase pass rates on Massachusetts’ high-stakes exit exam, with large effects on the likelihood of qualifying for a state-sponsored scholarship. Charter attendance also boosts SAT scores sharply and increases the likelihood of taking an Advanced Placement (AP) exam, the number of AP exams taken, and AP scores. Charters induce a substantial shift from 2- to 4-year institutions, though the effect on overall college enrollment is modest. Charter effects on college-related outcomes are strongly correlated with charter effects on earlier tests.}
-      \field{issn}{0734-306X}
-      \field{journaltitle}{Journal of Labor Economics}
-      \field{month}{4}
-      \field{number}{2}
-      \field{shorttitle}{Stand and {Deliver}}
-      \field{title}{Stand and {Deliver}: {Effects} of {Boston}’s {Charter} {High} {Schools} on {College} {Preparation}, {Entry}, and {Choice}}
-      \field{urlday}{12}
-      \field{urlmonth}{9}
+      \field{abstract}{A growing number of school districts use centralized assignment mechanisms to allocate school seats in a manner that reflects student preferences and school priorities. Many of these assignment schemes use lotteries to ration seats when schools are oversubscribed. The resulting random assignment opens the door to credible quasi‐experimental research designs for the evaluation of school effectiveness. Yet the question of how best to separate the lottery‐generated randomization integral to such designs from non‐random preferences and priorities remains open. This paper develops easily‐implemented empirical strategies that fully exploit the random assignment embedded in a wide class of mechanisms, while also revealing why seats are randomized at one school but not another. We use these methods to evaluate charter schools in Denver, one of a growing number of districts that combine charter and traditional public schools in a unified assignment system. The resulting estimates show large achievement gains from charter school attendance. Our approach generates efficiency gains over ad hoc methods, such as those that focus on schools ranked first, while also identifying a more representative average causal effect. We also show how to use centralized assignment mechanisms to identify causal effects in models with multiple school sectors.}
+      \field{journaltitle}{Econometrica}
+      \field{shorttitle}{Research {Design} {Meets} {Market} {Design}}
+      \field{title}{Research {Design} {Meets} {Market} {Design}: {Using} {Centralized} {Assignment} for {Impact} {Evaluation}}
+      \field{urlday}{2}
+      \field{urlmonth}{11}
       \field{urlyear}{2025}
-      \field{volume}{34}
-      \field{year}{2016}
+      \field{volume}{85}
+      \field{year}{2017}
       \field{urldateera}{ce}
-      \field{pages}{275\bibrangedash 318}
-      \range{pages}{44}
-      \verb{doi}
-      \verb 10.1086/683665
-      \endverb
+      \field{pages}{1373\bibrangedash 1432}
+      \range{pages}{60}
       \verb{file}
-      \verb Full Text:C\:\\Users\\xd-br\\Zotero\\storage\\NWP4A6GQ\\Angrist et al. - 2016 - Stand and Deliver Effects of Boston’s Charter High Schools on College Preparation, Entry, and Choic.pdf:application/pdf
+      \verb PDF:C\:\\Users\\brunem\\Zotero\\storage\\XB5URWA7\\Abdulkadiroğlu et al. - 2017 - Research Design Meets Market Design Using Centralized Assignment for Impact Evaluation.pdf:application/pdf;Snapshot:C\:\\Users\\brunem\\Zotero\\storage\\3B97ZSR7\\RePEcwlyemetrpv85y2017ip1373-1432.html:text/html
       \endverb
       \verb{urlraw}
-      \verb https://www.journals.uchicago.edu/doi/abs/10.1086/683665
+      \verb https://EconPapers.repec.org/RePEc:wly:emetrp:v:85:y:2017:i::p:1373-1432
       \endverb
       \verb{url}
-      \verb https://www.journals.uchicago.edu/doi/abs/10.1086/683665
+      \verb https://EconPapers.repec.org/RePEc:wly:emetrp:v:85:y:2017:i::p:1373-1432
       \endverb
     \endentry
     \entry{angrist_leveraging_2017}{article}{}{}
@@ -189,7 +112,6 @@
       \strng{authornamehash}{2cbd3e0434d1aadcbfd10ad5525540b5}
       \strng{authorfullhash}{c7b609ff7d47090561d425f379b75536}
       \strng{authorfullhashraw}{c7b609ff7d47090561d425f379b75536}
-      \field{extraname}{3}
       \field{sortinit}{A}
       \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
       \field{extradatescope}{labelyear}
@@ -215,7 +137,7 @@
       \verb 10.1093/qje/qjx001
       \endverb
       \verb{file}
-      \verb Full Text PDF:C\:\\Users\\xd-br\\Zotero\\storage\\KAJ5HJ7X\\Angrist et al. - 2017 - Leveraging Lotteries for School Value-Added Testing and Estimation.pdf:application/pdf;Snapshot:C\:\\Users\\xd-br\\Zotero\\storage\\RRW93N65\\qjx001.html:text/html
+      \verb Full Text PDF:C\:\\Users\\brunem\\Zotero\\storage\\KAJ5HJ7X\\Angrist et al. - 2017 - Leveraging Lotteries for School Value-Added Testing and Estimation.pdf:application/pdf;Snapshot:C\:\\Users\\brunem\\Zotero\\storage\\RRW93N65\\qjx001.html:text/html
       \endverb
       \verb{urlraw}
       \verb https://doi.org/10.1093/qje/qjx001
@@ -224,125 +146,369 @@
       \verb https://doi.org/10.1093/qje/qjx001
       \endverb
     \endentry
-    \entry{chetty_measuring_2014}{article}{}{}
+    \entry{beuermann_what_2023}{article}{}{}
+      \name{author}{4}{}{%
+        {{hash=4219eabc588e1a7422cb070f0d2abcd9}{%
+           family={Beuermann},
+           familyi={B\bibinitperiod},
+           given={Diether\bibnamedelima W},
+           giveni={D\bibinitperiod\bibinitdelim W\bibinitperiod}}}%
+        {{hash=c2d8c94b1329d97abfd858cb46ec55b8}{%
+           family={Jackson},
+           familyi={J\bibinitperiod},
+           given={C\bibnamedelima Kirabo},
+           giveni={C\bibinitperiod\bibinitdelim K\bibinitperiod}}}%
+        {{hash=6af7b6765bf2820f57f601c172906bd8}{%
+           family={Navarro-Sola},
+           familyi={N\bibinithyphendelim S\bibinitperiod},
+           given={Laia},
+           giveni={L\bibinitperiod}}}%
+        {{hash=85a2933abadddd364c661024b72b688e}{%
+           family={Pardo},
+           familyi={P\bibinitperiod},
+           given={Francisco},
+           giveni={F\bibinitperiod}}}%
+      }
+      \strng{namehash}{37b277170f96a89c7dfec8393be41036}
+      \strng{fullhash}{bfa3eb5a859d5fbf87f5107989e8e1de}
+      \strng{fullhashraw}{bfa3eb5a859d5fbf87f5107989e8e1de}
+      \strng{bibnamehash}{bfa3eb5a859d5fbf87f5107989e8e1de}
+      \strng{authorbibnamehash}{bfa3eb5a859d5fbf87f5107989e8e1de}
+      \strng{authornamehash}{37b277170f96a89c7dfec8393be41036}
+      \strng{authorfullhash}{bfa3eb5a859d5fbf87f5107989e8e1de}
+      \strng{authorfullhashraw}{bfa3eb5a859d5fbf87f5107989e8e1de}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{To explore whether schools’ causal impacts on test scores measure their overall impact on students, we exploit plausibly exogenous school assignments and data from Trinidad and Tobago to estimate the causal impacts of individual schools on several outcomes. Schools’ impacts on high-stakes tests are weakly related to impacts on important outcomes such as arrests, dropout, teen motherhood, and formal labour market participation. To examine if parents’ school preferences are related to these causal impacts, we link them to parents’ ranked lists of schools and employ discrete-choice models to infer preferences for schools. Parents choose schools that improve high-stakes tests even conditional on peer quality and average outcomes. Parents also choose schools that reduce criminality and teen motherhood and increase labour market participation. School choices among parents of low-achieving students are relatively more strongly related to schools’ impacts on non-test-score outcomes, while the opposite is true for parents of high-achieving students. These results suggest that evaluations based solely on test scores may be misleading about the benefits of school choice (particularly for low-achieving students), and education interventions more broadly.}
+      \field{issn}{0034-6527}
+      \field{journaltitle}{The Review of Economic Studies}
+      \field{month}{1}
+      \field{number}{1}
+      \field{shorttitle}{What is a {Good} {School}, and {Can} {Parents} {Tell}?}
+      \field{title}{What is a {Good} {School}, and {Can} {Parents} {Tell}? {Evidence} on the {Multidimensionality} of {School} {Output}}
+      \field{urlday}{12}
+      \field{urlmonth}{9}
+      \field{urlyear}{2025}
+      \field{volume}{90}
+      \field{year}{2023}
+      \field{urldateera}{ce}
+      \field{pages}{65\bibrangedash 101}
+      \range{pages}{37}
+      \verb{doi}
+      \verb 10.1093/restud/rdac025
+      \endverb
+      \verb{file}
+      \verb Full Text PDF:C\:\\Users\\brunem\\Zotero\\storage\\VU6Z335Q\\Beuermann et al. - 2023 - What is a Good School, and Can Parents Tell Evidence on the Multidimensionality of School Output.pdf:application/pdf;Snapshot:C\:\\Users\\brunem\\Zotero\\storage\\ZKWRL248\\6582595.html:text/html
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1093/restud/rdac025
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1093/restud/rdac025
+      \endverb
+    \endentry
+    \entry{chetty_diversifying_2025}{article}{}{}
       \name{author}{3}{}{%
         {{hash=7a853740afbc544905334cf607b3cd51}{%
            family={Chetty},
            familyi={C\bibinitperiod},
            given={Raj},
            giveni={R\bibinitperiod}}}%
+        {{hash=cdbcfeb6c56a0e9c4c6c75a559de40b6}{%
+           family={Deming},
+           familyi={D\bibinitperiod},
+           given={David\bibnamedelima J},
+           giveni={D\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
         {{hash=fb2eb6a3bea93fb3238fb8e1de2cf006}{%
            family={Friedman},
            familyi={F\bibinitperiod},
-           given={John\bibnamedelima N.},
+           given={John\bibnamedelima N},
            giveni={J\bibinitperiod\bibinitdelim N\bibinitperiod}}}%
-        {{hash=df06c866e3052c06bdecc6a70e4fa14d}{%
-           family={Rockoff},
-           familyi={R\bibinitperiod},
-           given={Jonah\bibnamedelima E.},
-           giveni={J\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
-      }
-      \list{language}{1}{%
-        {en}%
       }
       \strng{namehash}{de9f176c59c95a4d2de134921515d461}
-      \strng{fullhash}{4ac3e93cd8d6105cb22835b171955f57}
-      \strng{fullhashraw}{4ac3e93cd8d6105cb22835b171955f57}
-      \strng{bibnamehash}{4ac3e93cd8d6105cb22835b171955f57}
-      \strng{authorbibnamehash}{4ac3e93cd8d6105cb22835b171955f57}
+      \strng{fullhash}{cd066fbd6a8096a793a1de5cc9a6537f}
+      \strng{fullhashraw}{cd066fbd6a8096a793a1de5cc9a6537f}
+      \strng{bibnamehash}{cd066fbd6a8096a793a1de5cc9a6537f}
+      \strng{authorbibnamehash}{cd066fbd6a8096a793a1de5cc9a6537f}
       \strng{authornamehash}{de9f176c59c95a4d2de134921515d461}
-      \strng{authorfullhash}{4ac3e93cd8d6105cb22835b171955f57}
-      \strng{authorfullhashraw}{4ac3e93cd8d6105cb22835b171955f57}
+      \strng{authorfullhash}{cd066fbd6a8096a793a1de5cc9a6537f}
+      \strng{authorfullhashraw}{cd066fbd6a8096a793a1de5cc9a6537f}
       \field{sortinit}{C}
       \field{sortinithash}{4d103a86280481745c9c897c925753c0}
       \field{extradatescope}{labelyear}
       \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{shorttitle}
-      \field{abstract}{Are teachers' impacts on students' test scores ("value-added") a good measure of their quality? This question has sparked debate partly because of a lack of evidence on whether high value-added (VA) teachers improve students' long-term outcomes. Using school district and tax records for more than one million children, we find that students assigned to high-VA teachers are more likely to attend college, earn higher salaries, and are less likely to have children as teenagers. Replacing a teacher whose VA is in the bottom 5\% with an average teacher would increase the present value of students' lifetime income by approximately \$250,000 per classroom.}
-      \field{issn}{0002-8282}
-      \field{journaltitle}{American Economic Review}
-      \field{month}{9}
-      \field{number}{9}
-      \field{shorttitle}{Measuring the {Impacts} of {Teachers} {II}}
-      \field{title}{Measuring the {Impacts} of {Teachers} {II}: {Teacher} {Value}-{Added} and {Student} {Outcomes} in {Adulthood}}
-      \field{urlday}{15}
-      \field{urlmonth}{12}
+      \field{abstract}{We use anonymized admissions data from several colleges linked to income tax records and SAT and ACT test scores to study the determinants and causal effects of attending Ivy-Plus colleges (Ivy League, Stanford, MIT, Duke, and Chicago). Children from families in the top 1\% are more than twice as likely to attend an Ivy-Plus college as those from middle-class families with comparable SAT/ACT scores. Two-thirds of this gap is due to higher admissions rates for students with comparable test scores from high-income families; the remaining third is due to differences in rates of application and matriculation. In contrast, children from high-income families have no admissions advantage at flagship public colleges. The high-income admissions advantage at Ivy-Plus colleges is driven by three factors: (1) preferences for children of alumni, (2) weight placed on non-academic credentials, and (3) athletic recruitment. Using a new research design that isolates idiosyncratic variation in admissions decisions for waitlisted applicants, we show that attending an Ivy-Plus college instead of the average flagship public college increases students- chances of reaching the top 1\% of the earnings distribution by 50\%, nearly doubles their chances of attending an elite graduate school, and almost triples their chances of working at a prestigious firm. The three factors that give children from high-income families an admissions advantage are uncorrelated or negatively correlated with post-college outcomes, whereas academic credentials such as SAT/ACT scores are highly predictive of post-college success.}
+      \field{issn}{0033-5533}
+      \field{journaltitle}{The Quarterly Journal of Economics}
+      \field{month}{10}
+      \field{shorttitle}{Diversifying {Society}’s {Leaders}?}
+      \field{title}{Diversifying {Society}’s {Leaders}? {The} {Determinants} and {Causal} {Effects} of {Admission} to {Highly} {Selective} {Private} {Colleges}*}
+      \field{urlday}{31}
+      \field{urlmonth}{10}
       \field{urlyear}{2025}
-      \field{volume}{104}
-      \field{year}{2014}
+      \field{year}{2025}
       \field{urldateera}{ce}
-      \field{pages}{2633\bibrangedash 2679}
-      \range{pages}{47}
+      \field{pages}{qjaf050}
+      \range{pages}{-1}
       \verb{doi}
-      \verb 10.1257/aer.104.9.2633
+      \verb 10.1093/qje/qjaf050
       \endverb
       \verb{file}
-      \verb Full Text PDF:C\:\\Users\\xd-br\\Zotero\\storage\\TBRYYH2B\\Chetty et al. - 2014 - Measuring the Impacts of Teachers II Teacher Value-Added and Student Outcomes in Adulthood.pdf:application/pdf
+      \verb Full Text PDF:C\:\\Users\\brunem\\Zotero\\storage\\3RU69L5S\\Chetty et al. - 2025 - Diversifying Society’s Leaders The Determinants and Causal Effects of Admission to Highly Selective.pdf:application/pdf
       \endverb
       \verb{urlraw}
-      \verb https://www.aeaweb.org/articles?id=10.1257/aer.104.9.2633
+      \verb https://doi.org/10.1093/qje/qjaf050
       \endverb
       \verb{url}
-      \verb https://www.aeaweb.org/articles?id=10.1257/aer.104.9.2633
+      \verb https://doi.org/10.1093/qje/qjaf050
       \endverb
-      \keyw{Occupational Choice,Skills,Analysis of Education,Education,State and Local Government: Health,Welfare,Human Capital; Skills; Occupational Choice; Labor Productivity,State and Local Government: Health; Education; Welfare; Public Pensions,Labor Productivity,Public Sector Labor Markets,Public Pensions,Analysis of Education,Human Capital,Public Sector Labor Markets}
     \endentry
-    \entry{dobbie_medium-term_2015}{article}{}{}
-      \name{author}{2}{}{%
-        {{hash=a313125a5063b823252b86b2fcbb6462}{%
-           family={Dobbie},
+    \entry{dynarski_closing_2021}{article}{}{}
+      \name{author}{4}{}{%
+        {{hash=157d6d58dd9a1ee4ed3ffeb04cce95c0}{%
+           family={Dynarski},
            familyi={D\bibinitperiod},
-           given={Will},
-           giveni={W\bibinitperiod}}}%
-        {{hash=d0b850c7a9dc901788268092c967b9ba}{%
-           family={Fryer},
-           familyi={F\bibinitperiod},
-           given={Roland\bibnamedelima G.},
-           giveni={R\bibinitperiod\bibinitdelim G\bibinitperiod}}}%
+           given={Susan},
+           giveni={S\bibinitperiod}}}%
+        {{hash=5229bfe17208d59ee67e03043e64f69a}{%
+           family={Libassi},
+           familyi={L\bibinitperiod},
+           given={C.\bibnamedelimi J.},
+           giveni={C\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+        {{hash=d964d5571c41fa4f0252112a76db10d0}{%
+           family={Michelmore},
+           familyi={M\bibinitperiod},
+           given={Katherine},
+           giveni={K\bibinitperiod}}}%
+        {{hash=164f5e0dd938c6333194c675cff44528}{%
+           family={Owen},
+           familyi={O\bibinitperiod},
+           given={Stephanie},
+           giveni={S\bibinitperiod}}}%
       }
-      \list{publisher}{1}{%
-        {The University of Chicago Press}%
+      \list{language}{1}{%
+        {en}%
       }
-      \strng{namehash}{af6236bad1a0ee704353d4195264695e}
-      \strng{fullhash}{af6236bad1a0ee704353d4195264695e}
-      \strng{fullhashraw}{af6236bad1a0ee704353d4195264695e}
-      \strng{bibnamehash}{af6236bad1a0ee704353d4195264695e}
-      \strng{authorbibnamehash}{af6236bad1a0ee704353d4195264695e}
-      \strng{authornamehash}{af6236bad1a0ee704353d4195264695e}
-      \strng{authorfullhash}{af6236bad1a0ee704353d4195264695e}
-      \strng{authorfullhashraw}{af6236bad1a0ee704353d4195264695e}
+      \strng{namehash}{ffed501b89701abaed027a0863453511}
+      \strng{fullhash}{81e6a69f70c15be4acf2e2f3c2e6ee94}
+      \strng{fullhashraw}{81e6a69f70c15be4acf2e2f3c2e6ee94}
+      \strng{bibnamehash}{81e6a69f70c15be4acf2e2f3c2e6ee94}
+      \strng{authorbibnamehash}{81e6a69f70c15be4acf2e2f3c2e6ee94}
+      \strng{authornamehash}{ffed501b89701abaed027a0863453511}
+      \strng{authorfullhash}{81e6a69f70c15be4acf2e2f3c2e6ee94}
+      \strng{authorfullhashraw}{81e6a69f70c15be4acf2e2f3c2e6ee94}
       \field{sortinit}{D}
       \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
       \field{extradatescope}{labelyear}
       \field{labeldatesource}{}
       \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{High-achieving, low-income students attend selective colleges at far lower rates than upper-income students with similar achievement. Behavioral biases, intensified by complexity and uncertainty in the admissions and aid process, may explain this gap. In a large-scale experiment we test an early commitment of free tuition at a flagship university. The intervention did not increase aid: rather, students were guaranteed before application the same grant aid that they would qualify for in expectation if admitted. The offer substantially increased application (68 percent versus 26 percent) and enrollment rates (27 percent versus 12 percent). The results suggest that uncertainty, present bias, and loss aversion loom large in students' college decisions.}
+      \field{issn}{0002-8282}
+      \field{journaltitle}{American Economic Review}
+      \field{month}{6}
+      \field{number}{6}
+      \field{shorttitle}{Closing the {Gap}}
+      \field{title}{Closing the {Gap}: {The} {Effect} of {Reducing} {Complexity} and {Uncertainty} in {College} {Pricing} on the {Choices} of {Low}-{Income} {Students}}
+      \field{urlday}{31}
+      \field{urlmonth}{10}
+      \field{urlyear}{2025}
+      \field{volume}{111}
+      \field{year}{2021}
+      \field{urldateera}{ce}
+      \field{pages}{1721\bibrangedash 1756}
+      \range{pages}{36}
+      \verb{doi}
+      \verb 10.1257/aer.20200451
+      \endverb
+      \verb{file}
+      \verb PDF:C\:\\Users\\brunem\\Zotero\\storage\\JXW8L6QJ\\Dynarski et al. - 2021 - Closing the Gap The Effect of Reducing Complexity and Uncertainty in College Pricing on the Choices.pdf:application/pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://www.aeaweb.org/articles?id=10.1257/aer.20200451
+      \endverb
+      \verb{url}
+      \verb https://www.aeaweb.org/articles?id=10.1257/aer.20200451
+      \endverb
+      \keyw{Education: Government Policy,Educational Finance; Financial Aid,Financial Aid,Higher Education,Higher Education; Research Institutions,Education and Inequality,Personal Income,Wealth,and Their Distributions,Personal Income,Wealth,and Their Distributions,Educational Finance,Research Institutions,Education and Inequality,Education: Government Policy}
+    \endentry
+    \entry{hastings_informed_2016}{article}{}{}
+      \name{author}{4}{}{%
+        {{hash=5eda248b84717a540b06ce69e5774cde}{%
+           family={Hastings},
+           familyi={H\bibinitperiod},
+           given={Justine\bibnamedelima S.},
+           giveni={J\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+        {{hash=5f23b28056947f0566b56cffb7b8683d}{%
+           family={Neilson},
+           familyi={N\bibinitperiod},
+           given={Christopher\bibnamedelima A.},
+           giveni={C\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{hash=306858bb8b85f2752f521336ed97f1c3}{%
+           family={Ramirez},
+           familyi={R\bibinitperiod},
+           given={Anely},
+           giveni={A\bibinitperiod}}}%
+        {{hash=5d597621df69ddabd595930d8a38f5ba}{%
+           family={Zimmerman},
+           familyi={Z\bibinitperiod},
+           given={Seth\bibnamedelima D.},
+           giveni={S\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+      }
+      \strng{namehash}{5c4ed39e23bdd9af2f0d25c22ac70a59}
+      \strng{fullhash}{2e294c6079b1022f6b8d190c0e942a13}
+      \strng{fullhashraw}{2e294c6079b1022f6b8d190c0e942a13}
+      \strng{bibnamehash}{2e294c6079b1022f6b8d190c0e942a13}
+      \strng{authorbibnamehash}{2e294c6079b1022f6b8d190c0e942a13}
+      \strng{authornamehash}{5c4ed39e23bdd9af2f0d25c22ac70a59}
+      \strng{authorfullhash}{2e294c6079b1022f6b8d190c0e942a13}
+      \strng{authorfullhashraw}{2e294c6079b1022f6b8d190c0e942a13}
+      \field{sortinit}{H}
+      \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{We use large-scale surveys of Chilean college applicants and college students to explore the way students form beliefs about earnings and cost outcomes at different institutions and majors and how these beliefs relate to degree choice and persistence. Linking our survey records to administrative education and earnings data, we compare earnings and cost expectations to observed values for past students and follow survey participants forward to see how beliefs relate to matriculation and dropout outcomes. We find that students have correctly centered but noisy cost expectations, and appear to systematically overestimate earnings outcomes for past graduates. Students who overestimate costs are less likely to matriculate in any degree program and in their stated first-choice program, and are more likely to drop out. Students who overestimate earnings matriculate at similar rates to other students, but choose degree programs where past students have been less likely to graduate, have earned less early in their careers, and have been more likely to default on student loans. Consistent with an informal model of enrollment choice, students with a stated preference for labor market-related degree characteristics are less likely to overestimate earnings outcomes and choose degrees where past students have gone on to earn more, while the opposite is true for students with a stated preference for enjoyment of the curriculum.}
+      \field{issn}{0272-7757}
+      \field{journaltitle}{Economics of Education Review}
+      \field{month}{4}
+      \field{series}{Access to {Higher} {Education}}
+      \field{shorttitle}{({Un})informed college and major choice}
+      \field{title}{({Un})informed college and major choice: {Evidence} from linked survey and administrative data}
+      \field{urlday}{13}
+      \field{urlmonth}{9}
+      \field{urlyear}{2025}
+      \field{volume}{51}
+      \field{year}{2016}
+      \field{urldateera}{ce}
+      \field{pages}{136\bibrangedash 151}
+      \range{pages}{16}
+      \verb{doi}
+      \verb 10.1016/j.econedurev.2015.06.005
+      \endverb
+      \verb{file}
+      \verb PDF:C\:\\Users\\brunem\\Zotero\\storage\\NMJSITRG\\Hastings et al. - 2016 - (Un)informed college and major choice Evidence from linked survey and administrative data.pdf:application/pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://www.sciencedirect.com/science/article/pii/S0272775715000813
+      \endverb
+      \verb{url}
+      \verb https://www.sciencedirect.com/science/article/pii/S0272775715000813
+      \endverb
+      \keyw{College access,Higher education,Subjective expectations}
+    \endentry
+    \entry{hoxby_what_2015}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=27cede9dd4c09ff40612f8cdf038da75}{%
+           family={Hoxby},
+           familyi={H\bibinitperiod},
+           given={Caroline\bibnamedelima M.},
+           giveni={C\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+        {{hash=f614fcc742ca7d7ab2d810fbd57446b5}{%
+           family={Turner},
+           familyi={T\bibinitperiod},
+           given={Sarah},
+           giveni={S\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {en}%
+      }
+      \strng{namehash}{9c4dfe0882accd66b82854aabe9f9860}
+      \strng{fullhash}{9c4dfe0882accd66b82854aabe9f9860}
+      \strng{fullhashraw}{9c4dfe0882accd66b82854aabe9f9860}
+      \strng{bibnamehash}{9c4dfe0882accd66b82854aabe9f9860}
+      \strng{authorbibnamehash}{9c4dfe0882accd66b82854aabe9f9860}
+      \strng{authornamehash}{9c4dfe0882accd66b82854aabe9f9860}
+      \strng{authorfullhash}{9c4dfe0882accd66b82854aabe9f9860}
+      \strng{authorfullhashraw}{9c4dfe0882accd66b82854aabe9f9860}
+      \field{sortinit}{H}
+      \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{abstract}{Using survey data from the Promise Academy in the Harlem Children’s Zone, we estimate the effects of high-performing charter schools on human capital, risky behaviors, and health outcomes. Six years after the random admissions lottery, youths offered admission to the Promise Academy middle school score 0.279 (0.073) standard deviations higher on academic achievement outcomes, 0.067 (0.076) standard deviations higher on an index of academic attainment, and 0.313 (0.091) standard deviations higher on a measure of on-time benchmarks. Females are 10.1 percentage points less likely to be pregnant as teenagers, and males are 4.4 percentage points less likely to be incarcerated.}
-      \field{issn}{0022-3808}
+      \field{abstract}{Previous work demonstrates that low-income higher achievers fail to apply to selective colleges despite their being admitted at high rates and receiving financial aid so generous that they pay less than at non-selective schools. The Expanding College Opportunities project, a randomized controlled trial, provides individualized information about colleges' net prices, resources, curricula, students, and outcomes. Our prior study shows that the intervention raises students' applications to, admissions at, enrollment, and progress at selective colleges. Here we use survey data to show that it actually changes students' knowledge and decision-making. We highlight topics on which they are misinformed.}
+      \field{issn}{0002-8282}
+      \field{journaltitle}{American Economic Review}
+      \field{month}{5}
+      \field{number}{5}
+      \field{title}{What {High}-{Achieving} {Low}-{Income} {Students} {Know} about {College}}
+      \field{urlday}{31}
+      \field{urlmonth}{10}
+      \field{urlyear}{2025}
+      \field{volume}{105}
+      \field{year}{2015}
+      \field{urldateera}{ce}
+      \field{pages}{514\bibrangedash 517}
+      \range{pages}{4}
+      \verb{doi}
+      \verb 10.1257/aer.p20151027
+      \endverb
+      \verb{file}
+      \verb PDF:C\:\\Users\\brunem\\Zotero\\storage\\ISDGBBZC\\Hoxby and Turner - 2015 - What High-Achieving Low-Income Students Know about College.pdf:application/pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://www.aeaweb.org/articles?id=10.1257/aer.p20151027
+      \endverb
+      \verb{url}
+      \verb https://www.aeaweb.org/articles?id=10.1257/aer.p20151027
+      \endverb
+      \keyw{Consumer Economics: Empirical Analysis,Belief,Communication,Consumer Economics: Empirical Analysis,Search,Educational Finance; Financial Aid,Financial Aid,Higher Education,Higher Education; Research Institutions,Information and Knowledge,Learning,Research Institutions,Search; Learning; Information and Knowledge; Communication; Belief; Unawareness,Unawareness,Educational Finance}
+    \endentry
+    \entry{jackson_what_2018}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=c2d8c94b1329d97abfd858cb46ec55b8}{%
+           family={Jackson},
+           familyi={J\bibinitperiod},
+           given={C.\bibnamedelimi Kirabo},
+           giveni={C\bibinitperiod\bibinitdelim K\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {The University of Chicago Press}%
+      }
+      \strng{namehash}{c2d8c94b1329d97abfd858cb46ec55b8}
+      \strng{fullhash}{c2d8c94b1329d97abfd858cb46ec55b8}
+      \strng{fullhashraw}{c2d8c94b1329d97abfd858cb46ec55b8}
+      \strng{bibnamehash}{c2d8c94b1329d97abfd858cb46ec55b8}
+      \strng{authorbibnamehash}{c2d8c94b1329d97abfd858cb46ec55b8}
+      \strng{authornamehash}{c2d8c94b1329d97abfd858cb46ec55b8}
+      \strng{authorfullhash}{c2d8c94b1329d97abfd858cb46ec55b8}
+      \strng{authorfullhashraw}{c2d8c94b1329d97abfd858cb46ec55b8}
+      \field{sortinit}{J}
+      \field{sortinithash}{b2f54a9081ace9966a7cb9413811edb4}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{Teachers affect a variety of student outcomes through their influence on both cognitive and noncognitive skill. I proxy for students’ noncognitive skill using non–test score behaviors. These behaviors include absences, suspensions, course grades, and grade repetition in ninth grade. Teacher effects on test scores and those on behaviors are weakly correlated. Teacher effects on behaviors predict larger impacts on high school completion and other longer-run outcomes than their effects on test scores. Relative to using only test score measures, using effects on both test score and noncognitive measures more than doubles the variance of predictable teacher impacts on longer-run outcomes.}
       \field{journaltitle}{Journal of Political Economy}
       \field{month}{10}
       \field{number}{5}
-      \field{title}{The {Medium}-{Term} {Impacts} of {High}-{Achieving} {Charter} {Schools}}
-      \field{urlday}{12}
-      \field{urlmonth}{9}
-      \field{urlyear}{2025}
-      \field{volume}{123}
-      \field{year}{2015}
+      \field{shorttitle}{What {Do} {Test} {Scores} {Miss}?}
+      \field{title}{What {Do} {Test} {Scores} {Miss}? {The} {Importance} of {Teacher} {Effects} on {Non}–{Test} {Score} {Outcomes}}
+      \field{urlday}{31}
+      \field{urlmonth}{5}
+      \field{urlyear}{2026}
+      \field{volume}{126}
+      \field{year}{2018}
       \field{urldateera}{ce}
-      \field{pages}{985\bibrangedash 1037}
-      \range{pages}{53}
+      \field{pages}{2072\bibrangedash 2107}
+      \range{pages}{36}
       \verb{doi}
-      \verb 10.1086/682718
-      \endverb
-      \verb{file}
-      \verb PDF:C\:\\Users\\xd-br\\Zotero\\storage\\WY2H7BLU\\Dobbie and Fryer - 2015 - The Medium-Term Impacts of High-Achieving Charter Schools.pdf:application/pdf
+      \verb 10.1086/699018
       \endverb
       \verb{urlraw}
-      \verb https://www.journals.uchicago.edu/doi/abs/10.1086/682718
+      \verb https://www.journals.uchicago.edu/doi/10.1086/699018
       \endverb
       \verb{url}
-      \verb https://www.journals.uchicago.edu/doi/abs/10.1086/682718
+      \verb https://www.journals.uchicago.edu/doi/10.1086/699018
       \endverb
     \endentry
     \entry{kirkeboen_field_2016}{article}{}{}
@@ -395,7 +561,7 @@
       \verb 10.1093/qje/qjw019
       \endverb
       \verb{file}
-      \verb EBSCO-FullText-09_12_2025 (2):C\:\\Users\\xd-br\\Zotero\\storage\\ZDGBU9C5\\EBSCO-FullText-09_12_2025 (2).pdf:application/pdf;Submitted Version:C\:\\Users\\xd-br\\Zotero\\storage\\GCI5ETJ7\\Kirkeboen et al. - 2016 - Field of Study, Earnings, and Self-Selection.pdf:application/pdf
+      \verb EBSCO-FullText-09_12_2025 (2):C\:\\Users\\brunem\\Zotero\\storage\\ZDGBU9C5\\EBSCO-FullText-09_12_2025 (2).pdf:application/pdf;Submitted Version:C\:\\Users\\brunem\\Zotero\\storage\\GCI5ETJ7\\Kirkeboen et al. - 2016 - Field of Study, Earnings, and Self-Selection.pdf:application/pdf
       \endverb
       \verb{urlraw}
       \verb https://doi.org/10.1093/qje/qjw019
@@ -403,6 +569,131 @@
       \verb{url}
       \verb https://doi.org/10.1093/qje/qjw019
       \endverb
+    \endentry
+    \entry{rose_effects_2022}{misc}{}{}
+      \name{author}{3}{}{%
+        {{hash=17688f6ccc45098831e3aa07c756c0cb}{%
+           family={Rose},
+           familyi={R\bibinitperiod},
+           given={Evan\bibnamedelima K.},
+           giveni={E\bibinitperiod\bibinitdelim K\bibinitperiod}}}%
+        {{hash=aaab57a8c3716c5d39732658795a3dfd}{%
+           family={Schellenberg},
+           familyi={S\bibinitperiod},
+           given={Jonathan\bibnamedelima T.},
+           giveni={J\bibinitperiod\bibinitdelim T\bibinitperiod}}}%
+        {{hash=1a381bc44f0a1ba1d4fe3fd3c851ce64}{%
+           family={Shem-Tov},
+           familyi={S\bibinithyphendelim T\bibinitperiod},
+           given={Yotam},
+           giveni={Y\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {National Bureau of Economic Research}%
+      }
+      \strng{namehash}{21e8ee70e29875a895c7e8b37b01e8b8}
+      \strng{fullhash}{be80eb55f183175f2db145d622be52be}
+      \strng{fullhashraw}{be80eb55f183175f2db145d622be52be}
+      \strng{bibnamehash}{be80eb55f183175f2db145d622be52be}
+      \strng{authorbibnamehash}{be80eb55f183175f2db145d622be52be}
+      \strng{authornamehash}{21e8ee70e29875a895c7e8b37b01e8b8}
+      \strng{authorfullhash}{be80eb55f183175f2db145d622be52be}
+      \strng{authorfullhashraw}{be80eb55f183175f2db145d622be52be}
+      \field{sortinit}{R}
+      \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{This paper estimates teachers' impacts on their students' future criminal justice contact (CJC). Using a unique data set linking the universe of North Carolina public school data to administrative arrest records, we find a standard deviation of teacher effects on students' future arrests of 2.7 percentage points (11\% of the sample mean). Teachers' effects on CJC are orthogonal to their effects on academic achievement, implying assignment to a high test score value-added teacher does not reduce future CJC. However, teachers who reduce suspensions and improve attendance substantially reduce future arrests. Similar patterns emerge when allowing teacher impacts to vary by student sex, race, socio-economic status, and school. The results suggest that the development of non-cognitive skills is central to the returns to education for crime and highlight an important dimension of teachers' social value missed by test score-based quality metrics.}
+      \field{month}{7}
+      \field{series}{Working {Paper} {Series}}
+      \field{title}{The {Effects} of {Teacher} {Quality} on {Adult} {Criminal} {Justice} {Contact}}
+      \field{type}{Working {Paper}}
+      \field{urlday}{30}
+      \field{urlmonth}{3}
+      \field{urlyear}{2026}
+      \field{year}{2022}
+      \field{urldateera}{ce}
+      \verb{doi}
+      \verb 10.3386/w30274
+      \endverb
+      \verb{file}
+      \verb Full Text PDF:C\:\\Users\\brunem\\Zotero\\storage\\6WRYXVLY\\Rose et al. - 2022 - The Effects of Teacher Quality on Adult Criminal Justice Contact.pdf:application/pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://www.nber.org/papers/w30274
+      \endverb
+      \verb{url}
+      \verb https://www.nber.org/papers/w30274
+      \endverb
+    \endentry
+    \entry{walters_chapter_2024}{incollection}{}{}
+      \name{author}{1}{}{%
+        {{hash=00f4eae9d53892723e6ec72a134e44e5}{%
+           family={Walters},
+           familyi={W\bibinitperiod},
+           given={Christopher},
+           giveni={C\bibinitperiod}}}%
+      }
+      \name{editor}{2}{}{%
+        {{hash=e26258e53a5d323c8365d750c1a63e0e}{%
+           family={Dustmann},
+           familyi={D\bibinitperiod},
+           given={Christian},
+           giveni={C\bibinitperiod}}}%
+        {{hash=261b3be4ecb61f279cdbd85e8fcdcc32}{%
+           family={Lemieux},
+           familyi={L\bibinitperiod},
+           given={Thomas},
+           giveni={T\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Elsevier}%
+      }
+      \strng{namehash}{00f4eae9d53892723e6ec72a134e44e5}
+      \strng{fullhash}{00f4eae9d53892723e6ec72a134e44e5}
+      \strng{fullhashraw}{00f4eae9d53892723e6ec72a134e44e5}
+      \strng{bibnamehash}{00f4eae9d53892723e6ec72a134e44e5}
+      \strng{authorbibnamehash}{00f4eae9d53892723e6ec72a134e44e5}
+      \strng{authornamehash}{00f4eae9d53892723e6ec72a134e44e5}
+      \strng{authorfullhash}{00f4eae9d53892723e6ec72a134e44e5}
+      \strng{authorfullhashraw}{00f4eae9d53892723e6ec72a134e44e5}
+      \strng{editorbibnamehash}{ec479ec2cde970d86252850618a8013c}
+      \strng{editornamehash}{ec479ec2cde970d86252850618a8013c}
+      \strng{editorfullhash}{ec479ec2cde970d86252850618a8013c}
+      \strng{editorfullhashraw}{ec479ec2cde970d86252850618a8013c}
+      \field{sortinit}{W}
+      \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Labor economists increasingly work in empirical contexts with large numbers of unit-specific parameters. These settings include a growing number of value-added studies measuring causal effects of individual units like firms, managers, neighborhoods, teachers, schools, doctors, hospitals, police officers, and judges. Empirical Bayes (EB) methods provide a powerful toolkit for value-added analysis. The EB approach leverages distributional information from the full population of units to refine predictions of value-added for each individual, leading to improved estimators and decision rules. This chapter offers an overview of EB methods in labor economics, focusing on properties that make EB useful for value-added studies and practical guidance for EB implementation. Applications to school value-added in Boston and employer-level discrimination in the US labor market illustrate the EB toolkit in action.}
+      \field{booktitle}{Handbook of {Labor} {Economics}}
+      \field{month}{1}
+      \field{title}{Chapter 3 - {Empirical} {Bayes} methods in labor economics}
+      \field{urlday}{3}
+      \field{urlmonth}{11}
+      \field{urlyear}{2025}
+      \field{volume}{5}
+      \field{year}{2024}
+      \field{urldateera}{ce}
+      \field{pages}{183\bibrangedash 260}
+      \range{pages}{78}
+      \verb{doi}
+      \verb 10.1016/bs.heslab.2024.11.001
+      \endverb
+      \verb{file}
+      \verb ScienceDirect Full Text PDF:C\:\\Users\\brunem\\Zotero\\storage\\83MAXW2Q\\Walters - 2024 - Chapter 3 - Empirical Bayes methods in labor economics.pdf:application/pdf;ScienceDirect Snapshot:C\:\\Users\\brunem\\Zotero\\storage\\P35B7SH2\\S1573446324000014.html:text/html
+      \endverb
+      \verb{urlraw}
+      \verb https://www.sciencedirect.com/science/article/pii/S1573446324000014
+      \endverb
+      \verb{url}
+      \verb https://www.sciencedirect.com/science/article/pii/S1573446324000014
+      \endverb
+      \keyw{Bayesian methods,Empirical Bayes,Labor economics,Multiple testing,Shrinkage,Value-added}
     \endentry
   \enddatalist
 \endrefsection
