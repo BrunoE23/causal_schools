@@ -1,0 +1,273 @@
+<div id="program-income-math-scatter-root" class="program-income-math-scatter">
+  <style>
+    #program-income-math-scatter-root {
+      color-scheme: light dark;
+      --viz-bg: var(--background, #ffffff);
+      --viz-fg: var(--foreground, #171717);
+      --viz-muted: var(--muted-foreground, #6b7280);
+      --viz-border: var(--border, #d8dde5);
+      --viz-panel: var(--card, rgba(255,255,255,0.96));
+      --viz-s1: var(--viz-series-1, #2563eb);
+      --viz-s2: var(--viz-series-2, #dc2626);
+      --viz-s3: var(--viz-series-3, #d97706);
+      --viz-s4: var(--viz-series-4, #16803c);
+      --viz-s5: var(--viz-series-5, #7c3aed);
+      --viz-s6: var(--viz-series-6, #0891b2);
+      width: 100%;
+      min-width: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--viz-fg);
+      position: relative;
+    }
+    #program-income-math-scatter-root .chart-wrap {
+      width: 100%;
+      min-width: 0;
+      overflow: hidden;
+    }
+    #program-income-math-scatter-root svg {
+      width: 100%;
+      height: auto;
+      display: block;
+      overflow: visible;
+    }
+    #program-income-math-scatter-root .axis text,
+    #program-income-math-scatter-root .legend text,
+    #program-income-math-scatter-root .annotation,
+    #program-income-math-scatter-root .note {
+      fill: var(--viz-muted);
+    }
+    #program-income-math-scatter-root .axis-title {
+      fill: var(--viz-fg);
+      font-weight: 600;
+    }
+    #program-income-math-scatter-root .grid line {
+      stroke: var(--viz-border);
+      stroke-width: 1;
+      opacity: 0.72;
+    }
+    #program-income-math-scatter-root .domain {
+      stroke: var(--viz-muted);
+      stroke-width: 1;
+    }
+    #program-income-math-scatter-root .point {
+      stroke: var(--viz-bg);
+      stroke-width: 0.7;
+      opacity: 0.68;
+      transition: opacity 120ms ease, r 120ms ease;
+    }
+    #program-income-math-scatter-root .point:hover {
+      opacity: 1;
+      r: 5.1;
+    }
+    #program-income-math-scatter-root .trend {
+      stroke: var(--viz-fg);
+      stroke-width: 2;
+      opacity: 0.72;
+      fill: none;
+    }
+    #program-income-math-scatter-root .tooltip {
+      position: absolute;
+      visibility: hidden;
+      pointer-events: none;
+      z-index: 5;
+      max-width: 310px;
+      padding: 10px 12px;
+      border: 1px solid var(--viz-border);
+      border-radius: 9px;
+      background: var(--viz-panel);
+      color: var(--viz-fg);
+      box-shadow: 0 10px 26px rgba(0,0,0,0.16);
+      font-size: 12px;
+      line-height: 1.38;
+    }
+    #program-income-math-scatter-root .tooltip .t-program {
+      font-weight: 700;
+      margin-bottom: 3px;
+    }
+    #program-income-math-scatter-root .tooltip .t-inst,
+    #program-income-math-scatter-root .tooltip .t-meta {
+      color: var(--viz-muted);
+    }
+    #program-income-math-scatter-root .tooltip .t-values {
+      margin-top: 7px;
+      display: grid;
+      grid-template-columns: auto auto;
+      gap: 2px 10px;
+    }
+  </style>
+  <div class="chart-wrap"></div>
+  <div class="tooltip" aria-hidden="true"></div>
+  <script>
+    (() => {
+      const root = document.getElementById("program-income-math-scatter-root");
+      const wrap = root.querySelector(".chart-wrap");
+      const tooltip = root.querySelector(".tooltip");
+      const data = __PROGRAM_DATA_JSON__;
+      const summary = __SUMMARY_JSON__[0];
+      const NS = "http://www.w3.org/2000/svg";
+      const width = 1040;
+      const height = 610;
+      const margin = {top: 34, right: 270, bottom: 86, left: 90};
+      const plotW = width - margin.left - margin.right;
+      const plotH = height - margin.top - margin.bottom;
+      const fields = [
+        "Engineering & Construction",
+        "Medicine & Health",
+        "Business",
+        "Science",
+        "Teaching",
+        "Social Sciences",
+        "Humanities & Arts",
+        "Law"
+      ];
+      const colors = [
+        "var(--viz-s1)",
+        "var(--viz-s2)",
+        "var(--viz-s3)",
+        "var(--viz-s4)",
+        "var(--viz-s5)",
+        "var(--viz-s6)",
+        "color-mix(in srgb, var(--viz-s2) 55%, var(--viz-s5))",
+        "color-mix(in srgb, var(--viz-fg) 62%, var(--viz-muted))"
+      ];
+      const color = Object.fromEntries(fields.map((f, i) => [f, colors[i]]));
+      const make = (name, attrs = {}) => {
+        const el = document.createElementNS(NS, name);
+        Object.entries(attrs).forEach(([k, v]) => el.setAttribute(k, v));
+        return el;
+      };
+      const textNode = (x, y, value, attrs = {}) => {
+        const t = make("text", {x, y, ...attrs});
+        t.textContent = value;
+        return t;
+      };
+      const extent = (values) => [Math.min(...values), Math.max(...values)];
+      const padExtent = ([a, b], share) => {
+        const span = Math.max(b - a, 0.1);
+        return [a - span * share, b + span * share];
+      };
+      const xDomain = padExtent(extent(data.map(d => d.x)), 0.055);
+      const yDomain = padExtent(extent(data.map(d => d.y)), 0.075);
+      const xScale = x => margin.left + (x - xDomain[0]) / (xDomain[1] - xDomain[0]) * plotW;
+      const yScale = y => margin.top + plotH - (y - yDomain[0]) / (yDomain[1] - yDomain[0]) * plotH;
+      const ticks = (domain, n) => Array.from({length: n}, (_, i) => domain[0] + i * (domain[1] - domain[0]) / (n - 1));
+      const fmtX = x => (Math.abs(x) < 0.005 ? "0" : x.toFixed(1));
+      const fmtY = y => y.toFixed(1);
+
+      const svg = make("svg", {
+        viewBox: `0 0 ${width} ${height}`,
+        role: "img",
+        "aria-labelledby": "program-income-math-title program-income-math-desc"
+      });
+      const title = make("title", {id: "program-income-math-title"});
+      title.textContent = "Projected program income and entrant math achievement";
+      const desc = make("desc", {id: "program-income-math-desc"});
+      desc.textContent = `Scatterplot of ${summary.n_programs} higher-education programs. Horizontal position is the program's average entrance-exam math score, standardized within test year. Vertical position is projected monthly program income in millions of Chilean pesos. Colors represent eight broad fields.`;
+      svg.append(title, desc);
+
+      const grid = make("g", {class: "grid"});
+      ticks(yDomain, 6).forEach(v => {
+        grid.append(make("line", {x1: margin.left, x2: margin.left + plotW, y1: yScale(v), y2: yScale(v)}));
+      });
+      svg.append(grid);
+
+      const axes = make("g", {class: "axis"});
+      axes.append(make("line", {class: "domain", x1: margin.left, x2: margin.left + plotW, y1: margin.top + plotH, y2: margin.top + plotH}));
+      axes.append(make("line", {class: "domain", x1: margin.left, x2: margin.left, y1: margin.top, y2: margin.top + plotH}));
+      ticks(xDomain, 7).forEach(v => {
+        const x = xScale(v);
+        axes.append(make("line", {class: "domain", x1: x, x2: x, y1: margin.top + plotH, y2: margin.top + plotH + 6}));
+        axes.append(textNode(x, margin.top + plotH + 24, fmtX(v), {"text-anchor": "middle", "font-size": 12}));
+      });
+      ticks(yDomain, 6).forEach(v => {
+        const y = yScale(v);
+        axes.append(textNode(margin.left - 12, y + 4, fmtY(v), {"text-anchor": "end", "font-size": 12}));
+      });
+      axes.append(textNode(margin.left + plotW / 2, height - 35, "Average entrance-exam math score (SD within test year)", {class: "axis-title", "text-anchor": "middle", "font-size": 14}));
+      const yTitle = textNode(22, margin.top + plotH / 2, "Projected monthly income (millions of CLP)", {class: "axis-title", "text-anchor": "middle", "font-size": 14, transform: `rotate(-90 22 ${margin.top + plotH / 2})`});
+      axes.append(yTitle);
+      svg.append(axes);
+
+      const xMean = data.reduce((s, d) => s + d.x, 0) / data.length;
+      const yMean = data.reduce((s, d) => s + d.y, 0) / data.length;
+      const slope = data.reduce((s, d) => s + (d.x - xMean) * (d.y - yMean), 0) /
+        data.reduce((s, d) => s + (d.x - xMean) ** 2, 0);
+      const intercept = yMean - slope * xMean;
+      svg.append(make("line", {
+        class: "trend",
+        x1: xScale(xDomain[0]),
+        y1: yScale(intercept + slope * xDomain[0]),
+        x2: xScale(xDomain[1]),
+        y2: yScale(intercept + slope * xDomain[1])
+      }));
+
+      const points = make("g");
+      const hideTooltip = () => {
+        tooltip.style.visibility = "hidden";
+        tooltip.setAttribute("aria-hidden", "true");
+      };
+      const showTooltip = (event, d) => {
+        tooltip.innerHTML = `
+          <div class="t-program">${d.program || d.code}</div>
+          <div class="t-inst">${d.institution || ""}</div>
+          <div class="t-meta">${d.field} · ${d.code}</div>
+          <div class="t-values">
+            <span>Average math score</span><strong>${d.x.toFixed(2)} SD</strong>
+            <span>Projected income</span><strong>${d.y.toFixed(2)}m CLP</strong>
+            <span>Observed entrants</span><strong>${d.n.toLocaleString()}</strong>
+          </div>`;
+        tooltip.style.visibility = "visible";
+        tooltip.setAttribute("aria-hidden", "false");
+        const box = root.getBoundingClientRect();
+        const desiredX = event.clientX - box.left + 14;
+        const desiredY = event.clientY - box.top + 14;
+        const maxX = Math.max(8, box.width - tooltip.offsetWidth - 8);
+        const maxY = Math.max(8, box.height - tooltip.offsetHeight - 8);
+        tooltip.style.left = `${Math.max(8, Math.min(desiredX, maxX))}px`;
+        tooltip.style.top = `${Math.max(8, Math.min(desiredY, maxY))}px`;
+      };
+      data.forEach(d => {
+        const p = make("circle", {
+          class: "point",
+          cx: xScale(d.x),
+          cy: yScale(d.y),
+          r: 3.35,
+          fill: color[d.field] || "var(--viz-muted)"
+        });
+        const nativeTitle = make("title");
+        nativeTitle.textContent = `${d.program || d.code}: ${d.x.toFixed(2)} SD, ${d.y.toFixed(2)}m CLP`;
+        p.append(nativeTitle);
+        p.addEventListener("pointerenter", e => showTooltip(e, d));
+        p.addEventListener("pointermove", e => showTooltip(e, d));
+        p.addEventListener("pointerleave", hideTooltip);
+        points.append(p);
+      });
+      svg.append(points);
+
+      const legend = make("g", {class: "legend", transform: `translate(${margin.left + plotW + 38}, ${margin.top + 28})`});
+      legend.append(textNode(0, 0, "Field", {class: "axis-title", "font-size": 13}));
+      fields.forEach((f, i) => {
+        const y = 28 + i * 39;
+        legend.append(make("circle", {cx: 6, cy: y - 4, r: 5, fill: color[f]}));
+        legend.append(textNode(20, y, f, {"font-size": 12}));
+      });
+      legend.append(make("line", {class: "trend", x1: 0, x2: 18, y1: 369, y2: 369}));
+      legend.append(textNode(26, 373, "Linear fit", {"font-size": 12}));
+      svg.append(legend);
+
+      svg.append(textNode(
+        margin.left + 8,
+        margin.top + 18,
+        `r = ${Number(summary.correlation).toFixed(2)}   ·   ${Number(summary.n_programs).toLocaleString()} programs`,
+        {class: "annotation", "font-size": 12, "font-weight": 600}
+      ));
+      svg.append(textNode(
+        margin.left,
+        height - 9,
+        `2022–2025 entrants combined; programs require ≥${summary.min_entrants_per_program} observed math scores. Medicine and Health & Welfare are combined.`,
+        {class: "note", "font-size": 11}
+      ));
+      wrap.append(svg);
+    })();
+  </script>
+</div>
