@@ -1,0 +1,29 @@
+\begin{table}[!htbp]
+\centering
+\caption{Main scalar school-value IV estimates using deviations from expected value added}
+\label{tab:scalar_school_value_iv_main_five_surprise_eb}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lccccc}
+\toprule
+ & \multicolumn{2}{c}{Exams} & \multicolumn{3}{c}{Higher ed. choices} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-6}
+ & Math & Verbal & High-premium inst. & High-premium field & Projected income \\
+\midrule
+\multicolumn{6}{l}{\textit{Panel A. First stage: attended-school deviation }$A-E$} \\
+$O-E$ & 0.443*** & 0.435*** & 0.337*** & 0.488*** & 0.462*** \\
+ & (0.008) & (0.007) & (0.009) & (0.007) & (0.006) \\
+First-stage $F$ & 3230.0 & 4294.7 & 1321.1 & 5004.9 & 5729.8 \\
+\addlinespace
+\multicolumn{6}{l}{\textit{Panel B. Second stage: student outcome}} \\
+$\varphi^{EB}$ & 0.884*** & 0.885*** & 0.497*** & 0.803*** & 0.311*** \\
+ & (0.073) & (0.087) & (0.111) & (0.100) & (0.103) \\
+N & 93,438 & 95,107 & 95,651 & 90,338 & 95,651 \\
+\bottomrule
+\end{tabular}
+}
+\par\medskip
+\footnotesize
+\begin{minipage}{\textwidth}
+Notes: Each column reports a scalar IV estimate of the pass-through from attended-school EB value added relative to its DA-probability expected value, $A-E$, to the corresponding student outcome. $A-E$ is instrumented with first-round offered-school EB value added relative to the same expected value, $O-E$. All specifications continue to control for $E$, cohort, grade-4 SIMCE math and language, gender, and age. Heteroskedasticity-robust standard errors are reported in parentheses. The first-stage $F$ statistic tests the excluded instrument $O-E$. $^{*}p<0.10$, $^{**}p<0.05$, $^{***}p<0.01$.
+\end{minipage}
+\end{table}
