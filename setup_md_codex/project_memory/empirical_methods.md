@@ -279,3 +279,99 @@ Define `Z_i` and `P_i` in the estimation code. The methods section should state 
 Distinguish SAE participation from identifying lottery variation. `sae_proceso` marks that the student appears in the SAE grade-9 admission process, but the IV sample still needs to be restricted to observations with valid lottery-generated instruments and the corresponding risk/probability controls.
 
 Keep the school-value construction and IV estimation separated. First construct `V_s`; then merge it into the estimation sample and run 2SLS. This makes the scalar treatment explicit and prevents the estimation code from silently changing the definition of school value.
+
+## Staffing characteristics aligned with VA (2026-09-07)
+
+The agreed final target is two school-level staff-characteristic measures over
+2018-2024, corresponding to the four post-grade-8 years for VA cohorts 2017-2020.
+The extended cleaner reads Box staff records from 2013-2025; earlier records
+provide observed career history and 2025 is excluded from VA-window feature rows.
+Prior experience uses information strictly before each staff year; current spells
+and historical role-persistence indicators use information through that year only.
+All-appointment role experience counts each person-year once, and role-at-school
+experience counts each person-school-year once. Main-appointment primary-function
+histories are retained as a distinct definition, not silently substituted for all
+appointments. Full-window EVER flags are retrospective and excluded from the
+VA-feature tables. No prior observed history is not zero lifetime experience.
+
+Orientador spells and cumulative experience are distinct. The existing
+`ORIENTADOR_ANY_CONSECUTIVE_YEARS_TO_DATE` tracks consecutive observed years
+in either primary or secondary orientador function, across appointments.
+`ORIENTADOR_AT_SCHOOL_CONSECUTIVE_YEARS_TO_DATE` tracks the analogous
+person-RBD spell. Both include the current year. Moving schools alone does
+not interrupt the person-level spell, but starts a new school-specific spell.
+
+The added `ORIENTADOR_PRIMARY_CUMULATIVE_YEARS_OBSERVED` counts distinct
+observed years from 2013 through t with `ID_IFP=9` at any appointment.
+Here primary/main function does not require the `PERSONAS=1` designation.
+The separate `ORIENTADOR_MAIN_CUMULATIVE_YEARS_OBSERVED` applies both
+restrictions. All cumulative counts retain experience across nonconsecutive
+spells and school moves, without filling missing years or using future data.
+The `*_PRIOR_YEARS_OBSERVED` versions remain strictly prior to t; cumulative
+through-t counts must not silently replace them in predetermined specifications.
+An observed cumulative count is not lifetime experience; its support is
+reported in `*_KNOWN_YEARS_TO_DATE` and the broader history-coverage fields.
+
+School tenure uses the current record's reported `ANO_SERVICIO_EE`, exposed as
+the preferred `YEARS_AT_SCHOOL` input. It is not reconstructed from panel records
+or capped at 2013; missing reported tenure is not filled with record counts.
+Prior role experience counts observed role years from 2013 through t-1. Reconstructed
+role-at-school history remains supplemental and distinct from reported tenure.
+Credential indicators distinguish reported title status, tertiary qualification,
+institution type, title specialty, and applicable mentions; they are not ranks of
+training institutions.
+
+Teacher characteristics use only classroom teachers assigned to regular
+educacion media (HS) at that appointment's RBD. The assignment restriction is
+`COD_ENS_1` or `COD_ENS_2` in `310, 410, 510, 610, 710, 810, 910`, covering
+youth H-C, T-P and artistic media (MINEDUC annual staff codebooks 2013-2025,
+Annex V, pp. 19-20). Adult-only media is excluded for the regular VA cohorts.
+Either classroom function (primary or secondary) and either teaching slot can
+qualify; mixed basic/HS assignments and non-main appointments are included.
+The teacher's credentials, school-level offerings and appointments at other
+schools cannot substitute for their own teaching-assignment code.
+`NIVEL1/2` is only an audited consistency check, not an imputation source.
+Missing/unmapped teaching codes stay unknown and do not qualify without a
+confirmed HS code in the other slot.
+
+`TEACHER_HS_*` is the preferred HS-specific role-history family, counting
+observed HS teaching years from 2013 through t-1. All-level teacher histories
+are supplemental and remain available to distinguish prior basic teaching from
+missing career records. `VA_TEACHER_ELIGIBLE` and `VA_ORIENTADOR_ELIGIBLE` keep
+the two rosters separate inside the combined appointment-level feature file.
+Orientador eligibility/history remains function-based and is not subject to the
+classroom-assignment filter. The final HS RBD support, orientador coverage of HS
+students, and school-window aggregation weights remain to be settled. PCA is
+proposed, not estimated; school VA will not be an input to its construction.
+
+For students per orientador, the user authorized a VA-sample student numerator
+on 2026-09-07. The proposed common baseline is the broad estimation sample,
+not an outcome-specific score-observed subset. A read-only check of
+`output/tables/empirical_bayes_school_va/stata_va_eb_input_exam.csv` verified
+3,682 unique school RBDs and a sum of `n_students` equal to 757,999.
+School-level counts match the saved STEM and full program-income VA inputs
+exactly. The saved math VA input uses 561,977 students instead. School assignment
+is `most_time_RBD` and the pooled grade-8 cohorts are 2017-2020; this does not
+establish actual annual attendance at that RBD. Label any resulting ratio as
+VA-sample students per orientador, not total HS students per orientador.
+Bruno subsequently approved the period-average denominator on 2026-09-07.
+For scope r (primary or any function), define H_st^r as the number of distinct
+valid MRUNs with that function on any appointment at school s in year t.
+Primary is ID_IFP=9; any is ID_IFP=9 or ID_IFS=9. Neither requires PERSONAS=1.
+The final measure is N_VA_s / [(1/7) sum_{t=2018}^{2024} H_st^r].
+The pooled numerator is not divided by four cohorts or converted to student-years.
+The denominator is a mean of annual headcounts, not the number of ever-observed
+orientadores, nor an average of student/staff ratios. Use equal calendar-year
+weights, including confirmed zero years. This normalization is for this staffing
+ratio only; it does not choose weights for the two proposed staff-quality scores.
+
+The full-period denominator requires seven known annual headcounts. A school-year
+absent from the staff directory stays missing. Unknown person roles or invalid
+identifiers on potentially relevant appointments also leave the affected headcount
+unknown. A positive role on another appointment at the same person-school-year
+resolves that person's inclusion. Keep partial-year means only as labeled
+diagnostics, not a replacement denominator. A known zero full-period mean yields
+an undefined ratio and a separate no-orientador indicator, not zero workload.
+Count all school-specific appointments without restricting orientadores to HS
+classroom assignments; their coverage of HS versus other school levels is unknown.
+See `code/codex/docentes_educacion/README.md` for outputs and reproducible checks.

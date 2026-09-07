@@ -2,6 +2,48 @@
 
 ## Open Issues
 
+### Incomplete staffing coverage for VA-sample students per orientador
+
+- Status: Open
+- Date noted: 2026-09-07
+- Full 2018-2024 count build: 94 of the 3,682 broad-VA schools have at least
+  one year without a staff roster (268 missing school-years). Their full-period
+  primary and any-function denominators remain unknown. Missing years may
+  reflect school openings/closures or reporting gaps; these have not been resolved.
+- Additionally, 29 person-school-years have unresolved any-function orientador
+  status, affecting 28 covered school-years. There are no unresolved primary
+  counts and no invalid MRUN rows on the VA-school support in this build.
+  Altogether 120 schools have an incomplete any-function denominator.
+- Current rule: Require seven known annual counts for a full 2018-2024 mean.
+  Keep observed-years-only means as diagnostics, not substitute denominators.
+  Confirmed zero-orientador years enter the mean; missing records do not.
+- Output: `data/clean/docentes_educacion/va_schools_orientador_headcounts_2018_2024.csv`
+  exposes annual roster, role and ID coverage. The school-period file retains
+  all VA schools with separate zero-denominator and incomplete-coverage flags.
+- Follow-up: Audit missing rosters against school operating status and examine
+  ambiguous secondary-function codes before considering any alternative support.
+  At mixed-level schools, orientador headcounts are not allocated between HS
+  and other levels; the agreed ratio is a VA-sample staffing proxy, not actual
+  annual HS caseload or hours-adjusted counseling capacity.
+
+### Early teacher assignment histories have incomplete teaching-code slots
+
+- Status: Open
+- Date noted: 2026-09-07
+- Context: Validation of the HS-only teacher filter used the first 2,000
+  appointment rows from each annual file, not a representative/population sample.
+- What was found: 847, 896 and 894 teacher appointments in the 2013, 2014 and
+  2015 samples had uncertain HS assignment status because teaching-code slots
+  were missing. The 2016-2025 samples had none. No unmapped teaching codes or
+  code/level disagreements were found in this limited check.
+- Current rule: A confirmed regular-media code in either slot qualifies.
+  Without a confirmed HS code, a missing slot remains unknown, not zero HS
+  experience. Raw codes, unknown-assignment counts and prior known-year counts
+  remain available; no fallback to school offerings, degrees or NIVEL is used.
+- Follow-up: Before PCA, audit full-year coverage and establish whether specific
+  early empty-slot patterns denote an unused slot or genuinely missing teaching
+  assignments. Do not silently interpret uncertain history as non-HS teaching.
+
 ### Duplicate student-school rows in `sample_students`
 
 - Status: Open

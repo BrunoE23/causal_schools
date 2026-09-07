@@ -705,6 +705,38 @@ This matches the substantive expectation that `Particular Pagado` schools are ou
 
 ## Teacher and Orientador Characteristics: Planned HS Extension
 
+Current rule (2026-09-07; supersedes the initial plan below): build two
+school-period measures over 2018-2024, with role histories observed since 2013
+and reported `ANO_SERVICIO_EE` for school tenure. Teachers must have a classroom
+function and an educacion media assignment at the same RBD: `COD_ENS_1/2` in
+`310, 410, 510, 610, 710, 810, 910` (regular youth H-C, T-P or artistic media).
+Use `VA_TEACHER_ELIGIBLE` and `TEACHER_HS_*` histories for teacher construction.
+The orientador definition is unchanged. See `empirical_methods.md`, section
+"Staffing characteristics aligned with VA", for missing-code handling and scope.
+Orientador histories distinguish the current consecutive person and person-RBD
+spells from cumulative experience. `ORIENTADOR_PRIMARY_CUMULATIVE_YEARS_OBSERVED`
+counts primary-function (`ID_IFP=9`) years from 2013 through the current year
+across appointments; `ORIENTADOR_MAIN_CUMULATIVE_YEARS_OBSERVED` additionally
+restricts to `PERSONAS=1`. Strictly prior-year versions remain separate.
+The cleaner and synthetic tests are implemented; full outputs and PCA have not
+yet been produced.
+
+For the students-per-orientador extension, Bruno authorized using the VA
+estimation sample as the student numerator (2026-09-07), rather than treating
+school-directory `MAT_TOTAL` as HS-only enrollment. The broad saved VA sample
+has 757,999 students across 3,682 `most_time_RBD` schools in grade-8 cohorts
+2017-2020. School-specific `n_students` agree exactly across the saved exam-taking,
+STEM and full program-income VA inputs. These are VA-sample counts, not total
+HS enrollment or annual student caseloads. Staff-period normalization is
+recorded separately from the student count. Bruno approved the unweighted
+average of annual distinct-person orientador headcounts over 2018-2024 as the
+denominator. Both primary-function and primary-or-secondary-function ratios
+are implemented in `05_build_va_students_per_orientador.R`, with no main-appointment
+restriction. All seven annual counts must be known; confirmed zeros enter the
+mean, missing years do not become zeros. Zero-denominator and incomplete-coverage
+ratios remain missing with separate status flags. Outputs are in
+`data/clean/docentes_educacion/va_students_per_orientador_2018_2024.csv`.
+
 On 2026-09-06, Bruno specified that the next staffing extension should construct
 school-level staff characteristics first, using observed career trajectories and
 academic credentials. The intended outputs are two separate school-year scores:
