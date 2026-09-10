@@ -4,9 +4,10 @@ q_z <- function(x) {
   (x - mean(x)) / scale
 }
 
-q_fit_indices <- function(wide, role) {
-  components <- c("prior_role_years", "school_role_spell_years", "university_share",
+q_fit_indices <- function(wide, role, components = NULL) {
+  if (is.null(components)) components <- c("prior_role_years", "school_role_spell_years", "university_share",
                    if (role == "counselor") "teaching_title_share" else "hs_teaching_title_share")
+  stopifnot(length(components) == 4L, !anyDuplicated(components), all(components %in% names(wide)))
   eligible <- wide$N_ACTIVE_YEARS >= 3L & complete.cases(wide[, ..components])
   eligible[is.na(eligible)] <- FALSE
   x <- as.matrix(wide[eligible, ..components])

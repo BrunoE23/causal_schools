@@ -400,3 +400,17 @@ Use exact HC1 regression covariance, t inference and role-wide BH adjustments;
 do not infer causal staff effects or wage percentages from standardized betas.
 The decision record supplies all controls, support definitions, ranks/weights,
 PCA sign conventions and the separately fitted teacher-history-since-2016 check.
+
+### Leadership-only extension (2026-09-10)
+
+The same school-window construction is now implemented separately for primary
+or secondary leadership codes 3/4/10/15, with no HS-teaching requirement.
+The balanced score uses prior primary leadership years, current any-leadership
+school spell, university qualification and teaching qualification. It covers
+3,461 schools; the sensitivity truncating BOTH history components to 2015 covers
+3,447. Capacity is separate, not included in the qualifications/experience index.
+There are 504 main measure-outcome associations and 144 robustness rows; BH is
+within the leadership family (or robustness subsample), with the same HC1 model
+and contemporary 2024 controls. These are descriptive, not causal quality scores.
+Full coding-break treatment, normalization and checks are in
+`decisions/2026-09-10-leadership-characteristics-va.md`.

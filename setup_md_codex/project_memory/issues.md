@@ -2,6 +2,22 @@
 
 ## Open Issues
 
+### Pre-2015 director code includes profesores encargados
+
+- Status: Open historical-role ambiguity; explicit sensitivity completed.
+- Date noted: 2026-09-10.
+- MINEDUC ER_Cargos Docentes, Annex III p.16 footnote 27, says code 4 included
+  profesores encargados through 2014. Among 13,104 current leadership people,
+  2,340 have pre-2015 code-4 history; 40 have a specific possible 2014 code-4 to
+  2015 code-16 transition. The codebook does not identify which older staff were
+  directors rather than encargados.
+- Current rule: leadership codes 3/4/10/15 only; current code 16 does not qualify.
+  Flag ambiguous earlier history, exclude the specific code-break comparison
+  from switching rates, and compare an index with BOTH history components
+  truncated to 2015. Similar correlations do not resolve historical identity.
+- Evidence: data/clean/leadership_quality_va/leadership_history_verification.json.
+- Design: decisions/2026-09-10-leadership-characteristics-va.md.
+
 ### Reported staff school tenure changes to mostly zeros in 2019
 
 - Status: Open raw-data interpretation; completed analysis excludes broken period mean.
@@ -16,6 +32,9 @@
   separate diagnostic. The index uses observed current role-at-school spells,
   explicitly labeled, not period-average reported school tenure.
 - Evidence: `data/clean/staff_quality_va/staff_tenure_audit.csv`.
+- Leadership update (2026-09-10): 388/6,963 zeros in 2018 versus 4,878/7,093 in
+  2019, including 4,233 previously observed at that school. The same exclusion
+  applies; evidence in data/clean/leadership_quality_va/leadership_tenure_audit.csv.
 - Design/workaround: `decisions/2026-09-10-staff-characteristics-va.md`.
 - Follow-up: seek clarification on the annual collection/coding change before
   using post-2018 reported tenure substantively.

@@ -6,7 +6,7 @@ q_max_reported <- function(a, b) {
   ans
 }
 
-q_prepare_people <- function(dt, school_ids) {
+q_prepare_people <- function(dt, school_ids, extra_role_fields = character(), keep_all = FALSE) {
   dt <- copy(dt[RBD %in% school_ids & VALID_PERSON_ID == 1L])
   # Extra title and same-slot teaching indicators; never infer subject from title.
   hs_title <- lapply(1:2, function(k) {
@@ -35,7 +35,7 @@ q_prepare_people <- function(dt, school_ids) {
                                           as.logical(staff_role_flag(ID_IFS, 0L, TRUE)))]
   dt[, TEACHER_DEDICATED := as.integer(as.logical(TEACHER_PRIMARY) &
                                         as.logical(staff_role_flag(ID_IFS, 0L, TRUE)))]
-  role_fields <- c("ORIENTADOR_ANY", "ORIENTADOR_PRIMARY", "TEACHER_HS_ANY", "TEACHER_HS_PRIMARY")
+  role_fields <- c("ORIENTADOR_ANY", "ORIENTADOR_PRIMARY", "TEACHER_HS_ANY", "TEACHER_HS_PRIMARY", extra_role_fields)
   dedicated_fields <- c("COUNSELOR_DEDICATED", "TEACHER_DEDICATED")
   binary_fields <- c("UNIVERSITY_TERTIARY_QUALIFICATION_REPORTED", "TEACHING_TITLE_REPORTED",
     "HS_TEACHING_TITLE_REPORTED", "TERTIARY_QUALIFICATION_REPORTED", "HAS_SPECIALTY_REPORTED",
@@ -77,7 +77,7 @@ q_prepare_people <- function(dt, school_ids) {
   ), by = .(RBD, AGNO)]
   roster[, `:=`(N_COUNSELOR = fifelse(N_COUNSELOR_UNKNOWN == 0L, N_COUNSELOR_IDENTIFIED, NA_integer_),
                  N_TEACHER = fifelse(N_TEACHER_UNKNOWN == 0L, N_TEACHER_IDENTIFIED, NA_integer_))]
-  people <- people[ORIENTADOR_ANY == 1L | TEACHER_HS_ANY == 1L]
+  if (!keep_all) people <- people[ORIENTADOR_ANY == 1L | TEACHER_HS_ANY == 1L]
   list(people = people, roster = roster, conflicts = conflicts)
 }
 

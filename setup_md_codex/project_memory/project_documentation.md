@@ -731,6 +731,18 @@ report, `output/pdf/staff_quality_and_school_va_report.pdf`. Neither index is
 validated individual causal staff quality. Design, checks and findings are in
 `decisions/2026-09-10-staff-characteristics-va.md`.
 
+Leadership-only extension completed 2026-09-10: primary/secondary codes
+3, 4, 10, 15, without an HS-teaching-assignment restriction. The same 2018-2024
+school window and histories since 2013 produce an additional index for 3,461
+schools; teachers/orientadores remain unchanged. Preserve experience and
+credential blocks, capacity and detailed role shares separately. Both-history-
+since-2015 sensitivity addresses the ambiguous pre-2015 director code. Code,
+data and report use `leadership_quality_va` task paths; the report is
+`output/pdf/leadership_characteristics_and_school_va_report.pdf`. These are
+descriptive characteristics, not validated causal leadership quality. See
+`decisions/2026-09-10-leadership-characteristics-va.md` for exact definitions,
+normalization, supports, adjustment and verification.
+
 For the students-per-orientador extension, Bruno authorized using the VA
 estimation sample as the student numerator (2026-09-07), rather than treating
 school-directory `MAT_TOTAL` as HS-only enrollment. The broad saved VA sample
