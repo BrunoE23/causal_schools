@@ -743,6 +743,16 @@ descriptive characteristics, not validated causal leadership quality. See
 `decisions/2026-09-10-leadership-characteristics-va.md` for exact definitions,
 normalization, supports, adjustment and verification.
 
+Age diagnostic (2026-09-10): the 2024 DOC_FEC_NAC field is YYYYMM and usable
+for nearly all members of the three staff groups. Age attained during 2024
+is 2024 minus birth year, excluding placeholder 190001 and invalid/conflicting
+reports. Among unique people per role at VA schools, valid counts / medians are
+72,818 / 38 for HS teachers, 1,986 / 51 for orientadores, and 7,680 / 53 for
+leadership. Roles may overlap. The five-year-bin, within-role percentage plot is
+`output/figures/staff_quality_va/staff_age_distribution_2024.png`, reproduced by
+`code/codex/staff_quality_va/05_plot_staff_age_distribution.R`. This diagnostic
+does not add age to the saved indices or change their underlying datasets.
+
 For the students-per-orientador extension, Bruno authorized using the VA
 estimation sample as the student numerator (2026-09-07), rather than treating
 school-directory `MAT_TOTAL` as HS-only enrollment. The broad saved VA sample

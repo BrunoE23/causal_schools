@@ -163,3 +163,21 @@ especially for orientadores; retain experience and credentials as separate block
 Durable design and unresolved data issues are recorded in
 `setup_md_codex/project_memory/decisions/2026-09-10-staff-characteristics-va.md`,
 `empirical_methods.md` and `issues.md`.
+
+## 2024 age distribution
+
+`05_plot_staff_age_distribution.R` reads the existing teacher/orientador and
+leadership person-school-year caches and three columns from the 2024 raw file.
+It changes no data or scores and writes only
+`output/figures/staff_quality_va/staff_age_distribution_2024.png`.
+Run with `Rscript --vanilla code/codex/staff_quality_va/05_plot_staff_age_distribution.R`.
+Each person counts once within each role at VA schools; roles may overlap.
+Birth field DOC_FEC_NAC is YYYYMM in 2024. Age is 2024 minus birth year (age
+attained during the year), not exact age on the survey date. Exclude placeholder
+190001, malformed/month-invalid records, implied ages outside 18-100 and
+conflicting valid birth reports. Do not impute from other years in this plot.
+Five-year bins use percentages within role, common axes and median lines.
+Valid N / median: HS teachers 72,818 / 38; orientadores 1,986 / 51;
+leadership 7,680 / 53. Excluded ages: 36 / 0 / 12; no conflicting dates.
+Age is not a validated quality measure. All previous analysis outputs remain
+unchanged; the new figure is additional, not a replacement.
