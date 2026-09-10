@@ -703,7 +703,7 @@ A diagnostic run on the current `k100_timely_risk` SAE probability-support file 
 
 This matches the substantive expectation that `Particular Pagado` schools are outside the SAE system. This does not mean that all private-sector schools are absent from SAE: `Particular Subvencionado` schools are present in the SAE support and should be distinguished from `Particular Pagado` in plots, summaries, and binary-treatment definitions.
 
-## Teacher and Orientador Characteristics: Planned HS Extension
+## Teacher and Orientador Characteristics
 
 Current rule (2026-09-07; supersedes the initial plan below): build two
 school-period measures over 2018-2024, with role histories observed since 2013
@@ -718,8 +718,18 @@ spells from cumulative experience. `ORIENTADOR_PRIMARY_CUMULATIVE_YEARS_OBSERVED
 counts primary-function (`ID_IFP=9`) years from 2013 through the current year
 across appointments; `ORIENTADOR_MAIN_CUMULATIVE_YEARS_OBSERVED` additionally
 restricts to `PERSONAS=1`. Strictly prior-year versions remain separate.
-The cleaner and synthetic tests are implemented; full outputs and PCA have not
-yet been produced.
+The completed school-period measures, balanced indices and PCA are now produced
+by `code/codex/staff_quality_va/` (2026-09-10), with reusable tables under
+`data/clean/staff_quality_va/`. The lean build reads 2013-2024 staff sources
+directly and does not require the old full cleaner exports. Balanced indices
+cover 1,642 orientador and 2,706 teacher schools. Reported school tenure has a
+2019 zero-coding break: retain it for audit and use 2018 tenure separately, not
+its period average in the core. Experience and credentials remain separate
+blocks as well as entering an equally block-weighted standardized index.
+All 12 saved higher-education/score VA outcomes are covered by the association
+report, `output/pdf/staff_quality_and_school_va_report.pdf`. Neither index is
+validated individual causal staff quality. Design, checks and findings are in
+`decisions/2026-09-10-staff-characteristics-va.md`.
 
 For the students-per-orientador extension, Bruno authorized using the VA
 estimation sample as the student numerator (2026-09-07), rather than treating
@@ -739,10 +749,11 @@ ratios remain missing with separate status flags. Outputs are in
 
 On 2026-09-06, Bruno specified that the next staffing extension should construct
 school-level staff characteristics first, using observed career trajectories and
-academic credentials. The intended outputs are two separate school-year scores:
+academic credentials. The initial intended outputs were two school-year scores:
 one for teachers and one for orientadores, each combining those two blocks while
-retaining the component measures. Weights and normalization remain undecided;
-these are not yet estimated individual causal quality effects.
+retaining the component measures. This was superseded by the completed
+school-period construction and normalization described above; these remain
+observable school characteristics, not individual causal quality effects.
 
 The current teacher-directory cleaner retains all detailed main functions under
 `PERSONAS == 1`. `EVER_TEACHER` denotes anyone observed with `ID_IFP == 1` at
@@ -751,7 +762,8 @@ least once during 2018-2025. Both flags follow the person across all observed
 years and may overlap. The planned school-year aggregates use actual current
 function; full-window career labels are retrospective descriptions, not
 predetermined characteristics for earlier years. Prior-history construction,
-HS staffing coverage, and academic credential harmonization remain to implement.
+HS staffing coverage and academic credential harmonization are now implemented
+in the lean school-period workflow, with unresolved raw-data issues kept explicit.
 
 The concrete plan and open measurement choices are documented in
 `code/codex/docentes_educacion/README.md`.

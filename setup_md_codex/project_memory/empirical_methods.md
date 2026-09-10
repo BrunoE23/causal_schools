@@ -340,9 +340,9 @@ are supplemental and remain available to distinguish prior basic teaching from
 missing career records. `VA_TEACHER_ELIGIBLE` and `VA_ORIENTADOR_ELIGIBLE` keep
 the two rosters separate inside the combined appointment-level feature file.
 Orientador eligibility/history remains function-based and is not subject to the
-classroom-assignment filter. The final HS RBD support, orientador coverage of HS
-students, and school-window aggregation weights remain to be settled. PCA is
-proposed, not estimated; school VA will not be an input to its construction.
+classroom-assignment filter. School support, aggregation and PCA were settled
+in the completed 2026-09-10 construction below. Orientador allocation to HS
+versus other levels remains unknown. School VA is never an input to the indices.
 
 For students per orientador, the user authorized a VA-sample student numerator
 on 2026-09-07. The proposed common baseline is the broad estimation sample,
@@ -375,3 +375,28 @@ an undefined ratio and a separate no-orientador indicator, not zero workload.
 Count all school-specific appointments without restricting orientadores to HS
 classroom assignments; their coverage of HS versus other school levels is unknown.
 See `code/codex/docentes_educacion/README.md` for outputs and reproducible checks.
+
+### Completed staff indices and VA associations (2026-09-10)
+
+The implemented specification, normalization, missingness gates and inference
+are recorded in `decisions/2026-09-10-staff-characteristics-va.md`. The common
+3,682-school support uses 2018-2024 current staff and 2013-onward histories.
+Equal-person annual means require 80% eligible-member coverage. Equal-active-year
+period means require all seven annual role counts and 80% valid eligible years.
+No staff is not zero qualifications. Indices require three active years and all
+four components: prior role years, current school-role spell, university share,
+and teaching-title share (HS-specific for teachers). Z-standardize components,
+form/standardize two equal-component blocks, then equally weight/standardize
+the blocks. Fit PCA to the same staff-only components as a sensitivity.
+Reported period-average school tenure is excluded after the 2019 coding-break
+audit; the preserved raw-reported field and 2018 baseline remain separately
+available. This supersedes using period-average reported tenure as a core input.
+
+The output contains 876 measure-outcome associations using saved All-sample EB
+VA, unshrunk counterparts, and 288 alternative-support index associations.
+Adjusted regressions standardize the staff variable and VA within complete cases
+and include log size and its square plus 2024 categorical school context.
+Use exact HC1 regression covariance, t inference and role-wide BH adjustments;
+do not infer causal staff effects or wage percentages from standardized betas.
+The decision record supplies all controls, support definitions, ranks/weights,
+PCA sign conventions and the separately fitted teacher-history-since-2016 check.

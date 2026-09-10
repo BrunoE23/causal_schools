@@ -2,6 +2,24 @@
 
 ## Open Issues
 
+### Reported staff school tenure changes to mostly zeros in 2019
+
+- Status: Open raw-data interpretation; completed analysis excludes broken period mean.
+- Date noted: 2026-09-09.
+- At VA schools, orientador reported-tenure zeros rise from 130/1,993 records
+  in 2018 to 1,865/1,961 in 2019. Of the 2019 zeros, 1,702 people were already
+  observed at that school. In 2024, 1,906/1,995 are zero, including 1,737
+  previously seen people. Teachers show the same break (66,495/70,521 zeros in
+  2019, of which 52,804 were previously seen at that school).
+- Keep ANO_SERVICIO_EE unchanged; do not recode all zeros as true new arrivals
+  or overwrite them with reconstructed history. Use reported 2018 tenure as a
+  separate diagnostic. The index uses observed current role-at-school spells,
+  explicitly labeled, not period-average reported school tenure.
+- Evidence: `data/clean/staff_quality_va/staff_tenure_audit.csv`.
+- Design/workaround: `decisions/2026-09-10-staff-characteristics-va.md`.
+- Follow-up: seek clarification on the annual collection/coding change before
+  using post-2018 reported tenure substantively.
+
 ### Incomplete staffing coverage for VA-sample students per orientador
 
 - Status: Open
@@ -40,9 +58,14 @@
   Without a confirmed HS code, a missing slot remains unknown, not zero HS
   experience. Raw codes, unknown-assignment counts and prior known-year counts
   remain available; no fallback to school offerings, degrees or NIVEL is used.
-- Follow-up: Before PCA, audit full-year coverage and establish whether specific
-  early empty-slot patterns denote an unused slot or genuinely missing teaching
+- Follow-up: Establish whether specific early empty-slot patterns denote an
+  unused slot or genuinely missing teaching
   assignments. Do not silently interpret uncertain history as non-HS teaching.
+- 2026-09-10 update: the full-year audit confirms 110,916, 116,426 and 121,759
+  nationally uncertain teacher-assignment rows in 2013-2015, versus 10 in 2016.
+  A separately fitted balanced index with prior HS history starting in 2016 is
+  completed and yields similar teacher-VA associations. The raw-code meaning
+  remains unresolved; no early missing slot was imputed. See the staff decision.
 
 ### Duplicate student-school rows in `sample_students`
 
