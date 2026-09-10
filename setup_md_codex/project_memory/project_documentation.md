@@ -753,6 +753,13 @@ leadership. Roles may overlap. The five-year-bin, within-role percentage plot is
 `code/codex/staff_quality_va/05_plot_staff_age_distribution.R`. This diagnostic
 does not add age to the saved indices or change their underlying datasets.
 
+The `--non-hs` comparison option uses confirmed other-level classroom teachers
+at those VA schools, excluding anyone teaching regular youth HS anywhere in
+the national 2024 file or with uncertain assignment slots. Adult education is
+outside the project's youth-HS definition. There are 64,593 valid ages (median
+39, mean 41.33) versus HS median 38 / mean 41.05. This is not a national non-HS
+sample. The histogram is `teacher_age_hs_vs_nonhs_2024.png` in the same folder.
+
 For the students-per-orientador extension, Bruno authorized using the VA
 estimation sample as the student numerator (2026-09-07), rather than treating
 school-directory `MAT_TOTAL` as HS-only enrollment. The broad saved VA sample

@@ -181,3 +181,19 @@ Valid N / median: HS teachers 72,818 / 38; orientadores 1,986 / 51;
 leadership 7,680 / 53. Excluded ages: 36 / 0 / 12; no conflicting dates.
 Age is not a validated quality measure. All previous analysis outputs remain
 unchanged; the new figure is additional, not a replacement.
+
+For the requested non-HS comparison, run the same script with `--non-hs`.
+It writes `teacher_age_hs_vs_nonhs_2024.png`, preserving the three-role figure.
+The non-HS group contains confirmed classroom teachers with an observed other-
+level assignment at a VA school and no regular youth-HS teaching appointment
+anywhere in the 2024 national file. Require both assignment slots to be known
+across their classroom appointments; slots both zero do not establish an actual
+other-level assignment. Adult education remains outside the project's youth-HS
+definition and can enter this comparison group. HS comparison membership remains
+the previous VA-school HS group. The groups are disjoint.
+There are 64,604 non-HS people, 64,593 with valid ages (11 missing; zero birth
+conflicts), mean 41.33, median 39, quartiles 33/48. The HS mean is 41.05 and median
+38. Among VA-school classroom teachers with no national HS assignment, 1,189
+lack an actual other-level assignment at a VA school and are excluded; none
+have unknown assignment slots. Results describe these schools, not all Chilean
+non-HS teachers. The source datasets and prior figures are unchanged.
