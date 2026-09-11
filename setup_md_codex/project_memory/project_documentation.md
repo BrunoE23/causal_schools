@@ -760,6 +760,21 @@ outside the project's youth-HS definition. There are 64,593 valid ages (median
 39, mean 41.33) versus HS median 38 / mean 41.05. This is not a national non-HS
 sample. The histogram is `teacher_age_hs_vs_nonhs_2024.png` in the same folder.
 
+Graduation linkage (2026-09-10): `code/codex/titulados_staff_linkage/` cleans
+all 19 SIES cohorts 2007-2025 and links exact MRUN to those staff groups.
+Raw files include a duplicate copy of 2017 in the 2018 folder; it is verified
+and excluded. Named institutions/programs can be recovered, but undergraduate,
+postgraduate and postitulo matches must remain distinct. By 2024, any-award /
+undergraduate matching is 75.3% / 68.6% for HS teachers, 74.5% / 65.8% for
+non-HS teachers, 69.5% / 36.4% for orientadores and 62.9% / 29.9% for leaders.
+The underlying denominator is unique people per role at VA schools. Dated
+matches require report and actual award year <=staff year; some reporting
+cohorts include awards in the following calendar year. Full design, checks and
+limitations: `decisions/2026-09-10-titulados-staff-linkage.md`. Clean/private
+outputs are under `data/clean/titulados_staff_linkage/`; aggregate report at
+`output/reports/titulados_staff_match_report.md`. Existing staff indices remain
+unchanged; these links do not by themselves establish institution quality.
+
 For the students-per-orientador extension, Bruno authorized using the VA
 estimation sample as the student numerator (2026-09-07), rather than treating
 school-directory `MAT_TOTAL` as HS-only enrollment. The broad saved VA sample

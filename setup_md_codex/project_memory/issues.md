@@ -2,6 +2,28 @@
 
 ## Open Issues
 
+### Staff graduation linkage has cohort censoring and occasional identity disagreements
+
+- Status: Open measurement limitations; complete cleaning and linkage available.
+- Date noted: 2026-09-10.
+- SIES records begin with reporting cohort 2007 and include undergraduate,
+  postgraduate and postitulo awards. Older staff can match a later diploma
+  without their original undergraduate degree being observed. Missing links
+  are not proof of no qualification. Foreign degrees/nonreporting institutions
+  can also be absent (U. Gabriela Mistral 2009-2010; CFT INFOMED 2009-2011).
+- Cohort year is not always award year: actual awards can occur in the next
+  calendar year. Dated attributes require both years <=staff year. Do not
+  import 2025/2026 qualifications into 2024 staff characteristics.
+- Exact-MRUN birth-month agreement is above 99.9% among comparable 2024 people,
+  but some linked people have disagreeing records: 50 HS teachers, 24 non-HS
+  teachers, 5 orientadores and 5 leaders have at least one disagreement.
+  Agreement and disagreement can coexist; no automatic identity repair.
+- Staff reported title years do not perfectly coincide with recorded degree
+  dates, and can refer to different qualifications. Retain all awards; do not
+  choose an original teaching degree merely from a first arbitrary record.
+- Evidence and definitions: `decisions/2026-09-10-titulados-staff-linkage.md` and
+  `data/clean/titulados_staff_linkage/staff_match_2024_identity_summary.csv`.
+
 ### Pre-2015 director code includes profesores encargados
 
 - Status: Open historical-role ambiguity; explicit sensitivity completed.
