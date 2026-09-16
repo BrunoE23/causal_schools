@@ -118,3 +118,37 @@ must remain outside Git. This task does not modify the previous staff scores.
 The reader-facing report is `output/reports/titulados_staff_match_report.md`.
 The compact `staff_match_2024_overview.csv` has explicit count and percentage
 columns. No individual records appear in the report or committed outputs.
+
+## Agreed credential-indicator extension (2026-09-16; not yet computed)
+
+The requested person-role-year indicators are:
+
+1. `UG_HIGH_PREMIUM`: any observed undergraduate qualification at a
+   high-premium institution.
+2. `ANY_POST_UG`: any observed non-undergraduate qualification, including
+   diplomados, postitulos, magisters and doctorates.
+3. `POST_UG_HIGH_PREMIUM`: any such non-undergraduate qualification at a
+   high-premium institution.
+4. `ANY_HIGH_PREMIUM`: any observed qualification at a high-premium institution.
+5. `ROLE_SPECIFIC_QUALIFICATION`: any observed qualification relevant to the
+   person's current role.
+6. `ANY_MAGISTER`: any observed qualification classified as Magister in
+   NIVEL_CARRERA_1; a doctorate alone does not qualify.
+7. `MAGISTER_HIGH_PREMIUM`: an observed Magister awarded by a high-premium
+   institution. Separate degrees cannot jointly satisfy this condition.
+8. `ROLE_SPECIFIC_MAGISTER`: an observed Magister whose own subject matches
+   the person's current role; a general Magister plus a relevant non-master's
+   qualification does not qualify.
+
+Agreed subject domains: education, curriculum, teaching methods and assessment
+for teachers; orientation, vocational counseling, psychoeducation and family
+counseling for orientadores; management, educational administration and school
+leadership for leadership. The exact program-level mapping still needs to be
+constructed and reviewed, not inferred from an unrestricted keyword match.
+Reuse the project's existing high-premium institution definition after checking
+its institution-code crosswalk; do not invent a new ranking.
+
+Apply the existing as-of staff-year rule to each qualifying award. Retain degree
+level and coverage flags. Zero means no qualifying award observed in the covered
+records, not verified lifetime absence. These are agreed definitions only; the
+current output files do not yet contain these eight indicators.

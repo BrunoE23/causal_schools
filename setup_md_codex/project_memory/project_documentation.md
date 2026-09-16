@@ -812,6 +812,28 @@ in the lean school-period workflow, with unresolved raw-data issues kept explici
 The concrete plan and open measurement choices are documented in
 `code/codex/docentes_educacion/README.md`.
 
+## Planned staff credential indicators (2026-09-16)
+
+Bruno agreed to distinguish any observed non-undergraduate qualification
+(including postitulos and diplomados) from Magister qualifications. The planned
+eight person-role-year binaries are undergraduate at a high-premium institution,
+any non-undergraduate qualification, non-undergraduate at a high-premium
+institution, any qualification at a high-premium institution, role-specific
+qualification, any Magister, Magister at a high-premium institution, and
+role-specific Magister. A relevant Magister must itself meet the subject rule;
+a relevant diploma plus an unrelated Magister is insufficient. A doctorate
+alone is not an observed Magister.
+
+Role-specific domains are education/curriculum/teaching/assessment for teachers,
+orientation/vocational counseling/psychoeducation/family counseling for
+orientadores, and management/educational administration/school leadership for
+leadership. Bruno corrected an earlier reference to gestion: it applies to
+leadership, not orientadores. These definitions are not yet implemented. The
+program-level subject mapping and existing high-premium institution crosswalk
+must be checked before building. Preserve award-as-of-year restrictions and
+coverage flags; an observed zero cannot establish lifetime absence with records
+starting in 2007. See code/codex/titulados_staff_linkage/README.md.
+
 ## School Public Funding Per Student
 
 A first-pass school resource measure is constructed from the MINEDUC `Subvenciones-a-EE` files for 2017-2021.
