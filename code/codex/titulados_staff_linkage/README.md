@@ -119,7 +119,7 @@ The reader-facing report is `output/reports/titulados_staff_match_report.md`.
 The compact `staff_match_2024_overview.csv` has explicit count and percentage
 columns. No individual records appear in the report or committed outputs.
 
-## Agreed credential-indicator extension (2026-09-16; not yet computed)
+## Credential-indicator extension (computed 2026-09-16)
 
 The requested person-role-year indicators are:
 
@@ -143,12 +143,75 @@ The requested person-role-year indicators are:
 Agreed subject domains: education, curriculum, teaching methods and assessment
 for teachers; orientation, vocational counseling, psychoeducation and family
 counseling for orientadores; management, educational administration and school
-leadership for leadership. The exact program-level mapping still needs to be
-constructed and reviewed, not inferred from an unrestricted keyword match.
-Reuse the project's existing high-premium institution definition after checking
-its institution-code crosswalk; do not invent a new ranking.
+leadership for leadership. The first explicit rule-based program/title/degree
+mapping is implemented in `credential_helpers.R` and exported for review.
+Teacher rules include the SIES Education area and explicit teaching subjects.
+Orientador rules require orientation/counseling/psychoeducation/family mediation
+or advising, not generic psychology/psychopedagogy alone. Leadership requires
+management/administration/direction/leadership plus education context in the same
+field, not a generic MBA. These are reviewable first definitions, not a manually
+validated taxonomy or a measure of causal staff quality.
+
+Where a program lists several mentions but the recorded title/degree specifies
+a different mention and neither award field supports that role, exclude the
+program-menu inference. Program-only matches without a contradictory awarded
+mention are retained with explicit review flags. `credential_subject_overrides.csv`
+supports exact program/title/degree/area overrides for each role, with a required
+reason. Blank role override cells preserve defaults; blank source fields are
+missing values, not wildcards. Case/accents/punctuation are normalized. Duplicate
+or unknown signatures fail; the baseline override file is empty.
+
+High premium reuses the existing MiFuturo institution-plus-field model's centered
+institution FE strictly greater than 0.1. Map by SIES institution code, the first
+component of the existing unique model key. No refitting or fuzzy-name matching.
+The fixed FE snapshot is not a historical or postgraduate-specific premium.
+Absent FE estimates give observed zero as in `high_inst_m1`; separate uncovered-
+institution flags preserve this limitation. University/IP/CFT status is not an
+additional restriction on the existing high-premium definition.
 
 Apply the existing as-of staff-year rule to each qualifying award. Retain degree
 level and coverage flags. Zero means no qualifying award observed in the covered
-records, not verified lifetime absence. These are agreed definitions only; the
-current output files do not yet contain these eight indicators.
+records, not verified lifetime absence. The extension covers 614,435 person-role-
+years and 186,990 distinct people. The 2024 snapshot has 147,136 role memberships
+and 145,819 distinct people; overlaps across roles are retained. Non-HS remains
+2024 only. Existing staff indices, raw data and prior linkage outputs are intact.
+
+Run with R/data.table and the project's Python/pandas/numpy runtime:
+
+```powershell
+Rscript --vanilla code/codex/titulados_staff_linkage/test_credentials.R
+Rscript --vanilla code/codex/titulados_staff_linkage/06_build_credential_indicators.R
+python code/codex/titulados_staff_linkage/07_write_credential_review.py
+```
+
+The builder refuses populated credential outputs unless `--overwrite` is supplied.
+After editing rules/overrides, rerun both the builder with `--overwrite` and the
+Python review generator; the latter also independently verifies all eight saved
+indicators. `--review-only` builds only the subject/institution review mappings.
+
+Outputs under `data/clean/titulados_staff_linkage/credentials/`:
+
+- `staff_credentials_person_role_year.csv.gz`: full panel and coverage/level flags.
+- `staff_credentials_2024.csv.gz`: current snapshot, one row per MRUN-role.
+- `staff_credentials_summary.csv`: role-year counts/shares, including zeros.
+- `credential_award_evidence.csv.gz`: private source-award evidence and rules.
+- `credential_subject_mapping.csv`: full historical program/title/degree mapping.
+- `role_specific_review_2024.csv`: all included and excluded 2024 qualification
+  signatures with role-specific counts, rules and priority-review flags.
+- `credential_institution_mapping.csv`: exact code-to-FE mapping and coverage.
+- `credential_dictionary.csv`, `credential_input_manifest.csv`,
+  `credential_verification.csv`, `credential_independent_verification.json`.
+
+The readable review document is
+`output/reports/staff_credential_specialization_review.md`. It lists all included
+2024 program names by role and all program-only/conflicting-mention priority
+cases for orientadores and leadership. It explains consequential boundaries
+and how to change them without editing raw data. Full historical signatures
+(including future awards excluded from earlier indicators) remain in the CSV.
+
+Verification: targeted synthetic tests; independent direct role-year set checks
+of 10,445,395 R binary cells including coverage; Python reconstruction of the six
+non-subject conditions from source fields and checks of all 4,915,480 core binary
+cells; exact prior-coverage reconciliation; snapshot equality; input hash checks.
+Subject aggregation is verified, but substantive taxonomy choices remain open
+to review. Individual records remain Git-ignored.

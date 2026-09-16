@@ -2,6 +2,26 @@
 
 ## Open Issues
 
+### Staff credential subject taxonomy and premium coverage need substantive review
+
+- Status: Computed first specification; reviewable definitions, not validated
+  staff-quality measures. Date: 2026-09-16.
+- The teacher definition includes generic education and original undergraduate
+  teaching qualifications. Whether specialization should require additional or
+  HS-specific training remains a review choice, not a restriction imposed here.
+- Program labels can list multiple mentions. Contradictory specific awarded
+  mentions override program menus; remaining program-only matches are flagged.
+  Generic psychology/psychopedagogy and MBAs are excluded from orientador and
+  leadership matches respectively. Family mediation/psychoeducational inclusion
+  and curriculum/convivencia management are included but explicitly reviewable.
+- MiFuturo has no institution FE for some common institutions, including
+  Universidad Miguel de Cervantes. Existing high_inst coding assigns observed
+  zero; separate missing-FE indicators distinguish this from estimated low FE.
+  Fixed FE classifications are not graduation-year or master's-specific premia.
+- Review output/reports/staff_credential_specialization_review.md and the full
+  role-specific CSV. Definitions and reproducible override workflow:
+  decisions/2026-09-16-staff-credential-indicators.md. Rebuild after changes.
+
 ### Staff graduation linkage has cohort censoring and occasional identity disagreements
 
 - Status: Open measurement limitations; complete cleaning and linkage available.

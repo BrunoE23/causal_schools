@@ -812,10 +812,10 @@ in the lean school-period workflow, with unresolved raw-data issues kept explici
 The concrete plan and open measurement choices are documented in
 `code/codex/docentes_educacion/README.md`.
 
-## Planned staff credential indicators (2026-09-16)
+## Staff credential indicators (implemented 2026-09-16)
 
 Bruno agreed to distinguish any observed non-undergraduate qualification
-(including postitulos and diplomados) from Magister qualifications. The planned
+(including postitulos and diplomados) from Magister qualifications. The computed
 eight person-role-year binaries are undergraduate at a high-premium institution,
 any non-undergraduate qualification, non-undergraduate at a high-premium
 institution, any qualification at a high-premium institution, role-specific
@@ -828,11 +828,19 @@ Role-specific domains are education/curriculum/teaching/assessment for teachers,
 orientation/vocational counseling/psychoeducation/family counseling for
 orientadores, and management/educational administration/school leadership for
 leadership. Bruno corrected an earlier reference to gestion: it applies to
-leadership, not orientadores. These definitions are not yet implemented. The
-program-level subject mapping and existing high-premium institution crosswalk
-must be checked before building. Preserve award-as-of-year restrictions and
-coverage flags; an observed zero cannot establish lifetime absence with records
-starting in 2007. See code/codex/titulados_staff_linkage/README.md.
+leadership, not orientadores. First rule-based definitions and exact reviewed
+overrides are implemented, with a user-requested review document listing
+included programs and uncertain program-only/conflicting-mention cases.
+High premium is the existing centered MiFuturo institution FE >0.1, linked by
+SIES code; unsupported institutions are observed zero with separate coverage
+flags. A specific awarded mention overrides a contradictory program menu.
+Preserve award-as-of-year restrictions; an observed zero cannot establish
+lifetime absence with records starting in 2007. Outputs cover 614,435 person-
+role-years (186,990 distinct people), including 147,136 role memberships in
+2024 (145,819 people). Non-HS is 2024 only. Raw/prior staff datasets are intact.
+See code/codex/titulados_staff_linkage/README.md, the review document
+output/reports/staff_credential_specialization_review.md, and
+decisions/2026-09-16-staff-credential-indicators.md.
 
 ## School Public Funding Per Student
 
