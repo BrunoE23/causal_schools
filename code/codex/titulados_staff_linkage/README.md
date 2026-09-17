@@ -259,3 +259,52 @@ original VA equality, denominator reconciliation, BH adjustments and source
 hashes. It writes `output/reports/school_staff_titulados_coverage_va.md`.
 Two checked PNGs are in `output/figures/titulados_school_coverage/`. All new
 analysis CSVs remain under `data/clean/titulados_staff_linkage/school_coverage/`.
+
+## Orientador credentials versus non-achievement VA (2026-09-17)
+
+`10_orientador_credentials_va.R` aggregates the eight existing, as-of-year
+credential binaries among current primary-or-secondary orientadores. Annual
+denominator is all distinct orientadores at that school; the primary period
+share is the equally weighted mean of active-year shares, 2018-2024, requiring
+all seven role counts known. No orientadores means undefined, not zero. The
+definitions and classifications are unchanged from the credential build.
+
+The ten non-score outcomes include exam taking and the nine higher-education
+outcomes from the existing VA dictionary; exclude math and language scores.
+Use equally weighted-school Pearson/Spearman correlations with saved All-sample
+EB VA, plus student-weighted and unshrunk-VA checks. BH adjustment is across all
+80 metric-outcome tests, separately within each reported specification.
+
+Coverage checks are explicit sensitivities, not corrections for missing data:
+
+- Partial correlations residualize both the share and VA on an intercept,
+  any-award matching share and undergraduate-matching share in the same main
+  sample. Report partial r without claiming a causal adjusted coefficient.
+- Matched-only shares condition on any observed qualification, except that
+  UG-high-premium conditions on an observed UG qualification. Require nonempty
+  matched denominators in >=80% of active years and average their annual shares.
+  Samples shrink to 1,153 / 526 schools for the full-income outcome, respectively.
+- Separately require at least three active orientador years.
+
+All qualification evidence is dated by staff year. Observed zeros remain
+subject to 2007 cohort censoring and institution-FE coverage limits. No new
+school-context/age-adjusted regressions or VA estimation are performed.
+
+```powershell
+Rscript --vanilla code/codex/titulados_staff_linkage/10_orientador_credentials_va.R
+python code/codex/titulados_staff_linkage/11_verify_orientador_credentials_report.py
+```
+
+Use `--overwrite` for an intentional rebuild. Data and full correlations are in
+`data/clean/titulados_staff_linkage/orientador_credentials_va/`. The readable
+report is `output/reports/orientador_credentials_nonachievement_va.md`; the
+80-cell figure is `output/figures/orientador_credentials_va/`.
+Independent verification reconstructs annual and period denominators/rates,
+checks all 240 correlation rows and 80 coverage partial correlations, all BH
+adjustments, original VA equality and source preservation.
+
+Main findings: orientation-related qualification shares correlate 0.080 with
+enrollment VA, 0.075 with high-premium-field VA and 0.087 with full income VA.
+UG at a high-premium institution correlates 0.144 with high-premium-institution
+VA; any award at one correlates 0.133. Any-magister/full-income r is 0.015.
+These are modest descriptive associations, not evidence of causal staff effects.

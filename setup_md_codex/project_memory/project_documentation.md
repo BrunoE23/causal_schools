@@ -860,6 +860,23 @@ Data: data/clean/titulados_staff_linkage/school_coverage/; report:
 output/reports/school_staff_titulados_coverage_va.md. See
 decisions/2026-09-17-school-staff-linkage-coverage-va.md for definitions and checks.
 
+## Orientador credentials and non-achievement VA (2026-09-17)
+
+The eight observed credential measures are now correlated with ten non-score
+All-sample EB VA outcomes (exam taking plus nine higher-education outcomes).
+School shares average annual credential fractions among all current orientadores
+over active years in 2018-2024, requiring known counts in all seven years.
+Main support is 2,111 schools, with 2,037-2,111 available by VA outcome. Math and
+language scores are excluded. BH correction covers all 80 tests per specification.
+Orientation-related training correlates 0.080 with enrollment, 0.075 with high-
+premium-field and 0.087 with full-income VA; income remains 0.085 after partialling
+database coverage and 0.103 among matched records. UG at high-premium institutions
+correlates 0.144 with high-premium-institution VA. Any-Magister/full-income r=0.015.
+These are descriptive, not causal. Matched-only and >=3-active-year sensitivities
+are explicit and separate. Report: output/reports/orientador_credentials_nonachievement_va.md.
+Data: data/clean/titulados_staff_linkage/orientador_credentials_va/. Method and
+verification: decisions/2026-09-17-orientador-credentials-nonachievement-va.md.
+
 ## School Public Funding Per Student
 
 A first-pass school resource measure is constructed from the MINEDUC `Subvenciones-a-EE` files for 2017-2021.
