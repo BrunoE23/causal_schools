@@ -842,6 +842,24 @@ See code/codex/titulados_staff_linkage/README.md, the review document
 output/reports/staff_credential_specialization_review.md, and
 decisions/2026-09-16-staff-credential-indicators.md.
 
+## School staff titulados linkage coverage (2026-09-17)
+
+School-role matching rates are computed from distinct annual staff members and
+averaged equally over active-role years in 2018-2024, requiring all seven role
+counts known. Main ANY_DB is any exact-MRUN award match in the 2007-2025 database;
+UG_DB, ANY_ASOF and UG_ASOF are separate definitions. Absent roles are undefined,
+not zero. All 3,682 schools remain in the wide output with coverage statuses.
+Teachers here means HS teachers. Main means are 71.7% / 61.8% / 56.7% for
+teachers/orientadores/leadership over 3,003 / 2,111 / 3,550 schools.
+Correlations use the saved 12 All-sample EB VA outcomes, equally weighted schools,
+with rank, student-weighted, unshrunk and aggregation sensitivities. These test
+database coverage, not the eight credential indicators. Teacher coverage has
+r=-0.124 with high-premium-institution VA and +0.113 with higher-ed enrollment VA;
+undergraduate-only coverage has r=-0.210 with high-premium-institution VA.
+Data: data/clean/titulados_staff_linkage/school_coverage/; report:
+output/reports/school_staff_titulados_coverage_va.md. See
+decisions/2026-09-17-school-staff-linkage-coverage-va.md for definitions and checks.
+
 ## School Public Funding Per Student
 
 A first-pass school resource measure is constructed from the MINEDUC `Subvenciones-a-EE` files for 2017-2021.

@@ -215,3 +215,47 @@ non-subject conditions from source fields and checks of all 4,915,480 core binar
 cells; exact prior-coverage reconciliation; snapshot equality; input hash checks.
 Subject aggregation is verified, but substantive taxonomy choices remain open
 to review. Individual records remain Git-ignored.
+
+## School matching coverage and VA (2026-09-17)
+
+`08_school_match_coverage_va.R` constructs school-level coverage for HS teachers,
+orientadores and leadership, using existing exact-ID flags and memberships.
+Main `ANY_DB` is any match in the 2007-2025 reporting-cohort database; it is a
+linkage diagnostic, not a time-t credential. `UG_DB` restricts to undergraduate
+records. `ANY_ASOF` and `UG_ASOF` require awards reported/obtained by staff year.
+Do not confuse these matching measures with the eight credential indicators.
+
+Annual denominator: distinct role members at each school. Average annual shares
+equally over active-role years, 2018-2024. Require all seven role counts known
+for the main period share. Absent roles have undefined rates, not zero; schools
+with partial count coverage retain an observed-years sensitivity but no main
+rate. All 3,682 schools remain in the wide output for all three roles. Non-HS
+comparison teachers are not silently combined with HS teachers.
+
+The primary school file is
+`data/clean/titulados_staff_linkage/school_coverage/school_staff_match_rates.csv`.
+Long annual/period files retain matched counts, denominator counts, years of
+support, partial-roster status, pooled person-year and unique-person alternative
+rates. Main coverage means are 71.7% / 61.8% / 56.7% for teachers/orientadores/
+leadership, over 3,003 / 2,111 / 3,550 schools respectively.
+
+Use the existing 12 All-sample saved EB VA outcomes, equally weighted schools,
+and outcome-specific complete-case samples. Export Pearson (with conventional
+CI/p-values), Spearman (10 significant-digit tie convention), broad-VA-student-
+weighted and unshrunk-VA correlations. BH is within role and coverage definition.
+Sensitivity checks vary aggregation to pooled staff person-years or unique
+people, and require three active staff years. No adjusted regressions or causal
+interpretation; no re-estimation of VA or staff-quality scores.
+
+```powershell
+Rscript --vanilla code/codex/titulados_staff_linkage/08_school_match_coverage_va.R
+python code/codex/titulados_staff_linkage/09_verify_school_coverage_report.py
+```
+
+The R build refuses existing owned outputs unless `--overwrite` is specified.
+Python independently verifies 309,288 annual rows, 44,184 period rows, all
+distribution summaries, 144 correlation rows and 108 sensitivity rows, plus
+original VA equality, denominator reconciliation, BH adjustments and source
+hashes. It writes `output/reports/school_staff_titulados_coverage_va.md`.
+Two checked PNGs are in `output/figures/titulados_school_coverage/`. All new
+analysis CSVs remain under `data/clean/titulados_staff_linkage/school_coverage/`.
