@@ -1,5 +1,6 @@
 """Independent prediction/aggregation checks and readable all-outcome tables."""
 from pathlib import Path
+from datetime import date
 import hashlib
 import html
 import json
@@ -7,6 +8,7 @@ import warnings
 
 import numpy as np
 import pandas as pd
+from verify_extended_characteristics import verify as verify_extension
 
 ROOT = Path(__file__).resolve().parents[3]
 OUT = ROOT / 'data/clean/staff_lasso_va'
@@ -26,7 +28,10 @@ for row in manifest.itertuples():
     with open(row.PATH, 'rb') as source:
         assert hashlib.file_digest(source, 'md5').hexdigest() == row.MD5
 paths = dict(zip(manifest.SOURCE, manifest.PATH))
+verify_extension()
 x = pd.read_csv(OUT / 'school_predictors.csv').set_index('RBD')
+extension = pd.read_csv(OUT / 'extended_school_predictors.csv').set_index('RBD')
+close(x.loc[extension.index, extension.columns], extension)
 dictionary = pd.read_csv(OUT / 'predictor_dictionary.csv').set_index('FEATURE')
 outcomes = pd.read_csv(OUT / 'outcome_dictionary.csv')
 performance = pd.read_csv(OUT / 'lasso_performance.csv')
@@ -37,7 +42,7 @@ analysis = pd.read_csv(OUT / 'school_va_analysis.csv.gz')
 audit = pd.read_csv(OUT / 'lasso_fit_audit.csv')
 curves = pd.read_csv(OUT / 'lasso_cv_curves.csv')
 freq = pd.read_csv(OUT / 'lasso_selection_frequency.csv')
-assert x.index.is_unique and len(x) == 3682 and len(dictionary) == 175
+assert x.index.is_unique and len(x) == 3682 and len(dictionary) == 212
 assert not pred.duplicated(['RBD', 'OUTCOME', 'SPEC', 'RULE']).any()
 assert len(performance) == 48 and len(audit) == 288
 assert (coef.SELECTED == coef.BETA_SD.ne(0)).all()
@@ -169,7 +174,7 @@ verification = dict(status='passed', schools=len(x), candidates=len(dictionary),
 (OUT / 'independent_verification.json').write_text(json.dumps(verification, indent=2), encoding='utf-8')
 
 # Reader-facing tables. Coefficients are SD-per-SD; no post-selection significance tests.
-role_names = {'teacher': 'HS teachers', 'counselor': 'Orientadores', 'leadership': 'Leadership', 'school': 'School context'}
+role_names = {'teacher': 'HS teachers', 'counselor': 'Orientadores', 'leadership': 'Leadership', 'school': 'School characteristics'}
 ordered_outcomes = outcomes.OUTCOME.tolist()
 short = ['Math', 'Language', 'Exam taking', 'HE enrollment', 'STEM', 'HP field', 'HP institution',
          'Income: full', 'Income: field', 'Income: institution', 'Program accreditation', 'Institution accreditation']
@@ -243,18 +248,24 @@ notes = [
     'One Gaussian Lasso per saved All-sample EB VA outcome. All three staff groups enter jointly; schools receive equal weight.',
     'Main coefficients use the one-standard-error penalty. Each entry is outcome SD per predictor SD, conditional on all selected predictors. Dashes mean zero coefficients, not unavailable outcomes. No significance stars are used.',
     'Staff components and as-of credential shares refer to 2018–2024; observed career histories start in 2013. Teachers are HS-assigned classroom teachers. Orientadores and leaders can hold primary or secondary roles.',
-    'The 175 candidates comprise 39 school, 43 teacher, 46 orientador and 47 leadership measures. Each also has a missingness indicator; training-constant columns are removed. Composite indices and alternative-history versions are excluded; broken post-2018 reported-tenure averages are excluded.',
+    'The 212 candidates comprise 58 school, 49 teacher, 52 orientador and 53 leadership measures. Each also has a missingness indicator; training-constant columns are removed. Composite indices and alternative-history versions are excluded; broken post-2018 reported-tenure averages are excluded.',
     'School-only and joint models both include separate enrollment-fee and monthly-fee indicators from the 2024 MINEDUC directory. Free is the reference for each; paid bands are CLP 1,000–10,000, 10,001–25,000, 25,001–50,000, 50,001–100,000 and above 100,000. No information is a separate category. These self-reported bands are not exact prices; no midpoint, top-code amount or annual-cost scalar is assigned.',
     'Absent roles and incomplete rosters have explicit indicators. Undefined or missing characteristics use training-only median placeholders plus missingness indicators, not a claim of zero qualifications. Qualification database coverage and missing institution-premium coverage are separate predictors.',
-    'Student/staff ratios use pooled VA-sample students and average annual staff headcount. They are not class sizes, annual HS enrollment ratios, FTE measures or counselor caseloads. No funding or 2024-only age measure is included.',
+    'Student/staff ratios use pooled VA-sample students and average annual staff headcount. They are not class sizes, annual HS enrollment ratios, FTE measures or counselor caseloads.',
+    'Resources enter both models: public funding per student in 2021 pesos, its log, and change from 2017-2018 to 2019-2021. Levels use total funding divided by summed annual average enrollment. All five complete years are required; missing funding is not zero. This is public funding, not total spending or an HS-specific budget. Funding coverage enters separately.',
+    'Composition enters both models and pools the 757,999 students in the saved broad VA estimation sample (2017-2020 grade-8 cohorts): pre-HS grade-4 math/language means and SDs, household income decile and low/high-income shares, parental education, sex and grade-8 age. Existing baseline imputations are retained with their imputation shares; they are not reestimated within Lasso folds. Assignment is to the VA school, not necessarily the first HS attended.',
+    'Staff ages enter the joint model: mean, within-year SD, under-35 and 50+ shares for each role. Ages are attained during each staff year, 2018-2024, using that year’s birthdate records. Active-year summaries are equally weighted; incomplete rosters and years without any valid ages do not silently disappear. Coverage enters separately. These overlapping/post-entry windows support descriptive prediction, not causal input effects.',
     'Prediction uses five outer school folds and five inner tuning folds. Every imputation, scaling step and penalty choice excludes the held-out outer schools. The school-only baseline is separately tuned on identical schools and folds. Its penalty range extends to zero after a boundary audit; joint-model minima were interior.',
     'R² is pooled out-of-fold 1 − SSE/SST; negative values are possible. Coefficients instead come from the separately tuned full-sample refit. The minimum-error penalty is a sensitivity; selection frequencies count the five outer fits, not independent replications.',
     'Lasso may select one of several correlated measures and omit another. A zero does not establish irrelevance; signs are conditional predictive associations, not causal hiring effects or validated staff quality.',
     'Validation treats the saved EB VA estimates and institution-premium definitions as fixed, without reestimating them in folds or propagating their uncertainty. Schools sharing staff are not grouped into common folds. These are held-out-school predictions of saved estimates, not forecasts validated on future cohorts.',
-    'Independent checks reconstruct all role credential aggregates, all 240 outer-model predictions, all 288 fitted-model KKT conditions, tuning choices, selection frequencies and performance statistics. Raw inputs and source VA hashes are unchanged.'
+    'Independent checks reconstruct all new composition/resource/age aggregates, including ages directly from raw annual birthdates, all role credential aggregates, all 240 outer-model predictions, all 288 fitted-model KKT conditions, tuning choices, selection frequencies and performance statistics. Raw inputs and source VA hashes are unchanged.'
 ]
 
-md = ['# Staff characteristics and school VA: joint Lasso', '', '## Out-of-sample prediction', '',
+coverage = dictionary.loc[extension.columns, ['LABEL', 'ROLE', 'N_OBSERVED']].reset_index(drop=True)
+coverage.columns = ['New characteristic', 'Group', 'Schools observed (of 3,682)']
+md = ['# Staff characteristics and school VA: joint Lasso', '', '## New characteristics: coverage', '',
+      md_table(coverage), '', '## Out-of-sample prediction', '',
       md_table(performance_table('one_se')), '', '## Main coefficients', '',
       'Standardized coefficients; one-standard-error penalty. Only predictors selected in at least one displayed outcome appear.', '']
 for i in range(0, 12, 4):
@@ -288,8 +299,9 @@ parts = ['<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewp
          '<h1>Staff characteristics and school VA</h1>',
          '<p class="intro">Joint Lasso across 12 VA outcomes. Main specification: one-standard-error penalty. '
          'Teacher, orientador and leadership measures compete jointly with school characteristics. These are predictive associations, not causal effects.</p>',
-         '<p class="intro">Both models include 2024 enrollment-fee and monthly-fee bands, with free as the reference and no information as a separate category. School-only excludes all staff measures.</p>',
+         '<p class="intro">Both models include school context, fee-band indicators, public resources and baseline student composition. The joint model additionally includes all existing staff measures plus staff age. School-only excludes all staff measures.</p>',
          '<nav><a href="#prediction">Prediction</a><a href="#coefficients">Coefficients</a><a href="#sensitivity">Sensitivity</a><a href="#notes">Methods</a></nav>',
+         '<details><summary>New resources, student composition and staff age: coverage</summary>', ht(coverage), '</details>',
          '<h2 id="prediction">Out-of-sample prediction</h2>', ht(performance_table('one_se')),
          '<h2 id="coefficients">Selected coefficients</h2><p>Outcome SD per predictor SD. Dashes indicate not selected. '
          'Scroll horizontally to see all 12 outcomes; row labels and column headings stay visible.</p>']
@@ -303,7 +315,7 @@ parts += ['<details><summary>Selected coverage and missingness indicators</summa
           '<h2 id="notes">Definitions and interpretation</h2><ol>']
 parts += ['<li>' + html.escape(s) + '</li>' for s in notes]
 parts += ['</ol><p>Estimator: <a href="https://glmnet.stanford.edu/articles/glmnet.html">official glmnet documentation</a>.</p>',
-          '<p class="note">Verified on 2026-09-20. Reproducible inputs, fold assignments, coefficients and predictions are saved separately.</p></main></html>']
+          f'<p class="note">Verified on {date.today().isoformat()}. Reproducible inputs, fold assignments, coefficients and predictions are saved separately.</p></main></html>']
 (REPORT / 'staff_lasso_va.html').write_text('\n'.join(parts), encoding='utf-8')
 
 # A full numeric selected-coefficient matrix and readable LaTeX panels.

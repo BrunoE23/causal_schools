@@ -1,5 +1,18 @@
 # Project Issues Log
 
+### Current CSV and saved VA analytic cache differ by two eligible students
+
+- Noted 2026-09-20 while building staff Lasso student composition.
+- Applying original controls/sample restrictions to current Box CSV inputs
+  produces 757,997 students; the saved Stata analytic cache reproduces the
+  original 757,999 and every school count exactly. Differences are one student
+  each at RBD 609 and 10315. The underlying source-version/import difference
+  has not been diagnosed; do not assume the current CSV is identical to the VA
+  estimation cache.
+- Resolved for this extension by using the actual estimation cache, without
+  modifying source data or reestimating VAs. School-level audit is saved in
+  `data/clean/staff_lasso_va/composition_sample_reconciliation.csv`.
+
 ## Open Issues
 
 ### Staff credential subject taxonomy and premium coverage need substantive review

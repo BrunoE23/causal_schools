@@ -1,5 +1,36 @@
 # Project Documentation
 
+## Staff Lasso extension: resources, composition and contemporaneous age (2026-09-21)
+
+The current school predictor matrix includes 212 candidates, superseding the
+175-candidate fee-only specification below. All earlier predictors and school
+folds are preserved. The additional 37 comprise 14 baseline-composition measures
+(including three imputation shares), five public-resource measures (including
+two coverage shares), and six age/coverage measures per staff role.
+School-only and joint models both include resources/composition; only the joint
+model includes staff age. No new IV/MIV decomposition is implemented here.
+
+Composition uses the exact saved broad VA analytic cache (757,999 students,
+3,682 schools); current CSV reconstruction differs by two students. Complete
+five-year public-funding histories cover 2,943 schools, in 2021 CLP for 2017-2021;
+funding is not total spending or an HS-specific budget. Age is calculated from
+each contemporaneous 2018-2024 birthdate file, not backfilled from 2024 survivors.
+Missing/absent roles, birthdate validity, singleton age SDs and funding gaps are
+explicitly retained. These are descriptive predictors of fixed EB VAs, not causal
+effects of resources, composition or staffing. Definitions and provenance:
+`decisions/2026-09-21-staff-resources-composition-age.md`; reproducible builder and
+independent verification in `code/codex/staff_lasso_va/`; same HTML report.
+
+Updated one-SE joint/school-only held-out R2: math .554/.539, language .547/.546,
+exam taking .637/.565, HE enrollment .351/.328, STEM .069/.064, high-premium
+field .121/.128, high-premium institution .634/.578, full projected income
+.484/.470, field income .135/.143, institution income .287/.284, program
+accreditation .102/.101 and institution accreditation .142/.147. The richer
+school-only baseline absorbs much of the predictive signal for achievement.
+Staff do not improve held-out prediction for every outcome; these are selected
+predictive associations, not causal decomposition results. Previous performance
+is retained as `performance_before_resources_composition_age.csv`.
+
 This file records substantive, project-specific knowledge needed to understand and continue the causal schools research project. It should document data construction, sample definitions, outcome definitions, empirical design choices, interpretation conventions, and links to decision logs.
 
 It should not include Codex workflow rules, collaboration preferences, or general assistant behavior instructions. Those belong in `setup_md_codex/WORKFLOW.md` or other agent-facing setup files.

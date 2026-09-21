@@ -24,8 +24,17 @@ paths <- c(paths,
   fee_directory='C:/Users/brunem/Box/causal_schools/data/raw/school_directory/2024/20240912_Directorio_Oficial_EE_2024_20240430_WEB.csv',
   fee_codebook='C:/Users/brunem/Box/causal_schools/data/raw/school_directory/2024/ER_Directorio_Oficial_EE_WEB.pdf')
 hash <- tools::md5sum(paths)
+extension_manifest <- fread(file.path(out,'extended_source_manifest.csv'))
+stopifnot(all(unname(tools::md5sum(extension_manifest$PATH))==extension_manifest$MD5))
+paths <- c(paths,setNames(extension_manifest$PATH,paste0('extended_',extension_manifest$SOURCE)),
+  extended_matrix=file.path(out,'extended_school_predictors.csv'),
+  extended_dictionary=file.path(out,'extended_predictor_dictionary.csv'))
+hash <- tools::md5sum(paths)
 previous_x <- if(file.exists(file.path(out,'school_predictors.csv'))) fread(file.path(out,'school_predictors.csv')) else NULL
 previous_folds <- if(file.exists(file.path(out,'school_folds.csv'))) fread(file.path(out,'school_folds.csv')) else NULL
+if(!is.null(previous_x) && !'school__composition_math_mean' %in% names(previous_x) &&
+   !file.exists(file.path(out,'performance_before_resources_composition_age.csv')))
+  fwrite(fread(file.path(out,'lasso_performance.csv')),file.path(out,'performance_before_resources_composition_age.csv'))
 if(!is.null(previous_x) && !any(grepl('fee_',names(previous_x),fixed=TRUE)) &&
    file.exists(file.path(out,'lasso_performance.csv')) && !file.exists(file.path(out,'performance_before_fee_bands.csv')))
   fwrite(fread(file.path(out,'lasso_performance.csv')),file.path(out,'performance_before_fee_bands.csv'))
@@ -146,6 +155,11 @@ new <- melt(periods[['counselor']],id.vars='RBD',measure.vars=metrics,variable.n
 check <- merge(old[,.(RBD,METRIC,RATE)],new,by=c('RBD','METRIC'))
 stopifnot(nrow(check)==nrow(old),identical(is.na(check$RATE),is.na(check$NEW)),
           max(abs(check$RATE-check$NEW),na.rm=TRUE)<1e-12)
+extended <- fread(paths[['extended_matrix']])
+extended <- extended[match(x$RBD,RBD)]
+ed <- fread(paths[['extended_dictionary']])
+stopifnot(identical(extended$RBD,x$RBD),nrow(ed)==37L)
+for(i in seq_len(nrow(ed))) add(ed$FEATURE[i],extended[[ed$FEATURE[i]]],ed$LABEL[i],ed$ROLE[i],ed$BLOCK[i])
 dictionary <- rbindlist(dict)
 dictionary[,N_OBSERVED:=vapply(FEATURE,function(nm) sum(is.finite(x[[nm]])),integer(1))]
 dictionary[,N_UNIQUE_OBSERVED:=vapply(FEATURE,function(nm) uniqueN(x[[nm]][is.finite(x[[nm]])]),integer(1))]
