@@ -112,6 +112,26 @@ scalar-IV convention; these are not randomization-inference SEs.
 
 ## Outputs
 
+**Current reporting benchmark: common SAE population.** Run
+`Rscript code/codex/high_va_compliers/03_center_on_sae_population.R` after all
+three cutoff runs. This centers all 90 main estimates on a single mean per
+characteristic among all timely SAE applicants in the saved cohort roster,
+including applicants excluded from estimation. It validates that the full
+rosters and baseline values agree across every VA/cutoff. Missing baseline
+values are excluded characteristic by characteristic; no new imputation is
+performed. The benchmark is fixed across VA definitions and cutoffs.
+
+Use `complier_minus_sae_population.md` / `.csv` in the original, `median/`,
+and `p25/` table folders. Clean numeric results have the same CSV filename;
+`all_cutoffs_minus_sae_population.csv` and `sae_population_benchmarks.csv`
+in the base clean folder contain combined results and reference means.
+Joint SEs use individual contributions over the full observed population:
+`I(IV sample)*b*(X-complier_mean)/sum_IV(b) - (X-population_mean)/N_population`,
+with HC1 correction N_population/(N_population-1). This accounts for the
+overlap of the IV sample with the population-mean sample. VA/probability
+uncertainty remains conditioned out. Older eligible-sample-centered tables
+remain available with their distinct `complier_minus_applicant_means` names.
+
 To report differences from eligible applicants, run
 `Rscript code/codex/high_va_compliers/02_center_on_applicants.R` after the main
 script. This uses the saved student analysis inputs without rereading the

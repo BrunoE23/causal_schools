@@ -70,3 +70,20 @@ uses VA strictly above the school-level P25, classifying approximately 75%
 of schools as high. The same estimators and reference-mean convention apply,
 with D, Z, q and eligible samples recomputed. `p25/` subfolders preserve this
 third analysis separately, leaving both P50 and P75 results intact.
+
+## Common SAE benchmark (supersedes eligible-sample centering for reporting)
+
+Bruno clarified that the benchmark should be the SAE population mean and
+approved all timely applicants in the same 2018-2020 cohorts. Use one mean
+per baseline characteristic among the full saved timely-SAE roster with that
+characteristic observed, equally weighting applicants. Include students with
+no high/low offer risk and other IV exclusions. Keep the complier estimates
+unchanged. This removes benchmark variation across VA measures and thresholds;
+the complier populations themselves can still differ.
+
+`03_center_on_sae_population.R` validates identical full rosters and baseline
+values across all saved runs and produces 90 main centered estimates. Joint
+robust SEs include the population mean's sampling uncertainty and covariance
+with the subset IV estimator. Current tables are named
+`complier_minus_sae_population`; the earlier eligible-sample-centered tables
+are preserved as historical comparisons under their original names.
