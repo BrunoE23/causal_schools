@@ -11,10 +11,18 @@ years <- as.integer(strsplit(Sys.getenv('COMPLIER_YEARS', '2018,2019,2020'), ','
 stopifnot(length(years) > 0L, !anyNA(years), !anyDuplicated(years))
 out <- 'data/clean/high_va_compliers'
 tables <- 'output/tables/high_va_compliers'
+percentile <- as.integer(Sys.getenv('HIGH_VA_PERCENTILE', '75'))
+stopifnot(percentile %in% c(50L, 75L))
+indicator_dir <- 'data/clean/high_va_cutoffs'
+if (percentile == 50L) {
+  out <- file.path(out, 'median')
+  tables <- file.path(tables, 'median')
+  indicator_dir <- file.path(indicator_dir, 'median')
+}
 dir.create(out, recursive = TRUE, showWarnings = FALSE)
 dir.create(tables, recursive = TRUE, showWarnings = FALSE)
 keys <- c('math', 'language', 'highinst', 'highpay', 'program_income_full')
-schools <- fread('data/clean/high_va_cutoffs/school_high_va.csv', na.strings = 'NA')
+schools <- fread(file.path(indicator_dir, 'school_high_va.csv'), na.strings = 'NA')
 stopifnot(!anyDuplicated(schools$school_rbd))
 columns <- c('student_id', 'mrun', 'cohort_gr8', 'sae_proceso', 'timely_sae',
   'rbd_treated_1R', 'most_time_RBD', 'GEN_ALU', 'z_sim_mat_4to', 'z_sim_leng_4to',
@@ -79,6 +87,7 @@ for (k in keys) {
   }
 }
 result <- rbindlist(results, fill = TRUE)
+result[, cutoff_percentile := percentile]
 fwrite(result, file.path(out, 'complier_means.csv'), na = 'NA')
 fwrite(rbindlist(diagnostics), file.path(out, 'sample_exclusions.csv'))
 fwrite(rbindlist(student_frames), file.path(out, 'student_analysis.csv'), na = 'NA')
@@ -87,6 +96,7 @@ main[, cell := fifelse(status == 'ok', sprintf('%.3f (%.3f)', estimate, se), sta
 tab <- dcast(main, characteristic ~ va, value.var = 'cell')
 fwrite(tab, file.path(tables, 'baseline_complier_means.csv'))
 lines <- c('# Baseline characteristics of high-VA compliers', '',
+  paste('High VA: strictly above the school-level P', percentile, '.', sep = ''), '',
   paste('Assignment years:', paste(years, collapse = ', ')), '',
   'Main estimates use (Z-q) moments with the treated-state equation. Parentheses contain heteroskedastic-robust standard errors.',
   'These are assignment-variance-weighted complier means, conditional on valid classification and observed baseline covariates.', '',

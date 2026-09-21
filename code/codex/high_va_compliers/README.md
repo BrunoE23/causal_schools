@@ -15,6 +15,27 @@ comma-separated list. This follows the current three-cohort analysis window;
 complier analysis, not an RC-VAM regression, and uses the observational EB
 top-quartile classifications selected by the user.
 
+## Median-cutoff version (kept separately)
+
+Set `HIGH_VA_PERCENTILE=50` to define high VA as strictly above the equally
+weighted school median (inverse empirical CDF, type 1). Run all three steps:
+
+```powershell
+$env:HIGH_VA_PERCENTILE = '50'
+& 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/high_va_cutoffs/02_build_indicators.R
+& 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/high_va_compliers/01_run.R
+& 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/high_va_compliers/02_center_on_applicants.R
+Remove-Item Env:HIGH_VA_PERCENTILE
+```
+
+Only 50 and 75 are supported; omitted defaults to the original P75 analysis.
+For P50, indicators, clean results, and tables go in `median/` subfolders of
+their corresponding original directories, preserving all P75 outputs. Both
+versions use the same estimator, years, covariates, and exclusion rules.
+The script recomputes D, Z, q, eligibility, and comparison-group means for
+the selected threshold; it does not reuse P75 first stages or samples. Thus
+the two tables can describe different applicants as well as different compliers.
+
 ## Inputs and definitions
 
 - `data/clean/high_va_cutoffs/school_high_va.csv` in this repository, generated

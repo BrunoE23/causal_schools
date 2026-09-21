@@ -4,6 +4,12 @@ suppressPackageStartupMessages(library(data.table))
 source('code/codex/high_va_compliers/helpers.R')
 out <- 'data/clean/high_va_compliers'
 tables <- 'output/tables/high_va_compliers'
+percentile <- as.integer(Sys.getenv('HIGH_VA_PERCENTILE', '75'))
+stopifnot(percentile %in% c(50L, 75L))
+if (percentile == 50L) {
+  out <- file.path(out, 'median')
+  tables <- file.path(tables, 'median')
+}
 results <- fread(file.path(out, 'complier_means.csv'))
 main <- results[method == 'recentered' & state == 1]
 variables <- unique(main$characteristic)
@@ -37,6 +43,7 @@ centered[, cell := sprintf('%+.3f (%.3f)', difference, difference_se)]
 tab <- dcast(centered, characteristic ~ va, value.var = 'cell')
 fwrite(tab, file.path(tables, 'complier_minus_applicant_means.csv'))
 writeLines(c('# Complier characteristics relative to eligible applicants', '',
+  paste('High VA: strictly above the school-level P', percentile, '.', sep = ''), '',
   'Each entry is the complier mean minus the mean among the same eligible applicants with that characteristic observed.',
   'This is a difference in baseline composition, not a treatment effect. The reference is not the national student population or all SAE applicants.',
   'Complier means retain the original assignment-variance weighting; reference means give applicants equal weights. Reference populations differ across VA measures and characteristic availability.', '',

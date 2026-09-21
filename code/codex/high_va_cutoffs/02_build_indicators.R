@@ -1,8 +1,12 @@
-# High VA = strictly above the school-weighted empirical 75th percentile.
+# High VA = strictly above the equally weighted school percentile (75 default).
 # Run from repository root; original VA inputs remain unchanged.
 suppressPackageStartupMessages(library(data.table))
 input <- 'output/tables/empirical_bayes_school_va'
 out <- 'data/clean/high_va_cutoffs'
+percentile <- as.integer(Sys.getenv('HIGH_VA_PERCENTILE', '75'))
+stopifnot(percentile %in% c(50L, 75L))
+if (percentile == 50L) out <- file.path(out, 'median')
+cutoff_column <- paste0('cutoff_p', percentile)
 dir.create(out, recursive = TRUE, showWarnings = FALSE)
 keys <- c('math', 'language', 'highinst', 'highpay', 'program_income_full')
 values <- rbindlist(lapply(keys, function(k) {
@@ -12,7 +16,7 @@ values <- rbindlist(lapply(keys, function(k) {
   valid <- is.finite(x$va_eb_centered)
   stopifnot(any(valid))
   # Type 1 matches the inverse empirical CDF used in the distribution plots.
-  cutoff <- unname(quantile(x$va_eb_centered[valid], .75, type = 1))
+  cutoff <- unname(quantile(x$va_eb_centered[valid], percentile / 100, type = 1))
   result <- data.table(school_rbd = x$school_rbd, outcome = x$outcome,
              va_eb_centered = x$va_eb_centered, cutoff_p75 = cutoff,
              high_va = fifelse(valid, as.integer(x$va_eb_centered > cutoff), NA_integer_))
@@ -31,7 +35,9 @@ setorder(values, school_rbd, key)
 setorder(wide, school_rbd)
 stopifnot(!anyDuplicated(wide$school_rbd),
           all(is.na(values$high_va) | values$high_va %in% 0:1),
-          all(summary$share_high <= .25 + 1e-10))
+          all(summary$share_high <= 1 - percentile / 100 + 1e-10))
+setnames(values, 'cutoff_p75', cutoff_column)
+setnames(summary, 'cutoff_p75', cutoff_column)
 fwrite(values, file.path(out, 'school_high_va_long.csv'), na = 'NA')
 fwrite(wide, file.path(out, 'school_high_va.csv'), na = 'NA')
 fwrite(summary, file.path(out, 'high_va_cutoffs.csv'), na = 'NA')

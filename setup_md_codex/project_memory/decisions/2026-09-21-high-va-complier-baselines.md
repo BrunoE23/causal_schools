@@ -51,3 +51,14 @@ baseline composition difference, not a causal gain. Both component means and
 sample sizes remain available. Joint influence-function SEs include estimation
 of the applicant mean and its covariance with the complier mean; uncentered
 SEs are not reused. The original absolute-mean outputs are preserved.
+
+## Median threshold comparison
+
+Bruno requested the same exercise defining high VA above the median, retaining
+both tables. `HIGH_VA_PERCENTILE=50` selects strict VA > P50, with equal-school
+weights and empirical quantile type 1, just as P75 used previously. Median
+outputs are isolated in `median/` subfolders. D, Z, q, samples, and reference
+applicant means are recomputed; the three-cohort window, baseline measures,
+main/spline estimators, robust SEs, and centering convention remain the same.
+P75 remains the default and its existing tables are preserved. This is a
+threshold comparison, not a common-sample comparison or a replacement of P75.
