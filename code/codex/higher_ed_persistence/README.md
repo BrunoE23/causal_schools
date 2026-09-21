@@ -25,6 +25,9 @@ High-premium field follows the existing project classification: Science, Law,
 Engineering/Manufacturing/Construction, and Medicine+. High-premium institution
 uses the existing centered MiFuturo institution fixed effect above 0.1;
 unsupported matriculated institutions are coded zero, matching `high_inst_m1`.
+High-premium field is a positive-list binary: every observed enrollment outside
+the named premium categories is zero, including Agriculture, Services, and CINE
+combinations outside the broader nine-category taxonomy.
 
 The PAES 2026 admissions-matricula file is not used as a year-1 persistence
 measure for the 2020 cohort because it is not the full SIES enrollment census.

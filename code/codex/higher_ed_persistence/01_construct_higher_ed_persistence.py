@@ -80,7 +80,10 @@ def high_premium_field(area: object, cine_area: object, cine_subarea: object) ->
     elif cine_area_n == "SALUD Y SERVICIOS SOCIALES":
         field = "HEALTH AND WELFARE"
     if field is None:
-        return None
+        # The premium-field outcome is a binary positive-list indicator.
+        # An observed enrollment outside the positive list is zero even when
+        # the broader nine-category field classification is unavailable.
+        return False
     if field in {"SCIENCE", "ENGINEERING", "LAW"}:
         return True
     medicine_plus = {

@@ -188,20 +188,23 @@ derive_high_paying_field <- function(out, suffix) {
   is_eng <- fifelse(is.na(out[[eng_col]]), 0, as.integer(out[[eng_col]])) == 1L
   is_medicine_plus <- field == "Medicine" & area_key %chin% high_paying_medicine_plus_area_keys
   is_high_paying <- is_science | is_law | is_eng | is_medicine_plus
-  is_classified_non_high <- !is.na(field) & nzchar(field) & !is_high_paying
+  # High-premium field is a positive-list binary. Any observed matriculation
+  # outside Science, Law, Engineering, or Medicine+ is zero even when the
+  # broader field_reclassified taxonomy is missing.
+  is_non_high <- !is_high_paying
 
   out[, (high_paying_col) := fcase(
     !get(matriculated_col), 0L,
     get(matriculated_col) & is_high_paying, 1L,
-    get(matriculated_col) & is_classified_non_high, 0L,
+    get(matriculated_col) & is_non_high, 0L,
     default = NA_integer_
   )]
   out[, (high_paying_source_col) := fcase(
     !get(matriculated_col), "not_matriculated_zero",
     get(matriculated_col) & (is_science | is_law | is_eng), "matriculated_high_paying_existing_field",
     get(matriculated_col) & is_medicine_plus, "matriculated_high_paying_medicine_plus_area",
-    get(matriculated_col) & is_classified_non_high, "matriculated_classified_non_high_paying",
-    default = "matriculated_missing_field_classification"
+    get(matriculated_col) & is_non_high, "matriculated_not_in_high_paying_list",
+    default = "unclassified"
   )]
   out[, (high_paying_missing_col) := as.integer(is.na(get(high_paying_col)))]
 
@@ -1009,7 +1012,7 @@ report <- c(
   "- Students with no observed matriculation receive the configured non-matriculation floor.",
   "- The non-matriculation floor is not used for matriculated students.",
   "- Backward-compatible `program_income` columns are retained as aliases to `program_income_full` for existing VA/Stata scripts.",
-  "- `high_paying_field_m1`: non-matriculated students are coded 0; matriculated students are coded 1 for Science, Law, Engineering/Manufacturing/Construction, or Medicine+ (`Medicina`, `Quimica y Farmacia`, `Enfermeria`, `Obstetricia y Puericultura`, `Tecnologia Medica`, `Odontologia`). Matriculated students with insufficient field classification remain missing rather than being silently coded 0.",
+  "- `high_paying_field_m1`: non-matriculated students are coded 0; matriculated students are coded 1 for Science, Law, Engineering/Manufacturing/Construction, or Medicine+ (`Medicina`, `Quimica y Farmacia`, `Enfermeria`, `Obstetricia y Puericultura`, `Tecnologia Medica`, `Odontologia`). Every other observed enrollment is coded 0, including programs outside the broader retained field taxonomy.",
   paste0("- `high_inst_m1`: non-matriculated students are coded 0; matriculated students are coded 1 when their institution's centered MiFuturo institution FE is above ", high_inst_fe_cutoff, " log points, and 0 otherwise, including when the matriculated institution lacks an institution FE."),
   "",
   "## Non-Matriculation Floor",

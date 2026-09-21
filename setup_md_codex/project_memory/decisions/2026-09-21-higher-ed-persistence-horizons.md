@@ -16,6 +16,10 @@ High-premium field and institution definitions must match the existing first-
 enrollment outcomes. The institution threshold remains a centered MiFuturo
 institution fixed effect above 0.1.
 
+High-premium field is a positive-list binary. Agriculture, Services, and any
+other observed enrollment outside Science, Law, Engineering, and Medicine+ are
+coded zero even if the broader `field_reclassified` taxonomy is missing.
+
 Do not treat the PAES 2026 admissions-matricula file as full SIES persistence
 for the 2020 cohort. It has different institutional coverage and is retained
 only as a separately labeled admissions outcome.

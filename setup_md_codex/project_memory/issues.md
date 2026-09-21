@@ -26,6 +26,40 @@
 
 ## Open Issues
 
+### RC VAM noreg regression produces unstable estimates; EB shrinkage collapses to 0 for every outcome
+
+- Status: diagnosed, not fixed -- open question, needs a second opinion.
+  Date: 2026-09-21.
+- `01_construct_rc_vam_school_values_noreg.R`'s literal-dummy + g(p_i)
+  regression (`y ~ 0 + factor(school_rbd) + x_terms + gp_mat`) produces
+  point estimates far outside plausible range (e.g. -30 for a z-score
+  outcome, 3+ for a 0/1 outcome) and SEs that barely vary with a
+  school's own sample size (600x difference in `n`, <1% difference in
+  SE) -- the signature of severe multicollinearity between the ~3,000
+  school dummies and the ~2,656 g(p_i) `prob_*`/`iszero_*` columns.
+  Downstream, `02_construct_eb_rc_vam_values.R`'s `tau2` floors at 0 for
+  all 13 outcomes as a direct consequence (noise variance from these
+  inflated SEs swamps any real between-school signal) -- the EB script
+  itself is not the bug.
+- Cross-checked against the source paper (Angrist, Hull, Pathak,
+  Walters 2024): the full 2J-term g(p_i) design matches the paper's
+  actual main estimating equation, not a deviation from it -- so this
+  isn't simply "too many controls relative to the paper." Also resolves
+  a circularity question Bruno raised (can't use expected-VA-under-
+  assignment-probabilities without already having VA estimates): that
+  low-dimensional risk summary is only used in the paper's footnote-13
+  balance-check illustration, built from an independent non-risk-
+  adjusted VA estimate, never from the RC VAM estimate itself, and never
+  used in the main equation at all.
+- Leading unconfirmed hypothesis: Chile's SAE spans ~3,000+ schools
+  nationwide, vs. the paper's single-city settings (J likely in the
+  tens/low hundreds) -- far more scope for near-perfect collinearity
+  between `iszero_j` risk terms and school-identity dummies at this
+  scale. Also worth checking `support_k`/choice-set scoping in the
+  (archived) `00_export_probability_controls_all_timely_sae.R` /
+  `00b_build_gp_wide_dta.R`.
+- Full writeup: `decisions/2026-09-21-rc-vam-noreg-eb-shrinkage-diagnosis.md`.
+
 ### Staff credential subject taxonomy and premium coverage need substantive review
 
 - Status: Computed first specification; reviewable definitions, not validated
@@ -234,13 +268,19 @@
 
 ### `high_paying_field_m1` has missing values for matriculated students with insufficient field classification
 
-- Status: Open
+- Status: Resolved in code on 2026-09-21; person-level outcomes and downstream
+  high-premium-field VA must be rebuilt before older saved estimates reflect it.
 - Date noted: 2026-07-11
 - Context: The current five-outcome specification uses `high_paying_field_m1` as an unconditional higher-education choice outcome. Non-matriculated students are coded `0`, and matriculated students are coded `1` when their first observed enrollment is in Science, Law, Engineering/Manufacturing/Construction, or Medicine+.
 - What was found: The current person-level MiFuturo output has 51,855 students with missing `high_paying_field_m1`. All of these come from the `matriculated_missing_field_classification` source category. In the same output, `high_inst_m1` and `program_income_full` have no missing values after their outcome rules.
 - Why it matters: Unlike `high_inst_m1` and `program_income_full`, the high-premium-field outcome is not fully unconditional in the current implementation. Missing field classification among matriculated students reduces the VA/IV sample for this outcome and could matter if classification gaps are concentrated in particular programs, institutions, cohorts, or schools.
-- Current workaround: Do not silently code these cases as non-high-premium. Keep them missing and document the source category in outcome coverage checks.
-- Follow-up: Audit `matriculated_missing_field_classification` by `COD_SIES`, `NOMB_CARRERA`, `AREA_CARRERA_GENERICA`, `field_classified`, institution, cohort, and program-info match status. Repair high-volume classification gaps where the field is clear, rerun `03_construct_person_level_income_outcomes.R`, and recheck missingness before finalizing the main high-premium-field estimates.
+- Resolution: Treat high-premium field as a positive-list binary. Every observed
+  enrollment outside Science, Law, Engineering, and Medicine+ is zero,
+  including Agriculture, Services, and CINE combinations that remain missing
+  in the broader nine-category taxonomy. Preserve `field_reclassified` missingness
+  for analyses that actually require that taxonomy.
+- Follow-up: Rebuild the person-level outcome and downstream high-premium-field
+  VA/EB estimates so all saved main estimates use the revised binary definition.
 
 ### Full SIES 2026 is still missing for grade-8 2021 higher-ed outcomes
 
