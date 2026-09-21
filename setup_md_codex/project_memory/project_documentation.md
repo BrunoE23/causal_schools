@@ -1,5 +1,23 @@
 # Project Documentation
 
+## Current compact staff-versus-VA table: fixed joint OLS (2026-09-21)
+
+Bruno requested stopping Lasso and tabulating the previously shortlisted 14
+measures against all 12 VAs. Current table: `output/reports/staff_ols_va.html`
+(Markdown equivalent alongside it). Code: `code/codex/staff_ols_va/`; reusable
+estimates/audits: `data/clean/staff_ols_va/`. Historical Lasso files are unchanged.
+All 14 focal measures enter jointly, unweighted across schools, with missingness,
+role-absence and roster-incompleteness nuisance controls. There is no penalty,
+selection, CV or additional region/dependency/fee adjustment. Table cells show
+standardized coefficients and HC1 robust SEs, without stars. Predictor scales
+are observed-value sample SDs within the outcome sample; Y uses sample SD.
+The displayed R2 is in-sample, unlike earlier held-out Lasso R2. Coefficients
+and SEs were independently verified for all 168 focal cells. All original
+outcome sample sizes remain. One unit-leverage nuisance cell per model makes
+HC3 undefined; HC1 is used consistently. These remain data-informed descriptive
+associations, not causal input effects or selection-adjusted inference.
+Full rationale: `decisions/2026-09-21-fixed-staff-ols-va.md`.
+
 ## Staff Lasso extension: resources, composition and contemporaneous age (2026-09-21)
 
 The current school predictor matrix includes 212 candidates, superseding the

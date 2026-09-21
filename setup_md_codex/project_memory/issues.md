@@ -1,5 +1,16 @@
 # Project Issues Log
 
+### HC3 undefined for singleton nuisance cells in compact staff OLS
+
+- Noted 2026-09-21. Each of the 12 fixed 14-predictor OLS models has one
+  unit-leverage school from nuisance missingness/absence controls. HC3 contains
+  a 0/0 contribution and cannot be applied naively.
+- Current table uses conventional regression HC1 consistently, retaining all
+  schools and controls. This is documented and independently verified; it is
+  not permission to suppress indicators or silently change future specifications.
+- Audit: `data/clean/staff_ols_va/model_summary.csv`; decision:
+  `decisions/2026-09-21-fixed-staff-ols-va.md`.
+
 ### Current CSV and saved VA analytic cache differ by two eligible students
 
 - Noted 2026-09-20 while building staff Lasso student composition.
