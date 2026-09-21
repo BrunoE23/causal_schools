@@ -16,3 +16,8 @@ a causal effect and is distinct from realized sorting into attended schools.
 
 Run `01_run_expected_va_sorting.R` from the repository root. Outputs are under
 `data/clean/expected_va_sorting` and `output/tables/expected_va_sorting`.
+
+`02_run_expected_va_sorting_rc_vam.R` repeats the same standardized, common-
+sample design for the supplied unregularized RC-VAM math, verbal, and log
+projected-income values. Its outputs are isolated in `rc_vam_test1`
+subdirectories; the EB results remain unchanged.

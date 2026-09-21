@@ -1,0 +1,35 @@
+\begin{table}[!htbp]
+\centering
+\caption{Baseline predictors of expected risk-controlled school value added}
+\label{tab:expected-rc-vam-sorting}
+\begin{threeparttable}
+\begin{tabular}{lccc}
+\toprule
+ & Math & Verbal & Projected income \\
+\midrule
+Baseline math score & 0.091*** & 0.065*** & 0.005* \\
+ & (0.003) & (0.003) & (0.003) \\
+Baseline verbal score & 0.059*** & 0.069*** & 0.003 \\
+ & (0.003) & (0.003) & (0.003) \\
+Income decile & 0.057*** & 0.062*** & 0.082*** \\
+ & (0.002) & (0.002) & (0.002) \\
+Father's education & 0.043*** & 0.055*** & 0.035*** \\
+ & (0.002) & (0.002) & (0.002) \\
+Mother's education & 0.062*** & 0.073*** & -0.000 \\
+ & (0.002) & (0.002) & (0.003) \\
+Female & 0.088*** & 0.081*** & -0.122*** \\
+ & (0.004) & (0.004) & (0.004) \\
+\midrule
+$R^2$ & 0.046 & 0.048 & 0.015 \\
+Adjusted $R^2$ & 0.046 & 0.048 & 0.015 \\
+Partial $R^2$: achievement & 0.018 & 0.015 & 0.000 \\
+Partial $R^2$: SES & 0.017 & 0.023 & 0.010 \\
+N & 239,190 & 239,190 & 239,190 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\footnotesize
+\item Notes: The dependent variable in each column is standardized application-specific expected unregularized risk-controlled value added, $E_i[V^m]=\sum_jp_{ij}V_j^m$. Continuous baseline covariates are standardized on the common estimation sample; female is a binary indicator. All specifications include assignment-cohort fixed effects. The sample contains timely 2018--2020 SAE applicants with complete covariates, probability mass one, and full school-value coverage across all three dimensions; simulated unmatched assignments receive centered VA zero. Heteroskedasticity-robust standard errors are in parentheses. These are descriptive sorting relationships, not causal effects. $^{*}p<0.10$, $^{**}p<0.05$, $^{***}p<0.01$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

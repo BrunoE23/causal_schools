@@ -1,0 +1,19 @@
+outcome,covariate,covariate_label,beta,se,p_value,key
+Math,z_z_sim_mat_4to,Baseline math score,0.0913362190311094,0.00265695149574609,2.44620589883893e-258,math
+Math,z_z_sim_leng_4to,Baseline verbal score,0.0592273996065372,0.00264577550679082,7.06592071348466e-111,math
+Math,z_income_decile_imputed,Income decile,0.0574793877952435,0.0023423992998994,8.35037481010542e-133,math
+Math,z_father_educ_years_imputed,Father's education,0.0425156613167394,0.00242821201555484,1.34930649115888e-68,math
+Math,z_mother_educ_years_imputed,Mother's education,0.0620123395842978,0.00244887825843347,2.75908384048276e-141,math
+Math,female,Female,0.0875162887628147,0.00404457131826181,9.92986603212534e-104,math
+Verbal,z_z_sim_mat_4to,Baseline math score,0.0652076568575592,0.00264798591434474,9.92966981154853e-134,verbal
+Verbal,z_z_sim_leng_4to,Baseline verbal score,0.0686029785571418,0.0026518345945956,2.3157021260308e-147,verbal
+Verbal,z_income_decile_imputed,Income decile,0.0624913800391802,0.0023322745847886,6.47697669403621e-158,verbal
+Verbal,z_father_educ_years_imputed,Father's education,0.0552244968168622,0.00244645648392561,1.04192113364115e-112,verbal
+Verbal,z_mother_educ_years_imputed,Mother's education,0.0726925112426304,0.00243509232359325,1.89303919061421e-195,verbal
+Verbal,female,Female,0.0811330643294449,0.0040345434679811,7.21921082833848e-90,verbal
+Projected income,z_z_sim_mat_4to,Baseline math score,0.00474969120854843,0.00270275876490003,0.0788595695906119,program_income
+Projected income,z_z_sim_leng_4to,Baseline verbal score,0.00323215836190213,0.00270653147851949,0.232398258585743,program_income
+Projected income,z_income_decile_imputed,Income decile,0.0817137154704143,0.00237058036810027,9.88425903356186e-260,program_income
+Projected income,z_father_educ_years_imputed,Father's education,0.0351884889635899,0.002488338143339,2.20259686715647e-45,program_income
+Projected income,z_mother_educ_years_imputed,Mother's education,-0.000246225201382174,0.00253415762353984,0.922597394299828,program_income
+Projected income,female,Female,-0.121550830916208,0.00411224185914458,1.14110844774192e-191,program_income
