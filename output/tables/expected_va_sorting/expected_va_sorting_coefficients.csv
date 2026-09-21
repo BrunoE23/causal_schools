@@ -1,0 +1,31 @@
+outcome,covariate,covariate_label,beta,se,p_value,key
+Math,z_z_sim_mat_4to,Baseline math score,0.0767269250244197,0.00264050785448322,2.58942313948181e-185,math
+Math,z_z_sim_leng_4to,Baseline verbal score,0.0786684442534885,0.00261802765882265,5.29951312483506e-198,math
+Math,z_income_decile_imputed,Income decile,0.0613632239128938,0.00231663299780912,2.22003811997139e-154,math
+Math,z_father_educ_years_imputed,Father's education,0.053371491855271,0.00240822346029559,1.02403945502184e-108,math
+Math,z_mother_educ_years_imputed,Mother's education,0.0697271344008719,0.00240888867190451,6.59158277890927e-184,math
+Math,female,Female,0.153452387635835,0.00401877599655726,1.11253692949107e-308,math
+Verbal,z_z_sim_mat_4to,Baseline math score,0.0761013860015111,0.00261036316653942,1.59785308176978e-186,language
+Verbal,z_z_sim_leng_4to,Baseline verbal score,0.101554345481219,0.00259607017205266,0,language
+Verbal,z_income_decile_imputed,Income decile,0.0743539061965108,0.00228486537781863,8.75079982010586e-232,language
+Verbal,z_father_educ_years_imputed,Father's education,0.0685546336733792,0.00237851292070239,2.30183605619293e-182,language
+Verbal,z_mother_educ_years_imputed,Mother's education,0.0907076655774001,0.00237750429135601,1.11253693003548e-308,language
+Verbal,female,Female,0.127667774139926,0.00396604992475235,7.4088640410817e-227,language
+High-premium institution,z_z_sim_mat_4to,Baseline math score,-0.0373425246527748,0.002646661544616,3.47061657613175e-45,highinst
+High-premium institution,z_z_sim_leng_4to,Baseline verbal score,-0.0181355296745342,0.00264983880579444,7.71888797199954e-12,highinst
+High-premium institution,z_income_decile_imputed,Income decile,0.174468607571375,0.0024773365793431,0,highinst
+High-premium institution,z_father_educ_years_imputed,Father's education,0.044898163892374,0.00237955020084988,2.37181127947556e-79,highinst
+High-premium institution,z_mother_educ_years_imputed,Mother's education,-0.00330414421737919,0.00237729584202581,0.164568107187827,highinst
+High-premium institution,female,Female,-0.0376536546761235,0.0040411516586886,1.20011261948227e-20,highinst
+High-premium field,z_z_sim_mat_4to,Baseline math score,0.00916505103477139,0.00265328589341976,0.00055196843978274,highpay
+High-premium field,z_z_sim_leng_4to,Baseline verbal score,0.00680839192345191,0.0026643444336349,0.0106080388477222,highpay
+High-premium field,z_income_decile_imputed,Income decile,0.0353854607182206,0.00228627522035319,5.24087599748779e-54,highpay
+High-premium field,z_father_educ_years_imputed,Father's education,0.0358910718292877,0.00243226949562351,2.94958546298835e-49,highpay
+High-premium field,z_mother_educ_years_imputed,Mother's education,0.0259291141918919,0.00245219545222772,3.99292660032528e-26,highpay
+High-premium field,female,Female,-0.371025497411605,0.00401294413434682,0,highpay
+Projected income,z_z_sim_mat_4to,Baseline math score,0.0597976566546581,0.00258171304786558,1.48596036479067e-118,program_income_full
+Projected income,z_z_sim_leng_4to,Baseline verbal score,0.0624801065418071,0.00258163482451395,3.04949109777632e-129,program_income_full
+Projected income,z_income_decile_imputed,Income decile,0.157150144691872,0.00226388319720519,0,program_income_full
+Projected income,z_father_educ_years_imputed,Father's education,0.0958279563875651,0.0023972632825938,0,program_income_full
+Projected income,z_mother_educ_years_imputed,Mother's education,0.0841358597069455,0.00241103831264664,3.9804342126269e-266,program_income_full
+Projected income,female,Female,0.0151067255687914,0.00392631725289405,0.000119332842084032,program_income_full

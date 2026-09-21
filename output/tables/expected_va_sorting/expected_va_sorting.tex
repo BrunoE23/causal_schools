@@ -1,0 +1,36 @@
+\begin{table}[!htbp]
+\centering
+\caption{Baseline predictors of expected school value added}
+\label{tab:expected-va-sorting}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lccccc}
+\toprule
+ & Math & Verbal & High-premium institution & High-premium field & Projected income \\
+\midrule
+Baseline math score & 0.077*** & 0.076*** & -0.037*** & 0.009*** & 0.060*** \\
+ & (0.003) & (0.003) & (0.003) & (0.003) & (0.003) \\
+Baseline verbal score & 0.079*** & 0.102*** & -0.018*** & 0.007** & 0.062*** \\
+ & (0.003) & (0.003) & (0.003) & (0.003) & (0.003) \\
+Income decile & 0.061*** & 0.074*** & 0.174*** & 0.035*** & 0.157*** \\
+ & (0.002) & (0.002) & (0.002) & (0.002) & (0.002) \\
+Father's education & 0.053*** & 0.069*** & 0.045*** & 0.036*** & 0.096*** \\
+ & (0.002) & (0.002) & (0.002) & (0.002) & (0.002) \\
+Mother's education & 0.070*** & 0.091*** & -0.003 & 0.026*** & 0.084*** \\
+ & (0.002) & (0.002) & (0.002) & (0.002) & (0.002) \\
+Female & 0.153*** & 0.128*** & -0.038*** & -0.371*** & 0.015*** \\
+ & (0.004) & (0.004) & (0.004) & (0.004) & (0.004) \\
+\midrule
+$R^2$ & 0.058 & 0.080 & 0.043 & 0.043 & 0.098 \\
+Adjusted $R^2$ & 0.057 & 0.080 & 0.043 & 0.043 & 0.098 \\
+Partial $R^2$: achievement & 0.020 & 0.026 & 0.003 & 0.000 & 0.013 \\
+Partial $R^2$: SES & 0.022 & 0.035 & 0.037 & 0.006 & 0.072 \\
+N & 240,007 & 240,007 & 240,007 & 240,007 & 240,007 \\
+\bottomrule
+\end{tabular}
+}
+\par\medskip
+\footnotesize
+\begin{minipage}{\textwidth}
+Notes: The dependent variable in each column is the standardized application-specific expected EB-shrunken school value added, $E_i[V^m]=\sum_j p_{ij}V_j^m$. Continuous baseline covariates are standardized on the common estimation sample; the female coefficient is the difference relative to male applicants in outcome SD units. All specifications include assignment-cohort fixed effects. The sample contains timely 2018--2020 SAE applicants with complete baseline covariates, complete probability mass, and VA coverage for every positive-probability school option across all five dimensions. Simulated unmatched assignments receive centered VA zero. Heteroskedasticity-robust standard errors are in parentheses. The achievement block contains baseline math and verbal scores; the SES block contains income decile and both parental-education measures. These are descriptive sorting relationships, not causal effects. $^{*}p<0.10$, $^{**}p<0.05$, $^{***}p<0.01$.
+\end{minipage}
+\end{table}
