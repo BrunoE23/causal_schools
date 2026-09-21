@@ -87,6 +87,19 @@ scalar-IV convention; these are not randomization-inference SEs.
 
 ## Outputs
 
+To report differences from eligible applicants, run
+`Rscript code/codex/high_va_compliers/02_center_on_applicants.R` after the main
+script. This uses the saved student analysis inputs without rereading the
+universe or assignment files. It saves `complier_minus_applicant_means.csv` in
+the clean output folder and a compact CSV/Markdown table in the table folder.
+The reference mean is the equally weighted mean among the same eligible
+applicants with that characteristic observed, separately for each VA. It is
+not a national mean or a mean across all SAE applicants. The 30 main
+treated-state differences describe baseline composition, not treatment effects.
+Their joint robust SEs use influence function
+`b*(X-complier_mean)/mean(b) - (X-applicant_mean)`, where `b=(Z-q)*D`,
+including the covariance between the two estimated means.
+
 Repository `data/clean/high_va_compliers/` contains all 120 estimates (5 VA x
 6 characteristics x 2 treatment states x 2 methods), sample exclusions,
 student-level analysis inputs, and R session information. Each output is separate

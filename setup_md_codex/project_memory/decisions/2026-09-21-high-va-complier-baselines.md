@@ -39,3 +39,15 @@ Do not report ordinary applicant averages as complier means. The script saves
 applicant averages separately for comparison, plus untreated-state estimates.
 
 Implementation and validation: `code/codex/high_va_compliers/`.
+
+## Centered reporting
+
+Bruno subsequently requested subtracting the population mean. Implementation
+uses, as an explicitly stated default, the equally weighted mean of the same
+eligible applicants with the characteristic observed, separately by VA and
+characteristic. This is not a national mean or a mean of all timely applicants.
+The main treated-state complier mean minus this reference is reported as a
+baseline composition difference, not a causal gain. Both component means and
+sample sizes remain available. Joint influence-function SEs include estimation
+of the applicant mean and its covariance with the complier mean; uncentered
+SEs are not reused. The original absolute-mean outputs are preserved.
