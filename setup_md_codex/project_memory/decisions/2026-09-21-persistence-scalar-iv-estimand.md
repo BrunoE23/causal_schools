@@ -10,3 +10,8 @@ Keep outcomes unconditional. Conditioning on actual entry into higher education
 or a premium category would select on a post-treatment outcome. The table
 replicates the main table exactly, replacing only the outcomes with entry plus
 continued participation in the second academic year for SAE cohorts 2018--2019.
+
+A separate exact-specification version requires continuous participation for
+two years after entry. It uses only SAE cohort 2018 and therefore omits the
+redundant cohort fixed effect while preserving all other controls, the matching
+VA instrument, expected-VA control, and heteroskedasticity-robust standard errors.

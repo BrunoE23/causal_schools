@@ -44,3 +44,8 @@ specification with persistence outcomes. It uses SAE cohorts 2018--2019 and
 measures entry followed by continued participation in the second academic year.
 Each column pairs the outcome with its corresponding EB VA: higher-ed
 enrollment, high-premium field, or high-premium institution.
+
+The same script also writes a separate version requiring persistence in both
+subsequent academic years. This longer horizon uses only the SAE 2018 cohort;
+the redundant cohort fixed effect is omitted while all other elements of the
+main specification remain unchanged.
