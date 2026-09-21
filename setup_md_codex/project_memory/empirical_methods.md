@@ -16,6 +16,14 @@ The merged broad-universe analysis file is assembled in `universe_reg_df.R`. It 
 
 The higher-education matricula cleaner now carries program and institution accreditation information from the raw matricula files. It keeps `ACREDITADA_CARR`, `ACREDITADA_INST`, and `ACRE_INST_ANIO` for first and last ingreso, and defines `program_certified_years = 1[ACREDITADA_CARR == "ACREDITADA"] * ACRE_INST_ANIO`.
 
+The annual higher-education persistence panel uses full SIES matricula files
+for 2022--2025. Expected entry is grade-8 cohort plus five years. Grade-8
+cohort 2017 has three follow-up years, 2018 has two, 2019 has one, and 2020 has
+entry-year status only through full SIES 2025. Outcomes
+distinguish conditional persistence among entry-year enrollees from
+unconditional entry-and-persistence, and use set overlap when students have
+multiple valid enrollments in a year.
+
 As of May 31, 2026, current school-value and scalar-IV development uses All-sample school values by default. Male/Female sample-specific value-added and gender-gap value-added are on hold unless explicitly requested.
 
 The SAE participation/process marker comes from `sae_binary_prep.RData`. The loaded object is `sae_apps_grade9`, with variables `mrun` and `sae_proceso`. In this file, `sae_proceso` indicates the SAE grade-9 admission process in which the student appears; if a student appears in multiple SAE processes, the construction keeps the first observed process.
