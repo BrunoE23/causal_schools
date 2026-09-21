@@ -12,3 +12,20 @@ The entire observed range is retained. Quantiles use the inverse weighted empiri
 Zero, median, and 75th percentile are reference conventions only; no threshold is
 selected and no binary indicators are created. Visual separation alone does not
 establish distinct latent school types; estimation noise and EB shrinkage can affect shape.
+
+## Selected binary definition
+
+Run `Rscript code/codex/high_va_cutoffs/02_build_indicators.R` to create the
+user-selected top-quartile indicators. For each of the five outcomes, high VA
+equals 1 if `va_eb_centered > P75`, otherwise 0. Cutoffs use equal school weights
+and the inverse empirical CDF (R quantile type 1), matching the plots. Schools
+exactly at the cutoff receive 0; ties are not arbitrarily split. Unavailable
+or nonfinite VA remains missing. The reference population is all schools with
+finite All-sample EB VA for that outcome, without an SAE restriction.
+
+Outputs in `data/clean/high_va_cutoffs`:
+- `school_high_va.csv`: one row per school, five `high_va_*` indicators.
+- `school_high_va_long.csv`: source VA, outcome, cutoff, and indicator by school/outcome.
+- `high_va_cutoffs.csv`: thresholds, counts, missingness, ties, and high-VA shares.
+
+Original VA files and downstream regressions are unchanged.
