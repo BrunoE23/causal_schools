@@ -20,7 +20,15 @@ paths <- c(
   outcomes='data/clean/staff_quality_va/staff_va_outcome_dictionary.csv',
   va='output/tables/empirical_bayes_school_va/stata_eb_school_rbd_observational_values_for_iv.csv')
 paths <- setNames(file.path(root,paths),names(paths))
+paths <- c(paths,
+  fee_directory='C:/Users/brunem/Box/causal_schools/data/raw/school_directory/2024/20240912_Directorio_Oficial_EE_2024_20240430_WEB.csv',
+  fee_codebook='C:/Users/brunem/Box/causal_schools/data/raw/school_directory/2024/ER_Directorio_Oficial_EE_WEB.pdf')
 hash <- tools::md5sum(paths)
+previous_x <- if(file.exists(file.path(out,'school_predictors.csv'))) fread(file.path(out,'school_predictors.csv')) else NULL
+previous_folds <- if(file.exists(file.path(out,'school_folds.csv'))) fread(file.path(out,'school_folds.csv')) else NULL
+if(!is.null(previous_x) && !any(grepl('fee_',names(previous_x),fixed=TRUE)) &&
+   file.exists(file.path(out,'lasso_performance.csv')) && !file.exists(file.path(out,'performance_before_fee_bands.csv')))
+  fwrite(fread(file.path(out,'lasso_performance.csv')),file.path(out,'performance_before_fee_bands.csv'))
 source(file.path(root,'code/codex/titulados_staff_linkage/credential_helpers.R'))
 metrics <- credential_names
 cn <- c('UG degree at high-premium institution','Any non-UG qualification',
@@ -55,6 +63,30 @@ for (spec in list(list(field='COD_DEPE',codes=1:6,ref=1L,prefix='dependency'),
   add(paste0('school__',spec$prefix,'_unknown'),as.integer(!known),
       paste(spec$prefix,'unknown'),'school','context')
 }
+# Self-reported 2024 fee bands, not peso amounts. Free (code 1) is the omitted
+# category for each fee; unknown information has its own indicator (code 0).
+fee_source <- fread(paths[['fee_directory']],sep=';',encoding='UTF-8',
+  select=c('AGNO','RBD','PAGO_MATRICULA','PAGO_MENSUAL'))[RBD %in% x$RBD]
+stopifnot(!anyDuplicated(fee_source$RBD),all(fee_source$AGNO==2024L),setequal(fee_source$RBD,x$RBD))
+fee_source <- fee_source[match(x$RBD,RBD)]
+fee_map <- c('SIN INFORMACION'=0L,'GRATUITO'=1L,'$1.000 A $10.000'=2L,
+  '$10.001 A $25.000'=3L,'$25.001 A $50.000'=4L,'$50.001 A $100.000'=5L,'MAS DE $100.000'=6L)
+fee_labels <- c('No information','Free','CLP 1,000-10,000','CLP 10,001-25,000',
+  'CLP 25,001-50,000','CLP 50,001-100,000','Above CLP 100,000')
+fee_audit <- list()
+for(spec in list(list(field='PAGO_MATRICULA',prefix='enrollment_fee',label='Enrollment fee'),
+                 list(field='PAGO_MENSUAL',prefix='monthly_fee',label='Monthly fee'))) {
+  value <- toupper(trimws(fee_source[[spec$field]]))
+  stopifnot(!anyNA(value),all(value %in% names(fee_map)))
+  code <- unname(fee_map[value])
+  fee_source[,(paste0(spec$field,'_CODE')):=code]
+  for(band in c(2:6,0L)) add(paste0('school__',spec$prefix,'_',if(band==0) 'unknown' else paste0('band_',band)),
+    as.integer(code==band),paste0(spec$label,': ',fee_labels[band+1L]),'school',if(band==0) 'coverage' else 'fees')
+  fee_audit[[spec$field]] <- data.table(FEE=spec$field,CODE=0:6,LABEL=fee_labels,
+    N_SCHOOLS=tabulate(code+1L,nbins=7L))
+}
+fwrite(fee_source,file.path(out,'school_fee_bands.csv'))
+fwrite(rbindlist(fee_audit),file.path(out,'school_fee_band_counts.csv'))
 staff <- fread(paths[['staff']]); leaders <- fread(paths[['leaders']])
 sdict <- fread(paths[['staff_dictionary']]); ldict <- fread(paths[['leader_dictionary']])
 m <- fread(paths[['members']],colClasses=c(MRUN='character'))[ROLE!='Non-HS teachers']
@@ -121,6 +153,12 @@ stopifnot(!anyDuplicated(dictionary$FEATURE),nrow(x)==3682,!anyDuplicated(x$RBD)
 set.seed(20260920L)
 folds <- data.table(RBD=x$RBD,OUTER_FOLD=sample(rep(1:5,length.out=nrow(x))),
   FINAL_INNER_FOLD=sample(rep(1:5,length.out=nrow(x))))
+if(!is.null(previous_x)) {
+  previous_x <- previous_x[match(x$RBD,RBD)]
+  stopifnot(all(names(previous_x) %in% names(x)))
+  for(nm in names(previous_x)) stopifnot(isTRUE(all.equal(previous_x[[nm]],x[[nm]],tolerance=1e-12)))
+}
+if(!is.null(previous_folds)) stopifnot(identical(previous_folds,folds))
 fwrite(x,file.path(out,'school_predictors.csv'),na='NA')
 fwrite(dictionary,file.path(out,'predictor_dictionary.csv'))
 fwrite(rbindlist(excluded),file.path(out,'excluded_candidates.csv'))

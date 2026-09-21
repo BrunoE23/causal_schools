@@ -1,5 +1,10 @@
 # Joint staff-characteristic Lasso and school VA
 
+The design and results below describe the initial pre-fee specification.
+The approved fee-band extension and current results are recorded in
+`2026-09-20-staff-lasso-fee-bands.md`; the same report filenames now contain
+that extended specification.
+
 ## Agreed design
 
 Bruno approved one school-level Lasso for each of the 12 saved All-sample EB

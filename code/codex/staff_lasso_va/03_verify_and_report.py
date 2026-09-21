@@ -37,11 +37,29 @@ analysis = pd.read_csv(OUT / 'school_va_analysis.csv.gz')
 audit = pd.read_csv(OUT / 'lasso_fit_audit.csv')
 curves = pd.read_csv(OUT / 'lasso_cv_curves.csv')
 freq = pd.read_csv(OUT / 'lasso_selection_frequency.csv')
-assert x.index.is_unique and len(x) == 3682 and len(dictionary) == 163
+assert x.index.is_unique and len(x) == 3682 and len(dictionary) == 175
 assert not pred.duplicated(['RBD', 'OUTCOME', 'SPEC', 'RULE']).any()
 assert len(performance) == 48 and len(audit) == 288
 assert (coef.SELECTED == coef.BETA_SD.ne(0)).all()
 assert (coef.loc[coef.TRAIN_CONSTANT, 'BETA_SD'] == 0).all()
+
+# Independently verify fee categories directly from the 2024 raw directory.
+fee = pd.read_csv(paths['fee_directory'], sep=';', encoding='utf-8-sig',
+                  usecols=['RBD', 'AGNO', 'PAGO_MATRICULA', 'PAGO_MENSUAL']).set_index('RBD')
+fee = fee.loc[x.index]
+assert fee.index.is_unique and fee.AGNO.eq(2024).all()
+fee_categories = ['SIN INFORMACION', 'GRATUITO', '$1.000 A $10.000', '$10.001 A $25.000',
+                  '$25.001 A $50.000', '$50.001 A $100.000', 'MAS DE $100.000']
+for field, prefix in [('PAGO_MATRICULA', 'enrollment_fee'), ('PAGO_MENSUAL', 'monthly_fee')]:
+    values = fee[field].str.strip().str.upper()
+    assert values.isin(fee_categories).all()
+    matrix = []
+    for band in [2, 3, 4, 5, 6, 0]:
+        key = f'school__{prefix}_' + ('unknown' if band == 0 else f'band_{band}')
+        close(x[key], values.eq(fee_categories[band]).astype(int))
+        matrix.append(x[key].to_numpy())
+    close(np.array(matrix).sum(axis=0), values.ne('GRATUITO').astype(int))
+print('Verified 12 fee indicators: free reference, distinct unknown category, raw directory matches.', flush=True)
 
 # Verify all 24 credential aggregates and coverage features from person sources.
 metrics = ['UG_HIGH_PREMIUM', 'ANY_POST_UG', 'POST_UG_HIGH_PREMIUM', 'ANY_HIGH_PREMIUM',
@@ -225,7 +243,8 @@ notes = [
     'One Gaussian Lasso per saved All-sample EB VA outcome. All three staff groups enter jointly; schools receive equal weight.',
     'Main coefficients use the one-standard-error penalty. Each entry is outcome SD per predictor SD, conditional on all selected predictors. Dashes mean zero coefficients, not unavailable outcomes. No significance stars are used.',
     'Staff components and as-of credential shares refer to 2018–2024; observed career histories start in 2013. Teachers are HS-assigned classroom teachers. Orientadores and leaders can hold primary or secondary roles.',
-    'The 163 candidates comprise 27 school, 43 teacher, 46 orientador and 47 leadership measures. Each also has a missingness indicator; training-constant columns are removed. Composite indices and alternative-history versions are excluded; broken post-2018 reported-tenure averages are excluded.',
+    'The 175 candidates comprise 39 school, 43 teacher, 46 orientador and 47 leadership measures. Each also has a missingness indicator; training-constant columns are removed. Composite indices and alternative-history versions are excluded; broken post-2018 reported-tenure averages are excluded.',
+    'School-only and joint models both include separate enrollment-fee and monthly-fee indicators from the 2024 MINEDUC directory. Free is the reference for each; paid bands are CLP 1,000–10,000, 10,001–25,000, 25,001–50,000, 50,001–100,000 and above 100,000. No information is a separate category. These self-reported bands are not exact prices; no midpoint, top-code amount or annual-cost scalar is assigned.',
     'Absent roles and incomplete rosters have explicit indicators. Undefined or missing characteristics use training-only median placeholders plus missingness indicators, not a claim of zero qualifications. Qualification database coverage and missing institution-premium coverage are separate predictors.',
     'Student/staff ratios use pooled VA-sample students and average annual staff headcount. They are not class sizes, annual HS enrollment ratios, FTE measures or counselor caseloads. No funding or 2024-only age measure is included.',
     'Prediction uses five outer school folds and five inner tuning folds. Every imputation, scaling step and penalty choice excludes the held-out outer schools. The school-only baseline is separately tuned on identical schools and folds. Its penalty range extends to zero after a boundary audit; joint-model minima were interior.',
@@ -269,6 +288,7 @@ parts = ['<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewp
          '<h1>Staff characteristics and school VA</h1>',
          '<p class="intro">Joint Lasso across 12 VA outcomes. Main specification: one-standard-error penalty. '
          'Teacher, orientador and leadership measures compete jointly with school characteristics. These are predictive associations, not causal effects.</p>',
+         '<p class="intro">Both models include 2024 enrollment-fee and monthly-fee bands, with free as the reference and no information as a separate category. School-only excludes all staff measures.</p>',
          '<nav><a href="#prediction">Prediction</a><a href="#coefficients">Coefficients</a><a href="#sensitivity">Sensitivity</a><a href="#notes">Methods</a></nav>',
          '<h2 id="prediction">Out-of-sample prediction</h2>', ht(performance_table('one_se')),
          '<h2 id="coefficients">Selected coefficients</h2><p>Outcome SD per predictor SD. Dashes indicate not selected. '

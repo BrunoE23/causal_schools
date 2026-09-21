@@ -912,7 +912,7 @@ The level and growth measures should be treated as different school characterist
 ## Joint staff Lasso and school VA (2026-09-20)
 
 The approved joint school-level Lasso uses all 12 saved All-sample EB outcomes,
-2018-2024 staff characteristics, and 163 raw candidate predictors (27 school,
+2018-2024 staff characteristics, and 175 raw candidate predictors (39 school,
 43 HS-teacher, 46 orientador, 47 leadership), plus missingness indicators.
 Each role has all eight dated linked-credential shares, existing career and
 qualification components, staffing, role availability and matching coverage.
@@ -921,15 +921,22 @@ reported-tenure averages remain excluded; 2018 tenure is separate. Staffing
 ratios are VA-sample-count proxies, not actual class sizes. No funding or
 2024-only age measure enters this first specification.
 
+Both school-only and joint models include 12 self-reported 2024 school-directory
+fee indicators: five paid bands and a separate no-information category for each
+of enrollment and monthly fees, with free as the omitted reference. No exact
+annual cost is constructed from these ranges. The fee-band extension preserves
+all prior predictors, samples and folds; its rationale and current findings are
+in `decisions/2026-09-20-staff-lasso-fee-bands.md`.
+
 Gaussian alpha=1 Lasso uses train-fold-only imputation/scaling, five inner tuning
 folds and five outer school folds. Main tables use the one-SE penalty; minimum
 error is a sensitivity. Compare against separately tuned school-context-only
 models on identical schools/folds. Coefficients are standardized full-sample
 refits; reported R2 is nested out-of-fold. Outcomes are not imputed, schools are
 equally weighted, and sample sizes range 3,373-3,682. The main joint/baseline R2
-are math 0.446/0.365, language 0.458/0.412, exam taking 0.607/0.450, HE enrollment
-0.332/0.269, HP institution 0.578/0.476, full projected income 0.441/0.398, and
-HP field 0.094/0.095. Selection is not causal evidence or a validation of staff
+including fee bands are math 0.465/0.401, language 0.477/0.442, exam taking
+0.609/0.462, HE enrollment 0.334/0.277, HP institution 0.598/0.510, full projected
+income 0.458/0.424, and HP field 0.100/0.106. Selection is not causal evidence or a validation of staff
 quality; saved VA estimation uncertainty is not propagated.
 
 Code: `code/codex/staff_lasso_va/`; derived data/models/folds under

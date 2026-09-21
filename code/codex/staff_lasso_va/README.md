@@ -25,8 +25,11 @@ source VA, staff caches or raw data. Input hashes are checked before and after.
 
 - Existing 3,682-school universe, staff window 2018-2024, observed histories
   beginning 2013. Each outcome uses all schools with a finite saved EB VA.
-- 163 raw candidates: 27 school context, 43 HS-teacher, 46 orientador and
+- 175 raw candidates: 39 school context, 43 HS-teacher, 46 orientador and
   47 leadership measures. All eight dated credential shares enter for each role.
+- Both model sets include 12 fee indicators: five paid bands and no-information
+  for each of enrollment and monthly fees, relative to free. These are the
+  self-reported 2024 directory bands, not an invented annual-cost scalar.
 - Role absence and incomplete rosters are separate from qualifications; undefined
   predictors get train-only median placeholders and missingness indicators.
   No outcome is imputed. Training-constant columns are excluded.
