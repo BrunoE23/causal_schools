@@ -49,3 +49,7 @@ The same script also writes a separate version requiring persistence in both
 subsequent academic years. This longer horizon uses only the SAE 2018 cohort;
 the redundant cohort fixed effect is omitted while all other elements of the
 main specification remain unchanged.
+
+Persistence regressions do not condition on admission-exam taking. The exam
+indicator is tied to a later observed exam year and is not part of the sample
+definition for these higher-education persistence outcomes.

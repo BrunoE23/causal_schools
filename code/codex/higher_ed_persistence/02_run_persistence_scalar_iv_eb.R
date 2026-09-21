@@ -19,7 +19,7 @@ specs <- data.table(
   spec = c('highered', 'highpay', 'highinst'),
   value_outcome = c('higher_ed_enrolled_m1', 'high_paying_field_m1', 'high_inst_m1'),
   label = c('Higher-ed enrollment', 'High-premium field', 'High-premium institution'),
-  require_exam = c(FALSE, TRUE, TRUE)
+  require_exam = c(FALSE, FALSE, FALSE)
 )
 
 values <- fread(value_path, na.strings = c('', 'NA'))[
@@ -139,7 +139,7 @@ tex<-c('\\begin{table}[!htbp]','\\centering',
   ' & Higher-ed enrollment & High-premium field & High-premium institution \\\\',
   '\\midrule',theta_row,se_row,n_row,f_row,
   '\\bottomrule','\\end{tabular}','\\begin{tablenotes}[flushleft]','\\footnotesize',
-  '\\item Notes: Each column uses the EB observational school value-added measure named in its heading. Attended-school VA is instrumented with first-round offered-school VA, controlling for the DA-probability expected value of that VA, cohort, grade-4 math and verbal scores, gender, and age. The main sample contains timely SAE applicants from the 2018--2019 cohorts with nondegenerate assignment risk. Outcomes are unconditional; students who do not enter the relevant category are coded zero. Heteroskedasticity-robust standard errors are reported. $^{*}p<0.10$, $^{**}p<0.05$, $^{***}p<0.01$.',
+  '\\item Notes: Each column uses the EB observational school value-added measure named in its heading. Attended-school VA is instrumented with first-round offered-school VA, controlling for the DA-probability expected value of that VA, cohort, grade-4 math and verbal scores, gender, and age. The main sample contains timely SAE applicants from the 2018--2019 cohorts with nondegenerate assignment risk; admission-exam taking is not a sample restriction. Outcomes are unconditional; students who do not enter the relevant category are coded zero. Heteroskedasticity-robust standard errors are reported. $^{*}p<0.10$, $^{**}p<0.05$, $^{***}p<0.01$.',
   '\\end{tablenotes}','\\end{threeparttable}','\\end{table}')
 writeLines(tex,file.path(out_dir,'persistence_scalar_iv_eb_main.tex'))
 main_y2<-res_y2[match(specs$spec,spec)]
@@ -155,7 +155,7 @@ tex_y2<-c('\\begin{table}[!htbp]','\\centering',
   ' & Higher-ed enrollment & High-premium field & High-premium institution \\\\',
   '\\midrule',theta_y2,se_y2,n_y2,f_y2,'\\bottomrule','\\end{tabular}',
   '\\begin{tablenotes}[flushleft]','\\footnotesize',
-  '\\item Notes: Each column uses the EB observational school value-added measure named in its heading. Attended-school VA is instrumented with first-round offered-school VA, controlling for the DA-probability expected value of that VA, grade-4 math and verbal scores, gender, and age. The sample contains timely SAE applicants from the 2018 cohort with nondegenerate assignment risk. Outcomes equal one when the student enters the relevant category and remains in it in each of the following two academic years. Heteroskedasticity-robust standard errors are reported. $^{*}p<0.10$, $^{**}p<0.05$, $^{***}p<0.01$.',
+  '\\item Notes: Each column uses the EB observational school value-added measure named in its heading. Attended-school VA is instrumented with first-round offered-school VA, controlling for the DA-probability expected value of that VA, grade-4 math and verbal scores, gender, and age. The sample contains timely SAE applicants from the 2018 cohort with nondegenerate assignment risk; admission-exam taking is not a sample restriction. Outcomes equal one when the student enters the relevant category and remains in it in each of the following two academic years. Heteroskedasticity-robust standard errors are reported. $^{*}p<0.10$, $^{**}p<0.05$, $^{***}p<0.01$.',
   '\\end{tablenotes}','\\end{threeparttable}','\\end{table}')
 writeLines(tex_y2,file.path(out_dir,'persistence_two_year_scalar_iv_eb.tex'))
 print(res)

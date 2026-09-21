@@ -15,3 +15,7 @@ A separate exact-specification version requires continuous participation for
 two years after entry. It uses only SAE cohort 2018 and therefore omits the
 redundant cohort fixed effect while preserving all other controls, the matching
 VA instrument, expected-VA control, and heteroskedasticity-robust standard errors.
+
+Do not restrict these persistence specifications to admission-exam takers. The
+exam-taking indicator is tied to the later exam observation and is not a valid
+sample requirement for annual higher-education persistence.
