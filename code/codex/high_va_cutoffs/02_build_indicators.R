@@ -4,7 +4,8 @@ suppressPackageStartupMessages(library(data.table))
 input <- 'output/tables/empirical_bayes_school_va'
 out <- 'data/clean/high_va_cutoffs'
 percentile <- as.integer(Sys.getenv('HIGH_VA_PERCENTILE', '75'))
-stopifnot(percentile %in% c(50L, 75L))
+stopifnot(percentile %in% c(25L, 50L, 75L))
+if (percentile == 25L) out <- file.path(out, 'p25')
 if (percentile == 50L) out <- file.path(out, 'median')
 cutoff_column <- paste0('cutoff_p', percentile)
 dir.create(out, recursive = TRUE, showWarnings = FALSE)

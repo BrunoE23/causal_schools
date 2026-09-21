@@ -62,3 +62,11 @@ applicant means are recomputed; the three-cohort window, baseline measures,
 main/spline estimators, robust SEs, and centering convention remain the same.
 P75 remains the default and its existing tables are preserved. This is a
 threshold comparison, not a common-sample comparison or a replacement of P75.
+
+## P25 threshold comparison
+
+Bruno additionally requested P25 for completeness. `HIGH_VA_PERCENTILE=25`
+uses VA strictly above the school-level P25, classifying approximately 75%
+of schools as high. The same estimators and reference-mean convention apply,
+with D, Z, q and eligible samples recomputed. `p25/` subfolders preserve this
+third analysis separately, leaving both P50 and P75 results intact.

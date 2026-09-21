@@ -28,7 +28,11 @@ $env:HIGH_VA_PERCENTILE = '50'
 Remove-Item Env:HIGH_VA_PERCENTILE
 ```
 
-Only 50 and 75 are supported; omitted defaults to the original P75 analysis.
+The supported cutoffs are 25, 50, and 75; omitted defaults to P75.
+For P25, use the same three commands with `HIGH_VA_PERCENTILE='25'`.
+This defines high VA as strictly above P25 (approximately the top 75% of
+schools), and saves all outputs in separate `p25/` subfolders. P25, median,
+and P75 results are all retained.
 For P50, indicators, clean results, and tables go in `median/` subfolders of
 their corresponding original directories, preserving all P75 outputs. Both
 versions use the same estimator, years, covariates, and exclusion rules.

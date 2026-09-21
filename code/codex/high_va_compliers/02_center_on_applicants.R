@@ -5,7 +5,11 @@ source('code/codex/high_va_compliers/helpers.R')
 out <- 'data/clean/high_va_compliers'
 tables <- 'output/tables/high_va_compliers'
 percentile <- as.integer(Sys.getenv('HIGH_VA_PERCENTILE', '75'))
-stopifnot(percentile %in% c(50L, 75L))
+stopifnot(percentile %in% c(25L, 50L, 75L))
+if (percentile == 25L) {
+  out <- file.path(out, 'p25')
+  tables <- file.path(tables, 'p25')
+}
 if (percentile == 50L) {
   out <- file.path(out, 'median')
   tables <- file.path(tables, 'median')

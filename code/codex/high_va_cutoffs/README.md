@@ -35,3 +35,5 @@ For the median alternative, set `HIGH_VA_PERCENTILE=50` before running
 quantile convention are used, with strict VA > P50 and ties coded 0. All three
 indicator outputs go to `data/clean/high_va_cutoffs/median/`, preserving P75.
 Unset the variable or set it to 75 to use the original top-quartile default.
+Set `HIGH_VA_PERCENTILE=25` for the additional VA > P25 definition (roughly
+75% high-VA schools), saved separately under `data/clean/high_va_cutoffs/p25/`.
