@@ -132,6 +132,11 @@ overlap of the IV sample with the population-mean sample. VA/probability
 uncertainty remains conditioned out. Older eligible-sample-centered tables
 remain available with their distinct `complier_minus_applicant_means` names.
 
+Run `04_make_small_latex_table.R` after `03_center_on_sae_population.R` to
+create the paper-facing projected-income VA socioeconomic comparison. The
+table orders thresholds P25, median, P75 and reports joint robust SEs beneath
+the centered estimates. Its SAE population mean is common across thresholds.
+
 To report differences from eligible applicants, run
 `Rscript code/codex/high_va_compliers/02_center_on_applicants.R` after the main
 script. This uses the saved student analysis inputs without rereading the
