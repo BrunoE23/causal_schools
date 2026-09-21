@@ -908,3 +908,35 @@ The construction also creates a growth/change version of the real funding measur
 - `log_change_public_funding_per_student_2021_pesos_2019_2021_vs_2017_2018`
 
 The level and growth measures should be treated as different school characteristics. The level measure asks whether students benefit from being induced into higher-funded schools. The growth measure asks whether students benefit from being induced into schools whose real public funding per student increased more over the period.
+
+## Joint staff Lasso and school VA (2026-09-20)
+
+The approved joint school-level Lasso uses all 12 saved All-sample EB outcomes,
+2018-2024 staff characteristics, and 163 raw candidate predictors (27 school,
+43 HS-teacher, 46 orientador, 47 leadership), plus missingness indicators.
+Each role has all eight dated linked-credential shares, existing career and
+qualification components, staffing, role availability and matching coverage.
+Composite indices are not included alongside their components. Broken post-2018
+reported-tenure averages remain excluded; 2018 tenure is separate. Staffing
+ratios are VA-sample-count proxies, not actual class sizes. No funding or
+2024-only age measure enters this first specification.
+
+Gaussian alpha=1 Lasso uses train-fold-only imputation/scaling, five inner tuning
+folds and five outer school folds. Main tables use the one-SE penalty; minimum
+error is a sensitivity. Compare against separately tuned school-context-only
+models on identical schools/folds. Coefficients are standardized full-sample
+refits; reported R2 is nested out-of-fold. Outcomes are not imputed, schools are
+equally weighted, and sample sizes range 3,373-3,682. The main joint/baseline R2
+are math 0.446/0.365, language 0.458/0.412, exam taking 0.607/0.450, HE enrollment
+0.332/0.269, HP institution 0.578/0.476, full projected income 0.441/0.398, and
+HP field 0.094/0.095. Selection is not causal evidence or a validation of staff
+quality; saved VA estimation uncertainty is not propagated.
+
+Code: `code/codex/staff_lasso_va/`; derived data/models/folds under
+`data/clean/staff_lasso_va/`; full readable tables in
+`output/reports/staff_lasso_va.html` and `.md`; LaTeX coefficient panels in
+`output/tables/staff_lasso_va/staff_lasso_coefficients.tex`.
+Independent checks reconstruct all role credential shares and held-out
+predictions, optimizer conditions, tuning choices and performance. Design and
+the school-only penalty-boundary repair are documented in
+`decisions/2026-09-20-staff-lasso-va.md`.
