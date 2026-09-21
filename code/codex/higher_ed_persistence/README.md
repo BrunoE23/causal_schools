@@ -38,3 +38,9 @@ Outputs:
 - `data/clean/higher_ed_persistence/higher_ed_persistence_outcomes.csv`
 - `data/clean/higher_ed_persistence/higher_ed_persistence_scan_diagnostics.csv`
 - `output/tables/higher_ed_persistence/higher_ed_persistence_summary.csv`
+
+`02_run_persistence_scalar_iv_eb.R` replicates the main expected-VA scalar IV
+specification with persistence outcomes. It uses SAE cohorts 2018--2019 and
+measures entry followed by continued participation in the second academic year.
+Each column pairs the outcome with its corresponding EB VA: higher-ed
+enrollment, high-premium field, or high-premium institution.
