@@ -1,0 +1,21 @@
+# Baseline characteristics of high-VA compliers
+
+Assignment years: 2018, 2019, 2020
+
+Main estimates use (Z-q) moments with the treated-state equation. Parentheses contain heteroskedastic-robust standard errors.
+These are assignment-variance-weighted complier means, conditional on valid classification and observed baseline covariates.
+
+| characteristic | highinst | highpay | language | math | program_income_full |
+| --- | --- | --- | --- | --- | --- |
+| father_educ_years_imputed | 11.625 (0.090) | 11.092 (0.045) | 11.546 (0.071) | 11.535 (0.077) | 11.511 (0.052) |
+| female | 0.449 (0.016) | 0.433 (0.007) | 0.529 (0.011) | 0.569 (0.012) | 0.464 (0.009) |
+| income_decile_imputed | 5.498 (0.083) | 4.833 (0.040) | 5.171 (0.064) | 5.134 (0.069) | 5.268 (0.048) |
+| mother_educ_years_imputed | 11.704 (0.084) | 11.272 (0.043) | 11.812 (0.064) | 11.709 (0.070) | 11.622 (0.050) |
+| z_sim_leng_4to | -0.053 (0.033) | -0.127 (0.015) | 0.109 (0.023) | 0.135 (0.024) | -0.081 (0.019) |
+| z_sim_mat_4to | -0.095 (0.032) | -0.149 (0.015) | 0.017 (0.022) | 0.062 (0.024) | -0.093 (0.018) |
+
+Income and parent education use existing baseline imputations. Female is a share; math/language are grade-4 standardized scores; parent education is in years.
+See data/clean/high_va_compliers/complier_means.csv for untreated-state estimates, spline sensitivity, applicant means, confidence intervals, sample sizes, first-stage and balance diagnostics.
+Standard errors condition on school VA classifications and simulated assignment probabilities; they do not propagate VA estimation or simulation uncertainty.
+No-first-round-offer (RBD 0) and simulated unmatched states have Z=0. Missing VA is never classified as low.
+Positive first stages do not establish individual monotonicity. Missing attendance and covariate exclusions may affect interpretation; inspect the saved exclusion counts.
