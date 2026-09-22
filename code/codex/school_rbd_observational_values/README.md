@@ -18,11 +18,21 @@ constructor. Field indicators and STEM are rebuilt from the current
 The constructor estimates the existing outcome-specific school and
 middle-school fixed-effect regressions with baseline controls. It retains
 the existing age, complete-case, and outcome-specific exam-taking restrictions.
-It does not add sector, SAE, lottery-risk, or explicit cohort restrictions.
+It does not add sector, SAE, or lottery-risk restrictions.
 Standard errors use the existing lfe bootstrap configuration (100 replications
 by default); this can make a full run lengthy.
 
-Outputs are regenerated under `data/clean/school_rbd_observational_values/`:
+The default cohort window is 2017--2020. Set `SCHOOL_VA_COHORT_MIN` and
+`SCHOOL_VA_COHORT_MAX` explicitly for another window. The two paper-facing
+runs are 2017--2020 (all usable cohorts) and 2017--2018 (no cohort overlap
+with the paired 2019--2020 SAE lottery analysis). Cohort 2021 is excluded
+because its severe baseline-data loss yields a small selected complete-case
+sample.
+
+Outputs are regenerated under
+`data/clean/school_rbd_observational_values/cohorts_<min>_<max>/`:
 `school_rbd_observational_values.csv` and `score_scale_diagnostics_by_year.csv`.
 The source universe is never modified. Empirical-Bayes shrinkage is a separate
 downstream script in `../empirical_bayes_school_va/`.
+
+Run 03_audit_sample_cohorts.R from the repository root for a column-selective cohort eligibility audit. Counts precede outcome-specific missingness and estimator drops.

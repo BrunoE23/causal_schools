@@ -335,3 +335,6 @@
   first post-grade-8 RBDs; tabulate whether they remain at the origin school,
   receive a later offer, or enroll elsewhere. Then document and, if needed,
   revise the zero-offer treatment/instrument definition.
+
+### Resolved: observational VA selected 2021 cohort (2026-09-21)
+The consolidated Box universe includes grade-8 cohorts 2017-2021. A column-selective audit found complete-control eligible counts of 176570, 193269, 192615, 195545, and 13769 respectively; corresponding exam-taker counts are 135968, 159583, 162015, 165243, and 7003. These precede outcome-specific missingness and estimator drops. Because the 2021 group is small and selected by missing baseline data, the constructor now defaults to 2017-2020 and writes cohort-window-specific outputs. The second paper-facing observational run uses 2017-2018.

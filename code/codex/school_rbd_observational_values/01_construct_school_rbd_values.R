@@ -57,7 +57,16 @@ program_income_path <- Sys.getenv(
     "output/tables/mifuturo_matricula_income/mifuturo_person_level_income_outcomes.csv"
   )
 )
-output_dir <- file.path(data_wd, "data/clean/school_rbd_observational_values")
+cohort_min <- as.integer(Sys.getenv("SCHOOL_VA_COHORT_MIN", unset = "2017"))
+cohort_max <- as.integer(Sys.getenv("SCHOOL_VA_COHORT_MAX", unset = "2020"))
+if (is.na(cohort_min) || is.na(cohort_max) || cohort_min > cohort_max) {
+  stop("SCHOOL_VA_COHORT_MIN and SCHOOL_VA_COHORT_MAX must define a valid range.")
+}
+cohort_tag <- paste0("cohorts_", cohort_min, "_", cohort_max)
+
+output_dir <- file.path(
+  data_wd, "data/clean/school_rbd_observational_values", cohort_tag
+)
 output_path <- Sys.getenv(
   "SCHOOL_RBD_VALUES_OUTPUT_PATH",
   unset = file.path(output_dir, "school_rbd_observational_values.csv")
@@ -1018,6 +1027,8 @@ if (!is.na(student_id_var) && anyDuplicated(df[[student_id_var]]) > 0) {
 analytic <- df %>%
   mutate(school_rbd = as.numeric(.data[[school_var]])) %>%
   filter(
+    cohort_gr8 >= cohort_min,
+    cohort_gr8 <= cohort_max,
     !is.na(school_rbd),
     school_rbd > 0,
     !is.na(.data[[age_var]]),
@@ -1316,6 +1327,7 @@ if (anyDuplicated(final_values[c("school_rbd", "analysis_sample", "outcome")]) >
 write_csv(final_values, output_path)
 
 message("Wrote: ", output_path)
+message("Grade-8 cohorts: ", cohort_min, "-", cohort_max)
 message("Rows: ", nrow(final_values))
 message("Outcomes: ", n_distinct(final_values$outcome))
 message("Schools: ", n_distinct(final_values$school_rbd))
