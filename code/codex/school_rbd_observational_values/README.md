@@ -34,6 +34,9 @@ runs are 2017--2020 (all usable cohorts) and 2017--2018 (no cohort overlap
 with the paired 2019--2020 SAE lottery analysis). Cohort 2021 is excluded
 because its severe baseline-data loss yields a small selected complete-case
 sample.
+Only the 2017--2020 maximum-data run executes by default. Set
+`RUN_NO_OVERLAP=1` only when an explicit request calls for the 2017--2018
+no-overlap robustness run.
 
 Outputs are regenerated under
 `data/clean/school_rbd_observational_values/cohorts_<min>_<max>/`:

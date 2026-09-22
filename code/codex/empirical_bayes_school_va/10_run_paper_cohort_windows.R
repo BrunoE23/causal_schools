@@ -16,4 +16,6 @@ run_window <- function(min_year, max_year) {
 }
 
 run_window(2017L, 2020L)
-run_window(2017L, 2018L)
+if (identical(Sys.getenv("RUN_NO_OVERLAP", unset = "0"), "1")) {
+  run_window(2017L, 2018L)
+}

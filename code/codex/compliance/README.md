@@ -16,3 +16,7 @@ without a recorded first-round offer. For each group, it reports the fraction
 whose eventual most-time high school is their first, second, third, or any of
 their top three SAE choices. Rank-specific denominators require that the student
 submitted a school at that rank.
+
+Compliance scripts run only the maximum-data specification by default. Set
+`RUN_NO_OVERLAP=1` only when the no-overlap robustness sample is explicitly
+requested.

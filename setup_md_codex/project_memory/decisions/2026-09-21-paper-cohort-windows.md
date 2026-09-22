@@ -27,6 +27,14 @@ another. The 2017--2020 observational VA and 2018--2020 SAE samples overlap in
 cohort years by design; this is the maximum-data specification. The 2017--2018
 observational VA and 2019--2020 SAE samples are the no-overlap specification.
 
+## Update: default specification
+
+As of 2026-09-22, run and report only the maximum-data specification by
+default: observational VA cohorts 2017--2020 paired with SAE cohorts
+2018--2020. Do not run, update, or report the 2017--2018 VA / 2019--2020 SAE
+no-overlap specification unless Bruno explicitly requests it. Reusable runners
+enforce this with an opt-in `RUN_NO_OVERLAP=1` environment variable.
+
 The requested paper-facing VA outcomes are standardized admission-test math,
 standardized admission-test language, admission-exam taking, log projected
 program income, high-premium-field enrollment, high-premium-institution

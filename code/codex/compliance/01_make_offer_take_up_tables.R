@@ -31,6 +31,9 @@ pairs <- data.table(
   label = c("VA 2017--2020; SAE 2018--2020", "VA 2017--2018; SAE 2019--2020"),
   input_tag = c("va_2017_2020__sae_2018_2020", "va_2017_2018__sae_2019_2020")
 )
+if (!identical(Sys.getenv("RUN_NO_OVERLAP", unset = "0"), "1")) {
+  pairs <- pairs[pair == "maximum_data"]
+}
 
 specs <- data.table(
   spec = c("math_adj_eb", "leng_adj_eb", "exam_adj_eb", "highinst_adj_eb",

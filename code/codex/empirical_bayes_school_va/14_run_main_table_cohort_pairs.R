@@ -44,4 +44,6 @@ run_pair <- function(va_min, va_max, sae_min, sae_max) {
 }
 
 run_pair(2017L, 2020L, 2018L, 2020L)
-run_pair(2017L, 2018L, 2019L, 2020L)
+if (identical(Sys.getenv("RUN_NO_OVERLAP", unset = "0"), "1")) {
+  run_pair(2017L, 2018L, 2019L, 2020L)
+}
