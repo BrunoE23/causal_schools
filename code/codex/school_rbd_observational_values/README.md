@@ -14,6 +14,12 @@ The legacy `program_income_clp_m1` and `log_program_income_clp_m1` output names
 remain aliases of the full program-income measures, matching the income
 constructor. Field indicators and STEM are rebuilt from the current
 `field_reclassified_m1` and `field_reclassified_ml` classifications.
+The paper-facing controlled outcomes are math, language, admission-exam taking,
+log full program income, high-premium field, high-premium institution, and any
+FUAS benefits/credit application (`any_postulacion`). The application outcome
+is joined from `data/clean/becas_creditos/becas_creditos_outcomes.csv` and uses
+the broad complete-control sample; postsecondary outcomes retain the exam-taker
+restriction.
 
 The constructor estimates the existing outcome-specific school and
 middle-school fixed-effect regressions with baseline controls. It retains

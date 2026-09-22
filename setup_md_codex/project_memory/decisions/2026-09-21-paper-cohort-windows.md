@@ -26,3 +26,10 @@ Output paths must encode the cohort window to prevent one run from overwriting
 another. The 2017--2020 observational VA and 2018--2020 SAE samples overlap in
 cohort years by design; this is the maximum-data specification. The 2017--2018
 observational VA and 2019--2020 SAE samples are the no-overlap specification.
+
+The requested paper-facing VA outcomes are standardized admission-test math,
+standardized admission-test language, admission-exam taking, log projected
+program income, high-premium-field enrollment, high-premium-institution
+enrollment, and any FUAS benefits/credit application. Exam taking and benefits
+application use the broad complete-control sample; postsecondary outcomes use
+the admission-exam-taker sample.

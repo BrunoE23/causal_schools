@@ -57,6 +57,12 @@ program_income_path <- Sys.getenv(
     "output/tables/mifuturo_matricula_income/mifuturo_person_level_income_outcomes.csv"
   )
 )
+benefits_outcomes_path <- Sys.getenv(
+  "BECAS_CREDITOS_OUTCOMES_PATH",
+  unset = file.path(
+    data_wd, "data/clean/becas_creditos/becas_creditos_outcomes.csv"
+  )
+)
 cohort_min <- as.integer(Sys.getenv("SCHOOL_VA_COHORT_MIN", unset = "2017"))
 cohort_max <- as.integer(Sys.getenv("SCHOOL_VA_COHORT_MAX", unset = "2020"))
 if (is.na(cohort_min) || is.na(cohort_max) || cohort_min > cohort_max) {
@@ -147,13 +153,11 @@ stem_indicator_vars <- list(
 controlled_value_added_outcomes <- c(
   "z_year_math_max",
   "z_year_leng_max",
-  "z_year_leng_math_total",
   "admission_exam_taker",
-  "higher_ed_enrolled_m1",
-  "stem_enrollment_m1",
   "log_program_income_clp_m1",
-  "program_certified_years_m1",
-  "inst_certified_years_m1"
+  "high_paying_field_m1",
+  "high_inst_m1",
+  "any_postulacion"
 )
 
 # Main individual-level control set for controlled observational value-added.
@@ -939,6 +943,8 @@ input_cols <- unique(c(
   "log_program_income_clp_m1",
   "program_income_full_clp_m1",
   "log_program_income_full_clp_m1",
+  "high_paying_field_m1",
+  "high_inst_m1",
   control_vars,
   middle_school_fixed_effect_vars,
   "most_time_rbd_middle"
@@ -967,6 +973,24 @@ if (all(c("program_income_full_clp_m1", "log_program_income_full_clp_m1") %in% n
     select(-any_of(setdiff(names(program_income_outcomes), "MRUN"))) %>%
     left_join(program_income_outcomes, by = "MRUN")
 }
+
+if (!file.exists(benefits_outcomes_path)) {
+  stop("Benefits outcome file does not exist: ", benefits_outcomes_path)
+}
+benefits_outcomes <- fread(
+  benefits_outcomes_path,
+  select = c("mrun_key", "any_postulacion"),
+  na.strings = c("", "NA"),
+  showProgress = FALSE
+) %>%
+  as_tibble() %>%
+  transmute(MRUN = as.character(mrun_key), any_postulacion = as.integer(any_postulacion))
+if (anyDuplicated(benefits_outcomes$MRUN) > 0) {
+  stop("Benefits outcomes are not unique at MRUN level.")
+}
+df <- df %>%
+  select(-any_of("any_postulacion")) %>%
+  left_join(benefits_outcomes, by = "MRUN")
 
 if ("most_time_rbd_middle" %in% names(df) && !"most_time_RBD_middle" %in% names(df)) {
   df <- rename(df, most_time_RBD_middle = most_time_rbd_middle)
@@ -1082,13 +1106,19 @@ program_income_specs <- tibble(
   outcome_family = "program_income"
 )
 
+additional_outcome_specs <- tibble(
+  outcome = c("high_paying_field_m1", "high_inst_m1", "any_postulacion"),
+  outcome_family = c("enrollment_field", "institution_quality", "benefits_application")
+)
+
 outcome_specs <- bind_rows(
   score_result$outcome_specs,
   exam_taking_specs,
   direct_enrollment_result$outcome_specs,
   field_result$outcome_specs,
   accreditation_result$outcome_specs,
-  program_income_specs
+  program_income_specs,
+  additional_outcome_specs
 ) %>%
   distinct(outcome, .keep_all = TRUE)
 
@@ -1128,6 +1158,7 @@ sample_data <- function(data, gender_code) {
 
 outcome_requires_exam_taker <- function(outcome_name) {
   !(outcome_name == "admission_exam_taker" ||
+      outcome_name == "any_postulacion" ||
       grepl("^higher_ed_enrolled_", outcome_name))
 }
 
