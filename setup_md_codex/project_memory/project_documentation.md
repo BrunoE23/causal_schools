@@ -996,3 +996,6 @@ Independent checks reconstruct all role credential shares and held-out
 predictions, optimizer conditions, tuning choices and performance. Design and
 the school-only penalty-boundary repair are documented in
 `decisions/2026-09-20-staff-lasso-va.md`.
+
+### Observational VA consolidated inputs (2026-09-21)
+The observational school-VA constructor now prefers middle-school controls and full program-income columns already included in univ_gr8_df.csv, with external files used only when columns are absent. It normalizes most_time_rbd_middle to its existing internal capitalization and preserves legacy program_income/log_program_income names as aliases of the full-income measures, as defined by the income constructor. Field binaries and STEM are rebuilt from the current field_reclassified columns. Sample restrictions and regression specifications are unchanged.

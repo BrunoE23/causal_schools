@@ -16,11 +16,29 @@ parse_env_list <- function(var) {
   trimws(strsplit(value, ",", fixed = TRUE)[[1]])
 }
 
+find_existing_path <- function(env_var, candidates, label) {
+  candidates <- c(Sys.getenv(env_var), candidates)
+  candidates <- candidates[nzchar(candidates)]
+  candidates <- candidates[dir.exists(candidates)]
+
+  if (length(candidates) == 0) {
+    stop("Could not find ", label, ". Set ", env_var, " or update candidates.")
+  }
+
+  candidates[[1]]
+}
+
 # ------------------------- Configuration -------------------------
 
-data_wd <- Sys.getenv(
+data_wd <- find_existing_path(
   "CAUSAL_SCHOOLS_DATA_WD",
-  unset = "C:/Users/xd-br/Dropbox/causal_schools"
+  c(
+    "C:/Users/brunem/Box/causal_schools",
+    "C:/Users/xd-br/Box/causal_schools",
+    "C:/Users/brunem/Dropbox/causal_schools",
+    "C:/Users/xd-br/Dropbox/causal_schools"
+  ),
+  "data_wd"
 )
 repo_wd <- Sys.getenv(
   "CAUSAL_SCHOOLS_REPO_WD",
@@ -488,9 +506,24 @@ add_field_outcomes <- function(data,
                                stem_indicator_vars) {
   stop_if_missing(
     data,
-    c(unname(field_vars), field_indicator_vars, unlist(stem_indicator_vars)),
+    unname(field_vars),
     "Field outcome construction"
   )
+
+  # Rebuild indicators from the current taxonomy rather than cached binaries.
+  field_labels <- c(
+    science = "Science", social = "Social Sciences", business = "Business",
+    law = "Law", teaching = "Teaching", humarts = "Humanities and Arts",
+    eng = "Engineering, Manufacturing and Construction",
+    medicine = "Medicine", health = "Health and Welfare"
+  )
+  for (suffix in names(field_vars)) {
+    field <- data[[field_vars[[suffix]]]]
+    for (stem in names(field_labels)) {
+      data[[paste0("f_", stem, "_", suffix)]] <-
+        as.integer(!is.na(field) & field == field_labels[[stem]])
+    }
+  }
 
   data <- data %>%
     mutate(
@@ -893,7 +926,13 @@ input_cols <- unique(c(
   "ACRE_INST_ANIO_m1",
   "program_certified_years_m1",
   "institution_accredited_m1",
-  setdiff(control_vars, c(middle_school_control_vars, "middle_years_observed"))
+  "program_income_clp_m1",
+  "log_program_income_clp_m1",
+  "program_income_full_clp_m1",
+  "log_program_income_full_clp_m1",
+  control_vars,
+  middle_school_fixed_effect_vars,
+  "most_time_rbd_middle"
 ))
 available_cols <- names(fread(input_path, nrows = 0, showProgress = FALSE))
 input_cols <- intersect(input_cols, available_cols)
@@ -906,35 +945,52 @@ df <- fread(
 ) %>%
   as_tibble()
 
-program_income_outcomes <- read_program_income_outcomes(program_income_path)
-df <- df %>%
-  mutate(MRUN = as.character(MRUN)) %>%
-  left_join(program_income_outcomes, by = "MRUN")
-
-if (!file.exists(middle_school_controls_path)) {
-  stop(
-    "Middle-school controls file does not exist: ",
-    middle_school_controls_path,
-    call. = FALSE
+df <- df %>% mutate(MRUN = as.character(MRUN))
+# The income constructor defines the legacy names as aliases of full income.
+if (all(c("program_income_full_clp_m1", "log_program_income_full_clp_m1") %in% names(df))) {
+  df <- df %>% mutate(
+    program_income_clp_m1 = program_income_full_clp_m1,
+    log_program_income_clp_m1 = log_program_income_full_clp_m1
   )
+} else if (!all(c("program_income_clp_m1", "log_program_income_clp_m1") %in% names(df))) {
+  program_income_outcomes <- read_program_income_outcomes(program_income_path)
+  df <- df %>%
+    select(-any_of(setdiff(names(program_income_outcomes), "MRUN"))) %>%
+    left_join(program_income_outcomes, by = "MRUN")
 }
 
-middle_school_controls <- read_csv(
-  middle_school_controls_path,
-  show_col_types = FALSE
-) %>%
-  mutate(MRUN = as.character(MRUN)) %>%
-  select(
-    MRUN,
-    most_time_RBD_middle,
-    middle_years_observed,
-    z_gpa_middle_mean,
-    z_att_middle_mean
-  )
+if ("most_time_rbd_middle" %in% names(df) && !"most_time_RBD_middle" %in% names(df)) {
+  df <- rename(df, most_time_RBD_middle = most_time_rbd_middle)
+}
+middle_cols <- c(middle_school_fixed_effect_vars, "middle_years_observed", middle_school_control_vars)
+missing_middle_cols <- setdiff(middle_cols, names(df))
+if (length(missing_middle_cols) > 0) {
+  if (!file.exists(middle_school_controls_path)) {
+    stop(
+      "Middle-school controls file does not exist: ",
+      middle_school_controls_path,
+      call. = FALSE
+    )
+  }
 
-df <- df %>%
-  mutate(MRUN = as.character(MRUN)) %>%
-  left_join(middle_school_controls, by = "MRUN")
+  middle_school_controls <- read_csv(
+    middle_school_controls_path,
+    show_col_types = FALSE
+  ) %>%
+    mutate(MRUN = as.character(MRUN)) %>%
+    select(
+      MRUN,
+      all_of(missing_middle_cols)
+    )
+
+  if (anyDuplicated(middle_school_controls$MRUN) > 0) {
+    stop("Middle-school controls are not unique at MRUN level.", call. = FALSE)
+  }
+
+  df <- df %>%
+    mutate(MRUN = as.character(MRUN)) %>%
+    left_join(middle_school_controls, by = "MRUN")
+}
 
 stop_if_missing(
   df,
@@ -1137,6 +1193,7 @@ if (length(controlled_outcomes) == 0) {
 }
 
 controlled_values <- map_dfr(controlled_outcomes, function(outcome_name) {
+  message("Estimating controlled VA: ", outcome_name)
   pmap_dfr(analysis_samples, function(analysis_sample, gender_code) {
     estimate_school_value_added(
       data = sample_data_for_outcome(analytic, gender_code, outcome_name),
