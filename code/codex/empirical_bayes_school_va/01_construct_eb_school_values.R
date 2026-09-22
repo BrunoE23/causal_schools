@@ -53,6 +53,8 @@ parse_env_list <- function(var) {
 data_wd <- find_existing_path(
   "CAUSAL_SCHOOLS_DATA_WD",
   c(
+    "C:/Users/brunem/Box/causal_schools",
+    "C:/Users/xd-br/Box/causal_schools",
     "C:/Users/brunem/Dropbox/causal_schools",
     "C:/Users/xd-br/Dropbox/causal_schools"
   ),
@@ -86,6 +88,9 @@ target_outcomes <- c(
   "higher_ed_enrolled_m1",
   "stem_enrollment_m1",
   "log_program_income_clp_m1",
+  "high_paying_field_m1",
+  "high_inst_m1",
+  "any_postulacion",
   "program_certified_years_m1",
   "inst_certified_years_m1"
 )

@@ -81,6 +81,8 @@ parse_env_list <- function(var) {
 data_wd <- find_existing_path(
   "CAUSAL_SCHOOLS_DATA_WD",
   c(
+    "C:/Users/brunem/Box/causal_schools",
+    "C:/Users/xd-br/Box/causal_schools",
     "C:/Users/brunem/Dropbox/causal_schools",
     "C:/Users/xd-br/Dropbox/causal_schools"
   ),
@@ -170,6 +172,21 @@ diagnostics_csv <- Sys.getenv(
   unset = file.path(eb_dir, "scalar_school_value_iv_expected_va_eb_diagnostics.csv")
 )
 
+sae_min_year <- as.integer(Sys.getenv("EB_IV_SAE_MIN_YEAR", unset = "2018"))
+sae_max_year <- as.integer(Sys.getenv("EB_IV_SAE_MAX_YEAR", unset = "2020"))
+if (is.na(sae_min_year) || is.na(sae_max_year) || sae_min_year > sae_max_year) {
+  stop("EB_IV_SAE_MIN_YEAR and EB_IV_SAE_MAX_YEAR must define a valid range.")
+}
+benefits_outcomes_path <- Sys.getenv(
+  "BECAS_CREDITOS_OUTCOMES_PATH",
+  unset = file.path(clean_dir, "becas_creditos", "becas_creditos_outcomes.csv")
+)
+va_cohort_label <- Sys.getenv("EB_IV_VA_COHORT_LABEL", unset = "configured")
+pair_label <- paste0(
+  "va-", gsub("[^0-9-]", "-", va_cohort_label),
+  "-sae-", sae_min_year, "-", sae_max_year
+)
+
 value_specs <- data.table(
   spec = c(
     "math_adj_eb",
@@ -184,7 +201,8 @@ value_specs <- data.table(
     "program_income_full_adj_eb",
     "program_income_adj_eb",
     "progcert_adj_eb",
-    "instcert_adj_eb"
+    "instcert_adj_eb",
+    "anypost_adj_eb"
   ),
   outcome = c(
     "z_year_math_max",
@@ -199,7 +217,8 @@ value_specs <- data.table(
     "log_program_income_full_clp_m1",
     "log_program_income_clp_m1",
     "program_certified_years_m1",
-    "inst_certified_years_m1"
+    "inst_certified_years_m1",
+    "any_postulacion"
   ),
   value_outcome = c(
     "z_year_math_max",
@@ -214,7 +233,8 @@ value_specs <- data.table(
     "log_program_income_full_clp_m1",
     "log_program_income_clp_m1",
     "program_certified_years_m1",
-    "inst_certified_years_m1"
+    "inst_certified_years_m1",
+    "any_postulacion"
   ),
   value_column = "controlled_value_added_eb_centered_student",
   outcome_group = c(
@@ -230,7 +250,8 @@ value_specs <- data.table(
     "Program income",
     "Program income",
     "Program-certified years",
-    "Institutional quality"
+    "Institutional quality",
+    "Benefits/credit application"
   ),
   require_exam_taker = c(
     TRUE,
@@ -245,7 +266,8 @@ value_specs <- data.table(
     TRUE,
     TRUE,
     TRUE,
-    TRUE
+    TRUE,
+    FALSE
   )
 )
 
@@ -300,9 +322,11 @@ if (nrow(value_specs) == 0) {
 main_specs <- c(
   "math_adj_eb",
   "leng_adj_eb",
+  "exam_adj_eb",
   "highinst_adj_eb",
   "highpay_adj_eb",
-  "program_income_full_adj_eb"
+  "program_income_adj_eb",
+  "anypost_adj_eb"
 )
 accreditation_specs <- c("progcert_adj_eb", "instcert_adj_eb")
 program_income_specs <- c(
@@ -392,6 +416,7 @@ universe[, `:=`(
   COD_SIES_m1 = trimws(as.character(COD_SIES_m1))
 )]
 universe[COD_SIES_m1 %chin% c("", "NA"), COD_SIES_m1 := NA_character_]
+universe <- universe[sae_proceso >= sae_min_year & sae_proceso <= sae_max_year]
 
 message("Reading program_income outcome columns: ", program_income_path)
 if (!file.exists(program_income_path)) {
@@ -438,6 +463,29 @@ universe <- merge(
   all.x = TRUE,
   sort = FALSE
 )
+if (!"log_program_income_clp_m1" %in% names(universe) &&
+    "log_program_income_full_clp_m1" %in% names(universe)) {
+  universe[, log_program_income_clp_m1 := log_program_income_full_clp_m1]
+}
+if (!"program_income_clp_m1" %in% names(universe) &&
+    "program_income_full_clp_m1" %in% names(universe)) {
+  universe[, program_income_clp_m1 := program_income_full_clp_m1]
+}
+
+if (!file.exists(benefits_outcomes_path)) {
+  stop("Benefits outcome file does not exist: ", benefits_outcomes_path)
+}
+benefits <- fread(
+  benefits_outcomes_path,
+  select = c("mrun_key", "any_postulacion"),
+  na.strings = c("", "NA")
+)
+benefits[, mrun := as.numeric(mrun_key)]
+benefits[, mrun_key := NULL]
+if (anyDuplicated(benefits$mrun) > 0) {
+  stop("Benefits outcomes are not unique at mrun level.")
+}
+universe <- merge(universe, benefits, by = "mrun", all.x = TRUE, sort = FALSE)
 
 universe[
   !is.na(psu_year) & !is.na(math_max) & math_max > 0,
@@ -469,7 +517,7 @@ universe[, inst_certified_years_m1 := fcase(
 )]
 
 message("Reading long DA probability files and computing expected EB VA.")
-prob_list <- lapply(2018:2021, function(year) {
+prob_list <- lapply(seq.int(sae_min_year, sae_max_year), function(year) {
   path <- file.path(prob_dir, paste0("DA_probs_", year, ".csv"))
   dt <- fread(path, select = c("student_id", "school_id", "prob"))
   dt[, sae_proceso := as.integer(year)]
@@ -591,11 +639,13 @@ keep_cols <- c(
   "program_income_clp_m1", "log_program_income_clp_m1",
   "program_income_source_m1", "program_income_missing_m1",
   "program_certified_years_m1", "inst_certified_years_m1",
+  "any_postulacion",
   paste0("expected_", value_names),
   paste0("mass_with_value_", value_names),
   paste0("d_", value_names),
   paste0("z_", value_names)
 )
+keep_cols <- intersect(keep_cols, names(estimation_df))
 estimation_df <- estimation_df[, ..keep_cols]
 
 message("Writing EB regression dataframe: ", regression_csv)
@@ -808,13 +858,20 @@ written_paths <- c(
     main_specs,
     main_table_csv,
     main_table_tex,
-    "Main scalar school-value IV estimates using EB-shrunken value added",
-    "tab:scalar_school_value_iv_main_five_expected_va_eb",
-    c(
-      " & \\multicolumn{2}{c}{Exams} & \\multicolumn{3}{c}{Higher ed. choices} \\\\",
-      "\\cmidrule(lr){2-3} \\cmidrule(lr){4-6}"
+    paste0(
+      "Main scalar school-value IV estimates using EB-shrunken value added",
+      " (VA ", va_cohort_label, "; SAE ", sae_min_year, "--", sae_max_year, ")"
     ),
-    "Each column reports a scalar IV estimate of the pass-through from attended-school EB value added to the corresponding student outcome. Attended-school EB value added is instrumented with first-round offered-school EB value added. All specifications control for the DA-probability expected value of the same EB measure, cohort, grade-4 SIMCE math and language, gender, and age. Heteroskedasticity-robust standard errors are reported in parentheses. $^{*}p<0.10$, $^{**}p<0.05$, $^{***}p<0.01$."
+    paste0("tab:scalar-school-value-iv-main-seven-eb-", pair_label),
+    c(
+      " & \\multicolumn{3}{c}{Exams} & \\multicolumn{3}{c}{Higher ed. choices} & Benefits \\\\",
+      "\\cmidrule(lr){2-4} \\cmidrule(lr){5-7} \\cmidrule(lr){8-8}"
+    ),
+    paste0(
+      "School value added is estimated using grade-8 cohorts ", va_cohort_label,
+      "; the lottery sample uses SAE cohorts ", sae_min_year, "--", sae_max_year,
+      ". Each column reports a scalar IV estimate of the pass-through from attended-school EB value added to the corresponding student outcome. Attended-school EB value added is instrumented with first-round offered-school EB value added. All specifications control for the DA-probability expected value of the same EB measure, cohort, grade-4 SIMCE math and language, gender, and age. Heteroskedasticity-robust standard errors are reported in parentheses. $^{*}p<0.10$, $^{**}p<0.05$, $^{***}p<0.01$."
+    )
   )
 )
 written_paths <- c(
