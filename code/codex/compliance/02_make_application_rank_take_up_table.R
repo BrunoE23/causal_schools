@@ -67,7 +67,7 @@ make_pair <- function(pair_name, pair_label, input_tag) {
   dt <- merge(dt, apps_wide, by = c("mrun", "sae_proceso"), all.x = TRUE, sort = FALSE)
   dt[, offer_status := fifelse(
     !is.na(rbd_treated_1R) & rbd_treated_1R > 0,
-    "Recorded offer", "No recorded offer"
+    "Recorded first-round offer", "No recorded first-round offer"
   )]
 
   rank_rows <- rbindlist(lapply(1:3, function(k) {
@@ -94,8 +94,16 @@ make_pair <- function(pair_name, pair_label, input_tag) {
   long <- rbind(rank_rows, any_top3, use.names = TRUE)
   shares <- dcast(long, rank_order + choice ~ offer_status, value.var = "share_attend")
   counts <- dcast(long, rank_order + choice ~ offer_status, value.var = "n")
-  setnames(shares, c("No recorded offer", "Recorded offer"), c("share_no_offer", "share_offer"))
-  setnames(counts, c("No recorded offer", "Recorded offer"), c("n_no_offer", "n_offer"))
+  setnames(
+    shares,
+    c("No recorded first-round offer", "Recorded first-round offer"),
+    c("share_no_offer", "share_offer")
+  )
+  setnames(
+    counts,
+    c("No recorded first-round offer", "Recorded first-round offer"),
+    c("n_no_offer", "n_offer")
+  )
   out <- merge(shares, counts, by = c("rank_order", "choice"), sort = FALSE)
   out[, difference_offer_minus_no_offer := share_offer - share_no_offer]
   out[, pair := pair_name]
@@ -112,12 +120,12 @@ make_pair <- function(pair_name, pair_label, input_tag) {
 
   lines <- c(
     "\\begin{table}[!htbp]", "\\centering",
-    paste0("\\caption{Eventual school by SAE application rank: ", pair_label, "}"),
+    paste0("\\caption{Eventual school by SAE application rank and first-round offer status: ", pair_label, "}"),
     paste0("\\label{tab:application-rank-takeup-", gsub("_", "-", pair_name), "}"),
     "\\begin{tabular}{lrrrrr}", "\\toprule",
-    " & \\multicolumn{2}{c}{Recorded offer} & \\multicolumn{2}{c}{No recorded offer} & Difference \\\\",
+    " & \\multicolumn{2}{c}{Recorded first-round offer} & \\multicolumn{2}{c}{No recorded first-round offer} & Difference \\\\",
     "\\cmidrule(lr){2-3} \\cmidrule(lr){4-5}",
-    "Application position & N & Share & N & Share & Offer $-$ no offer \\\\",
+    "Application position & N & Share & N & Share & First-round offer $-$ no offer \\\\",
     "\\midrule"
   )
   for (i in seq_len(nrow(out))) {
@@ -132,7 +140,7 @@ make_pair <- function(pair_name, pair_label, input_tag) {
   lines <- c(
     lines, "\\bottomrule", "\\end{tabular}", "\\par\\medskip", "\\footnotesize",
     "\\begin{minipage}{0.95\\textwidth}",
-    "Notes: Each row reports the share whose most-time high school after grade 8 equals the indicated position in the student's SAE application list. Rank-specific denominators include students who submitted a school at that rank. The top-three denominator includes students with a first choice and counts attendance at any available choice among positions 1--3. Recorded offer means a positive school identifier in the regular first-round SAE assignment record.",
+    "Notes: Each row reports the share whose most-time high school after grade 8 equals the indicated position in the student's SAE application list. Rank-specific denominators include students who submitted a school at that rank. The top-three denominator includes students with a first choice and counts attendance at any available choice among positions 1--3. Recorded first-round offer means a positive school identifier in the regular first-round SAE assignment record; it does not include later or supplementary assignment rounds.",
     "\\end{minipage}", "\\end{table}"
   )
   writeLines(lines, tex_path)
