@@ -22,3 +22,10 @@ and the no-overlap pairing (VA 2017--2018, SAE 2019--2020).
 This is a descriptive take-up measure. The continuous first-stage coefficient
 and F statistic in the main IV table remain the relevant diagnostics for the
 school-value instrument itself.
+
+As a complementary diagnostic, compare the student's eventual most-time high
+school with positions 1--3 in the submitted SAE application list, separately
+for students with and without a recorded first-round offer. Rank-specific
+shares are conditional on having submitted a school at that rank. Also report
+attendance at any of the top three choices and the offer-minus-no-offer
+difference.

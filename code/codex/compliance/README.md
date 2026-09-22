@@ -10,3 +10,9 @@ The tables report overall compliance, compliance by SAE cohort, gender,
 baseline grade-4 math quintile, baseline income quintile, and the exact sample
 used for each of the seven main-table outcomes. Outputs are written to
 `output/tables/compliance/`.
+
+Run `02_make_application_rank_take_up_table.R` to compare students with and
+without a recorded first-round offer. For each group, it reports the fraction
+whose eventual most-time high school is their first, second, third, or any of
+their top three SAE choices. Rank-specific denominators require that the student
+submitted a school at that rank.
