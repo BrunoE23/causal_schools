@@ -209,7 +209,7 @@ BLOCKS = {'Teachers': 'Teachers', 'Orientadores': 'Counselors (orientadores)', '
           'Peers': 'Peers and track', 'Resources': None, 'Track': None}
 SHORT = {'z_year_math_max': 'Math VA', 'z_year_leng_max': 'Verbal VA', 'high_inst_m1': 'HP inst. VA',
          'high_paying_field_m1': 'HP field VA', 'log_program_income_clp_m1': 'Income VA',
-         'admission_exam_taker': 'Exam VA', 'any_postulacion': 'Aid app. VA'}
+         'admission_exam_taker': 'Exam VA', 'any_postulacion': 'Fin. aid app. VA'}
 nc = len(PAPER_COLS)
 samp = ('public and private-subsidized schools with at least %d students in the value-added sample' % MIN_VA) if MIN_VA else 'all public and private-subsidized schools'
 L = [r'\begin{table}[!htbp]', r'\centering', r'\caption{School staff, peers and track, and school value added}',
