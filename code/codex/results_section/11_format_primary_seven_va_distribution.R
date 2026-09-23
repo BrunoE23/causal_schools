@@ -22,6 +22,7 @@ tex <- c(
   '\\begin{table}[!htbp]','\\centering','\\begin{threeparttable}',
   '\\caption{Distribution of student outcomes and school value added}',
   '\\label{tab:school-va-distribution}',
+  '\\footnotesize','\\setlength{\\tabcolsep}{3pt}',
   '\\begin{tabular}{lccc cccc c}','\\toprule',
   ' & \\multicolumn{3}{c}{Student outcome} & \\multicolumn{4}{c}{EB posterior school VA} & \\multicolumn{1}{c}{RSS latent VA} \\\\',
   '\\cmidrule(lr){2-4} \\cmidrule(lr){5-8} \\cmidrule(lr){9-9}',
