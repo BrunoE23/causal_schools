@@ -209,12 +209,16 @@ PAPER_ROWS = {'teacher__per100_enrolled': 'Teachers per 100 students',
               'school__has_tp': 'Technical-professional track (0/1)'}
 BLOCKS = {'Teachers': 'Teachers', 'Orientadores': 'Counselors (orientadores)', 'Leadership': 'School leadership',
           'Peers': 'Peers, resources and track', 'Resources': None, 'Track': None}
+SHORT = {'z_year_math_max': 'Math VA', 'z_year_leng_max': 'Verbal VA', 'high_inst_m1': 'HP inst. VA',
+         'high_paying_field_m1': 'HP field VA', 'log_program_income_clp_m1': 'Income VA',
+         'admission_exam_taker': 'Exam VA', 'any_postulacion': 'Aid app. VA'}
 nc = len(PAPER_COLS)
 samp = ('public and private-subsidized schools with at least %d students in the value-added sample' % MIN_VA) if MIN_VA else 'all public and private-subsidized schools'
 L = [r'\begin{table}[!htbp]', r'\centering', r'\caption{School staff, peers and resources, and school value added}',
      r'\label{tab:staff-va' + ('' if MIN_VA == 100 else '-' + SUFFIX.strip('_')) + '}', r'\resizebox{\textwidth}{!}{%',
      r'\begin{tabular}{l' + 'c' * nc + '}', r'\toprule',
-     ' & ' + ' & '.join(f'({i+1})' for i in range(nc)) + r' \\', r'\midrule']
+     ' & ' + ' & '.join(f'({i+1})' for i in range(nc)) + r' \\',
+     ' & ' + ' & '.join(SHORT[o] for o, _ in PAPER_COLS) + r' \\', r'\midrule']
 prev = None
 for f, lab, blk in FOCAL:
     if f not in PAPER_ROWS:
