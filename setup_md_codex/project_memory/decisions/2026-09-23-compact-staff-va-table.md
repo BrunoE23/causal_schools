@@ -73,7 +73,8 @@ codex fixed-OLS estimator (HC1, SD-standardized); verified to 1e-14.
   replaces log VA-sample size and is now reported. R2 rows: controls+track;
   +staff; +peers and size. Update 10: R2 rows reordered to controls only ->
   + peers, size and track -> + staff (full model), so the last row is the
-  reported model; staff add <= ~1 pp in every column.
+  reported model; staff add <= ~1 pp in every column. Update 11 (Bruno):
+  order is controls -> + size and track -> + staff -> + peers (full model).
 
 ## Rationale
 

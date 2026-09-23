@@ -168,9 +168,10 @@ for o, olab in OUTCOMES:
 
     yz = (y_eb - y_eb.mean()) / y_eb.std(ddof=1)
     r2 = {}
-    # Nested R2, ordered so the last row is the reported (full) model:
-    # controls only -> + peers, size and track -> + staff.
-    for spec, fs in (('controls', []), ('school', SCHOOL + TRACK), ('full', feats)):
+    # Nested R2 (Bruno): controls only -> + size and track -> + staff -> + peers
+    # (= full reported model).
+    PEER = ['school__composition_math_mean']; SIZE = [f for f in SCHOOL if f not in PEER]
+    for spec, fs in (('controls', []), ('sizetrack', SIZE + TRACK), ('staff', SIZE + TRACK + STAFF), ('full', feats)):
         X, names = design(fs)
         b, se, e = ols_hc1(X, yz)
         r2[spec] = 1 - (e @ e) / ((yz - yz.mean()) @ (yz - yz.mean()))
@@ -180,7 +181,7 @@ for o, olab in OUTCOMES:
                     coef_rows.append(dict(OUTCOME=o, FEATURE=nm, BETA_SD=bb, SE_HC1=ss))
             Xfull = X
     summ_rows.append(dict(OUTCOME=o, LABEL=olab, N=int(idx.sum()), P_FULL=Xfull.shape[1],
-                          R2_CONTROLS=r2['controls'], R2_SCHOOL=r2['school'], R2_FULL=r2['full']))
+                          R2_CONTROLS=r2['controls'], R2_SIZETRACK=r2['sizetrack'], R2_STAFF=r2['staff'], R2_FULL=r2['full']))
 
 coef = pd.DataFrame(coef_rows); summ = pd.DataFrame(summ_rows)
 coef.to_csv(os.path.join(OUT_DATA, 'coefficients.csv'), index=False)
@@ -237,8 +238,8 @@ for f, lab, blk in FOCAL:
     L.append(' & ' + ' & '.join(f'({c.SE_HC1[o]:.3f})' for o, _ in PAPER_COLS) + r' \\')
 L.append(r'\midrule')
 sm = summ.set_index('OUTCOME')
-for col, lab in (('R2_CONTROLS', r'$R^2$: controls only'), ('R2_SCHOOL', r'$R^2$: adding peers, size and track'),
-                 ('R2_FULL', r'$R^2$: adding staff (full model)')):
+for col, lab in (('R2_CONTROLS', r'$R^2$: controls only'), ('R2_SIZETRACK', r'$R^2$: adding size and track'),
+                 ('R2_STAFF', r'$R^2$: adding staff'), ('R2_FULL', r'$R^2$: adding peers (full model)')):
     L.append(lab + ' & ' + ' & '.join(f'{sm[col][o]:.3f}' for o, _ in PAPER_COLS) + r' \\')
 L.append('Schools & ' + ' & '.join(f'{sm.N[o]:,}' for o, _ in PAPER_COLS) + r' \\')
 L += [r'\bottomrule', r'\end{tabular}}', r'\par\medskip', r'\footnotesize', r'\begin{minipage}{\textwidth}',
