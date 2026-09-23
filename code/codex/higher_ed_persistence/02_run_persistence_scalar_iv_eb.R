@@ -16,11 +16,14 @@ clean_out <- file.path(repo, 'data/clean/higher_ed_persistence')
 dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
 
 specs <- data.table(
-  spec = c('highered', 'highpay', 'highinst'),
-  value_outcome = c('higher_ed_enrolled_m1', 'high_paying_field_m1', 'high_inst_m1'),
-  label = c('Higher-ed enrollment', 'High-premium field', 'High-premium institution'),
-  require_exam = c(FALSE, FALSE, FALSE)
+  spec = c('highered', 'highpay', 'highinst', 'math'),
+  value_outcome = c('higher_ed_enrolled_m1', 'high_paying_field_m1', 'high_inst_m1',
+    'z_year_math_max'),
+  label = c('Higher-ed enrollment', 'High-premium field', 'High-premium institution',
+    'Math'),
+  require_exam = c(FALSE, FALSE, FALSE, FALSE)
 )
+focal_specs <- c('highered', 'highpay', 'highinst')
 
 values <- fread(value_path, na.strings = c('', 'NA'))[
   analysis_sample == 'All' & outcome %chin% specs$value_outcome,
@@ -91,11 +94,11 @@ dt<-merge(dt,o,by.x='rbd_treated_1R',by.y='school_rbd',all.x=TRUE,sort=FALSE)
 for(s in specs$spec) dt[is.na(rbd_treated_1R)|rbd_treated_1R==0,(paste0('z_',s)):=0]
 
 outcomes <- data.table(
-  spec=specs$spec,
+  spec=focal_specs,
   outcome=c('entered_and_persist_y1','field_entry_to_y1','inst_entry_to_y1')
 )
 outcomes_y2 <- data.table(
-  spec=specs$spec,
+  spec=focal_specs,
   outcome=c('entered_and_persist_continuous_through_y2',
     'field_entry_through_y2','inst_entry_through_y2')
 )
@@ -126,7 +129,7 @@ fwrite(res_y2,file.path(clean_out,'persistence_two_year_scalar_iv_eb_results.csv
 fwrite(res_y2,file.path(out_dir,'persistence_two_year_scalar_iv_eb_results.csv'))
 
 stars<-function(p)fifelse(p<.01,'***',fifelse(p<.05,'**',fifelse(p<.10,'*','')))
-main<-res[match(specs$spec,spec)]
+main<-res[match(focal_specs,spec)]
 main[,cell:=paste0(sprintf('%.3f',beta),stars(p_value))]
 theta_row<-paste0('$\\theta^{EB}$ & ',paste(main$cell,collapse=' & '),' \\\\')
 se_row<-paste0(' & ',paste0('(',sprintf('%.3f',main$se),')',collapse=' & '),' \\\\')
@@ -142,7 +145,7 @@ tex<-c('\\begin{table}[!htbp]','\\centering',
   '\\item Notes: Each column uses the EB observational school value-added measure named in its heading. Attended-school VA is instrumented with first-round offered-school VA, controlling for the DA-probability expected value of that VA, cohort, grade-4 math and verbal scores, gender, and age. The main sample contains timely SAE applicants from the 2018--2019 cohorts with nondegenerate assignment risk; admission-exam taking is not a sample restriction. Outcomes are unconditional; students who do not enter the relevant category are coded zero. Heteroskedasticity-robust standard errors are reported. $^{*}p<0.10$, $^{**}p<0.05$, $^{***}p<0.01$.',
   '\\end{tablenotes}','\\end{threeparttable}','\\end{table}')
 writeLines(tex,file.path(out_dir,'persistence_scalar_iv_eb_main.tex'))
-main_y2<-res_y2[match(specs$spec,spec)]
+main_y2<-res_y2[match(focal_specs,spec)]
 main_y2[,cell:=paste0(sprintf('%.3f',beta),stars(p_value))]
 theta_y2<-paste0('$\\theta^{EB}$ & ',paste(main_y2$cell,collapse=' & '),' \\\\')
 se_y2<-paste0(' & ',paste0('(',sprintf('%.3f',main_y2$se),')',collapse=' & '),' \\\\')
@@ -158,5 +161,45 @@ tex_y2<-c('\\begin{table}[!htbp]','\\centering',
   '\\item Notes: Each column uses the EB observational school value-added measure named in its heading. Attended-school VA is instrumented with first-round offered-school VA, controlling for the DA-probability expected value of that VA, grade-4 math and verbal scores, gender, and age. The sample contains timely SAE applicants from the 2018 cohort with nondegenerate assignment risk; admission-exam taking is not a sample restriction. Outcomes equal one when the student enters the relevant category and remains in it in each of the following two academic years. Heteroskedasticity-robust standard errors are reported. $^{*}p<0.10$, $^{**}p<0.05$, $^{***}p<0.01$.',
   '\\end{tablenotes}','\\end{threeparttable}','\\end{table}')
 writeLines(tex_y2,file.path(out_dir,'persistence_two_year_scalar_iv_eb.tex'))
+
+# Separate cross-outcome table: outcomes in columns and VA measures in rows.
+cross_outcomes <- data.table(
+  outcome_key = c('highered_persistence', 'highpay_persistence', 'highinst_persistence'),
+  outcome = c('entered_and_persist_y1', 'field_entry_to_y1', 'inst_entry_to_y1'),
+  outcome_label = c('Higher-ed enrollment', 'High-premium field', 'High-premium institution')
+)
+cross_grid <- CJ(spec = specs$spec, outcome_key = cross_outcomes$outcome_key, unique = TRUE)
+cross_grid <- merge(cross_grid, cross_outcomes, by = 'outcome_key', sort = FALSE)
+cross_results <- rbindlist(lapply(seq_len(nrow(cross_grid)), function(i) {
+  ans <- run_one(cross_grid[i, .(spec, outcome)])
+  ans[, `:=`(outcome_key = cross_grid$outcome_key[i],
+    outcome_label = cross_grid$outcome_label[i])]
+  ans
+}))
+cross_results[, va_label := specs$label[match(spec, specs$spec)]]
+setcolorder(cross_results, c('spec','va_label','outcome_key','outcome_label','outcome',
+  'beta','se','p_value','n_obs','first_stage_f','outcome_mean'))
+fwrite(cross_results, file.path(clean_out, 'persistence_second_year_cross_va_results.csv'))
+fwrite(cross_results, file.path(out_dir, 'persistence_second_year_cross_va_results.csv'))
+
+cross_results[, cell := paste0(sprintf('%.3f', beta), stars(p_value))]
+cross_lines <- unlist(lapply(specs$spec, function(s) {
+  x <- cross_results[spec == s][match(cross_outcomes$outcome_key, outcome_key)]
+  c(
+    paste0(x$va_label[1], ' VA & ', paste(x$cell, collapse = ' & '), ' \\\\'),
+    paste0(' & ', paste0('(', sprintf('%.3f', x$se), ')', collapse = ' & '), ' \\\\')
+  )
+}))
+cross_tex <- c('\\begin{table}[!htbp]','\\centering',
+  '\\caption{School value added and second-academic-year persistence}',
+  '\\label{tab:va-higher-ed-persistence-cross-va}','\\begin{threeparttable}',
+  '\\begin{tabular}{lccc}','\\toprule',
+  ' & Higher-ed enrollment & High-premium field & High-premium institution \\\\',
+  '\\midrule',cross_lines,'\\bottomrule','\\end{tabular}',
+  '\\begin{tablenotes}[flushleft]','\\footnotesize',
+  '\\item Notes: Columns report persistence outcomes requiring entry into the relevant category and continued participation in the second academic year. Rows identify the EB observational school value-added measure used as the endogenous school-quality index. In each cell, attended-school VA is instrumented with first-round offered-school VA, controlling for the DA-probability expected value of the same row VA, cohort, grade-4 math and verbal scores, gender, and age. The sample contains timely SAE applicants from the 2018--2019 cohorts with nondegenerate assignment risk; admission-exam taking is not a sample restriction. Heteroskedasticity-robust standard errors are in parentheses. $^{*}p<0.10$, $^{**}p<0.05$, $^{***}p<0.01$.',
+  '\\end{tablenotes}','\\end{threeparttable}','\\end{table}')
+writeLines(cross_tex, file.path(out_dir, 'persistence_second_year_cross_va.tex'))
 print(res)
 print(res_y2)
+print(cross_results)

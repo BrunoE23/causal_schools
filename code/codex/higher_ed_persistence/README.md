@@ -53,6 +53,11 @@ subsequent academic years. This longer horizon uses only the SAE 2018 cohort;
 the redundant cohort fixed effect is omitted while all other elements of the
 main specification remain unchanged.
 
+It also writes a cross-outcome second-academic-year table with persistence
+outcomes in columns and four EB VA measures in rows: higher-ed enrollment,
+high-premium field, high-premium institution, and math. Every cell uses the
+expected value of its row VA as the assignment-risk control.
+
 Persistence regressions do not condition on admission-exam taking. The exam
 indicator is tied to a later observed exam year and is not part of the sample
 definition for these higher-education persistence outcomes.
