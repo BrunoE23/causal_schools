@@ -71,7 +71,9 @@ codex fixed-OLS estimator (HC1, SD-standardized); verified to 1e-14.
   and track (teacher index -> math VA 0.01 -> 0.13; TP -> math -0.08 -> -0.66),
   so peers stay as a reported row. Log students enrolled (universe count)
   replaces log VA-sample size and is now reported. R2 rows: controls+track;
-  +staff; +peers and size.
+  +staff; +peers and size. Update 10: R2 rows reordered to controls only ->
+  + peers, size and track -> + staff (full model), so the last row is the
+  reported model; staff add <= ~1 pp in every column.
 
 ## Rationale
 
