@@ -25,10 +25,12 @@ specs <- data.table(
     'log_program_income_clp_m1', 'any_postulacion'),
   label = c('Higher-ed enrollment', 'Math', 'Verbal', 'Admission-exam taking',
     'High-premium institution', 'High-premium field', 'Projected program income',
-    'Benefits/credit application'),
+    'Fin. aid app.'),
   require_exam = rep(FALSE, 8)
 )
 focal_specs <- c('highered', 'highpay', 'highinst')
+cross_spec_order <- c('highered', 'highpay', 'highinst', 'math', 'leng', 'exam',
+  'program_income', 'anypost')
 
 values_main <- fread(main_value_path, na.strings = c('', 'NA'))[
   analysis_sample == 'All' & outcome %chin% specs[spec != 'highered', value_outcome],
@@ -189,16 +191,25 @@ cross_results <- rbindlist(lapply(seq_len(nrow(cross_grid)), function(i) {
 cross_results[, va_label := specs$label[match(spec, specs$spec)]]
 setcolorder(cross_results, c('spec','va_label','outcome_key','outcome_label','outcome',
   'beta','se','p_value','n_obs','first_stage_f','outcome_mean'))
+cross_results[, `:=`(
+  spec_order = match(spec, cross_spec_order),
+  outcome_order = match(outcome_key, cross_outcomes$outcome_key)
+)]
+setorder(cross_results, spec_order, outcome_order)
+cross_results[, c('spec_order', 'outcome_order') := NULL]
 fwrite(cross_results, file.path(clean_out, 'persistence_second_year_cross_va_results.csv'))
 fwrite(cross_results, file.path(out_dir, 'persistence_second_year_cross_va_results.csv'))
 
 cross_results[, cell := paste0(sprintf('%.3f', beta), stars(p_value))]
-cross_lines <- unlist(lapply(specs$spec, function(s) {
+cross_lines <- unlist(lapply(seq_along(cross_spec_order), function(i) {
+  s <- cross_spec_order[i]
   x <- cross_results[spec == s][match(cross_outcomes$outcome_key, outcome_key)]
-  c(
+  lines <- c(
     paste0(x$va_label[1], ' VA & ', paste(x$cell, collapse = ' & '), ' \\\\'),
     paste0(' & ', paste0('(', sprintf('%.3f', x$se), ')', collapse = ' & '), ' \\\\')
   )
+  if (i == 3L) lines <- c(lines, '\\midrule')
+  lines
 }))
 cross_tex <- c('\\begin{table}[!htbp]','\\centering',
   '\\caption{School value added and second-academic-year persistence}',
