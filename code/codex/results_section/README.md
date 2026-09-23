@@ -27,11 +27,13 @@ from the levels table rather than from the ratio alone.
 
 `14_plot_unshrunk_cross_iv_rss_validation.R` plots the 42 off-diagonal direct
 cross-outcome IV estimates against their RSS-implied causal gains. The dashed
-45-degree line denotes exact agreement, vertical bars show direct-IV 95 percent
-confidence intervals, and labels identify the seven largest absolute gaps.
+45-degree line denotes exact agreement and vertical bars show direct-IV 95
+percent confidence intervals. All estimates use the same point color and the
+figure omits pair labels to keep the visual comparison uncluttered.
 
-`15_format_notable_cross_iv_rss_pairs.R` selects the ten off-diagonal pairs
-with the largest absolute RSS-implied causal gains and reports their RSS
-projections, implied causal gains, direct IV estimates, and validation ratios.
-The selection rule depends only on the RSS prediction, rather than on whether
-the IV comparison is favorable.
+`15_format_notable_cross_iv_rss_pairs.R` reports ten off-diagonal pairs chosen
+a priori to cover five conceptual links: academic complementarities, academic
+preparation and access, postsecondary complementarities, postsecondary quality
+and earnings, and access and financial aid. It reports their RSS projections,
+implied causal gains, direct IV estimates, and validation ratios. Pair selection
+does not use the magnitude, sign, or precision of either estimate.
