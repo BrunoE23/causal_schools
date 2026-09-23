@@ -251,7 +251,7 @@ value_specs <- data.table(
     "Program income",
     "Program-certified years",
     "Institutional quality",
-    "Benefits/credit application"
+    "Fin. aid app."
   ),
   require_exam_taker = c(
     TRUE,
@@ -764,14 +764,14 @@ table_out <- merge(
 message("Writing EB IV results: ", results_csv)
 fwrite(results, results_csv)
 
-make_two_row_table <- function(dt, specs, caption, label, path, group_header = NULL, notes = NULL, include_expected = FALSE) {
+make_two_row_table <- function(dt, specs, caption, label, path, group_header = NULL, notes = NULL, include_expected = FALSE, estimand = "\\theta") {
   table_dt <- copy(dt[spec %chin% specs])
   table_dt[, spec_order := match(spec, specs)]
   setorder(table_dt, spec_order)
   wide_table <- nrow(table_dt) > 4
 
   theta_row <- paste0(
-    "$\\theta^{EB}$ & ",
+    paste0("$", estimand, "^{EB}$ & "),
     paste(format_estimate_stars(table_dt$beta, table_dt$p_value), collapse = " & "),
     " \\\\"
   )
@@ -831,7 +831,7 @@ make_two_row_table <- function(dt, specs, caption, label, path, group_header = N
   writeLines(latex, path)
 }
 
-write_spec_table <- function(table_out, specs, csv_path, tex_path, caption, label, group_header = NULL, notes = NULL, include_expected = FALSE) {
+write_spec_table <- function(table_out, specs, csv_path, tex_path, caption, label, group_header = NULL, notes = NULL, include_expected = FALSE, estimand = "\\theta") {
   out <- table_out[spec %chin% specs]
   if (nrow(out) == 0) {
     return(character())
@@ -846,7 +846,7 @@ write_spec_table <- function(table_out, specs, csv_path, tex_path, caption, labe
     )],
     csv_path
   )
-  make_two_row_table(out, specs, caption, label, tex_path, group_header, notes, include_expected)
+  make_two_row_table(out, specs, caption, label, tex_path, group_header, notes, include_expected, estimand)
   c(csv_path, tex_path)
 }
 
@@ -864,14 +864,15 @@ written_paths <- c(
     ),
     paste0("tab:scalar-school-value-iv-main-seven-eb-", pair_label),
     c(
-      " & \\multicolumn{3}{c}{Exams} & \\multicolumn{3}{c}{Higher ed. choices} & Benefits \\\\",
+      " & \\multicolumn{3}{c}{Exams} & \\multicolumn{3}{c}{Higher ed. choices} & Financial aid \\\\",
       "\\cmidrule(lr){2-4} \\cmidrule(lr){5-7} \\cmidrule(lr){8-8}"
     ),
     paste0(
       "School value added is estimated using grade-8 cohorts ", va_cohort_label,
       "; the lottery sample uses SAE cohorts ", sae_min_year, "--", sae_max_year,
       ". Each column reports a scalar IV estimate of the pass-through from attended-school EB value added to the corresponding student outcome. Attended-school EB value added is instrumented with first-round offered-school EB value added. All specifications control for the DA-probability expected value of the same EB measure, cohort, grade-4 SIMCE math and language, gender, and age. Heteroskedasticity-robust standard errors are reported in parentheses. $^{*}p<0.10$, $^{**}p<0.05$, $^{***}p<0.01$."
-    )
+    ),
+    estimand = "\\psi"
   )
 )
 written_paths <- c(
