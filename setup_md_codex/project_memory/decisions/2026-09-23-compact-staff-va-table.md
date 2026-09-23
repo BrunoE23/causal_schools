@@ -18,6 +18,13 @@ codex fixed-OLS estimator (HC1, SD-standardized); verified to 1e-14.
   Only 2 schools (RBD 320, 8511) have artistic code 910 in the 2024
   directory; neither has TP. The artistic coefficient is not interpretable.
 
+- 2026-09-23 update 2: staffing ratios now staff per 100 students enrolled,
+  denominator = universe students (grade-8 cohorts 2017-2020) whose
+  most_time_RBD is the school. Still undercounts schools students attend only
+  partially: ratios remain skewed (teacher skew 33) and full-sample capacity
+  rows are outlier-driven. A true annual grades 9-12 enrollment count from
+  tracking files is the proper denominator (open).
+
 ## Rationale
 
 - Staffing ratios enter as log(1+x): raw ratios have skew 6-24, driven by

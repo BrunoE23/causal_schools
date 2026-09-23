@@ -9,11 +9,14 @@ placeholders + missingness indicators; role-absence/roster nuisance; HC1).
 `02_verify_against_codex_r.py` reproduces the R 14-variable results to 1e-14.
 
 Differences from the 14-variable table:
-- Focal rows: log(1 + staff per 1,000 VA students) for teachers, orientadores,
-  leaders; teacher and leadership balanced qualification indices
+- Focal rows: staff per 100 students enrolled (mean 2018-2024 headcount /
+  universe students with most_time_RBD = school, grade-8 cohorts 2017-2020;
+  from `00_hs_enrollment_from_universe.R`) for teachers, orientadores, leaders; teacher and leadership balanced qualification indices
   (`data/clean/staff_quality_va`, `data/clean/leadership_quality_va`);
   orientation-specific qualification; peer grade-4 math mean; log public funding.
-- Staffing ratios are log(1+x) because raw ratios have skew 6-24.
+- Caveat: the universe denominator still undercounts some schools (62 schools
+  have >30 teachers per 100; median 22 universe students). Ratios remain skewed
+  (teachers skew 33); full-sample capacity rows are driven by these schools.
 - Track rows (0/1, Y-SD units): TP (ENS 410-810) and artistic (910) enter
   separately; artistic = RBD 320, 8511 only (2024 directory; see
   `data/clean/staff_va_compact_inputs/artistic_rbd_2024.csv`).

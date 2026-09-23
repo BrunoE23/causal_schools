@@ -28,11 +28,11 @@ OUTCOMES = [('z_year_math_max', 'Math'), ('z_year_leng_max', 'Language'),
             ('admission_exam_taker', 'Exam taking'), ('higher_ed_enrolled_m1', 'HE enrollment'),
             ('stem_enrollment_m1', 'STEM'), ('high_inst_m1', 'High-premium inst.'),
             ('log_program_income_full_clp_m1', 'Proj. income')]
-FOCAL = [('teacher__log1p_per1000', 'Log(1 + teachers per 1,000 students)', 'Teachers'),
+FOCAL = [('teacher__per100_enrolled', 'Teachers per 100 students enrolled', 'Teachers'),
          ('teacher__balanced_index', 'Teacher qualification index', 'Teachers'),
-         ('counselor__log1p_per1000', 'Log(1 + orientadores per 1,000 students)', 'Orientadores'),
+         ('counselor__per100_enrolled', 'Orientadores per 100 students enrolled', 'Orientadores'),
          ('counselor__ROLE_SPECIFIC_QUALIFICATION', 'Orientation-specific qualification', 'Orientadores'),
-         ('leadership__log1p_per1000', 'Log(1 + leaders per 1,000 students)', 'Leadership'),
+         ('leadership__per100_enrolled', 'Leaders per 100 students enrolled', 'Leadership'),
          ('leadership__balanced_index', 'Leadership qualification index', 'Leadership'),
          ('school__composition_math_mean', 'Peer grade-4 math (mean)', 'Peers'),
          ('school__log_public_funding_level', 'Log public funding per student', 'Resources'),
@@ -57,10 +57,24 @@ art = pd.read_csv('data/clean/staff_va_compact_inputs/artistic_rbd_2024.csv')
 x['school__has_artistic'] = x.RBD.isin(art.RBD).astype(float)
 x['school__has_tp'] = x.school__has_tp_or_artistic - x.school__has_artistic
 assert set(x.school__has_tp.unique()) <= {0.0, 1.0}
-# Staffing ratios are extremely right-skewed (skew 6-24; driven by schools with
-# very few VA-sample students), so they enter as log(1 + staff per 1,000).
+# Staffing ratios: mean annual 2018-2024 headcount per 100 students enrolled,
+# where enrollment = universe students (grade-8 cohorts 2017-2020) assigned to
+# the school as most_time_RBD (4 cohorts ~ grades 9-12). Built by
+# 00_hs_enrollment_from_universe.R. Schools absent from the universe file have
+# missing ratios (handled by the missingness indicators).
+enr_path = 'data/clean/staff_va_compact_inputs/hs_enrollment_universe_2017_2020.csv'
+if not os.path.exists(enr_path):
+    sys.exit('Run 00_hs_enrollment_from_universe.R first: ' + enr_path)
+P['enrollment'] = enr_path
+md5['enrollment'] = hashlib.md5(open(enr_path, 'rb').read()).hexdigest()
+enr = pd.read_csv(enr_path).set_index('RBD').HS_ENROLLED_EST
+assert enr.index.is_unique
+x['hs_enrolled_est'] = x.RBD.map(enr)
 for r in ('teacher', 'counselor', 'leadership'):
-    x[f'{r}__log1p_per1000'] = np.log1p(x[f'{r}__staff_per1000_va_students'])
+    den = x.hs_enrolled_est.where(x.hs_enrolled_est > 0)
+    x[f'{r}__per100_enrolled'] = 100 * x[f'{r}__mean_headcount'] / den
+    print(r, 'per 100 enrolled:', x[f'{r}__per100_enrolled'].describe(percentiles=[.01, .5, .99]).round(2).to_dict(),
+          'skew', round(x[f'{r}__per100_enrolled'].skew(), 1))
 
 context = ['school__log_va_students'] + \
     [c for c in x.columns if c.startswith('school__dependency_') or c.startswith('school__region_')]
