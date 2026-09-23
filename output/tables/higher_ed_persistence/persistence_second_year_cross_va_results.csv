@@ -1,19 +1,25 @@
 spec,va_label,outcome_key,outcome_label,outcome,beta,se,p_value,n_obs,first_stage_f,outcome_mean,label
+anypost,Benefits/credit application,highered_persistence,Higher-ed enrollment,entered_and_persist_y1,0.0934347540220131,0.136271068170045,0.49293154721073,89246,2666.92125279379,0.29665195078771,Benefits/credit application
+anypost,Benefits/credit application,highinst_persistence,High-premium institution,inst_entry_to_y1,0.000207244452060884,0.0534374816952407,0.99690560391608,89246,2666.92125279379,0.0381193554893217,Benefits/credit application
+anypost,Benefits/credit application,highpay_persistence,High-premium field,field_entry_to_y1,0.0136545192845956,0.0537682818444744,0.799533265035935,89246,2666.92125279379,0.0317661295744347,Benefits/credit application
+exam,Admission-exam taking,highered_persistence,Higher-ed enrollment,entered_and_persist_y1,-0.0105684136139197,0.064215948785534,0.869277604824085,89246,3870.58675682158,0.29665195078771,Admission-exam taking
+exam,Admission-exam taking,highinst_persistence,High-premium institution,inst_entry_to_y1,0.00680465535354666,0.0280942076256317,0.808618623799322,89246,3870.58675682158,0.0381193554893217,Admission-exam taking
+exam,Admission-exam taking,highpay_persistence,High-premium field,field_entry_to_y1,-0.0187287812913199,0.0251668647690587,0.456765089431954,89246,3870.58675682158,0.0317661295744347,Admission-exam taking
 highered,Higher-ed enrollment,highered_persistence,Higher-ed enrollment,entered_and_persist_y1,0.244311608451666,0.143418991780029,0.0884779852103736,89253,3274.36013331825,0.296628684750092,Higher-ed enrollment
 highered,Higher-ed enrollment,highinst_persistence,High-premium institution,inst_entry_to_y1,-0.0386699065279834,0.0582457022412385,0.506747889700224,89253,3274.36013331825,0.0381163658364425,Higher-ed enrollment
 highered,Higher-ed enrollment,highpay_persistence,High-premium field,field_entry_to_y1,0.0549587613233471,0.0569774474031763,0.334760012791386,89253,3274.36013331825,0.0317636381970354,Higher-ed enrollment
-highinst,High-premium institution,highered_persistence,Higher-ed enrollment,entered_and_persist_y1,0.142961147766272,0.144343682697175,0.321967934352565,89255,1105.37888954646,0.296622037981066,High-premium institution
-highinst,High-premium institution,highinst_persistence,High-premium institution,inst_entry_to_y1,0.298946561903094,0.100147273776443,0.00283513997303259,89255,1105.37888954646,0.0381155117360372,High-premium institution
-highinst,High-premium institution,highpay_persistence,High-premium field,field_entry_to_y1,-0.0317308686052877,0.0614303737653819,0.605481590443477,89255,1105.37888954646,0.0317629264466977,High-premium institution
-highpay,High-premium field,highered_persistence,Higher-ed enrollment,entered_and_persist_y1,-0.00156333209937154,0.0942886442098261,0.986771456867212,89254,4500.09439797409,0.296625361328344,High-premium field
-highpay,High-premium field,highinst_persistence,High-premium institution,inst_entry_to_y1,0.0232458275904874,0.0420637918639148,0.580514934063868,89254,4500.09439797409,0.0381159387814552,High-premium field
-highpay,High-premium field,highpay_persistence,High-premium field,field_entry_to_y1,0.0532039586203088,0.0393475285111499,0.176325726000625,89254,4500.09439797409,0.0317632823178793,High-premium field
-leng,Verbal,highered_persistence,Higher-ed enrollment,entered_and_persist_y1,-0.143238369350399,0.0643177224074403,0.0259443628155183,89096,3360.43659900617,0.297061596480201,Verbal
-leng,Verbal,highinst_persistence,High-premium institution,inst_entry_to_y1,0.0209328425256405,0.028958837770004,0.469773176987822,89096,3360.43659900617,0.0381610846727126,Verbal
-leng,Verbal,highpay_persistence,High-premium field,field_entry_to_y1,-0.0359844011104244,0.0265078145250531,0.174621879662824,89096,3360.43659900617,0.0318083864595492,Verbal
-math,Math,highered_persistence,Higher-ed enrollment,entered_and_persist_y1,-0.094963810208931,0.0579260593016604,0.101130597527877,89091,2594.43226673287,0.297078268287481,Math
-math,Math,highinst_persistence,High-premium institution,inst_entry_to_y1,0.0334366115289386,0.0269597283475439,0.214885567068298,89091,2594.43226673287,0.0381632263640547,Math
-math,Math,highpay_persistence,High-premium field,field_entry_to_y1,-0.00295756623631682,0.0240760595096382,0.902231723720111,89091,2594.43226673287,0.0318101716222739,Math
-program_income_full,Projected program income,highered_persistence,Higher-ed enrollment,entered_and_persist_y1,0.202713865358374,0.111170572857748,0.0682354208754981,89255,4372.10391653785,0.296622037981066,Projected program income
-program_income_full,Projected program income,highinst_persistence,High-premium institution,inst_entry_to_y1,0.0687936666056683,0.0554398843979458,0.214653928429844,89255,4372.10391653785,0.0381155117360372,Projected program income
-program_income_full,Projected program income,highpay_persistence,High-premium field,field_entry_to_y1,0.0195047588324796,0.0462161889985044,0.673000899917541,89255,4372.10391653785,0.0317629264466977,Projected program income
+highinst,High-premium institution,highered_persistence,Higher-ed enrollment,entered_and_persist_y1,0.1266086730773,0.162375336664948,0.435550716464908,88978,658.338683383578,0.297410595877633,High-premium institution
+highinst,High-premium institution,highinst_persistence,High-premium institution,inst_entry_to_y1,0.323153887788315,0.106634610993586,0.00244166632204818,88978,658.338683383578,0.0382116927779901,High-premium institution
+highinst,High-premium institution,highpay_persistence,High-premium field,field_entry_to_y1,-0.0377316116836184,0.0683674695432102,0.5810208246026,88978,658.338683383578,0.0318505698037717,High-premium institution
+highpay,High-premium field,highered_persistence,Higher-ed enrollment,entered_and_persist_y1,0.0306897193423059,0.0796004170029387,0.699832030070024,88978,3832.08870211803,0.297410595877633,High-premium field
+highpay,High-premium field,highinst_persistence,High-premium institution,inst_entry_to_y1,0.0374953881454003,0.0354746057390049,0.290527928039178,88978,3832.08870211803,0.0382116927779901,High-premium field
+highpay,High-premium field,highpay_persistence,High-premium field,field_entry_to_y1,0.0316485329455197,0.0321233595440575,0.324516681306756,88978,3832.08870211803,0.0318505698037717,High-premium field
+leng,Verbal,highered_persistence,Higher-ed enrollment,entered_and_persist_y1,-0.141529200820738,0.0642171194459209,0.0275301822195154,88978,3340.26928767775,0.297410595877633,Verbal
+leng,Verbal,highinst_persistence,High-premium institution,inst_entry_to_y1,0.021396115893221,0.0289349895440326,0.459630897983562,88978,3340.26928767775,0.0382116927779901,Verbal
+leng,Verbal,highpay_persistence,High-premium field,field_entry_to_y1,-0.0356595380245297,0.0264767666938965,0.178037005933818,88978,3340.26928767775,0.0318505698037717,Verbal
+math,Math,highered_persistence,Higher-ed enrollment,entered_and_persist_y1,-0.094068285896963,0.05787903156167,0.104107865903285,88977,2591.6912396679,0.297413938433528,Math
+math,Math,highinst_persistence,High-premium institution,inst_entry_to_y1,0.0334728592205247,0.026937019898301,0.214002701630872,88977,2591.6912396679,0.0382121222338357,Math
+math,Math,highpay_persistence,High-premium field,field_entry_to_y1,-0.00317737159937259,0.0240763768131654,0.895007621502632,88977,2591.6912396679,0.0318509277678501,Math
+program_income,Projected program income,highered_persistence,Higher-ed enrollment,entered_and_persist_y1,0.44959098281263,0.134382172476665,0.00082100369910604,88978,3914.85190526694,0.297410595877633,Projected program income
+program_income,Projected program income,highinst_persistence,High-premium institution,inst_entry_to_y1,0.137872044773576,0.0689231984424065,0.0454600963147046,88978,3914.85190526694,0.0382116927779901,Projected program income
+program_income,Projected program income,highpay_persistence,High-premium field,field_entry_to_y1,0.0477771586268468,0.0553513560790862,0.388048687301437,88978,3914.85190526694,0.0318505698037717,Projected program income

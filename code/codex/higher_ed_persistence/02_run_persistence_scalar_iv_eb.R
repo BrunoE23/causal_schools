@@ -5,8 +5,10 @@ setFixest_nthreads(0)
 data_root <- Sys.getenv('CAUSAL_SCHOOLS_DATA_WD', 'C:/Users/brunem/Box/causal_schools')
 clean <- file.path(data_root, 'data/clean')
 repo <- normalizePath('.', winslash = '/', mustWork = TRUE)
-value_path <- file.path(repo, 'output/tables/empirical_bayes_school_va',
+legacy_value_path <- file.path(repo, 'output/tables/empirical_bayes_school_va',
   'stata_eb_school_rbd_observational_values_for_iv.csv')
+main_value_path <- file.path(clean, 'empirical_bayes_school_va', 'cohorts_2017_2020',
+  'eb_school_rbd_observational_values.csv')
 persistence_path <- file.path(repo, 'data/clean/higher_ed_persistence',
   'higher_ed_persistence_outcomes.csv')
 program_path <- file.path(repo, 'output/tables/mifuturo_matricula_income',
@@ -16,19 +18,27 @@ clean_out <- file.path(repo, 'data/clean/higher_ed_persistence')
 dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
 
 specs <- data.table(
-  spec = c('highered', 'math', 'leng', 'highinst', 'highpay', 'program_income_full'),
+  spec = c('highered', 'math', 'leng', 'exam', 'highinst', 'highpay',
+    'program_income', 'anypost'),
   value_outcome = c('higher_ed_enrolled_m1', 'z_year_math_max', 'z_year_leng_max',
-    'high_inst_m1', 'high_paying_field_m1', 'log_program_income_full_clp_m1'),
-  label = c('Higher-ed enrollment', 'Math', 'Verbal', 'High-premium institution',
-    'High-premium field', 'Projected program income'),
-  require_exam = rep(FALSE, 6)
+    'admission_exam_taker', 'high_inst_m1', 'high_paying_field_m1',
+    'log_program_income_clp_m1', 'any_postulacion'),
+  label = c('Higher-ed enrollment', 'Math', 'Verbal', 'Admission-exam taking',
+    'High-premium institution', 'High-premium field', 'Projected program income',
+    'Benefits/credit application'),
+  require_exam = rep(FALSE, 8)
 )
 focal_specs <- c('highered', 'highpay', 'highinst')
 
-values <- fread(value_path, na.strings = c('', 'NA'))[
-  analysis_sample == 'All' & outcome %chin% specs$value_outcome,
+values_main <- fread(main_value_path, na.strings = c('', 'NA'))[
+  analysis_sample == 'All' & outcome %chin% specs[spec != 'highered', value_outcome],
   .(school_rbd = as.numeric(school_rbd), outcome,
     value = controlled_value_added_eb_centered_student)]
+values_highered <- fread(legacy_value_path, na.strings = c('', 'NA'))[
+  analysis_sample == 'All' & outcome == 'higher_ed_enrolled_m1',
+  .(school_rbd = as.numeric(school_rbd), outcome,
+    value = controlled_value_added_eb_centered_student)]
+values <- rbindlist(list(values_highered, values_main), use.names = TRUE)
 stopifnot(!anyDuplicated(values[, .(school_rbd, outcome)]))
 wide <- dcast(values, school_rbd ~ outcome, value.var = 'value')
 setnames(wide, specs$value_outcome, paste0('school_value_', specs$spec))
