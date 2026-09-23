@@ -25,6 +25,11 @@ codex fixed-OLS estimator (HC1, SD-standardized); verified to 1e-14.
   rows are outlier-driven. A true annual grades 9-12 enrollment count from
   tracking files is the proper denominator (open).
 
+- 2026-09-23 update 3: Bruno chose the main sample = schools with >=100
+  pooled VA-sample students (2,334 schools). All-schools version kept as
+  robustness (`*_allschools`). This restricts the population described to
+  larger schools; small schools' EB VA is heavily shrunk anyway.
+
 ## Rationale
 
 - Staffing ratios enter as log(1+x): raw ratios have skew 6-24, driven by

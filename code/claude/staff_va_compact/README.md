@@ -24,14 +24,15 @@ Differences from the 14-variable table:
   and region (ref RM) dummies.
 - R2 rows: controls only; + 6 staff rows; + peers and funding. In-sample.
 
-Sensitivity: `MIN_VA_STUDENTS=100` keeps schools with >=100 pooled VA-sample
-students (2,334 schools). Capacity rows change sharply; see decision log.
+Main sample: schools with >=100 pooled VA-sample students (2,334 schools;
+Bruno's choice 2026-09-23). `MIN_VA_STUDENTS=0` writes the all-schools
+robustness version to `*_allschools/`.
 
 Run from repo root (Python 3 with numpy/pandas; R unavailable in this session):
     python code/claude/staff_va_compact/01_fit_compact_table.py
-    MIN_VA_STUDENTS=100 python code/claude/staff_va_compact/01_fit_compact_table.py
+    MIN_VA_STUDENTS=0 python code/claude/staff_va_compact/01_fit_compact_table.py
     python code/claude/staff_va_compact/02_verify_against_codex_r.py
 
-Outputs: `data/clean/staff_va_compact[_minva100]/` (coefficients, model summary,
-coverage, source md5) and `output/tables/staff_va_compact[_minva100]/`
+Outputs: `data/clean/staff_va_compact[_allschools]/` (coefficients, model summary,
+coverage, source md5) and `output/tables/staff_va_compact[_allschools]/`
 (`staff_va_compact.tex`, `.csv`).

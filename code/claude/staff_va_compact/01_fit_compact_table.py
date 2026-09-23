@@ -10,9 +10,11 @@ import hashlib, json, os, sys
 import numpy as np, pandas as pd
 
 ROOT = os.getcwd()
-# Optional sensitivity: drop schools with fewer than MIN_VA pooled VA-sample students.
-MIN_VA = int(os.environ.get('MIN_VA_STUDENTS', '0'))
-SUFFIX = '' if MIN_VA == 0 else f'_minva{MIN_VA}'
+# Main sample (Bruno, 2026-09-23): schools with >= 100 pooled VA-sample
+# students (grade-8 cohorts 2017-2020). MIN_VA_STUDENTS=0 gives the all-schools
+# robustness version.
+MIN_VA = int(os.environ.get('MIN_VA_STUDENTS', '100'))
+SUFFIX = '' if MIN_VA == 100 else ('_allschools' if MIN_VA == 0 else f'_minva{MIN_VA}')
 OUT_DATA = os.path.join(ROOT, 'data/clean/staff_va_compact' + SUFFIX)
 OUT_TAB = os.path.join(ROOT, 'output/tables/staff_va_compact' + SUFFIX)
 os.makedirs(OUT_DATA, exist_ok=True); os.makedirs(OUT_TAB, exist_ok=True)
