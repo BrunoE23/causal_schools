@@ -28,7 +28,14 @@ Main sample: schools with >=100 pooled VA-sample students (2,334 schools;
 Bruno's choice 2026-09-23). `MIN_VA_STUDENTS=0` writes the all-schools
 robustness version to `*_allschools/`.
 
+Orientador rows (2026-09-23): headcount and counseling-trained headcount per
+100 students, split by birth cohort (born 1977+ vs before 1977), built by
+`03_build_orientador_tiers.py`. Counseling-trained = counseling-specific
+postitulo/postgraduate SIES award as of the staff year. Replaces the any-level
+orientation-specific qualification share.
+
 Run from repo root (Python 3 with numpy/pandas; R unavailable in this session):
+    python code/claude/staff_va_compact/03_build_orientador_tiers.py
     python code/claude/staff_va_compact/01_fit_compact_table.py
     MIN_VA_STUDENTS=0 python code/claude/staff_va_compact/01_fit_compact_table.py
     python code/claude/staff_va_compact/02_verify_against_codex_r.py

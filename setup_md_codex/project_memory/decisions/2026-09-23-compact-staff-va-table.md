@@ -30,6 +30,18 @@ codex fixed-OLS estimator (HC1, SD-standardized); verified to 1e-14.
   robustness (`*_allschools`). This restricts the population described to
   larger schools; small schools' EB VA is heavily shrunk anyway.
 
+- 2026-09-23 update 4 (orientador tiers): SIES undergrad match reaches >90%
+  only for staff born 1985+, but counseling specialization is almost entirely
+  post-UG (45 UG vs 3,473 postitulo/postgrad counseling awards) and happens
+  mostly after age 30 (median ~40). Split orientadores at birth year 1977 (age
+  30 in 2007): training essentially fully observed for 1977+, partly hidden
+  before. Rows: orientadores per 100 students and counseling-trained (post-UG
+  counseling award as of staff year) orientadores per 100, by tier. Counts, not
+  within-tier shares, so schools without a tier have true zeros. Rebuilt
+  headcounts reproduce counselor__mean_headcount exactly. Rolling award windows
+  and same-age residualization were considered and rejected (Bruno wants an
+  accurate school stock, not a fair person comparison).
+
 ## Rationale
 
 - Staffing ratios enter as log(1+x): raw ratios have skew 6-24, driven by

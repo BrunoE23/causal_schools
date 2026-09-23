@@ -32,8 +32,10 @@ OUTCOMES = [('z_year_math_max', 'Math'), ('z_year_leng_max', 'Language'),
             ('log_program_income_full_clp_m1', 'Proj. income')]
 FOCAL = [('teacher__per100_enrolled', 'Teachers per 100 students enrolled', 'Teachers'),
          ('teacher__balanced_index', 'Teacher qualification index', 'Teachers'),
-         ('counselor__per100_enrolled', 'Orientadores per 100 students enrolled', 'Orientadores'),
-         ('counselor__ROLE_SPECIFIC_QUALIFICATION', 'Orientation-specific qualification', 'Orientadores'),
+         ('counselor__young_per100', 'Orientadores born 1977+ per 100 students', 'Orientadores'),
+         ('counselor__young_trained_per100', '  of which counseling-trained', 'Orientadores'),
+         ('counselor__old_per100', 'Orientadores born before 1977 per 100 students', 'Orientadores'),
+         ('counselor__old_trained_per100', '  of which counseling-trained', 'Orientadores'),
          ('leadership__per100_enrolled', 'Leaders per 100 students enrolled', 'Leadership'),
          ('leadership__balanced_index', 'Leadership qualification index', 'Leadership'),
          ('school__composition_math_mean', 'Peer grade-4 math (mean)', 'Peers'),
@@ -43,7 +45,7 @@ FOCAL = [('teacher__per100_enrolled', 'Teachers per 100 students enrolled', 'Tea
 # Track dummies are reported as 0/1 contrasts (Y SD units), not per predictor SD.
 UNSTD = {'school__has_tp', 'school__has_artistic'}
 feats = [f for f, _, _ in FOCAL]
-STAFF = feats[:6]; SCHOOL = feats[6:8]; TRACK = feats[8:]
+STAFF = feats[:8]; SCHOOL = feats[8:10]; TRACK = feats[10:]
 
 x = pd.read_csv(P['predictors']).sort_values('RBD').reset_index(drop=True)
 assert len(x) == 3682 and x.RBD.is_unique
@@ -77,6 +79,18 @@ for r in ('teacher', 'counselor', 'leadership'):
     x[f'{r}__per100_enrolled'] = 100 * x[f'{r}__mean_headcount'] / den
     print(r, 'per 100 enrolled:', x[f'{r}__per100_enrolled'].describe(percentiles=[.01, .5, .99]).round(2).to_dict(),
           'skew', round(x[f'{r}__per100_enrolled'].skew(), 1))
+# Orientador birth-cohort tiers (03_build_orientador_tiers.py). Schools with a
+# known zero orientador headcount get zeros; unknown headcount stays missing.
+tiers = pd.read_csv('data/clean/staff_va_compact_inputs/orientador_tiers_2018_2024.csv').set_index('RBD')
+known0 = x.counselor__mean_headcount.notna()
+for src, dst in (('counselor_young_headcount_mean', 'counselor__young_per100'),
+                 ('counselor_young_trained_mean', 'counselor__young_trained_per100'),
+                 ('counselor_old_headcount_mean', 'counselor__old_per100'),
+                 ('counselor_old_trained_mean', 'counselor__old_trained_per100')):
+    cnt = x.RBD.map(tiers[src]).where(known0 & x.RBD.isin(tiers.index), np.where(known0, 0.0, np.nan))
+    x[dst] = 100 * cnt / x.hs_enrolled_est.where(x.hs_enrolled_est > 0)
+tot = x.counselor__young_per100 + x.counselor__old_per100
+assert np.allclose(tot.dropna(), x.counselor__per100_enrolled[tot.notna()])
 
 context = ['school__log_va_students'] + \
     [c for c in x.columns if c.startswith('school__dependency_') or c.startswith('school__region_')]
