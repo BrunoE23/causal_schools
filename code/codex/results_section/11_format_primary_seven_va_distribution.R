@@ -19,22 +19,40 @@ weighted_sd <- function(value, weight) {
   mu <- sum(weight * value) / sum(weight)
   sqrt(sum(weight * (value - mu)^2) / sum(weight))
 }
-
-# The unshrunk estimates are the school fixed effects supplied to the EB step.
-eb_dir <- file.path(repo_wd,'output/tables/empirical_bayes_school_va')
-stata_keys <- c('math','language','exam','highinst','highpay','program_income_full')
-unshrunk_sd <- setNames(numeric(length(order_keys)),order_keys)
-for(key in stata_keys) {
-  z <- fread(file.path(eb_dir,paste0('stata_eb_school_values_',key,'.csv')),
-             select=c('va_centered','n_students'))
-  unshrunk_sd[key] <- weighted_sd(z$va_centered,z$n_students)
+weighted_quantile <- function(value, weight, probs) {
+  keep <- is.finite(value) & is.finite(weight) & weight > 0
+  value <- value[keep]
+  weight <- weight[keep]
+  ord <- order(value)
+  value <- value[ord]
+  cumulative_weight <- cumsum(weight[ord]) / sum(weight)
+  vapply(probs, function(p) value[which(cumulative_weight >= p)[1L]], numeric(1))
 }
+
+# Use the unified pooled VA/EB file for all seven outcomes so the VA and RSS
+# calculations share the same outcome-specific sample rule and student weights.
 data_wd <- Sys.getenv('CAUSAL_SCHOOLS_DATA_WD',unset='C:/Users/brunem/Box/causal_schools')
-aid_path <- file.path(data_wd,'data/clean/empirical_bayes_school_va/cohorts_2017_2020/eb_school_rbd_observational_values.csv')
-aid <- fread(aid_path,select=c('outcome','controlled_value_added_centered_student','n_students_regression'))
-aid <- aid[outcome=='any_postulacion']
-unshrunk_sd['postulacion'] <- weighted_sd(aid$controlled_value_added_centered_student,aid$n_students_regression)
-x[,unshrunk_va_sd:=unshrunk_sd[outcome_key]]
+eb_path <- file.path(data_wd,'data/clean/empirical_bayes_school_va/cohorts_2017_2020/eb_school_rbd_observational_values.csv')
+eb <- fread(eb_path,select=c(
+  'outcome','analysis_sample','controlled_value_added_centered_student',
+  'controlled_value_added_eb_centered_student','n_students_regression'
+))[analysis_sample=='All']
+outcome_map <- c(
+  math='z_year_math_max', language='z_year_leng_max', exam='admission_exam_taker',
+  highinst='high_inst_m1', highpay='high_paying_field_m1',
+  program_income_full='log_program_income_clp_m1', postulacion='any_postulacion'
+)
+for (i in seq_len(nrow(x))) {
+  z <- eb[outcome==outcome_map[[x$outcome_key[i]]]]
+  w <- z$n_students_regression
+  q <- weighted_quantile(z$controlled_value_added_eb_centered_student,w,c(.10,.25,.50,.75,.90))
+  x[i,`:=`(
+    eb_va_sd=weighted_sd(z$controlled_value_added_eb_centered_student,w),
+    p10=q[1],p25=q[2],p50=q[3],p75=q[4],p90=q[5],
+    n_schools=nrow(z),eb_source='r_lfe_unified',
+    unshrunk_va_sd=weighted_sd(z$controlled_value_added_centered_student,w)
+  )]
+}
 fwrite(x,input_path)
 
 rows <- unlist(lapply(seq_len(nrow(x)),function(i){
@@ -54,7 +72,7 @@ tex <- c(
   'Outcome & Mean & SD & $N$ & P10 & P50 & P90 & SD & SD & SD \\\\',
   '\\midrule',rows,'\\bottomrule','\\end{tabular}',
   '\\begin{tablenotes}[flushleft]','\\footnotesize',
-  '\\item Notes: The student-outcome columns report moments for the outcome-specific samples. The EB block reports the student-weighted distribution of EB-shrunken, student-centered school value added; schools are weighted by the number of students in the corresponding value-added regression. Unshrunk VA is the student-weighted dispersion of the school fixed-effect estimates supplied to the EB shrinkage step. The RSS column reports the standard deviation of latent school effects estimated from cross-cohort products. RSS uses its cross-cohort estimation sample and school weighting, which differ from the EB calculation; the relative magnitudes of EB and RSS therefore need not follow a fixed ordering. Financial-aid application uses the R-based EB pipeline employed by the main IV analysis; the other rows use the corresponding Stata EB outputs. Math and verbal are measured in admission-test standard deviations, admission-exam taking, high-premium institution, high-premium field, and financial-aid application are binary, and projected income is measured in logs.',
+  '\\item Notes: The student-outcome columns report moments for the outcome-specific samples. The EB block reports the student-weighted distribution of EB-shrunken, student-centered school value added; schools are weighted by the number of students in the corresponding pooled value-added regression. Unshrunk VA is the student-weighted dispersion of the school fixed-effect estimates supplied to the EB shrinkage step. The RSS column reports the standard deviation of latent school effects estimated from cross-cohort products and uses the same outcome-specific sample rule and student-count weights. All VA columns use the unified R-based pooled VA pipeline. Math and verbal are measured in admission-test standard deviations, admission-exam taking, high-premium institution, high-premium field, and financial-aid application are binary, and projected income is measured in logs.',
   '\\end{tablenotes}','\\end{threeparttable}','\\end{table}')
 writeLines(tex,output_path)
 message('Wrote: ',output_path)
