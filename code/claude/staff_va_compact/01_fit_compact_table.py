@@ -184,24 +184,62 @@ cov.to_csv(os.path.join(OUT_DATA, 'focal_coverage.csv'), index=False)
 assert md5 == {k: hashlib.md5(open(v, 'rb').read()).hexdigest() for k, v in P.items()}
 json.dump(md5, open(os.path.join(OUT_DATA, 'source_md5.json'), 'w'), indent=1)
 
-# ---- LaTeX table ----
-L = [r'\begin{tabular}{l' + 'c' * len(OUTCOMES) + '}', r'\toprule',
-     ' & ' + ' & '.join(f'({i+1})' for i in range(len(OUTCOMES))) + r' \\',
-     ' & ' + ' & '.join(lab for _, lab in OUTCOMES) + r' \\', r'\midrule']
+# ---- LaTeX table (paper format; column order/labels follow the var/cov table) ----
+PAPER_COLS = [('z_year_math_max', 'Math achievement'), ('z_year_leng_max', 'Verbal achievement'),
+              ('high_inst_m1', 'High-premium institution'), ('high_paying_field_m1', 'High-premium field'),
+              ('log_program_income_clp_m1', 'Log projected income'), ('admission_exam_taker', 'Admission exam taken'),
+              ('any_postulacion', 'Any application (postulaci\\\'on)')]
+PAPER_ROWS = {'teacher__per100_enrolled': 'Teachers per 100 students',
+              'teacher__balanced_index': 'Teacher qualification index',
+              'counselor__young_per100': 'Born 1977 or later, per 100 students',
+              'counselor__young_trained_per100': '\\hspace{1em}Counseling-trained, born 1977 or later',
+              'counselor__old_per100': 'Born before 1977, per 100 students',
+              'counselor__old_trained_per100': '\\hspace{1em}Counseling-trained, born before 1977',
+              'leadership__per100_enrolled': 'Leaders per 100 students',
+              'leadership__balanced_index': 'Leadership qualification index',
+              'school__composition_math_mean': 'Peer grade-4 math achievement',
+              'school__log_public_funding_level': 'Log public funding per student',
+              'school__has_tp': 'Technical-professional track (0/1)'}
+BLOCKS = {'Teachers': 'Teachers', 'Orientadores': 'Counselors (orientadores)', 'Leadership': 'School leadership',
+          'Peers': 'Peers, resources and track', 'Resources': None, 'Track': None}
+nc = len(PAPER_COLS)
+samp = ('public and private-subsidized schools with at least %d students in the value-added sample' % MIN_VA) if MIN_VA else 'all public and private-subsidized schools'
+L = [r'\begin{table}[!htbp]', r'\centering', r'\caption{School staff, peers and resources, and school value added}',
+     r'\label{tab:staff-va' + ('' if MIN_VA == 100 else '-' + SUFFIX.strip('_')) + '}', r'\resizebox{\textwidth}{!}{%',
+     r'\begin{tabular}{l' + 'c' * nc + '}', r'\toprule',
+     ' & ' + ' & '.join(f'({i+1})' for i in range(nc)) + r' \\', r'\midrule']
 prev = None
 for f, lab, blk in FOCAL:
-    if blk != prev:
-        L.append(r'\multicolumn{' + str(len(OUTCOMES) + 1) + r'}{l}{\textit{' + blk + r'}} \\'); prev = blk
+    if f not in PAPER_ROWS:
+        continue
+    head = BLOCKS[blk]
+    if head and head != prev:
+        L.append(r'\multicolumn{' + str(nc + 1) + r'}{l}{\textit{' + head + r'}} \\'); prev = head
     c = coef[coef.FEATURE == f].set_index('OUTCOME')
-    L.append(r'\quad ' + lab.replace('&', r'\&') + ' & ' + ' & '.join(f'{c.BETA_SD[o]:.3f}' for o, _ in OUTCOMES) + r' \\')
-    L.append(' & ' + ' & '.join(f'({c.SE_HC1[o]:.3f})' for o, _ in OUTCOMES) + r' \\')
+    L.append(r'\quad ' + PAPER_ROWS[f] + ' & ' + ' & '.join(f'{c.BETA_SD[o]:.3f}' for o, _ in PAPER_COLS) + r' \\')
+    L.append(' & ' + ' & '.join(f'({c.SE_HC1[o]:.3f})' for o, _ in PAPER_COLS) + r' \\')
 L.append(r'\midrule')
 sm = summ.set_index('OUTCOME')
-for col, lab in (('R2_CONTROLS', r'$R^2$: controls + track'), ('R2_STAFF', r'$R^2$: + staff'),
-                 ('R2_FULL', r'$R^2$: + peers, funding')):
-    L.append(lab + ' & ' + ' & '.join(f'{sm[col][o]:.3f}' for o, _ in OUTCOMES) + r' \\')
-L.append('Schools & ' + ' & '.join(f'{sm.N[o]:,}' for o, _ in OUTCOMES) + r' \\')
-L += [r'\bottomrule', r'\end{tabular}']
+for col, lab in (('R2_CONTROLS', r'$R^2$: controls and track only'), ('R2_STAFF', r'$R^2$: adding staff'),
+                 ('R2_FULL', r'$R^2$: adding peers and funding')):
+    L.append(lab + ' & ' + ' & '.join(f'{sm[col][o]:.3f}' for o, _ in PAPER_COLS) + r' \\')
+L.append('Schools & ' + ' & '.join(f'{sm.N[o]:,}' for o, _ in PAPER_COLS) + r' \\')
+L += [r'\bottomrule', r'\end{tabular}}', r'\par\medskip', r'\footnotesize', r'\begin{minipage}{\textwidth}',
+      'Notes: Each column is a school-level OLS regression of the All-sample Empirical-Bayes school value added for the '
+      'indicated outcome (grade-8 cohorts 2017--2020) on the listed characteristics, estimated on ' + samp + '. '
+      'Both value added and continuous regressors are standardized by their sample standard deviations, so '
+      'coefficients are in standard deviations of value added per standard deviation of the regressor; the '
+      'technical-professional coefficient is the difference between schools with and without that track. '
+      'Staff measures average 2018--2024 administrative staff records. Staffing ratios divide mean annual '
+      'headcounts by the number of grade-8-cohort students assigned to the school. Qualification indices combine '
+      'prior role experience, the current spell at the school, university qualification and teaching '
+      'qualification. Counseling-trained counselors hold a counseling-specific postgraduate or post-degree '
+      'certificate recorded in SIES graduation records by the staff year. All regressions control for log school '
+      'size, dependency, region and an artistic-track indicator, and include indicators for missing '
+      'regressors, absent roles and incomplete staff rosters. Heteroskedasticity-robust (HC1) standard errors '
+      'in parentheses. (1) Math achievement; (2) Verbal achievement; (3) High-premium institution; '
+      '(4) High-premium field; (5) Log projected income; (6) Admission exam taken; (7) Any application (postulaci\\\'on).',
+      r'\end{minipage}', r'\end{table}']
 open(os.path.join(OUT_TAB, 'staff_va_compact.tex'), 'w').write('\n'.join(L) + '\n')
 
 wide = coef.assign(cell=lambda d: d.BETA_SD.map('{:.3f}'.format) + ' (' + d.SE_HC1.map('{:.3f}'.format) + ')') \
