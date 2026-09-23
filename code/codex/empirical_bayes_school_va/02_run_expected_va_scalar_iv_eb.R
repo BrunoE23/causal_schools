@@ -70,6 +70,10 @@ format_se <- function(x) {
   ifelse(is.na(x), "", paste0("(", sprintf("%.3f", x), ")"))
 }
 
+format_p_value <- function(x) {
+  ifelse(is.na(x), "", ifelse(x < 0.001, "$<0.001$", sprintf("%.3f", x)))
+}
+
 parse_env_list <- function(var) {
   value <- Sys.getenv(var, unset = "")
   if (!nzchar(trimws(value))) {
@@ -417,6 +421,10 @@ universe[, `:=`(
 )]
 universe[COD_SIES_m1 %chin% c("", "NA"), COD_SIES_m1 := NA_character_]
 universe <- universe[sae_proceso >= sae_min_year & sae_proceso <= sae_max_year]
+universe <- universe[
+  !is.na(most_time_RBD) & most_time_RBD > 0 &
+    !is.na(EDAD_ALU) & EDAD_ALU >= 12 & EDAD_ALU <= 16
+]
 
 message("Reading program_income outcome columns: ", program_income_path)
 if (!file.exists(program_income_path)) {
@@ -764,7 +772,7 @@ table_out <- merge(
 message("Writing EB IV results: ", results_csv)
 fwrite(results, results_csv)
 
-make_two_row_table <- function(dt, specs, caption, label, path, group_header = NULL, notes = NULL, include_expected = FALSE, estimand = "\\theta") {
+make_two_row_table <- function(dt, specs, caption, label, path, group_header = NULL, notes = NULL, include_expected = FALSE, estimand = "\\theta", include_estimand_tests = FALSE) {
   table_dt <- copy(dt[spec %chin% specs])
   table_dt[, spec_order := match(spec, specs)]
   setorder(table_dt, spec_order)
@@ -780,6 +788,17 @@ make_two_row_table <- function(dt, specs, caption, label, path, group_header = N
     paste(format_se(table_dt$se), collapse = " & "),
     " \\\\"
   )
+  estimand_test_rows <- character()
+  if (include_estimand_tests) {
+    p_equal_zero <- table_dt$p_value
+    p_equal_one <- 2 * stats::pnorm(-abs((table_dt$beta - 1) / table_dt$se))
+    estimand_test_rows <- c(
+      paste0("$p$-value: $", estimand, "^{EB}=0$ & ",
+             paste(format_p_value(p_equal_zero), collapse = " & "), " \\\\"),
+      paste0("$p$-value: $", estimand, "^{EB}=1$ & ",
+             paste(format_p_value(p_equal_one), collapse = " & "), " \\\\")
+    )
+  }
   expected_rows <- character()
   if (include_expected) {
     expected_rows <- c(
@@ -816,6 +835,7 @@ make_two_row_table <- function(dt, specs, caption, label, path, group_header = N
     "\\midrule",
     theta_row,
     se_row,
+    estimand_test_rows,
     expected_rows,
     n_row,
     "\\bottomrule",
@@ -831,22 +851,24 @@ make_two_row_table <- function(dt, specs, caption, label, path, group_header = N
   writeLines(latex, path)
 }
 
-write_spec_table <- function(table_out, specs, csv_path, tex_path, caption, label, group_header = NULL, notes = NULL, include_expected = FALSE, estimand = "\\theta") {
+write_spec_table <- function(table_out, specs, csv_path, tex_path, caption, label, group_header = NULL, notes = NULL, include_expected = FALSE, estimand = "\\theta", include_estimand_tests = FALSE) {
   out <- table_out[spec %chin% specs]
   if (nrow(out) == 0) {
     return(character())
   }
   out[, spec_order := match(spec, specs)]
   setorder(out, spec_order)
+  out[, p_value_equal_zero := p_value]
+  out[, p_value_equal_one := 2 * stats::pnorm(-abs((beta - 1) / se))]
   fwrite(
     out[, .(
       spec, outcome_group,
-      beta, se, p_value,
+      beta, se, p_value, p_value_equal_zero, p_value_equal_one,
       n_obs, fs_beta, fs_se, fs_f
     )],
     csv_path
   )
-  make_two_row_table(out, specs, caption, label, tex_path, group_header, notes, include_expected, estimand)
+  make_two_row_table(out, specs, caption, label, tex_path, group_header, notes, include_expected, estimand, include_estimand_tests)
   c(csv_path, tex_path)
 }
 
@@ -858,10 +880,7 @@ written_paths <- c(
     main_specs,
     main_table_csv,
     main_table_tex,
-    paste0(
-      "Main scalar school-value IV estimates using EB-shrunken value added",
-      " (VA ", va_cohort_label, "; SAE ", sae_min_year, "--", sae_max_year, ")"
-    ),
+    "Pass-through coefficients for the main EB school-value specifications",
     paste0("tab:scalar-school-value-iv-main-seven-eb-", pair_label),
     c(
       " & \\multicolumn{3}{c}{Exams} & \\multicolumn{3}{c}{Higher ed. choices} & Financial aid \\\\",
@@ -870,9 +889,10 @@ written_paths <- c(
     paste0(
       "School value added is estimated using grade-8 cohorts ", va_cohort_label,
       "; the lottery sample uses SAE cohorts ", sae_min_year, "--", sae_max_year,
-      ". Each column reports a scalar IV estimate of the pass-through from attended-school EB value added to the corresponding student outcome. Attended-school EB value added is instrumented with first-round offered-school EB value added. All specifications control for the DA-probability expected value of the same EB measure, cohort, grade-4 SIMCE math and language, gender, and age. Heteroskedasticity-robust standard errors are reported in parentheses. $^{*}p<0.10$, $^{**}p<0.05$, $^{***}p<0.01$."
+      ". Each column reports a scalar IV estimate of the pass-through from attended-school EB value added to the corresponding student outcome. Attended-school EB value added is instrumented with first-round offered-school EB value added. All specifications control for the DA-probability expected value of the same EB measure, cohort, grade-4 SIMCE math and language, gender, and age. Heteroskedasticity-robust standard errors are reported in parentheses. The two reported $p$-values test $\\psi^{EB}=0$ and $\\psi^{EB}=1$ using the same robust standard error. $^{*}p<0.10$, $^{**}p<0.05$, $^{***}p<0.01$."
     ),
-    estimand = "\\psi"
+    estimand = "\\psi",
+    include_estimand_tests = TRUE
   )
 )
 written_paths <- c(

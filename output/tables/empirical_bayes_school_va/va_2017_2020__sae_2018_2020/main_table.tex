@@ -1,6 +1,6 @@
 \begin{table}[!htbp]
 \centering
-\caption{Main scalar school-value IV estimates using EB-shrunken value added (VA 2017--2020; SAE 2018--2020)}
+\caption{Pass-through coefficients for the main EB school-value specifications}
 \label{tab:scalar-school-value-iv-main-seven-eb-va-2017--2020-sae-2018-2020}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{lccccccc}
@@ -9,15 +9,17 @@
 \cmidrule(lr){2-4} \cmidrule(lr){5-7} \cmidrule(lr){8-8}
  & Math & Verbal & Exam taking & High-premium inst. & High-premium field & Program income & Fin. aid app. \\
 \midrule
-$\psi^{EB}$ & 1.197*** & 1.030*** & 0.487*** & 0.668*** & 0.860*** & 1.060*** & 0.584*** \\
+$\psi^{EB}$ & 1.197*** & 1.031*** & 0.486*** & 0.667*** & 0.861*** & 1.060*** & 0.584*** \\
  & (0.097) & (0.098) & (0.052) & (0.120) & (0.087) & (0.131) & (0.098) \\
-N &  92,372 &  93,993 & 135,911 &  94,500 &  94,500 &  94,500 & 135,911 \\
+$p$-value: $\psi^{EB}=0$ & $<0.001$ & $<0.001$ & $<0.001$ & $<0.001$ & $<0.001$ & $<0.001$ & $<0.001$ \\
+$p$-value: $\psi^{EB}=1$ & 0.042 & 0.754 & $<0.001$ & 0.005 & 0.108 & 0.649 & $<0.001$ \\
+N &  92,361 &  93,980 & 135,844 &  94,487 &  94,487 &  94,487 & 135,844 \\
 \bottomrule
 \end{tabular}
 }
 \par\medskip
 \footnotesize
 \begin{minipage}{\textwidth}
-Notes: School value added is estimated using grade-8 cohorts 2017--2020; the lottery sample uses SAE cohorts 2018--2020. Each column reports a scalar IV estimate of the pass-through from attended-school EB value added to the corresponding student outcome. Attended-school EB value added is instrumented with first-round offered-school EB value added. All specifications control for the DA-probability expected value of the same EB measure, cohort, grade-4 SIMCE math and language, gender, and age. Heteroskedasticity-robust standard errors are reported in parentheses. $^{*}p<0.10$, $^{**}p<0.05$, $^{***}p<0.01$.
+Notes: School value added is estimated using grade-8 cohorts 2017--2020; the lottery sample uses SAE cohorts 2018--2020. Each column reports a scalar IV estimate of the pass-through from attended-school EB value added to the corresponding student outcome. Attended-school EB value added is instrumented with first-round offered-school EB value added. All specifications control for the DA-probability expected value of the same EB measure, cohort, grade-4 SIMCE math and language, gender, and age. Heteroskedasticity-robust standard errors are reported in parentheses. The two reported $p$-values test $\psi^{EB}=0$ and $\psi^{EB}=1$ using the same robust standard error. $^{*}p<0.10$, $^{**}p<0.05$, $^{***}p<0.01$.
 \end{minipage}
 \end{table}
