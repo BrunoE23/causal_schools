@@ -28,7 +28,9 @@
 
 ### RC VAM noreg regression produces unstable estimates; EB shrinkage collapses to 0 for every outcome
 
-- Status: diagnosed, not fixed -- open question, needs a second opinion.
+- Status: CLOSED 2026-09-22 -- RC-VAM abandoned by Bruno; do not pursue.
+  See `decisions/2026-09-22-abandon-rc-vam.md`. Text below kept for record.
+- Former status: diagnosed, not fixed -- open question, needs a second opinion.
   Date: 2026-09-21.
 - `01_construct_rc_vam_school_values_noreg.R`'s literal-dummy + g(p_i)
   regression (`y ~ 0 + factor(school_rbd) + x_terms + gp_mat`) produces
