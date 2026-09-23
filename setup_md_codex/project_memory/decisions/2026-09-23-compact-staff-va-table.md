@@ -14,6 +14,10 @@ log VA students, TP/artistic, dependency and region dummies, plus the existing
 missingness and role-absence/roster nuisance indicators. Estimator is the
 codex fixed-OLS estimator (HC1, SD-standardized); verified to 1e-14.
 
+- 2026-09-23 update: TP and artistic split into separate reported 0/1 rows.
+  Only 2 schools (RBD 320, 8511) have artistic code 910 in the 2024
+  directory; neither has TP. The artistic coefficient is not interpretable.
+
 ## Rationale
 
 - Staffing ratios enter as log(1+x): raw ratios have skew 6-24, driven by

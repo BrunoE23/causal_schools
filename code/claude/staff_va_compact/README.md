@@ -14,7 +14,10 @@ Differences from the 14-variable table:
   (`data/clean/staff_quality_va`, `data/clean/leadership_quality_va`);
   orientation-specific qualification; peer grade-4 math mean; log public funding.
 - Staffing ratios are log(1+x) because raw ratios have skew 6-24.
-- Unreported controls: log VA students, TP/artistic, dependency (ref municipal)
+- Track rows (0/1, Y-SD units): TP (ENS 410-810) and artistic (910) enter
+  separately; artistic = RBD 320, 8511 only (2024 directory; see
+  `data/clean/staff_va_compact_inputs/artistic_rbd_2024.csv`).
+- Unreported controls: log VA students, dependency (ref municipal)
   and region (ref RM) dummies.
 - R2 rows: controls only; + 6 staff rows; + peers and funding. In-sample.
 

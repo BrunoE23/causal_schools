@@ -35,9 +35,13 @@ FOCAL = [('teacher__log1p_per1000', 'Log(1 + teachers per 1,000 students)', 'Tea
          ('leadership__log1p_per1000', 'Log(1 + leaders per 1,000 students)', 'Leadership'),
          ('leadership__balanced_index', 'Leadership qualification index', 'Leadership'),
          ('school__composition_math_mean', 'Peer grade-4 math (mean)', 'Peers'),
-         ('school__log_public_funding_level', 'Log public funding per student', 'Resources')]
+         ('school__log_public_funding_level', 'Log public funding per student', 'Resources'),
+         ('school__has_tp', 'Technical-professional offering (0/1)', 'Track'),
+         ('school__has_artistic', 'Artistic offering (0/1; 2 schools)', 'Track')]
+# Track dummies are reported as 0/1 contrasts (Y SD units), not per predictor SD.
+UNSTD = {'school__has_tp', 'school__has_artistic'}
 feats = [f for f, _, _ in FOCAL]
-STAFF = feats[:6]; SCHOOL = feats[6:]
+STAFF = feats[:6]; SCHOOL = feats[6:8]; TRACK = feats[8:]
 
 x = pd.read_csv(P['predictors']).sort_values('RBD').reset_index(drop=True)
 assert len(x) == 3682 and x.RBD.is_unique
@@ -47,12 +51,18 @@ l = pd.read_csv(P['lead_idx'], usecols=['RBD', 'balanced_index']).set_index('RBD
 assert t.index.is_unique and l.index.is_unique
 x['teacher__balanced_index'] = x.RBD.map(t)
 x['leadership__balanced_index'] = x.RBD.map(l)
+# Split HAS_TP_OR_ARTISTIC (ENS 410-810 or 910). The 2024 directory lists
+# only RBD 320 and 8511 with 910; neither has a TP code (see inputs CSV).
+art = pd.read_csv('data/clean/staff_va_compact_inputs/artistic_rbd_2024.csv')
+x['school__has_artistic'] = x.RBD.isin(art.RBD).astype(float)
+x['school__has_tp'] = x.school__has_tp_or_artistic - x.school__has_artistic
+assert set(x.school__has_tp.unique()) <= {0.0, 1.0}
 # Staffing ratios are extremely right-skewed (skew 6-24; driven by schools with
 # very few VA-sample students), so they enter as log(1 + staff per 1,000).
 for r in ('teacher', 'counselor', 'leadership'):
     x[f'{r}__log1p_per1000'] = np.log1p(x[f'{r}__staff_per1000_va_students'])
 
-context = ['school__log_va_students', 'school__has_tp_or_artistic'] + \
+context = ['school__log_va_students'] + \
     [c for c in x.columns if c.startswith('school__dependency_') or c.startswith('school__region_')]
 nuis = [f'{r}__{k}' for r in ('teacher', 'counselor', 'leadership') for k in ('absent_all_years', 'roster_incomplete')]
 missing_cols = [c for c in feats + context + nuis if c not in x.columns]
@@ -98,6 +108,8 @@ for o, olab in OUTCOMES:
     mu, sig, med = np.nanmean(raw, 0), np.nanstd(raw, 0, ddof=1), np.nanmedian(raw, 0)
     miss = np.isnan(raw)
     for j in range(len(feats)): raw[miss[:, j], j] = med[j]
+    unstd = np.array([f in UNSTD for f in feats])
+    mu[unstd], sig[unstd] = 0.0, 1.0
     Z = (raw - mu) / sig
     Mi = miss.astype(float)
     N = xs[nuis].to_numpy(float); Nm = (~np.isfinite(N)).astype(float); N[~np.isfinite(N)] = 0
@@ -117,7 +129,7 @@ for o, olab in OUTCOMES:
 
     yz = (y_eb - y_eb.mean()) / y_eb.std(ddof=1)
     r2 = {}
-    for spec, fs in (('controls', []), ('staff', STAFF), ('full', feats)):
+    for spec, fs in (('controls', TRACK), ('staff', TRACK + STAFF), ('full', feats)):
         X, names = design(fs)
         b, se, e = ols_hc1(X, yz)
         r2[spec] = 1 - (e @ e) / ((yz - yz.mean()) @ (yz - yz.mean()))
@@ -150,7 +162,7 @@ for f, lab, blk in FOCAL:
     L.append(' & ' + ' & '.join(f'({c.SE_HC1[o]:.3f})' for o, _ in OUTCOMES) + r' \\')
 L.append(r'\midrule')
 sm = summ.set_index('OUTCOME')
-for col, lab in (('R2_CONTROLS', r'$R^2$: controls only'), ('R2_STAFF', r'$R^2$: + staff'),
+for col, lab in (('R2_CONTROLS', r'$R^2$: controls + track'), ('R2_STAFF', r'$R^2$: + staff'),
                  ('R2_FULL', r'$R^2$: + peers, funding')):
     L.append(lab + ' & ' + ' & '.join(f'{sm[col][o]:.3f}' for o, _ in OUTCOMES) + r' \\')
 L.append('Schools & ' + ' & '.join(f'{sm.N[o]:,}' for o, _ in OUTCOMES) + r' \\')
