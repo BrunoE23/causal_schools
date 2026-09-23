@@ -60,6 +60,12 @@ codex fixed-OLS estimator (HC1, SD-standardized); verified to 1e-14.
   selected by Lasso, but stars still do not adjust for multiple outcomes or
   for estimation error in the EB VA dependent variables.
 
+- 2026-09-23 update 8: dropped log public funding per student (Bruno):
+  public funding is targeted by student vulnerability (SEP) and private
+  contributions are unobserved, so it is not a clean resource measure.
+  Paper write-up (sept_draft.tex, subsection School Inputs and Value Added)
+  updated to match.
+
 ## Rationale
 
 - Staffing ratios enter as log(1+x): raw ratios have skew 6-24, driven by

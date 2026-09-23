@@ -41,13 +41,12 @@ FOCAL = [('teacher__per100_enrolled', 'Teachers per 100 students enrolled', 'Tea
          ('leadership__per100_enrolled', 'Leaders per 100 students enrolled', 'Leadership'),
          ('leadership__balanced_index', 'Leadership qualification index', 'Leadership'),
          ('school__composition_math_mean', 'Peer grade-4 math (mean)', 'Peers'),
-         ('school__log_public_funding_level', 'Log public funding per student', 'Resources'),
          ('school__has_tp', 'Technical-professional offering (0/1)', 'Track'),
          ('school__has_artistic', 'Artistic offering (0/1; 2 schools)', 'Track')]
 # Track dummies are reported as 0/1 contrasts (Y SD units), not per predictor SD.
 UNSTD = {'school__has_tp', 'school__has_artistic'}
 feats = [f for f, _, _ in FOCAL]
-STAFF = feats[:8]; SCHOOL = feats[8:10]; TRACK = feats[10:]
+STAFF = feats[:8]; SCHOOL = feats[8:9]; TRACK = feats[9:]
 
 x = pd.read_csv(P['predictors']).sort_values('RBD').reset_index(drop=True)
 assert len(x) == 3682 and x.RBD.is_unique
@@ -205,16 +204,15 @@ PAPER_ROWS = {'teacher__per100_enrolled': 'Teachers per 100 students',
               'leadership__per100_enrolled': 'Leaders per 100 students',
               'leadership__balanced_index': 'Leadership qualification index',
               'school__composition_math_mean': 'Peer grade-4 math achievement',
-              'school__log_public_funding_level': 'Log public funding per student',
               'school__has_tp': 'Technical-professional track (0/1)'}
 BLOCKS = {'Teachers': 'Teachers', 'Orientadores': 'Counselors (orientadores)', 'Leadership': 'School leadership',
-          'Peers': 'Peers, resources and track', 'Resources': None, 'Track': None}
+          'Peers': 'Peers and track', 'Resources': None, 'Track': None}
 SHORT = {'z_year_math_max': 'Math VA', 'z_year_leng_max': 'Verbal VA', 'high_inst_m1': 'HP inst. VA',
          'high_paying_field_m1': 'HP field VA', 'log_program_income_clp_m1': 'Income VA',
          'admission_exam_taker': 'Exam VA', 'any_postulacion': 'Aid app. VA'}
 nc = len(PAPER_COLS)
 samp = ('public and private-subsidized schools with at least %d students in the value-added sample' % MIN_VA) if MIN_VA else 'all public and private-subsidized schools'
-L = [r'\begin{table}[!htbp]', r'\centering', r'\caption{School staff, peers and resources, and school value added}',
+L = [r'\begin{table}[!htbp]', r'\centering', r'\caption{School staff, peers and track, and school value added}',
      r'\label{tab:staff-va' + ('' if MIN_VA == 100 else '-' + SUFFIX.strip('_')) + '}', r'\resizebox{\textwidth}{!}{%',
      r'\begin{tabular}{l' + 'c' * nc + '}', r'\toprule',
      ' & ' + ' & '.join(f'({i+1})' for i in range(nc)) + r' \\',
@@ -232,7 +230,7 @@ for f, lab, blk in FOCAL:
 L.append(r'\midrule')
 sm = summ.set_index('OUTCOME')
 for col, lab in (('R2_CONTROLS', r'$R^2$: controls and track only'), ('R2_STAFF', r'$R^2$: adding staff'),
-                 ('R2_FULL', r'$R^2$: adding peers and funding')):
+                 ('R2_FULL', r'$R^2$: adding peers')):
     L.append(lab + ' & ' + ' & '.join(f'{sm[col][o]:.3f}' for o, _ in PAPER_COLS) + r' \\')
 L.append('Schools & ' + ' & '.join(f'{sm.N[o]:,}' for o, _ in PAPER_COLS) + r' \\')
 L += [r'\bottomrule', r'\end{tabular}}', r'\par\medskip', r'\footnotesize', r'\begin{minipage}{\textwidth}',
