@@ -66,6 +66,13 @@ codex fixed-OLS estimator (HC1, SD-standardized); verified to 1e-14.
   Paper write-up (sept_draft.tex, subsection School Inputs and Value Added)
   updated to match.
 
+- 2026-09-23 update 9: Bruno considered dropping peer grade-4 math (mixes
+  peer effects and sorting). Dropping it loaded composition onto staff, size
+  and track (teacher index -> math VA 0.01 -> 0.13; TP -> math -0.08 -> -0.66),
+  so peers stay as a reported row. Log students enrolled (universe count)
+  replaces log VA-sample size and is now reported. R2 rows: controls+track;
+  +staff; +peers and size.
+
 ## Rationale
 
 - Staffing ratios enter as log(1+x): raw ratios have skew 6-24, driven by

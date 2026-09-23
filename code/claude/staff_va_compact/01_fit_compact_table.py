@@ -40,13 +40,14 @@ FOCAL = [('teacher__per100_enrolled', 'Teachers per 100 students enrolled', 'Tea
          ('counselor__old_trained_per100', 'Counseling-trained orientadores born <1977 per 100', 'Orientadores'),
          ('leadership__per100_enrolled', 'Leaders per 100 students enrolled', 'Leadership'),
          ('leadership__balanced_index', 'Leadership qualification index', 'Leadership'),
-         ('school__composition_math_mean', 'Peer grade-4 math (mean)', 'Peers'),
+         ('school__composition_math_mean', 'Peer grade-4 math (mean)', 'Size'),
+         ('school__log_enrolled', 'Log students enrolled', 'Size'),
          ('school__has_tp', 'Technical-professional offering (0/1)', 'Track'),
          ('school__has_artistic', 'Artistic offering (0/1; 2 schools)', 'Track')]
 # Track dummies are reported as 0/1 contrasts (Y SD units), not per predictor SD.
 UNSTD = {'school__has_tp', 'school__has_artistic'}
 feats = [f for f, _, _ in FOCAL]
-STAFF = feats[:8]; SCHOOL = feats[8:9]; TRACK = feats[9:]
+STAFF = feats[:8]; SCHOOL = feats[8:10]; TRACK = feats[10:]
 
 x = pd.read_csv(P['predictors']).sort_values('RBD').reset_index(drop=True)
 assert len(x) == 3682 and x.RBD.is_unique
@@ -93,7 +94,11 @@ for src, dst in (('counselor_young_headcount_mean', 'counselor__young_per100'),
 tot = x.counselor__young_per100 + x.counselor__old_per100
 assert np.allclose(tot.dropna(), x.counselor__per100_enrolled[tot.notna()])
 
-context = ['school__log_va_students'] + \
+# Peer composition is reported (Bruno, 2026-09-23): dropping it loads peer
+# composition onto the staff, size and track rows. Log students enrolled
+# (universe denominator) replaces log VA-sample size as the size measure.
+x['school__log_enrolled'] = np.log(x.hs_enrolled_est.where(x.hs_enrolled_est > 0))
+context = \
     [c for c in x.columns if c.startswith('school__dependency_') or c.startswith('school__region_')]
 nuis = [f'{r}__{k}' for r in ('teacher', 'counselor', 'leadership') for k in ('absent_all_years', 'roster_incomplete')]
 missing_cols = [c for c in feats + context + nuis if c not in x.columns]
@@ -204,15 +209,16 @@ PAPER_ROWS = {'teacher__per100_enrolled': 'Teachers per 100 students',
               'leadership__per100_enrolled': 'Leaders per 100 students',
               'leadership__balanced_index': 'Leadership qualification index',
               'school__composition_math_mean': 'Peer grade-4 math achievement',
+              'school__log_enrolled': 'Log students enrolled',
               'school__has_tp': 'Technical-professional track (0/1)'}
 BLOCKS = {'Teachers': 'Teachers', 'Orientadores': 'Counselors (orientadores)', 'Leadership': 'School leadership',
-          'Peers': 'Peers and track', 'Resources': None, 'Track': None}
+          'Size': 'Peers, size and track', 'Resources': None, 'Track': None}
 SHORT = {'z_year_math_max': 'Math VA', 'z_year_leng_max': 'Verbal VA', 'high_inst_m1': 'HP inst. VA',
          'high_paying_field_m1': 'HP field VA', 'log_program_income_clp_m1': 'Income VA',
          'admission_exam_taker': 'Exam VA', 'any_postulacion': 'Fin. aid app. VA'}
 nc = len(PAPER_COLS)
 samp = ('public and private-subsidized schools with at least %d students in the value-added sample' % MIN_VA) if MIN_VA else 'all public and private-subsidized schools'
-L = [r'\begin{table}[!htbp]', r'\centering', r'\caption{School staff, peers and track, and school value added}',
+L = [r'\begin{table}[!htbp]', r'\centering', r'\caption{School staff, peers, size and track, and school value added}',
      r'\label{tab:staff-va' + ('' if MIN_VA == 100 else '-' + SUFFIX.strip('_')) + '}', r'\resizebox{\textwidth}{!}{%',
      r'\begin{tabular}{l' + 'c' * nc + '}', r'\toprule',
      ' & ' + ' & '.join(f'({i+1})' for i in range(nc)) + r' \\',
@@ -230,7 +236,7 @@ for f, lab, blk in FOCAL:
 L.append(r'\midrule')
 sm = summ.set_index('OUTCOME')
 for col, lab in (('R2_CONTROLS', r'$R^2$: controls and track only'), ('R2_STAFF', r'$R^2$: adding staff'),
-                 ('R2_FULL', r'$R^2$: adding peers')):
+                 ('R2_FULL', r'$R^2$: adding peers and size')):
     L.append(lab + ' & ' + ' & '.join(f'{sm[col][o]:.3f}' for o, _ in PAPER_COLS) + r' \\')
 L.append('Schools & ' + ' & '.join(f'{sm.N[o]:,}' for o, _ in PAPER_COLS) + r' \\')
 L += [r'\bottomrule', r'\end{tabular}}', r'\par\medskip', r'\footnotesize', r'\begin{minipage}{\textwidth}',
@@ -243,8 +249,8 @@ L += [r'\bottomrule', r'\end{tabular}}', r'\par\medskip', r'\footnotesize', r'\b
       'headcounts by the number of grade-8-cohort students assigned to the school. Qualification indices combine '
       'prior role experience, the current spell at the school, university qualification and teaching '
       'qualification. Counseling-trained counselors hold a counseling-specific postgraduate or post-degree '
-      'certificate recorded in SIES graduation records by the staff year. All regressions control for log school '
-      'size, dependency, region and an artistic-track indicator, and include indicators for missing '
+      'certificate recorded in SIES graduation records by the staff year. All regressions control for '
+      'dependency, region and an artistic-track indicator, and include indicators for missing '
       'regressors, absent roles and incomplete staff rosters. Heteroskedasticity-robust (HC1) standard errors '
       'in parentheses. * $p<0.10$, ** $p<0.05$, *** $p<0.01$. (1) Math achievement; (2) Verbal achievement; (3) High-premium institution; '
       '(4) High-premium field; (5) Log projected income; (6) Admission exam taken; (7) Any application (postulaci\\\'on).',
