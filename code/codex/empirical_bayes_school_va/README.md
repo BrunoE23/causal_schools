@@ -312,6 +312,17 @@ $env:EB_IV_VALUE_SPECS='program_income_adj_eb'
 
 ## Interpretation
 
+### Main-table first stages
+
+`15_make_main_first_stage_kappa_table.R` produces a paper-facing table of the
+seven first-stage coefficients, denoted $\kappa^{EB}$, from the exact
+regressions and estimation samples used in the main scalar-IV table. It reads
+the saved `main_table.csv`, reports heteroskedasticity-robust standard errors,
+first-stage F statistics, and sample sizes, and writes both CSV and LaTeX
+outputs beside the main table. The default input is the VA 2017--2020 / SAE
+2018--2020 pairing; set `EB_IV_PAIR_TAG` to build the same table for another
+saved cohort pairing.
+
 The resulting coefficient is a pass-through coefficient per unit of EB-shrunken observational school VA.
 
 Because EB shrinkage compresses the school-value scale, EB and non-EB coefficients should be compared together with the SD of the corresponding school-value index.
