@@ -1,5 +1,9 @@
 # Compact staff/school characteristics vs school EB VA
 
+VA source: current paper EB VAs, cohorts 2017-2020 (copy of Box
+`data/clean/empirical_bayes_school_va/cohorts_2017_2020/eb_school_rbd_observational_values.csv`
+in `data/clean/staff_va_compact_inputs/`).
+
 Goal: a readable 8-row descriptive table of All-sample EB school VA on staff,
 peer and resource characteristics (1-2 per staff role). Not causal.
 

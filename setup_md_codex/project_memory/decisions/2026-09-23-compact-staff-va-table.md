@@ -42,6 +42,13 @@ codex fixed-OLS estimator (HC1, SD-standardized); verified to 1e-14.
   and same-age residualization were considered and rejected (Bruno wants an
   accurate school stock, not a fair person comparison).
 
+- 2026-09-23 update 5: switched outcomes to the current paper EB VAs
+  (Box data/clean/empirical_bayes_school_va/cohorts_2017_2020, copied to
+  data/clean/staff_va_compact_inputs/). Columns: math, language, exam taking,
+  FUAS application (any_postulacion), high-premium field, high-premium inst.,
+  projected income. HE enrollment and STEM dropped (not in current paper VA).
+  The earlier codex staff tables used the older *_for_iv.csv VA file.
+
 ## Rationale
 
 - Staffing ratios enter as log(1+x): raw ratios have skew 6-24, driven by

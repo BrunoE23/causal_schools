@@ -23,19 +23,21 @@ P = dict(
     predictors='data/clean/staff_lasso_va/school_predictors.csv',
     staff_idx='data/clean/staff_quality_va/school_staff_indices_and_measures.csv',
     lead_idx='data/clean/leadership_quality_va/leadership_indices_and_measures.csv',
-    va='output/tables/empirical_bayes_school_va/stata_eb_school_rbd_observational_values_for_iv.csv')
+    # Current paper VAs (Bruno, 2026-09-23): EB All-sample, grade-8 cohorts
+    # 2017-2020, copied from Box data/clean/empirical_bayes_school_va/cohorts_2017_2020/.
+    va='data/clean/staff_va_compact_inputs/eb_school_rbd_observational_values_cohorts_2017_2020.csv')
 md5 = {k: hashlib.md5(open(v, 'rb').read()).hexdigest() for k, v in P.items()}
 
 OUTCOMES = [('z_year_math_max', 'Math'), ('z_year_leng_max', 'Language'),
-            ('admission_exam_taker', 'Exam taking'), ('higher_ed_enrolled_m1', 'HE enrollment'),
-            ('stem_enrollment_m1', 'STEM'), ('high_inst_m1', 'High-premium inst.'),
-            ('log_program_income_full_clp_m1', 'Proj. income')]
+            ('admission_exam_taker', 'Exam taking'), ('any_postulacion', 'FUAS application'),
+            ('high_paying_field_m1', 'High-premium field'), ('high_inst_m1', 'High-premium inst.'),
+            ('log_program_income_clp_m1', 'Proj. income')]
 FOCAL = [('teacher__per100_enrolled', 'Teachers per 100 students enrolled', 'Teachers'),
          ('teacher__balanced_index', 'Teacher qualification index', 'Teachers'),
          ('counselor__young_per100', 'Orientadores born 1977+ per 100 students', 'Orientadores'),
-         ('counselor__young_trained_per100', '  of which counseling-trained', 'Orientadores'),
+         ('counselor__young_trained_per100', 'Counseling-trained orientadores born 1977+ per 100', 'Orientadores'),
          ('counselor__old_per100', 'Orientadores born before 1977 per 100 students', 'Orientadores'),
-         ('counselor__old_trained_per100', '  of which counseling-trained', 'Orientadores'),
+         ('counselor__old_trained_per100', 'Counseling-trained orientadores born <1977 per 100', 'Orientadores'),
          ('leadership__per100_enrolled', 'Leaders per 100 students enrolled', 'Leadership'),
          ('leadership__balanced_index', 'Leadership qualification index', 'Leadership'),
          ('school__composition_math_mean', 'Peer grade-4 math (mean)', 'Peers'),
