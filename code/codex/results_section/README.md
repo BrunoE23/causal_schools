@@ -18,3 +18,9 @@ the corresponding RSS implied gain by the destination outcome's unshrunk
 same-outcome IV pass-through. The script saves the full estimates, a compact
 comparison table, and summary agreement statistics. Equality inference is not
 reported because it requires a joint bootstrap of the RSS and IV estimators.
+
+`13_format_unshrunk_cross_iv_rss_ratios.R` reformats that validation exercise
+as a seven-by-seven matrix of direct IV gains divided by RSS-implied causal
+gains. A value of one indicates exact agreement. The diagonal equals one by
+construction, and cells with predictions close to zero should be interpreted
+from the levels table rather than from the ratio alone.
