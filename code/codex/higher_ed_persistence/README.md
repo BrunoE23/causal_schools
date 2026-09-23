@@ -54,9 +54,11 @@ the redundant cohort fixed effect is omitted while all other elements of the
 main specification remain unchanged.
 
 It also writes a cross-outcome second-academic-year table with persistence
-outcomes in columns and four EB VA measures in rows: higher-ed enrollment,
-high-premium field, high-premium institution, and math. Every cell uses the
-expected value of its row VA as the assignment-risk control.
+outcomes in columns and the main EB VA dimensions in rows: math, verbal,
+high-premium institution, high-premium field, and projected program income.
+Higher-ed-enrollment VA is included as the directly corresponding additional
+dimension. Every cell uses the expected value of its row VA as the
+assignment-risk control.
 
 Persistence regressions do not condition on admission-exam taking. The exam
 indicator is tied to a later observed exam year and is not part of the sample

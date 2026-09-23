@@ -16,12 +16,12 @@ clean_out <- file.path(repo, 'data/clean/higher_ed_persistence')
 dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
 
 specs <- data.table(
-  spec = c('highered', 'highpay', 'highinst', 'math'),
-  value_outcome = c('higher_ed_enrolled_m1', 'high_paying_field_m1', 'high_inst_m1',
-    'z_year_math_max'),
-  label = c('Higher-ed enrollment', 'High-premium field', 'High-premium institution',
-    'Math'),
-  require_exam = c(FALSE, FALSE, FALSE, FALSE)
+  spec = c('highered', 'math', 'leng', 'highinst', 'highpay', 'program_income_full'),
+  value_outcome = c('higher_ed_enrolled_m1', 'z_year_math_max', 'z_year_leng_max',
+    'high_inst_m1', 'high_paying_field_m1', 'log_program_income_full_clp_m1'),
+  label = c('Higher-ed enrollment', 'Math', 'Verbal', 'High-premium institution',
+    'High-premium field', 'Projected program income'),
+  require_exam = rep(FALSE, 6)
 )
 focal_specs <- c('highered', 'highpay', 'highinst')
 
