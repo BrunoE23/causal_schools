@@ -1,0 +1,2 @@
+n_pairs,correlation,sign_agreement,mean_absolute_difference,min_first_stage_f,max_first_stage_f
+42,0.562415741966632,0.690476190476191,0.231912081806689,715.752552313915,5216.51336216212

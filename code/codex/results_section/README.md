@@ -10,3 +10,11 @@ readable.
 
 The source CSV is built from the outcome-specific EB outputs and
 `data/clean/rss_debiased_varcov/four_year_no_sae/rss_varcov_matrix.csv`.
+
+`12_run_unshrunk_cross_iv_rss_validation.R` estimates the full directed
+seven-by-seven cross-outcome IV system using unshrunk school value added. It
+compares each direct IV coefficient with the prediction obtained by multiplying
+the corresponding RSS implied gain by the destination outcome's unshrunk
+same-outcome IV pass-through. The script saves the full estimates, a compact
+comparison table, and summary agreement statistics. Equality inference is not
+reported because it requires a joint bootstrap of the RSS and IV estimators.
