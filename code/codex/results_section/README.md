@@ -24,3 +24,14 @@ as a seven-by-seven matrix of direct IV gains divided by RSS-implied causal
 gains. A value of one indicates exact agreement. The diagonal equals one by
 construction, and cells with predictions close to zero should be interpreted
 from the levels table rather than from the ratio alone.
+
+`14_plot_unshrunk_cross_iv_rss_validation.R` plots the 42 off-diagonal direct
+cross-outcome IV estimates against their RSS-implied causal gains. The dashed
+45-degree line denotes exact agreement, vertical bars show direct-IV 95 percent
+confidence intervals, and labels identify the seven largest absolute gaps.
+
+`15_format_notable_cross_iv_rss_pairs.R` selects the ten off-diagonal pairs
+with the largest absolute RSS-implied causal gains and reports their RSS
+projections, implied causal gains, direct IV estimates, and validation ratios.
+The selection rule depends only on the RSS prediction, rather than on whether
+the IV comparison is favorable.
