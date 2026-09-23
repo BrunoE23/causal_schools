@@ -54,6 +54,12 @@ codex fixed-OLS estimator (HC1, SD-standardized); verified to 1e-14.
   Teachers-per-100 FUAS coefficient flips from -0.13 to +0.04: the earlier
   negative sign was the private-school contrast.
 
+- 2026-09-23 update 7: paper version adds significance stars (two-sided
+  normal p from HC1 t; * .10, ** .05, *** .01) at Bruno's request. Unlike the
+  codex 14-variable table, this specification was fixed by design rather than
+  selected by Lasso, but stars still do not adjust for multiple outcomes or
+  for estimation error in the EB VA dependent variables.
+
 ## Rationale
 
 - Staffing ratios enter as log(1+x): raw ratios have skew 6-24, driven by

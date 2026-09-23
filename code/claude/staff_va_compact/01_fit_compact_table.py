@@ -184,6 +184,13 @@ cov.to_csv(os.path.join(OUT_DATA, 'focal_coverage.csv'), index=False)
 assert md5 == {k: hashlib.md5(open(v, 'rb').read()).hexdigest() for k, v in P.items()}
 json.dump(md5, open(os.path.join(OUT_DATA, 'source_md5.json'), 'w'), indent=1)
 
+import math
+def stars(b, se):
+    # Two-sided normal p-value from the HC1 t-statistic (residual df > 2,000).
+    p = math.erfc(abs(b / se) / math.sqrt(2))
+    return '$^{***}$' if p < 0.01 else '$^{**}$' if p < 0.05 else '$^{*}$' if p < 0.1 else ''
+
+
 # ---- LaTeX table (paper format; column order/labels follow the var/cov table) ----
 PAPER_COLS = [('z_year_math_max', 'Math achievement'), ('z_year_leng_max', 'Verbal achievement'),
               ('high_inst_m1', 'High-premium institution'), ('high_paying_field_m1', 'High-premium field'),
@@ -216,7 +223,7 @@ for f, lab, blk in FOCAL:
     if head and head != prev:
         L.append(r'\multicolumn{' + str(nc + 1) + r'}{l}{\textit{' + head + r'}} \\'); prev = head
     c = coef[coef.FEATURE == f].set_index('OUTCOME')
-    L.append(r'\quad ' + PAPER_ROWS[f] + ' & ' + ' & '.join(f'{c.BETA_SD[o]:.3f}' for o, _ in PAPER_COLS) + r' \\')
+    L.append(r'\quad ' + PAPER_ROWS[f] + ' & ' + ' & '.join(f'{c.BETA_SD[o]:.3f}' + stars(c.BETA_SD[o], c.SE_HC1[o]) for o, _ in PAPER_COLS) + r' \\')
     L.append(' & ' + ' & '.join(f'({c.SE_HC1[o]:.3f})' for o, _ in PAPER_COLS) + r' \\')
 L.append(r'\midrule')
 sm = summ.set_index('OUTCOME')
@@ -237,7 +244,7 @@ L += [r'\bottomrule', r'\end{tabular}}', r'\par\medskip', r'\footnotesize', r'\b
       'certificate recorded in SIES graduation records by the staff year. All regressions control for log school '
       'size, dependency, region and an artistic-track indicator, and include indicators for missing '
       'regressors, absent roles and incomplete staff rosters. Heteroskedasticity-robust (HC1) standard errors '
-      'in parentheses. (1) Math achievement; (2) Verbal achievement; (3) High-premium institution; '
+      'in parentheses. * $p<0.10$, ** $p<0.05$, *** $p<0.01$. (1) Math achievement; (2) Verbal achievement; (3) High-premium institution; '
       '(4) High-premium field; (5) Log projected income; (6) Admission exam taken; (7) Any application (postulaci\\\'on).',
       r'\end{minipage}', r'\end{table}']
 open(os.path.join(OUT_TAB, 'staff_va_compact.tex'), 'w').write('\n'.join(L) + '\n')
