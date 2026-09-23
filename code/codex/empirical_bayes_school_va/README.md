@@ -348,3 +348,13 @@ The residual from any school-level projection is not included in the IV
 regression. The joint IV uses attended orthogonalized dimensions as endogenous
 treatments, offered-school orthogonalized dimensions as instruments, and the
 DA-probability expected values of the same dimensions as risk controls.
+
+### Prioritario-control robustness
+
+`16_run_main_iv_prioritario_robustness.R` re-estimates the seven main scalar-IV
+and first-stage specifications after adding the SAE low-income priority flag
+(`prioritario`) to the controls. The flag is read from each cohort's public B1
+applicant file and merged by `mrun` and SAE process. The robustness uses the
+same outcome-specific samples as the main specification, additionally requiring
+observed priority status, and writes separate $\psi^{EB}$ and $\kappa^{EB}$
+tables without replacing the main results.
