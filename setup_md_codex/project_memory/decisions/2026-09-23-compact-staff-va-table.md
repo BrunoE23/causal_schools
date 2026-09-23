@@ -49,6 +49,11 @@ codex fixed-OLS estimator (HC1, SD-standardized); verified to 1e-14.
   projected income. HE enrollment and STEM dropped (not in current paper VA).
   The earlier codex staff tables used the older *_for_iv.csv VA file.
 
+- 2026-09-23 update 6: Particular Pagado schools (COD_DEPE == 4) excluded
+  (Bruno). Main sample 2,058 schools (276 pagado dropped from the >=100 set).
+  Teachers-per-100 FUAS coefficient flips from -0.13 to +0.04: the earlier
+  negative sign was the private-school contrast.
+
 ## Rationale
 
 - Staffing ratios enter as log(1+x): raw ratios have skew 6-24, driven by

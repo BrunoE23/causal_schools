@@ -129,6 +129,9 @@ coef_rows, summ_rows = [], []
 for o, olab in OUTCOMES:
     v = va[va.outcome == o].set_index('school_rbd').reindex(x.RBD)
     idx = np.isfinite(v.controlled_value_added_eb_centered_student.values)
+    # Exclude Particular Pagado (COD_DEPE == 4; Bruno 2026-09-23): outside SAE
+    # and public funding.
+    idx &= (x.school__dependency_4.values != 1)
     if MIN_VA:
         idx &= (np.exp(x.school__log_va_students.values) >= MIN_VA - 1e-6)
     y_eb = v.controlled_value_added_eb_centered_student.values[idx]

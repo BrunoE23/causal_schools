@@ -28,7 +28,7 @@ Differences from the 14-variable table:
   and region (ref RM) dummies.
 - R2 rows: controls only; + 6 staff rows; + peers and funding. In-sample.
 
-Main sample: schools with >=100 pooled VA-sample students (2,334 schools;
+Main sample: non-Particular-Pagado schools (COD_DEPE != 4) with >=100 pooled VA-sample students (2,058 schools;
 Bruno's choice 2026-09-23). `MIN_VA_STUDENTS=0` writes the all-schools
 robustness version to `*_allschools/`.
 
