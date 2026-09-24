@@ -1,6 +1,6 @@
 \begin{table}[!htbp]
 \centering
-\caption{School value added by administration type, curricular track, and school size}
+\caption{School value added by administration type, school size, and curricular track}
 \label{tab:admin-type-va}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{lrcccccccc}
@@ -8,7 +8,7 @@
  & $N$ schools & Share of students & (1) & (2) & (3) & (4) & (5) & (6) & (7) \\
  & & & Math VA & Verbal VA & HP inst. VA & HP field VA & Income VA & Exam VA & Fin. aid app. VA \\
 \midrule
-Intercept (omitted: Municipal, no tracks, 100--249 students) & 84 & 1.3\% & -0.180$^{***}$ & -0.084$^{**}$ & -0.322$^{***}$ & -0.099$^{**}$ & -0.201$^{***}$ & 0.174$^{***}$ & 0.240$^{***}$ \\
+Intercept (omitted: Municipal, 100--249 students, no tracks) & 84 & 1.3\% & -0.180$^{***}$ & -0.084$^{**}$ & -0.322$^{***}$ & -0.099$^{**}$ & -0.201$^{***}$ & 0.174$^{***}$ & 0.240$^{***}$ \\
  & & & (0.033) & (0.037) & (0.037) & (0.049) & (0.047) & (0.049) & (0.047) \\
 \multicolumn{10}{l}{\textit{Administration type}} \\
 Municipal corporation & 222 & 8.8\% & 0.098$^{*}$ & 0.050 & 0.562$^{***}$ & 0.067 & 0.240$^{***}$ & -0.186$^{***}$ & -0.239$^{***}$ \\
@@ -21,11 +21,6 @@ Delegated administration & 70 & 4.4\% & -0.103$^{**}$ & -0.193$^{***}$ & 0.128 &
  & & & (0.048) & (0.067) & (0.085) & (0.288) & (0.155) & (0.088) & (0.071) \\
 SLEP & 176 & 5.3\% & 0.058 & 0.089 & 0.296$^{***}$ & 0.212$^{**}$ & 0.300$^{***}$ & -0.122 & -0.108 \\
  & & & (0.044) & (0.055) & (0.077) & (0.084) & (0.078) & (0.078) & (0.069) \\
-\multicolumn{10}{l}{\textit{School tracks}} \\
-Technical-professional & 931 & 40.8\% & -0.495$^{***}$ & -0.785$^{***}$ & -0.124$^{***}$ & -0.010 & -0.302$^{***}$ & -0.727$^{***}$ & -0.126$^{***}$ \\
- & & & (0.026) & (0.032) & (0.032) & (0.048) & (0.042) & (0.039) & (0.035) \\
-Artistic & 2 & $<0.1\%$ & -0.774$^{***}$ & 0.173$^{***}$ & 2.313$^{***}$ & -1.467$^{*}$ & 0.434 & 0.235 & 0.363$^{***}$ \\
- & & & (0.127) & (0.052) & (0.839) & (0.793) & (0.699) & (0.151) & (0.058) \\
 \multicolumn{10}{l}{\textit{School size}} \\
 Fewer than 100 students & 626 & 3.6\% & -0.208$^{***}$ & -0.231$^{***}$ & -0.158$^{***}$ & -0.053 & -0.160$^{***}$ & -0.849$^{***}$ & -0.556$^{***}$ \\
  & & & (0.043) & (0.040) & (0.039) & (0.035) & (0.040) & (0.044) & (0.045) \\
@@ -33,6 +28,11 @@ Fewer than 100 students & 626 & 3.6\% & -0.208$^{***}$ & -0.231$^{***}$ & -0.158
  & & & (0.034) & (0.033) & (0.039) & (0.041) & (0.041) & (0.033) & (0.035) \\
 500+ students & 466 & 38.8\% & 0.106$^{***}$ & 0.105$^{**}$ & 0.123$^{**}$ & 0.150$^{**}$ & 0.059 & 0.235$^{***}$ & 0.173$^{***}$ \\
  & & & (0.040) & (0.041) & (0.052) & (0.069) & (0.057) & (0.044) & (0.043) \\
+\multicolumn{10}{l}{\textit{School tracks}} \\
+Technical-professional & 931 & 40.8\% & -0.495$^{***}$ & -0.785$^{***}$ & -0.124$^{***}$ & -0.010 & -0.302$^{***}$ & -0.727$^{***}$ & -0.126$^{***}$ \\
+ & & & (0.026) & (0.032) & (0.032) & (0.048) & (0.042) & (0.039) & (0.035) \\
+Artistic & 2 & $<0.1\%$ & -0.774$^{***}$ & 0.173$^{***}$ & 2.313$^{***}$ & -1.467$^{*}$ & 0.434 & 0.235 & 0.363$^{***}$ \\
+ & & & (0.127) & (0.052) & (0.839) & (0.793) & (0.699) & (0.151) & (0.058) \\
 \midrule
 Schools & 3,274 & 100.0\% &  &  &  &  &  &  &  \\
 \bottomrule
@@ -40,6 +40,6 @@ Schools & 3,274 & 100.0\% &  &  &  &  &  &  &  \\
 \par\medskip
 \footnotesize
 \begin{minipage}{\textwidth}
-Notes: Each column is a school-level OLS regression of the indicated Empirical-Bayes value-added measure on administration-type, curricular-track, and school-size indicators. Value added is standardized across schools. The omitted categories are Municipal DAEM, neither technical-professional nor artistic, and 100--249 estimated high-school students; the first row reports the intercept. All other rows report regression coefficients. There is no minimum-school-size restriction, and fully private schools are included. School size is estimated total enrollment across grades 9--12 using the four grade-8 cohorts. The first two columns report the number of schools and share of pooled value-added-sample students satisfying each row definition. Unconditionally, Municipal schools account for 18.4\% of students and schools with 100--249 students account for 20.8\%; these shares do not condition on the other omitted categories. Track and size categories overlap administration types. Heteroskedasticity-robust (HC1) standard errors are in parentheses and do not incorporate estimation error in school value added. * $p<0.10$, ** $p<0.05$, *** $p<0.01$.
+Notes: Each column is a school-level OLS regression of the indicated Empirical-Bayes value-added measure on administration-type, school-size, and curricular-track indicators. Value added is standardized across schools. The omitted categories are Municipal DAEM, 100--249 estimated high-school students, and neither technical-professional nor artistic; the first row reports the intercept. All other rows report regression coefficients. There is no minimum-school-size restriction, and fully private schools are included. School size is estimated total enrollment across grades 9--12 using the four grade-8 cohorts. The first two columns report the number of schools and share of pooled value-added-sample students satisfying each row definition. Unconditionally, Municipal schools account for 18.4\% of students and schools with 100--249 students account for 20.8\%; these shares do not condition on the other omitted categories. Size and track categories overlap administration types. Heteroskedasticity-robust (HC1) standard errors are in parentheses and do not incorporate estimation error in school value added. * $p<0.10$, ** $p<0.05$, *** $p<0.01$.
 \end{minipage}
 \end{table}
