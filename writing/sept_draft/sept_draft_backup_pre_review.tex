@@ -1,0 +1,917 @@
+\documentclass[a4paper, article, english, oneside, unknownkeysallowed, 12pt]{memoir} 
+\usepackage{preamble}
+
+
+\usepackage[
+backend=biber,
+style=authoryear-ibid,
+maxcitenames=2, % show up to 2 authors in citations
+mincitenames=1, % use "et al." if more than 2
+maxbibnames=10, % show up to 10 names in bibliography
+minbibnames=1,
+uniquelist=false,
+uniquename=false
+]{biblatex}
+
+
+\addbibresource{causal_effect_schools.bib}
+
+\AtEveryBibitem{%
+  \clearfield{urlyear}%
+  \clearfield{urlmonth}%
+  \clearfield{urlday}%
+  \clearfield{urldate}%
+}
+
+% Name and Title
+\title{Do High Schools Shape College Choices? Evidence from Centralized Assignment in Chile}
+\author{ Bruno E. Aravena-Magüida}
+\date{September 2026}
+
+% Header (top) and footer (bottom)
+\pagestyle{fancy}
+\fancyhead[R]{\emph{Do High Schools Shape College Choices?}}
+ \fancyhead[L]{BEAM} % keep section names
+\fancyfoot[R]{}
+\fancyfoot[L]{}
+
+
+\begin{document}
+
+% Prints title block from macros given above
+\maketitle
+
+\begin{abstract}
+School quality is usually measured with test scores, but high schools may also shape students' college choices.
+This paper studies this question in Chile, where centralized assignment creates lottery variation in high-school offers.
+I link assignment records to administrative data on school enrollment, standardized achievement, and higher-education applications and enrollment.
+I estimate observational school value added for math, verbal achievement, enrollment in high-premium institutions and high-premium fields, and projected program income, using a rich set of pre-treatment controls.
+I then test whether lottery-induced attendance at higher-value-added schools improves the corresponding outcome, controlling for expected value added in each student's assignment portfolio.
+Achievement forecast coefficient estimates are 0.884 for math and 0.885 for verbal achievement, close to benchmarks from settings with lagged test scores.
+Higher-education value added also predicts causal changes in later choices: pass-through is 0.497 for high-premium-institution enrollment, 0.803 for high-premium-field enrollment, and 0.311 for log projected program income.
+Heterogeneity estimates suggest that the pass-through of math value added varies across the baseline math achievement distribution.
+Gender also reveals important heterogeneity in achievement pass-through, with value added more informative for girls.
+Lastly, an ordered value-added horse race shows that projected-income gains are not primarily summarized by math value added, but rather by other dimensions of value added.
+High schools therefore shape college choices through dimensions of school value that achievement value added alone does not capture.
+Choices that appear to reveal student preferences may thus partly reflect the information, expectations, and preparation produced by the high school attended.
+\end{abstract}
+
+% Prints a table of contents
+\setcounter{tocdepth}{2}
+\renewcommand\contentsname{}
+%\tableofcontents* 
+
+\clearpage
+\section{Introduction}
+
+School quality is usually summarized by achievement.
+This is natural: test scores are widely available, comparable across schools, and even predictive of later outcomes. \parencite{chetty_how_2011}
+But school and teacher effects are not necessarily one-dimensional.
+Recent work shows that schools and teachers can affect attendance, behavior, crime, teenage motherhood, labor-market outcomes, and other long-run outcomes in ways that are only weakly related to test-score effects \parencite{jackson_what_2018, beuermann_what_2023, rose_effects_2022, angrist_methods_2023}.
+Families and policymakers might therefore care about school quality measures that capture more than just achievement.
+
+This broader view of school quality is especially relevant for high schools.
+High schools are the last formal educational institutions students attend before making higher-education choices, and those choices are immensely consequential.
+Whether students enter higher education, which institutions they attend, and which fields they choose all matter because returns vary substantially across institutions and, especially, fields of study \parencite{kirkeboen_field_2016}.
+Yet many measures of school effects on higher education are coarse, focusing on indicators for enrollment or persistence rather than on the type of institution or field students enter.
+
+There are also good reasons to think that higher-education choices are shaped by frictions that schools may influence.
+Prior work documents large differences in application and enrollment behavior across groups of students, and shows that relatively small interventions can change college search, application behavior, and major choice \parencite{hoxby_what_2015, dynarski_closing_2021, hastings_informed_2016, chetty_diversifying_2025}.
+If high schools differ in counseling, information provision, expectations, peer norms, academic confidence, or preparation for particular fields, then their effects on higher education may extend beyond their effects on achievement.
+
+This possibility also changes how higher-education choices should be interpreted.
+Decisions not to continue to higher education, to avoid particular fields, or to attend lower-quality institutions are often viewed as revealing stable preferences or privately optimal responses to expected returns.
+Yet expected returns and the options students perceive may themselves depend on the information, preparation, and support provided by their high school.
+A choice can therefore be privately optimal given beliefs and preparation that the school helped produce, while still being causally affected by the school attended.
+This distinction is especially relevant in settings where families have limited information about educational options and access to counseling varies across schools.
+
+This paper asks whether high schools causally affect higher-education choices, and whether those effects are captured by traditional achievement value added.
+The main empirical challenge arises from the fact that students and families sort across schools.
+Families choose schools based on resources, preferences, networks, location, and expectations; these same characteristics may also shape later higher-education choices.
+As a result, differences across schools may reflect both causal school effects and the underlying characteristics of the students and families who select into them.
+
+I address this challenge using Chile's centralized school assignment system, the Sistema de Admisi\'on Escolar (SAE).
+SAE assigns students to public and private-subsidized schools through a centralized mechanism that uses random tie-breakers when schools are oversubscribed.
+The system covers a large national school sector, allowing me to study school effects at a scale that is unusual in lottery-based designs.
+This assignment variation can be linked to administrative data covering school enrollment, standardized tests, and higher-education applications and enrollment.
+Linking random assignment in the mechanism to higher-education choices allows me to answer this question in a national context.
+
+
+The analysis proceeds in two steps.
+First, I estimate observational value added for each school and outcome in the broad panel.
+These measures are school fixed effects from regressions that adjust for rich pre-treatment controls, including grade-4 standardized test scores, family-background variables, and middle-school controls.
+Secondly, I validate these value added measurements for each school using the SAE lottery offers as exogenous variation.
+I instrument for attended school with the school offered through the centralized mechanism, while controlling for the expected value added that arises from the probabilities of assignment of the student to the schools in their list, together with the value added measured in the first step.
+
+
+I summarize this relationship with a forecast coefficient, $\psi$ in line with \textcite{angrist_leveraging_2017}\footnote{I refer to the forecast coefficient as pass-through interchangeably}.
+If $\psi=1$, then the causal effect induced by complying with a lottery offer equals the gain predicted by observational value added for that outcome.
+If $\psi=0$, the observational value-added measure has no causal predictive content along the lottery-induced margin.
+The main estimates suggest meaningful pass-through.
+For achievement, the estimates are 0.884 for math and 0.885 for verbal achievement.
+For higher-education choices, the forecast coefficients are 0.497 for enrollment in a high-premium institution, 0.803 for enrollment in a high-premium field, and 0.311 for log projected program income.
+In practical terms, schools that observationally look better at raising achievement or higher-education outcomes also predict causal effects on those same outcomes, though the causal effects are smaller than the value-added might suggest.
+%The achievement estimates are close to comparable validation estimates in \textcite{angrist_leveraging_2017} despite the absence of immediately lagged outcomes.
+%This validates the rich set of pre-treatment controls used here, which can also be applied to outcomes, such as higher-education choices, for which lagged measures are unavailable.
+
+%I then ask for whom observational value-added measures are most informative.
+%%Splitting the sample by baseline grade-4 math achievement shows that, relative to students in the middle quintile, math value added is substantially less predictive in the bottom quintile and marginally more predictive in the top quintile.
+%Math and verbal achievement also show statistically significant differences by gender: achievement value-added measures are less informative for boys.
+%These results point to meaningful heterogeneity in achievement, yet remarkable stability for the other higher-education dimensions.
+
+%Finally, I examine which dimensions of school value added best predict gains in projected program income, a proxy for later earnings.
+%For interpretation, I use an ordered horse race: math value added enters first, high-premium-institution value added enters after removing its school-level association with math, and high-premium-field value added enters after removing its association with the first two dimensions.
+%In this specification, the incremental high-premium-field dimension remains positive and precisely estimated, while math value added does not carry the projected-income signal once the higher-education choice dimensions are included.
+%These results are difficult to reconcile with a view in which math achievement fully summarizes the school dimensions relevant for projected income.
+
+The paper contributes to three literatures.
+First, it contributes to work on teacher and school value added.
+A large literature estimates the effects of teachers and schools on test scores and longer-run outcomes \parencite{chetty_measuring_2014, dobbie_medium-term_2015, jackson_what_2018, beuermann_what_2023, rose_effects_2022}.
+This work increasingly emphasizes that test-score value added may miss important dimensions of educational production.
+I extend this idea to high-school effects on higher-education choices, focusing not only on enrollment or achievement but also on whether students enter high-premium fields, high-premium institutions, and programs with higher projected earnings.
+
+
+Second, the paper contributes to the literature using lotteries and centralized assignment systems to estimate school effects \parencite{abdulkadiroglu_elite_2014, abdulkadiroglu_research_2017, angrist_credible_2024}.
+In the spirit of \textcite{angrist_leveraging_2017}, I ask whether observational value-added measures are useful guides to causal school effects.
+The contribution here is to apply this pass-through logic to a national high-school assignment system and to outcomes observed after students transition into higher education.
+
+Third, the paper contributes to work on higher-education choice.
+Prior research shows that the field and institution students choose matter for later outcomes, and that information and application frictions can change those choices \parencite{kirkeboen_field_2016, hoxby_what_2015, dynarski_closing_2021, hastings_informed_2016, chetty_diversifying_2025}.
+I study high schools as a possible upstream source of these differences.
+Rather than evaluating a particular counseling or information intervention, the paper measures whether the high-school system itself generates causal differences in students' higher-education paths.
+
+The rest of the paper is organized as follows.
+Section 2 describes the Chilean setting and the linked administrative data.
+Section 3 presents the empirical framework.
+Section 4 reports the main results, heterogeneity by baseline achievement and gender, and the ordered value-added horse race for projected program income.
+Section 5 concludes.
+
+\clearpage
+\section{Context and Data}
+
+\subsection{Institutional Setting}
+
+Chile is a useful setting for this project because national administrative data records school enrollment, academic histories, standardized achievement, and higher-education choices with individual identifiers that allow students to be matched across educational data.
+
+Formal secondary education begins in grade 9 and lasts four years.
+Students may attend public, private-subsidized, or private non-subsidized schools.
+Public and private-subsidized schools are fully or partly financed by the State and thus participate in the centralized school assignment system described below.
+They serve 90.6\% of the HS population. Pivate non-subsidized schools remain outside that mechanism and serve the remaining 9.4\%.
+
+%In the broad grade-8 universe used in the value-added analysis, private non-subsidized schools account for about 9.4\% of students.
+%The lottery-based sample is therefore given by the set of students who apply for for entrance to grade 9 in a school in the public and private-subsidized sector after 
+
+
+\subsection{Centralized School Assignment}
+
+Chile's centralized school assignment system, the Sistema de Admisi\'on Escolar (SAE), assigns students to participating schools through a version of student-proposing Deferred Acceptance.
+Families submit ranked lists of schools.
+The mechanism combines these rankings with school vacancies and priority rules, and it uses random tie-breakers when there are more applicants than seats within a priority group.
+If a student's offered school depends on one of these tie-breakers in the system, different lottery draws will imply different school assignments.
+We say therefore this student is at assignment risk.  Conditional on the information that determines priorities and assignment probabilities, these tie-breakers or lotteries generate the quasi-experimental variation in school assignment for students with assignment risk as described by \textcite{abdulkadiroglu_research_2017}.
+
+
+SAE started in 2017 in some regions and was rolled out nationally in 2018. 
+Given that I study high school effects, I use applications to grade-9 vacancies between 2018 and 2021. 
+These cohorts are expected to finish high school between 2023 and 2025, allowing us to observe high school attendance and post-schooling outcomes.
+
+Implementing this design requires recovering each applicant's probability of assignment to each school among those in the submitted rankings of schools.
+I do this by replicating the SAE assignment algorithm and repeatedly simulating counterfactual lottery draws, which determiens which students are at assignment risk.
+As a diagnostic check, when I run the replicated algorithm using the original lottery numbers for the 2018--2020 regular grade-9 processes, I reproduce over 99\% of observed first-round assignments in each of the three cohorts. \footnote{Even though SAE runs two additional rounds, these complementary rounds are very limited in sample size. Since they assign vacancies in previously undersubscribbed schools, assignment risk is unlikely in these rounds.}
+The remaining mismatch reflects institutional features that are difficult to fully recover from public documentation, but the high replication rate gives confidence that the simulated probabilities capture the relevant assignment risk.
+
+
+This centralized system is very relevant to determine the high school attended.
+Figure \ref{fig:first-stage} makes this point by showing attendance rates in the top 100 schools most demanded, with different markers for applicants with and without first round offers.
+
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=\textwidth]{../../output/figures/compliance/school_level_offer_attendance_first_stage_top100.png}
+\caption{Effect of SAE offers on attendance}
+\label{fig:first-stage}
+\end{figure}
+
+
+For this exercise and the rest of the paper, I simplify high school attendance as the school where a student spends the most time after grade 8, with most recent spells breaking ties.
+This definition smooths over short enrollment spells and transfers, and it assigns a single high-school value to each student.
+As a result, students who did not receive first-round offer might still end up attending a certain high-school via complementary rounds or an application cycle in a later year.
+On average, a high-school is attended at a rate of 6.9 \% by the first-round rejected students and at a rate of 62.5\% by the accepted students. 
+This suggests an average effect of the first-round offer of 55.5 percentage points, making it a relevant instrument for school attendance.
+
+
+
+%The estimation sample consists of timely SAE applicants: students who apply in the assignment process corresponding to their grade-8 cohort and who have assignment risk in the simulated data.
+%Assignment risk means that the simulated assignment probabilities do not place all probability mass on a single school.
+
+
+%As shown in Table~\ref{tab:data-samples}, 135,916 students across the 2018--2020 cohorts have a valid high-school exposure, are ages 12--16, have complete lottery controls, apply to SAE on time, and face assignment risk.
+%The score-based estimation sample further restricts to the 108,418 lottery-risk students with an observed math or verbal national admission-test score.
+%On average, these students have positive simulated assignment probability at about 3.1 schools; the median is 3 and the 90th percentile is 5.
+
+%Among applicants with assignment risk, 85.4\% receive a first-round SAE offer.
+%The remaining 14.6\% have no first-round assignment (\texttt{rbd\_admitido}) in the regular-process results; they are retained, with their first-round offer value set to zero.
+%The first-round offered RBD is the source of lottery variation, while the student's realized high-school exposure is measured by the most-time RBD described above.
+
+%The value-added exercise uses the broader complete-control panel, while the causal estimates use the smaller lottery-risk sample.
+%This distinction is central to the interpretation.
+%The broad panel improves precision in estimating school-level outcome gradients, and the lottery sample then tests whether those observational value-added measures have causal signal on the centralized-assignment margin.
+%The results therefore speak most directly to students and schools represented in the SAE lottery-risk sample.
+%Because SAE covers the public and private-subsidized sector, this is a large and policy-relevant part of the high-school market, but extrapolating to private non-subsidized schools or non-lottery margins requires assuming that the same value-added gradients are comparable there.
+
+
+\subsection{Sample Description}
+
+In this subsection I describe the samples I employ for the two steps of my analysis. 
+In my first step, I construct measures of value added of schools in different outcomes as residuals in a regression with rich covariates and as representative as possible.
+I refer to the sample used for that exercise as the value added sample.
+In the second step, I use the exogenous variation in the centralized mechanism to study whether school changes due to tie-breakers are as predictive of effects as the value added metric suggest. 
+For that exercise I collect all students with assignment risk in their grade-9 SAE application.
+I refer to this sample as the lottery sample. 
+
+
+\subsubsection{Value Added Sample}
+
+I construct the value added sample by merging annual enrollment, grade progression, attendance, grades, and completion records using the student identifier provided for educational data.
+The linked administrative panel starts from the universe of students first observed in grade 8 between 2017 and 2020, producing 944,510 students across four cohorts, defined 
+by their year of grade-8 enrollment. 
+For instance, a student in cohort 2019, should apply that year to SAE if they want a change of school in the non-private system, is expected to start HS in 2020 and graduate in 2023.
+
+%If a student in cohort 2019 intends to attend high school in a non private institution 
+% is expected to apply that year to the centralized assignment mechanism for entrance to grade 9 in 2020 and has expected graduation in 2023.
+
+To construct value-added for each school I keep as much from this broad panel as possible, while ensuring the comparison is reasonable.
+From this universe I restrict students below 12 or above 16 in grade 8 and those who dont attend high school. 
+
+
+Given that value-added estimation relies on a rich set of baseline covariates, this becomes the most important restriction on this sample.
+For these covariates, I use information from Chile's national standardized assessment system (SIMCE) and middle school relative performance.
+Middle school controls are constructed by comparing attendance and GPA of a student to those of their peers in middle school every year. 
+These are then averaged and summarized into two middle school z-scores for a student: one for attendance and one for GPA.
+
+SIMCE exams are administered in different grades depending on the year. 
+This always includes grade 4 and occasionally grades 8 and/or 10.
+Unfortunately grade-8 and grade-10 measures are not available for all the studied cohorts.
+I therefore use grade-4 SIMCE as the main pre-treatment achievement control.
+
+SIMCE also collects parent surveys.
+I use these surveys to measure family background before treatment, including household income, parental education, indigenous origin of the parents, and early-childhood education.
+These variables are useful because they proxy for family resources and prior investments that may influence both high-school choices and later higher-education outcomes.
+When parent-survey variables are missing, I use middle school and neighborhood cells to impute medians where enough donor observations are available; remaining missing values are left missing.
+
+
+%I define a middle school --with a similar role  for those students that can be tracked in the anual enrollment database, 
+As it can be seen in Panel A of Table \ref{tab:data-samples}, from the original 944,510 students in these cohorts, 
+I keep the 757,999 for which I have a complete control vector with all the sources of information described above. 
+Sample restrictions define on each row should be read cumulatively within each panel.
+
+
+
+\begin{table}[H]
+\centering
+\caption{Construction of the value-added and SAE samples}
+\label{tab:data-samples}
+\begin{minipage}[t]{0.48\textwidth}
+\centering
+\textbf{Panel A: Value-added sample}\\[0.4em]
+\begin{tabular}{@{}p{0.72\linewidth}r@{}}
+\toprule
+Sample restriction & Students \\
+\midrule
+Cohorts 2017--2020 & 944,510 \\
++ valid HS and age 12--16 & 931,547 \\
++ complete VA control set & \textbf{757,999} \\
++ admission test & 622,809 \\
+\bottomrule
+\end{tabular}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.48\textwidth}
+\centering
+\textbf{Panel B: SAE lottery sample}\\[0.4em]
+\begin{tabular}{@{}p{0.72\linewidth}r@{}}
+\toprule
+Sample restriction & Students \\
+\midrule
+Cohorts 2018--2020 & 706,042 \\
++ valid HS and age 12--16 & 696,817 \\
++ complete lottery control set & 587,142 \\
++ application in SAE & 241,490 \\
++ assignment risk & \textbf{135,916} \\
++ admission test & 108,418 \\
+\bottomrule
+\end{tabular}
+\end{minipage}
+\end{table}
+
+
+
+\subsubsection{Lottery Sample}
+
+
+For the lottery sample I start following virtually the same steps but with the 2018-2020 cohorts, the first ones with SAE rolled out at a national level.
+Panel B of Table \ref{tab:data-samples} repeats the accounting exercise above for the lottery sample. 
+From an original list of 706,402 we can track the baseline set of controls for only 587,142. 
+Out of that group only about 41\% (241,190) applied for a change of school through the SAE mechanism for a spot in grade 9\footnote{I consider only applications to grade 9 on the year the student reaches year 8 to avoid including on this sample students who changed due to failing a grade}.
+In some cases, students (e.g. those applying to undersubscribbed schools) are guaranteed an offer to a certain school. 
+The assignment mechanism does not yield exogenous variation for such cases since there is no tie-breaking.
+As a result, the SAE lottery sample (135,916) only considers those students whose preferences imply non-trivial assignment probabilities. 
+
+
+
+%For the value-added sample, I then retain the 2017--2020 cohorts, leaving 944,510 students across four cohorts.
+%I make this cohort restriction because these cohorts have comparable grade-4 SIMCE baseline controls; the 2021 cohort does not.
+%The main high-school exposure is observed for 4,133 schools with a unique identifier (RBD).
+%I define high-school exposure as the school identifier where a student spends the most time after grade 8.
+%I define middle-school attendance analogously as the RBD where the student spends the most time in grades 5 to 8.
+%The same histories let me construct pre-treatment middle-school controls, including standardized measures of grades and attendance before high school.
+
+
+%Table~\ref{tab:data-samples} summarizes how the linked administrative sources map into the two samples used in the analysis.
+The broad complete-control panel is used to estimate the main school value-added measures, while the SAE lottery exam-taker sample is used to validate score-based value-added measures using assignment variation.
+For some outcomes, I condition the samples to test-takers which is when the last row becomes relevant.
+
+\subsection{Characterization of the samples}
+
+\textit{How different are these two samples?} Table \ref{tab:balance_samples} helps us answer this question. 
+Here, I report means on some key variables for the broad panel (column 1), 
+students that applied for a HS in SAE (column 2) and their subset which had applications with assignment risk (column 4).
+
+\input{../../output/tables/balance_table/balance_table_samples.tex}
+
+
+Column (3) report differences between SAE applicants and the broad sample. 
+From there we can see that the sample of students that apply for a new school in grade 9 are negatively selected relative to the population:
+For instance, they perform around 0.2 SD below in achievement tests in grade 4, have in average mothers with 1 fewer education year and perform 0.3 SD worse in exams to higher education.
+The joint test clearly rejects these two populations to be similar.
+
+Column (5) shows a comparable pattern, but with smaller differences.
+Column (6) makes it clear that students with assignment risk are positively selected relative to those without, 
+with the respective joint test also rejecting these two groups to be similar. 
+
+The differences present in (5) could make one worry that estimates run on the broad panel might not be useful to predict effects on the population of SAE applicants with assignment risk.
+For this to be an issue, SAE applicants at-risk would need to be different from those of the broad sample in ways that our rich set of controls does not capture. 
+If that were the case, the validation step of the design would show that the VA estimated are biased and not as predictive of causal effects.
+At its core, the validation step answers whether estimates in sample (1) predict causal effects in sample (4).
+
+
+\subsection{Higher Education Outcomes}
+
+The higher-education system also generates administrative data on applications, admission scores, and enrollment.
+Taking the national admission exam is a choice for secondary-school students, but it is the standard route into selective higher education.
+Students who apply through the centralized admission system take mandatory math and verbal components, and may also take optional subject exams.\footnote{The national admission exam was called the PSU through 2020, the PTU in 2021--2022, and the PAES from 2023 onward.}
+I use the mandatory math and verbal scores as achievement outcomes, standardizing them within test year to make them comparable across test regimes.
+
+Higher-education applications and admissions are organized at the program-institution level.
+A student's admission depends on entrance-exam scores, school GPA-based scores, ranked program preferences, and the weights each program assigns to score components.
+This structure is useful because it makes higher-education choices much richer than a single college-enrollment indicator: students choose not only whether to enroll, but also which institution, program, and field to pursue.
+
+Students in the sample have not yet finished higher education, so I cannot observe their realized earnings. 
+I take advantage of MiFuturo, an information source run by the Ministry of Education that reports labor-market statistics at the program level.
+I use its reported average income in the fourth year after graduation to assign an earnings proxy to higher-education options. 
+
+Because the MiFuturo income file is not observed at the exact enrollment-program code used in the matricula records, I do not treat it as a direct one-to-one match for every student-program record.
+Instead, I estimate log-income fixed-effect models in the MiFuturo data using institution and generic-program cells.
+Figure~\ref{fig:mifuturo-field-income-premia} shows the estimated generic-program fixed effects organized by field.
+I then use generic-program and institution estimates to construct projected-income measures for the matriculated programs observed in the student panel when the exact program has no direct MiFuturo value.
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=\textwidth]{../../output/figures/mifuturo_matricula_income/area_carrera_generica_program_fe_by_field.png}
+\caption{MiFuturo Generic-Program Income Premia by Field}
+\label{fig:mifuturo-field-income-premia}
+\end{figure}
+
+I link the school panel to higher-education enrollment records for the first observed enrollment.
+I use three higher-education choice outcomes.
+The first is an indicator for enrollment in a high-premium field.
+This indicator equals one for students whose first observed higher-education enrollment is in Science, Law, Engineering/Manufacturing/Construction, or Medicine+\footnote{Medicine+ includes premium health-related careers such as medicine, pharmacy, nursing, midwifery, medical technology, and dentistry.
+Other health and technical-health programs are not included in this high-premium-field category.}, which correspond to the right-hand side of Figure~\ref{fig:mifuturo-field-income-premia}.
+
+
+The second is an indicator for enrollment in a high-premium institution.
+This indicator equals one when the student's first observed matriculated institution has a particularly high institution fixed effect in the MiFuturo log-income model.\footnote{Specifically, I use a threshold of 0.1 log points relative to the average program, which roughly translates to an average institution premium of 10\%.}
+Students without an observed higher-education enrollment are coded as zero for the high-premium-field and high-premium-institution indicators.
+
+The third is log projected program income.
+For matriculated students, projected program income comes from MiFuturo-based predictions using a hierarchy that first uses institution-by-generic-program fixed effects when available, then generic-program fixed effects, then institution fixed effects, and finally the global MiFuturo mean.
+For students with no observed higher-education enrollment, projected program income is set to the current minimum-wage proxy of 553,553 Chilean pesos before taking logs.\footnote{This is consistent with the fact that the amounts reported in MiFuturo are in 2025 Chilean pesos.}
+
+
+%For matriculated students, missing or unsupported high-premium-field classifications are left missing rather than coded as non-high-premium.
+%The math and verbal score outcomes require observed national admission-test scores.
+%The unconditional postsecondary outcomes instead retain students without higher-education enrollment when non-enrollment is part of the outcome definition.
+%In the 2017--2020 complete-control value-added panel, 571,110 students have a math or verbal admission-test outcome.
+
+\clearpage 
+\section{Empirical Framework}
+
+This section describes the empirical object and the research design.
+The goal is not to estimate a separate causal effect for every school and every possible margin of substitution.
+Instead, I ask whether an outcome-specific observational value-added measure is informative about causal effects generated by lottery-induced changes in school attendance.
+The design therefore collapses school effects into scalar measures and estimates a forecast coefficient for each outcome.
+
+\subsection{School Effects and Observational Value Added}
+
+I use a constant-effects value-added model as a guide:
+\begin{equation}
+  Y_i^m(j) = \mu^m + V_j^m + \epsilon_i^m,
+  \label{eq:potential-va}
+\end{equation}
+Here, $Y_i^m(j)$ is student $i$'s potential outcome for outcome $m$ if assigned to high school $j$.
+The index $m$ denotes the outcome, and $j$ denotes the high school.
+The term $\mu^m$ is the average level of outcome $m$ under the student-weighted average school.
+The term $V_j^m$ is the contribution of school $j$ to outcome $m$ relative to that average.
+The term $\epsilon_i^m$ captures student-level determinants of outcome $m$ that do not vary with the assigned school in this constant-effects representation.
+I normalize school effects so that their student-weighted mean is zero, $\sum_j \omega_j V_j^m = 0$, where $\omega_j$ is the share of students linked to school $j$ in the value-added sample.
+This centering means that the weighted average of $V_j^m$ across schools is exactly zero.
+A positive $V_j^m$ therefore denotes a school above the student-weighted average for outcome $m$, while a negative value denotes a school below that average.
+The main outcomes are math and verbal achievement, indicators for enrollment in a high-premium field and a high-premium institution, and log projected program income. 
+
+The first step constructs observational value added in the broad complete-control panel.
+For each outcome $m$, I estimate
+\begin{equation}
+  Y_i^m = \alpha^m + \lambda_{s(i)}^m + X_i'\Gamma^m + u_i^m,
+  \label{eq:observational-va}
+\end{equation}
+where $s(i)$ is the student's main high-school RBD and $X_i$ contains pre-treatment controls.
+These include cohort, gender, age, a third-degree polynomial in each of grade-4 SIMCE math and language, family-background measures from SIMCE parent surveys\footnote{In particular: family income decile, years of education and indigenous status of each parent, and indicators for whether the student attended any institution before primary education.}, and middle-school controls from grades 5 to 8 (middle school indicator and school-normalized attendance and performance).
+%Score outcomes are estimated among students with observed admission-test scores, while the other postsecondary outcomes use the complete-control panel after applying the outcome-specific missing-data rules described above.
+I define the observational value-added measure $\widehat{V}_j^m$ as the centered empirical analogue of $V_j^m$: the estimated school fixed effect $\widehat{\lambda}_j^m$ from equation~\eqref{eq:observational-va}, centered using the same student-weighting convention.
+
+Importantly, these fixed effects by themselves answer an observational question: conditional on $X_i$, which schools have higher average outcomes?
+If school assignment in the broad panel were truly random, then the centered fixed effect $\widehat{\lambda}_j^m$ would identify $V_j^m$ up to sampling error.
+In practice, students sort across schools, so the fixed effects may combine true school effects with any remaining selection not absorbed by controls.
+The second step therefore asks whether the part of $\widehat{V}_j^m$ shifted by the SAE lotteries corresponds to causal effects in the same outcome.
+
+
+\subsection{Assignment Risk and Expected Value Added}
+
+SAE applicants submit rank-ordered lists of schools.
+Let $Z_i$ denote the first-round school offer and $D_i$ denote the school attended, measured by the post-grade-8 most-time RBD.
+A student has a preference and priority type $\theta_i$, and the assignment mechanism implies an assignment-probability vector $p_i=(p_{i1},...,p_{iJ})$, where $p_{ij}=Pr(Z_i=j)$.
+Under equal treatment of equals, students with the same type have the same assignment probabilities \parencite{abdulkadiroglu_research_2017}.
+For pre-treatment characteristics and potential outcomes fixed under re-randomization, we have
+\begin{equation}
+  (Y_i^m(1),...,Y_i^m(J), X_i) \ind Z_i \mid p_i.
+  \label{eq:offer-independence}
+\end{equation}
+
+The raw vector $p_i$ is high-dimensional, because students can rank many different combinations of schools.
+For an outcome-specific scalar value-added measure, I summarize assignment risk by the expected value added in the student's portfolio:
+\begin{equation}
+  E_i^m = \sum_j p_{ij}\widehat{V}_j^m.
+  \label{eq:expected-va}
+\end{equation}
+This is the average value added the student would receive over repeated randomizations of the assignment mechanism, holding the submitted application and priorities fixed.
+In the main IV specification, this scalar expected value replaces a large set of school-specific probability controls.
+
+For each outcome $m$, define the value added of the attended school and offered school as
+\begin{equation}
+  A_i^m = \widehat{V}_{D_i}^m,
+  \qquad
+  O_i^m = \widehat{V}_{Z_i}^m.
+  \label{eq:attended-offered-va}
+\end{equation}
+The instrument is $O_i^m$, the value added of the school generated by the lottery offer.
+The endogenous variable is $A_i^m$, the value added of the school actually attended.
+The notation is mnemonic: $O_i^m$ is the value added of the \textbf{O}ffered school, and $A_i^m$ is the value added of the \textbf{A}ttended school.
+Because assignment offers vary randomly conditional on the assignment probabilities, variation in $O_i^m$ around $E_i^m$ provides quasi-experimental variation in the quality of the school offer.
+
+
+\subsection{Scalar IV Specification}
+
+The first empirical question is whether observational value added predicts causal effects on the same outcome.
+Specifically, when the assignment mechanism moves a student toward a school with higher $\widehat{V}_j^m$, does outcome $m$ rise, and by how much relative to the observational difference encoded in $\widehat{V}_j^m$?
+The main IV system is given by the following pair of equations:
+\noindent
+  \begin{equation}
+    \begin{aligned}
+      Y_i^m ={}& \alpha^m + \theta^m A_i^m + \rho^m E_i^m +  W_i'\delta^m + \eta_i^m,
+    \end{aligned}
+    \label{eq:pass-through}
+  \end{equation}
+
+  \begin{equation}
+    \begin{aligned}
+      A_i^m ={}& a^m + \kappa^m O_i^m + \rho_A^m E_i^m +  W_i'\delta_A^m + \nu_i^m.
+    \end{aligned}
+    \label{eq:first-stage}
+  \end{equation}
+
+Here, $Y_i^m$ is student $i$'s realized value of outcome $m$. The value added of the attended school, $A_i^m$, is instrumented with the value added of the school offered through the assignment mechanism, $O_i^m$.
+$E_i^m$ is the expected value added implied by the student's assignment-probability vector.
+Finally, $W_i$ is a parsimonious lottery-sample control vector containing cohort, gender, age, and grade-4 SIMCE math and language.
+This differs from the richer control vector used to construct $\widehat{V}_j^m$ in equation~\eqref{eq:observational-va}, which also includes family-background and middle-school controls.
+%The rich controls enter through the construction of the school value-added measures, while equation~\eqref{eq:pass-through} asks whether those pre-constructed measures pass through in the SAE lottery sample after conditioning on assignment risk and core baseline covariates.
+All reported specifications use heteroskedasticity-robust standard errors.
+
+The coefficient $\theta^m$ is the key object.
+It measures how much of the observational value-added difference induced by the lottery offer passes through into causal effects on the same outcome.
+If $\theta^m=1$, then a one-unit increase in observational value added causes a one-unit increase in the outcome.
+If $\theta^m=0$, the observational measure has no causal predictive content along the lottery-induced margin.
+Values between zero and one imply that observational value added is directionally informative, but overstates the causal effect of attending higher-value-added schools.
+
+The scalar design is useful because a fully flexible school-specific IV design would be high-dimensional and would mix many margins of substitution across fallback schools \parencite{angrist_methods_2023, kirkeboen_field_2016}.
+It instead asks whether movement toward schools with higher measured value added causes better outcomes, after controlling for the expected value added implied by each student's assignment risk.
+
+A second empirical question is whether the forecast differs by students' baseline achievement.
+To answer that question, I also estimate equation~\eqref{eq:pass-through} separately by quintiles of baseline grade-4 math achievement or gender.
+Evidently since gender and grade-4 SIMCE are fixed before high-school assignment, these splits describe heterogeneity without conditioning on a post-treatment outcome.
+
+\subsection{Empirical Bayes}
+
+The school fixed effects in equation~\eqref{eq:observational-va} are estimated with different precision.
+In particular, effects for schools with smaller regression samples or noisier outcomes contain more sampling error.
+I therefore use an Empirical-Bayes (EB) version of the observational school-value index, which shrinks noisier estimates more strongly toward the across-school mean \parencite{walters_chapter_2024}.
+For each outcome $m$, let $se_j^m$ denote the regression-derived standard error of the student-weighted centered fixed effect $\widehat{V}_j^m$.
+This is the uncertainty of the same centered effect used in the scalar design, rather than the standard error of an arbitrary reference-normalized school dummy.
+
+I estimate the latent across-school variance by subtracting average sampling variance from the student-weighted variance of the estimated effects:
+\begin{equation}
+  \widehat{\tau}_m^2 =
+  \max\left\{
+    \operatorname{Var}_{\omega}\left(\widehat{V}_j^m\right)
+    - \sum_j \omega_j (se_j^m)^2,\,
+    0
+  \right\},
+  \label{eq:eb-latent-variance}
+\end{equation}
+where $\omega_j$ is proportional to the number of students in school $j$'s stage-1 regression sample.
+The implied school-specific reliability is
+\begin{equation}
+  \lambda_j^m =
+  \frac{\widehat{\tau}_m^2}
+  {\widehat{\tau}_m^2 + (se_j^m)^2},
+  \label{eq:eb-reliability}
+\end{equation}
+and the EB school value is
+\begin{equation}
+  \widehat{V}_{j}^{m,EB}
+  =
+  \overline{\widehat{V}}_{\omega}^m
+  +
+  \lambda_j^m
+  \left(
+    \widehat{V}_j^m-\overline{\widehat{V}}_{\omega}^m
+  \right).
+  \label{eq:eb-va}
+\end{equation}
+Note that as $(se_j^m) \to 0$ (more precision on the estimate), $\lambda^m_j \to 1$ and the posterior approaches the original $\hat{V}_j^m$.
+Otherwise, the posterior lies between the estimate $\hat{V}_j^m$ and the mean of such estimates $\overline{\hat{V}_j^m}$.
+
+I recenter these posterior means using the same student weights, so their student-weighted mean remains zero.
+
+I then replace $\widehat{V}_j^m$ with $\widehat{V}_{j}^{m,EB}$ everywhere in the scalar IV construction:
+\begin{equation}
+  A_i^{m,EB} = \widehat{V}_{D_i}^{m,EB},
+  \qquad
+  O_i^{m,EB} = \widehat{V}_{Z_i}^{m,EB},
+  \qquad
+  E_i^{m,EB} = \sum_j p_{ij}\widehat{V}_{j}^{m,EB}.
+  \label{eq:eb-iv-objects}
+\end{equation}
+The EB specification instruments $A_i^{m,EB}$ with $O_i^{m,EB}$ and controls for $E_i^{m,EB}$ in the same way as equation~\eqref{eq:pass-through}.
+%Thus, EB improves the signal-to-noise ratio of the stage-1 observational index before it is used in the lottery design; it does not estimate a separate causal effect for each school or form a hybrid causal-EB estimator.
+%Because shrinkage compresses the scale of the school-value index, the resulting forecast coefficients should be interpreted together with the distribution of the EB-shrunken index.
+
+
+\subsection{Var/Covar analysis}
+
+Equation~\eqref{eq:eb-latent-variance} treats each outcome separately: it purges sampling noise from the variance of a single outcome's school-value estimates.
+But the paper's motivating claim, that school effects are not necessarily one-dimensional, is fundamentally a claim about how effects on \emph{different} outcomes relate to one another across schools \parencite{jackson_what_2018, rose_effects_2022}.
+Answering that question requires the covariance of the latent effects $V_j^m$ and $V_j^{m'}$ across schools, not just their individual variances.
+
+A naive covariance of the raw estimates, $\widehat{\mathrm{Cov}}\left(\widehat V_j^m, \widehat V_j^{m'}\right)$, is not a valid estimate of $\mathrm{Cov}(V_j^m, V_j^{m'})$ for the same reason that the naive variance in equation~\eqref{eq:eb-latent-variance} required a bias correction.
+Sampling error in $\widehat V_j^m$ and sampling error in $\widehat V_j^{m'}$ are both computed from the same students in the same regression sample, so they are generally correlated with each other: idiosyncratic cohort-level shocks, mechanical overlap in the estimation sample, or correlated measurement error can all generate a positive or negative covariance between the two sampling errors even if the underlying school effects $V_j^m$ and $V_j^{m'}$ are unrelated.
+A plug-in covariance therefore conflates true cross-outcome covariation in school effects with correlated noise, in a way that ordinary Empirical-Bayes shrinkage does not correct, since equation~\eqref{eq:eb-latent-variance} only ever shrinks one outcome at a time.
+
+To purge this bias, I use the cross-cohort estimator developed in \textcite{rose_effects_2022}, adapting their teacher-by-year design to schools observed across grade-8 cohorts.
+The idea is to replace the single pooled estimate $\widehat V_j^m$ with $T_j$ separate, cohort-specific estimates for school $j$, and then use products of estimates from \emph{different} cohorts to recover $V_j^m V_j^{m'}$ without the correlated-noise contamination that a single pooled cross-product would carry.
+
+Formally, let $t \in \{1,\ldots,T_j\}$ index the grade-8 cohorts observed for school $j$ (cohorts 2017--2020), and define the school-by-cohort mean of the fitted residual plus school effect from equation~\eqref{eq:observational-va}:
+\begin{equation}
+  \widehat V_{jt}^m = \frac{1}{n_{jt}^m}\sum_{i:\, s(i)=j,\, c(i)=t} \left(\widehat\lambda_j^m + \widehat u_i^m\right) = V_j^m + \bar u_{jt}^m,
+  \label{eq:varcov-cell-mean}
+\end{equation}
+where $c(i)$ denotes student $i$'s grade-8 cohort and $\bar u_{jt}^m$ is the school-by-cohort sampling error, with $E[\bar u_{jt}^m]=0$.
+Averaging equation~\eqref{eq:varcov-cell-mean} across a school's $T_j$ cohorts recovers the pooled estimate: $\frac{1}{T_j}\sum_t \widehat V_{jt}^m = \widehat V_j^m$.
+
+\begin{assumption}[Uncorrelated cross-cohort sampling error]
+  For any school $j$ and any two cohorts $t\neq t'$, and for any pair of outcomes $m, m'$ (including $m=m'$),
+  $E\left[\bar u_{jt}^m \bar u_{jt'}^{m'}\right]=0$.
+  \label{as:cross-cohort}
+\end{assumption}
+
+Assumption~\ref{as:cross-cohort} allows sampling errors in the same cohort to be correlated across outcomes -- which is the problematic case above -- but rules out shocks that persist or run across different grade-8 cohorts of the same school.
+It is the natural analogue, extended across outcomes, of the within-outcome independence assumption already implicit in the Empirical-Bayes correction in equation~\eqref{eq:eb-latent-variance}.
+
+Under Assumption~\ref{as:cross-cohort}, $E_{t\neq t'}\left[\widehat V_{jt}^m \widehat V_{jt'}^{m'}\right] = V_j^m V_j^{m'}$, since all cross terms involving $\bar u_{jt}^m$ or $\bar u_{jt'}^{m'}$ vanish in expectation.
+Averaging this cross-cohort product over all $\binom{T_j}{2}$ distinct cohort pairs for school $j$, and aggregating across the $J$ schools with $T_j\geq 2$, gives debiased estimators of the variance and covariance of the latent school effects:
+\begin{equation}
+  \widehat{\mathrm{Var}}\left(V^m\right) =
+  \left(\frac{J-1}{J}\right)\frac{1}{J}\sum_j \binom{T_j}{2}^{-1}\sum_{t<t'} \widehat V_{jt}^m \widehat V_{jt'}^m
+  \;-\; \frac{2}{J^2}\sum_{j<k} \widehat V_j^m \widehat V_k^m,
+  \label{eq:varcov-variance}
+\end{equation}
+\begin{equation}
+  \widehat{\mathrm{Cov}}\left(V^m, V^{m'}\right) =
+  \left(\frac{J-1}{J}\right)\frac{1}{J}\sum_j \binom{T_j}{2}^{-1}\sum_{t\neq t'} \widehat V_{jt}^m \widehat V_{jt'}^{m'}
+  \;-\; \frac{1}{J^2}\sum_{j\neq k} \widehat V_j^m \widehat V_k^{m'}.
+  \label{eq:varcov-covariance}
+\end{equation}
+
+Unlike equation~\eqref{eq:eb-latent-variance}, equations~\eqref{eq:varcov-variance} and~\eqref{eq:varcov-covariance} require no explicit correction term built from regression standard errors.
+They are also not truncated at zero: they are unbiased for the latent variance and covariance directly, and can take small negative values in a finite sample even though the underlying quantity is, for the variance, non-negative by construction.
+
+From equations~\eqref{eq:varcov-variance} and~\eqref{eq:varcov-covariance}, I construct two summary objects.
+The first is the implied correlation between latent school effects on outcomes $m$ and $m'$,
+\begin{equation}
+  \widehat\rho^{\,m,m'} = \frac{\widehat{\mathrm{Cov}}\left(V^m,V^{m'}\right)}{\sqrt{\widehat{\mathrm{Var}}(V^m)\,\widehat{\mathrm{Var}}(V^{m'})}},
+  \label{eq:varcov-correlation}
+\end{equation}
+computed on the set of schools common to both outcomes' variance estimates.
+The second is the implied gain: the population-projection coefficient of $V_j^{m'}$ on $V_j^m$ across schools,
+\begin{equation}
+  \widehat\beta^{\,m' \mid m} = \frac{\widehat{\mathrm{Cov}}\left(V^m,V^{m'}\right)}{\widehat{\mathrm{Var}}(V^m)}.
+  \label{eq:varcov-implied-gain}
+\end{equation}
+$\widehat\beta^{\,m'\mid m}$ answers a concrete question: if a school's true value added on outcome $m$ were one unit higher, how much higher would its true value added on outcome $m'$ be expected to be?
+Because $\widehat{\mathrm{Var}}(V^m)$ and $\widehat{\mathrm{Var}}(V^{m'})$ generally differ, $\widehat\beta^{\,m'\mid m}\neq \widehat\beta^{\,m\mid m'}$ in general.
+
+I compute equations~\eqref{eq:varcov-variance}--\eqref{eq:varcov-implied-gain} for each pair among the same seven primary outcomes reported in Table~\ref{tab:scalar-school-value-iv-main-seven-eb-va-2017--2020-sae-2018-2020}: math and verbal achievement, admission-exam taking, high-premium-institution and high-premium-field enrollment, log projected program income, and benefits or credit applications.
+If $\widehat\rho^{\,m,m'}$ is close to zero, or $\widehat\beta^{\,m'\mid m}$ is close to zero, then a school's true effect on outcome $m$ carries little information about its true effect on outcome $m'$: the two dimensions of school quality are largely distinct, even after removing the noise that would otherwise attenuate their observed relationship.
+This is a purely observational counterpart to the value-added horse race below: it asks whether achievement value added and higher-education-choice value added are two names for the same underlying school quality, or whether they capture separate margins along which schools differ.
+
+Standard errors for equations~\eqref{eq:varcov-variance}--\eqref{eq:varcov-implied-gain} are computed with a nonparametric bootstrap that resamples schools with replacement.\footnote{\textcite{rose_effects_2022} instead derive analytic standard errors for these objects from the estimator's U-statistic representation. I use the bootstrap here as a first pass; incorporating the corresponding analytic formulas is left for a later draft.}
+For the correlation and implied-gain objects specifically, the resampled draw is joint: the same resampled set of schools is used to recompute $\widehat{\mathrm{Var}}(V^m)$, $\widehat{\mathrm{Var}}(V^{m'})$, and $\widehat{\mathrm{Cov}}(V^m,V^{m'})$ together in each replicate, since these are ratios of quantities estimated from the same schools.
+
+\clearpage
+
+\section{Characterizing applications and compliers}
+
+In this section 
+
+
+\subsection{Characterizing applications}
+
+\subsection{Characterizing compliers}
+
+
+\input{../../output/tables/high_va_compliers/math_complier_ses_by_cutoff.tex}
+
+
+\input{../../output/tables/high_va_compliers/high_premium_field_complier_ses_by_cutoff.tex}
+
+
+Table X sh
+
+
+
+
+\clearpage 
+\section{Causal Effects of Schools}
+
+I organize the results in five blocks.
+First, I describe the scale of the underlying outcomes and the distribution of the five primary observational school value-added measures.
+Second, I report the main forecast coefficient estimates for each outcome.
+Third, I examine heterogeneity in forecast by baseline grade-4 math achievement.
+Fourth, I examine whether pass-through differs by student gender.
+Finally, I use an ordered value-added horse race to compare achievement, high-premium-institution, and high-premium-field dimensions of school value added when predicting projected program income.
+
+\subsection{Distribution of Value-Added Estimates}
+
+Table~\ref{tab:school-va-distribution} reports the mean and standard deviation of each underlying student outcome alongside the student-weighted distribution of the corresponding school value-added measure.
+The former capture variation across students; the latter capture estimated differences in school contributions.
+
+\input{../../output/tables/results_section/primary_five_va_distribution.tex}
+
+The achievement outcomes are standardized measures, so their sample means are close to zero and their standard deviations are close to one.
+The probability of entering a high-premium institution is 0.142, and the probability of entering a high-premium field is 0.347.
+Mean log projected program income is 13.893, with a student-level standard deviation of 0.522.
+
+The school value-added measures also display substantial dispersion.
+The standard deviation of math value added is 0.222, and the gap between the 90th and 10th percentiles is 0.492 standard deviations.
+For verbal, the corresponding standard deviation is 0.150 and the 90--10 gap is 0.374 standard deviations.
+Among the higher-education outcomes, the standard deviation of high-premium-institution value added is 0.106, and the corresponding standard deviation for high-premium-field value added is 0.053.
+Projected-income value added has a standard deviation of 0.072 log points and a 90--10 gap of 0.184 log points.
+These distributions show that the observational measures contain economically meaningful variation and provide the scale needed to interpret the pass-through estimates below.
+
+\subsection{IV Estimates}
+
+
+Table~\ref{tab:scalar-school-value-iv-main-seven-eb-va-2017--2020-sae-2018-2020} reports the seven primary EB IV estimates.
+Each column uses the same outcome to construct the observational school value-added measure, the first-round offered-school value-added instrument, and the realized attended-school value-added treatment.
+The coefficients can therefore be read as pass-through estimates: how much a lottery-induced increase in a school's observational value added translates into a causal gain in the corresponding student outcome.
+
+The value-added metrics contain important signal: I reject $\theta = 0$ in all dimensions of value added.
+
+The achievement estimates are close to one: a one-unit increase in the EB math value-added index raises math achievement by 1.197 standard deviations, while the analogous estimate for verbal is 1.031.
+Moreover, the achievement estimates are close to comparable lottery-based estimates in \textcite{angrist_leveraging_2017}, despite the absence of immediately lagged outcomes.
+This result supports the richness of the pre-treatment controls used in this design, since they deliver results similar to settings where immediate lagged measures are available.
+This reasoning should also give confidence in the non-achievement estimates, since they use the same rich control vector.
+
+The estimated pass-through is 0.486 for admission-exam taking, 0.667 for high-premium-institution enrollment, 0.861 for high-premium-field enrollment, 1.060 for projected program income, and 0.584 for benefits or credit applications.
+
+Taken together, the estimates suggest that the observational school value-added measures are informative about both test-score production and later higher-education choices.
+They also provide lottery-based evidence that high schools causally affect all seven primary outcomes studied here.
+Lottery-induced movement toward schools with higher observational value added raises math achievement, verbal achievement, admission-exam taking, entry into high-premium institutions and high-premium fields, projected program income, and applications for benefits or credit, although at different rates depending on the outcome.
+The results therefore show that the school assignment margin shifts later higher-education choices, not only test scores.
+
+\input{../../output/tables/empirical_bayes_school_va/va_2017_2020__sae_2018_2020/main_table.tex}
+
+
+\subsection{Corrected Variance/Covariance Matrix}
+
+Table~\ref{tab:rss-varcov-correlation} reports the debiased standard deviations (diagonal) and correlations (lower triangle) of latent school value added across the seven primary outcomes, estimated using the cross-cohort procedure in equations~\eqref{eq:varcov-variance}--\eqref{eq:varcov-correlation}.
+
+\input{../../output/tables/rss_debiased_varcov/rss_varcov_correlation_table.tex}
+
+The debiased standard deviations are larger than the corresponding Empirical-Bayes standard deviations reported in Table~\ref{tab:school-va-distribution} for every outcome where the two are comparable: 0.258 versus 0.222 for math, 0.205 versus 0.150 for verbal, 0.123 versus 0.106 for high-premium institution, and, most notably, 0.110 versus 0.053 for high-premium field.
+This pattern is expected: Empirical-Bayes shrinkage in equation~\eqref{eq:eb-va} deliberately compresses each school's estimate toward the across-school mean, which reduces the apparent spread of the posterior means below the true spread of the underlying school effects, especially for outcomes like high-premium-field enrollment where individual schools are estimated with less precision.
+
+The correlations reveal three broad patterns.
+First, the two achievement measures are highly related: math and verbal value added correlate at 0.754.
+Second, the higher-education-choice outcomes are only moderately related to achievement and, notably, only weakly related to \emph{each other}.
+High-premium-institution and high-premium-field value added correlate at just 0.145, despite both loading positively on math (0.462 and 0.250, respectively) and on log projected income (0.473 and 0.609).
+This suggests that ``getting students into elite institutions'' and ``getting students into high-paying fields'' are two largely distinct margins along which schools differ, not two symptoms of the same underlying school quality.
+Third, admission-exam taking and any financial-aid or benefits application move closely together (correlation 0.597), consistent with both capturing an earlier-stage engagement margin, but both are only weakly related to high-premium-institution and high-premium-field value added (0.075 and 0.060 for admission-exam taking; $-0.424$ and 0.050 for any application).
+The negative correlation between any-application value added and high-premium-institution value added is the largest-magnitude relationship in the matrix outside the achievement block, and is discussed further below.
+
+Table~\ref{tab:rss-implied-gains} reports the implied-gains matrix from equation~\eqref{eq:varcov-implied-gain}, together with joint-bootstrap standard errors.
+
+\input{../../output/tables/rss_debiased_varcov/rss_implied_gains_table.tex}
+
+Because the implied gain is a population-projection coefficient rather than a correlation, it need not be symmetric, and in most cells it is not.
+A one-unit increase in a school's true math value added predicts a 0.213 log-point increase in its true log-income value added (SE 0.014); because log-income value added has a much smaller variance than math value added, the reverse projection is larger in magnitude, 1.271 (SE 0.106).
+Both are precisely estimated and economically large.
+Most cells in the table are statistically distinguishable from zero at conventional levels, which given 42 directed pairs is itself informative, but three relationships are not: high-premium-field value added is not detectably related to either admission-exam-taking value added (0.074, SE 0.050, and 0.048, SE 0.032, in the two directions) or any-application value added (0.054, SE 0.036, and 0.046, SE 0.031), and log-income value added is not detectably related to any-application value added (0.015, SE 0.170, and 0.012, SE 0.135).
+These null relationships are informative in the same way the small correlations above are: they identify specific pairs of outcomes for which a school's true effect on one carries essentially no information about its true effect on the other, once sampling noise is removed.
+
+As a complementary check, I compute how much of each outcome's raw correlation with math value added survives after removing the debiased linear projection onto math, using the pooled (non-cross-cohort) value-added estimates from equation~\eqref{eq:observational-va} and the debiased slope $\widehat\beta^{\,m\mid \text{math}}$ from equation~\eqref{eq:varcov-implied-gain}.
+For high-premium-institution value added, the naive correlation with math value added is 0.469 before removing the math component and 0.008 after; for high-premium-field value added, 0.232 before and $-0.024$ after; for log-income value added, 0.425 before and $-0.074$ after; for admission-exam-taking value added, 0.229 before and $-0.026$ after; and for any-application value added, $-0.281$ before and 0.004 after.
+In every case, the residual correlation after removing the debiased math projection is close to zero, an order of magnitude smaller than the correlation it started from.
+This means the debiased implied-gain coefficient captures nearly all of the linear association between math value added and each of the other outcomes: whatever additional signal these outcomes' value-added measures contain is, by construction, orthogonal to math value added rather than a residual piece of it.
+
+Taken together, these results support the paper's motivating claim that school effects on higher-education choices are not simply a noisy copy of school effects on achievement.
+Achievement value added and higher-education-choice value added are related but clearly distinguishable dimensions of school quality, and two higher-education-choice dimensions that might seem similar on their face---getting students into strong institutions and getting students into well-paid fields---are themselves only weakly related.
+The inference underlying this comparison is currently a nonparametric bootstrap rather than the analytic standard errors in \textcite{rose_effects_2022}'s Appendix C, as noted in Section~3; the qualitative pattern of which relationships are precisely estimated and which are indistinguishable from zero is unlikely to be sensitive to that choice, but the exact standard errors reported here should be treated as a first pass.
+
+
+%\subsection{Heterogeneity by Baseline Achievement}
+
+%Figure~\ref{fig:simce4-math-quintile-primary-five-eb} repeats the five primary EB estimates separately by quintiles of baseline grade-4 math achievement.
+%This comparison is useful because it keeps the heterogeneity split pre-treatment and available for the full exam-taker analysis sample.
+%Table~\ref{tab:simce4-math-quintile-primary-five-eb-contrasts-q3} formally tests each quintile coefficient against the middle quintile, reporting $\widehat{\theta}^{EB}_{Q_q}-\widehat{\theta}^{EB}_{Q_3}$ for $q\in\{1,2,4,5\}$.
+%
+%The clearest heterogeneity appears in math.
+%The bottom-quintile estimate is 0.083, compared with 0.929 in the middle quintile, a difference of $-0.846$ ($p<0.01$).
+%The top-quintile estimate is 1.285, or 0.356 above the middle quintile, although this difference is significant only at the 10 percent level ($p=0.093$).
+%The math estimates for the second and fourth quintiles are not statistically different from the middle-quintile estimate.
+%These results suggest a limit to the constant-effects model of schools, but also efficiency and equity considerations on policies based on value-added reporting.
+%Low baseline achievement students might severely underestimate the gains from switching schools, rendering those moves as less efficient or even detrimental if we consider switching costs.
+%
+%None of the four contrasts with the middle quintile is statistically significant for verbal, high-premium-institution enrollment, high-premium-field enrollment, or log projected program income.
+%Thus, the formal tests support meaningful heterogeneity in math, but an almost flat gradient across the higher-education outcomes by baseline achievement.
+%
+%\begin{figure}[!htbp]
+%\centering
+%\includegraphics[width=.9\textwidth]{../../output/figures/results_section/simce4_math_quintile_primary_five_eb.png}
+%\caption{EB scalar school-value IV estimates by baseline grade-4 math achievement quintile}
+%\label{fig:simce4-math-quintile-primary-five-eb}
+%\end{figure}
+%\input{../../output/tables/results_section/simce4_math_quintile_primary_five_eb_contrasts_vs_q3.tex}
+%\FloatBarrier
+%
+%\subsection{Heterogeneity by Gender}
+%
+%I next ask whether the forecast estimates differ by gender.
+%Gender is measured from the grade-8 enrollment records used to construct the linked student panel, so this split is predetermined relative to high-school assignment and does not rely on SAE or admission-test records.
+%Figure~\ref{fig:primary-five-eb-by-gender} reports the five EB forecast estimates separately for boys and girls.
+%Table~\ref{tab:primary-five-eb-gender-contrasts} reports the corresponding difference, girls relative to boys.
+%
+%The estimates are positive for both groups across all five outcomes.
+%For achievement, however, the point estimates are larger for girls.
+%The math pass-through estimate is 0.703 for boys and 1.053 for girls, a difference of 0.349 ($p=0.017$).
+%The verbal estimate is 0.685 for boys and 1.066 for girls, a difference of 0.382 ($p=0.029$).
+%Thus, lottery-induced movement toward schools with higher achievement value added appears to translate more strongly into measured achievement gains for girls.
+%
+%For higher-education choices, the gender differences are noticeably smaller.
+%The point estimates for high-premium-institution enrollment and high-premium-field enrollment are also larger for girls, but neither difference is statistically significant.
+%For log projected program income, the point estimate is slightly larger for boys, and the difference is close to zero.
+%Overall, the gender split suggests meaningful heterogeneity in achievement pass-through, but does not provide evidence that the school effects on higher-education choices differ systematically between boys and girls.
+%
+%\begin{figure}[!htbp]
+%\centering
+%\includegraphics[width=.9\textwidth]{../../output/figures/results_section/primary_five_eb_by_gender.png}
+%\caption{EB scalar school-value IV estimates by gender}
+%\label{fig:primary-five-eb-by-gender}
+%\end{figure}
+%\input{../../output/tables/results_section/primary_five_eb_gender_contrasts.tex}
+%\FloatBarrier
+%
+%
+%
+%\subsection{Ordered Value-Added Horse Race for Projected Income}
+%
+%The scalar estimates above treat each outcome-specific value-added measure one at a time.
+%I next ask whether the labor-market-relevant signal in projected program income is exhausted by math value added.
+%This is a stricter question than asking whether schools affect projected income in the scalar specification.
+%Schools that raise math achievement may also raise projected income, but high schools may affect later labor-market prospects through other margins: the institutions students attend and the fields they enter.
+%The ordered horse race therefore tests which value-added dimensions retain predictive content for projected income as additional dimensions are added.
+%
+%Figure~\ref{fig:va-correlation-panels}, panel (a), first compares math and verbal value added as an achievement benchmark.
+%The two achievement measures are strongly related across schools, with a correlation of 0.659.
+%Panel (b) then compares math value added with high-premium-field value added.
+%That relationship is positive but much weaker, with a correlation of 0.273.
+%This pattern suggests that field-choice value added is related to, but not reducible to, achievement value added.
+%The ordered exercise below asks whether these less achievement-like dimensions carry signal for projected income once math value added is given the first place in the ordering.
+%
+%\begin{figure}[!htbp]
+%\centering
+%\subbottom[Math and verbal value added\label{fig:math-verbal-va-correlation}]{%
+%\includegraphics[width=.48\textwidth]{../../output/figures/results_section/math_language_va_correlation.png}%
+%}
+%\hfill
+%\subbottom[Math and high-premium-field value added\label{fig:math-highpay-va-correlation}]{%
+%\includegraphics[width=.48\textwidth]{../../output/figures/results_section/math_highpay_va_correlation.png}%
+%}
+%\caption{Relationships between math, verbal, and high-premium-field observational value added}
+%\label{fig:va-correlation-panels}
+%\end{figure}
+%\FloatBarrier
+%
+%I estimate a joint IV regression for log projected program income using the ordered EB value-added measures specified in equation~\ref{eq:ordered-va-iv}.
+%Each attended school value is instrumented with the corresponding first-round offered-school value, and the regression controls for the assignment-risk expected value of each dimension.
+%
+%Table~\ref{tab:program-income-orthogonal-math-highinst-highpay} reports the estimates.
+%Math value added has a small and statistically insignificant coefficient of $-0.056$.
+%High-premium-institution value added net of math is positive, with an estimate of 0.286.
+%High-premium-field value added net of math and high-premium-institution value added is positive and precisely estimated, with a coefficient of 0.366.
+%These estimates are difficult to reconcile with a view in which math value added fully summarizes the school dimensions relevant for projected income.
+%Instead, high schools appear to have labor-market-relevant value-added dimensions that are not captured by achievement value added alone.
+%%The strongest evidence comes from the incremental high-premium-field dimension: schools that shift students toward high-premium fields also raise projected income after accounting for math and institution-choice value added.
+%%The raw joint horse race gives the same qualitative message, but the ordered version makes the incremental interpretation more transparent.
+%
+%\input{../../output/tables/empirical_bayes_school_va/program_income_full_orthogonal_math_highinst_highpay_joint_iv.tex}
+%
+\FloatBarrier
+
+\clearpage 
+\section{Conclusion}
+
+This paper asks whether high schools causally affect higher-education choices, and to what extent those effects are captured by observational value added.
+I address this question by combining Chile's centralized school assignment system with linked administrative data.
+I first estimate school value added for achievement and higher-education outcomes in a broad national panel, and then use lottery offers to ask whether schools that look better in observational value-added terms also produce larger causal effects.
+
+The main estimates suggest meaningful pass-through.
+The estimates are 0.884 for math, 0.885 for verbal achievement, 0.497 for high-premium-institution enrollment, 0.803 for high-premium-field enrollment, and 0.311 for log projected program income.
+In practical terms, schools that observationally look better at raising achievement or higher-education outcomes also predict causal effects on those same outcomes, as I can confidently reject $\theta = 0$ in all dimensions of value added.
+The results therefore show that the school assignment margin shifts later higher-education choices, not only test scores.
+
+The heterogeneity results show that the relationship is mostly stable across students, with noticeable exceptions.
+Relative to students in the middle quintile of baseline math achievement, math value added is substantially less predictive in the bottom quintile and marginally more predictive in the top quintile.
+At the same time, both verbal and math achievement show noticeable gender differences in their forecast coefficients.
+These differences may suggest some caution when considering achievement value-added disclosure policies, especially in terms of their efficacy and equity across groups.
+However, the non-achievement results are remarkably stable, making the common-effects approximation more plausible for those dimensions.
+
+%For verbal achievement and the three higher-education outcomes, none of the differences relative to the middle quintile is statistically significant.
+%These results point to meaningful heterogeneity in math pass-through, rather than a common pattern across outcomes or the baseline achievement distribution.
+
+Finally, I ask which dimensions of school value added predict gains in projected program income.
+The ordered horse-race exercise enters math value added first, then high-premium-institution value added net of math, and finally high-premium-field value added net of the first two dimensions.
+In this joint IV specification, math value added is small and statistically insignificant, while the two higher-education choice dimensions are positive and significant.
+These results suggest that high schools differ along multiple dimensions in ways that are not captured by achievement alone.
+In particular, schools affect higher-education decisions through dimensions not captured by math achievement, such as institution and field choice.
+%The analysis does not determine whether these differences arise from counseling, information, expectations, peer norms, academic preparation, or other school practices.
+
+These results show why achievement-based measures of school quality are incomplete.
+As access to secondary and higher education expands, the consequences of schooling increasingly depend not only on learning and enrollment, but also on the decisions students make thereafter.
+Accountability systems and school-choice policies centered on achievement may therefore overlook school effects that matter for the allocation of skills across fields, occupations, and sectors.
+
+The results also qualify how higher-education choices should be interpreted.
+Decisions not to continue to higher education, to avoid particular fields, or to attend lower-quality institutions are often interpreted as revealing stable preferences or privately optimal responses to expected returns.
+Yet both expected returns and the options students perceive can be shaped by the information, expectations, academic preparation, and support they receive in high school.
+A decision may therefore be privately optimal given beliefs and preparation that the high school helped produce, while still being causally affected by the school attended.
+This possibility is especially important in settings where families have limited information about educational options and where access to counseling and other supports varies across schools.
+
+%Future work should attempt to identify the specific channels that generate these effects and examine whether families value and respond to nontraditional measures of school value added.
+%It should also study whether providing information on multiple dimensions of school quality changes school demand and later educational choices, and estimate the aggregate consequences of systematically ignoring these dimensions when students and funds are allocated across schools.
+
+
+
+
+\clearpage
+\printbibliography
+
+
+\section{Appendix}
+
+\input{../../output/tables/balance_table/balance_table_school_sector.tex}
+
+\input{../../output/tables/compliance/application_rank_take_up_maximum_data.tex}
+
+
+
+
+\end{document}
