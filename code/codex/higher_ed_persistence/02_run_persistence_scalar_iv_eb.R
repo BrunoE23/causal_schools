@@ -76,7 +76,8 @@ p[, inst_entry_through_y2 := fifelse(
   entry_high_premium_institution * high_premium_institution_y1 *
     high_premium_institution_y2,
   NA_real_)]
-p <- p[, .(mrun, he_enrolled_y1, high_premium_field_y1,
+p <- p[, .(mrun, he_enrolled_entry, entry_high_premium_field,
+  entry_high_premium_institution, he_enrolled_y1, high_premium_field_y1,
   high_premium_institution_y1, persist_from_entry_y1,
   remain_high_premium_field_y1, remain_high_premium_institution_y1,
   entered_and_persist_y1, field_entry_to_y1, inst_entry_to_y1,
@@ -253,13 +254,21 @@ write_cross_table <- function(defs, stem, caption, label, group_header, note) {
     if (i == 3L) ans <- c(ans, '\\midrule')
     ans
   }))
+  nc2 <- nrow(defs)
+  group_line <- if (length(group_header) == 1L) {
+    paste0(' & \\multicolumn{',nc2,'}{c}{',group_header,'} \\\\')
+  } else {
+    paste0(' & \\multicolumn{3}{c}{',group_header[1],'} & \\multicolumn{3}{c}{',group_header[2],'} \\\\')
+  }
+  cmid_line <- if (length(group_header) == 1L) {
+    paste0('\\cmidrule(lr){2-',nc2+1L,'}')
+  } else '\\cmidrule(lr){2-4} \\cmidrule(lr){5-7}'
   tex2 <- c('\\begin{table}[!htbp]','\\centering',paste0('\\caption{',caption,'}'),
     paste0('\\label{',label,'}'),'\\begin{threeparttable}',
-    '\\begin{tabular}{lccc}','\\toprule',
-    paste0(' & \\multicolumn{3}{c}{', group_header, '} \\\\'),
-    '\\cmidrule(lr){2-4}',
+    '\\resizebox{\\textwidth}{!}{%',paste0('\\begin{tabular}{l',strrep('c',nc2),'}'),'\\toprule',
+    group_line, cmid_line,
     paste0(' & ', paste(defs$outcome_label, collapse=' & '), ' \\\\'),
-    '\\midrule',lines,'\\bottomrule','\\end{tabular}',
+    '\\midrule',lines,'\\bottomrule','\\end{tabular}}',
     '\\begin{tablenotes}[flushleft]','\\footnotesize',paste0('\\item Notes: ',note,
     ' Rows identify the EB observational school value-added measure used as the endogenous school-quality index. In each cell, attended-school VA is instrumented with first-round offered-school VA, controlling for the DA-probability expected value of the same row VA, cohort, grade-4 math and verbal scores, gender, and age. The sample uses timely SAE applicants from the 2018--2019 cohorts with nondegenerate assignment risk; admission-exam taking is not a sample restriction. Heteroskedasticity-robust standard errors are in parentheses. $^{*}p<0.10$, $^{**}p<0.05$, $^{***}p<0.01$.'),
     '\\end{tablenotes}','\\end{threeparttable}','\\end{table}')
@@ -267,14 +276,16 @@ write_cross_table <- function(defs, stem, caption, label, group_header, note) {
 }
 
 year2_defs <- data.table(
-  outcome_key=c('highered_y2','highpay_y2','highinst_y2'),
-  outcome=c('he_enrolled_y1','high_premium_field_y1','high_premium_institution_y1'),
-  outcome_label=c('Higher-ed enrollment','High-premium field','High-premium institution'))
+  outcome_key=c('highered_y1','highpay_y1','highinst_y1',
+    'highered_y2','highpay_y2','highinst_y2'),
+  outcome=c('he_enrolled_entry','entry_high_premium_field','entry_high_premium_institution',
+    'he_enrolled_y1','high_premium_field_y1','high_premium_institution_y1'),
+  outcome_label=rep(c('Higher-ed enrollment','High-premium field','High-premium institution'),2))
 write_cross_table(year2_defs, 'year2_status_cross_va',
-  'School value added and higher-education status one academic year after entry',
+  'School value added and unconditional higher-education status in Years 1 and 2',
   'tab:va-higher-ed-year2-status-cross-va',
-  'Unconditional Year-2 status',
-  'Columns are unconditional indicators for status in the academic year after expected entry (2024 for the 2018 cohort and 2025 for the 2019 cohort). Every student receives a zero or one; Year-1 entry is not imposed as a condition.')
+  c('Unconditional Year-1 status','Unconditional Year-2 status'),
+  'The left panel reports status in the expected entry year; the right panel reports status one academic year later (2024 for the 2018 cohort and 2025 for the 2019 cohort). Every student receives a zero or one in both panels, and Year-2 status is not conditioned on Year-1 entry.')
 
 conditional_defs <- data.table(
   outcome_key=c('highered_retention','highpay_retention','highinst_retention'),
