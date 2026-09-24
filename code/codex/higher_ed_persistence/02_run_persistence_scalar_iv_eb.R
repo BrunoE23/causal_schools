@@ -76,7 +76,10 @@ p[, inst_entry_through_y2 := fifelse(
   entry_high_premium_institution * high_premium_institution_y1 *
     high_premium_institution_y2,
   NA_real_)]
-p <- p[, .(mrun, entered_and_persist_y1, field_entry_to_y1, inst_entry_to_y1,
+p <- p[, .(mrun, he_enrolled_y1, high_premium_field_y1,
+  high_premium_institution_y1, persist_from_entry_y1,
+  remain_high_premium_field_y1, remain_high_premium_institution_y1,
+  entered_and_persist_y1, field_entry_to_y1, inst_entry_to_y1,
   entered_and_persist_continuous_through_y2, field_entry_through_y2,
   inst_entry_through_y2)]
 u <- merge(u, p, by='mrun', all=FALSE, sort=FALSE)
@@ -221,6 +224,65 @@ cross_tex <- c('\\begin{table}[!htbp]','\\centering',
   '\\item Notes: Columns report persistence outcomes requiring entry into the relevant category and continued participation in the second academic year. Rows identify the EB observational school value-added measure used as the endogenous school-quality index. In each cell, attended-school VA is instrumented with first-round offered-school VA, controlling for the DA-probability expected value of the same row VA, cohort, grade-4 math and verbal scores, gender, and age. The sample contains timely SAE applicants from the 2018--2019 cohorts with nondegenerate assignment risk; admission-exam taking is not a sample restriction. Heteroskedasticity-robust standard errors are in parentheses. $^{*}p<0.10$, $^{**}p<0.05$, $^{***}p<0.01$.',
   '\\end{tablenotes}','\\end{threeparttable}','\\end{table}')
 writeLines(cross_tex, file.path(out_dir, 'persistence_second_year_cross_va.tex'))
+
+# Distinguish the total effect on status in the second academic year from
+# retention conditional on entry-year participation. The latter conditions on
+# a post-assignment outcome and is therefore presented as a selected-entrant
+# comparison rather than as the main causal estimand.
+write_cross_table <- function(defs, stem, caption, label, note) {
+  grid <- CJ(spec = specs$spec, outcome_key = defs$outcome_key, unique = TRUE)
+  grid <- merge(grid, defs, by = 'outcome_key', sort = FALSE)
+  rr <- rbindlist(lapply(seq_len(nrow(grid)), function(i) {
+    ans <- run_one(grid[i, .(spec, outcome)])
+    ans[, `:=`(outcome_key = grid$outcome_key[i], outcome_label = grid$outcome_label[i])]
+    ans
+  }))
+  rr[, va_label := specs$label[match(spec, specs$spec)]]
+  rr[, `:=`(spec_order = match(spec, cross_spec_order),
+    outcome_order = match(outcome_key, defs$outcome_key))]
+  setorder(rr, spec_order, outcome_order)
+  rr[, c('spec_order', 'outcome_order') := NULL]
+  fwrite(rr, file.path(clean_out, paste0(stem, '_results.csv')))
+  fwrite(rr, file.path(out_dir, paste0(stem, '_results.csv')))
+  rr[, cell := paste0(sprintf('%.3f', beta), stars(p_value))]
+  lines <- unlist(lapply(seq_along(cross_spec_order), function(i) {
+    s <- cross_spec_order[i]
+    z <- rr[spec == s][match(defs$outcome_key, outcome_key)]
+    ans <- c(paste0(z$va_label[1], ' VA & ', paste(z$cell, collapse=' & '), ' \\\\'),
+      paste0(' & ', paste0('(', sprintf('%.3f', z$se), ')', collapse=' & '), ' \\\\'))
+    if (i == 3L) ans <- c(ans, '\\midrule')
+    ans
+  }))
+  tex2 <- c('\\begin{table}[!htbp]','\\centering',paste0('\\caption{',caption,'}'),
+    paste0('\\label{',label,'}'),'\\begin{threeparttable}',
+    '\\begin{tabular}{lccc}','\\toprule',
+    paste0(' & ', paste(defs$outcome_label, collapse=' & '), ' \\\\'),
+    '\\midrule',lines,'\\bottomrule','\\end{tabular}',
+    '\\begin{tablenotes}[flushleft]','\\footnotesize',paste0('\\item Notes: ',note,
+    ' Rows identify the EB observational school value-added measure used as the endogenous school-quality index. In each cell, attended-school VA is instrumented with first-round offered-school VA, controlling for the DA-probability expected value of the same row VA, cohort, grade-4 math and verbal scores, gender, and age. The sample uses timely SAE applicants from the 2018--2019 cohorts with nondegenerate assignment risk; admission-exam taking is not a sample restriction. Heteroskedasticity-robust standard errors are in parentheses. $^{*}p<0.10$, $^{**}p<0.05$, $^{***}p<0.01$.'),
+    '\\end{tablenotes}','\\end{threeparttable}','\\end{table}')
+  writeLines(tex2, file.path(out_dir, paste0(stem, '.tex')))
+}
+
+year2_defs <- data.table(
+  outcome_key=c('highered_y2','highpay_y2','highinst_y2'),
+  outcome=c('he_enrolled_y1','high_premium_field_y1','high_premium_institution_y1'),
+  outcome_label=c('Enrolled in higher ed.','In high-premium field','At high-premium institution'))
+write_cross_table(year2_defs, 'year2_status_cross_va',
+  'School value added and higher-education status one academic year after entry',
+  'tab:va-higher-ed-year2-status-cross-va',
+  'Columns are unconditional indicators for status in the academic year after expected entry (2024 for the 2018 cohort and 2025 for the 2019 cohort). Every student receives a zero or one; Year-1 entry is not imposed as a condition.')
+
+conditional_defs <- data.table(
+  outcome_key=c('highered_retention','highpay_retention','highinst_retention'),
+  outcome=c('persist_from_entry_y1','remain_high_premium_field_y1',
+    'remain_high_premium_institution_y1'),
+  outcome_label=c('Still enrolled','Still in high-premium field',
+    'Still at high-premium institution'))
+write_cross_table(conditional_defs, 'year2_retention_conditional_cross_va',
+  'School value added and retention among entry-year participants',
+  'tab:va-higher-ed-year2-retention-conditional-cross-va',
+  'Columns indicate participation in the academic year after entry, conditional on entry-year participation in the corresponding category. Nonentrants are excluded rather than coded zero. Because entry is itself affected by school assignment, conditioning on entry selects on a post-assignment outcome; these estimates therefore describe retention among observed entrants and should not be interpreted as the same unconditional causal estimand as Table~\\ref{tab:va-higher-ed-year2-status-cross-va}.')
 print(res)
 print(res_y2)
 print(cross_results)
