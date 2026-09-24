@@ -11,7 +11,7 @@ OUTCOMES = [('z_year_math_max','Math VA'),('z_year_leng_max','Verbal VA'),
  ('log_program_income_clp_m1','Income VA'),('admission_exam_taker','Exam VA'),
  ('any_postulacion','Fin. aid app. VA')]
 ROWS = [('intercept','Intercept (omitted: Municipal, no tracks, 100--249 students)','base'),
- ('admin_1',r'Corporaci\'on Municipal','admin'),('admin_3','Private subsidized','admin'),
+ ('admin_1','Municipal corporation','admin'),('admin_3','Private subsidized','admin'),
  ('admin_4','Fully private','admin'),('admin_5','Delegated administration','admin'),
  ('admin_6','SLEP','admin'),('tp','Technical-professional','track'),('artistic','Artistic','track')]
 ROWS += [('size_under100','Fewer than 100 students','size'),
