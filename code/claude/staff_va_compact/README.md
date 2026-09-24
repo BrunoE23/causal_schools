@@ -51,10 +51,12 @@ coverage, source md5) and `output/tables/staff_va_compact[_allschools]/`
 ## Role-symmetric expanded version
 
 `04_fit_all_roles_table.py` preserves the compact-table estimator and sample,
-but reports the same seven measures for teachers, counselors, and leadership:
-staff per 100 students, share under age 35, high-premium undergraduate degree
-share, any high-premium credential share, role-specific qualification share,
-role-specific master's degree share, and the balanced qualification index.
+but reports the same measures for teachers, counselors, and leadership: staff
+counts per 100 students in three mutually exclusive age groups (under 35,
+35--49, and 50+), high-premium undergraduate degree share, any high-premium
+credential share, role-specific qualification share, role-specific master's
+degree share, and the balanced qualification index. Total staff is omitted
+from this expanded regression because it is the sum of the three age counts.
 By default it excludes peer achievement and writes to
 `data/clean/staff_va_all_roles_no_peers/` and
 `output/tables/staff_va_all_roles_no_peers/`. Running with

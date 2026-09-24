@@ -22,22 +22,25 @@ src = src.replace(
 start = src.index("FOCAL = [")
 end = src.index("# Track dummies", start)
 focal = r'''FOCAL = [
-    ('teacher__per100_enrolled', 'Staff per 100 students', 'Teachers'),
-    ('teacher__age_under35_share', 'Share under age 35', 'Teachers'),
+    ('teacher__age_under35_per100', 'Staff under age 35 per 100 students', 'Teachers'),
+    ('teacher__age_35_49_per100', 'Staff ages 35--49 per 100 students', 'Teachers'),
+    ('teacher__age_50plus_per100', 'Staff age 50+ per 100 students', 'Teachers'),
     ('teacher__UG_HIGH_PREMIUM', 'High-premium undergraduate degree share', 'Teachers'),
     ('teacher__ANY_HIGH_PREMIUM', 'Any high-premium credential share', 'Teachers'),
     ('teacher__ROLE_SPECIFIC_QUALIFICATION', 'Role-specific qualification share', 'Teachers'),
     ('teacher__ROLE_SPECIFIC_MAGISTER', 'Role-specific master degree share', 'Teachers'),
     ('teacher__balanced_index', 'Qualification index', 'Teachers'),
-    ('counselor__per100_enrolled', 'Staff per 100 students', 'Counselors'),
-    ('counselor__age_under35_share', 'Share under age 35', 'Counselors'),
+    ('counselor__age_under35_per100', 'Staff under age 35 per 100 students', 'Counselors'),
+    ('counselor__age_35_49_per100', 'Staff ages 35--49 per 100 students', 'Counselors'),
+    ('counselor__age_50plus_per100', 'Staff age 50+ per 100 students', 'Counselors'),
     ('counselor__UG_HIGH_PREMIUM', 'High-premium undergraduate degree share', 'Counselors'),
     ('counselor__ANY_HIGH_PREMIUM', 'Any high-premium credential share', 'Counselors'),
     ('counselor__ROLE_SPECIFIC_QUALIFICATION', 'Role-specific qualification share', 'Counselors'),
     ('counselor__ROLE_SPECIFIC_MAGISTER', 'Role-specific master degree share', 'Counselors'),
     ('counselor__balanced_index', 'Qualification index', 'Counselors'),
-    ('leadership__per100_enrolled', 'Staff per 100 students', 'Leadership'),
-    ('leadership__age_under35_share', 'Share under age 35', 'Leadership'),
+    ('leadership__age_under35_per100', 'Staff under age 35 per 100 students', 'Leadership'),
+    ('leadership__age_35_49_per100', 'Staff ages 35--49 per 100 students', 'Leadership'),
+    ('leadership__age_50plus_per100', 'Staff age 50+ per 100 students', 'Leadership'),
     ('leadership__UG_HIGH_PREMIUM', 'High-premium undergraduate degree share', 'Leadership'),
     ('leadership__ANY_HIGH_PREMIUM', 'Any high-premium credential share', 'Leadership'),
     ('leadership__ROLE_SPECIFIC_QUALIFICATION', 'Role-specific qualification share', 'Leadership'),
@@ -54,9 +57,9 @@ if not INCLUDE_PEERS:
 src = src[:start] + focal + src[end:]
 
 if INCLUDE_PEERS:
-    partition = "STAFF = feats[:21]; SCHOOL = feats[21:23]; TRACK = feats[23:]"
+    partition = "STAFF = feats[:24]; SCHOOL = feats[24:26]; TRACK = feats[26:]"
 else:
-    partition = "STAFF = feats[:21]; SCHOOL = feats[21:22]; TRACK = feats[22:]"
+    partition = "STAFF = feats[:24]; SCHOOL = feats[24:25]; TRACK = feats[25:]"
 src = src.replace("STAFF = feats[:8]; SCHOOL = feats[8:10]; TRACK = feats[10:]", partition)
 src = src.replace(
     "s = pd.read_csv(P['staff_idx'], usecols=['RBD', 'ROLE', 'balanced_index'])\n"
@@ -78,14 +81,35 @@ src = src.replace(
 # not to this matched-variable table.
 tier_start = src.index("# Orientador birth-cohort tiers")
 tier_end = src.index("# Peer composition", tier_start)
-src = src[:tier_start] + src[tier_end:]
+age_code = r'''# Mean annual staff counts in mutually exclusive age categories. Birth dates
+# are observed for essentially all roster members; inactive school-years count
+# as zero, while genuinely unknown roster years remain missing.
+age_path = 'data/clean/staff_lasso_va/staff_age_school_year.csv'
+P['age_year'] = age_path
+md5['age_year'] = hashlib.md5(open(age_path, 'rb').read()).hexdigest()
+age = pd.read_csv(age_path)
+age_groups = [('under35', 'age_under35_share'), ('35_49', 'age_35_49_share'),
+              ('50plus', 'age_50plus_share')]
+for suffix, share in age_groups:
+    age[suffix] = age.N_VALID_AGE * age[share]
+    age.loc[age.N_VALID_AGE.eq(0), suffix] = 0.0
+age_mean = age.groupby(['ROLE', 'RBD'])[[a for a, _ in age_groups]].mean()
+for role in ('teacher', 'counselor', 'leadership'):
+    den = x.hs_enrolled_est.where(x.hs_enrolled_est > 0)
+    for suffix, _ in age_groups:
+        counts = x.RBD.map(age_mean.loc[role, suffix])
+        x[f'{role}__age_{suffix}_per100'] = 100 * counts / den
+
+'''
+src = src[:tier_start] + age_code + src[tier_end:]
 
 rows_start = src.index("PAPER_ROWS = {")
 rows_end = src.index("BLOCKS =", rows_start)
 row_lines = ["PAPER_ROWS = {"]
 labels = {
-    'per100_enrolled': 'Staff per 100 students',
-    'age_under35_share': 'Share under age 35',
+    'age_under35_per100': 'Under age 35 per 100 students',
+    'age_35_49_per100': 'Ages 35--49 per 100 students',
+    'age_50plus_per100': 'Age 50+ per 100 students',
     'UG_HIGH_PREMIUM': 'High-premium undergraduate degree share',
     'ANY_HIGH_PREMIUM': 'Any high-premium credential share',
     'ROLE_SPECIFIC_QUALIFICATION': 'Role-specific qualification share',
