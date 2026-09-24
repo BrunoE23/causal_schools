@@ -43,6 +43,8 @@ for outcome, _ in OUTCOMES:
     keep = np.isfinite(y) & (np.exp(x.school__log_va_students.to_numpy()) >= 100 - 1e-6) & (code != 4)
     yz = (y[keep] - np.mean(y[keep])) / np.std(y[keep], ddof=1)
     g = code[keep]
+    students = np.exp(x.loc[keep, 'school__log_va_students'].to_numpy())
+    student_total = students.sum()
     assert len(yz) == 2058 and set(np.unique(g)) == {1, 2, 3, 5, 6}
     stats = {}
     for k, _ in GROUPS:
@@ -58,7 +60,8 @@ for outcome, _ in OUTCOMES:
         p = math.erfc(abs(estimate / se) / math.sqrt(2))
         star = '***' if p < .01 else '**' if p < .05 else '*' if p < .10 else ''
         rows.append(dict(outcome=outcome, admin=k, label=label, estimate=estimate,
-                         se=se, p=p, stars=star, schools=n))
+                         se=se, p=p, stars=star, schools=n,
+                         student_share=students[g == k].sum() / student_total))
 
 r = pd.DataFrame(rows)
 r.to_csv(OUT / 'admin_type_va.csv', index=False)
@@ -73,24 +76,28 @@ lines = [
     r'\begin{table}[!htbp]', r'\centering',
     r'\caption{School value added by administration type}',
     r'\label{tab:admin-type-va}', r'\resizebox{\textwidth}{!}{%',
-    r'\begin{tabular}{l' + 'c' * nc + 'r}', r'\toprule',
-    ' & ' + ' & '.join(f'({j + 1})' for j in range(nc)) + r' & Schools \\',
-    ' & ' + ' & '.join(label for _, label in OUTCOMES) + r' & \\', r'\midrule',
+    r'\begin{tabular}{lrc' + 'c' * nc + '}', r'\toprule',
+    ' & $N$ schools & Share of students & ' + ' & '.join(f'({j + 1})' for j in range(nc)) + r' \\',
+    ' & & & ' + ' & '.join(label for _, label in OUTCOMES) + r' \\', r'\midrule',
 ]
 for k, label in GROUPS:
     if k == 1:
-        lines.append(r'\multicolumn{' + str(nc + 2) +
+        lines.append(r'\multicolumn{' + str(nc + 3) +
                      r'}{l}{\textit{Differences relative to Municipal}} \\')
     z = r[r.admin.eq(k)].set_index('outcome').loc[cols]
     n = int(z.schools.iloc[0])
-    lines.append(label + ' & ' + ' & '.join(cell(z.loc[o]) for o in cols) + f' & {n:,}' + r' \\')
-    lines.append(' & ' + ' & '.join(f'({z.loc[o, "se"]:.3f})' for o in cols) + r' & \\')
+    share = z.student_share.iloc[0]
+    share_tex = f'{100 * share:.1f}\\%'
+    lines.append(label + f' & {n:,} & {share_tex} & ' +
+                 ' & '.join(cell(z.loc[o]) for o in cols) + r' \\')
+    lines.append(' & & & ' + ' & '.join(f'({z.loc[o, "se"]:.3f})' for o in cols) + r' \\')
 lines += [
     r'\bottomrule', r'\end{tabular}}', r'\par\medskip', r'\footnotesize',
     r'\begin{minipage}{\textwidth}',
     'Notes: Municipal denotes the Municipal DAEM category. The first row reports its mean Empirical-Bayes value added. '
     'The remaining rows report differences relative to that group. Each value-added measure is standardized '
     'across the 2,058 public and private-subsidized schools with at least 100 students in the value-added sample. '
+    'Student shares use the pooled number of students contributing to the value-added estimates in those schools. '
     'Standard errors in parentheses use the sampling variance of the corresponding group mean or difference in means. '
     'The table is descriptive and adds no controls beyond those used to construct value added; it does not adjust administration-type comparisons for region. '
     'Standard errors describe dispersion across schools and do not incorporate estimation error in school value added. '
