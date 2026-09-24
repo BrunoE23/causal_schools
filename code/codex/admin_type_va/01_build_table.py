@@ -54,7 +54,10 @@ L=[r'\begin{table}[!htbp]',r'\centering',r'\caption{School value added by admini
  ' & & & '+' & '.join(z for _,z in OUTCOMES)+r' \\',r'\midrule']
 prev=None
 for feature,label,block in ROWS:
-    if prev=='base' or (block=='track' and prev!='track'): L.append(r'\midrule')
+    if prev=='base':
+        L.append(r'\multicolumn{'+str(nc+3)+r'}{l}{\textit{Administration type}} \\')
+    elif block=='track' and prev!='track':
+        L.append(r'\multicolumn{'+str(nc+3)+r'}{l}{\textit{School tracks}} \\')
     z=r[r.feature.eq(feature)].set_index('outcome').loc[cols]; n=int(z.schools.iloc[0]); sh=z.student_share.iloc[0]
     share_text = r'$<0.1\%$' if 0 < sh < .001 else f'{100*sh:.1f}\\%'
     L.append(label+f' & {n:,} & {share_text} & '+' & '.join(cell(z.loc[o]) for o in cols)+r' \\')
