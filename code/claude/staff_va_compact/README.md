@@ -47,3 +47,13 @@ Run from repo root (Python 3 with numpy/pandas; R unavailable in this session):
 Outputs: `data/clean/staff_va_compact[_allschools]/` (coefficients, model summary,
 coverage, source md5) and `output/tables/staff_va_compact[_allschools]/`
 (`staff_va_compact.tex`, `.csv`).
+
+## Role-symmetric expanded version
+
+`04_fit_all_roles_table.py` preserves the compact-table estimator and sample,
+but reports the same seven measures for teachers, counselors, and leadership:
+staff per 100 students, share under age 35, high-premium undergraduate degree
+share, any high-premium credential share, role-specific qualification share,
+role-specific master's degree share, and the balanced qualification index.
+It writes separately to `data/clean/staff_va_all_roles/` and
+`output/tables/staff_va_all_roles/`, leaving the compact table unchanged.
