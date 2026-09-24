@@ -20,11 +20,11 @@ OUTCOMES = [
     ('any_postulacion', 'Fin. aid app. VA'),
 ]
 GROUPS = [
-    (2, 'Municipal DAEM average'),
-    (1, r'Corporaci\'on Municipal $-$ Municipal DAEM'),
-    (3, r'Private subsidized $-$ Municipal DAEM'),
-    (5, r'Delegated administration $-$ Municipal DAEM'),
-    (6, r'SLEP $-$ Municipal DAEM'),
+    (2, 'Municipal'),
+    (1, r'Corporaci\'on Municipal'),
+    (3, r'Private subsidized'),
+    (5, r'Delegated administration'),
+    (6, r'SLEP'),
 ]
 
 x = pd.read_csv(PRED).sort_values('RBD').reset_index(drop=True)
@@ -78,6 +78,9 @@ lines = [
     ' & ' + ' & '.join(label for _, label in OUTCOMES) + r' & \\', r'\midrule',
 ]
 for k, label in GROUPS:
+    if k == 1:
+        lines.append(r'\multicolumn{' + str(nc + 2) +
+                     r'}{l}{\textit{Differences relative to Municipal}} \\')
     z = r[r.admin.eq(k)].set_index('outcome').loc[cols]
     n = int(z.schools.iloc[0])
     lines.append(label + ' & ' + ' & '.join(cell(z.loc[o]) for o in cols) + f' & {n:,}' + r' \\')
@@ -85,12 +88,13 @@ for k, label in GROUPS:
 lines += [
     r'\bottomrule', r'\end{tabular}}', r'\par\medskip', r'\footnotesize',
     r'\begin{minipage}{\textwidth}',
-    'Notes: The first row reports the mean Empirical-Bayes value added among Municipal DAEM schools. '
+    'Notes: Municipal denotes the Municipal DAEM category. The first row reports its mean Empirical-Bayes value added. '
     'The remaining rows report differences relative to that group. Each value-added measure is standardized '
     'across the 2,058 public and private-subsidized schools with at least 100 students in the value-added sample. '
     'Standard errors in parentheses use the sampling variance of the corresponding group mean or difference in means. '
     'The table is descriptive and adds no controls beyond those used to construct value added; it does not adjust administration-type comparisons for region. '
     'Standard errors describe dispersion across schools and do not incorporate estimation error in school value added. '
+    'Stars in the first row test equality to zero; stars in subsequent rows test equality to the Municipal mean. '
     r'* $p<0.10$, ** $p<0.05$, *** $p<0.01$.',
     r'\end{minipage}', r'\end{table}'
 ]
