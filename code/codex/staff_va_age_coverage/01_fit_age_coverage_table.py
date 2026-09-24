@@ -46,14 +46,11 @@ focal = r'''FOCAL = [
     ('leadership__young_UG_HIGH_PREMIUM', 'Leaders: high-premium undergraduate share', 'SIES'),
     ('leadership__young_ANY_HIGH_PREMIUM', 'Leaders: any high-premium credential share', 'SIES'),
     ('leadership__young_ROLE_SPECIFIC_QUALIFICATION', 'Leaders: role-specific qualification share', 'SIES'),
-    ('leadership__young_ROLE_SPECIFIC_MAGISTER', 'Leaders: role-specific master share', 'SIES'),
-    ('school__log_enrolled', 'Log students enrolled', 'Size'),
-    ('school__has_tp', 'Technical-professional offering (0/1)', 'Track'),
-    ('school__has_artistic', 'Artistic offering (0/1; 2 schools)', 'Track')]
+    ('leadership__young_ROLE_SPECIFIC_MAGISTER', 'Leaders: role-specific master share', 'SIES')]
 '''
 src = src[:start] + focal + src[end:]
 src = src.replace('STAFF = feats[:8]; SCHOOL = feats[8:10]; TRACK = feats[10:]',
-                  'STAFF = feats[:27]; SCHOOL = feats[27:28]; TRACK = feats[28:]')
+                  'STAFF = feats; SCHOOL = []; TRACK = []')
 
 # Replace the qualification-index merge with all-age directory measures.
 old = """s = pd.read_csv(P['staff_idx'], usecols=['RBD', 'ROLE', 'balanced_index'])
@@ -125,11 +122,30 @@ for raw_role, role in role_map.items():
 '''
 src = src[:tier_start] + measurement + src[tier_end:]
 
+# Table 6 controls, suppressed from the displayed rows: administration type
+# (Municipal DAEM omitted), school-size categories (100--249 omitted), and
+# curricular tracks (no track omitted). Geography is deliberately excluded.
+control_code = r'''x['school__size_under100'] = (x.hs_enrolled_est < 100).astype(float)
+x['school__size_250_499'] = ((x.hs_enrolled_est >= 250) & (x.hs_enrolled_est < 500)).astype(float)
+x['school__size_500_plus'] = (x.hs_enrolled_est >= 500).astype(float)
+x['school__dependency_1'] = (x[[f'school__dependency_{k}' for k in (2, 3, 4, 5, 6)]].sum(axis=1) == 0).astype(float)
+context = ['school__dependency_1', 'school__dependency_3', 'school__dependency_5',
+           'school__dependency_6', 'school__size_under100', 'school__size_250_499',
+           'school__size_500_plus', 'school__has_tp', 'school__has_artistic']
+'''
+old_context = "context = \\\n    [c for c in x.columns if c.startswith('school__dependency_') or c.startswith('school__region_')]"
+assert old_context in src
+src = src.replace(old_context, control_code.rstrip())
+
 # No peer row in this version; the main paper currently omits peers.
 src = src.replace("    PEER = ['school__composition_math_mean']; SIZE = [f for f in SCHOOL if f not in PEER]",
                   "    PEER = []; SIZE = SCHOOL")
 src = src.replace("                 ('R2_STAFF', r'$R^2$: adding staff'), ('R2_FULL', r'$R^2$: adding peers (full model)')):",
                   "                 ('R2_FULL', r'$R^2$: adding staff (full model)')):")
+src = src.replace("for spec, fs in (('controls', []), ('sizetrack', SIZE + TRACK), ('staff', SIZE + TRACK + STAFF), ('full', feats)):",
+                  "for spec, fs in (('controls', []), ('sizetrack', []), ('staff', feats), ('full', feats)):")
+src = src.replace("('R2_SIZETRACK', r'$R^2$: adding size and track'),\n                 ('R2_FULL', r'$R^2$: adding staff (full model)')):",
+                  "('R2_FULL', r'$R^2$: adding staff (full model)')):")
 
 rows_start = src.index('PAPER_ROWS = {')
 rows_end = src.index('BLOCKS =', rows_start)
@@ -160,17 +176,14 @@ paper_rows = r'''PAPER_ROWS = {
     'leadership__young_UG_HIGH_PREMIUM': 'Leadership: high-premium undergraduate share',
     'leadership__young_ANY_HIGH_PREMIUM': 'Leadership: any high-premium credential share',
     'leadership__young_ROLE_SPECIFIC_QUALIFICATION': 'Leadership: role-specific qualification share',
-    'leadership__young_ROLE_SPECIFIC_MAGISTER': "Leadership: role-specific master's share",
-    'school__log_enrolled': 'Log students enrolled',
-    'school__has_tp': 'Technical-professional track (0/1)'}
+    'leadership__young_ROLE_SPECIFIC_MAGISTER': "Leadership: role-specific master's share"}
 '''
 src = src[:rows_start] + paper_rows + src[rows_end:]
 src = src.replace(
     "BLOCKS = {'Teachers': 'Teachers', 'Orientadores': 'Counselors (orientadores)', 'Leadership': 'School leadership',\n"
     "          'Size': 'Peers, size and track', 'Resources': None, 'Track': None}",
     "BLOCKS = {'Age': 'Staffing by age', 'Directory': 'Qualifications reported in the staff directory (all staff)',\n"
-    "          'SIES': 'Detailed linked-degree measures (staff born in 1989 or later)',\n"
-    "          'Size': 'School size and track', 'Track': None}")
+    "          'SIES': 'Detailed linked-degree measures (staff born in 1989 or later)'}")
 src = src.replace('School staff, peers, size and track, and school value added',
                   'Staff measurement coverage and school value added')
 src = src.replace('tab:staff-va', 'tab:staff-va-age-coverage')
@@ -186,11 +199,14 @@ replacement = """      'Staff measures average 2018--2024 administrative records
       'later; the SIES register begins in 2007, when this cohort was at most 18 years old. Schools without '
       'younger staff in a role have a missing detailed-credential share and enter through the corresponding '
       'missing-value indicator. In the estimation sample, these detailed measures are observed for 2,045 schools '
-      'for teachers, 214 for counselors, and 314 for leadership. All regressions control for dependency, region '
-      'and an artistic-track indicator, '
-      'and include indicators for missing regressors, absent roles and incomplete staff rosters. '
+      'for teachers, 214 for counselors, and 314 for leadership. All regressions include the administration-type, '
+      'school-size-category, and curricular-track indicators reported in Table~\\\\ref{tab:admin-type-va}; these '
+      'controls are not displayed. Geography is not included. The sample excludes fully private schools and '
+      'schools with fewer than 100 students in the pooled value-added sample. Regressions also include indicators '
+      'for missing regressors, absent roles and incomplete staff rosters. '
 """
 src = src[:i] + replacement + src[j2 + len(note_end):]
+src = src.replace("; the technical-professional coefficient is the difference between schools with and without that track. ", ". ")
 src = src.replace("      'in parentheses. * $p<0.10$", 
                   "      'Heteroskedasticity-robust (HC1) standard errors in parentheses. * $p<0.10$")
 src = src.replace("'staff_va_compact.tex'", "'staff_va_age_coverage.tex'")
@@ -204,4 +220,8 @@ tex_path = Path(OUT_TAB) / 'staff_va_age_coverage.tex'
 table_tex = tex_path.read_text(encoding='utf-8')
 table_tex = table_tex.replace(r'\resizebox{\textwidth}{!}{%',
                               r'\resizebox{0.78\textwidth}{!}{%')
+table_tex = table_tex.replace(
+    '; the technical-professional coefficient is the difference between schools with and without that track.',
+    '.')
 tex_path.write_text(table_tex, encoding='utf-8')
+
