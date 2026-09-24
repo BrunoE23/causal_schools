@@ -229,7 +229,7 @@ writeLines(cross_tex, file.path(out_dir, 'persistence_second_year_cross_va.tex')
 # retention conditional on entry-year participation. The latter conditions on
 # a post-assignment outcome and is therefore presented as a selected-entrant
 # comparison rather than as the main causal estimand.
-write_cross_table <- function(defs, stem, caption, label, note) {
+write_cross_table <- function(defs, stem, caption, label, group_header, note) {
   grid <- CJ(spec = specs$spec, outcome_key = defs$outcome_key, unique = TRUE)
   grid <- merge(grid, defs, by = 'outcome_key', sort = FALSE)
   rr <- rbindlist(lapply(seq_len(nrow(grid)), function(i) {
@@ -256,6 +256,8 @@ write_cross_table <- function(defs, stem, caption, label, note) {
   tex2 <- c('\\begin{table}[!htbp]','\\centering',paste0('\\caption{',caption,'}'),
     paste0('\\label{',label,'}'),'\\begin{threeparttable}',
     '\\begin{tabular}{lccc}','\\toprule',
+    paste0(' & \\multicolumn{3}{c}{', group_header, '} \\\\'),
+    '\\cmidrule(lr){2-4}',
     paste0(' & ', paste(defs$outcome_label, collapse=' & '), ' \\\\'),
     '\\midrule',lines,'\\bottomrule','\\end{tabular}',
     '\\begin{tablenotes}[flushleft]','\\footnotesize',paste0('\\item Notes: ',note,
@@ -267,21 +269,23 @@ write_cross_table <- function(defs, stem, caption, label, note) {
 year2_defs <- data.table(
   outcome_key=c('highered_y2','highpay_y2','highinst_y2'),
   outcome=c('he_enrolled_y1','high_premium_field_y1','high_premium_institution_y1'),
-  outcome_label=c('Enrolled in higher ed.','In high-premium field','At high-premium institution'))
+  outcome_label=c('Higher-ed enrollment','High-premium field','High-premium institution'))
 write_cross_table(year2_defs, 'year2_status_cross_va',
   'School value added and higher-education status one academic year after entry',
   'tab:va-higher-ed-year2-status-cross-va',
+  'Unconditional Year-2 status',
   'Columns are unconditional indicators for status in the academic year after expected entry (2024 for the 2018 cohort and 2025 for the 2019 cohort). Every student receives a zero or one; Year-1 entry is not imposed as a condition.')
 
 conditional_defs <- data.table(
   outcome_key=c('highered_retention','highpay_retention','highinst_retention'),
   outcome=c('persist_from_entry_y1','remain_high_premium_field_y1',
     'remain_high_premium_institution_y1'),
-  outcome_label=c('Still enrolled','Still in high-premium field',
-    'Still at high-premium institution'))
+  outcome_label=c('Higher-ed enrollment','High-premium field',
+    'High-premium institution'))
 write_cross_table(conditional_defs, 'year2_retention_conditional_cross_va',
   'School value added and retention among entry-year participants',
   'tab:va-higher-ed-year2-retention-conditional-cross-va',
+  'Conditional retention among Year-1 entrants',
   'Columns indicate participation in the academic year after entry, conditional on entry-year participation in the corresponding category. Nonentrants are excluded rather than coded zero. Because entry is itself affected by school assignment, conditioning on entry selects on a post-assignment outcome; these estimates therefore describe retention among observed entrants and should not be interpreted as the same unconditional causal estimand as Table~\\ref{tab:va-higher-ed-year2-status-cross-va}.')
 print(res)
 print(res_y2)
