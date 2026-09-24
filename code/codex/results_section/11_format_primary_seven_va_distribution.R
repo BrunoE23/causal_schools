@@ -11,6 +11,7 @@ order_keys <- c('math','language','exam','highinst','highpay','program_income_fu
 x <- x[match(order_keys,outcome_key)]
 labels <- c('Math achievement','Verbal achievement','Admission exam taken','High-premium institution','High-premium field','Log projected income','Financial aid application')
 fmt <- function(z) sprintf('%.3f',z)
+fmt_mean <- function(z, binary=FALSE) if(binary) sprintf('%.1f',100*z) else sprintf('%.3f',z)
 fmt_n <- function(z) format(z,big.mark=',',trim=TRUE,scientific=FALSE)
 weighted_sd <- function(value, weight) {
   keep <- is.finite(value) & is.finite(weight) & weight > 0
@@ -55,24 +56,28 @@ for (i in seq_len(nrow(x))) {
 }
 fwrite(x,input_path)
 
+binary <- x$outcome_key %in% c('exam','highinst','highpay','postulacion')
+units <- ifelse(binary,'pp',ifelse(x$outcome_key=='program_income_full','log pts.','SD'))
 rows <- unlist(lapply(seq_len(nrow(x)),function(i){
-  line <- paste0(labels[i],' & ',fmt_n(x$n_students[i]),' & ',fmt(x$sample_mean[i]),' & ',fmt(x$sample_sd[i]),
-    ' & ',fmt(x$p10[i]),' & ',fmt(x$p50[i]),' & ',fmt(x$p90[i]),' & ',fmt(x$eb_va_sd[i]),
-    ' & ',fmt(x$unshrunk_va_sd[i]),' & ',fmt(x$debiased_sd[i]),' \\\\')
+  scale <- if(binary[i]) 100 else 1
+  line <- paste0(labels[i],' & ',units[i],' & ',fmt_n(x$n_students[i]),' & ',
+    fmt_mean(x$sample_mean[i],binary[i]),' & ',fmt_mean(x$sample_sd[i],binary[i]),
+    ' & ',fmt(scale*x$eb_va_sd[i]),' & ',fmt(scale*(x$p90[i]-x$p10[i])),
+    ' & ',fmt(scale*x$unshrunk_va_sd[i]),' & ',fmt(scale*x$debiased_sd[i]),' \\\\')
   if(i %in% c(2L,3L)) c(line,'\\addlinespace[2pt]') else line
 }))
 tex <- c(
   '\\begin{table}[!htbp]','\\centering','\\begin{threeparttable}',
-  '\\caption{Distribution of student outcomes and school value added}',
+  '\\caption{Scale of student outcomes and dispersion of school value added}',
   '\\label{tab:school-va-distribution}',
-  '\\footnotesize','\\setlength{\\tabcolsep}{1.5pt}',
-  '\\begin{tabular}{lccc cccc cc}','\\toprule',
-  ' & \\multicolumn{3}{c}{Student outcome} & \\multicolumn{4}{c}{EB posterior school VA} & \\multicolumn{1}{c}{Unshrunk VA} & \\multicolumn{1}{c}{RSS latent VA} \\\\',
-  '\\cmidrule(lr){2-4} \\cmidrule(lr){5-8} \\cmidrule(lr){9-9} \\cmidrule(lr){10-10}',
-  'Outcome & $N$ & Mean & SD & P10 & P50 & P90 & SD & SD & SD \\\\',
+  '\\scriptsize','\\setlength{\\tabcolsep}{2pt}',
+  '\\begin{tabular}{llrcc cccc}','\\toprule',
+  ' & & & \\multicolumn{2}{c}{Student outcome} & \\multicolumn{4}{c}{School VA dispersion} \\\\',
+  '\\cmidrule(lr){4-5} \\cmidrule(lr){6-9}',
+  'Outcome & Units & $N$ & Mean & SD & EB SD & EB 90--10 & Unshrunk SD & RSS SD \\\\',
   '\\midrule',rows,'\\bottomrule','\\end{tabular}',
   '\\begin{tablenotes}[flushleft]','\\footnotesize',
-  '\\item Notes: The student-outcome columns report moments for the outcome-specific samples. The EB block reports the student-weighted distribution of EB-shrunken, student-centered school value added; schools are weighted by the number of students in the corresponding pooled value-added regression. Unshrunk VA is the student-weighted dispersion of the school fixed-effect estimates supplied to the EB shrinkage step. The RSS column reports the standard deviation of latent school effects estimated from cross-cohort products and uses the same outcome-specific sample rule and student-count weights. All VA columns use the unified R-based pooled VA pipeline. Math and verbal are measured in admission-test standard deviations, admission-exam taking, high-premium institution, high-premium field, and financial-aid application are binary, and projected income is measured in logs.',
+  '\\item Notes: Each row uses the units shown in column 2: admission-test standard deviations (SD) for math and verbal achievement, percentage points (pp) for binary outcomes, and log points for projected income. The first block reports moments of the student outcome in the outcome-specific sample. The EB block reports the student-weighted standard deviation and 90--10 percentile gap of EB-shrunken, student-centered school value added. Schools are weighted by their number of students in the corresponding pooled value-added regression. Unshrunk VA is the student-weighted standard deviation of the school fixed-effect estimates supplied to the EB shrinkage step. RSS latent VA is the standard deviation of latent school effects estimated from cross-cohort products using the same sample rule and weights. All VA columns use the unified R-based pooled VA pipeline.',
   '\\end{tablenotes}','\\end{threeparttable}','\\end{table}')
 writeLines(tex,output_path)
 message('Wrote: ',output_path)

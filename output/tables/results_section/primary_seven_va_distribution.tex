@@ -1,30 +1,30 @@
 \begin{table}[!htbp]
 \centering
 \begin{threeparttable}
-\caption{Distribution of student outcomes and school value added}
+\caption{Scale of student outcomes and dispersion of school value added}
 \label{tab:school-va-distribution}
-\footnotesize
-\setlength{\tabcolsep}{1.5pt}
-\begin{tabular}{lccc cccc cc}
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\begin{tabular}{llrcc cccc}
 \toprule
- & \multicolumn{3}{c}{Student outcome} & \multicolumn{4}{c}{EB posterior school VA} & \multicolumn{1}{c}{Unshrunk VA} & \multicolumn{1}{c}{RSS latent VA} \\
-\cmidrule(lr){2-4} \cmidrule(lr){5-8} \cmidrule(lr){9-9} \cmidrule(lr){10-10}
-Outcome & $N$ & Mean & SD & P10 & P50 & P90 & SD & SD & SD \\
+ & & & \multicolumn{2}{c}{Student outcome} & \multicolumn{4}{c}{School VA dispersion} \\
+\cmidrule(lr){4-5} \cmidrule(lr){6-9}
+Outcome & Units & $N$ & Mean & SD & EB SD & EB 90--10 & Unshrunk SD & RSS SD \\
 \midrule
-Math achievement & 561,977 & 0.043 & 1.002 & -0.196 & -0.062 & 0.300 & 0.223 & 0.256 & 0.256 \\
-Verbal achievement & 569,047 & 0.049 & 0.989 & -0.173 & -0.021 & 0.202 & 0.151 & 0.187 & 0.187 \\
+Math achievement & SD & 561,977 & 0.043 & 1.002 & 0.223 & 0.496 & 0.256 & 0.256 \\
+Verbal achievement & SD & 569,047 & 0.049 & 0.989 & 0.151 & 0.375 & 0.187 & 0.187 \\
 \addlinespace[2pt]
-Admission exam taken & 757,999 & 0.753 & 0.431 & -0.148 & 0.028 & 0.106 & 0.103 & 0.115 & 0.115 \\
+Admission exam taken & pp & 757,999 & 75.3 & 43.1 & 10.347 & 25.415 & 11.537 & 11.472 \\
 \addlinespace[2pt]
-High-premium institution & 757,999 & 0.142 & 0.349 & -0.113 & -0.031 & 0.180 & 0.121 & 0.134 & 0.134 \\
-High-premium field & 715,740 & 0.347 & 0.476 & -0.061 & -0.006 & 0.065 & 0.056 & 0.084 & 0.086 \\
-Log projected income & 757,999 & 13.893 & 0.522 & -0.066 & -0.004 & 0.071 & 0.055 & 0.086 & 0.085 \\
-Financial aid application & 931,547 & 0.757 & 0.429 & -0.094 & 0.015 & 0.074 & 0.078 & 0.100 & 0.100 \\
+High-premium institution & pp & 757,999 & 14.2 & 34.9 & 12.146 & 29.342 & 13.447 & 13.449 \\
+High-premium field & pp & 715,740 & 34.7 & 47.6 & 5.579 & 12.561 & 8.448 & 8.562 \\
+Log projected income & log pts. & 757,999 & 13.893 & 0.522 & 0.055 & 0.136 & 0.086 & 0.085 \\
+Financial aid application & pp & 931,547 & 75.7 & 42.9 & 7.771 & 16.746 & 9.988 & 9.962 \\
 \bottomrule
 \end{tabular}
 \begin{tablenotes}[flushleft]
 \footnotesize
-\item Notes: The student-outcome columns report moments for the outcome-specific samples. The EB block reports the student-weighted distribution of EB-shrunken, student-centered school value added; schools are weighted by the number of students in the corresponding pooled value-added regression. Unshrunk VA is the student-weighted dispersion of the school fixed-effect estimates supplied to the EB shrinkage step. The RSS column reports the standard deviation of latent school effects estimated from cross-cohort products and uses the same outcome-specific sample rule and student-count weights. All VA columns use the unified R-based pooled VA pipeline. Math and verbal are measured in admission-test standard deviations, admission-exam taking, high-premium institution, high-premium field, and financial-aid application are binary, and projected income is measured in logs.
+\item Notes: Each row uses the units shown in column 2: admission-test standard deviations (SD) for math and verbal achievement, percentage points (pp) for binary outcomes, and log points for projected income. The first block reports moments of the student outcome in the outcome-specific sample. The EB block reports the student-weighted standard deviation and 90--10 percentile gap of EB-shrunken, student-centered school value added. Schools are weighted by their number of students in the corresponding pooled value-added regression. Unshrunk VA is the student-weighted standard deviation of the school fixed-effect estimates supplied to the EB shrinkage step. RSS latent VA is the standard deviation of latent school effects estimated from cross-cohort products using the same sample rule and weights. All VA columns use the unified R-based pooled VA pipeline.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
