@@ -55,5 +55,9 @@ but reports the same seven measures for teachers, counselors, and leadership:
 staff per 100 students, share under age 35, high-premium undergraduate degree
 share, any high-premium credential share, role-specific qualification share,
 role-specific master's degree share, and the balanced qualification index.
-It writes separately to `data/clean/staff_va_all_roles/` and
-`output/tables/staff_va_all_roles/`, leaving the compact table unchanged.
+By default it excludes peer achievement and writes to
+`data/clean/staff_va_all_roles_no_peers/` and
+`output/tables/staff_va_all_roles_no_peers/`. Running with
+`INCLUDE_PEERS=1` adds peer grade-4 math to the regression and table and writes
+the corresponding `*_with_peers/` outputs. The two versions have explicit
+file names and leave the compact table unchanged.

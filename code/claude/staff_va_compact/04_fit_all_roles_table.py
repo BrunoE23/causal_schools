@@ -5,15 +5,19 @@ staff selection with the same seven measures for teachers, counselors, and
 school leadership. Outputs are written separately so the compact paper table
 is preserved while the larger candidate set is assessed.
 """
+import os
 from pathlib import Path
+
+INCLUDE_PEERS = os.environ.get('INCLUDE_PEERS', '0') == '1'
+VARIANT = 'with_peers' if INCLUDE_PEERS else 'no_peers'
 
 src = Path(__file__).with_name('01_fit_compact_table.py').read_text(encoding='utf-8')
 
 src = src.replace(
     "OUT_DATA = os.path.join(ROOT, 'data/clean/staff_va_compact' + SUFFIX)\n"
     "OUT_TAB = os.path.join(ROOT, 'output/tables/staff_va_compact' + SUFFIX)",
-    "OUT_DATA = os.path.join(ROOT, 'data/clean/staff_va_all_roles' + SUFFIX)\n"
-    "OUT_TAB = os.path.join(ROOT, 'output/tables/staff_va_all_roles' + SUFFIX)")
+    f"OUT_DATA = os.path.join(ROOT, 'data/clean/staff_va_all_roles_{VARIANT}' + SUFFIX)\n"
+    f"OUT_TAB = os.path.join(ROOT, 'output/tables/staff_va_all_roles_{VARIANT}' + SUFFIX)")
 
 start = src.index("FOCAL = [")
 end = src.index("# Track dummies", start)
@@ -44,10 +48,16 @@ focal = r'''FOCAL = [
     ('school__has_tp', 'Technical-professional offering (0/1)', 'Track'),
     ('school__has_artistic', 'Artistic offering (0/1; 2 schools)', 'Track')]
 '''
+if not INCLUDE_PEERS:
+    focal = focal.replace(
+        "    ('school__composition_math_mean', 'Peer grade-4 math (mean)', 'Size'),\n", "")
 src = src[:start] + focal + src[end:]
 
-src = src.replace("STAFF = feats[:8]; SCHOOL = feats[8:10]; TRACK = feats[10:]",
-                  "STAFF = feats[:21]; SCHOOL = feats[21:23]; TRACK = feats[23:]")
+if INCLUDE_PEERS:
+    partition = "STAFF = feats[:21]; SCHOOL = feats[21:23]; TRACK = feats[23:]"
+else:
+    partition = "STAFF = feats[:21]; SCHOOL = feats[21:22]; TRACK = feats[22:]"
+src = src.replace("STAFF = feats[:8]; SCHOOL = feats[8:10]; TRACK = feats[10:]", partition)
 src = src.replace(
     "s = pd.read_csv(P['staff_idx'], usecols=['RBD', 'ROLE', 'balanced_index'])\n"
     "t = s[s.ROLE == 'teacher'].set_index('RBD').balanced_index\n"
@@ -92,8 +102,9 @@ row_lines += [
 src = src[:rows_start] + '\n'.join(row_lines) + src[rows_end:]
 src = src.replace("'Orientadores': 'Counselors (orientadores)'", "'Counselors': 'Counselors (orientadores)'")
 src = src.replace("School staff, peers, size and track, and school value added",
-                  "Role-symmetric school staff correlates of school value added")
-src = src.replace("tab:staff-va", "tab:staff-va-all-roles")
+                  "Role-symmetric school staff correlates of school value added" +
+                  (" (controlling for peers)" if INCLUDE_PEERS else ""))
+src = src.replace("tab:staff-va", "tab:staff-va-all-roles-" + VARIANT.replace('_', '-'))
 src = src.replace("Qualification indices combine ", "The qualification index combines ")
 src = src.replace(
     "Counseling-trained counselors hold a counseling-specific postgraduate or post-degree "
@@ -104,7 +115,16 @@ src = src.replace(
 src = src.replace(
     "      'certificate recorded in SIES graduation records by the staff year. All regressions control for '",
     "      'All regressions control for '")
-src = src.replace("'staff_va_compact.tex'", "'staff_va_all_roles.tex'")
-src = src.replace("'staff_va_compact.csv'", "'staff_va_all_roles.csv'")
+if not INCLUDE_PEERS:
+    src = src.replace(
+        "    PEER = ['school__composition_math_mean']; SIZE = [f for f in SCHOOL if f not in PEER]",
+        "    PEER = []; SIZE = SCHOOL")
+    src = src.replace(
+        "                 ('R2_STAFF', r'$R^2$: adding staff'), ('R2_FULL', r'$R^2$: adding peers (full model)')):",
+        "                 ('R2_FULL', r'$R^2$: adding staff (full model)')):")
+    src = src.replace("All regressions control for dependency, region and an artistic-track indicator,",
+                      "All regressions control for dependency, region and an artistic-track indicator,")
+src = src.replace("'staff_va_compact.tex'", f"'staff_va_all_roles_{VARIANT}.tex'")
+src = src.replace("'staff_va_compact.csv'", f"'staff_va_all_roles_{VARIANT}.csv'")
 
 exec(compile(src, str(Path(__file__).with_name('01_fit_compact_table.py')), 'exec'))
