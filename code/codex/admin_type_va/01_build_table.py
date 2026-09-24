@@ -6,10 +6,11 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[3]
 OUT = ROOT / 'output/tables/admin_type_va'; OUT.mkdir(parents=True, exist_ok=True)
-OUTCOMES = [('z_year_math_max','Math VA'),('z_year_leng_max','Verbal VA'),
- ('high_inst_m1','HP inst. VA'),('high_paying_field_m1','HP field VA'),
- ('log_program_income_clp_m1','Income VA'),('admission_exam_taker','Exam VA'),
- ('any_postulacion','Fin. aid app. VA')]
+OUTCOMES = [('z_year_math_max','Math VA (SD)'),('z_year_leng_max','Verbal VA (SD)'),
+ ('high_inst_m1','HP inst. VA (pp)'),('high_paying_field_m1','HP field VA (pp)'),
+ ('log_program_income_clp_m1','Income VA (log pts.)'),('admission_exam_taker','Exam VA (pp)'),
+ ('any_postulacion','Fin. aid app. VA (pp)')]
+RATE_OUTCOMES = {'high_inst_m1','high_paying_field_m1','admission_exam_taker','any_postulacion'}
 ROWS = [('intercept','Intercept (omitted: Municipal, 100--249 students, no tracks)','base'),
  ('admin_1','Municipal corporation','admin'),('admin_3','Private subsidized','admin'),
  ('admin_4','Fully private','admin'),('admin_5','Delegated administration','admin'),
@@ -41,7 +42,7 @@ out=[]
 for outcome,_ in OUTCOMES:
     y=va[va.outcome.eq(outcome)].set_index('school_rbd').reindex(x.RBD).controlled_value_added_eb_centered_student.to_numpy()
     keep=np.isfinite(y)&x.HS_ENROLLED_EST.gt(0).to_numpy()
-    yy=(y[keep]-y[keep].mean())/y[keep].std(ddof=1); a=admin[keep]; t=tp[keep]; q=artistic[keep]
+    yy=y[keep] * (100 if outcome in RATE_OUTCOMES else 1); a=admin[keep]; t=tp[keep]; q=artistic[keep]
     size=x.loc[keep,'HS_ENROLLED_EST'].to_numpy()
     s0=size<100; s1=(size>=100)&(size<250); s2=(size>=250)&(size<500); s3=size>=500
     students=np.exp(x.loc[keep,'school__log_va_students'].to_numpy())
@@ -80,7 +81,7 @@ municipal_share=100*r.municipal_share_all.iloc[0]
 size_base_share=100*r.size_100_249_share_all.iloc[0]
 L += [r'\midrule',f'Schools & {int(r.sample_schools.iloc[0]):,} & 100.0\\% & '+' & '.join(['']*nc)+r' \\',
  r'\bottomrule',r'\end{tabular}}',r'\par\medskip',r'\footnotesize',r'\begin{minipage}{\textwidth}',
- 'Notes: Each column is a school-level OLS regression of the indicated Empirical-Bayes value-added measure on administration-type, school-size, and curricular-track indicators. Value added is standardized across schools. The omitted categories are Municipal DAEM, 100--249 estimated high-school students, and neither technical-professional nor artistic; the first row reports the intercept. All other rows report regression coefficients. There is no minimum-school-size restriction, and fully private schools are included. School size is estimated total enrollment across grades 9--12 using the four grade-8 cohorts. The first two columns report the number of schools and share of pooled value-added-sample students satisfying each row definition. Unconditionally, Municipal schools account for '+f'{municipal_share:.1f}'+r'\% of students and schools with 100--249 students account for '+f'{size_base_share:.1f}'+r'\%; these shares do not condition on the other omitted categories. Size and track categories overlap administration types. Heteroskedasticity-robust (HC1) standard errors are in parentheses and do not incorporate estimation error in school value added. '+r'* $p<0.10$, ** $p<0.05$, *** $p<0.01$.',
+ 'Notes: Each column is a school-level OLS regression of the indicated Empirical-Bayes value-added measure on administration-type, school-size, and curricular-track indicators. Outcomes are reported in their original units: math and verbal achievement in student standard deviations, binary outcomes in percentage points (pp), and projected income in log points. The omitted categories are Municipal DAEM, 100--249 estimated high-school students, and neither technical-professional nor artistic; the first row reports the intercept. All other rows report regression coefficients. There is no minimum-school-size restriction, and fully private schools are included. School size is estimated total enrollment across grades 9--12 using the four grade-8 cohorts. The first two columns report the number of schools and share of pooled value-added-sample students satisfying each row definition. Unconditionally, Municipal schools account for '+f'{municipal_share:.1f}'+r'\% of students and schools with 100--249 students account for '+f'{size_base_share:.1f}'+r'\%; these shares do not condition on the other omitted categories. Size and track categories overlap administration types. Heteroskedasticity-robust (HC1) standard errors are in parentheses and do not incorporate estimation error in school value added. '+r'* $p<0.10$, ** $p<0.05$, *** $p<0.01$.',
  r'\end{minipage}',r'\end{table}']
 (OUT/'admin_type_va.tex').write_text('\n'.join(L)+'\n',encoding='utf-8')
 print(r.to_string(index=False))
