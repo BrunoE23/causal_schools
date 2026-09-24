@@ -146,6 +146,11 @@ src = src.replace("for spec, fs in (('controls', []), ('sizetrack', SIZE + TRACK
                   "for spec, fs in (('controls', []), ('sizetrack', []), ('staff', feats), ('full', feats)):")
 src = src.replace("('R2_SIZETRACK', r'$R^2$: adding size and track'),\n                 ('R2_FULL', r'$R^2$: adding staff (full model)')):",
                   "('R2_FULL', r'$R^2$: adding staff (full model)')):")
+src = src.replace(
+    "L.append('Schools & ' + ' & '.join(f'{sm.N[o]:,}' for o, _ in PAPER_COLS) + r' \\\\')",
+    "L.append(r'Gain from staff measures ($\\Delta R^2$) & ' + "
+    "' & '.join(f'{sm.R2_FULL[o]-sm.R2_CONTROLS[o]:.3f}' for o, _ in PAPER_COLS) + r' \\\\')\n"
+    "L.append('Schools & ' + ' & '.join(f'{sm.N[o]:,}' for o, _ in PAPER_COLS) + r' \\\\')")
 
 rows_start = src.index('PAPER_ROWS = {')
 rows_end = src.index('BLOCKS =', rows_start)
@@ -223,5 +228,9 @@ table_tex = table_tex.replace(r'\resizebox{\textwidth}{!}{%',
 table_tex = table_tex.replace(
     '; the technical-professional coefficient is the difference between schools with and without that track.',
     '.')
+table_tex = table_tex.replace(
+    'Heteroskedasticity-robust (HC1) standard errors in parentheses.',
+    'The gain from staff measures is the full-model $R^2$ minus the controls-only $R^2$. '
+    'Heteroskedasticity-robust (HC1) standard errors are in parentheses.')
 tex_path.write_text(table_tex, encoding='utf-8')
 

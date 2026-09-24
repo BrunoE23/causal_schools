@@ -36,7 +36,8 @@ va = va[va.analysis_sample.eq('All')]
 def fit(X,y):
     inv=np.linalg.inv(X.T@X); b=inv@X.T@y; e=y-X@b; n,k=X.shape
     V=n/(n-k)*inv@(X*e[:,None]).T@(X*e[:,None])@inv
-    return b,np.sqrt(np.diag(V))
+    r2=1-(e@e)/((y-y.mean())@(y-y.mean()))
+    return b,np.sqrt(np.diag(V)),r2
 
 out=[]
 for outcome,_ in OUTCOMES:
@@ -50,11 +51,11 @@ for outcome,_ in OUTCOMES:
     size_100_249_share_all=students[s1].sum()/students.sum()
     X=np.column_stack([np.ones(keep.sum()),*(a==k for k in (1,3,4,5,6)),s0,s2,s3,t,q]).astype(float)
     assert np.linalg.matrix_rank(X)==X.shape[1]
-    b,se=fit(X,yy); masks=[(a==2)&(t==0)&(q==0)&s1,a==1,a==3,a==4,a==5,a==6,s0,s2,s3,t==1,q==1]
+    b,se,r2=fit(X,yy); masks=[(a==2)&(t==0)&(q==0)&s1,a==1,a==3,a==4,a==5,a==6,s0,s2,s3,t==1,q==1]
     for j,((feature,label,block),mask) in enumerate(zip(ROWS,masks)):
         p=math.erfc(abs(b[j]/se[j])/math.sqrt(2)); stars='***' if p<.01 else '**' if p<.05 else '*' if p<.10 else ''
         out.append(dict(outcome=outcome,feature=feature,label=label,block=block,estimate=b[j],se=se[j],p=p,stars=stars,
-          schools=int(mask.sum()),student_share=students[mask].sum()/students.sum(),sample_schools=int(keep.sum())))
+          schools=int(mask.sum()),student_share=students[mask].sum()/students.sum(),sample_schools=int(keep.sum()),r2=r2))
         out[-1]['municipal_share_all']=municipal_share_all
         out[-1]['size_100_249_share_all']=size_100_249_share_all
 r=pd.DataFrame(out); r.to_csv(OUT/'admin_type_va.csv',index=False)
@@ -89,8 +90,9 @@ municipal_share=100*r.municipal_share_all.iloc[0]
 size_base_share=100*r.size_100_249_share_all.iloc[0]
 L += [r'\midrule',f'Schools & {int(r.sample_schools.iloc[0]):,} & 100.0\\% & '+' & '.join(['']*nc)+r' \\',
  'Population mean & & & '+' & '.join(f'{pop_mean[o]:.3f}' for o in cols)+r' \\',
+ r'$R^2$ & & & '+' & '.join(f'{r[r.outcome.eq(o)].r2.iloc[0]:.3f}' for o in cols)+r' \\',
  r'\bottomrule',r'\end{tabular}}',r'\par\medskip',r'\footnotesize',r'\begin{minipage}{\textwidth}',
- 'Notes: Each column is a school-level OLS regression of the indicated Empirical-Bayes value-added measure on administration-type, school-size, and curricular-track indicators. Outcomes are reported in their original units: math and verbal achievement in student standard deviations, binary outcomes in percentage points (pp), and projected income in log points. The omitted categories are Municipal DAEM, 100--249 estimated high-school students, and neither technical-professional nor artistic; the first row reports the intercept. All other rows report regression coefficients. There is no minimum-school-size restriction, and fully private schools are included. School size is estimated total enrollment across grades 9--12 using the four grade-8 cohorts. The first two columns report the number of schools and share of pooled value-added-sample students satisfying each row definition. Unconditionally, Municipal schools account for '+f'{municipal_share:.1f}'+r'\% of students and schools with 100--249 students account for '+f'{size_base_share:.1f}'+r'\%; these shares do not condition on the other omitted categories. The population-mean row reports the outcome-specific student mean around which each value-added measure is centered. Size and track categories overlap administration types. Heteroskedasticity-robust (HC1) standard errors are in parentheses and do not incorporate estimation error in school value added. '+r'* $p<0.10$, ** $p<0.05$, *** $p<0.01$.',
+ 'Notes: Each column is a school-level OLS regression of the indicated Empirical-Bayes value-added measure on administration-type, school-size, and curricular-track indicators. Outcomes are reported in their original units: math and verbal achievement in student standard deviations, binary outcomes in percentage points (pp), and projected income in log points. The omitted categories are Municipal DAEM, 100--249 estimated high-school students, and neither technical-professional nor artistic; the first row reports the intercept. All other rows report regression coefficients. There is no minimum-school-size restriction, and fully private schools are included. School size is estimated total enrollment across grades 9--12 using the four grade-8 cohorts. The first two columns report the number of schools and share of pooled value-added-sample students satisfying each row definition. Unconditionally, Municipal schools account for '+f'{municipal_share:.1f}'+r'\% of students and schools with 100--249 students account for '+f'{size_base_share:.1f}'+r'\%; these shares do not condition on the other omitted categories. The population-mean row reports the outcome-specific student mean around which each value-added measure is centered. The $R^2$ row reports the explanatory power of the full displayed specification. Size and track categories overlap administration types. Heteroskedasticity-robust (HC1) standard errors are in parentheses and do not incorporate estimation error in school value added. '+r'* $p<0.10$, ** $p<0.05$, *** $p<0.01$.',
  r'\end{minipage}',r'\end{table}']
 (OUT/'admin_type_va.tex').write_text('\n'.join(L)+'\n',encoding='utf-8')
 print(r.to_string(index=False))
