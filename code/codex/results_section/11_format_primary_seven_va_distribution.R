@@ -62,8 +62,8 @@ rows <- unlist(lapply(seq_len(nrow(x)),function(i){
   scale <- if(binary[i]) 100 else 1
   line <- paste0(labels[i],' & ',units[i],' & ',fmt_n(x$n_students[i]),' & ',
     fmt_mean(x$sample_mean[i],binary[i]),' & ',fmt_mean(x$sample_sd[i],binary[i]),
-    ' & ',fmt(scale*x$eb_va_sd[i]),' & ',fmt(scale*(x$p90[i]-x$p10[i])),
-    ' & ',fmt(scale*x$unshrunk_va_sd[i]),' & ',fmt(scale*x$debiased_sd[i]),' \\\\')
+    ' & ',fmt(scale*x$eb_va_sd[i]),' & ',fmt(scale*x$unshrunk_va_sd[i]),
+    ' & ',fmt(scale*x$debiased_sd[i]),' & ',fmt(scale*(x$p90[i]-x$p10[i])),' \\\\')
   if(i %in% c(2L,3L)) c(line,'\\addlinespace[2pt]') else line
 }))
 tex <- c(
@@ -74,7 +74,7 @@ tex <- c(
   '\\begin{tabular}{llrcc cccc}','\\toprule',
   ' & & & \\multicolumn{2}{c}{Student outcome} & \\multicolumn{4}{c}{School VA dispersion} \\\\',
   '\\cmidrule(lr){4-5} \\cmidrule(lr){6-9}',
-  'Outcome & Units & $N$ & Mean & SD & EB SD & EB 90--10 & Unshrunk SD & RSS SD \\\\',
+  'Outcome & Units & $N$ & Mean & SD & EB SD & Unshrunk SD & RSS SD & EB 90--10 \\\\',
   '\\midrule',rows,'\\bottomrule','\\end{tabular}',
   '\\begin{tablenotes}[flushleft]','\\footnotesize',
   '\\item Notes: Each row uses the units shown in column 2: admission-test standard deviations (SD) for math and verbal achievement, percentage points (pp) for binary outcomes, and log points for projected income. The first block reports moments of the student outcome in the outcome-specific sample. The EB block reports the student-weighted standard deviation and 90--10 percentile gap of EB-shrunken, student-centered school value added. Schools are weighted by their number of students in the corresponding pooled value-added regression. Unshrunk VA is the student-weighted standard deviation of the school fixed-effect estimates supplied to the EB shrinkage step. RSS latent VA is the standard deviation of latent school effects estimated from cross-cohort products using the same sample rule and weights. All VA columns use the unified R-based pooled VA pipeline.',
