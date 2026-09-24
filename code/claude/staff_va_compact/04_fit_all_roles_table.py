@@ -10,14 +10,18 @@ from pathlib import Path
 
 INCLUDE_PEERS = os.environ.get('INCLUDE_PEERS', '0') == '1'
 VARIANT = 'with_peers' if INCLUDE_PEERS else 'no_peers'
+SECTOR = os.environ.get('SCHOOL_SECTOR', 'all').lower()
+if SECTOR not in {'all', 'public', 'private_subsidized'}:
+    raise ValueError('SCHOOL_SECTOR must be all, public, or private_subsidized')
+TAG = VARIANT if SECTOR == 'all' else f'{VARIANT}_{SECTOR}'
 
 src = Path(__file__).with_name('01_fit_compact_table.py').read_text(encoding='utf-8')
 
 src = src.replace(
     "OUT_DATA = os.path.join(ROOT, 'data/clean/staff_va_compact' + SUFFIX)\n"
     "OUT_TAB = os.path.join(ROOT, 'output/tables/staff_va_compact' + SUFFIX)",
-    f"OUT_DATA = os.path.join(ROOT, 'data/clean/staff_va_all_roles_{VARIANT}' + SUFFIX)\n"
-    f"OUT_TAB = os.path.join(ROOT, 'output/tables/staff_va_all_roles_{VARIANT}' + SUFFIX)")
+    f"OUT_DATA = os.path.join(ROOT, 'data/clean/staff_va_all_roles_{TAG}' + SUFFIX)\n"
+    f"OUT_TAB = os.path.join(ROOT, 'output/tables/staff_va_all_roles_{TAG}' + SUFFIX)")
 
 start = src.index("FOCAL = [")
 end = src.index("# Track dummies", start)
@@ -54,6 +58,9 @@ focal = r'''FOCAL = [
 if not INCLUDE_PEERS:
     focal = focal.replace(
         "    ('school__composition_math_mean', 'Peer grade-4 math (mean)', 'Size'),\n", "")
+if SECTOR == 'private_subsidized':
+    focal = focal.replace(
+        "    ('school__has_artistic', 'Artistic offering (0/1; 2 schools)', 'Track')", "")
 src = src[:start] + focal + src[end:]
 
 if INCLUDE_PEERS:
@@ -127,8 +134,10 @@ src = src[:rows_start] + '\n'.join(row_lines) + src[rows_end:]
 src = src.replace("'Orientadores': 'Counselors (orientadores)'", "'Counselors': 'Counselors (orientadores)'")
 src = src.replace("School staff, peers, size and track, and school value added",
                   "Role-symmetric school staff correlates of school value added" +
-                  (" (controlling for peers)" if INCLUDE_PEERS else ""))
-src = src.replace("tab:staff-va", "tab:staff-va-all-roles-" + VARIANT.replace('_', '-'))
+                  (" (controlling for peers)" if INCLUDE_PEERS else "") +
+                  ({'all': '', 'public': ': public schools',
+                    'private_subsidized': ': private-subsidized schools'}[SECTOR]))
+src = src.replace("tab:staff-va", "tab:staff-va-all-roles-" + TAG.replace('_', '-'))
 src = src.replace("Qualification indices combine ", "The qualification index combines ")
 src = src.replace(
     "Counseling-trained counselors hold a counseling-specific postgraduate or post-degree "
@@ -148,7 +157,26 @@ if not INCLUDE_PEERS:
         "                 ('R2_FULL', r'$R^2$: adding staff (full model)')):")
     src = src.replace("All regressions control for dependency, region and an artistic-track indicator,",
                       "All regressions control for dependency, region and an artistic-track indicator,")
-src = src.replace("'staff_va_compact.tex'", f"'staff_va_all_roles_{VARIANT}.tex'")
-src = src.replace("'staff_va_compact.csv'", f"'staff_va_all_roles_{VARIANT}.csv'")
+if SECTOR != 'all':
+    sector_filter = {
+        'public': "idx &= ((x.school__dependency_2.values == 1) | (x.school__dependency_5.values == 1) | (x.school__dependency_6.values == 1) | ((x[[c for c in x.columns if c.startswith('school__dependency_')]].sum(axis=1).values) == 0))",
+        'private_subsidized': "idx &= (x.school__dependency_3.values == 1)",
+    }[SECTOR]
+    src = src.replace(
+        "    idx &= (x.school__dependency_4.values != 1)",
+        "    idx &= (x.school__dependency_4.values != 1)\n    " + sector_filter)
+sector_sample = {
+    'public': 'public schools (municipal, SLEP, or delegated-administration)',
+    'private_subsidized': 'private-subsidized schools',
+}.get(SECTOR)
+if sector_sample:
+    src = src.replace(
+        "samp = ('public and private-subsidized schools with at least %d students in the value-added sample' % MIN_VA) if MIN_VA else 'all public and private-subsidized schools'",
+        f"samp = ('{sector_sample} with at least %d students in the value-added sample' % MIN_VA) if MIN_VA else 'all {sector_sample}'")
+if SECTOR == 'private_subsidized':
+    src = src.replace("dependency, region and an artistic-track indicator",
+                      "dependency and region")
+src = src.replace("'staff_va_compact.tex'", f"'staff_va_all_roles_{TAG}.tex'")
+src = src.replace("'staff_va_compact.csv'", f"'staff_va_all_roles_{TAG}.csv'")
 
 exec(compile(src, str(Path(__file__).with_name('01_fit_compact_table.py')), 'exec'))

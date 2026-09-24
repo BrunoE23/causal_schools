@@ -63,3 +63,9 @@ By default it excludes peer achievement and writes to
 `INCLUDE_PEERS=1` adds peer grade-4 math to the regression and table and writes
 the corresponding `*_with_peers/` outputs. The two versions have explicit
 file names and leave the compact table unchanged.
+
+Set `SCHOOL_SECTOR=public` or `SCHOOL_SECTOR=private_subsidized` to produce
+sector-specific versions (and combine with `INCLUDE_PEERS=1` when desired).
+Public includes COD_DEPE 1, 2, 5, and 6: municipal, SLEP, and
+delegated-administration schools. Private-subsidized is COD_DEPE 3. Thus the
+two sector tables partition the 2,058-school main sample.
