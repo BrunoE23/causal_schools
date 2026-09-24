@@ -59,6 +59,14 @@ for outcome,_ in OUTCOMES:
         out[-1]['size_100_249_share_all']=size_100_249_share_all
 r=pd.DataFrame(out); r.to_csv(OUT/'admin_type_va.csv',index=False)
 
+# Outcome-specific student population means, reported in the same units as the
+# regression columns. This is the benchmark around which VA is centered.
+pop=pd.read_csv(ROOT/'output/tables/results_section/primary_seven_va_distribution.csv').set_index('outcome_key')
+pop_key={'z_year_math_max':'math','z_year_leng_max':'language','high_inst_m1':'highinst',
+         'high_paying_field_m1':'highpay','log_program_income_clp_m1':'program_income_full',
+         'admission_exam_taker':'exam','any_postulacion':'postulacion'}
+pop_mean={o:pop.loc[pop_key[o],'sample_mean']*(100 if o in RATE_OUTCOMES else 1) for o,_ in OUTCOMES}
+
 def cell(d): return f'{d.estimate:.3f}'+(f'$^{{{d.stars}}}$' if d.stars else '')
 cols=[o for o,_ in OUTCOMES]; nc=len(cols)
 L=[r'\begin{table}[!htbp]',r'\centering',r'\caption{School value added by administration type, school size, and curricular track}',
@@ -80,8 +88,9 @@ for feature,label,block in ROWS:
 municipal_share=100*r.municipal_share_all.iloc[0]
 size_base_share=100*r.size_100_249_share_all.iloc[0]
 L += [r'\midrule',f'Schools & {int(r.sample_schools.iloc[0]):,} & 100.0\\% & '+' & '.join(['']*nc)+r' \\',
+ 'Population mean & & & '+' & '.join(f'{pop_mean[o]:.3f}' for o in cols)+r' \\',
  r'\bottomrule',r'\end{tabular}}',r'\par\medskip',r'\footnotesize',r'\begin{minipage}{\textwidth}',
- 'Notes: Each column is a school-level OLS regression of the indicated Empirical-Bayes value-added measure on administration-type, school-size, and curricular-track indicators. Outcomes are reported in their original units: math and verbal achievement in student standard deviations, binary outcomes in percentage points (pp), and projected income in log points. The omitted categories are Municipal DAEM, 100--249 estimated high-school students, and neither technical-professional nor artistic; the first row reports the intercept. All other rows report regression coefficients. There is no minimum-school-size restriction, and fully private schools are included. School size is estimated total enrollment across grades 9--12 using the four grade-8 cohorts. The first two columns report the number of schools and share of pooled value-added-sample students satisfying each row definition. Unconditionally, Municipal schools account for '+f'{municipal_share:.1f}'+r'\% of students and schools with 100--249 students account for '+f'{size_base_share:.1f}'+r'\%; these shares do not condition on the other omitted categories. Size and track categories overlap administration types. Heteroskedasticity-robust (HC1) standard errors are in parentheses and do not incorporate estimation error in school value added. '+r'* $p<0.10$, ** $p<0.05$, *** $p<0.01$.',
+ 'Notes: Each column is a school-level OLS regression of the indicated Empirical-Bayes value-added measure on administration-type, school-size, and curricular-track indicators. Outcomes are reported in their original units: math and verbal achievement in student standard deviations, binary outcomes in percentage points (pp), and projected income in log points. The omitted categories are Municipal DAEM, 100--249 estimated high-school students, and neither technical-professional nor artistic; the first row reports the intercept. All other rows report regression coefficients. There is no minimum-school-size restriction, and fully private schools are included. School size is estimated total enrollment across grades 9--12 using the four grade-8 cohorts. The first two columns report the number of schools and share of pooled value-added-sample students satisfying each row definition. Unconditionally, Municipal schools account for '+f'{municipal_share:.1f}'+r'\% of students and schools with 100--249 students account for '+f'{size_base_share:.1f}'+r'\%; these shares do not condition on the other omitted categories. The population-mean row reports the outcome-specific student mean around which each value-added measure is centered. Size and track categories overlap administration types. Heteroskedasticity-robust (HC1) standard errors are in parentheses and do not incorporate estimation error in school value added. '+r'* $p<0.10$, ** $p<0.05$, *** $p<0.01$.',
  r'\end{minipage}',r'\end{table}']
 (OUT/'admin_type_va.tex').write_text('\n'.join(L)+'\n',encoding='utf-8')
 print(r.to_string(index=False))
