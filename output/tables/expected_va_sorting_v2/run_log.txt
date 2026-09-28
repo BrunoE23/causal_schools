@@ -1,0 +1,13 @@
+VA file: C:/Users/brunem/Box/causal_schools/data/clean/empirical_bayes_school_va/cohorts_2017_2020/eb_school_rbd_observational_values.csv
+School-level slope of verbal VA on math VA: 0.592 (R2 0.698)
+School-level slope of exam VA on math VA: 0.156 (R2 0.099)
+School-level slope of hpinst VA on math VA: 0.274 (R2 0.246)
+School-level slope of hpfield VA on math VA: 0.034 (R2 0.013)
+School-level slope of income VA on math VA: 0.127 (R2 0.229)
+School-level slope of benefits VA on math VA: -0.147 (R2 0.156)
+Optional universe columns found: comuna=COD_COM_ALU, ms_rbd=most_time_rbd_middle, ind_f=father_indigenous_imputed, ind_m=mother_indigenous_imputed, gpa_ms=z_gpa_middle_mean, att_ms=z_att_middle_mean, attended=most_time_RBD
+Timely SAE applicants 2018-2020: 296,209
+B1 merged: prioritario non-missing for 296209 applicants
+With full probability mass and VA coverage: 295,420
+Common complete sample (all DVs, covariates, geography): 238,015
+Share of income gradient in E removed by priority controls (by dim): benefits=0.17, benefits_perp=0.15, exam=0.15, exam_perp=0.15, hpfield=0.26, hpfield_perp=0.23, hpinst=0.02, hpinst_perp=0.18, income=0.13, income_perp=0.15, math=0.12, verbal=0.13, verbal_perp=0.14

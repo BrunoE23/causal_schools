@@ -1,0 +1,32 @@
+\begin{table}[!htbp]
+\centering
+\caption{Debiased correlations in latent observational school value added}
+\label{tab:rss-varcov-correlation}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lccccccc}
+\toprule
+ & Math & Verbal & Exam & Fin. aid app & Higher ed. & High-inst. & HP field \\
+\midrule
+Math achievement & 0.256 &  &  &  &  &  &  \\
+ & [0.008] &  &  &  &  &  &  \\
+Verbal achievement & 0.856 & 0.187 &  &  &  &  &  \\
+ & [0.008] & [0.004] &  &  &  &  &  \\
+Admission exam taken & 0.267 & 0.396 & 0.115 &  &  &  &  \\
+ & [0.019] & [0.018] & [0.002] &  &  &  &  \\
+Financial aid application & -0.545 & -0.423 & 0.383 & 0.100 &  &  &  \\
+ & [0.028] & [0.028] & [0.021] & [0.003] &  &  &  \\
+Higher-ed enrollment & 0.210 & 0.259 & 0.659 & 0.457 & 0.071 &  &  \\
+ & [0.029] & [0.025] & [0.015] & [0.029] & [0.001] &  &  \\
+High-premium institution & 0.558 & 0.464 & 0.054 & -0.582 & 0.083 & 0.134 &  \\
+ & [0.025] & [0.025] & [0.020] & [0.024] & [0.026] & [0.003] &  \\
+High-premium field & 0.253 & 0.194 & -0.021 & -0.080 & 0.255 & 0.189 & 0.086 \\
+ & [0.030] & [0.028] & [0.028] & [0.026] & [0.025] & [0.026] & [0.002] \\
+\bottomrule
+\end{tabular}}
+\par\medskip
+\footnotesize
+\begin{minipage}{\textwidth}
+\textit{Notes:} Diagonal entries report debiased standard deviations of latent school value added; off-diagonal entries report cross-outcome correlations estimated using the procedure in Section 3.5. Bootstrap standard errors are in brackets. Math, verbal, high-premium-institution, and high-premium-field value added are estimated among admission-exam takers; all other measures use the broader eligible sample.
+\end{minipage}
+\end{table}
+

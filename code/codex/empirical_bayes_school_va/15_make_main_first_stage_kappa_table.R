@@ -31,8 +31,8 @@ required <- c("spec", "outcome_group", "n_obs", "fs_beta", "fs_se", "fs_f")
 stopifnot(all(required %in% names(results)))
 
 order_specs <- c(
-  "math_adj_eb", "leng_adj_eb", "exam_adj_eb", "highinst_adj_eb",
-  "highpay_adj_eb", "program_income_adj_eb", "anypost_adj_eb"
+  "math_adj_eb", "leng_adj_eb", "exam_adj_eb", "anypost_adj_eb",
+  "highered_adj_eb", "highinst_adj_eb", "highpay_adj_eb"
 )
 results <- results[match(order_specs, spec)]
 stopifnot(nrow(results) == 7L, !anyNA(results$spec))
@@ -67,9 +67,9 @@ tex <- c(
   "\\resizebox{\\textwidth}{!}{%",
   "\\begin{tabular}{lccccccc}",
   "\\toprule",
-  " & \\multicolumn{3}{c}{Exams} & \\multicolumn{3}{c}{Higher ed. choices} & Financial aid \\\\",
-  "\\cmidrule(lr){2-4} \\cmidrule(lr){5-7} \\cmidrule(lr){8-8}",
-  " & Math & Verbal & Exam taking & High-premium inst. & High-premium field & Program income & Fin. aid app. \\\\",
+  " & \\multicolumn{2}{c}{Achievement} & \\multicolumn{3}{c}{Postsecondary access} & \\multicolumn{2}{c}{Within higher-education choice} \\\\",
+  "\\cmidrule(lr){2-3} \\cmidrule(lr){4-6} \\cmidrule(lr){7-8}",
+  " & Math & Verbal & Exam taking & Fin. aid app. & Higher-ed enrollment & High-premium inst. & High-premium field \\\\",
   "\\midrule",
   kappa_row,
   se_row,
@@ -82,11 +82,7 @@ tex <- c(
   "\\footnotesize",
   "\\begin{minipage}{\\textwidth}",
   paste0(
-    "Notes: Each column reports the first-stage coefficient $\\kappa^{EB}$ from regressing attended-school EB value added for the indicated outcome on first-round offered-school EB value added. ",
-    "The regressions and samples are exactly those underlying the corresponding columns of the main scalar-IV table. ",
-    "All specifications control for the DA-probability expected value of the same EB measure, cohort, grade-4 SIMCE math and language, gender, and age. ",
-    "Heteroskedasticity-robust standard errors are reported in parentheses. The reported $F$ statistic tests the excluded offered-school value-added instrument. ",
-    "$^{*}p<0.10$, $^{**}p<0.05$, $^{***}p<0.01$."
+    "\\textit{Notes:} Each column regresses attended-school EB value added on first-round offered-school EB value added using the corresponding Table~5 sample and controls. High-premium-institution and field specifications are restricted to exam takers, with non-enrollees coded zero. Robust standard errors are in parentheses; the $F$ statistic tests the excluded instrument. $^{*}p<0.10$, $^{**}p<0.05$, $^{***}p<0.01$."
   ),
   "\\end{minipage}",
   "\\end{table}"

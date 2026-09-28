@@ -5,20 +5,20 @@
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{lccccccc}
 \toprule
-Row school VA & Math & Verbal & Exam taking & High-premium inst. & High-premium field & Log income & Fin. aid app. \\
+Row school VA & Math & Verbal & Exam taking & Fin. aid app. & Higher-ed enrollment & High-premium inst. & High-premium field \\
 \midrule
-Math & 1.00 & 1.23 & 1.81 & 0.54 & -2.28 & -0.65 & 0.22 \\
-Verbal & 0.85 & 1.00 & 1.64 & 0.40 & -3.59 & -1.05 & 0.41 \\
-Exam taking & 0.76 & 0.54 & 1.00 & -1.07 & -6.36 & -1.13 & 0.24 \\
-High-premium inst. & 0.14 & 0.59 & 0.60 & 1.00 & 4.02 & 1.21 & -0.15 \\
-High-premium field & 0.06 & 0.76 & -2.27 & 1.48 & 1.00 & 0.80 & 0.50 \\
-Log income & 0.32 & 0.87 & -0.14 & 0.97 & 1.26 & 1.00 & 17.76 \\
-Fin. aid app. & -0.51 & 0.12 & 1.44 & 0.21 & -5.32 & -9.92 & 1.00 \\
+Math & 1.00 & 1.17 & 2.54 & 0.13 & -1.02 & 0.40 & -2.86 \\
+Verbal & 0.69 & 1.00 & 1.82 & 0.21 & -0.62 & 0.27 & -4.02 \\
+Exam taking & 0.50 & 0.34 & 1.00 & 0.38 & 0.21 & -0.92 & 15.98 \\
+Fin. aid app. & -0.23 & 0.05 & 2.25 & 1.00 & 2.29 & 0.12 & 3.61 \\
+Higher-ed enrollment & 0.50 & 0.14 & 0.81 & 1.02 & 1.00 & 0.33 & -0.34 \\
+High-premium inst. & 0.13 & 0.58 & 1.34 & -0.14 & 2.97 & 1.00 & 4.35 \\
+High-premium field & 0.04 & 0.62 & 7.47 & -0.28 & 0.85 & 0.81 & 1.00 \\
 \bottomrule
 \end{tabular}}
 \par\medskip
 \footnotesize
 \begin{minipage}{\textwidth}
-Notes: Each cell divides the direct unshrunk cross-outcome IV estimate by the corresponding RSS-implied causal prediction, defined as the RSS projection from the row VA to the column VA multiplied by the column outcome's unshrunk same-outcome IV pass-through. A ratio of one denotes exact agreement, zero denotes no direct IV gain despite a nonzero prediction, and a negative ratio denotes opposite signs. Diagonal entries equal one mechanically because their prediction uses the same same-outcome IV coefficient. Ratios can be large when the predicted gain is close to zero; the underlying levels and standard errors are reported in Table~\ref{tab:unshrunk-cross-iv-rss-validation}.
+\textit{Notes:} Entries divide the direct cross-outcome IV estimate by the corresponding RSS-implied causal gain; one denotes exact agreement. Ratios can be unstable when the implied gain is near zero; Table 10 reports the estimates in levels. Diagonal entries equal one mechanically.
 \end{minipage}
 \end{table}

@@ -1,0 +1,2 @@
+model_name,folds,mean_share_test_predicted,mean_rmse_log,mean_mae_log,mean_error_log,mean_rmse_clp_from_log,mean_mae_clp_from_log,min_share_test_predicted
+institution_plus_carrera_generica,5,0.946255506607929,0.102450118242394,0.0766256734741834,0.000535268887936742,195405.573360094,121750.52903969,0.92511013215859

@@ -1,0 +1,1835 @@
+Do High Schools Shape College Choices?
+Evidence from Centralized Assignment in
+                Chile
+                       Bruno E. Aravena-Magüida
+
+                              September 2026
+
+
+                                   Abstract
+
+     High schools may shape students’ postsecondary choices in ways that are not
+captured by test-score measures of school quality. I study this question using
+Chile’s centralized school assignment system, where random tie-breakers generate
+lottery variation in high-school offers. I link these lotteries to administrative
+data on achievement, higher-education applications, and enrollment, and construct
+observational school value-added measures for seven outcomes spanning achievement,
+postsecondary access, and the institution and field students ultimately choose. I
+first ask whether these observational measures predict causal school effects. They
+do. Lottery-induced attendance at schools with higher outcome-specific value added
+improves the corresponding outcome for all seven measures. Forecast coefficients
+are close to one for math and verbal achievement and range from 0.49 to 0.86
+for postsecondary access and higher-education choices. School effectiveness is
+also strongly multidimensional. After removing correlated sampling noise, math
+and verbal value added are highly correlated, while value added for attending
+high-premium institutions and high-premium fields is only weakly related. These
+cross-outcome relationships also have causal content: the gains implied by the
+covariance structure broadly line up with direct lottery estimates. High schools
+therefore shape not only whether students reach higher education, but also the
+options they ultimately choose within it. Choices that appear to reflect student
+preferences may partly reflect the high school attended.
+
+
+
+
+                                        1
+BEAM                                              Do High Schools Shape College Choices?
+
+
+1     Introduction
+School quality is usually summarized by achievement. This is natural: test scores are
+widely available, comparable across schools, and predictive of later outcomes (Chetty
+et al., 2011). But school and teacher effects need not be one-dimensional. Recent work
+shows that schools and teachers affect attendance, behavior, crime, teenage motherhood,
+labor-market outcomes, and other long-run outcomes in ways that are only weakly related
+to their test-score effects (Jackson, 2018; Beuermann et al., 2023; Rose et al., 2022;
+Angrist et al., 2023). If families and policymakers care about these other dimensions,
+achievement-based measures of school quality may be seriously incomplete.
+    This broader view of school quality is especially relevant for high schools. High
+schools are the last formal educational institutions students attend before making higher-
+education choices, and those choices are highly consequential. Whether students enter
+higher education, which institutions they attend, and which fields they choose all matter
+because returns vary substantially across institutions and, especially, across fields of study
+(Kirkeboen et al., 2016). Yet measures of school effects on higher education often focus on
+relatively coarse outcomes such as enrollment or persistence rather than on the type of
+institution or field students enter.
+    There are good reasons to expect high schools to shape these choices. Prior work
+documents large differences in application and enrollment behavior across groups of
+students and shows that relatively small interventions can change college search, application
+behavior, and major choice (Hoxby and Turner, 2015; Dynarski et al., 2021; Hastings
+et al., 2016; Chetty et al., 2025). High schools may differ in counseling, information
+provision, expectations, peer norms, academic confidence, or preparation for particular
+fields. If so, their effects on higher education may extend well beyond their effects on
+achievement.
+    This possibility also changes how higher-education choices should be interpreted.
+Decisions about whether to attend higher education, which institution to attend, or which
+field to study are often treated as revealing students’ preferences given the options they
+face. But the information students have, the options they perceive, and their preparation
+for different fields may themselves depend on the high school they attend. A choice
+can therefore be privately optimal given beliefs and preparation that the school helped
+produce, while still being causally affected by the school attended.
+    This paper asks two questions. First, do high schools causally affect postsecondary
+access and higher-education choices, and not only achievement? More precisely, do
+outcome-specific observational value-added measures predict causal school effects on these
+outcomes, using a validation approach so far applied primarily to test scores (Angrist
+et al., 2017)? Second, do these effects reflect a single underlying dimension of school
+quality, or do schools have distinct strengths across outcomes?
+    The main empirical challenge is that students and families sort across schools. Families
+choose schools based on resources, preferences, networks, location, and expectations,
+and these same characteristics may shape later higher-education choices. Differences
+
+
+                                              2
+BEAM                                                       Do High Schools Shape College Choices?
+
+
+in outcomes across schools may therefore reflect both causal school effects and the
+characteristics of the students who select into them.
+    I address this challenge using Chile’s centralized school assignment system, the Sistema
+de Admisión Escolar (SAE). SAE assigns students to public and private-subsidized schools,
+which serve over 90 percent of high-school students, using a deferred-acceptance mechanism
+with random tie-breakers when schools are oversubscribed. I replicate the assignment
+mechanism and use its lottery variation to isolate changes in the high school students
+attend. I link these assignments to national administrative data on school enrollment,
+standardized achievement, higher-education applications, financial-aid applications, and
+enrollment.
+    I first estimate observational school value added for seven outcomes in a broad national
+panel of roughly 758,000 students. The outcomes span achievement, postsecondary access,
+and choices within higher education: math and verbal achievement, admission-exam
+taking, financial-aid applications, higher-education enrollment, and enrollment in high-
+premium institutions and fields. The value-added measures are school fixed effects from
+regressions with rich pre-treatment controls, including grade-4 standardized test scores,
+family background, and middle-school performance, and I use Empirical Bayes to reduce
+sampling noise. I then ask whether the schools that look better observationally on a given
+outcome also causally improve that outcome. For roughly 136,000 SAE applicants whose
+assignments depend on random tie-breakers, I use the value added of the school offered
+by the mechanism as an instrument for the value added of the school ultimately attended,
+accounting for the assignment risk implied by each student’s submitted preferences and
+priorities.
+    Using the terminology of Angrist et al. (2017), I summarize this relationship with a
+forecast coefficient, ψ.1 If ψ = 1, the causal gain induced by the lottery matches the gain
+predicted by observational value added for that outcome. If ψ = 0, the observational
+measure has no causal predictive content along the lottery-induced margin.
+    Outcome-specific observational value added contains substantial causal signal across
+all seven margins. For achievement, the forecast coefficients are 1.20 for math and 1.03
+for verbal achievement, close to a one-for-one relationship between observational value
+added and lottery-induced gains. The corresponding coefficients are 0.49 for admission-
+exam taking, 0.58 for financial-aid applications, and 0.74 for higher-education enrollment.
+Schools that observationally increase enrollment in high-premium institutions and fields
+also causally shift students toward those choices, with forecast coefficients of 0.67 and 0.86.
+Thus, observational school value added predicts causal effects not only on achievement or
+whether students enter the postsecondary system, but also on the types of options they
+ultimately choose within it.
+    I next ask whether these school effects are different manifestations of a common
+dimension of school quality. To separate genuine covariance in school effectiveness from
+correlated sampling noise, I adapt the cross-cohort estimator of Rose et al. (2022) to
+schools. The resulting covariance structure is far from one-dimensional. Math and
+   1
+       I refer to the forecast coefficient interchangeably as pass-through.
+
+
+                                                       3
+BEAM                                               Do High Schools Shape College Choices?
+
+
+verbal value added are strongly related, with a correlation of 0.86, while value added for
+enrollment in high-premium institutions and high-premium fields correlates only 0.19.
+The access measures form their own cluster: exam-taking value added correlates 0.66
+with enrollment value added. A school can therefore be effective at improving students’
+academic preparation without being especially effective at shifting the institution or field
+they ultimately choose. Knowing which schools raise achievement gives only partial
+information about which schools shape later postsecondary opportunities.
+     I then test whether these observational relationships across outcomes have causal
+content. For each pair of outcomes, I compare the cross-outcome gain implied by the
+value-added covariance structure with a direct lottery-based estimate. Across the 42
+directed outcome pairs, the implied and direct causal gains have a correlation of 0.45 and
+agree in sign in 79 percent of cases. The agreement is not exact, but it shows that the
+multidimensional structure observed across schools contains meaningful information about
+how lottery-induced changes in school attendance affect outcomes beyond the one used to
+rank schools.
+     Descriptive evidence on school characteristics reinforces this picture. Administration
+type, school size, and curricular track explain about 40 percent of the variation in math and
+verbal value added, but only about 2 percent of the variation in high-premium-field value
+added. Staffing patterns and qualifications are also associated with different dimensions
+in different ways: teacher staffing and credentials are most systematically related to
+achievement, while detailed staff characteristics add substantial explanatory power for
+high-premium-institution value added. Field-choice value added remains comparatively
+difficult to predict from the observable school inputs available here. These relationships are
+not causal, but they suggest that the school features associated with raising achievement
+need not be the same as those associated with shaping later educational choices.
+     The paper contributes to three literatures. First, it contributes to work on teacher and
+school value added. A large literature estimates the effects of teachers and schools on test
+scores and longer-run outcomes (Chetty et al., 2014; Dobbie and Fryer, 2015; Jackson,
+2018; Beuermann et al., 2023; Rose et al., 2022). This work increasingly emphasizes
+that test-score value added may miss important dimensions of educational production. I
+show that this multidimensionality extends to consequential postsecondary outcomes at
+the high-school stage: schools differ not only in their effects on achievement and overall
+enrollment, but also in their effects on whether students enter high-premium institutions
+and fields. I causally validate these outcome-specific measures and then use their cross-
+outcome covariance to characterize which dimensions of school effectiveness move together.
+Methodologically, I adapt the cross-cohort covariance estimator of Rose et al. (2022) to
+schools and compare the cross-outcome gains it implies with direct lottery-based causal
+estimates.
+     Second, the paper contributes to the literature that uses lotteries and centralized
+assignment to estimate school effects (Abdulkadiroğlu et al., 2014; Abdulkadiroğlu et al.,
+2017; Angrist et al., 2024). In the spirit of Angrist et al. (2017), I ask whether observational
+value added is a useful guide to causal school effects. I apply this logic to a nationwide
+
+                                               4
+BEAM                                              Do High Schools Shape College Choices?
+
+
+high-school assignment system and to outcomes realized after students leave high school.
+Unlike test-score value added, these postsecondary outcomes have no lagged counterpart
+that can directly absorb prior differences in the same outcome, making external lottery
+validation especially informative.
+    Third, the paper contributes to work on higher-education choice. Prior research
+shows that the institution and field students choose matter for later outcomes, and that
+information and application frictions can change those choices (Kirkeboen et al., 2016;
+Hoxby and Turner, 2015; Dynarski et al., 2021; Hastings et al., 2016; Chetty et al., 2025).
+I study high schools as an upstream source of these differences. Rather than evaluating
+a particular counseling or information intervention, I measure whether the high-school
+system itself generates causal differences in students’ access to and choices within higher
+education. The results imply that choices which appear to reveal student preferences may
+partly reflect the high school attended.
+    The rest of the paper is organized as follows. Section 2 describes the Chilean setting
+and the linked administrative data. Section 3 presents the empirical framework. Section 4
+reports the distribution of school value added, the causal validation estimates, the correlates
+of value added, and the cross-outcome covariance and IV-validation exercises. Section 5
+concludes.
+
+
+
+
+                                              5
+BEAM                                                     Do High Schools Shape College Choices?
+
+
+2       Context and Data
+2.1     Institutional Setting
+Chile is a useful setting for this project because national administrative data records
+school enrollment, academic histories, standardized achievement, and higher-education
+choices with individual identifiers that allow students to be matched across educational
+data.
+   Formal secondary education begins in grade 9 and lasts four years. Students may
+attend public, private-subsidized, or private non-subsidized schools. Public and private-
+subsidized schools are fully or partly financed by the State and thus participate in the
+centralized school assignment system described below. They serve 90.6% of the high-school
+population. Private non-subsidized schools remain outside that mechanism and serve the
+remaining 9.4%.
+
+
+2.2     Centralized School Assignment
+Chile’s centralized school assignment system, the Sistema de Admisión Escolar (SAE),
+assigns students to participating schools through a version of student-proposing Deferred
+Acceptance. Families submit ranked lists of schools. The mechanism combines these
+rankings with school vacancies and priority rules, and it uses random tie-breakers when
+there are more applicants than seats within a priority group. If a student’s offered
+school depends on one of these tie-breakers in the system, different lottery draws will
+imply different school assignments. I refer to such students as being at assignment risk.
+Conditional on the information that determines priorities and assignment probabilities,
+the random tie-breakers generate quasi-experimental variation in school assignment, as
+described by Abdulkadiroğlu et al. (2017).
+    SAE started in 2017 in some regions and was rolled out nationally in 2018. Given that
+I study high-school effects, I use applications to grade-9 vacancies from the 2018–2020
+grade-8 cohorts. These cohorts are expected to finish high school between 2022 and 2024,
+allowing me to observe high-school attendance and initial postsecondary outcomes.
+    Implementing this design requires recovering each applicant’s probability of assignment
+to each school among those in the submitted rankings of schools. I do this by replicating
+the SAE assignment algorithm and repeatedly simulating counterfactual lottery draws,
+which determines which students are at assignment risk. As a diagnostic check, when I
+run the replicated algorithm using the original lottery numbers for the 2018–2020 regular
+grade-9 processes, I reproduce over 99% of observed first-round assignments in each of the
+three cohorts. 2 The remaining mismatch reflects institutional features that are difficult
+to fully recover from public documentation, but the high replication rate gives confidence
+that the simulated probabilities capture the relevant assignment risk.
+    2
+     Even though SAE runs two additional rounds, these complementary rounds are very limited in
+sample size. Since they assign vacancies in previously undersubscribed schools, assignment risk is unlikely
+in these rounds.
+
+
+                                                    6
+BEAM                                                   Do High Schools Shape College Choices?
+
+
+    The centralized offer strongly predicts the high school ultimately attended. Figure 1
+makes this point by showing attendance rates in the 100 most demanded schools, with
+different markers for applicants with and without first round offers.
+
+
+
+
+                     Figure 1: Effect of SAE offers on attendance
+Notes: The figure shows attendance rates at the 100 most demanded schools among timely SAE applicants
+with assignment risk, separately by whether the applicant received a first-round offer from that school.
+Attendance is the school in which the student spent the most time after grade 8; schools are ordered by
+applicant demand.
+
+    For this exercise and the rest of the paper, I define high-school attendance as the school
+where a student spends the most time after grade 8, with most recent spells breaking
+ties. This definition smooths over short enrollment spells and transfers, and it assigns
+a single high-school value to each student. As a result, students who did not receive a
+first-round offer might still end up attending a certain high-school via complementary
+rounds or an application cycle in a later year. On average, a high school is attended by
+6.9% of students rejected from it in the first round and by 62.5% of students offered a
+seat. The resulting difference of approximately 55.6 percentage points establishes a strong
+first stage for school attendance.
+
+
+2.3     Sample Description
+This subsection describes the two samples used in the analysis. The first is the value-
+added sample, a broad student panel used to estimate outcome-specific school fixed
+effects after adjusting for a rich set of covariates. The second is the lottery sample,
+
+                                                   7
+BEAM                                            Do High Schools Shape College Choices?
+
+
+which contains students whose timely grade-9 SAE applications generate nondegenerate
+assignment probabilities. I use this second sample to test whether lottery-induced changes
+in attended-school value added produce the outcome gains predicted by the observational
+measures.
+
+2.3.1   Value Added Sample
+
+I construct the value added sample by merging annual enrollment, grade progression,
+attendance, grades, and completion records using the student identifier provided for
+educational data. The linked administrative panel starts from the universe of students
+observed in grade 8 between 2017 and 2020, producing 944,510 students across four cohorts
+defined by their year of grade-8 enrollment. For instance, a student in the 2019 cohort
+who wants to change schools within the non-private system applies to SAE that year, is
+expected to start high school in 2020, and is expected to graduate in 2023.
+    To construct school value added, I retain as much of this broad panel as possible
+while imposing the restrictions required for comparable high-school exposure and baseline
+controls. From this universe I drop students younger than 12 or older than 16 in grade 8
+and those who do not attend high school.
+    Requiring a complete vector of baseline covariates is the most consequential sample
+restriction. For these covariates, I use information from Chile’s national standardized
+assessment system (SIMCE) and middle school relative performance. Middle school
+controls are constructed by comparing attendance and GPA of a student to those of their
+peers in middle school every year. These are then averaged and summarized into two
+middle school z-scores for a student: one for attendance and one for GPA.
+    SIMCE exams are administered in different grades depending on the year. This always
+includes grade 4 and occasionally grades 8 and/or 10. Unfortunately grade-8 and grade-10
+measures are not available for all the studied cohorts. I therefore use grade-4 SIMCE as
+the main pre-treatment achievement control.
+    SIMCE also collects parent surveys. I use these surveys to measure family background
+before treatment, including household income, parental education, indigenous origin of the
+parents, and early-childhood education. These variables are useful because they proxy for
+family resources and prior investments that may influence both high-school choices and
+later higher-education outcomes. When parent-survey variables are missing, I use middle
+school and neighborhood cells to impute medians where enough donor observations are
+available; remaining missing values are left missing.
+    As shown in Panel A of Table 1, I retain 757,999 of the original 944,510 students with
+a valid high-school exposure, the required age range, and the complete control vector
+described above. Sample restrictions defined in each row should be read cumulatively
+within each panel.
+
+
+
+
+                                            8
+BEAM                                                  Do High Schools Shape College Choices?
+
+            Table 1: Construction of the value-added and SAE samples
+       Panel A: Value-added sample                       Panel B: SAE lottery sample
+Sample restriction                    Students       Sample restriction                   Students
+Cohorts 2017–2020                      944,510       Cohorts 2018–2020                     706,042
++ valid HS and age 12–16               931,547       + valid HS and age 12–16              696,817
++ complete VA control set             757,999        + complete lottery control set        587,142
++ admission test                       622,809       + application in SAE                  241,490
+                                                     + assignment risk                    135,916
+                                                     + admission test                      108,418
+
+
+2.3.2    Lottery Sample
+
+For the lottery sample, I follow the same initial steps using the 2018–2020 cohorts, the
+first cohorts for which SAE operated nationally. Panel B of Table 1 repeats the accounting
+exercise above for the lottery sample. Of the 706,042 students in these cohorts, 587,142
+have a valid high-school exposure, fall within the required age range, and have the complete
+lottery control set. Among them, 241,490 applied through SAE for a grade-9 seat while
+in grade 8.3 In some cases, students (e.g., those applying to undersubscribed schools)
+are guaranteed an offer to a certain school. The assignment mechanism does not yield
+exogenous variation for such cases since there is no tie-breaking. The resulting lottery
+sample contains 135,916 students whose preferences and priorities imply nondegenerate
+assignment probabilities.
+    The broad complete-control panel is used to estimate the school value-added measures,
+while the 135,916 students with assignment risk form the base validation sample. Math
+and verbal specifications additionally require an observed admission-test score, whereas
+the binary access and higher-education-choice outcomes retain non-test-takers whenever
+their outcome status can be defined.
+
+
+2.4      Characterization of the samples
+How different are these two samples? Table 2 compares baseline characteristics and
+outcomes across the broad panel, all timely SAE applicants, and applicants with assignment
+risk. Columns (1), (2), and (4) report group means; columns (3), (5), and (6) report the
+differences between SAE applicants and the broad panel, at-risk applicants and the broad
+panel, and at-risk applicants and all SAE applicants, respectively.
+   3
+    I consider only applications to grade 9 in the year the student is in grade 8, to avoid including
+students who changed schools after repeating a grade.
+
+
+
+
+                                                 9
+BEAM                                                         Do High Schools Shape College Choices?
+
+                         Table 2: Balance across analysis samples
+                                     Broad Panel                                                         Risk SAE -
+                                      (All HS)       SAE Applicants           SAE Applicants w/ risk      All SAE
+                                                                 Diff.                      Diff.            Diff.
+                                                                (2)-(1)                    (4)-(1)          (4)-(2)
+                                        Mean       Mean          (SE)         Mean          (SE)             (SE)
+                                         (1)        (2)           (3)          (4)           (5)              (6)
+Student characteristics
+Female                                  0.492       0.484 -0.008 (0.001) 0.495           0.004 (0.001) 0.011 (0.001)
+Metropolitan Region (Santiago)          0.387       0.257 -0.130 (0.001) 0.273          -0.114 (0.001) 0.016 (0.001)
+Age                                      13.4       13.4 0.000 (0.001) 13.3             -0.035 (0.001) -0.035 (0.001)
+ Baseline SIMCE variables
+Math 4th grade (z)                      0.036      -0.232    -0.268 (0.002) -0.159      -0.195 (0.002)   0.073 (0.002)
+Verbal 4th grade (z)                    0.036      -0.189    -0.225 (0.002) -0.115      -0.151 (0.002)   0.074 (0.002)
+Income decile                            5.5         4.5     -0.991 (0.005) 4.8         -0.721 (0.006)   0.271 (0.004)
+Mother education years                   11.9       10.9     -1.002 (0.005) 11.2        -0.709 (0.007)   0.292 (0.005)
+  % matched all SIMCE vars             82.4%       81.8%                      83.4%
+Middle school
+GPA (z)                                 0.032       0.024 -0.008 (0.001) 0.093          0.061 (0.002)    0.069 (0.001)
+Attendance (z)                          0.021       0.030 0.009 (0.001) 0.043           0.022 (0.002)    0.014 (0.001)
+  % matched all middle-school vars     99.8%       99.8%                      99.8%
+Outcomes
+Std. math exam                          0.000      -0.334    -0.334 (0.002)   -0.289    -0.289 (0.002)   0.045 (0.001)
+Std. verbal exam                        0.000      -0.301    -0.301 (0.002)   -0.230    -0.230 (0.003)   0.072 (0.002)
+Admission exam taker                    0.776      0.738     -0.038 (0.001)   0.769     -0.007 (0.001)   0.031 (0.001)
+Higher ed. enrolled                     0.672      0.580     -0.092 (0.001)    0.617    -0.055 (0.001)   0.037 (0.001)
+Hi-premium institution                  0.128      0.056     -0.072 (0.000)    0.067    -0.061 (0.001)   0.011 (0.000)
+Hi-premium field                        0.307      0.258     -0.048 (0.001)    0.280    -0.026 (0.001)   0.022 (0.001)
+N                                      931,547     294,198                    162,633
+Percent of broad panel                 100.0%       31.6%                      17.5%
+Joint test p-value                                              < 0.001                    < 0.001         < 0.001
+
+Notes: The Broad Panel contains 2017–2020 cohorts with an observed high school and age 12–16. SAE
+Applicants are timely 2018–2020 grade-9 applicants; w/ risk requires maxj pij < 1. Difference columns
+report the indicated mean differences, with overlap-adjusted standard errors in parentheses. Joint tests
+cover the baseline characteristics above the Outcomes section.
+
+
+    Column (3) shows that SAE applicants are negatively selected relative to the broad
+panel. Their grade-4 math and verbal scores are 0.27 and 0.23 standard deviations lower,
+their household income is about one decile lower, and their mothers have approximately
+one fewer year of education. Column (5) shows the same broad pattern for applicants
+with assignment risk, although the differences are smaller. Column (6) confirms that
+at-risk applicants are positively selected relative to the full set of SAE applicants on these
+baseline measures. The joint tests reject equality of the baseline characteristics in all
+three comparisons.
+    These differences matter because the observational value-added measures are estimated
+in the broad panel but validated among SAE applicants with assignment risk. The
+validation exercise therefore asks directly whether school rankings estimated in the
+population represented by column (1) predict causal effects for the population represented
+by column (4), after controlling for the observed baseline characteristics used in the lottery
+specification.
+
+
+
+                                                    10
+BEAM                                                    Do High Schools Shape College Choices?
+
+
+2.5     Higher Education Outcomes
+The seven primary outcomes are organized into the same three groups used throughout
+the results tables: achievement, postsecondary access, and within higher-education choice.
+    The achievement group contains math and verbal scores from the national higher-
+education admission exam. Taking this exam is itself a choice, but it is the standard
+route into selective higher education. Applicants take mandatory math and verbal
+components and may also take optional subject exams.4 I standardize math and verbal
+scores within test year to make them comparable across test regimes; these two outcomes
+are consequently observed only for exam takers.
+    The postsecondary-access group contains three binary outcomes defined for the broader
+eligible student population. The first is admission-exam taking. The second is whether
+the student submitted any application through the centralized state system for higher-
+education scholarships and student credit (FUAS). The third is whether the student
+appears in the higher-education enrollment records. Students who do not take the exam,
+submit a financial-aid application, or enroll are coded zero for the respective outcome.
+    The final group describes within-higher-education choices: whether a student enrolls
+in a high-premium institution and whether a student enrolls in a high-premium field.
+Higher-education applications and admissions are organized at the program–institution
+level, so the enrollment records identify both the institution and field associated with a
+student’s first observed enrollment.
+    Students in the sample have not yet finished higher education, so I cannot observe
+their realized earnings. I instead use MiFuturo, an information source maintained by
+the Ministry of Education that reports program-level labor-market statistics, including
+average income in the fourth year after graduation. Because MiFuturo identifiers do
+not map one-to-one into every program code in the enrollment records, I estimate a
+log-income model with institution and generic-program fixed effects. These estimates
+provide a common measure of the earnings premium associated with each institution and
+generic program. Figure 2 shows the generic-program fixed effects organized by field.
+    The high-premium-field indicator equals one when the student’s first observed enroll-
+ment is in Science, Law, Engineering/Manufacturing/Construction, or Medicine+.5 All
+other observed fields, including programs outside the retained field taxonomy, are coded
+zero. The high-premium-institution indicator equals one when the institution associated
+with the student’s first observed enrollment has a centered MiFuturo institution fixed
+effect above 0.1 log points.6
+    The phrase “within higher-education choice” describes the information used to construct
+these two outcomes: an institution or field can be classified only when an enrollment choice
+is observed. The outcomes used in the main regressions are nevertheless unconditional with
+   4
+      The national admission exam was called the PSU through 2020, the PTU in 2021–2022, and the
+PAES from 2023 onward.
+    5
+      Medicine+ includes medicine, pharmacy, nursing, midwifery, medical technology, and dentistry.
+Other health and technical-health programs are not included in the high-premium-field category.
+    6
+      A difference of 0.1 log points corresponds approximately to a 10% institution premium. Matriculated
+students whose institution lacks an estimable fixed effect are coded zero.
+
+
+                                                  11
+BEAM                                                    Do High Schools Shape College Choices?
+
+
+
+
+           Figure 2: MiFuturo Generic-Program Income Premia by Field
+Notes: The figure plots generic-program fixed effects from a log-income model with institution and
+generic-program effects, using MiFuturo earnings measured in the fourth year after graduation. Points
+are grouped by the field classification used in the analysis; higher values indicate programs associated
+with higher projected earnings, conditional on institution.
+
+
+respect to higher-education enrollment. Students without an observed higher-education
+enrollment are coded zero rather than removed from the sample. Both the observational
+value-added construction and the lottery IV specifications for these two outcomes are
+restricted to admission-exam takers. The resulting coefficients therefore combine an effect
+on the probability of entering higher education with an effect on the type of institution
+or field chosen upon enrollment; they should not be interpreted as effects conditional on
+enrollment. Estimating the latter object would require conditioning on a post-assignment
+outcome that schools may themselves affect.
+
+
+
+
+                                                  12
+BEAM                                                  Do High Schools Shape College Choices?
+
+
+3       Empirical Framework
+This section describes the empirical objects and research design. The goal is not to
+estimate a separate causal effect for every school and every possible margin of substitution.
+Instead, I ask whether outcome-specific observational measures of school value added
+predict causal effects generated by lottery-induced changes in high-school attendance. The
+design therefore summarizes school effectiveness with scalar outcome-specific indices and
+estimates a forecast coefficient for each outcome.
+
+
+3.1     School Effects and Observational Value Added
+I use a constant-effects value-added model as a guide. Let
+
+                                    Yim (j) = µm + Vjm + ϵm
+                                                          i ,                                     (1)
+    where Yim (j) is student i’s potential outcome for outcome m if student i attends high
+school j. The term µm denotes the average level of outcome m, and Vjm is the causal
+contribution of school j to that outcome relative to the student-weighted average school.
+I normalize
+                                           ωj Vjm = 0,
+                                        X
+
+                                            j
+
+where ωj is the share of students attending school j in the value-added sample. A positive
+Vjm therefore denotes a school with an above-average causal effect on outcome m.
+   The main outcomes considered in the paper are math and verbal achievement;
+admission-exam taking, financial-aid application, and higher-education enrollment; and
+enrollment in a high-premium institution or field.
+   The causal effects Vjm are not directly observed. I first construct observational
+measures of school value added using the broad complete-control panel. For each outcome
+m, consider the population regression
+
+                                                     ′ m
+                                 Yim = αm + λm              m
+                                             s(i) + Xi Γ + ui ,                                   (2)
+    where s(i) denotes the high school attended by student i, and Xi contains pre-treatment
+characteristics. These include cohort, gender, age, a third-degree polynomial in grade-4
+SIMCE math and language scores, family-background measures from SIMCE parent
+surveys,7 and middle-school controls constructed from grades 5 through 8, including
+school-normalized attendance and academic performance.
+    I normalize the population observational school effects using the same student weights,
+so that
+                                           ωj λm
+                                        X
+                                               j = 0.
+                                            j
+
+I estimate equation (2) and define Vbjm as the corresponding centered estimate of λm
+                                                                                   j .
+    7
+     In particular, family income decile, years of education and indigenous status of each parent, and
+indicators for whether the student attended an educational institution before primary school.
+
+
+                                                 13
+BEAM                                                Do High Schools Shape College Choices?
+
+
+    The distinction between λm          m
+                               j and Vj is important. The former describes conditional
+differences in outcomes across schools in the observational population, whereas the latter
+denotes the causal effect of attending school j. If school attendance were conditionally
+mean independent of potential outcomes given Xi , the two objects would coincide. In
+practice, students and families sort across high schools, so λmj may also reflect residual
+selection not absorbed by the controls.
+    The lottery validation below therefore asks whether differences in observational school
+value added predict differences in causal school effects. In particular, I ask whether the
+component of Vbjm shifted by the centralized assignment mechanism produces changes in
+outcome m of the magnitude predicted by the observational measure.
+
+
+3.2    Assignment Risk and Offer Shocks
+SAE applicants submit rank-ordered lists of schools. Let J denote the set of high schools
+and let J0 = J ∪ {0}, where 0 denotes no first-round offer. Let Zi ∈ J0 denote student i’s
+first-round offer and set Vb0m = 0. Let Di ∈ J denote the high school ultimately attended,
+measured by the post-grade-8 most-time RBD.
+    For each possible offer z, let Di (z) denote the school that student i would attend if
+offered school z. Let Yim (d) denote the potential outcome under attendance at school d,
+and let Yim (z) denote the potential outcome under offer z. The assignment mechanism
+maps each student’s submitted preferences and priorities, denoted by θi , into the full
+offer-probability vector
+
+                         pi = (pij )j∈J0 ,    pij = Pr(Zi = j | θi ),
+
+where the probability is taken over repeated draws of the randomized tie-breakers, holding
+θi fixed. Let Wi denote the predetermined controls used below.
+
+Assumption 1 (Offer exogeneity and exclusion). Offer exogeneity. For each outcome m,
+conditional on pi , the realized first-round offer is independent of predetermined controls
+and the joint schedules of potential attendance choices and potential outcomes:
+
+                        Zi ⊥⊥ ({Di (z)}z∈J0 , {Yim (d)}d∈J , Wi ) | pi .
+
+   Exclusion. Offers have no direct effect on outcomes beyond the school attended:
+
+                        Yim (z) = Yim (Di (z))      for every z ∈ J0 .
+
+    Offer exogeneity is the conditional-independence restriction. Rankings and priorities are
+fixed before SAE draws the random tie-breakers, and pi records the resulting distribution
+of possible offers. The restriction therefore allows preferences, priorities, and pi to be
+arbitrarily related to potential outcomes; it requires the realized draw to be random within
+that assignment risk. Exclusion separately requires that an offer affect outcome m only
+by changing the high school attended.
+
+
+                                              14
+BEAM                                                      Do High Schools Shape College Choices?
+
+
+   The complete vector pi is high-dimensional because students submit different rankings
+and face different priorities and capacities. For an outcome-specific scalar value-added
+measure, I summarize this assignment risk using the expected value added of the offered
+school:
+
+                                      Eim =             pij Vbjm .
+                                                  X
+                                                                                             (3)
+                                                 j∈J0
+
+   This is the average observational value added of the offer student i would receive over
+repeated randomizations of the assignment mechanism, holding the student’s application
+and priorities fixed.
+   Define the observational value added of the school attended and the school offered as
+
+                                 Am   bm
+                                  i = VDi ,             Oim = VbZmi .                        (4)
+   Because
+                                              Oim = VbZmi ,
+its conditional expectation under the assignment mechanism is
+
+                               E[Oim | pi ] =           pij Vbjm = Eim .
+                                                  X
+                                                                                             (5)
+                                                 j∈J0
+
+   Define the outcome-specific offer shock
+
+                                       e m ≡ Om − E m .
+                                       O                                                     (6)
+                                         i    i    i
+
+
+Let Sim collect the potential attendance schedule, potential outcome schedule, and Wi .
+Holding the estimated school index and simulated assignment probabilities fixed, offer
+exogeneity implies
+
+                       E[Oim | pi , Sim ] =          Vbjm Pr(Zi = j | pi , Sim )
+                                               X
+
+                                              j∈J0
+
+                                                     pij Vbjm = Eim ,
+                                               X
+                                        =                                                    (7)
+                                              j∈J0
+
+and hence
+                                       e m | p , S m ] = 0.
+                                     E[O i    i   i
+
+The weaker equality E[O   e m | p ] = 0 would establish only that the offer shock is centered.
+                            i    i
+The moment above establishes the required orthogonality to the counterfactual attendance
+and outcome schedules, even when assignment risk is related to them. The scalar Eim is
+not assumed to replace the full pi as a balancing score. It forms the conditional-mean
+residual of the scalar offer value; because the moment holds at every pi , it also holds after
+integrating over assignment risk. Exclusion ensures that any reduced-form effect of this
+shock operates through the school attended.
+
+
+
+
+                                                   15
+BEAM                                              Do High Schools Shape College Choices?
+
+
+3.3    Scalar IV Specification
+The first empirical question is whether observational school value added forecasts causal
+effects on the corresponding outcome. Specifically, when the assignment mechanism
+induces a student to attend a school with higher Vbjm , does outcome m improve, and by
+how much relative to the observational difference encoded in Vbjm ?
+    I estimate the following IV system:
+
+                                                      ′ m
+                        Yim = αm + ψ m Am    m m             m
+                                        i + ρ Ei + W i δ + η i ,                          (8)
+   with first stage
+
+                                                  ′ m
+                        Am    m   m em   m m             m
+                         i = a + κ Oi + ρA Ei + Wi δA + νi .                              (9)
+    Here, Yim is student i’s realized outcome, Am  i is the observational value added of
+                              m
+the school attended, and O  e is the lottery-induced component of the offered school’s
+                              i
+observational value added. The offer shock instruments for attended value added, while
+Eim controls for the level predicted by the student’s assignment probabilities. Because
+Oim = Oe m + E m and E m is included as a control, this is algebraically identical to using
+         i      i        i
+Oim as the excluded instrument.
+    The vector Wi contains a parsimonious set of predetermined characteristics: cohort,
+gender, age, and grade-4 SIMCE math and language scores. This differs from the
+richer control vector used to construct Vbjm in equation (2), which additionally includes
+family-background and middle-school characteristics. All reported specifications use
+heteroskedasticity-robust standard errors.
+    Identification additionally requires a nonzero first stage:
+                                                 
+                                        e m , Am ̸= 0.
+                                    Cov O                                               (10)
+                                          i    i
+
+    This relevance condition is directly testable and is assessed using the first-stage
+estimates reported below.
+    The coefficient ψ m is the central parameter of the validation exercise. I refer to it as
+the forecast coefficient, or interchangeably as pass-through. It measures the change in
+outcome m generated by a lottery-induced one-unit increase in the observational value
+added of the school attended.
+    If ψ m = 1, the causal gain generated by lottery-induced movement across schools
+matches the difference predicted by observational value added. If ψ m = 0, the observational
+measure has no causal predictive content along the lottery-induced margin. Values between
+zero and one indicate that observational value added is directionally informative but that
+observational differences overstate the corresponding causal gains.
+    Importantly, ψ m should be interpreted as a causal forecast coefficient rather than as
+the structural effect of a manipulable treatment called “value added.” The underlying
+treatment is attendance at a different high school. The scalar index asks whether the
+observational ranking of those schools predicts the causal consequences of the school
+changes induced by the lottery.
+
+                                             16
+BEAM                                               Do High Schools Shape College Choices?
+
+
+   The scalar specification is useful because a fully flexible school-specific IV design would
+be high-dimensional and would combine many margins of substitution across fallback
+schools (Angrist et al., 2023; Kirkeboen et al., 2016). The scalar design instead asks
+whether movement toward schools with higher measured value added produces better
+outcomes, after accounting for the assignment risk implied by each student’s submitted
+preferences and priorities.
+
+
+3.4    Empirical Bayes
+The observational school fixed effects in equation (2) are estimated with different degrees
+of precision. Estimates for schools with fewer students or noisier outcomes contain more
+sampling error. Using the raw estimates therefore gives rise to extreme values that may
+partly reflect estimation noise.
+    I use an Empirical-Bayes shrinkage procedure to improve the signal-to-noise ratio of
+the school indices before using them in the lottery design (Walters, 2024). For each school
+j and outcome m, let sem  j denote the regression-derived standard error of the centered
+                        m
+fixed-effect estimate Vj .
+                      b
+
+    The EB calculation relies on the following sampling-error approximation.
+
+Assumption 2 (Sampling error in observational value added). For each school j and
+outcome m,
+                               Vbjm = λm    m
+                                       j + ej ,
+
+where λm
+       j is the centered population observational school effect from equation (2), and
+                    h             i                                
+                  E em    m     m
+                     j | λj , sej = 0,        Var em    m     m
+                                                   j | λj , sej = (sem  2
+                                                                     j ) .
+
+
+    Assumption 2 concerns sampling error in the estimated observational school effects. It
+does not require the population observational effect λm  j to equal the causal school effect
+  m
+Vj . Whether observational school effectiveness predicts causal school effectiveness is
+precisely the object of the lottery validation exercise.
+    Under Assumption 2, the cross-school dispersion of the estimated effects combines
+dispersion in population observational value added with estimation noise. I therefore
+estimate the latent across-school variance as
+                                                                       
+                                                                     
+                          2
+                            = max Varω Vbjm −             ωj (sem  2
+                                                       X
+                        τbm                                      j ) , 0 ,              (11)
+                                                       j
+
+    where ωj is proportional to the number of students in school j’s value-added regression
+sample. I perform this calculation separately for each outcome using its outcome-specific
+estimation sample and student weights.
+    To translate the estimated signal variance into school-specific shrinkage, I use a normal–
+normal working model: population observational school effects are approximated by a
+                                  m
+                                                    2
+normal distribution with mean Vb ω and variance τbm   , and estimation error is approximated
+
+
+                                              17
+BEAM                                                Do High Schools Shape College Choices?
+
+
+as normal with variance (sem  2
+                           j ) . This additional distributional approximation, together
+with Assumption 2, yields the school-specific reliability weight
+                                                   2
+                                                 τbm
+                                    rjm =     2 + (sem )2
+                                                          .                                       (12)
+                                            τbm      j
+
+   I first construct the posterior-mean school index
+                                           m                        m
+                                                                       
+                            Ve m,EB = Vb
+                              j
+                                                m
+                                           ω + rj       Vb m − Vb
+                                                         j          ω       ,                     (13)
+            m
+    where Vb ω is the student-weighted mean of the estimated school effects. The raw
+estimates are centered, so this shrinkage target is zero up to numerical precision. Because
+reliability varies across schools, however, the weighted mean of the posterior means need
+not remain exactly zero. The implementation therefore re-centers the posterior means
+using the same student weights:
+
+                             Vbjm,EB = Vejm,EB −             ωk Vekm,EB .
+                                                    X
+                                                                                                  (14)
+                                                    k
+
+   This final student-centered index is the EB measure reported in the distribution table
+and used in the main lottery specifications.
+   As semj becomes small relative to τ bm , reliability approaches one and the preliminary
+                  m,EB
+posterior mean Vej     approaches the original estimate Vbjm . Less precise school estimates
+are instead shrunk more strongly toward the across-school mean. Under the normal–
+normal working model above, Vejm,EB is the Empirical-Bayes posterior mean; Vbjm,EB is its
+student-centered version.
+   For the main same-outcome scalar IV specifications, I replace the raw observational
+school index with its EB-shrunken counterpart:
+
+
+Am,EB = VbDm,EB       Oim,EB = VbZm,EB         Eim,EB =               pij Vbjm,EB ,   e m,EB = O m,EB −E m,EB ,
+                                                                X
+ i          i
+                ,                 i
+                                       ,                                              O i       i       i
+                                                               j∈J0
+                                                                                                  (15)
+   Here the no-offer value is again zero. The EB specification instruments Am,EB
+                                                                              i    with
+  m,EB                   m,EB
+Oi
+e      and controls for Ei      exactly as in equations (8) and (9). The shrinkage step
+therefore changes the precision and scale of the observational school-quality index used
+by the lottery design; it does not itself identify causal school effects. Accordingly, the
+null ψ m,EB = 1 tests whether the EB-shrunken index is calibrated to the lottery-induced
+outcome gain on its own scale. The later comparison of direct IV estimates with RSS-
+implied cross-outcome gains instead uses unshrunk value added so that both objects are
+expressed on the same underlying value-added scale.
+
+
+3.5    Cross-Outcome Relationships in School Value Added
+To study whether school effectiveness is multidimensional, I estimate how latent observa-
+                       m′
+tional effects λm
+                j and λj covary across outcomes (Jackson, 2018; Rose et al., 2022). A
+
+
+                                               18
+BEAM                                                                  Do High Schools Shape College Choices?
+
+                                                                  ′
+covariance computed directly from Vbjm and Vbjm is biased when their sampling errors are
+correlated, as can occur because the estimates use overlapping students. Outcome-by-
+outcome EB shrinkage does not remove this cross-outcome noise.
+   I therefore adapt the cross-cohort estimator of Rose et al. (2022). It uses different
+                                            m′
+cohorts to estimate the product λm       j λj , avoiding covariance between sampling errors
+measured in the same cohort.
+   Formally, let t ∈ {1, . . . , Tj } index the grade-8 cohorts observed for school j (cohorts
+2017–2020), and define the school-by-cohort mean of the fitted residual plus school effect
+from equation (2):
+
+                       bm =        1                    
+                                                          bm + u
+                                                                   
+                                                               bm    = λm     m
+                                             X
+                       λjt         m
+                                                          λj     i      j + ējt ,                            (16)
+                                  njt i: s(i)=j, c(i)=t
+
+where c(i) is the grade-8 cohort and E[ēm
+                                         jt ] = 0. These components use the same controls
+and fixed effects as equation (2).
+
+Assumption 3 (Uncorrelated cross-cohort sampling error). For any school hj and iany two
+                                                                                   m′
+cohorts t ̸= t′ , and for any pair of outcomes m, m′ (including m = m′ ), E ēm
+                                                                              jt ējt′ = 0.
+
+   The assumption permits correlated errors across outcomes within a cohort but rules out
+correlated errors across cohorts of the same school. Cross-cohort products then identify
+products of latent school effects. For an own-outcome variance, define
+
+                                     bm 2 − P λ
+                             P                2
+                                                bm
+                                   t λjt     t   jt                                 m           1 X bm
+                   Sjm,m =                          ,                       b =
+                                                                            λj                       λ .      (17)
+                                       m   m
+                                     Tj (Tj − 1)                                               Tjm t jt
+                              ′
+For two outcomes, let Pjm,m contain the ordered cohort pairs (t, t′ ) available for school j
+with t ̸= t′ , and define
+                                ′      1                       b m′
+                           Sjm,m = m,m′                    bmλ
+                                                   X
+                                                           λ jt jt′ .                   (18)
+                                   |Pj    | (t,t′ )∈P m,m′
+                                                                        j
+
+          m,m′        m′                      ′
+Thus E[Sj ] = λm  j λj , including when m = m . I aggregate these signals using student
+weights. Pairwise variances and covariances use the same schools and weights; eligible
+schools must appear in at least two cohorts for each relevant outcome. Suppressing
+outcome superscripts on the normalized weights, the estimators are
+                                                                                                  m m
+                    d (λm ) =                       ωj (1 − ωj )Sjm,m −
+                                               X                                X
+                    Var ω
+                                                                                              b λ
+                                                                                        ωj ωk λj k ,
+                                                                                                b             (19)
+                                               j                                j̸=k
+
+                                      ′
+                                                                           ′                        m m′
+                        m  m
+                                                        ωj (1 − ωj )Sjm,m −
+                                                   X                                    X
+                 Cov
+                 d
+                     ω λ ,λ                    =                                               ωj ωk λ
+                                                                                                     b λ
+                                                                                                      j k ,
+                                                                                                       b      (20)
+                                                    j                                   j̸=k
+
+    Under Assumption 3, these expressions target the latent variance and covariance
+directly. I summarize them with the cross-outcome correlation
+                                                                               ′
+                                                                                    
+                                                                 m  m
+                                       m,m′
+                                                          Cov
+                                                          d
+                                                              ω λ ,λ
+                                  ρb               =q                  ,                                      (21)
+                                                              d (λm′ )
+                                                      d (λm ) Var
+                                                     Var ω        ω
+
+
+                                                             19
+BEAM                                             Do High Schools Shape College Choices?
+
+
+and the directional projection of destination-outcome value added m′ on origin-outcome
+value added m,                                             
+                                                    m    m′
+                                    ′     Cov
+                                          d
+                                              ω   λ   , λ
+                                βb m |m =    d (λm )
+                                                              .                    (22)
+                                            Var  ω
+   ′
+βb m |m is the expected difference in latent value added on m′ associated with a one-unit
+difference in latent value added on m. I estimate both objects for all pairs among the seven
+primary outcomes, using the same outcome-specific samples as the pooled VA exercise.
+They are descriptive until combined with the lottery pass-through estimates in Section 4.4,
+where I assess whether they predict causal cross-outcome gains.
+     Inference uses a school-level nonparametric bootstrap. Each replicate jointly recom-
+putes the two variances and covariance entering a correlation or projection.
+
+
+
+
+                                            20
+BEAM                                                         Do High Schools Shape College Choices?
+
+
+4      Causal Effects of Schools
+I organize the results in four blocks. First, I describe the scale of the underlying outcomes
+and the distribution of the seven primary observational school value-added measures.
+Second, I report the first-stage and pass-through estimates for each outcome. Third, I relate
+the value-added measures to school organization and staff credentials. Finally, I estimate
+the covariance structure of school value added and compare its implied cross-outcome
+gains with direct IV estimates.
+
+
+4.1      Distribution of Value-Added Estimates
+Table 3 reports the scale of each student outcome and the dispersion of the corresponding
+school value-added measure for all seven primary outcomes. Binary outcomes and their
+value-added measures are expressed in percentage points, while achievement outcomes are
+expressed in standard deviations. For school value added, the table compares the posterior
+EB standard deviation and 90–10 gap with the dispersion of the unshrunk estimates and
+the cross-cohort RSS estimate of latent dispersion.
+
+         Table 3: Scale of student outcomes and dispersion of school value added
+                                              Student outcome             School VA dispersion
+      Outcome                  Units        N Mean          SD   EB SD Unshrunk SD RSS SD EB 90–10
+      Math achievement          SD     561,977 0.043    1.002    0.223     0.256       0.256      0.496
+      Verbal achievement        SD     569,047 0.049    0.989     0.151    0.187       0.187     0.375
+      Admission exam taken      pp     757,999 75.3     43.1     10.347    11.537     11.472     25.415
+      Financial aid application pp     931,547 75.7     42.9      7.771     9.988      9.962     16.746
+      Higher-ed enrollment      pp     931,547 67.2      47.0    4.898     7.208       7.121     11.947
+      High-premium institution pp      757,999 14.2     34.9     12.146    13.447     13.449     29.342
+      High-premium field        pp     715,740 34.7     47.6      5.579     8.448      8.562     12.561
+
+       Notes: Outcomes use the units in column 2. Math, verbal, high-premium-institution, and field
+      measures are estimated among exam takers; non-enrollees are coded zero for the latter two. EB
+      columns report student-weighted dispersion in shrunken, centered school VA; unshrunk VA is
+      its fixed-effect input. RSS reports latent dispersion from cross-cohort products using the same
+      samples and weights.
+
+    The school value-added measures also display substantial dispersion. The posterior
+EB standard deviation is 0.223 for math and 0.151 for verbal achievement; their 90–10
+gaps are 0.496 and 0.375 standard deviations, respectively. For the binary outcomes, the
+posterior EB standard deviations range from 4.9 percentage points for higher-education
+enrollment to 12.1 percentage points for high-premium-institution enrollment. As expected,
+EB shrinkage produces less dispersion than either the unshrunk estimates or the RSS
+estimates of latent school heterogeneity. These distributions show that the observational
+measures contain economically meaningful variation and provide the scale needed to
+interpret the pass-through estimates below.
+
+
+4.2      Validation of Value Added Estimates
+In this section I report the results of the scalar IV regression.
+
+                                                       21
+BEAM                                                                Do High Schools Shape College Choices?
+
+
+4.2.1       First-stage estimates
+
+Table 4 reports the first-stage coefficients corresponding to equation 9. In particular
+it reports the κ coefficient for each value added. This parameter summarizes how the
+value-added of the offers translates into improvements in the value-added of the school
+attended. For instance, students who receive an offer of a school with 1 unit s.d. higher
+VA in math ahievement end up, on average, attending high schools with 0.442 more
+s.d. in math VA. Most cofficients are between 0.405 and 0.474, except for the first-stage
+coefficient on the value added for high-premium institutions which is estimated to be
+0.269. This could sugest that this dimension of value added is either less salient or less
+relevant to families when they decide whether to comply or not with the offer. Howeover,
+it could also be the case that this value added dimension is correlated with other elements
+which reduce the compliance.
+
+     Table 4: First-stage coefficients for the main EB school-value specifications
+                   Achievement                    Postsecondary access                    Within higher-education choice
+                  Math     Verbal    Exam taking Fin. aid app. Higher-ed enrollment   High-premium inst.   High-premium field
+  EB
+ κ               0.442*** 0.435***    0.424***      0.405***             0.428***          0.269***            0.474***
+                  (0.008)  (0.007)     (0.006)       (0.006)              (0.006)           (0.009)             (0.007)
+ First-stage F    3189.8   4210.0      5920.0        4222.7               5489.2             821.1              4278.6
+ N                92,361   93,980     135,844       135,844              135,844            94,487              94,487
+
+Notes: Each column regresses attended-school EB value added on first-round offered-school EB value added
+using the corresponding Table 5 sample and controls. High-premium-institution and field specifications
+are restricted to exam takers, with non-enrollees coded zero. Robust standard errors are in parentheses;
+the F statistic tests the excluded instrument. ∗ p < 0.10, ∗∗ p < 0.05, ∗∗∗ p < 0.01.
+
+
+    The first-stage F statistic is high across specifications confirming that the value added
+offer instrument is a relevant instrument for the value added of the school attended.
+
+4.2.2       Second-stage estimates
+
+Table 5 reports the seven primary EB IV estimates. Each column uses the same outcome
+to construct the observational school value-added measure, the first-round offered-school
+value-added instrument, and the realized attended-school value-added treatment. The
+coefficients can therefore be read as pass-through estimates: how much a lottery-induced
+increase in a school’s observational value added translates into a causal gain in the
+corresponding student outcome.
+    The value-added metrics for achievement contain important signal: I reject ψ = 0
+in both these dimensions of value added. In particular, the pass-through estimates for
+achievement are both above one: a one-unit increase in the EB math value-added index
+raises math achievement by 1.197, while the analogous estimate for verbal is 1.031. These
+coefficients are in the ballpark of those reported by Angrist et al. (2017) (in the range
+of 0.864 to 0.95) and those reported by Angrist et al. (2024) (in the range of 0.933 and
+1.12 for conventional value added). There is evidence to reject the unbiased forecast for
+the math value added (p = 0.042) but I am unable to reject it for verbal value added
+(p = 0.754)
+
+                                                               22
+BEAM                                                                  Do High Schools Shape College Choices?
+
+     Table 5: Pass-through coefficients for the main EB school-value specifications
+                      Achievement                     Postsecondary access                      Within higher-education choice
+                    Math      Verbal     Exam taking Fin. aid app.   Higher-ed enrollment   High-premium inst.   High-premium field
+     EB
+ ψ                 1.197***   1.031***    0.486***      0.584***             0.743***            0.667***            0.861***
+                    (0.097)    (0.098)     (0.052)       (0.098)              (0.117)             (0.120)             (0.087)
+          EB
+ p-value: ψ = 0 < 0.001       < 0.001     < 0.001       < 0.001              < 0.001             < 0.001             < 0.001
+ p-value: ψ EB = 1   0.042      0.754     < 0.001       < 0.001                0.028               0.005               0.108
+ N                  92,361     93,980      135,844      135,844               135,844             94,487              94,487
+
+Notes: Each column instruments attended-school EB value added with first-round offered-school EB
+value added. Controls are expected VA, cohort, grade-4 math and verbal scores, gender, and age. High-
+premium-institution and field specifications are restricted to exam takers, with non-enrollees coded zero.
+Robust standard errors are in parentheses. Reported p-values test ψ EB = 0 and ψ EB = 1. ∗ p < 0.10,
+∗∗
+   p < 0.05, ∗∗∗ p < 0.01.
+
+
+    An important contribution of this paper is to extend this validation exercise to
+consequential higher-education outcomes for which a lagged measure of the same outcome
+is unavailable. The estimates show that the observational value-added measures contain
+causal predictive content well beyond achievement: the null hypothesis ψ = 0 is rejected
+for admission-exam taking, financial-aid applications, higher-education enrollment, high-
+premium-institution enrollment, and high-premium-field enrollment.
+    The magnitude of pass-through nevertheless differs across outcomes. A one-unit
+increase in admission-exam-taking value added raises the probability of taking the exam
+by 0.486 units, and the corresponding coefficient for high-premium-institution enrollment
+is 0.667. Both estimates are statistically below one, with p < 0.001 and p = 0.005,
+respectively, implying that the observational measures overpredict the gains generated
+by lottery-induced movement toward higher-value-added schools along these dimensions.
+Financial-aid-application value added also has a positive but incomplete pass-through
+of 0.584, and the one-for-one benchmark is rejected with p < 0.001. The corresponding
+estimate for higher-education enrollment is 0.743, with the one-for-one benchmark rejected
+at p = 0.028.
+    By contrast, the pass-through coefficient for high-premium-field enrollment is 0.861,
+and I cannot reject the one-for-one benchmark (p = 0.108). The estimates therefore
+suggest that observational differences across schools in these two dimensions closely predict
+the causal gains induced by the lottery, while the measures for exam taking, high-premium
+institutions, and financial-aid applications remain informative but systematically overstate
+those gains.
+    Taken together, these results show that high schools affect more than test-score
+production. Lottery-induced movement toward schools with higher outcome-specific value
+added changes students’ progression into the admissions process, the types of programs
+and institutions they enter, and their engagement with the financial-aid system. Because
+these coefficients are identified by students whose attended-school value added responds
+to the lottery offer, they describe pass-through along the lottery-induced compliance.
+
+
+
+
+                                                               23
+BEAM                                                                                                     Do High Schools Shape College Choices?
+
+
+4.3             Correlates of Value Added
+The preceding results show that schools differ substantially across several dimensions
+of value added. A natural next question is whether these differences are systematically
+related to observable school characteristics. The lottery design does not identify the
+causal effects of these characteristics: lotteries shift the school a student attends, but do
+not independently randomize school inputs such as staffing, size, or administration type.
+Everything in this section is therefore descriptive. A correlation between value added and,
+for example, the age composition of the teaching staff may reflect the effect of that input,
+the characteristics of schools able to attract such staff, or other school features correlated
+with both. The goal is to describe where each dimension of school quality is concentrated
+and which dimensions are well summarized by observable school characteristics.
+
+4.3.1             Administration type, size, and curricular track
+
+Table 6 regresses each EB value-added measure on indicators for administration type,
+school size, and curricular track. Value added is expressed in the units of each outcome
+and centered at the student-weighted mean, so coefficients measure differences relative to
+the omitted category: municipal schools administered directly by a municipal education
+department, with 100–249 students and no technical-professional or artistic track.
+
+Table 6: School value added by administration type, school size, and curricular
+track
+                                 N schools   Share of students        (1)             (2)            (3)                   (4)                  (5)               (6)                (7)
+                                                                 Math VA (SD)   Verbal VA (SD)   Exam VA (pp)    Fin. aid app. VA (pp)   Higher-ed VA (pp) HP inst. VA (pp)   HP field VA (pp)
+Intercept (omitted: Municipal,
+100–249 students)                      84          1.3%            -0.054∗∗∗       -0.027∗∗∗          -0.081             0.076                -0.523∗          -3.887∗∗∗          -0.650∗∗∗
+                                                                    (0.007)         (0.005)          (0.587)            (0.412)               (0.282)           (0.389)            (0.244)
+Administration type
+Municipal corporation                 222          8.8%             0.020∗           0.007          -2.209∗∗∗          -2.106∗∗∗             -1.573∗∗∗         5.950∗∗∗            0.331
+                                                                   (0.011)          (0.009)          (0.810)            (0.575)               (0.406)           (0.620)           (0.419)
+Delegated administration               70          4.4%            -0.021∗∗        -0.027∗∗∗        -5.871∗∗∗          -2.304∗∗∗             -1.716∗∗∗           1.358            2.822∗∗
+                                                                   (0.010)          (0.009)          (1.046)            (0.625)               (0.591)           (0.901)           (1.423)
+SLEP                                  176          5.3%             0.012            0.013            -1.448             -0.949                -0.232          3.137∗∗∗           1.050∗∗
+                                                                   (0.009)          (0.008)          (0.928)            (0.609)               (0.418)           (0.815)           (0.416)
+Private subsidized                   1,795        52.8%            0.024∗∗∗        0.021∗∗∗         1.812∗∗∗            0.837∗∗              0.882∗∗∗          1.256∗∗∗            0.193
+                                                                   (0.006)          (0.005)          (0.533)            (0.368)               (0.258)           (0.350)           (0.248)
+Fully private                         476         10.2%            0.330∗∗∗        0.197∗∗∗         6.523∗∗∗          -10.119∗∗∗             1.984∗∗∗          16.434∗∗∗          1.739∗∗∗
+                                                                   (0.014)          (0.008)          (0.612)            (0.603)               (0.296)           (0.728)           (0.298)
+School tracks
+Technical-professional                931         40.8%            -0.101∗∗∗       -0.111∗∗∗        -8.652∗∗∗          -1.113∗∗∗             -2.884∗∗∗         -1.309∗∗∗           -0.051
+                                                                    (0.005)         (0.004)          (0.464)            (0.311)               (0.234)           (0.337)           (0.239)
+Artistic                                2        < 0.1%            -0.158∗∗∗       0.024∗∗∗           2.801             3.202∗∗∗              4.004∗∗          24.475∗∗∗          -7.257∗
+                                                                    (0.026)         (0.007)          (1.800)            (0.510)               (1.733)           (8.875)           (3.922)
+School size
+Fewer than 100 students               626          3.6%            -0.042∗∗∗       -0.033∗∗∗        -10.103∗∗∗         -4.908∗∗∗             -2.436∗∗∗         -1.674∗∗∗           -0.262
+                                                                    (0.009)         (0.006)           (0.529)           (0.397)               (0.218)           (0.408)           (0.172)
+250–499 students                      977         36.8%            0.026∗∗∗        0.021∗∗∗          2.748∗∗∗          1.208∗∗∗              1.050∗∗∗           0.755∗             -0.155
+                                                                    (0.007)         (0.005)           (0.392)           (0.306)               (0.204)           (0.408)           (0.201)
+500+ students                         466         38.8%             0.022∗∗∗        0.015∗∗          2.794∗∗∗          1.530∗∗∗              1.652∗∗∗           1.306∗∗           0.742∗∗
+                                                                    (0.008)         (0.006)           (0.524)           (0.379)               (0.276)           (0.547)           (0.343)
+Schools                              3,274        100.0%
+Population mean                                                     0.043           0.049            75.344             75.717                67.159            14.192             34.743
+R2                                                                  0.389           0.411             0.281              0.263                 0.143            0.273               0.023
+
+
+Notes: School-level OLS regressions include the displayed administration, size, and track indicators. The
+intercept is Municipal, 100–249 students, with neither listed track. Math and verbal VA are in student
+SDs; binary outcomes are in percentage points. The first two columns give school counts and student
+shares. HC1 standard errors are in parentheses. ∗ p < 0.10, ∗∗ p < 0.05, ∗∗∗ p < 0.01.
+
+
+    Analyzing the three covariate blocks yields different insights. First, differences between
+the publicly funded administration types are modest for achievement but larger for
+institution choice. Schools run by municipal corporations and by the new local public
+
+
+
+                                                                                               24
+BEAM                                                       Do High Schools Shape College Choices?
+
+
+education services (SLEP) show no meaningful achievement advantage, yet raise high-
+premium-institution enrollment by 6.0 and 3.1 percentage points, respectively.
+    Relative to the omitted category, private-subsidized schools, which enroll 52.8% of
+students, have value added 0.024 SD higher in math and 0.021 SD higher in verbal
+achievement and enroll students at high-premium institutions 1.2 percentage points more.
+    Fully private schools stand apart on every dimension, with value added 0.330 SD
+higher in math. Their graduates are 6.5 percentage points more likely to register for
+higher-education exams and they enroll in high-premium institutions at an additional 16.43
+percentage points, more than doubling the population average. The value added estimates
+also suggest they exhibit 10.1 percentage points lower for financial-aid applications 8 .
+Because fully private schools do not participate in SAE, their value added is not validated
+by the lottery design, and these estimates should be read with particular caution.
+    Second, curricular track is strongly associated with achievement and access, but not
+with field choice. Technical-professional schools, which enroll 40.8% of students, have
+value added 0.101 SD lower in math and 0.111 SD lower in verbal achievement, and reduce
+admission-exam taking by 8.7 percentage points and entrance to higher education by 2.9
+percentage points. This makes sense, insofar as these schools are focused in providing
+students with skills to enter the labor market immediately upon graduation. This might
+also explain why they are less likely to apply for financial aid.
+    Thirdly, school size seems to be correlated almsot monotonically with higher VA: Across
+matehmatics, test-taking, entrance to higher education and enrollment in high-premium
+institutions, smaller schools perform significantly worse and larger schools significantly
+better 9 .
+    Finally, note that these characteristics explain a substantial share of the variation in
+achievement value added, and almost none of the variation in field value added. The R2 is
+0.389 for math and 0.411 for verbal achievement, compared with 0.273 for high-premium
+institutions, 0.143 for higher-education enrollment, and only 0.023 for high-premium fields.
+Administration type, size, and track thus largely account for the dimensions of school
+quality that parents and policymakers might be more familiar with through test scores.
+
+4.3.2    Staff characteristics
+
+To go beyond administrative categories, I link schools to administrative staff records. For
+each school, I compute annual headcounts of teachers, counselors, and school leadership
+from the staff directory between 2018 and 2024, and divide them by the number of students
+in the school’s grade-8 cohorts. The staff directory also reports whether each staff member
+holds a university qualification and a teaching qualification.
+    8
+      It might be easy to think this particular result is trivial given that fully private schools have richer
+students and thus lower need for financial need. Remember, however, that the VA estimation does control
+for income decile (at grade 4) and the education level of the parents of each student. More likely, this
+result arises from the lag in the income decile measure
+    9
+      Though some of this effect might arise from smaller schools serving in rural communities
+
+
+
+
+                                                     25
+BEAM                                                     Do High Schools Shape College Choices?
+
+
+    I further match staff to the register of higher-education degrees granted in Chile (SIES),
+which records the institution and program of each degree, allowing for more granularity.
+This includes not only undergraduate degrees, but also postgraduate education such as
+master’s degrees (3-4 semesters) and shorter degrees (1 or 2 semesters). From these
+records, I am able to distinguish degrees coming from high-premium institutions, as well
+as whether the staff holds a role-specific credential (e.g., a counseling degree).
+    Howver, because the available SIES register begins in 2007, complete degree histories
+are observable only for younger staff. I therefore compute the detailed degree measures
+only for staff born in 1989 or later, who were at most 18 years old when the register began.
+These measures are observed for 2,045 schools for teachers, but only 214 for counselors
+and 314 for leadership, so the counselor and leadership estimates are considerably less
+precise.
+    For older staff, I rely on the qualifications reported in the staff directory.
+    Table 7 shows the results for this exercise, controlling for the administration-type,
+school-size, and curricular-track indicators reported in Table 6.
+    The strongest and most systematic relationships in appear between achievement value
+added and teacher characteristics. Schools with more teachers per student, particularly
+younger and middle-aged teachers, tend to have higher math and verbal value added.
+The share of high-school teachers with undergraduate degrees and high-school specific
+qualification also seems correlated with higher achievement. From the more detailed
+analysis, master’s degrees in teaching also seem highly correlated with achievement gains.
+    The compositional age of teachers has an interesting pattern on exam-taking, higher-
+education enrollment and application to financial aid. Younger teachers correlate with
+higher VA rates, while the opposite is true for older ones. At the same time older teachers
+seem to be more prevalent in schools with high value added in high-premium fields.
+    The share of teachers with undergraduate degrees also correlates with higher rates
+of exam-taking and entrance to higher education, as one might expect. However, the
+share of young teachers with high-premium undergraduate has less obvious correlations:
+suggesting a sizeable increase in those students that enroll in high-premium institutions
+while also lowering the rates of entering higher-education and applying for financial aid
+altogether 10 .
+    The conselors and leadership show far less often significant relationships with value
+added. Notable exceptions include the number of middle-aged counselors and leadership
+correlating with students attending high-premium instutions, and number of older lead-
+ership with rates of students attending high-premium fields. I also observe, counselors
+with role-specific master’s degrees correlate with lower rates of attending a high-premium
+institution.
+    The bottom rows of Table 7 summarize the explanatory power of these observables.
+Adding the detailed staffing measures increases the R2 substantially for high-premium-
+institution value added and more modestly for achievement and the other outcomes. As a
+  10
+      One could rationalize these effects through high quality teachers motivating more able students while
+allienating marginal ones.
+
+
+                                                    26
+BEAM                                                                                                 Do High Schools Shape College Choices?
+
+            Table 7: Staff measurement coverage and school value added
+                                                                       (1)      (2)             (3)         (4)              (5)           (6)           (7)
+                                                                     Math VA Verbal VA       Exam VA Fin. aid app. VA   Higher-ed VA   HP inst. VA   HP field VA
+            Staffing by age
+              Teachers: under age 35 per 100 students                 0.171∗∗∗    0.150∗∗∗      0.107∗∗∗    0.120∗∗∗      0.092∗∗∗       -0.051∗∗      0.030
+                                                                      (0.033)     (0.027)       (0.020)     (0.026)        (0.024)       (0.021)      (0.027)
+              Teachers: ages 35–49 per 100 students                   0.096∗∗∗    0.092∗∗∗       0.035∗      0.031          0.028          0.014       0.027
+                                                                      (0.030)     (0.026)       (0.020)     (0.025)        (0.023)       (0.022)      (0.026)
+              Teachers: age 50+ per 100 students                       0.034       0.035        -0.047∗∗   -0.085∗∗∗      -0.075∗∗∗       0.023       0.077∗∗∗
+                                                                      (0.027)     (0.023)       (0.022)     (0.026)        (0.023)       (0.023)      (0.030)
+              Counselors: under age 35 per 100 students                -0.032     -0.045∗∗       -0.005    -0.056∗∗∗       -0.037∗∗       -0.012        0.030
+                                                                      (0.028)     (0.022)       (0.017)     (0.019)        (0.019)       (0.016)      (0.025)
+              Counselors: ages 35–49 per 100 students                   0.040       0.023         0.019       0.033         0.023        0.070∗∗∗      0.038
+                                                                      (0.025)     (0.023)       (0.016)     (0.022)        (0.022)       (0.021)      (0.024)
+              Counselors: age 50+ per 100 students                      0.014       0.005        0.015       -0.013         0.001          0.030       -0.010
+                                                                      (0.023)     (0.023)       (0.017)     (0.026)        (0.027)       (0.023)      (0.031)
+              Leadership: under age 35 per 100 students                 0.021       0.012        -0.019      0.046∗         0.021         -0.002       -0.034
+                                                                      (0.030)     (0.024)       (0.020)     (0.026)        (0.024)       (0.025)      (0.025)
+              Leadership: ages 35–49 per 100 students                   0.016      -0.011         0.014      0.008          0.024        0.044∗∗       -0.011
+                                                                      (0.025)     (0.020)       (0.018)     (0.022)        (0.021)       (0.020)      (0.022)
+              Leadership: age 50+ per 100 students                      0.037       0.025        0.023       -0.008         0.016          0.004       0.042∗
+                                                                      (0.025)     (0.023)       (0.017)     (0.022)        (0.021)       (0.022)      (0.023)
+            Qualifications reported in the staff directory (all staff)
+              Teachers: university qualification share                 0.084∗∗∗   0.099∗∗∗      0.082∗∗∗    0.052         0.066∗∗         -0.030        -0.008
+                                                                       (0.025)    (0.024)       (0.027)    (0.032)        (0.031)        (0.025)       (0.035)
+              Teachers: high-school teaching qualification share 0.185∗∗∗         0.180∗∗∗      0.131∗∗∗    0.022          -0.011        -0.077∗∗       -0.048
+                                                                       (0.031)    (0.029)       (0.027)    (0.032)        (0.033)        (0.032)       (0.040)
+              Counselors: university qualification share                 0.013     0.003          0.024     0.040∗         0.031         -0.045∗∗       0.023
+                                                                       (0.022)    (0.019)       (0.019)    (0.023)        (0.024)        (0.021)       (0.023)
+              Counselors: teaching qualification share                  -0.003    -0.042∗∗       -0.003     0.025          0.026           0.023         0.039
+                                                                       (0.021)    (0.018)       (0.020)    (0.023)        (0.026)        (0.019)       (0.032)
+              Leadership: university qualification share                 0.020     0.014        -0.035∗∗    -0.017          0.021         -0.015       0.037∗
+                                                                       (0.021)    (0.020)       (0.015)    (0.020)        (0.020)        (0.016)       (0.020)
+              Leadership: teaching qualification share                  -0.023     0.000        0.045∗∗    0.066∗∗∗       0.050∗∗          0.027        -0.001
+                                                                       (0.018)    (0.018)       (0.019)    (0.023)        (0.022)        (0.017)       (0.035)
+            Detailed linked-degree measures (staff born in 1989 or later)
+              Teachers: high-premium undergraduate share                0.116∗      0.032        0.020     -0.134∗∗       -0.094∗        0.518∗∗∗       -0.025
+                                                                       (0.067)    (0.053)       (0.050)    (0.053)        (0.052)        (0.062)       (0.066)
+              Teachers: any high-premium credential share               -0.029      0.032        -0.002      0.046          0.071          0.070         0.006
+                                                                       (0.067)    (0.052)       (0.049)    (0.051)        (0.051)        (0.058)       (0.064)
+              Teachers: role-specific qualification share                0.012    0.045∗∗       0.051∗∗      0.031          0.004        -0.054∗∗     -0.181∗∗∗
+                                                                       (0.022)    (0.022)       (0.021)    (0.026)        (0.026)        (0.023)       (0.033)
+              Teachers: role-specific master’s share                   0.059∗∗    0.050∗∗∗        0.019     -0.003         -0.002          0.004        -0.011
+                                                                       (0.023)    (0.019)       (0.013)    (0.018)        (0.018)        (0.017)       (0.020)
+              Counselors: high-premium undergraduate share              -0.065      0.038        -0.078     -0.046         -0.045         0.058         0.049
+                                                                       (0.082)    (0.069)       (0.062)    (0.064)        (0.057)        (0.062)       (0.090)
+              Counselors: any high-premium credential share              0.139      0.076         0.032     -0.001          0.037         -0.029         0.020
+                                                                       (0.108)    (0.077)       (0.053)    (0.059)        (0.060)        (0.063)       (0.086)
+              Counselors: role-specific qualification share             -0.117     -0.041         0.067      0.084         -0.030          0.034        -0.090
+                                                                       (0.076)    (0.060)       (0.052)    (0.062)        (0.052)        (0.051)       (0.067)
+              Counselors: role-specific master’s share                   0.054      0.029        -0.030     -0.076         -0.060        -0.069∗∗       -0.019
+                                                                       (0.066)    (0.049)       (0.027)    (0.059)        (0.037)        (0.027)       (0.040)
+              Leadership: high-premium undergraduate share               0.083      0.013       0.096∗      0.133∗          0.072          0.035         0.101
+                                                                       (0.071)    (0.064)       (0.052)    (0.071)        (0.071)        (0.066)       (0.090)
+              Leadership: any high-premium credential share              0.042      0.077        -0.016     -0.029         -0.014          0.011        0.049
+                                                                       (0.075)    (0.057)       (0.055)    (0.070)        (0.077)        (0.054)       (0.082)
+              Leadership: role-specific qualification share              0.054     -0.039         0.070     -0.022          0.040         0.100         -0.089
+                                                                       (0.120)    (0.098)       (0.068)    (0.106)        (0.097)        (0.098)       (0.118)
+              Leadership: role-specific master’s share                  -0.118     -0.017        -0.077      0.036         -0.015         -0.101         0.056
+                                                                       (0.122)    (0.098)       (0.066)    (0.100)        (0.091)        (0.095)       (0.108)
+            R2 : controls only                                          0.157      0.293         0.486      0.210          0.240          0.058         0.020
+            R2 : adding staff (full model)                              0.232      0.360         0.530      0.258          0.268          0.421         0.065
+            Gain from staff measures (∆R2 )                             0.074      0.067         0.044      0.048          0.028          0.364         0.046
+            Schools                                                     2,058      2,058         2,058      2,058          2,058          2,058         2,058
+
+
+Notes: School-level OLS regressions use public and subsidized-private schools with at least 100 VA-sample
+students. VA and continuous regressors are standardized. Staff measures average 2018–2024 records;
+linked detailed credentials cover staff born in 1989 or later. Regressions include Table 6 controls and
+missingness indicators. HC1 standard errors are in parentheses. ∗ p < 0.10, ∗∗ p < 0.05, ∗∗∗ p < 0.01.
+
+
+result, enrollment in high-premium goes from being one of the less explained dimensions
+of value added to one of the best explained. Nevertheless, most of the variation remains
+difficult to explain using these observable school characteristics.
+    Taken together, these results suggest that observable staff characteristics are infor-
+mative about some dimensions of school effectiveness, but much less so about others.
+Achievement, admission-exam taking, and high-premium-institution value added are rel-
+atively strongly related to observable staffing patterns and qualifications. By contrast,
+field-choice value added remains considerably harder to predict from the characteristics
+observed here.
+    More broadly, different school characteristics appear to explain different dimensions of
+value added. Teacher staffing and qualifications are most closely related to achievement,
+
+
+                                                                                           27
+BEAM                                                       Do High Schools Shape College Choices?
+
+
+while other characteristics are more predictive of whether students enter particular types
+of higher-education institutions or fields. This provides further descriptive evidence that
+school quality is multidimensional: the characteristics associated with a school’s ability to
+raise achievement need not be the same as those associated with its effects on students’
+later educational choices.
+    These relationships should not be interpreted causally. Staffing levels and qualifications
+are themselves choices made by schools and may proxy for other unobserved features of
+the school environment. The exercise is therefore best viewed as characterizing which
+dimensions of school value added are more or less predictable from observable inputs,
+rather than identifying the mechanisms that generate those effects.
+
+
+4.4     Multidimensionality of School Value Added
+Table 8 reports the debiased standard deviations (diagonal) and correlations (lower
+triangle) of latent school value added across the seven primary outcomes, estimated using
+the cross-cohort procedure in equations (19)–(21).
+
+      Table 8: Debiased correlations in latent observational school value added
+                              Math     Verbal    Exam      Fin. aid app   Higher ed.   High-inst.   HP field
+ Math achievement             0.256
+                             [0.008]
+ Verbal achievement           0.856     0.187
+                             [0.008]   [0.004]
+ Admission exam taken         0.267     0.396     0.115
+                             [0.019]   [0.018]   [0.002]
+ Financial aid application   -0.545    -0.423     0.383       0.100
+                             [0.028]   [0.028]   [0.021]     [0.003]
+ Higher-ed enrollment         0.210     0.259     0.659       0.457         0.071
+                             [0.029]   [0.025]   [0.015]     [0.029]       [0.001]
+ High-premium institution     0.558     0.464     0.054      -0.582         0.083        0.134
+                             [0.025]   [0.025]   [0.020]     [0.024]       [0.026]      [0.003]
+ High-premium field           0.253     0.194    -0.021      -0.080         0.255        0.189       0.086
+                             [0.030]   [0.028]   [0.028]     [0.026]       [0.025]      [0.026]     [0.002]
+Notes: Diagonal entries report debiased standard deviations of latent school value added; off-diagonal
+entries report cross-outcome correlations estimated using the procedure in Section 3.5. Bootstrap standard
+errors are in brackets. Math, verbal, high-premium-institution, and high-premium-field value added are
+estimated among admission-exam takers; all other measures use the broader eligible sample.
+
+    The RSS estimates imply somewhat greater dispersion than the EB posterior means
+reported in Table 3, as expected given that the two procedures address sampling noise
+differently.
+    The correlations reveal substantial multidimensionality in school effectiveness. Math
+and verbal value added are closely related, with a correlation of 0.856. By contrast, the
+two measures of postsecondary choice are only weakly related: value added for high-
+premium institutions and high-premium fields correlates at just 0.189, even though both
+are positively related to math value added. Thus, schools that shift students toward
+
+
+                                                     28
+BEAM                                                            Do High Schools Shape College Choices?
+
+
+high-premium institutions are generally not the same schools that shift students toward
+high-premium fields.
+    The access outcomes are more closely related to one another. Higher-education-
+enrollment value added correlates 0.659 with exam-taking value added and 0.457 with
+financial-aid-application value added. But these access measures remain distinct from
+postsecondary choice. In particular, overall enrollment value added is only weakly related
+to high-premium-institution value added, and field value added is essentially unrelated
+to exam-taking value added. Taken together, the estimates suggest that achievement,
+access, institution choice, and field choice capture meaningfully different dimensions of
+high-school effectiveness.
+    Table 9 reports the implied-gains matrix from equation (22), together with joint-
+bootstrap standard errors.
+
+     Table 9: Implied gains across latent observational value-added measures
+                              Math        Verbal      Exam       Fin. aid app   Higher ed.   High-inst.   HP field
+ Math achievement               –        0.623***    0.096***     -0.215***     0.051***      0.294***     0.084***
+                                          (0.013)     (0.009)       (0.013)      (0.007)       (0.013)      (0.010)
+ Verbal achievement          1.176***        –       0.197***     -0.228***     0.086***      0.335***     0.089***
+                               (0.028)                (0.012)       (0.019)      (0.009)       (0.020)      (0.012)
+ Admission exam taken         0.740***    0.796***       –         0.332***     0.409***      0.079***       -0.019
+                               (0.047)     (0.034)                  (0.015)      (0.013)       (0.029)      (0.026)
+ Financial aid application   -1.383***   -0.783***   0.441***          –        0.326***     -0.778***    -0.068***
+                               (0.075)     (0.046)    (0.034)                    (0.027)       (0.028)      (0.022)
+ Higher-ed enrollment        0.874***     0.783***   1.062***     0.639***          –         0.181***     0.353***
+                               (0.122)     (0.077)    (0.028)      (0.032)                     (0.059)      (0.034)
+ High-premium institution    1.060***     0.643***   0.038***     -0.435***     0.038***          –        0.120***
+                               (0.062)     (0.038)    (0.014)      (0.024)       (0.012)                    (0.017)
+ High-premium field          0.760***     0.422***     -0.022     -0.094***     0.184***     0.297***           –
+                               (0.100)     (0.066)    (0.031)      (0.032)       (0.019)      (0.042)
+
+Notes: Each cell reports the implied gain in the column outcome’s latent school value added from a
+one-unit increase in the row outcome’s latent school value added, Cov(row,
+                                                                       d        col)/Var(row).
+                                                                                     d         Bootstrap
+standard errors are in parentheses. The matrix is not symmetric because outcome variances differ.
+Outcome-specific samples follow Table 8. ∗ p < 0.10, ∗∗ p < 0.05, ∗∗∗ p < 0.01.
+
+
+    Because these objects are projections rather than correlations, they are directional.
+For example, a 0.1-SD increase in latent math value added predicts 0.062 SD higher
+verbal value added, while a 10-percentage-point increase in exam-taking value added
+predicts about 4.1 percentage points higher enrollment value added. These projections
+are descriptive: whether they predict causal cross-outcome effects is the question I turn
+to next.
+
+4.4.1     IV validation of RSS-implied gains
+
+I next ask whether the cross-outcome relationships estimated in the observational sample
+predict causal effects in the lottery sample. For each directed pair, I first use the RSS
+covariance structure to predict how much destination-outcome value added accompanies a
+one-unit increase in origin value added. I then use the destination outcome’s same-outcome
+
+
+                                                       29
+BEAM                                                                      Do High Schools Shape College Choices?
+
+
+lottery pass-through to translate that predicted value-added gain into a predicted causal
+outcome gain. Finally, I compare this prediction with a direct cross-outcome IV estimate.
+    For example, for math value added predicting verbal achievement,
+
+                                    0.62                                    0.948
+             Math VA −−−−−−−−→ Verbal VA −−−−−−−−−−−→ Verbal achievement
+                               RSS projection                      verbal pass-through
+
+    implying a causal gain of 0.62 × 0.948 = 0.59, compared with a direct lottery estimate
+of 0.69.
+    This comparison is not a formal test of equality between the two estimates, which
+would require joint inference across the covariance and IV estimators. Instead, it asks
+whether the cross-outcome structure estimated in the observational sample has predictive
+content for causal school effects.
+    Table 10 reports the complete set of estimates in levels. Panel A contains the direct
+cross-outcome IV estimates, while Panel B reports the corresponding RSS-implied causal
+gains. Reading the two panels together preserves the economically meaningful scale of
+each comparison and avoids the instability of ratios when the predicted gain is close to
+zero.
+
+  Table 10: Cross-outcome causal gains: direct IV and RSS-implied predictions
+Row school VA           Math      Verbal    Exam taking   Fin. aid app.   Higher-ed enrollment   High-premium inst.   High-premium field
+Panel A. Direct unshrunk cross-outcome IV
+Math                  1.143*** 0.694***      0.115***        -0.016             -0.034                 0.080**            -0.171***
+Verbal                0.927*** 0.948***      0.168***        -0.027             -0.034                  0.062*            -0.253***
+Exam taking           0.419*** 0.253**       0.470***         0.070              0.056                  -0.050            -0.216***
+Fin. aid app.           0.362     -0.038     0.466***       0.557***           0.488***                 -0.064              -0.174
+Higher-ed enrollment 0.499**       0.107     0.403***       0.364***           0.651***                  0.041              -0.084
+High-premium inst.      0.151      0.354       0.024          0.034              0.074                0.681***             0.371**
+High-premium field      0.037    0.246**      -0.079          0.015             0.102*                0.164***             0.708***
+Panel B. Predicted gain: RSS implied gain × destination-outcome pass-through
+Math                     1.143     0.591        0.045         -0.120             0.033                 0.200                0.060
+Verbal                   1.344     0.948        0.093         -0.127             0.056                 0.228                0.063
+Exam taking              0.846     0.754        0.470          0.185             0.267                  0.054               -0.014
+Fin. aid app.           -1.580    -0.742        0.207          0.557             0.213                 -0.530               -0.048
+Higher-ed enrollment     0.999     0.741        0.500          0.356             0.651                  0.123                0.250
+High-premium inst.       1.211     0.609        0.018         -0.243             0.025                  0.681               0.085
+High-premium field       0.869     0.400       -0.011         -0.052             0.120                 0.202                0.708
+
+Notes: Panel A instruments attended-school unshrunk row value added with offered-school row value
+added and uses the column outcome as the dependent variable. Regressions include the main specification’s
+controls. Panel B multiplies the RSS row-to-column projection by the column outcome’s same-outcome
+IV pass-through. Stars report robust tests against zero in Panel A. ∗ p < 0.10, ∗∗ p < 0.05, ∗∗∗ p < 0.01.
+
+
+    Figure 3 summarizes all 42 off-diagonal comparisons. The relationship is clearly
+positive but far from one-for-one: the correlation between the RSS-implied and direct IV
+gains is 0.45, and the two estimates have the same sign in 79 percent of cases. Thus, the
+covariance structure contains meaningful information about causal cross-outcome effects,
+although it does not precisely predict their magnitude for every pair.
+    Table 11 illustrates the comparison for ten economically relevant pairs. The full set of
+direct-to-implied ratios is reported in Appendix Table 12.
+    Taken together, these results support the paper’s motivating claim that school effects on
+higher-education choices are not simply a noisy reflection of school effects on achievement.
+
+
+                                                                 30
+BEAM                                                                                                                             Do High Schools Shape College Choices?
+
+
+
+                                                                      Direct IV estimates versus RSS−implied causal gains
+                                                                      Off−diagonal comparisons: correlation = 0.45; same sign = 79%
+
+
+
+
+                                                                  1
+                              Direct cross−outcome IV estimate
+
+
+
+
+                                                                  0
+
+
+
+
+                                                                 −1
+
+
+
+
+                                                                                           −1                               0                               1
+                                                                                                             RSS−implied causal gain
+                                                                      Vertical bars are 95% confidence intervals for the direct IV estimates; the dashed line denotes exact agreement.
+
+
+
+    Figure 3: RSS-implied causal gains and direct cross-outcome IV estimates
+Notes: Points compare direct cross-outcome IV estimates with RSS-implied causal gains. Vertical bars
+are 95% confidence intervals for the direct IV estimates; the dashed line denotes exact agreement.
+
+
+
+
+      Table 11: Selected cross-outcome relationships and direct IV validation
+Conceptual link                                                  School VA → outcome                                                 RSS projection             RSS-implied gain         Direct IV   Direct / implied
+Academic complementarities                                       Math → Verbal                                                              0.62                       0.59                 0.69          1.17
+                                                                                                                                           (0.01)                                         (0.08)
+Academic complementarities                                       Verbal → Math                                                              1.18                       1.34                 0.93          0.69
+                                                                                                                                           (0.03)                                         (0.10)
+Academic preparation and access Math → Exam taking                                                                                          0.10                       0.05                0.12           2.54
+                                                                                                                                           (0.01)                                         (0.04)
+Academic preparation and access Verbal → Exam taking                                                                                        0.20                       0.09                0.17           1.82
+                                                                                                                                           (0.01)                                         (0.05)
+Access complementarities                                         Exam taking → Higher-ed enrollment                                         0.41                       0.27                0.06           0.21
+                                                                                                                                           (0.01)                                         (0.05)
+Access complementarities                                         Fin. aid app. → Higher-ed enrollment                                       0.33                       0.21                0.49           2.29
+                                                                                                                                           (0.03)                                         (0.11)
+Postsecondary complementarities                                  High-premium inst. → High-premium field                                    0.12                       0.09                0.37           4.35
+                                                                                                                                           (0.02)                                         (0.15)
+Postsecondary complementarities                                  High-premium field → High-premium inst.                                    0.30                       0.20                 0.16          0.81
+                                                                                                                                           (0.04)                                         (0.05)
+Access and postsecondary choice                                  Higher-ed enrollment → High-premium inst.                                  0.18                       0.12                0.04           0.33
+                                                                                                                                           (0.06)                                         (0.07)
+Access and postsecondary choice                                  Higher-ed enrollment → High-premium field                                  0.35                       0.25                -0.08          -0.34
+                                                                                                                                           (0.03)                                         (0.12)
+
+Notes: The table reports ten pairs chosen a priori to represent five economically relevant links. The
+implied gain multiplies the RSS row-to-column projection by the destination outcome’s same-outcome IV
+pass-through. Parentheses contain bootstrap standard errors for RSS projections and regression standard
+errors for direct IV estimates. A direct-to-implied ratio of one denotes exact agreement.
+
+
+
+
+                                                                                                                      31
+BEAM                                           Do High Schools Shape College Choices?
+
+
+Achievement, postsecondary access, institution choice, and field choice are related but
+distinct dimensions of school effectiveness. Even two outcomes that might appear closely
+connected—placing students in high-premium institutions and placing them in high-
+premium fields—are only weakly related across schools.
+    This matters for how school quality is interpreted. A ranking based on achievement
+value added contains some information about schools’ effects on later outcomes, but it
+is far from a sufficient summary. Schools that look similar when ranked by achievement
+can have very different effects on whether students enter higher education and on the
+institutions and fields they ultimately choose.
+
+
+
+
+                                          32
+BEAM                                              Do High Schools Shape College Choices?
+
+
+5     Conclusion
+High schools shape more than students’ academic achievement. Using lottery variation
+from Chile’s centralized school assignment system, I show that observational measures of
+school value added predict causal effects on postsecondary access and higher-education
+choices as well as on achievement. At the same time, these dimensions of school effectiveness
+are far from interchangeable. Schools that improve achievement are not necessarily those
+that move students toward higher education, and schools that increase enrollment in
+high-premium institutions are only weakly related to those that increase enrollment in
+high-premium fields.
+    This multidimensionality changes how school effects on later choices should be inter-
+preted. Decisions about whether to enter higher education, which institution to attend,
+and which field to study are ultimately made by students. But the information, prepa-
+ration, expectations, and opportunities underlying those decisions may themselves be
+shaped by the high school attended. Postsecondary choices therefore need not simply
+reveal fixed student preferences; they can also be outcomes of the educational environment
+that precedes them.
+    These results also have implications for how school quality is summarized and com-
+municated. School rankings and school-choice information are often organized around
+achievement, implicitly treating test-score performance as a sufficient statistic for school
+quality. The results here suggest that this can be misleading. Achievement value added is
+informative, but it is only imperfectly related to schools’ effects on postsecondary access
+and on the institutions and fields students ultimately choose. For families who care about
+these later outcomes, an achievement-based ranking can therefore give an incomplete
+picture of the consequences of attending one school rather than another. More generally,
+there may be no single ranking of high schools that is appropriate for all outcomes students
+and families care about.
+    Understanding why schools differ across these dimensions is an important next step.
+The associations with school organization and staff characteristics documented here
+provide some initial clues, but they do not identify the underlying mechanisms. The
+cohorts studied in this paper are also still early in their postsecondary and labor-market
+trajectories. As additional outcomes become observable, it will be possible to ask whether
+the school-induced differences in institution and field choice documented here translate
+into differences in degree completion, earnings, and other longer-run outcomes. More
+broadly, understanding what schools produce requires looking not only at what students
+know when they leave school, but also at the choices they make afterward.
+
+
+
+
+                                             33
+BEAM                                             Do High Schools Shape College Choices?
+
+
+References
+Abdulkadiroğlu, Atila, Joshua Angrist, Yusuke Narita, and Parag Pathak (2017). “Research
+   Design Meets Market Design: Using Centralized Assignment for Impact Evaluation”.
+   In: Econometrica 85, pp. 1373–1432. url: https://EconPapers.repec.org/RePEc:wly:
+   emetrp:v:85:y:2017:i::p:1373-1432.
+Abdulkadiroğlu, Atila, Joshua Angrist, and Parag Pathak (2014). “The Elite Illusion:
+   Achievement Effects at Boston and New York Exam Schools”. en. In: Econometrica
+   82.1. _eprint: https://onlinelibrary.wiley.com/doi/pdf/10.3982/ECTA10266, pp. 137–
+   196. issn: 1468-0262. doi: 10.3982/ECTA10266. url: https://onlinelibrary.wiley.com/
+   doi/abs/10.3982/ECTA10266.
+Angrist, Joshua, Peter Hull, Parag A. Pathak, and Christopher Walters (Jan. 2024).
+  “Credible School Value-Added with Undersubscribed School Lotteries”. In: The Review
+   of Economics and Statistics 106.1, pp. 1–19. issn: 0034-6535. doi: 10.1162/rest_a_
+   01149. url: https://doi.org/10.1162/rest_a_01149.
+Angrist, Joshua, Peter Hull, and Christopher Walters (2023). “Methods for measuring
+   school effectiveness”. en. In: Handbook of the Economics of Education. Vol. 7. Elsevier,
+   pp. 1–60. isbn: 978-0-443-13276-6. doi: 10.1016/bs.hesedu.2023.03.001. url: https:
+   //linkinghub.elsevier.com/retrieve/pii/S1574069223000156.
+Angrist, Joshua D., Peter D. Hull, Parag A. Pathak, and Christopher R. Walters (May
+   2017). “Leveraging Lotteries for School Value-Added: Testing and Estimation*”. In:
+  The Quarterly Journal of Economics 132.2, pp. 871–919. issn: 0033-5533. doi: 10.
+   1093/qje/qjx001. url: https://doi.org/10.1093/qje/qjx001.
+Beuermann, Diether W, C Kirabo Jackson, Laia Navarro-Sola, and Francisco Pardo (Jan.
+   2023). “What is a Good School, and Can Parents Tell? Evidence on the Multidimen-
+   sionality of School Output”. In: The Review of Economic Studies 90.1, pp. 65–101. issn:
+   0034-6527. doi: 10.1093/restud/rdac025. url: https://doi.org/10.1093/restud/rdac025.
+Chetty, Raj, David J Deming, and John N Friedman (Oct. 2025). “Diversifying Society’s
+   Leaders? The Determinants and Causal Effects of Admission to Highly Selective Private
+   Colleges*”. In: The Quarterly Journal of Economics, qjaf050. issn: 0033-5533. doi:
+   10.1093/qje/qjaf050. url: https://doi.org/10.1093/qje/qjaf050.
+Chetty, Raj, John N. Friedman, Nathaniel Hilger, Emmanuel Saez, Diane Whitmore
+   Schanzenbach, and Danny Yagan (Nov. 2011). “How Does Your Kindergarten Class-
+   room Affect Your Earnings? Evidence from Project Star”. In: The Quarterly Journal
+   of Economics 126.4, pp. 1593–1660. issn: 0033-5533. doi: 10.1093/qje/qjr041. url:
+   https://doi.org/10.1093/qje/qjr041.
+Chetty, Raj, John N. Friedman, and Jonah E. Rockoff (Sept. 2014). “Measuring the
+   Impacts of Teachers II: Teacher Value-Added and Student Outcomes in Adulthood”.
+   en. In: American Economic Review 104.9, pp. 2633–2679. issn: 0002-8282. doi: 10.
+   1257/aer.104.9.2633. url: https://www.aeaweb.org/articles?id=10.1257/aer.104.9.2633.
+Dobbie, Will and Roland G. Fryer (Oct. 2015). “The Medium-Term Impacts of High-
+   Achieving Charter Schools”. In: Journal of Political Economy 123.5, pp. 985–1037.
+
+
+                                            34
+BEAM                                             Do High Schools Shape College Choices?
+
+
+   issn: 0022-3808. doi: 10.1086/682718. url: https://www.journals.uchicago.edu/doi/
+   abs/10.1086/682718.
+Dynarski, Susan, C. J. Libassi, Katherine Michelmore, and Stephanie Owen (June 2021).
+   “Closing the Gap: The Effect of Reducing Complexity and Uncertainty in College
+   Pricing on the Choices of Low-Income Students”. en. In: American Economic Review
+   111.6, pp. 1721–1756. issn: 0002-8282. doi: 10.1257/aer.20200451. url: https://www.
+   aeaweb.org/articles?id=10.1257/aer.20200451.
+Hastings, Justine S., Christopher A. Neilson, Anely Ramirez, and Seth D. Zimmerman
+   (Apr. 2016). “(Un)informed college and major choice: Evidence from linked survey and
+   administrative data”. In: Economics of Education Review. Access to Higher Education
+   51, pp. 136–151. issn: 0272-7757. doi: 10 . 1016 / j . econedurev . 2015 . 06 . 005. url:
+   https://www.sciencedirect.com/science/article/pii/S0272775715000813.
+Hoxby, Caroline M. and Sarah Turner (May 2015). “What High-Achieving Low-Income
+   Students Know about College”. en. In: American Economic Review 105.5, pp. 514–517.
+   issn: 0002-8282. doi: 10.1257/aer.p20151027. url: https://www.aeaweb.org/articles?
+   id=10.1257/aer.p20151027.
+Jackson, C. Kirabo (Oct. 2018). “What Do Test Scores Miss? The Importance of Teacher
+   Effects on Non–Test Score Outcomes”. In: Journal of Political Economy 126.5, pp. 2072–
+   2107. doi: 10.1086/699018. url: https://www.journals.uchicago.edu/doi/10.1086/
+   699018.
+Kirkeboen, Lars J., Edwin Leuven, and Magne Mogstad (Aug. 2016). “Field of Study,
+   Earnings, and Self-Selection*”. In: The Quarterly Journal of Economics 131.3, pp. 1057–
+   1111. issn: 0033-5533. doi: 10.1093/qje/qjw019. url: https://doi.org/10.1093/qje/
+   qjw019.
+Rose, Evan K., Jonathan T. Schellenberg, and Yotam Shem-Tov (July 2022). The Effects
+   of Teacher Quality on Adult Criminal Justice Contact. Working Paper. doi: 10.3386/
+   w30274. url: https://www.nber.org/papers/w30274.
+Walters, Christopher (Jan. 2024). “Chapter 3 - Empirical Bayes methods in labor eco-
+   nomics”. In: Handbook of Labor Economics. Ed. by Christian Dustmann and Thomas
+   Lemieux. Vol. 5. Elsevier, pp. 183–260. doi: 10.1016/bs.heslab.2024.11.001. url:
+   https://www.sciencedirect.com/science/article/pii/S1573446324000014.
+
+
+
+
+                                            35
+BEAM                                                                 Do High Schools Shape College Choices?
+
+
+6       Appendix
+
+  Table 12: Ratio of direct cross-outcome IV gains to RSS-implied causal gains
+ Row school VA          Math Verbal    Exam taking   Fin. aid app. Higher-ed enrollment High-premium inst.   High-premium field
+ Math                   1.00    1.17      2.54          0.13              -1.02                0.40                -2.86
+ Verbal                 0.69    1.00      1.82          0.21              -0.62                0.27                -4.02
+ Exam taking             0.50   0.34      1.00           0.38             0.21                -0.92                15.98
+ Fin. aid app.          -0.23   0.05      2.25          1.00              2.29                0.12                  3.61
+ Higher-ed enrollment   0.50    0.14      0.81          1.02               1.00                0.33                -0.34
+ High-premium inst.     0.13    0.58      1.34          -0.14             2.97                1.00                  4.35
+ High-premium field     0.04    0.62      7.47          -0.28             0.85                0.81                  1.00
+
+Notes: Entries divide the direct cross-outcome IV estimate by the corresponding RSS-implied causal gain;
+one denotes exact agreement. Ratios can be unstable when the implied gain is near zero; Table 10 reports
+the estimates in levels. Diagonal entries equal one mechanically.
+
+
+
+
+                                                                36
+

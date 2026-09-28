@@ -4,8 +4,8 @@ repo_wd<-Sys.getenv('CAUSAL_SCHOOLS_REPO_WD',unset=getwd())
 out_dir<-file.path(repo_wd,'output/tables/rss_debiased_varcov')
 input_path<-file.path(out_dir,'unshrunk_cross_outcome_iv_rss_validation.csv')
 x<-fread(input_path)
-order_keys<-c('math','verbal','exam','highinst','highpay','income','aid')
-labels<-c('Math','Verbal','Exam taking','High-premium inst.','High-premium field','Log income','Fin. aid app.')
+order_keys<-c('math','verbal','exam','aid','enrolled','highinst','highpay')
+labels<-c('Math','Verbal','Exam taking','Fin. aid app.','Higher-ed enrollment','High-premium inst.','High-premium field')
 x[,validation_ratio:=direct_iv/predicted_causal_gain]
 x[,`:=`(from_order=match(from_key,order_keys),to_order=match(to_key,order_keys))]
 setorder(x,from_order,to_order)

@@ -34,6 +34,7 @@ find_existing_path <- function(env_var, candidates, label) {
 data_wd <- find_existing_path(
   "CAUSAL_SCHOOLS_DATA_WD",
   c(
+    "C:/Users/brunem/Box/causal_schools",
     "C:/Users/brunem/Dropbox/causal_schools",
     "C:/Users/xd-br/Dropbox/causal_schools"
   ),
@@ -52,6 +53,11 @@ repo_wd <- find_existing_path(
 
 output_dir <- file.path(repo_wd, "output", "tables", "mifuturo_matricula_income")
 dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
+
+# Person-level outcome files live in data/clean so downstream scripts can
+# read them without depending on the repo output directory.
+clean_data_dir <- file.path(data_wd, "data", "clean")
+dir.create(clean_data_dir, recursive = TRUE, showWarnings = FALSE)
 
 non_matriculated_floor_clp <- as.numeric(Sys.getenv("MIFUTURO_NON_MATRICULATED_FLOOR_CLP", "553553"))
 non_matriculated_floor_label <- Sys.getenv(
@@ -78,8 +84,8 @@ program_info_path <- if (file.exists(file.path(data_wd, "data", "clean", "progra
 }
 model_artifact_path <- file.path(output_dir, "mifuturo_income_fe_model_artifact.rds")
 
-person_outcome_path <- file.path(output_dir, "mifuturo_person_level_income_outcomes.csv")
-stata_va_outcome_path <- file.path(output_dir, "mifuturo_person_level_income_outcomes_stata_va.csv")
+person_outcome_path <- file.path(clean_data_dir, "mifuturo_person_level_income_outcomes.csv")
+stata_va_outcome_path <- file.path(clean_data_dir, "mifuturo_person_level_income_outcomes_stata_va.csv")
 source_summary_path <- file.path(output_dir, "mifuturo_person_level_income_source_summary.csv")
 program_summary_path <- file.path(output_dir, "mifuturo_enrolled_program_income_summary.csv")
 unsupported_programs_path <- file.path(output_dir, "mifuturo_enrolled_income_unsupported_programs.csv")

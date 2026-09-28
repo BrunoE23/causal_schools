@@ -1,0 +1,48 @@
+\begin{table}[H]
+\centering
+\caption{Balance across analysis samples}
+\label{tab:balance_samples}
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\begin{tabular}{@{}lcccccc@{}}
+\toprule
+ & \shortstack{Broad Panel\\(All HS)} & \multicolumn{2}{c}{SAE Applicants} & \multicolumn{2}{c}{SAE Applicants w/ risk} & \shortstack{Risk SAE -\\All SAE} \\
+\cmidrule(lr){3-4} \cmidrule(lr){5-6}
+ & Mean & Mean & \shortstack{Diff.\\(2)-(1)\\(SE)} & Mean & \shortstack{Diff.\\(4)-(1)\\(SE)} & \shortstack{Diff.\\(4)-(2)\\(SE)} \\
+ & (1) & (2) & (3) & (4) & (5) & (6) \\
+\midrule
+\multicolumn{7}{l}{\textit{Student characteristics}} \\[2pt]
+Female & 0.492 & 0.484 & -0.008 (0.001) & 0.495 & 0.004 (0.001) & 0.011 (0.001) \\
+Metropolitan Region (Santiago) & 0.387 & 0.257 & -0.130 (0.001) & 0.273 & -0.114 (0.001) & 0.016 (0.001) \\
+Age & 13.4 & 13.4 & 0.000 (0.001) & 13.3 & -0.035 (0.001) & -0.035 (0.001) \\
+\midrule
+\multicolumn{7}{l}{\textit{Baseline SIMCE variables}} \\[2pt]
+Math 4th grade (z) & 0.036 & -0.232 & -0.268 (0.002) & -0.159 & -0.195 (0.002) & 0.073 (0.002) \\
+Verbal 4th grade (z) & 0.036 & -0.189 & -0.225 (0.002) & -0.115 & -0.151 (0.002) & 0.074 (0.002) \\
+Income decile & 5.5 & 4.5 & -0.991 (0.005) & 4.8 & -0.721 (0.006) & 0.271 (0.004) \\
+Mother education years & 11.9 & 10.9 & -1.002 (0.005) & 11.2 & -0.709 (0.007) & 0.292 (0.005) \\
+\quad\footnotesize{\% matched all SIMCE vars} & \footnotesize{82.4\%} & \footnotesize{81.8\%} &  & \footnotesize{83.4\%} &  &  \\
+\midrule
+\multicolumn{7}{l}{\textit{Middle school}} \\[2pt]
+GPA (z) & 0.032 & 0.024 & -0.008 (0.001) & 0.093 & 0.061 (0.002) & 0.069 (0.001) \\
+Attendance (z) & 0.021 & 0.030 & 0.009 (0.001) & 0.043 & 0.022 (0.002) & 0.014 (0.001) \\
+\quad\footnotesize{\% matched all middle-school vars} & \footnotesize{99.8\%} & \footnotesize{99.8\%} &  & \footnotesize{99.8\%} &  &  \\
+\midrule
+\multicolumn{7}{l}{\textit{Outcomes}} \\[2pt]
+Std. math exam & 0.000 & -0.334 & -0.334 (0.002) & -0.289 & -0.289 (0.002) & 0.045 (0.001) \\
+Std. verbal exam & 0.000 & -0.301 & -0.301 (0.002) & -0.230 & -0.230 (0.003) & 0.072 (0.002) \\
+Admission exam taker & 0.776 & 0.738 & -0.038 (0.001) & 0.769 & -0.007 (0.001) & 0.031 (0.001) \\
+Higher ed. enrolled & 0.672 & 0.580 & -0.092 (0.001) & 0.617 & -0.055 (0.001) & 0.037 (0.001) \\
+Hi-premium institution & 0.128 & 0.056 & -0.072 (0.000) & 0.067 & -0.061 (0.001) & 0.011 (0.000) \\
+Hi-premium field & 0.307 & 0.258 & -0.048 (0.001) & 0.280 & -0.026 (0.001) & 0.022 (0.001) \\
+\midrule
+$N$ & 931,547 & 294,198 & & 162,633 & & \\
+Percent of broad panel & 100.0\% & 31.6\% & & 17.5\% & & \\
+Joint test $p$-value & & & $<0.001$ & & $<0.001$ & $<0.001$ \\
+\bottomrule
+\end{tabular}
+\par\medskip\footnotesize
+\begin{minipage}{\textwidth}
+\textit{Notes:} The Broad Panel contains 2017--2020 cohorts with an observed high school and age 12--16. SAE Applicants are timely 2018--2020 grade-9 applicants; \textit{w/ risk} requires $\max_j p_{ij}<1$. Difference columns report the indicated mean differences, with overlap-adjusted standard errors in parentheses. Joint tests cover the baseline characteristics above the Outcomes section.
+\end{minipage}
+\end{table}

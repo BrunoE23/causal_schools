@@ -123,8 +123,8 @@ spec <- "four_year_no_sae"
 
 outcomes <- c(
   "z_year_math_max", "z_year_leng_max",
-  "high_inst_m1", "high_paying_field_m1", "log_program_income_clp_m1",
-  "admission_exam_taker", "any_postulacion"
+  "admission_exam_taker", "any_postulacion", "higher_ed_enrolled_m1",
+  "high_inst_m1", "high_paying_field_m1"
 )
 academic_outcomes <- c("z_year_math_max", "z_year_leng_max")
 math_anchor <- "z_year_math_max"

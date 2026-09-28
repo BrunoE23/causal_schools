@@ -1,0 +1,3 @@
+sample,n_schools,n_applications,share_student_school_applications,weighted_attendance_if_not_offered,weighted_attendance_if_offered,weighted_first_stage,share_student_school_applications_pct,weighted_attendance_if_not_offered_pct,weighted_attendance_if_offered_pct,weighted_first_stage_pp
+All estimable applied schools,2476,646156,0.994239113709802,0.069351365085937,0.624782432710625,0.555431067624688,99.4239113709802,6.9351365085937,62.4782432710625,55.5431067624688
+Top 100 applied schools,100,158789,0.244328358208955,0.0734248429567892,0.725301381704135,0.651876538747345,24.4328358208955,7.34248429567892,72.5301381704135,65.1876538747345

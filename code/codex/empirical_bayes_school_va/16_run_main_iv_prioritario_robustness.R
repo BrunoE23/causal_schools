@@ -9,10 +9,10 @@ table_dir <- file.path(repo_wd,'output/tables/empirical_bayes_school_va',pair_ta
 input_path <- Sys.getenv('EB_IV_REGRESSION_INPUT_PATH',unset=file.path(clean_dir,'scalar_iv_regression_df.csv'))
 
 specs <- data.table(
-  spec=c('math_adj_eb','leng_adj_eb','exam_adj_eb','highinst_adj_eb','highpay_adj_eb','program_income_adj_eb','anypost_adj_eb'),
-  outcome=c('z_year_math_max','z_year_leng_max','admission_exam_taker','high_inst_m1','high_paying_field_m1','log_program_income_clp_m1','any_postulacion'),
-  label=c('Math','Verbal','Exam taking','High-premium inst.','High-premium field','Program income','Fin. aid app.'),
-  require_exam=c(TRUE,TRUE,FALSE,TRUE,TRUE,TRUE,FALSE))
+  spec=c('math_adj_eb','leng_adj_eb','exam_adj_eb','anypost_adj_eb','highered_adj_eb','highinst_adj_eb','highpay_adj_eb'),
+  outcome=c('z_year_math_max','z_year_leng_max','admission_exam_taker','any_postulacion','higher_ed_enrolled_m1','high_inst_m1','high_paying_field_m1'),
+  label=c('Math','Verbal','Exam taking','Fin. aid app.','Higher-ed enrollment','High-premium inst.','High-premium field'),
+  require_exam=c(TRUE,TRUE,FALSE,FALSE,FALSE,TRUE,TRUE))
 
 dt <- fread(input_path,na.strings=c('','NA'))
 dt[,`:=`(mrun=as.numeric(mrun),sae_proceso=as.integer(sae_proceso))]
@@ -60,7 +60,7 @@ setFixest_nthreads(0)
 results<-rbindlist(lapply(seq_len(nrow(specs)),function(i)run_spec(specs[i])))
 fwrite(results,file.path(table_dir,'main_results_prioritario_control.csv'))
 stars<-function(p)fifelse(p<.01,'***',fifelse(p<.05,'**',fifelse(p<.10,'*','')))
-header<-c(' & \\multicolumn{3}{c}{Exams} & \\multicolumn{3}{c}{Higher ed. choices} & Financial aid \\\\','\\cmidrule(lr){2-4} \\cmidrule(lr){5-7} \\cmidrule(lr){8-8}',' & Math & Verbal & Exam taking & High-premium inst. & High-premium field & Program income & Fin. aid app. \\\\')
+header<-c(' & \\multicolumn{2}{c}{Achievement} & \\multicolumn{3}{c}{Postsecondary access} & \\multicolumn{2}{c}{Within higher-education choice} \\\\','\\cmidrule(lr){2-3} \\cmidrule(lr){4-6} \\cmidrule(lr){7-8}',' & Math & Verbal & Exam taking & Fin. aid app. & Higher-ed enrollment & High-premium inst. & High-premium field \\\\')
 make_table<-function(kind=c('psi','kappa')){
   kind<-match.arg(kind)
   if(kind=='psi'){est<-results$psi;std<-results$psi_se;p<-results$psi_p_value;symbol<-'\\psi^{EB}';caption<-'Main EB school-value IV estimates controlling for SAE priority status';label<-'tab:scalar-school-value-iv-main-seven-eb-prioritario';filename<-'main_table_prioritario_control.tex';extra<-character()

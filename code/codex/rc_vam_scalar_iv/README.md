@@ -23,3 +23,8 @@ No cutoff or binary classification enters this analysis.
 
 Outputs are isolated under `data/clean/rc_vam_scalar_iv/test1` and
 `output/tables/rc_vam_scalar_iv/test1`.
+
+`02_run_main_theta_table_eb.R` repeats the same specification with
+`rc_vam_eb_centered_student` from `eb_rc_vam_school_values.csv`. Its outputs
+are isolated under `data/clean/rc_vam_scalar_iv/eb` and
+`output/tables/rc_vam_scalar_iv/eb`, leaving the unregularized table intact.

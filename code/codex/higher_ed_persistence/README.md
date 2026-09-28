@@ -1,5 +1,11 @@
 # Higher-education persistence outcomes
 
+## Current status
+
+The persistence tables produced by this folder are withdrawn from the paper. The reconstructed entry-year outcomes do not reproduce the corresponding Table 5 outcomes, so the resulting Year-1/Year-2 comparison should not be used.
+
+Any replacement should extend Table 5 directly. First run the current Table 5 code on the follow-up-eligible SAE cohorts and use its exact `higher_ed_enrolled_m1`, `high_paying_field_m1`, and `high_inst_m1` outcomes as the Year-1 benchmark. Then construct Year-2 versions using the same enrollment universe, timing rule, field classification, institution threshold, sample restrictions, controls, and IV code. The Year-1 diagonal must reproduce the restricted-cohort Table 5 estimates before the Year-2 results are reported.
+
 `01_construct_higher_ed_persistence.py` builds annual higher-education
 persistence outcomes from the full SIES matricula files for 2022--2025.
 

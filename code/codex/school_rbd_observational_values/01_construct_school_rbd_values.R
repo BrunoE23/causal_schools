@@ -154,6 +154,7 @@ controlled_value_added_outcomes <- c(
   "z_year_math_max",
   "z_year_leng_max",
   "admission_exam_taker",
+  "higher_ed_enrolled_m1",
   "log_program_income_clp_m1",
   "high_paying_field_m1",
   "high_inst_m1",

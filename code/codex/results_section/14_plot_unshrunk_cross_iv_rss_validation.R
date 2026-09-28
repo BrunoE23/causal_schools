@@ -25,6 +25,13 @@ p <- ggplot(x, aes(x = predicted_causal_gain, y = direct_iv)) +
   geom_hline(yintercept = 0, linewidth = 0.35, color = "#B7B7B7") +
   geom_vline(xintercept = 0, linewidth = 0.35, color = "#B7B7B7") +
   geom_abline(slope = 1, intercept = 0, linewidth = 0.75, linetype = "dashed", color = "#3D3D3D") +
+  geom_smooth(
+    method = "lm",
+    formula = y ~ x,
+    se = FALSE,
+    linewidth = 0.75,
+    color = "#D55E00"
+  ) +
   geom_errorbar(
     aes(ymin = ci_low, ymax = ci_high),
     width = 0,
@@ -50,7 +57,7 @@ p <- ggplot(x, aes(x = predicted_causal_gain, y = direct_iv)) +
     ),
     caption = paste0(
       "Vertical bars are 95% confidence intervals for the direct IV estimates; ",
-      "the dashed line denotes exact agreement."
+      "the solid line is the linear fit and the dashed line denotes exact agreement."
     )
   ) +
   theme_minimal(base_size = 11) +

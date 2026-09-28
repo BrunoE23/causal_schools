@@ -1,0 +1,76 @@
+var,label,show_match,group,n,mean,match
+female,Female,FALSE,g_broad,931547,0.491834550484302,1
+female,Female,FALSE,g_nonprivate,843631,0.491628448930872,1
+female,Female,FALSE,g_sae_app,294198,0.484068552471465,1
+female,Female,FALSE,g_sae_risk,162633,0.495348422521874,1
+female,Female,FALSE,g_private,87391,0.494387293886098,1
+in_rm,Metropolitan Region (Santiago),FALSE,g_broad,931547,0.3865537648664,1
+in_rm,Metropolitan Region (Santiago),FALSE,g_nonprivate,843631,0.365740471841362,1
+in_rm,Metropolitan Region (Santiago),FALSE,g_sae_app,294198,0.25687462185331,1
+in_rm,Metropolitan Region (Santiago),FALSE,g_sae_risk,162633,0.272964281541876,1
+in_rm,Metropolitan Region (Santiago),FALSE,g_private,87391,0.588138366651028,1
+edad_alu,Age,FALSE,g_broad,931547,13.3694993381976,1
+edad_alu,Age,FALSE,g_nonprivate,843631,13.3713305935889,1
+edad_alu,Age,FALSE,g_sae_app,294198,13.3696558100327,1
+edad_alu,Age,FALSE,g_sae_risk,162633,13.3344893102876,1
+edad_alu,Age,FALSE,g_private,87391,13.3454818001854,1
+income_decile_imputed,Income decile,FALSE,g_broad,931547,5.51115129125353,0.824657263670003
+income_decile_imputed,Income decile,FALSE,g_nonprivate,843631,5.07808416610955,0.819151975211911
+income_decile_imputed,Income decile,FALSE,g_sae_app,294198,4.5197013945721,0.81822106200586
+income_decile_imputed,Income decile,FALSE,g_sae_risk,162633,4.79032638499867,0.834197241642225
+income_decile_imputed,Income decile,FALSE,g_private,87391,9.39161437535653,0.882608048883752
+mother_educ_years_imputed,Mother education years,FALSE,g_broad,931547,11.9447498731791,0.833759327226646
+mother_educ_years_imputed,Mother education years,FALSE,g_nonprivate,843631,11.5474230004879,0.828481883667148
+mother_educ_years_imputed,Mother education years,FALSE,g_sae_app,294198,10.943191143645,0.828394482627346
+mother_educ_years_imputed,Mother education years,FALSE,g_sae_risk,162633,11.2352527578217,0.843900069481594
+mother_educ_years_imputed,Mother education years,FALSE,g_private,87391,15.5179786700287,0.889462301610006
+z_sim_mat_4to,SIMCE 4th math (z),FALSE,g_broad,931547,0.0363299120166013,0.844516701787457
+z_sim_mat_4to,SIMCE 4th math (z),FALSE,g_nonprivate,843631,-0.0442870749102145,0.839147684236355
+z_sim_mat_4to,SIMCE 4th math (z),FALSE,g_sae_app,294198,-0.23187757779472,0.841919387623301
+z_sim_mat_4to,SIMCE 4th math (z),FALSE,g_sae_risk,162633,-0.159024666479744,0.856843322081005
+z_sim_mat_4to,SIMCE 4th math (z),FALSE,g_private,87391,0.76160015339771,0.901065327093179
+z_sim_leng_4to,SIMCE 4th verbal (z),FALSE,g_broad,931547,0.0358253018508354,0.842111026067391
+z_sim_leng_4to,SIMCE 4th verbal (z),FALSE,g_nonprivate,843631,-0.0334526165311899,0.836724824004808
+z_sim_leng_4to,SIMCE 4th verbal (z),FALSE,g_sae_app,294198,-0.188681314692113,0.839652207017043
+z_sim_leng_4to,SIMCE 4th verbal (z),FALSE,g_sae_risk,162633,-0.114840163088712,0.853867296305178
+z_sim_leng_4to,SIMCE 4th verbal (z),FALSE,g_private,87391,0.659071807417261,0.89871954777952
+z_gpa_middle_mean,Middle school GPA (z),FALSE,g_broad,931547,0.0320249858749728,0.999623207417339
+z_gpa_middle_mean,Middle school GPA (z),FALSE,g_nonprivate,843631,0.028542498761476,0.99964795034796
+z_gpa_middle_mean,Middle school GPA (z),FALSE,g_sae_app,294198,0.023790764508621,0.999881032501921
+z_gpa_middle_mean,Middle school GPA (z),FALSE,g_sae_risk,162633,0.0925401474735749,0.999870874914685
+z_gpa_middle_mean,Middle school GPA (z),FALSE,g_private,87391,0.0704481306358809,0.999874128914877
+z_att_middle_mean,Middle school attend. (z),FALSE,g_broad,931547,0.0208877056762399,0.998389775287774
+z_att_middle_mean,Middle school attend. (z),FALSE,g_nonprivate,843631,0.0225013778650326,0.998320355700537
+z_att_middle_mean,Middle school attend. (z),FALSE,g_sae_app,294198,0.0296095641932553,0.997797401749842
+z_att_middle_mean,Middle school attend. (z),FALSE,g_sae_risk,162633,0.0431902097238963,0.997835617617581
+z_att_middle_mean,Middle school attend. (z),FALSE,g_private,87391,0.0100433556098419,0.999633829570551
+z_year_math_max,Std. math exam,FALSE,g_broad,931547,5.72335161041259e-17,0.693365981533943
+z_year_math_max,Std. math exam,FALSE,g_nonprivate,843631,-0.154600988628903,0.670141329562332
+z_year_math_max,Std. math exam,FALSE,g_sae_app,294198,-0.333903655698121,0.606910991917008
+z_year_math_max,Std. math exam,FALSE,g_sae_risk,162633,-0.288548487560503,0.649849661507812
+z_year_math_max,Std. math exam,FALSE,g_private,87391,1.08537727254147,0.921559428316417
+z_year_leng_max,Std. verbal exam,FALSE,g_broad,931547,7.0300842543277e-17,0.702560364640754
+z_year_leng_max,Std. verbal exam,FALSE,g_nonprivate,843631,-0.124682168878408,0.680010573343085
+z_year_leng_max,Std. verbal exam,FALSE,g_sae_app,294198,-0.301367624367635,0.61867857701276
+z_year_leng_max,Std. verbal exam,FALSE,g_sae_risk,162633,-0.229752531212924,0.661581597830699
+z_year_leng_max,Std. verbal exam,FALSE,g_private,87391,0.885622741214197,0.924282820885446
+admission_exam_taker,Admission exam taker,FALSE,g_broad,931547,0.776231365674518,1
+admission_exam_taker,Admission exam taker,FALSE,g_nonprivate,843631,0.76051614983328,1
+admission_exam_taker,Admission exam taker,FALSE,g_sae_app,294198,0.738499242007084,1
+admission_exam_taker,Admission exam taker,FALSE,g_sae_risk,162633,0.769351853559856,1
+admission_exam_taker,Admission exam taker,FALSE,g_private,87391,0.93236145598517,1
+higher_ed_enrolled_m1,Higher ed. enrolled,FALSE,g_broad,931547,0.671588229042657,1
+higher_ed_enrolled_m1,Higher ed. enrolled,FALSE,g_nonprivate,843631,0.65437732847655,1
+higher_ed_enrolled_m1,Higher ed. enrolled,FALSE,g_sae_app,294198,0.579901970781583,1
+higher_ed_enrolled_m1,Higher ed. enrolled,FALSE,g_sae_risk,162633,0.616935062379714,1
+higher_ed_enrolled_m1,Higher ed. enrolled,FALSE,g_private,87391,0.841585517959515,1
+high_inst_m1,Hi-premium institution,FALSE,g_broad,931547,0.128211459003142,1
+high_inst_m1,Hi-premium institution,FALSE,g_nonprivate,843631,0.088933431796603,1
+high_inst_m1,Hi-premium institution,FALSE,g_sae_app,294198,0.0561560581649094,1
+high_inst_m1,Hi-premium institution,FALSE,g_sae_risk,162633,0.0670220680919617,1
+high_inst_m1,Hi-premium institution,FALSE,g_private,87391,0.508141570642286,1
+high_paying_field_m1,Hi-premium field,FALSE,g_broad,931547,0.306767130375601,1
+high_paying_field_m1,Hi-premium field,FALSE,g_nonprivate,843631,0.292758326804017,1
+high_paying_field_m1,Hi-premium field,FALSE,g_sae_app,294198,0.258424598399717,1
+high_paying_field_m1,Hi-premium field,FALSE,g_sae_risk,162633,0.280379750727097,1
+high_paying_field_m1,Hi-premium field,FALSE,g_private,87391,0.443764232014738,1

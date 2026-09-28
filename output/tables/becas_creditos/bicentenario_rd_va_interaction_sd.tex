@@ -1,0 +1,23 @@
+\begin{table}[!htbp]
+\centering
+\caption{School Value Added and Beca Bicentenario Take-up at the Eligibility Cutoff (running variable: within-year SD units)}
+\label{tab:bicentenario-rd-va-interaction-sd}
+\begin{tabular}{lccccc}
+\toprule
+ & Math VA & Verbal VA & Hi-inst. VA & Hi-field VA & Proj. income VA \\
+\midrule
+Above cutoff ($\hat{\gamma}_1$) & 0.055*** & 0.058*** & 0.054*** & 0.057*** & 0.057*** \\
+        & (0.002) & (0.002) & (0.002) & (0.002) & (0.002) \\
+Above $\times$ School VA ($\hat{\gamma}_3$) & -0.003** & 0.003** & -0.013*** & -0.001* & 0.001 \\
+        & (0.001) & (0.001) & (0.001) & (0.001) & (0.001) \\
+\midrule
+$N$ & 227,986 & 227,987 & 227,988 & 227,988 & 227,988 \\
+Take-up mean & 0.054 & 0.054 & 0.054 & 0.054 & 0.054 \\
+Bandwidth & 0.5 & 0.5 & 0.5 & 0.5 & 0.5 \\
+\bottomrule
+\end{tabular}
+\par\medskip\footnotesize
+\begin{minipage}{\textwidth}
+Notes: Outcome is Beca Bicentenario take-up. Running variable $S_i$ is the average of math and verbal admission-test scores, centered at the eligibility cutoff (500 pts for PSU years $\leq$2022; 510 pts for PAES years $\geq$2023). Bandwidth selected by MSE-optimal rdrobust (triangular kernel). Each column interacts above-cutoff eligibility with a different school EB value-added measure (standardized to unit SD). Local linear polynomial with separate slopes on each side of the cutoff. Controls: cohort, gender, age, grade-4 SIMCE math and language. Heteroskedasticity-robust standard errors in parentheses. $^{*}p<0.10$, $^{**}p<0.05$, $^{***}p<0.01$.
+\end{minipage}
+\end{table}

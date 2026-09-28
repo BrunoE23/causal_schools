@@ -1,0 +1,34 @@
+\begin{table}[!htbp]
+\centering
+\caption{Implied gains across latent observational value-added measures}
+\label{tab:rss-implied-gains}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lccccccc}
+\toprule
+ & Math & Verbal & Exam & Fin. aid app & Higher ed. & High-inst. & HP field \\
+\midrule
+Math achievement & -- & 0.623*** & 0.096*** & -0.215*** & 0.051*** & 0.294*** & 0.084*** \\
+ &  & (0.013) & (0.009) & (0.013) & (0.007) & (0.013) & (0.010) \\
+Verbal achievement & 1.176*** & -- & 0.197*** & -0.228*** & 0.086*** & 0.335*** & 0.089*** \\
+ & (0.028) &  & (0.012) & (0.019) & (0.009) & (0.020) & (0.012) \\
+Admission exam taken & 0.740*** & 0.796*** & -- & 0.332*** & 0.409*** & 0.079*** & -0.019 \\
+ & (0.047) & (0.034) &  & (0.015) & (0.013) & (0.029) & (0.026) \\
+Financial aid application & -1.383*** & -0.783*** & 0.441*** & -- & 0.326*** & -0.778*** & -0.068*** \\
+ & (0.075) & (0.046) & (0.034) &  & (0.027) & (0.028) & (0.022) \\
+Higher-ed enrollment & 0.874*** & 0.783*** & 1.062*** & 0.639*** & -- & 0.181*** & 0.353*** \\
+ & (0.122) & (0.077) & (0.028) & (0.032) &  & (0.059) & (0.034) \\
+High-premium institution & 1.060*** & 0.643*** & 0.038*** & -0.435*** & 0.038*** & -- & 0.120*** \\
+ & (0.062) & (0.038) & (0.014) & (0.024) & (0.012) &  & (0.017) \\
+High-premium field & 0.760*** & 0.422*** & -0.022 & -0.094*** & 0.184*** & 0.297*** & -- \\
+ & (0.100) & (0.066) & (0.031) & (0.032) & (0.019) & (0.042) &  \\
+\bottomrule
+\end{tabular}}
+\par\medskip
+\begin{minipage}{\textwidth}
+\footnotesize \textit{Notes:} Each cell reports the implied gain in the column outcome's latent school value added from a one-unit increase in the row outcome's latent school value added, $\widehat{\mathrm{Cov}}(row,col)/\widehat{\mathrm{Var}}(row)$.
+Bootstrap standard errors are in parentheses. 
+The matrix is not symmetric because outcome variances differ.
+Outcome-specific samples follow Table 8.
+$^{*}p<0.10$, $^{**}p<0.05$, $^{***}p<0.01$.
+\end{minipage}
+\end{table}

@@ -1,0 +1,32 @@
+\begin{table}[!htbp]
+\centering
+\caption{Beca Bicentenario Eligibility and Higher-Education Choices: Heterogeneity by School Value Added}
+\label{tab:bicentenario-rd-va-interaction}
+\begin{tabular}{lccccc}
+\toprule
+ & \multicolumn{2}{c}{Exams} & \multicolumn{3}{c}{Higher ed.~choices} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-6}
+ & Math & Verbal & Hi-prem. inst. & Hi-prem. field & Log proj. income \\
+\midrule
+\multicolumn{6}{l}{\textit{Panel A: Reduced form}} \\[2pt]
+Above cutoff ($\hat{\gamma}_1$) & -0.027*** & 0.022*** & 0.008*** & 0.001 & 0.019*** \\
+        & (0.002) & (0.002) & (0.002) & (0.003) & (0.002) \\
+Above $\times$ School VA ($\hat{\gamma}_3$) & 0.308*** & -0.228*** & 0.521*** & -0.086*** & -0.085*** \\
+        & (0.010) & (0.011) & (0.013) & (0.024) & (0.026) \\
+School VA ($\hat{\gamma}_2$) & 0.010 & 0.223*** & 0.726*** & 1.196*** & 1.141*** \\
+        & (0.009) & (0.010) & (0.011) & (0.018) & (0.020) \\
+\midrule
+\multicolumn{6}{l}{\textit{Panel B: First stage}} \\[2pt]
+Above cutoff ($\hat{\pi}_1$) & 0.048*** & 0.048*** & 0.048*** & 0.048*** & 0.048*** \\
+        & (0.001) & (0.001) & (0.001) & (0.001) & (0.001) \\
+First-stage $F$ & 1749.4 & 1749.4 & 1749.4 & 1749.4 & 1749.4 \\
+\midrule
+$N$ & 415,456 & 415,457 & 415,458 & 415,458 & 415,458 \\
+Outcome mean & -0.373 & -0.340 & 0.107 & 0.331 & 13.940 \\
+\bottomrule
+\end{tabular}
+\par\medskip\footnotesize
+\begin{minipage}{\textwidth}
+Notes: The running variable $S_i$ is the average of math and verbal national admission-test scores. The sample is restricted to $|S_i - 500| \leq 150$ points. Each column uses the EB-shrunken observational value added for the same outcome. The polynomial $h(S_i - 500)$ is linear with separate slopes on each side of the cutoff. Controls: cohort, gender, age, and grade-4 SIMCE math and language. Heteroskedasticity-robust standard errors in parentheses. $^{*}p<0.10$, $^{**}p<0.05$, $^{***}p<0.01$.
+\end{minipage}
+\end{table}

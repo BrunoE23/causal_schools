@@ -1,0 +1,2 @@
+spec,group,outcome,treatment,instrument,risk_control,beta,se,zstat,p_value,expected_beta,expected_se,expected_zstat,expected_p_value,n_obs,fs_beta,fs_se,fs_f,rc
+highered_adj_eb,all,higher_ed_enrolled_m1,d_highered_adj_eb,z_highered_adj_eb,expected_highered_adj_eb,0.636670537691522,0.145405276141151,4.37859309227184,1.1944791674868e-05,0.825297228535664,0.12603095792809,6.54836908409882,5.81688166276387e-11,89206,0.408893774035642,0.00711248424534969,3305.05248776523,0

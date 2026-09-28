@@ -11,10 +11,10 @@ rss_path<-file.path(data_wd,'data/clean/rss_debiased_varcov/four_year_no_sae/rss
 out_dir<-file.path(repo_wd,'output/tables/rss_debiased_varcov');dir.create(out_dir,recursive=TRUE,showWarnings=FALSE)
 
 specs<-data.table(
-  spec=c('math','verbal','exam','highinst','highpay','income','aid'),
-  label=c('Math','Verbal','Exam taking','High-premium inst.','High-premium field','Log income','Fin. aid app.'),
-  outcome=c('z_year_math_max','z_year_leng_max','admission_exam_taker','high_inst_m1','high_paying_field_m1','log_program_income_clp_m1','any_postulacion'),
-  require_exam=c(TRUE,TRUE,FALSE,TRUE,TRUE,TRUE,FALSE))
+  spec=c('math','verbal','exam','aid','enrolled','highinst','highpay'),
+  label=c('Math','Verbal','Exam taking','Fin. aid app.','Higher-ed enrollment','High-premium inst.','High-premium field'),
+  outcome=c('z_year_math_max','z_year_leng_max','admission_exam_taker','any_postulacion','higher_ed_enrolled_m1','high_inst_m1','high_paying_field_m1'),
+  require_exam=c(TRUE,TRUE,FALSE,FALSE,FALSE,TRUE,TRUE))
 
 message('Reading scalar-IV sample and unshrunk school VA.')
 dt<-fread(reg_path,na.strings=c('','NA'))

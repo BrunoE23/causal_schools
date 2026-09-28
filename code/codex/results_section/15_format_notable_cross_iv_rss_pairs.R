@@ -15,23 +15,23 @@ selection <- data.table(
   conceptual_link = rep(c(
     "Academic complementarities",
     "Academic preparation and access",
+    "Access complementarities",
     "Postsecondary complementarities",
-    "Postsecondary quality and earnings",
-    "Access and financial aid"
+    "Access and postsecondary choice"
   ), each = 2L),
   from_key = c(
     "math", "verbal",
     "math", "verbal",
+    "exam", "aid",
     "highinst", "highpay",
-    "highinst", "highpay",
-    "exam", "aid"
+    "enrolled", "enrolled"
   ),
   to_key = c(
     "verbal", "math",
     "exam", "exam",
+    "enrolled", "enrolled",
     "highpay", "highinst",
-    "income", "income",
-    "aid", "exam"
+    "highinst", "highpay"
   )
 )
 selected <- merge(selection, x, by = c("from_key", "to_key"), all.x = TRUE, sort = FALSE)
@@ -84,7 +84,7 @@ tex <- c(
   "\\footnotesize",
   "\\begin{minipage}{\\textwidth}",
   paste0(
-    "Notes: The table reports ten off-diagonal pairs chosen a priori to represent five economically relevant links: academic complementarities, academic preparation and access, postsecondary complementarities, postsecondary quality and earnings, and access and financial aid. ",
+    "Notes: The table reports ten off-diagonal pairs chosen a priori to represent five economically relevant links: academic complementarities, academic preparation and access, access complementarities, postsecondary complementarities, and access to postsecondary choice. ",
     "The RSS projection maps the row value-added measure into the column value-added measure; bootstrap standard errors are in parentheses. ",
     "The implied gain multiplies that projection by the destination outcome's unshrunk same-outcome IV pass-through. ",
     "The direct IV column estimates the cross-outcome effect directly, with regression standard errors in parentheses. ",

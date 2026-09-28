@@ -22,8 +22,8 @@ run_pair <- function(va_min, va_max, sae_min, sae_max) {
     EB_IV_SAE_MAX_YEAR = as.character(sae_max),
     EB_IV_VA_COHORT_LABEL = paste0(va_min, "--", va_max),
     EB_IV_VALUE_SPECS = paste(c(
-      "math_adj_eb", "leng_adj_eb", "exam_adj_eb", "highinst_adj_eb",
-      "highpay_adj_eb", "program_income_adj_eb", "anypost_adj_eb"
+      "math_adj_eb", "leng_adj_eb", "exam_adj_eb", "anypost_adj_eb",
+      "highered_adj_eb", "highinst_adj_eb", "highpay_adj_eb"
     ), collapse = ","),
     EB_IV_REGRESSION_OUTPUT_PATH = file.path(clean_out, "scalar_iv_regression_df.csv"),
     EB_IV_RESULTS_OUTPUT_PATH = file.path(table_out, "main_results.csv"),

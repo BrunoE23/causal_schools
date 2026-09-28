@@ -11,6 +11,8 @@ find_existing_path <- function(candidates, label) {
 
 data_wd <- find_existing_path(
   c(
+    "C:/Users/brunem/Box/causal_schools",
+    "C:/Users/xd-br/Box/causal_schools",
     "C:/Users/xd-br/Dropbox/causal_schools",
     "C:/Users/brunem/Dropbox/causal_schools"
   ),
@@ -338,7 +340,30 @@ if (file.exists(paes_matricula_2026_path)) {
 
 
 
-reg_df <- left_join(base, offers_1R_first, by = "mrun") %>% 
+middle_school_controls <- data.table::fread(
+  "./data/clean/middle_school_controls/middle_school_controls.csv",
+  na.strings = c("", "NA")
+)
+middle_school_controls <- middle_school_controls %>%
+  rename_with(tolower) %>%
+  select(mrun, most_time_rbd_middle, middle_years_observed, z_gpa_middle_mean, z_att_middle_mean)
+
+program_income_outcomes <- data.table::fread(
+  "./data/clean/mifuturo_person_level_income_outcomes.csv",
+  na.strings = c("", "NA")
+)
+program_income_outcomes <- program_income_outcomes %>%
+  select(
+    mrun,
+    high_paying_field_m1, high_inst_m1,
+    log_program_income_full_clp_m1,
+    log_program_income_area_clp_m1,
+    log_program_income_institution_clp_m1,
+    program_income_full_clp_m1,
+    mifuturo_fe_income_source_m1
+  )
+
+reg_df <- left_join(base, offers_1R_first, by = "mrun") %>%
   mutate(timely_sae = ifelse(cohort_gr8 == sae_proceso, 1L, 0L)) %>% 
   left_join(simce_4to, by = "mrun") %>% 
   left_join(simce8_math_heterogeneity, by = "mrun") %>%
@@ -366,7 +391,9 @@ reg_df <- left_join(base, offers_1R_first, by = "mrun") %>%
     paes_matriculated_2026 = replace_na(paes_matriculated_2026, 0L),
     paes_matricula_is_full_sies_2026 = 0L
   ) %>%
-  impute_income_decile()
+  impute_income_decile() %>%
+  left_join(middle_school_controls, by = "mrun") %>%
+  left_join(program_income_outcomes, by = "mrun")
   
 
 rm(list = setdiff(ls(), "reg_df"))
@@ -377,7 +404,8 @@ write.csv(reg_df, "data/clean/univ_gr8_df.csv", row.names = FALSE)
 reg_df_stata <- reg_df %>%
   rename_with(
     ~ stringr::str_replace(.x, "_missing_after_impute$", "_miss_after_imp")
-  )
+  ) %>%
+  rename(log_pinc_inst_clp_m1 = log_program_income_institution_clp_m1)
 
 haven::write_dta(reg_df_stata, "data/clean/univ_gr8_df.dta")
 

@@ -51,7 +51,12 @@ if (!identical(Sys.getenv("RUN_NO_OVERLAP", unset = "0"), "1")) {
 }
 
 make_pair <- function(pair_name, pair_label, input_tag) {
-  input_path <- file.path(clean_eb_dir, input_tag, "scalar_iv_regression_df.csv")
+  input_candidates <- c(
+    file.path(clean_eb_dir, input_tag, "scalar_iv_regression_df_age12_16_valid_hs.csv"),
+    file.path(clean_eb_dir, input_tag, "scalar_iv_regression_df.csv")
+  )
+  input_path <- input_candidates[file.exists(input_candidates)][1]
+  if (is.na(input_path)) stop("Missing regression data for: ", input_tag)
   dt <- fread(
     input_path,
     select = c("mrun", "sae_proceso", "rbd_treated_1R", "most_time_RBD"),
@@ -86,12 +91,13 @@ make_pair <- function(pair_name, pair_label, input_tag) {
        (!is.na(choice_2) & most_time_RBD == choice_2) |
        (!is.na(choice_3) & most_time_RBD == choice_3)]
   any_top3 <- dt[!is.na(choice_1), .(
-    n = .N, share_attend = mean(attends_top3, na.rm = TRUE)
+    n = .N,
+    share_attend = mean(attends_top3, na.rm = TRUE)
   ), by = offer_status]
-  any_top3[, rank_order := 4L]
+  any_top3[, rank_order := 0L]
   any_top3[, choice := "Any of top 3"]
 
-  long <- rbind(rank_rows, any_top3, use.names = TRUE)
+  long <- rbind(any_top3, rank_rows, use.names = TRUE)
   shares <- dcast(long, rank_order + choice ~ offer_status, value.var = "share_attend")
   counts <- dcast(long, rank_order + choice ~ offer_status, value.var = "n")
   setnames(
@@ -122,7 +128,7 @@ make_pair <- function(pair_name, pair_label, input_tag) {
     "\\begin{table}[!htbp]", "\\centering",
     paste0("\\caption{Eventual school by SAE application rank and first-round offer status: ", pair_label, "}"),
     paste0("\\label{tab:application-rank-takeup-", gsub("_", "-", pair_name), "}"),
-    "\\begin{tabular}{lrrrrr}", "\\toprule",
+    "\\begin{tabular}{lccc}", "\\toprule",
     " & \\multicolumn{2}{c}{Recorded first-round offer} & \\multicolumn{2}{c}{No recorded first-round offer} & Difference \\\\",
     "\\cmidrule(lr){2-3} \\cmidrule(lr){4-5}",
     "Application position & N & Share & N & Share & First-round offer $-$ no offer \\\\",
@@ -142,6 +148,55 @@ make_pair <- function(pair_name, pair_label, input_tag) {
     "\\begin{minipage}{0.95\\textwidth}",
     "Notes: Each row reports the share whose most-time high school after grade 8 equals the indicated position in the student's SAE application list. Rank-specific denominators include students who submitted a school at that rank. The top-three denominator includes students with a first choice and counts attendance at any available choice among positions 1--3. Recorded first-round offer means a positive school identifier in the regular first-round SAE assignment record; it does not include later or supplementary assignment rounds.",
     "\\end{minipage}", "\\end{table}"
+  )
+  lines <- c(
+    "\\begin{table}[!htbp]",
+    "\\centering",
+    paste0("\\caption{Eventual school by SAE application rank and first-round offer status: ", pair_label, "}"),
+    paste0("\\label{tab:application-rank-takeup-", gsub("_", "-", pair_name), "}"),
+    "\\setlength{\\tabcolsep}{4pt}",
+    "\\begin{tabular}{lcccc}",
+    "\\toprule",
+    paste0("\\shortstack{Attendance to target school (column), \\\\ conditional on (row) } & \\shortstack{Any of\\\\top 3} & Choice 1 & Choice 2 & Choice 3 ", "\\\\"),
+    "\\midrule",
+    paste0(
+      "Receiving offer & ",
+      paste(
+        sprintf("\\shortstack{%.1f\\%%\\\\(N = %s)}", 100 * out$share_offer,
+                format(out$n_offer, big.mark = ",")),
+        collapse = " & "
+      ),
+      " \\\\"
+    ),
+    paste0(
+      "Not receiving offer  & ",
+      paste(
+        sprintf("\\shortstack{%.1f\\%%\\\\(N = %s)}", 100 * out$share_no_offer,
+                format(out$n_no_offer, big.mark = ",")),
+        collapse = " & "
+      ),
+      " \\\\"
+    ),
+    "\\bottomrule",
+    paste0(
+      "Difference & ",
+      paste(
+        c(
+          paste0("\\textbf{", sprintf("%+.1f pp", 100 * out$difference_offer_minus_no_offer[1]), "}"),
+          sprintf("%+.1f pp", 100 * out$difference_offer_minus_no_offer[-1])
+        ),
+        collapse = " & "
+      ),
+      " \\\\"
+    ),
+    "\\bottomrule",
+    "\\end{tabular}",
+    "\\par\\medskip",
+    "\\footnotesize",
+    "\\begin{minipage}{0.95\\textwidth}",
+    "Notes: Each cell reports the share whose most-time high school after grade 8 equals the indicated position in the student's SAE application list; the relevant denominator is shown in parentheses. Rank-specific denominators include students who submitted a school at that rank. Received offer means a positive school identifier in the regular first-round SAE assignment record; it does not include later or supplementary assignment rounds. The difference row reports received offer minus did not receive offer.",
+    "\\end{minipage}",
+    "\\end{table}"
   )
   writeLines(lines, tex_path)
   out

@@ -5,8 +5,6 @@ setFixest_nthreads(0)
 data_root <- Sys.getenv('CAUSAL_SCHOOLS_DATA_WD', 'C:/Users/brunem/Box/causal_schools')
 clean <- file.path(data_root, 'data/clean')
 repo <- normalizePath('.', winslash = '/', mustWork = TRUE)
-legacy_value_path <- file.path(repo, 'output/tables/empirical_bayes_school_va',
-  'stata_eb_school_rbd_observational_values_for_iv.csv')
 main_value_path <- file.path(clean, 'empirical_bayes_school_va', 'cohorts_2017_2020',
   'eb_school_rbd_observational_values.csv')
 persistence_path <- file.path(repo, 'data/clean/higher_ed_persistence',
@@ -29,18 +27,13 @@ specs <- data.table(
   require_exam = rep(FALSE, 8)
 )
 focal_specs <- c('highered', 'highpay', 'highinst')
-cross_spec_order <- c('highered', 'highpay', 'highinst', 'math', 'leng', 'exam',
-  'program_income', 'anypost')
+cross_spec_order <- c('math', 'leng', 'exam', 'anypost', 'highered', 'highinst',
+  'highpay')
 
-values_main <- fread(main_value_path, na.strings = c('', 'NA'))[
-  analysis_sample == 'All' & outcome %chin% specs[spec != 'highered', value_outcome],
+values <- fread(main_value_path, na.strings = c('', 'NA'))[
+  analysis_sample == 'All' & outcome %chin% specs$value_outcome,
   .(school_rbd = as.numeric(school_rbd), outcome,
     value = controlled_value_added_eb_centered_student)]
-values_highered <- fread(legacy_value_path, na.strings = c('', 'NA'))[
-  analysis_sample == 'All' & outcome == 'higher_ed_enrolled_m1',
-  .(school_rbd = as.numeric(school_rbd), outcome,
-    value = controlled_value_added_eb_centered_student)]
-values <- rbindlist(list(values_highered, values_main), use.names = TRUE)
 stopifnot(!anyDuplicated(values[, .(school_rbd, outcome)]))
 wide <- dcast(values, school_rbd ~ outcome, value.var = 'value')
 setnames(wide, specs$value_outcome, paste0('school_value_', specs$spec))
@@ -184,7 +177,7 @@ cross_outcomes <- data.table(
   outcome = c('entered_and_persist_y1', 'field_entry_to_y1', 'inst_entry_to_y1'),
   outcome_label = c('Higher-ed enrollment', 'High-premium field', 'High-premium institution')
 )
-cross_grid <- CJ(spec = specs$spec, outcome_key = cross_outcomes$outcome_key, unique = TRUE)
+cross_grid <- CJ(spec = cross_spec_order, outcome_key = cross_outcomes$outcome_key, unique = TRUE)
 cross_grid <- merge(cross_grid, cross_outcomes, by = 'outcome_key', sort = FALSE)
 cross_results <- rbindlist(lapply(seq_len(nrow(cross_grid)), function(i) {
   ans <- run_one(cross_grid[i, .(spec, outcome)])
@@ -231,7 +224,7 @@ writeLines(cross_tex, file.path(out_dir, 'persistence_second_year_cross_va.tex')
 # a post-assignment outcome and is therefore presented as a selected-entrant
 # comparison rather than as the main causal estimand.
 write_cross_table <- function(defs, stem, caption, label, group_header, note) {
-  grid <- CJ(spec = specs$spec, outcome_key = defs$outcome_key, unique = TRUE)
+  grid <- CJ(spec = cross_spec_order, outcome_key = defs$outcome_key, unique = TRUE)
   grid <- merge(grid, defs, by = 'outcome_key', sort = FALSE)
   rr <- rbindlist(lapply(seq_len(nrow(grid)), function(i) {
     ans <- run_one(grid[i, .(spec, outcome)])

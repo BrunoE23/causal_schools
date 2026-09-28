@@ -30,8 +30,8 @@ md5 = {k: hashlib.md5(open(v, 'rb').read()).hexdigest() for k, v in P.items()}
 
 OUTCOMES = [('z_year_math_max', 'Math'), ('z_year_leng_max', 'Language'),
             ('admission_exam_taker', 'Exam taking'), ('any_postulacion', 'FUAS application'),
-            ('high_paying_field_m1', 'High-premium field'), ('high_inst_m1', 'High-premium inst.'),
-            ('log_program_income_clp_m1', 'Proj. income')]
+            ('higher_ed_enrolled_m1', 'Higher-ed enrollment'),
+            ('high_inst_m1', 'High-premium inst.'), ('high_paying_field_m1', 'High-premium field')]
 FOCAL = [('teacher__per100_enrolled', 'Teachers per 100 students enrolled', 'Teachers'),
          ('teacher__balanced_index', 'Teacher qualification index', 'Teachers'),
          ('counselor__young_per100', 'Orientadores born 1977+ per 100 students', 'Orientadores'),
@@ -200,9 +200,10 @@ def stars(b, se):
 
 # ---- LaTeX table (paper format; column order/labels follow the var/cov table) ----
 PAPER_COLS = [('z_year_math_max', 'Math achievement'), ('z_year_leng_max', 'Verbal achievement'),
-              ('high_inst_m1', 'High-premium institution'), ('high_paying_field_m1', 'High-premium field'),
-              ('log_program_income_clp_m1', 'Log projected income'), ('admission_exam_taker', 'Admission exam taken'),
-              ('any_postulacion', 'Any application (postulaci\\\'on)')]
+              ('admission_exam_taker', 'Admission exam taken'),
+              ('any_postulacion', 'Any application (postulaci\\\'on)'),
+              ('higher_ed_enrolled_m1', 'Higher-ed enrollment'),
+              ('high_inst_m1', 'High-premium institution'), ('high_paying_field_m1', 'High-premium field')]
 PAPER_ROWS = {'teacher__per100_enrolled': 'Teachers per 100 students',
               'teacher__balanced_index': 'Teacher qualification index',
               'counselor__young_per100': 'Born 1977 or later, per 100 students',
@@ -217,6 +218,7 @@ PAPER_ROWS = {'teacher__per100_enrolled': 'Teachers per 100 students',
 BLOCKS = {'Teachers': 'Teachers', 'Orientadores': 'Counselors (orientadores)', 'Leadership': 'School leadership',
           'Size': 'Peers, size and track', 'Resources': None, 'Track': None}
 SHORT = {'z_year_math_max': 'Math VA', 'z_year_leng_max': 'Verbal VA', 'high_inst_m1': 'HP inst. VA',
+         'higher_ed_enrolled_m1': 'Higher-ed VA',
          'high_paying_field_m1': 'HP field VA', 'log_program_income_clp_m1': 'Income VA',
          'admission_exam_taker': 'Exam VA', 'any_postulacion': 'Fin. aid app. VA'}
 nc = len(PAPER_COLS)
@@ -255,8 +257,8 @@ L += [r'\bottomrule', r'\end{tabular}}', r'\par\medskip', r'\footnotesize', r'\b
       'certificate recorded in SIES graduation records by the staff year. All regressions control for '
       'dependency, region and an artistic-track indicator, and include indicators for missing '
       'regressors, absent roles and incomplete staff rosters. Heteroskedasticity-robust (HC1) standard errors '
-      'in parentheses. * $p<0.10$, ** $p<0.05$, *** $p<0.01$. (1) Math achievement; (2) Verbal achievement; (3) High-premium institution; '
-      '(4) High-premium field; (5) Log projected income; (6) Admission exam taken; (7) Any application (postulaci\\\'on).',
+      'in parentheses. * $p<0.10$, ** $p<0.05$, *** $p<0.01$. (1) Math achievement; (2) Verbal achievement; (3) Admission exam taken; '
+      '(4) Any application (postulaci\\\'on); (5) Higher-ed enrollment; (6) High-premium institution; (7) High-premium field.',
       r'\end{minipage}', r'\end{table}']
 open(os.path.join(OUT_TAB, 'staff_va_compact.tex'), 'w').write('\n'.join(L) + '\n')
 

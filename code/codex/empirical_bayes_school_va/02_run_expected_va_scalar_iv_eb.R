@@ -327,10 +327,10 @@ main_specs <- c(
   "math_adj_eb",
   "leng_adj_eb",
   "exam_adj_eb",
+  "anypost_adj_eb",
+  "highered_adj_eb",
   "highinst_adj_eb",
-  "highpay_adj_eb",
-  "program_income_adj_eb",
-  "anypost_adj_eb"
+  "highpay_adj_eb"
 )
 accreditation_specs <- c("progcert_adj_eb", "instcert_adj_eb")
 program_income_specs <- c(
@@ -883,13 +883,11 @@ written_paths <- c(
     "Pass-through coefficients for the main EB school-value specifications",
     paste0("tab:scalar-school-value-iv-main-seven-eb-", pair_label),
     c(
-      " & \\multicolumn{3}{c}{Exams} & \\multicolumn{3}{c}{Higher ed. choices} & Financial aid \\\\",
-      "\\cmidrule(lr){2-4} \\cmidrule(lr){5-7} \\cmidrule(lr){8-8}"
+      " & \\multicolumn{2}{c}{Achievement} & \\multicolumn{3}{c}{Postsecondary access} & \\multicolumn{2}{c}{Within higher-education choice} \\\\",
+      "\\cmidrule(lr){2-3} \\cmidrule(lr){4-6} \\cmidrule(lr){7-8}"
     ),
     paste0(
-      "School value added is estimated using grade-8 cohorts ", va_cohort_label,
-      "; the lottery sample uses SAE cohorts ", sae_min_year, "--", sae_max_year,
-      ". Each column reports a scalar IV estimate of the pass-through from attended-school EB value added to the corresponding student outcome. Attended-school EB value added is instrumented with first-round offered-school EB value added. All specifications control for the DA-probability expected value of the same EB measure, cohort, grade-4 SIMCE math and language, gender, and age. Heteroskedasticity-robust standard errors are reported in parentheses. The two reported $p$-values test $\\psi^{EB}=0$ and $\\psi^{EB}=1$ using the same robust standard error. $^{*}p<0.10$, $^{**}p<0.05$, $^{***}p<0.01$."
+      "Each column instruments attended-school EB value added with first-round offered-school EB value added. Controls are expected VA, cohort, grade-4 math and verbal scores, gender, and age. High-premium-institution and field specifications are restricted to exam takers, with non-enrollees coded zero. Robust standard errors are in parentheses. Reported $p$-values test $\\psi^{EB}=0$ and $\\psi^{EB}=1$. $^{*}p<0.10$, $^{**}p<0.05$, $^{***}p<0.01$."
     ),
     estimand = "\\psi",
     include_estimand_tests = TRUE
