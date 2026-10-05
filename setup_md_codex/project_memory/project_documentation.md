@@ -1,5 +1,22 @@
 # Project Documentation
 
+## SAE participation prediction (2026-10-05)
+
+The new exercise in `code/codex/sae_participation/` predicts explicit grade-9 SAE
+applications during the first observed grade-8 year, using cohorts 2017-2020.
+Regular and complementary rounds are reconstructed from raw applications; the
+legacy first-process marker is not the outcome. The administrative panel retains
+944,510 universe students; 660,426 have an origin in SAE-covered regions and enter
+the analysis. Coverage harmonizes Nuble's new 2018 region code with the April
+directory. Origin-school continuation is taken from SAE offerings; schools absent
+from the offering file remain unresolved. Predictors use grades/attendance 5-8,
+peer z-scores and quadratic terms, GPA-minus-baseline-SIMCE z-score gaps, and 39
+grade-4 parent questionnaire questions/constructs. Geography is explicitly deferred.
+This is retrospective prediction; a sensitivity excludes grade-8 annual measures.
+All new data are repository-local under `data/clean/sae_participation/`, with source
+Box files unchanged. Exact definitions and validation choices are in
+`decisions/2026-10-05-sae-participation-prediction.md` and the task README.
+
 ## Current compact staff-versus-VA table: fixed joint OLS (2026-09-21)
 
 Bruno requested stopping Lasso and tabulating the previously shortlisted 14

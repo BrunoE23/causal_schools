@@ -1,5 +1,20 @@
 # Empirical Methods
 
+## SAE participation prediction (2026-10-05)
+
+Fixed nested binomial logits predict any explicit regular/complementary grade-9
+SAE application in the grade-8 cohort year. School offerings, own/relative grades
+and attendance, and GPA-minus-SIMCE peer z-score gaps enter the agreed sequence;
+the administrative numeric measures include squares. Separate questionnaire
+availability from answer content. A fixed 80/20 origin-school split keeps schools
+together across cohorts, with training-only imputation/scaling and identical
+samples across specifications. Evaluate AUC, Brier loss, log loss and calibration
+overall, within continuation groups and by cohort; descriptive coefficient SEs
+cluster at origin school. Full-year grade-8 inputs make this retrospective. A
+sensitivity drops those annual grade-8 measures. No geography is estimated.
+See `decisions/2026-10-05-sae-participation-prediction.md` for sample, normalization,
+questionnaire harmonization, zero-attendance and timing decisions.
+
 This file records the empirical specifications used in the causal schools project. The goal is to keep each family of regressions explicit enough that the estimand, treatment definition, controls, and interpretation are clear before implementation.
 
 ## Scalar School-Value IV

@@ -1,0 +1,40 @@
+feature,label,max_code,code2013,code2014,code2015,code2016,reverse2013,reverse2016
+reenroll,Would enroll child here again,4,29_06,25_06,,,1,0
+recommend,Would recommend school,4,29_07,25_07,,,1,0
+likes_school,Child likes attending school,4,29_01,25_01,,,1,0
+good_learning_place,School is a good place to learn,4,29_02,25_02,,,1,0
+calm_at_school,Child goes calmly to school,4,29_03,25_03,,,1,0
+accepted_peers,Child feels accepted by peers (2013),4,29_04,,,,1,0
+accepted_teachers,Child feels accepted by teachers (2013),4,29_05,,,,1,0
+protected_peers,Child feels protected with peers (2014-15),4,,25_04,24_01,,0,0
+protected_teachers,Child feels protected with teachers (2014-15),4,,25_05,24_02,,0,0
+teacher_care,Head teacher concern for students,7,25_01,17_05,,,0,0
+discipline,School discipline and compliance with rules rating,7,25_03,18_01,29_04,27_02,0,0
+behavior_support,Work with students with behavior problems,7,25_12,18_03,29_02,27_04,0,0
+bullying_prevention,Work to prevent bullying,7,,18_04,29_01,27_03,0,0
+cleanliness,Care and cleanliness rating (2013-14),7,27_01,22_01,,,0,0
+facilities,Quality of school facilities,7,27_02,22_02,,,0,0
+values_formation,Values formation,7,25_09,17_01,26_05,,0,0
+mutual_help,Teachers encourage students to help one another,7,25_10,17_02,26_06,,0,0
+student_commitment,Students commitment to school,7,25_08,17_04,26_07,,0,0
+support_parents,Support to parents for educating children,7,26_03,17_07,26_08,,0,0
+extracurricular,Extracurricular activities offered,7,25_14,17_08,26_09,,0,0
+learning_level,Students level of learning,7,,19_01,26_01,,0,0
+teaching_quality,Quality of teaching (2014),7,,19_02,,,0,0
+teaching_math,Math teaching quality (2013),7,28_03,,,,0,0
+teaching_language,Language teaching quality (2013),7,28_01,,,,0,0
+study_demands,Study and homework requirements,7,,19_03,26_02,,0,0
+learning_motivation,School motivates interest in learning,7,,19_04,26_03,,0,0
+communicate_values,Communication of school values,7,,20_01,27_01,25_01,0,0
+communicate_rules,Communication of school rules,7,,20_02,27_02,25_02,0,0
+inform_grades,Frequency of informing parents about grades,7,,21_01,28_01,26_01,0,0
+inform_problems,Communication about student problems,7,,21_03,28_03,26_02,0,0
+parent_interviews,Frequency of head teacher interviews with parents,7,,21_05,28_05,26_03,0,0
+teacher_response,Head teacher willingness to address concerns,7,,21_06,28_06,26_04,0,0
+leadership_response,Willingness to listen to parent concerns,7,,21_07,28_07,26_05,0,0
+equal_importance,All students equally important to teachers (2016),4,,,,18_01,0,0
+equal_opportunities,Equal opportunities to learn (2016),4,,,,18_02,0,0
+no_teacher_mistreatment,Absence of teacher mistreatment (2016; reversed),4,,,,18_03,0,1
+safe_with_peers,Child feels safe with peers (2016),4,,,,22_03,0,0
+fair_rules,School rules applied fairly (2016),4,,,,23_03,0,0
+clean_order,Cleanliness and order (2016),7,,,,27_01,0,0
