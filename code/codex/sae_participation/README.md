@@ -174,3 +174,23 @@ New objects are in `data/clean/sae_participation/voluntary/`; the report is
 For repairs limited to serialization, tree specifications or scoring, the
 `--reuse-logits` flag reloads the existing unchanged logit estimates. Do not use
 this flag after changing input data, preprocessing, sample or logit formulas.
+
+## One joint descriptive regression
+
+At Bruno's request, `10_voluntary_ols.R` fits one OLS linear probability model
+with all constructed full-model regressors entered together, on all 313,813
+voluntary-margin pupils. It reuses the cached full-logit training design and
+evaluation frame (rather than rereading raw administrative data), preserving
+existing median imputations, standardization, squares and missingness terms.
+The outcome is SAE application; SEs cluster by origin school. This is a full-sample
+descriptive regression, not a held-out classification comparison.
+
+Run `10_voluntary_ols.R` to estimate, verify, and render the complete coefficient
+table. `11_voluntary_ols_report.R` can rerender the table from its small saved CSVs
+without refitting. Coefficients and SEs are in percentage points, and all parent
+items, quadratic terms, missingness indicators, and context coefficients appear
+in `output/reports/sae_participation/voluntary_ols.html` (Markdown alongside).
+Results and the actual regression object are under
+`data/clean/sae_participation/voluntary_ols/`. Verification includes an independent
+cluster-sandwich covariance calculation with the regression's finite-sample
+correction, OLS normal equations, R-squared, and complete predictor coverage.

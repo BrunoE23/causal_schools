@@ -91,3 +91,37 @@ They cover school separation, common samples, training references in saved fits,
 complete-holdout prediction reproduction, convergence, independent confusion
 counts and grouped-rank AUC, and exclusion of grade-8 terms in sensitivities.
 The risk-decile figure was rendered and visually inspected.
+
+## User request: one simple joint regression
+
+Bruno then requested a regression showing all the constructed variables against
+voluntary SAE application. Interpret application as the dependent variable and
+enter all the existing full-model predictors jointly. Use an OLS linear
+probability model with origin-school-clustered SEs and the entire 313,813-pupil
+voluntary sample, rather than another classification exercise. The user was
+informed of this outcome direction, model and sample before estimation.
+
+Reuse the existing prepared training and test designs; keep the prior training
+medians/SDs, missingness indicators, administrative/age squares, 39 parent
+responses, questionnaire matching and cohort-by-region/sector/gender controls.
+This avoids an unrequested change to the constructed regressors. School-ending
+status is constant here. Report every coefficient, in percentage points with SEs;
+numeric regressors are standardized. Linear coefficients with quadratics are
+slopes at the reference mean; a finite +1 SD change from the mean uses beta+gamma.
+The two binary questionnaire/matching indicators retain their standardization,
+so their displayed coefficients are per SD rather than per zero-to-one change.
+
+The single model has 313,813 pupils, 2,000 schools, 45,947 applicants (14.6415%),
+214 estimated coefficients, R2 .0343078 and adjusted R2 .0336519. All 39 parent
+responses and all 24 grade-specific administrative linear terms plus 24 squares
+are estimated. Collinear context terms are listed separately. Seven estimation
+checks pass, including direct reconstruction of the school-clustered covariance
+using G/(G-1)*(N-1)/(N-K), OLS normal equations and R2. Table rendering also checks
+that every substantive requested row resolves to an estimated coefficient.
+
+Code: `10_voluntary_ols.R` and `11_voluntary_ols_report.R`. Report:
+`output/reports/sae_participation/voluntary_ols.html` (Markdown alongside).
+Model, full coefficient CSV, summary, formula and checks:
+`data/clean/sae_participation/voluntary_ols/`. No new prediction tuning or model
+selection is done; coefficients are conditional descriptive associations and
+annual grade-8 measures may postdate application.

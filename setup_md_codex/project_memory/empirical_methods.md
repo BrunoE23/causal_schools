@@ -28,6 +28,13 @@ to choose complexity. The primary benchmark predicts no application for everyone
 also report AUC, average precision and top-decile applicant concentration. Treat
 this follow-up as exploratory because the holdout was already examined. See
 `decisions/2026-10-05-voluntary-sae-margin.md` for exact specifications.
+The subsequent requested simple regression is a single joint OLS linear
+probability model on all 313,813 voluntary-margin pupils, with all constructed
+full-model regressors and school-clustered SEs. Existing standardization,
+imputation, quadratic and missingness terms are preserved. The full coefficient
+table in `output/reports/sae_participation/voluntary_ols.html` reports percentage
+points and SEs; R2 is .0343078. This is descriptive full-sample OLS, not held-out
+prediction performance.
 See `decisions/2026-10-05-sae-participation-prediction.md` for sample, normalization,
 questionnaire harmonization, zero-attendance and timing decisions.
 

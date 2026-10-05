@@ -25,6 +25,12 @@ The voluntary follow-up restricts to the 313,813 pupils whose schools offer grad
 Report: `output/reports/sae_participation/voluntary_margin.html`. New estimates
 and diagnostics are in `data/clean/sae_participation/voluntary/`. Method and timing
 details are in `decisions/2026-10-05-voluntary-sae-margin.md`.
+The latest requested output is the single joint OLS table at
+`output/reports/sae_participation/voluntary_ols.html`: all constructed predictors,
+including squares and parent questions, on the full voluntary sample, with
+school-clustered SEs and coefficients in percentage points. N = 313,813,
+schools = 2,000, R2 = .0343078. It reuses the existing constructed design without
+new feature selection; all coefficients and the regression object are saved.
 All new data are repository-local under `data/clean/sae_participation/`, with source
 Box files unchanged. Exact definitions and validation choices are in
 `decisions/2026-10-05-sae-participation-prediction.md` and the task README.
