@@ -16,6 +16,8 @@ From the repository root, run these scripts in order with R 4.5 or later:
 4. `03_fit.R` estimates the fixed logistic specifications and evaluates held-out schools.
 5. `04_report.R` generates the report and diagnostic figures.
 6. `05_verify.R` checks the resulting data and predictions.
+7. `06_continuation_benchmark.R` compares the saved predictions with Bruno's
+   deterministic continuation rule, without refitting or tuning on the holdout.
 
 Code paths in this list are relative to `code/codex/sae_participation/`.
 Required R packages: `data.table`, `readxl`, `fixest`, `ggplot2`.
@@ -114,7 +116,18 @@ additional information in answers. The final sensitivity excludes grade-8 annual
 grades/attendance/gaps; it is not a guaranteed pre-application forecast because
 the school origin is still measured in annual records.
 
-Report AUC, Brier score, log loss, calibration, and Brier R2 relative to the training
+The primary classification benchmark predicts no application where grade 9 is
+offered and an application where the school ends at grade 8 in SAE offerings.
+Compare accuracy, mistakes corrected and introduced, and net errors avoided,
+overall and separately by continuation group. Use a fixed 0.5 probability cutoff
+and equal error costs. Restrict this comparison to the same held-out pupils in
+the two resolved groups; exclude unresolved and Other SAE offerings explicitly.
+The target remains application, not realized continuation. Paired accuracy-gain
+intervals cluster by origin school and condition on the fitted models. For
+probability scores, also compare with each group's training application rate.
+The benchmark report is `output/reports/sae_participation/continuation_benchmark.html`.
+
+Also report AUC, Brier score, log loss, calibration, and Brier R2 relative to the training
 prevalence forecast; separately by cohort and school continuation group. No test
 outcomes are used for feature selection or tuning. Model coefficient SEs cluster
 at origin school. Parent associations are descriptive, jointly conditional,

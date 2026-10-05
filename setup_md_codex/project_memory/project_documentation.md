@@ -13,6 +13,13 @@ from the offering file remain unresolved. Predictors use grades/attendance 5-8,
 peer z-scores and quadratic terms, GPA-minus-baseline-SIMCE z-score gaps, and 39
 grade-4 parent questionnaire questions/constructs. Geography is explicitly deferred.
 This is retrospective prediction; a sensitivity excludes grade-8 annual measures.
+Bruno's primary benchmark predicts no application where grade 9 is offered and
+application where the origin ends at grade 8. The same-student held-out comparison
+in `output/reports/sae_participation/continuation_benchmark.html` restricts to the
+two resolved offering groups (120,943 pupils). Accuracy is 89.774% for the rule
+and 90.002% for the full model: 276 net errors avoided, only one among pupils
+whose schools offer grade 9. Excluding grade-8 annual measures avoids only three
+errors net. These outcomes measure applications, not actual school changes.
 All new data are repository-local under `data/clean/sae_participation/`, with source
 Box files unchanged. Exact definitions and validation choices are in
 `decisions/2026-10-05-sae-participation-prediction.md` and the task README.

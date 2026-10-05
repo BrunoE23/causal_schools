@@ -104,3 +104,50 @@ AUC and Brier calculations, training-only preprocessing, raw 2019 application
 reconstruction, 2013/2014 parent scale coding, 20 independent full peer-roster
 reconstructions in 2019, base-R logit agreement, and saved-model reproduction.
 Report: `output/reports/sae_participation/report.html` (Markdown alongside).
+
+## User refinement: beat the deterministic continuation rule
+
+Bruno clarified that the model to beat predicts continuation for everyone except
+pupils in schools without continuation. For the agreed application outcome,
+operationalize this as no SAE application where grade 9 is offered, application
+where the observed grade-8 origin has no secondary SAE offering. Nonapplication
+does not establish actual staying, and application does not establish moving.
+
+Evaluate the existing saved holdout probabilities with a fixed 0.5 cutoff and
+equal costs for the two errors. No refit, test-set tuning, or selection of a
+favorable cutoff. Restrict all comparisons to the same 120,943 held-out pupils in
+the two resolved groups; exclude 11,531 unresolved pupils and 19 in Other SAE
+offering. Report accuracy and corrections versus newly introduced mistakes,
+overall and within each continuation group. For probability quality, separately
+benchmark the group's training application rate, avoiding a comparison only to
+overconfident zero/one probabilities. Hard-rule log loss is infinite with errors.
+
+The rule achieves 89.7737% accuracy (12,368 mistakes). The full model achieves
+90.0019% (12,092 mistakes), fixes 361 mistakes and introduces 85, a net 276 fewer
+errors or 0.2282 percentage points. Of the net corrections, 275 are at schools
+ending at grade 8 and one where grade 9 is offered. Excluding grade-8 annual
+measures leaves only three net corrections (89.7762% accuracy). High overall AUC
+does not establish useful classification of exceptions to school continuation.
+
+An intercept-only regression of each pupil's change in correctness, with
+origin-school-clustered SEs, gives a paired 95% CI of [0.1788, 0.2776] percentage
+points for the full model's gain. This conditions on the fixed fitted models,
+without training or selection uncertainty. Nine confusion-table, paired-count
+and Brier identity checks pass. New specification or threshold development
+belongs in training/validation; confirmatory future comparisons require a fresh
+holdout because these test results have been examined.
+
+Code: `06_continuation_benchmark.R` in the existing task directory. Primary
+comparison report: `output/reports/sae_participation/continuation_benchmark.html`
+(Markdown alongside). Counts, probabilities, paired intervals and checks are
+saved under `data/clean/sae_participation/continuation_benchmark_*`.
+
+Bruno also requested the applicant composition. Across the full analysis sample
+(training plus holdout), 325,747 unique students apply: 274,819 from schools ending
+at grade 8 (84.3658%), 45,947 from schools offering grade 9 (14.1051%), 4,849 with
+unresolved offerings (1.4886%), and 132 with Other SAE offerings (0.0405%). Among
+the two resolved groups, shares are 85.6759% school-ending and 14.3241% voluntary.
+"Voluntary" describes applications when grade 9 is offered, not realized moves.
+These shares cover our grade-8 cohort sample, not every raw SAE grade-9 applicant.
+The benchmark report includes this table, saved as
+`data/clean/sae_participation/applicant_composition_by_continuation.csv`.

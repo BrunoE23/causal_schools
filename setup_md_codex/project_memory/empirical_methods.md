@@ -12,6 +12,15 @@ samples across specifications. Evaluate AUC, Brier loss, log loss and calibratio
 overall, within continuation groups and by cohort; descriptive coefficient SEs
 cluster at origin school. Full-year grade-8 inputs make this retrospective. A
 sensitivity drops those annual grade-8 measures. No geography is estimated.
+The primary classification comparison is now Bruno's deterministic continuation
+rule: no application if grade 9 is offered, application if the school ends at
+grade 8. Use identical held-out pupils with resolved continuation status, a fixed
+0.5 cutoff for logits, equal error costs, and separate results in each school
+group. Report accuracy and mistakes corrected/introduced, with paired gain CIs
+from a pupil-level intercept-only regression clustered by origin school. CIs
+condition on the fitted models. A separate probability benchmark assigns each
+group its training application rate. No test-set threshold tuning is performed.
+Actual continuation is distinct from this application outcome.
 See `decisions/2026-10-05-sae-participation-prediction.md` for sample, normalization,
 questionnaire harmonization, zero-attendance and timing decisions.
 
