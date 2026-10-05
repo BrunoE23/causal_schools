@@ -18,6 +18,11 @@ From the repository root, run these scripts in order with R 4.5 or later:
 6. `05_verify.R` checks the resulting data and predictions.
 7. `06_continuation_benchmark.R` compares the saved predictions with Bruno's
    deterministic continuation rule, without refitting or tuning on the holdout.
+8. `07_voluntary_margin.R` refits the predictor blocks among origins offering
+   grade 9, and compares two probability trees with complexity chosen in an
+   inner school validation split. It requires the standard R package `rpart`.
+9. `09_verify_voluntary.R` reproduces saved predictions in a fresh R session.
+10. `08_voluntary_report.R` reports the voluntary application margin and risk deciles.
 
 Code paths in this list are relative to `code/codex/sae_participation/`.
 Required R packages: `data.table`, `readxl`, `fixest`, `ggplot2`.
@@ -136,3 +141,36 @@ saved. Geography and a separate actual-school-change outcome are not estimated.
 
 Empirical rationale is also recorded in
 `setup_md_codex/project_memory/decisions/2026-10-05-sae-participation-prediction.md`.
+
+## Voluntary application margin
+
+The follow-up restricts to 313,813 pupils with grade-9 SAE offerings at their
+grade-8 origin. All 62,189 test pupils remain in the original school holdout.
+The no-application rule is the primary classification benchmark. Six logits
+re-estimate context, grades/attendance, SIMCE gaps, parent availability, parent
+answers, and a full specification excluding grade-8 annual measures. Medians,
+scaling and missingness terms are recomputed from voluntary training pupils.
+Standalone saved fits carry their estimation data to preserve factor references.
+
+Two CART regression alternatives use the binary outcome, so leaf means are
+application probabilities and splits/pruning minimize squared error. They use
+all predictors or exclude grade-8 annual measures,
+with no class reweighting, depth at most 8 and leaves of at least 200 pupils.
+Select complexity from {0.01, 0.005, 0.001, 0.0005, 0.0001} on an inner 20% school
+validation split (seed 20261007): maximize accuracy at 0.5, break ties by Brier
+loss, then prefer the larger complexity penalty. Inner imputation and scaling
+use inner training only. Refit the selected complexity on all original training
+pupils. No probability cutoff is tuned. No test outcome selects a model.
+
+Report accuracy, detected applicants, false positives, paired school-clustered
+accuracy-gain intervals, AUC, average precision, Brier loss, and the application
+rate and recall in the top predicted decile. The original pooled predictions
+provide a same-student comparison. Prior inspection of this holdout makes this
+an exploratory follow-up. Grade-8 annual measures remain retrospective; neither
+applying nor nonapplying establishes an actual move or continuation.
+
+New objects are in `data/clean/sae_participation/voluntary/`; the report is
+`output/reports/sae_participation/voluntary_margin.html` (Markdown alongside).
+For repairs limited to serialization, tree specifications or scoring, the
+`--reuse-logits` flag reloads the existing unchanged logit estimates. Do not use
+this flag after changing input data, preprocessing, sample or logit formulas.

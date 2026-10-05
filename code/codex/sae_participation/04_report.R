@@ -122,6 +122,7 @@ notes <- c(
 md_table <- function(d) c(paste0('| ',paste(names(d),collapse=' | '),' |'),paste0('| ',paste(rep('---',ncol(d)),collapse=' | '),' |'),apply(d,1,function(r) paste0('| ',paste(r,collapse=' | '),' |')))
 md <- c('# Predicting grade-8 SAE participation','',
   'Primary classification benchmark: [Can we beat the continuation rule?](continuation_benchmark.md). This compares accuracy and mistakes corrected against predicting no application wherever grade 9 is offered.','',
+  'Follow-up: [Predicting voluntary applications](voluntary_margin.md) refits the models among students whose schools offer grade 9.','',
   paste0(key,collapse='\n\n'),'',
   '## Application rates by school continuation','',md_table(rates),'','## Held-out prediction','',md_table(comparison),'',
   '![Predictive performance](../../figures/sae_participation/predictive_performance.png)','',
@@ -138,6 +139,7 @@ html <- paste0('<!doctype html><html lang="en"><head><meta charset="utf-8"><meta
  '<style>body{font:16px/1.6 system-ui,sans-serif;color:#243347;background:#f5f7fa;margin:0}main{max-width:1100px;margin:40px auto;padding:36px;background:white;border-radius:12px}h1{font-size:34px;line-height:1.2}h2{margin-top:40px;font-size:23px}.tag{color:#216b86;letter-spacing:.08em;font-size:12px;font-weight:700;text-transform:uppercase}table{border-collapse:collapse;width:100%;font-size:14px}th{text-align:left;background:#e9eff4}td,th{padding:10px;border-bottom:1px solid #dde3ea}td:not(:first-child){font-variant-numeric:tabular-nums}.table{overflow-x:auto}img{max-width:100%;height:auto}.notes{font-size:14px;color:#4c5a6b}li{margin-bottom:12px}.lede{font-size:18px}footer{margin-top:35px;font-size:13px;color:#596678}</style></head><body><main>',
  '<div class="tag">Research note · October 5, 2026 · Retrospective prediction</div><h1>Who applies through SAE in grade 8?</h1>',
  '<p><strong>Primary classification benchmark:</strong> <a href="continuation_benchmark.html">Can we beat the continuation rule?</a> This compares accuracy and mistakes corrected against predicting no application wherever grade 9 is offered.</p>',
+ '<p><strong>Follow-up:</strong> <a href="voluntary_margin.html">Predicting voluntary applications</a> refits the models among students whose schools offer grade 9.</p>',
  paste0('<p class="lede">',esc(key),'</p>',collapse=''),'<h2>Application rates by school continuation</h2>',html_table(rates),
  '<h2>What each predictor block adds</h2>',html_table(comparison),'<img src="../../figures/sae_participation/predictive_performance.png" alt="Held-out AUC by model">',
  '<h2>Prediction within school groups</h2>',html_table(group_table),'<h2>Full model by cohort</h2>',html_table(cohort_table),

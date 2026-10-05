@@ -20,6 +20,11 @@ two resolved offering groups (120,943 pupils). Accuracy is 89.774% for the rule
 and 90.002% for the full model: 276 net errors avoided, only one among pupils
 whose schools offer grade 9. Excluding grade-8 annual measures avoids only three
 errors net. These outcomes measure applications, not actual school changes.
+The voluntary follow-up restricts to the 313,813 pupils whose schools offer grade
+9 and refits models within that group; 62,189 remain in the original holdout.
+Report: `output/reports/sae_participation/voluntary_margin.html`. New estimates
+and diagnostics are in `data/clean/sae_participation/voluntary/`. Method and timing
+details are in `decisions/2026-10-05-voluntary-sae-margin.md`.
 All new data are repository-local under `data/clean/sae_participation/`, with source
 Box files unchanged. Exact definitions and validation choices are in
 `decisions/2026-10-05-sae-participation-prediction.md` and the task README.

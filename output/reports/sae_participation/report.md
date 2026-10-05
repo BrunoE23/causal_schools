@@ -2,6 +2,8 @@
 
 Primary classification benchmark: [Can we beat the continuation rule?](continuation_benchmark.md). This compares accuracy and mistakes corrected against predicting no application wherever grade 9 is offered.
 
+Follow-up: [Predicting voluntary applications](voluntary_margin.md) refits the models among students whose schools offer grade 9.
+
 The analysis includes 660,426 students in the 2017-2020 grade-8 cohorts within SAE-covered origin regions. The fixed school split assigns 527,933 students to training and 132,493 to testing.
 
 Adding grades, attendance, SIMCE comparisons and parent information to school continuation reduces held-out Brier error by 4.9% (0.0857 to 0.0815).

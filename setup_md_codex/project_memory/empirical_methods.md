@@ -21,6 +21,13 @@ from a pupil-level intercept-only regression clustered by origin school. CIs
 condition on the fitted models. A separate probability benchmark assigns each
 group its training application rate. No test-set threshold tuning is performed.
 Actual continuation is distinct from this application outcome.
+The voluntary-margin follow-up refits six nested logits only among origins
+offering grade 9, preserving the original school holdout and using subgroup
+training preprocessing. Two CART probability trees use inner school validation
+to choose complexity. The primary benchmark predicts no application for everyone;
+also report AUC, average precision and top-decile applicant concentration. Treat
+this follow-up as exploratory because the holdout was already examined. See
+`decisions/2026-10-05-voluntary-sae-margin.md` for exact specifications.
 See `decisions/2026-10-05-sae-participation-prediction.md` for sample, normalization,
 questionnaire harmonization, zero-attendance and timing decisions.
 
