@@ -1,5 +1,19 @@
 # Project Documentation
 
+## Compact voluntary-SAE table with grade averages (2026-10-10)
+
+The latest compact report is
+`output/reports/sae_participation/voluntary_averages.html`. Six available-grade
+means over grades 5-8 replace 24 grade-specific academic measures; squares and
+survey PC1 remain. The six separate regressions and joint comparison retain
+313,813 pupils and school-clustered SEs. Peer-GPA's separate linear coefficient
+is .023 pp, with a -.382 pp squared term; the math-gap linear coefficient is
+-.709 pp. A two-period check finds opposite conditional peer-GPA slopes in
+grades 5-6 and 7-8. Annual survey PC1 slopes remain negative (.67-1.23 pp less
+application per SD). Exact averaging, missingness and scaling decisions are in
+`decisions/2026-10-10-average-grade-histories.md`; derived data and models are
+under `data/clean/sae_participation/averaged_grades/`.
+
 ## Separate academic measures and survey PCA (2026-10-10)
 
 The revised voluntary-SAE table is

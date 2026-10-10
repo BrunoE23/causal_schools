@@ -1,5 +1,18 @@
 # Empirical Methods
 
+## Averaged academic histories for voluntary SAE (2026-10-10)
+
+At Bruno's request, replace each four-grade academic history with the arithmetic
+mean of its observed values in grades 5-8. Each of six summaries enters with its
+square, separately or jointly, retaining the context and annual survey-PC1
+controls. Standardize the newly constructed averages with original-training
+observed moments; use the training median when wholly missing and categorical
+observed-grade counts for every included average. Sample and clustered inference
+remain unchanged. A two-period sensitivity (5-6 and 7-8) checks whether averaging
+hides timing. For the focused GPA/math-gap comparison, use identical observed
+grades and pupils to preserve the gap identity. See
+`decisions/2026-10-10-average-grade-histories.md` for exact specifications.
+
 ## Separate predictors and survey PCA (2026-10-10)
 
 For the voluntary-SAE sample, compare 24 separate grade-specific academic

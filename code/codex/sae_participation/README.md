@@ -230,3 +230,30 @@ re-expressions of the original regression, and verification. The re-expression
 undoes each regressor's standardization and propagates the original full clustered
 covariance; quadratic terms imply interactions after rewriting gaps as baseline
 scores. The displayed re-expressed slopes are local at the centered reference.
+
+## Compact grade averages (October 10)
+
+Run `16_average_grades.R`, then `17_report_averages.R`. The report is
+`output/reports/sae_participation/voluntary_averages.html` (Markdown alongside).
+It replaces the four grade-specific values of each academic measure with one
+available-grade arithmetic mean over grades 5-8. The main table shows six
+separate regressions, each with one average and its square; the joint comparison
+enters all six averages and squares. The same context and survey-PC1 controls
+remain, with all 313,813 pupils and origin-school clustered SEs.
+
+Each new average uses its own original-training observed mean/SD, with median
+imputation if every grade is missing. Categorical observed-grade counts enter
+for each included average. Average first, standardize second, then square.
+A sensitivity uses two averages (5-6 and 7-8). A focused GPA/math-gap comparison
+averages over identical observed grades and holds the pupil sample fixed.
+New objects, lean fitted models, coefficients, coverage, preprocessing moments,
+presentation tables and verification are in
+`data/clean/sae_participation/averaged_grades/`.
+
+The overall peer-GPA linear coefficient is near zero, but its squared term is
+negative and the two periods have opposite conditional linear slopes. Survey
+PC1 remains negatively associated with application. Fit comparisons are
+descriptive in-sample R-squared; the averaging also changes coverage controls,
+so they are not formal nested tests or held-out prediction comparisons.
+The joint OLS clustered covariance is independently reconstructed. See the
+project-memory decision `2026-10-10-average-grade-histories.md` for details.

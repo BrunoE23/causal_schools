@@ -1,5 +1,7 @@
 # Voluntary SAE application: one joint regression
 
+[Latest compact table: grades 5-8 averages and survey PCA](voluntary_averages.html)
+
 [October 10 update: separate predictors and parent-survey PCA](voluntary_separate_pca.html)
 
 One joint linear probability regression. N = 313,813 students; 2,000 origin schools; 45,947 applicants (14.64%); R-squared = 0.0343. Each cell is coefficient (school-clustered standard error), in percentage points. All constructed predictors are entered together, including quadratic and missingness terms.
