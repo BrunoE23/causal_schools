@@ -194,3 +194,39 @@ Results and the actual regression object are under
 `data/clean/sae_participation/voluntary_ols/`. Verification includes an independent
 cluster-sandwich covariance calculation with the regression's finite-sample
 correction, OLS normal equations, R-squared, and complete predictor coverage.
+
+## Separate predictors and parent-survey PCA (October 10)
+
+Run `12_prepare_survey_pca.R`, `13_separate_predictors_pca.R`,
+`15_verify_pca_design.R`, then `14_report_separate_pca.R`.
+
+The main new table fits one grade-specific academic measure and its square at a
+time (24 separate regressions), with common context and survey-PC1 controls. A
+joint model includes all six academic measures in grades 5-8. Both keep all
+313,813 pupils. A focused comparison of peer-relative GPA alone, the math gap
+alone, and both together uses identical observed-GPA/math-gap students within
+each grade. Full coefficients, standard errors and model objects are saved.
+
+PCA uses complete questionnaires separately in 2013, 2014, 2015 and 2016 because
+the available items differ (19, 29, 20 and 16). It standardizes each applicable
+item within that year's complete respondents, without outcome information or
+answer imputation. PC1 has positive loadings; higher scores mean more favorable
+reports. Scores have within-year mean zero and SD one, and coefficients vary by
+survey year. Main models use PC1, with a sensitivity using PCs 1-3. Incomplete
+questionnaires have zero scores plus explicit completeness controls; all pupils
+remain. The report shows PCA coverage, variance and loadings.
+
+The shared controls are cohort-by-region, sector, gender, age and its square and
+missingness, same-school status/missingness, parent-record indicator, survey year,
+fraction answered and survey-year completeness indicators. PCs replace individual
+parent-answer coefficients. Each included academic measure retains its original
+training normalization, imputation, square and missingness term. All SEs cluster
+at origin school and condition on the constructed PC scores.
+
+`voluntary_separate_pca.html` in the existing report folder shows all comparisons
+and explains the GPA-gap algebra. `data/clean/sae_participation/interpretation_pca/`
+contains the reusable frame, PCA objects, lean OLS objects, coefficients, exact
+re-expressions of the original regression, and verification. The re-expression
+undoes each regressor's standardization and propagates the original full clustered
+covariance; quadratic terms imply interactions after rewriting gaps as baseline
+scores. The displayed re-expressed slopes are local at the centered reference.

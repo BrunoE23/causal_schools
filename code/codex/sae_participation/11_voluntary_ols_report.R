@@ -50,7 +50,8 @@ sections <- list('Grades, attendance and SIMCE-relative gaps'=admin_table,'Paren
 mdtable <- function(z) c(paste0('| ',paste(names(z),collapse=' | '),' |'),paste0('| ',paste(rep('---',ncol(z)),collapse=' | '),' |'),
   apply(z,1,function(r) paste0('| ',paste(r,collapse=' | '),' |')))
 report_dir <- file.path(root,'output/reports/sae_participation')
-md <- c('# Voluntary SAE application: one joint regression','',intro,'')
+md <- c('# Voluntary SAE application: one joint regression','',
+  '[October 10 update: separate predictors and parent-survey PCA](voluntary_separate_pca.html)','',intro,'')
 for(s in names(sections)) md <- c(md,paste0('## ',s),'',mdtable(sections[[s]]),'')
 md <- c(md,'## Notes','',paste0('- ',notes),'','## Omitted collinear terms','',paste0('- `',omitted$term,'`'))
 writeLines(md,file.path(report_dir,'voluntary_ols.md'))
@@ -60,7 +61,7 @@ htmltable <- function(z) paste0('<div class="table"><table><thead><tr>',paste0('
 body <- paste0(vapply(names(sections),function(s) paste0('<h2>',esc(s),'</h2>',htmltable(sections[[s]])),character(1)),collapse='')
 html <- paste0('<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Voluntary SAE application: joint OLS</title>',
   '<style>body{font:16px/1.5 system-ui,sans-serif;color:#243347;background:#f5f7fa;margin:0}main{max-width:1120px;margin:32px auto;padding:36px;background:white;border-radius:12px}h1{font-size:30px;line-height:1.2}h2{font-size:22px;margin-top:32px}table{border-collapse:collapse;width:100%;font-size:14px}th{background:#e9eff4;text-align:left}th,td{padding:9px;border-bottom:1px solid #dde3ea}td:not(:first-child){font-variant-numeric:tabular-nums;white-space:nowrap}.table{overflow-x:auto}.notes{font-size:14px}li{margin-bottom:9px}@media print{body{background:white}main{margin:0;padding:0}thead{display:table-header-group}tr{break-inside:avoid}}</style></head><body><main>',
-  '<h1>Voluntary SAE application: one joint regression</h1><p>',esc(intro),'</p>',body,
+  '<h1>Voluntary SAE application: one joint regression</h1><p><a href="voluntary_separate_pca.html">October 10 update: separate predictors and parent-survey PCA</a></p><p>',esc(intro),'</p>',body,
   '<h2>Notes</h2><ul class="notes">',paste0('<li>',esc(notes),'</li>',collapse=''),'</ul>',
   '<details><summary>Omitted collinear terms</summary><ul>',paste0('<li>',esc(omitted$term),'</li>',collapse=''),'</ul></details></main></body></html>')
 writeLines(html,file.path(report_dir,'voluntary_ols.html'))

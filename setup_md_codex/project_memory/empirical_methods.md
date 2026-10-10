@@ -1,5 +1,20 @@
 # Empirical Methods
 
+## Separate predictors and survey PCA (2026-10-10)
+
+For the voluntary-SAE sample, compare 24 separate grade-specific academic
+measure-plus-square OLS regressions with a model entering them all jointly.
+Use the same context and annual survey-PC1 controls, clustered by origin school.
+Focused GPA/math-gap comparisons hold the observed sample fixed within grade.
+Academic units/imputation remain unchanged from the prior prepared design.
+Survey PCA uses each year's applicable standardized items among complete
+respondents, without outcome information or answer imputation. Keep incomplete
+respondents in the full regressions with zero-reference scores and completeness
+controls. PC coefficients vary by survey year; a sensitivity includes PCs 1-3.
+The exact specifications, PCA coverage, and algebra re-expressing gaps in current
+GPA and baseline achievement are documented in
+`decisions/2026-10-10-separate-predictors-survey-pca.md`.
+
 ## SAE participation prediction (2026-10-05)
 
 Fixed nested binomial logits predict any explicit regular/complementary grade-9

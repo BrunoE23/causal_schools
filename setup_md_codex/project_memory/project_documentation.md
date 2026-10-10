@@ -1,5 +1,20 @@
 # Project Documentation
 
+## Separate academic measures and survey PCA (2026-10-10)
+
+The revised voluntary-SAE table is
+`output/reports/sae_participation/voluntary_separate_pca.html`. It adds separate
+regressions for each grade-specific academic measure plus its square, a joint
+comparison with the same controls, and same-student GPA/math-gap comparisons.
+PCA is computed separately by survey year from complete parent questionnaires
+(218,241 respondents); all 313,813 pupils remain in the main regressions with
+score-completeness controls. PC1 has positive loadings and explains 47-54% of
+item variation. More favorable PC1 scores predict .67-1.24 pp less application per
+SD conditional on all academic measures. Exact construction, coefficients and
+the GPA-gap re-expression are in
+`decisions/2026-10-10-separate-predictors-survey-pca.md`. New reusable data and
+models are under `data/clean/sae_participation/interpretation_pca/`.
+
 ## SAE participation prediction (2026-10-05)
 
 The new exercise in `code/codex/sae_participation/` predicts explicit grade-9 SAE
