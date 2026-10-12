@@ -1,0 +1,31 @@
+\begin{table}[!htbp]
+\centering
+\caption{Pass-through coefficients by origin-school continuation}
+\label{tab:pass_through-by-continuation}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lccccccc}
+\toprule
+ & \multicolumn{2}{c}{Achievement} & \multicolumn{3}{c}{Postsecondary access} & \multicolumn{2}{c}{Within higher-education choice} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-6} \cmidrule(lr){7-8}
+ & Math & Verbal & Exam taking & Fin. aid app. & Higher-ed enrollment & High-premium inst. & High-premium field \\
+\midrule
+School ending & 1.139*** & 0.992*** & 0.501*** & 0.582*** & 0.748*** & 0.554*** & 0.875*** \\
+ & (0.105) & (0.105) & (0.054) & (0.105) & (0.125) & (0.135) & (0.093) \\
+$p$: $\psi=0$ & $<0.001$ & $<0.001$ & $<0.001$ & $<0.001$ & $<0.001$ & $<0.001$ & $<0.001$ \\
+$p$: $\psi=1$ & 0.188 & 0.943 & $<0.001$ & $<0.001$ & 0.044 & $<0.001$ & 0.180 \\
+N & 73,700 & 75,040 & 111,952 & 111,952 & 111,952 & 75,470 & 75,470 \\
+\addlinespace
+Voluntary & 1.393*** & 1.198*** & 0.419** & 0.518* & 0.772** & 0.953*** & 0.751*** \\
+ & (0.238) & (0.261) & (0.167) & (0.281) & (0.339) & (0.236) & (0.238) \\
+$p$: $\psi=0$ & $<0.001$ & $<0.001$ & 0.012 & 0.065 & 0.023 & $<0.001$ & 0.002 \\
+$p$: $\psi=1$ & 0.098 & 0.448 & $<0.001$ & 0.086 & 0.501 & 0.843 & 0.296 \\
+N & 16,461 & 16,719 & 21,196 & 21,196 & 21,196 & 16,789 & 16,789 \\
+\addlinespace
+\bottomrule
+\end{tabular}
+}
+\par\medskip\footnotesize
+\begin{minipage}{\textwidth}
+\textit{Notes:} First-stage and pass-through specifications are the paper's Tables 4 and 5, estimated separately within each origin-school group. Both use timely applicants with assignment risk in 2018-2020; school VA is estimated on the original 2017-2020 sample and is held fixed across groups. The first stage regresses attended-school EB VA on first-round offered-school EB VA. The pass-through regression instruments attended VA with offered VA. Both control for expected VA in that outcome, cohort indicators, grade-4 math and verbal scores, gender indicators and age indicators. Outcome-specific missingness and exam-taking restrictions match the main paper. No-offer instrument values and all VA normalizations are unchanged. Parentheses contain heteroskedasticity-robust standard errors, as in the main paper. Stars use the original normal-reference tests: *** p<0.01, ** p<0.05, * p<0.10. First-stage F is the squared robust t statistic for the single excluded instrument. These subgroup point estimates alone do not establish a statistically significant difference between groups. Assignment-risk fractions use all applicants in each Table 2 subgroup before complete-control and outcome restrictions. School ending means the grade-8 origin has no SAE offering above grade 8; voluntary means it offers grade 9. These operational labels describe continuation availability, not observed motives or actual moves. 4,766 applicants have unresolved/other origin offerings, including 3,140 with assignment risk. They are excluded from both subgroup rows. The original pooled results include them when eligible.
+\end{minipage}
+\end{table}

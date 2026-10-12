@@ -1,5 +1,17 @@
 # Project Documentation
 
+## Main IV tables by continuation group (2026-10-12)
+
+The report `output/reports/empirical_bayes_school_va/main_by_continuation.html`
+splits Tables 4 and 5 into school-ending and voluntary applicant rows, keeping
+all original controls, EB VA and outcome-specific restrictions. All seven pooled
+specifications reproduce the paper first. Risk rates among the Table 2 groups
+are 54.07% and 61.79%; expected VA is reported for all applicants and the exact
+IV samples. Reusable model/data outputs live under the maximum-data cohort
+pair's `by_continuation` directory; new paper-table fragments end in
+`_by_continuation.tex`. The original manuscript is unchanged. See
+`decisions/2026-10-12-main-iv-by-continuation.md` for sources and validation.
+
 ## Table 2 continuation-group variant (2026-10-12)
 
 `output/tables/balance_table/balance_table_continuation.tex` adds school-ending

@@ -1,5 +1,17 @@
 # Empirical Methods
 
+## Main IV by origin-school continuation (2026-10-12)
+
+Re-estimate the paper's seven first-stage and pass-through specifications
+separately for school-ending and voluntary applicants, using the existing
+Table 2 continuation classification. Both regression samples require assignment
+risk and retain the original outcome-specific controls/missingness restrictions.
+Keep EB school values and expected-VA construction fixed across groups, with
+the paper's heteroskedasticity-robust SEs. Assignment-risk rates and primary
+expected-VA means instead use all Table 2 applicants within each group;
+additional expected-VA means use the exact IV samples. See
+`decisions/2026-10-12-main-iv-by-continuation.md` for complete definitions.
+
 ## Averaged academic histories for voluntary SAE (2026-10-10)
 
 At Bruno's request, replace each four-grade academic history with the arithmetic
