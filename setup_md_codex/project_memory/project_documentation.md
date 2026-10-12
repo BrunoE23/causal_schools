@@ -1,5 +1,16 @@
 # Project Documentation
 
+## Look up paper sample statistics before recomputing (2026-10-12)
+
+For questions about the student universe, SAE applicants, or assignment-risk
+applicants, first inspect the current paper's existing sample/balance tables.
+`writing/sept_draft/sept_draft.tex` includes Table 2 from
+`output/tables/balance_table/balance_table_samples.tex`; its companion CSV has
+unrounded values. Metropolitan shares are 38.7%, 25.7%, and 27.3% respectively.
+Use the table's definitions: broad panel with observed high school and age 12-16
+(2017-2020), timely SAE applicants (2018-2020), and their assignment-risk subset.
+Do not silently substitute the broader SAE-participation exercise's population.
+
 ## Compact voluntary-SAE table with grade averages (2026-10-10)
 
 The latest compact report is
