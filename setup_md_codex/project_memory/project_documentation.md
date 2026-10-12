@@ -1,5 +1,16 @@
 # Project Documentation
 
+## Table 2 continuation-group variant (2026-10-12)
+
+`output/tables/balance_table/balance_table_continuation.tex` adds school-ending
+and voluntary applicant columns to the three original Table 2 mean columns,
+omitting differences and tests. The HTML view is
+`output/reports/balance_table/table2_continuation.html`. It exactly reproduces
+the paper's existing samples and means, then splits its 294,198 applicants
+using cached origin-school SAE offerings: 250,564 ending, 38,868 voluntary,
+and 4,766 unresolved/other. See
+`decisions/2026-10-12-table2-continuation-groups.md` for construction and checks.
+
 ## Look up paper sample statistics before recomputing (2026-10-12)
 
 For questions about the student universe, SAE applicants, or assignment-risk
