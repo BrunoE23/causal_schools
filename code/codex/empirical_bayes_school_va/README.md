@@ -390,3 +390,14 @@ applicant file and merged by `mrun` and SAE process. The robustness uses the
 same outcome-specific samples as the main specification, additionally requiring
 observed priority status, and writes separate $\psi^{EB}$ and $\kappa^{EB}$
 tables without replacing the main results.
+
+### TP attendance by continuation group
+
+Run `Rscript code/codex/empirical_bayes_school_va/20_tp_attendance_by_continuation.R`
+from the repository root. It uses the cached Table 2 applicant roster and matches
+`most_time_RBD` to the paper's 2024 directory-based TP school flag (excluding
+artistic schools). Mixed schools offering TP are included; this does not measure
+individual curricular-track enrollment. The CSV in the `by_continuation` clean
+data directory reports counts, coverage, classified-school shares, and bounds
+allowing unclassified schools to be either TP or non-TP, for all applicants and
+the assignment-risk subset separately.
