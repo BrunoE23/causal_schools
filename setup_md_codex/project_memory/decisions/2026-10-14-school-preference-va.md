@@ -1,0 +1,117 @@
+# Submitted school preferences and four-dimensional EB value added
+
+Current user instruction: estimate math, exam-taking, high-premium-field and
+high-premium-institution VA jointly with log(1+distance_km). Retain the two
+distance versions: published student-to-campus distance and home-comuna-center
+to the same campus. This supersedes the initially approved seven-VA model.
+The initial seven-VA snapshot is retained only in the local ignored
+data/clean/school_preference_va/archive/seven_va_initial directory and is not
+the reported specification. No other preference extension or manuscript edit
+is included.
+
+## Population and submitted rankings
+
+Use the Table 2 roster of 294198 timely grade-9 applicants in 2018-2020,
+including those with and without assignment risk. The user explicitly chose
+the paper's upstream age/linked-HS restrictions. Do not narrow to lottery risk
+or outcome-specific IV samples. Reconstruct regular-round C1 lists, remove
+auto-appended continuity entries, retain genuine priority choices, and exclude
+complementary rounds. Old sae_apps drops genuine priority choices; the
+unique-process cache lacks continuity flags. Neither can replace raw C1.
+
+Preserve 1013909 genuine program rows. Collapse each RBD to its first submitted
+program, retaining that program's campus, and renumber distinct-school ranks.
+The full data have 1007253 school pairs. Keep flags for 4875 repeated-school
+lists and 278 interleaved A/B/A program lists. The user chose school-level
+aggregation rather than program alternatives; it does not recover every
+program preference.
+
+Preserve all original lists with coverage flags. A missing required regressor
+at any listed school excludes the whole list; never silently remove only that
+school. Single-school lists have likelihood one and provide no ordering signal.
+Recalculate eligibility for the four selected VAs, rather than inheriting a
+seven-VA complete-case restriction. This happens to retain the same sample:
+276193 rankings, 985285 pairs and 2501 schools. Exclusive losses are 16720
+single-school lists and 1285 informative lists missing at least one VA.
+Before singleton restriction, 292887/294198 lists (99.55%) have all four VAs;
+26 missing-VA lists are also singleton lists. Geography removes none.
+
+## Existing indices and normalization
+
+Use the canonical current paper file under Box data/clean/
+empirical_bayes_school_va/cohorts_2017_2020, analysis_sample=All and
+controlled_value_added_eb_centered_student. Outcomes, in report order, are
+z_year_math_max, admission_exam_taker, high_paying_field_m1 and high_inst_m1.
+Do not use legacy Stata exports, reconstruct VA, or invent year-specific VAs.
+Math uses observed-score pupils; institution/field VAs use exam takers;
+exam-taking VA uses the broader complete-control population. Preserve and
+disclose those source definitions.
+
+Normalize each VA using unweighted mean and sample SD (N-1) across unique
+destination RBDs in the common final estimation sample, pooled across years.
+Do not application-weight moments. Save parameters, retain raw values, and
+apply exactly the same standardized indices in both models.
+
+## Geography
+
+All published B1 coordinate-quality types enter by explicit user choice,
+including 59976 municipality-imputed pupils (20.4%). Coordinates describe
+approximate declared locations and are privacy displaced. 2018 noise is
+uniform +/-0.0013 degrees independently per coordinate; 2019-2020 uses a
+uniform 50-300m radial displacement with random direction.
+
+Use contemporaneous A1 campus coordinates joined by process/RBD/program;
+campuses at a single RBD can differ by over20km. All coordinates match, so
+neither directory fallback nor external geocoding is required. Robustness
+replaces only student coordinates using grade-8 COD_COM_ALU from
+universe_controls.csv and numeric centers from comuna_info.RDS. All applicants
+match the345 unique codes. Join numeric codes, not lookup names: code1401
+is mislabeled TOCOPILLA though its code/center/province identify Pozo Almonte;
+actual Tocopilla is separately code2301. Retain official residence names and
+document the source-label error without modifying original inputs. No old
+84xx Nuble residence codes occur in this sample.
+
+Use Haversine straight-line km with mean Earth radius6371.0088km, followed
+by log1p. Do not standardize the distance term, trim genuine long distances,
+or substitute travel distance. Schools retain actual campus points in both fits.
+
+## Exact likelihood and inference
+
+The estimand is ordering conditional on the submitted school set. Use
+coxph(Surv(rank_school,1)~four_VAs+distance+strata(ranking_id)), cluster=mrun,
+ties=breslow. The event time is each school's unique rank; at rank r the risk
+set is exactly the schools remaining in that submitted ranking. There are no
+within-ranking ties, making this the exact specified Plackett-Luce likelihood.
+Only the four normalized VAs and one distance term enter (five coefficients).
+No intercept, school fixed effects, peer controls or unlisted alternatives
+enter. Student-clustered sandwich SEs aggregate full ranking scores and
+condition on supplied EB estimates without propagating VA estimation error.
+
+Coefficients describe conditional ranking associations, not whether parents
+observe these VA measures, their beliefs, the causal demand effect of VA
+information, consideration-set inclusion, outside options or enrollment.
+
+## Results and verification
+
+Main/comuna point estimates: math .015557/.014613; exam -.018020/-.014524;
+high-premium field .057109/.055053; high-premium institution -.008186/-.013231;
+logged distance -.181531/-.058939. All four VA signs are preserved. Field is
+the strongest positive partial association (one SD implies main conditional
+odds ratio1.0588), followed by math. All four main VA coefficients are
+distinguishable from zero at5% with student-clustered inference; this is not
+a causal preference-effect interpretation.
+
+Both models converge in three iterations, have five identified regressors,
+positive observed information and score per ranking below1e-14. Information
+condition numbers are5.30/13.59; school-VA VIFs range1.03-1.17. Validation
+compares independent full-sample PL likelihoods and expanded conditional
+logit point estimates/student-clustered covariance on deterministic complete
+lists, including long and interleaved-program examples. Detailed checks and
+errors are saved with the results. All54 independent model checks pass. On
+1393 validation rankings (9207 alternatives,66199 expanded rows), coefficient
+differences are below4e-16 and covariance differences below3e-17. Independent
+full-sample log likelihood differences are5.4e-9(main) and2.8e-7(comuna).
+
+Code, derived data, tables and report use task name school_preference_va.
+Student-level data and fitted models remain in ignored clean data; commit
+only reproducible code, documentation and aggregate outputs.

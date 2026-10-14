@@ -1,5 +1,19 @@
 # Project Issues Log
 
+### Existing comuna-center lookup mislabels code 1401
+
+- Noted 2026-10-14 while implementing school-preference distances. The source
+  comuna_info.RDS and raw boundary DBF label code 1401 TOCOPILLA, although its
+  numeric code, province/region and center coordinates identify Pozo Almonte.
+  Actual Tocopilla is separately present at code 2301.
+- Status: source name-label error remains; raw and existing clean files are
+  unchanged. The new school_preference_va pipeline joins on unique numeric
+  codes and uses residence names from universe_controls.csv, preserving all
+  294198 paper applicants. No distance is joined using the erroneous names.
+- Other analyses joining comuna_info by name may need a separate audit;
+  this task does not alter them. See the geography notes and decision
+  decisions/2026-10-14-school-preference-va.md.
+
 ### HC3 undefined for singleton nuisance cells in compact staff OLS
 
 - Noted 2026-09-21. Each of the 12 fixed 14-predictor OLS models has one

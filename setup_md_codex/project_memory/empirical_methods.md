@@ -1,5 +1,23 @@
 # Empirical Methods
 
+## Submitted school rankings and joint VA preferences (2026-10-14)
+
+Estimate the exact Plackett-Luce ordering likelihood conditional on each
+student's submitted RBD set. The initial two specifications include four
+current pooled EB VAs simultaneously (math, exam taking, high-premium field
+and high-premium institution) and log(1+Haversine km), using published
+home points or home-comuna centers while retaining actual school campuses.
+Use the Table 2 applicant roster, retain genuine priority choices, exclude
+auto-continuity alternatives, collapse RBD to its first submitted program,
+and exclude an entire ranking if any regressor is missing. Single-school
+lists provide no identifying information. Normalize VAs equally across unique
+destination schools in the final shared estimation support and reuse those
+moments in both models. Cox event time equals school rank, stratum equals
+ranking, and cluster equals student; unique ranks make Breslow exact here.
+Inference conditions on existing EB estimates. No school fixed effects,
+unlisted alternatives, peer controls, or preference heterogeneity enter.
+See `decisions/2026-10-14-school-preference-va.md` for sources and validation.
+
 ## Main IV by origin-school continuation (2026-10-12)
 
 Re-estimate the paper's seven first-stage and pass-through specifications
