@@ -6,7 +6,12 @@ Estimate the exact Plackett-Luce ordering likelihood conditional on each
 student's submitted RBD set. The initial two specifications include four
 current pooled EB VAs simultaneously (math, exam taking, high-premium field
 and high-premium institution) and log(1+Haversine km), using published
-home points or home-comuna centers while retaining actual school campuses.
+student points or home-comuna centers. The user's subsequent TP addition
+enters as an unstandardized binary in both joint models, using the paper's
+2024 Directorio classification (regular TP offered, including mixed HC/TP;
+pure artistic schools excluded). The flag is constructed directly from ENS
+codes410,510,610,710,810 and verified against the paper's existing cached flag.
+This is school type, not individual track; both versions retain actual campuses.
 Use the Table 2 applicant roster, retain genuine priority choices, exclude
 auto-continuity alternatives, collapse RBD to its first submitted program,
 and exclude an entire ranking if any regressor is missing. Single-school

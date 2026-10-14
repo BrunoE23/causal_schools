@@ -68,6 +68,36 @@ selected_complete_schools <- sum(complete.cases(wide[, specs$raw, with = FALSE])
 check("selected_va_joint_school_support_positive", selected_complete_schools > 1L,
   paste(selected_complete_schools, "schools with all", nrow(specs), "selected VA measures"))
 programs <- merge(programs, wide, by = "rbd", all.x = TRUE, sort = FALSE)
+
+# Use Directorio school-level TP offerings, including mixed HC/TP schools.
+# Verify agreement with the paper's existing classification.
+# Unmatched schools remain missing; they are never implicitly coded as HC.
+tp_path <- file.path(root, "data/clean/staff_lasso_va/school_predictors.csv")
+artistic_path <- file.path(root, "data/clean/staff_va_compact_inputs/artistic_rbd_2024.csv")
+tp_map <- fread(tp_path, select = c("RBD", "school__has_tp_or_artistic"), showProgress = FALSE)
+artistic <- fread(artistic_path, select = "RBD", showProgress = FALSE)
+check("tp_source_school_keys_unique", !anyDuplicated(tp_map$RBD))
+check("artistic_source_school_keys_unique", !anyDuplicated(artistic$RBD))
+check("tp_or_artistic_source_binary", all(tp_map$school__has_tp_or_artistic %in% 0:1))
+tp_map[, tp_school := as.integer(school__has_tp_or_artistic - as.integer(RBD %in% artistic$RBD))]
+check("tp_school_map_binary_after_artistic_exclusion", all(tp_map$tp_school %in% 0:1))
+setnames(tp_map, "RBD", "rbd")
+# Verify the reused paper flag directly against Directorio teaching codes.
+tp_directory_path <- list.files(file.path(data_root, "data/raw/school_directory/2024"),
+  pattern = "[.]csv$", full.names = TRUE)
+check("one_2024_directory_source", length(tp_directory_path) == 1L)
+tp_header <- names(fread(tp_directory_path, nrows = 0L))
+tp_ens <- grep("^ENS_", toupper(tp_header), value = TRUE)
+tp_direct <- fread(tp_directory_path, select = tp_header[match(c("RBD", tp_ens), toupper(tp_header))],
+  showProgress = FALSE)
+setnames(tp_direct, toupper(names(tp_direct)))
+tp_direct[, tp_directory := as.integer(rowSums(.SD == 410L | .SD == 510L | .SD == 610L |
+  .SD == 710L | .SD == 810L, na.rm = TRUE) > 0L), .SDcols = tp_ens]
+tp_comparison <- merge(tp_map[, .(rbd, tp_school)], tp_direct[, .(rbd = RBD, tp_directory)],
+  by = "rbd", all = TRUE)
+check("paper_TP_matches_Directorio_teaching_codes", all(tp_comparison[!is.na(tp_directory) & !is.na(tp_school), tp_school == tp_directory]))
+fwrite(tp_comparison[rbd %in% programs$rbd], file.path(clean_dir, "tp_directory_verification.csv"))
+programs <- merge(programs, tp_direct[, .(rbd = RBD, tp_school = tp_directory)], by = "rbd", all.x = TRUE, sort = FALSE)
 setorder(programs, ranking_id, rank_program)
 message("Attaching published geography and the separate home-comuna sensitivity distance.")
 program_rows_before_geography <- nrow(programs)
@@ -97,18 +127,21 @@ programs[, first_school_occurrence := rank_program == first_program_rank]
 raw_terms <- specs$raw
 schools[, all_selected_va := rowSums(is.finite(as.matrix(.SD))) == length(raw_terms), .SDcols = raw_terms]
 schools[, `:=`(main_distance_observed = is.finite(distance_main_km) & is.finite(log1p_distance_main),
-  comuna_distance_observed = is.finite(distance_comuna_km) & is.finite(log1p_distance_comuna))]
+  comuna_distance_observed = is.finite(distance_comuna_km) & is.finite(log1p_distance_comuna),
+  tp_observed = is.finite(tp_school) & tp_school %in% 0:1)]
 list_coverage <- schools[, .(list_all_selected_va = all(all_selected_va),
+  list_all_tp_observed = all(tp_observed),
   list_main_distance_observed = all(main_distance_observed),
   list_comuna_distance_observed = all(comuna_distance_observed)), by = ranking_id]
 roster <- merge(roster, list_coverage, by = "ranking_id", sort = FALSE)
 roster[, at_least_two_schools := n_schools >= 2L]
-roster[, estimation_eligible := at_least_two_schools & list_all_selected_va &
+roster[, estimation_eligible := at_least_two_schools & list_all_selected_va & list_all_tp_observed &
   list_main_distance_observed & list_comuna_distance_observed]
 roster[, `:=`(eligible_estimation = estimation_eligible, list_complete_va = list_all_selected_va,
   list_complete_geography = list_main_distance_observed & list_comuna_distance_observed)]
 roster[, exclusion_reason := fcase(!at_least_two_schools, "single_school",
   !list_all_selected_va, "missing_any_va_in_submitted_list",
+  !list_all_tp_observed, "missing_tp_classification_in_submitted_list",
   !list_main_distance_observed, "missing_main_distance_in_submitted_list",
   !list_comuna_distance_observed, "missing_comuna_distance_in_submitted_list",
   default = "included")]
@@ -118,7 +151,7 @@ check("selected_va_informative_lists_positive", sum(roster$list_all_selected_va 
   paste(sum(roster$list_all_selected_va & roster$at_least_two_schools), "complete informative submitted lists"))
 check("estimation_sample_not_empty", sum(roster$estimation_eligible) > 0L)
 flags <- c("n_programs", "n_schools", "repeat_school_programs", "interleaved_school_programs",
-  "multi_program_single_school", "at_least_two_schools", "list_all_selected_va",
+  "multi_program_single_school", "at_least_two_schools", "list_all_selected_va", "list_all_tp_observed",
   "list_main_distance_observed", "list_comuna_distance_observed", "estimation_eligible", "eligible_estimation",
   "list_complete_va", "list_complete_geography", "exclusion_reason")
 for (v in flags) {
@@ -177,7 +210,8 @@ flow_for <- function(year) {
     all_submitted = rep(TRUE, nrow(z)),
     two_or_more_schools = z$at_least_two_schools,
     all_selected_va = z$at_least_two_schools & z$list_all_selected_va,
-    main_distance = z$at_least_two_schools & z$list_all_selected_va & z$list_main_distance_observed,
+    all_selected_va_and_tp = z$at_least_two_schools & z$list_all_selected_va & z$list_all_tp_observed,
+    main_distance = z$at_least_two_schools & z$list_all_selected_va & z$list_all_tp_observed & z$list_main_distance_observed,
     shared_main_and_comuna_distance = z$estimation_eligible)
   rbindlist(lapply(seq_along(stages), function(k) {
     ids <- z$ranking_id[stages[[k]]]
@@ -188,6 +222,25 @@ flow_for <- function(year) {
   }))
 }
 flow <- rbindlist(lapply(c(2018:2020, NA_integer_), flow_for))
+tp_coverage <- rbindlist(lapply(c(2018:2020, NA_integer_), function(year) {
+  x <- if (is.na(year)) schools else schools[sae_proceso == year]
+  z <- if (is.na(year)) roster else roster[sae_proceso == year]
+  rbindlist(lapply(c("All submitted rankings", "Final estimation rankings"), function(population) {
+    if (population == "Final estimation rankings") {
+      x <- x[estimation_eligible == TRUE]
+      z <- z[estimation_eligible == TRUE]
+    }
+    data.table(sae_proceso = if (is.na(year)) "All" else as.character(year), population = population,
+      rankings = nrow(z), complete_tp_rankings = sum(z$list_all_tp_observed),
+      complete_tp_ranking_share = mean(z$list_all_tp_observed), school_pairs = nrow(x),
+      classified_school_pairs = sum(x$tp_observed), missing_school_pairs = sum(!x$tp_observed),
+      tp_school_pairs = sum(x$tp_school == 1L, na.rm = TRUE),
+      unique_schools = uniqueN(x$rbd), classified_schools = uniqueN(x$rbd[x$tp_observed]),
+      missing_schools = uniqueN(x$rbd[!x$tp_observed]),
+      tp_schools = uniqueN(x$rbd[x$tp_school %in% 1L]),
+      definition = "2024 directory school TP offerings; mixed HC/TP=1; pure artistic=0; missing retained as NA")
+  }))
+}))
 attrition <- roster[, .(rankings = .N, program_rows = sum(n_programs), school_pairs = sum(n_schools)),
   by = .(sae_proceso, exclusion_reason)]
 attrition_all <- roster[, .(sae_proceso = "All", rankings = .N,
@@ -202,7 +255,7 @@ audit <- merge(rbindlist(raw_counts), roster[, .(genuine_rankings = .N,
   by = "sae_proceso", sort = TRUE)
 
 estimation_columns <- c("mrun", "ranking_id", "sae_proceso", "rbd", "rank_school",
-  specs$standardized, "log1p_distance_main", "log1p_distance_comuna")
+  specs$standardized, controls, "log1p_distance_main", "log1p_distance_comuna")
 estimation <- schools[estimation_eligible == TRUE, ..estimation_columns]
 setorder(estimation, ranking_id, rank_school)
 check("estimation_no_missing_covariates", all(vapply(estimation, function(x) all(is.finite(x)), logical(1L))))
@@ -216,6 +269,9 @@ setorder(schools, ranking_id, rank_school)
 setorder(roster, ranking_id)
 input_manifest <- rbindlist(list(manifest_rows(roster_path, "Existing Table 2 applicant roster"),
   manifest_rows(va_path, "Existing pooled controlled EB school VA"),
+  manifest_rows(tp_path, "Paper school-level TP-or-artistic classification from 2024 directory"),
+  manifest_rows(artistic_path, "Pure artistic RBDs excluded from the paper TP indicator"),
+  manifest_rows(tp_directory_path, "Direct verification against 2024 Directorio ENS TP teaching codes"),
   manifest_rows(app_paths, "Regular-round submitted rankings, before continuity exclusion"),
   as.data.table(geo_manifest)), use.names = TRUE, fill = TRUE)
 input_manifest <- unique(input_manifest)
@@ -226,6 +282,7 @@ fwrite(roster, file.path(clean_dir, "ranking_roster.csv"))
 fwrite(normalization, file.path(clean_dir, "va_normalization.csv"))
 fwrite(coverage, file.path(clean_dir, "va_coverage.csv"))
 fwrite(flow, file.path(clean_dir, "sample_flow.csv"))
+fwrite(tp_coverage, file.path(clean_dir, "tp_coverage.csv"))
 fwrite(attrition, file.path(clean_dir, "sample_attrition.csv"))
 fwrite(audit, file.path(clean_dir, "ranking_audit.csv"))
 fwrite(input_manifest, file.path(clean_dir, "source_manifest.csv"))

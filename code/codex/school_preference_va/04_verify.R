@@ -6,7 +6,7 @@ input_path <- file.path(clean_dir, "estimation_data.rds")
 stopifnot(file.exists(input_path))
 message("Validation input: ", format(file.info(input_path)$size / 1024^2, digits = 3), " MB")
 est <- as.data.table(readRDS(input_path))
-required <- c("mrun", "ranking_id", "sae_proceso", "rbd", "rank_school", va_terms, distance_vars)
+required <- c("mrun", "ranking_id", "sae_proceso", "rbd", "rank_school", model_static_terms, distance_vars)
 check("Validation input columns", all(required %in% names(est)))
 check("No missing joint-regression inputs", all(complete.cases(est[, ..required])))
 check("Unique school within each submitted ranking", !anyDuplicated(est[, .(ranking_id, rbd)]))
@@ -17,8 +17,10 @@ roster <- est[, .(alternatives = .N, students = uniqueN(mrun), years = uniqueN(s
 check("Every estimation ranking has at least two schools", all(roster$alternatives >= 2L))
 check("Rankings contain one student and process", all(roster$students == 1L & roster$years == 1L))
 check("Collapsed school ranks are consecutive", all(roster$consecutive))
-check("All VA and distance regressors finite", all(vapply(est[, c(va_terms, distance_vars), with = FALSE],
+check("All VA, TP and distance regressors finite", all(vapply(est[, c(model_static_terms, distance_vars), with = FALSE],
   function(z) all(is.finite(z)), logical(1))))
+check("TP indicator remains unstandardized binary", all(est$tp_school %in% c(0L, 1L)))
+check("TP indicator constant within destination school", all(est[, uniqueN(tp_school), by = rbd]$V1 == 1L))
 check("Standardized VA constant by school across both specifications", all(est[,
   lapply(.SD, uniqueN), by = rbd, .SDcols = va_terms][, unlist(.SD), .SDcols = va_terms] == 1L))
 normalization <- fread(file.path(clean_dir, "va_normalization.csv"))
@@ -75,9 +77,9 @@ expanded <- rbindlist(lapply(split(sub, by = "ranking_id", keep.by = TRUE), func
 check("One chosen alternative per exploded risk set", all(expanded[, sum(chosen), by = stage_id]$V1 == 1L))
 
 direct_formula <- function(distance) as.formula(paste("Surv(rank_school, event1) ~",
-  paste(c(va_terms, distance), collapse = " + "), "+ strata(ranking_id)"))
+  paste(c(model_static_terms, distance), collapse = " + "), "+ strata(ranking_id)"))
 expanded_formula <- function(distance) as.formula(paste("chosen ~",
-  paste(c(va_terms, distance), collapse = " + "), "+ strata(stage_id)"))
+  paste(c(model_static_terms, distance), collapse = " + "), "+ strata(stage_id)"))
 
 # Centering within each ranking prevents overflow; reverse cumulative sums are
 # exactly the submitted-list Plackett-Luce denominators at each ranked position.
@@ -106,7 +108,7 @@ control <- coxph.control(eps = 1e-10, iter.max = 100L)
 for (model_name in names(distance_vars)) {
   message("Validating joint rank-ordered logit: ", model_name)
   distance <- unname(distance_vars[model_name])
-  terms <- c(va_terms, distance)
+  terms <- c(model_static_terms, distance)
   fit <- readRDS(file.path(clean_dir, "models", paste0(model_name, ".rds")))
   saved_models[[model_name]] <- fit
   check(paste(model_name, "saved object is coxph"), inherits(fit, "coxph"))
@@ -174,7 +176,8 @@ for (model_name in names(distance_vars)) {
 
 check("Both models use the same rankings and normalization", all(vapply(saved_models,
   function(z) z$n == nrow(est), logical(1))) &&
-  identical(names(coef(saved_models$main))[seq_along(va_terms)], names(coef(saved_models$municipality))[seq_along(va_terms)]) &&
+  identical(names(coef(saved_models$main))[seq_along(model_static_terms)],
+    names(coef(saved_models$municipality))[seq_along(model_static_terms)]) &&
   identical(attr(saved_models$main, "preference_model")$estimation_data,
     attr(saved_models$municipality, "preference_model")$estimation_data) &&
   identical(attr(saved_models$main, "preference_model")$normalization_file,

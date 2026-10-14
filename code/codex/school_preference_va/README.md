@@ -1,7 +1,8 @@
 # School preferences and four-dimensional EB value added
 
 The current user specification is math, exam-taking, high-premium-field and
-high-premium-institution VA, entered jointly with log(1+distance in km).
+high-premium-institution VA, entered jointly with a TP-school binary and
+log(1+distance in km).
 Estimate two versions: published student coordinates and home-comuna centers.
 School-campus coordinates, ranking sample and VA normalization are identical
 between the two models. No other demand specification is included.
@@ -35,7 +36,7 @@ program's campus. The full data have 1,007,253 student-school pairs. Flag the
 This school-level aggregation was explicitly selected by the user.
 
 Keep all original lists in the full data with coverage and eligibility flags.
-Estimate only whole lists with all four selected VAs, both finite distances,
+Estimate only whole lists with all four selected VAs, an observed TP indicator, both finite distances,
 and at least two distinct schools. A missing alternative excludes the entire
 list. Single-school lists have likelihood one and provide no ordering signal.
 Coverage and normalization are recomputed for the selected four VAs; they
@@ -58,6 +59,25 @@ unique destination RBDs in the final common estimation support, pooled across
 years. Each school has equal normalization weight; list length/application
 frequency do not determine moments. Save means/SDs and reuse them unchanged
 in both models. Preserve raw EB values alongside normalized regressors.
+
+## Tecnico Profesional indicator
+
+tp_school is a raw, unstandardized 0/1 school-level indicator constructed from
+any ENS code in {410,510,610,710,810} in the raw 2024 Directorio. The builder
+also verifies exact agreement with the paper's school__has_tp_or_artistic
+flag minus the separately identified artistic-school indicator. All inputs
+are recorded in the manifest. Mixed HC/TP schools receive 1; pure artistic
+schools receive 0.
+This means the school offers a regular TP secondary track, not that the
+student's particular grade-9 program or eventual track is TP. It is a fixed
+2024 classification, consistent with the prior paper tables, rather than a
+claim about every school's offerings in its application year.
+
+The indicator is added to both joint models without changing VA units.
+tp_coverage.csv records coverage and any whole-list attrition; the direct
+directory comparison is saved as tp_directory_verification.csv. Missing TP
+values are never implicitly zero-coded. In the existing estimation sample,
+all 2501 schools are classified, 927 are TP, and 690 of those are mixed HC/TP.
 
 ## Geography
 
@@ -89,7 +109,7 @@ the risk set is exactly the remaining listed schools. Unique ranks imply no
 within-stratum event-time ties, so ties='breslow' is the exact specified
 Plackett-Luce likelihood. The final singleton factor is one.
 
-Only four normalized VAs and one distance term enter: five coefficients,
+Four normalized VAs, the unstandardized TP binary, and one distance term enter: six coefficients,
 no intercept, school fixed effects, peer controls or unlisted alternatives.
 The sandwich covariance clusters full ranking scores by student. Inference
 conditions on existing EB estimates and does not propagate their estimation
@@ -125,7 +145,7 @@ clean-data archive/seven_va_initial folder and is not the reported model.
 Methods decision: setup_md_codex/project_memory/decisions/
 2026-10-14-school-preference-va.md.
 
-## Completed four-VA run
+## Completed four-VA plus TP run
 
 Both distance versions use 276,193 rankings, 985,285 school pairs and 2,501
 destination schools. Recomputed four-VA coverage retains 292,887 of 294,198
@@ -133,15 +153,18 @@ original lists (99.55%); the informative sample happens to match the earlier
 seven-VA sample. Exclusive attrition is 16,720 singleton lists and 1,285
 informative lists missing VA, with no geographic loss.
 
-Main coefficients (student-clustered SEs): math 0.0156 (0.0018), exam taking
--0.0180 (0.0019), high-premium field 0.0571 (0.0014), high-premium institution
--0.0082 (0.0030), log distance -0.1815 (0.0031). The comuna-distance fit
-preserves all four VA signs. Its distance coefficient is -0.0589 (0.0057).
-Field is the strongest positive conditional association; one SD corresponds
-to a stage-choice odds ratio of 1.0588, holding other attributes fixed.
+Main coefficients (student-clustered SEs): math 0.0429 (0.0019), exam taking
+0.0663 (0.0023), high-premium field 0.0581 (0.0014), high-premium institution
+-0.0178 (0.0030), TP 0.3167 (0.0047), log distance -0.1837 (0.0031).
+The comuna-distance fit preserves all VA and TP signs; TP is 0.3135 (0.0047)
+and logged distance -0.0640 (0.0057). Relative to the saved no-TP model,
+exam-taking VA changes from -0.0180 to +0.0663. These remain conditional
+within-submitted-set associations. TP's stage-choice odds ratio is 1.3726,
+conditional on the four VAs and distance; it is not an enrollment effect.
 
-Both full fits converge in three iterations. All 54 independent model checks
-pass. On 1,393 validation rankings (9,207 alternatives and 66,199 expanded
+Both full fits converge in three iterations; all 56 independent model checks
+pass. On 1,393 validation rankings
+(9,207 alternatives and 66,199 expanded
 rows), direct Cox and expanded conditional-logit coefficients/covariances
 agree to machine precision. Independent full-sample log likelihood errors
-are below 3e-7. The report also includes all data-build and convergence checks.
+are below 5e-7. The report also includes all data-build and convergence checks.

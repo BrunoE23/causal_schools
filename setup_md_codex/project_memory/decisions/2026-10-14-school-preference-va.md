@@ -1,7 +1,8 @@
 # Submitted school preferences and four-dimensional EB value added
 
 Current user instruction: estimate math, exam-taking, high-premium-field and
-high-premium-institution VA jointly with log(1+distance_km). Retain the two
+high-premium-institution VA jointly with a TP-school indicator and
+log(1+distance_km). Retain the two
 distance versions: published student-to-campus distance and home-comuna-center
 to the same campus. This supersedes the initially approved seven-VA model.
 The initial seven-VA snapshot is retained only in the local ignored
@@ -77,12 +78,26 @@ or substitute travel distance. Schools retain actual campus points in both fits.
 
 ## Exact likelihood and inference
 
+The user subsequently added a binary indicator for TP schools and pointed
+to Directorio. It is a raw 0/1 regressor in both models, not standardized.
+Construct it directly from ENS codes410,510,610,710,810 in the 2024 Directorio,
+and verify equality to the paper's existing TP flag on their shared support.
+Mixed HC/TP schools count1, pure artistic
+schools0. This is school-level availability of a TP secondary track, not the
+chosen student's track or a contemporaneous application-year classification.
+All2501 current estimation schools are classified, with927TP (690 mixed).
+No TP-based sample loss or VA renormalization occurs. All2524 schools in the
+full submitted-ranking data receive a direct-directory classification,
+including15 schools not covered by the older predictor cache. The final
+estimation data are byte-identical whether using the verified cache or the
+direct directory source, so the fitted parameters apply to the final data.
+
 The estimand is ordering conditional on the submitted school set. Use
-coxph(Surv(rank_school,1)~four_VAs+distance+strata(ranking_id)), cluster=mrun,
+coxph(Surv(rank_school,1)~four_VAs+tp_school+distance+strata(ranking_id)), cluster=mrun,
 ties=breslow. The event time is each school's unique rank; at rank r the risk
 set is exactly the schools remaining in that submitted ranking. There are no
 within-ranking ties, making this the exact specified Plackett-Luce likelihood.
-Only the four normalized VAs and one distance term enter (five coefficients).
+The four normalized VAs, TP binary and distance term enter (six coefficients).
 No intercept, school fixed effects, peer controls or unlisted alternatives
 enter. Student-clustered sandwich SEs aggregate full ranking scores and
 condition on supplied EB estimates without propagating VA estimation error.
@@ -93,24 +108,29 @@ information, consideration-set inclusion, outside options or enrollment.
 
 ## Results and verification
 
-Main/comuna point estimates: math .015557/.014613; exam -.018020/-.014524;
-high-premium field .057109/.055053; high-premium institution -.008186/-.013231;
-logged distance -.181531/-.058939. All four VA signs are preserved. Field is
-the strongest positive partial association (one SD implies main conditional
-odds ratio1.0588), followed by math. All four main VA coefficients are
-distinguishable from zero at5% with student-clustered inference; this is not
-a causal preference-effect interpretation.
+Main/comuna point estimates with TP: math .042903/.041678;
+exam .066261/.068796; high-premium field .058101/.056050;
+high-premium institution -.017834/-.022832; TP .316737/.313501;
+logged distance -.183724/-.063978. All four VA signs and the TP sign are
+preserved across distance measures. TP has main conditional odds ratio1.3726;
+the binary is not standardized. Adding TP changes the exam-VA coefficient
+from -.018020 in the saved no-TP model to+.066261. All four main VA
+coefficients are distinguishable from zero at5% with student-clustered
+inference; these are conditional associations, not causal effects of school
+type or providing VA information. The no-TP results are archived locally
+under archive/four_va_without_tp and documented in commit58b9d71.
 
-Both models converge in three iterations, have five identified regressors,
-positive observed information and score per ranking below1e-14. Information
-condition numbers are5.30/13.59; school-VA VIFs range1.03-1.17. Validation
+Both models converge in three iterations, have six identified regressors,
+positive observed information and score per ranking below2e-14. Information
+condition numbers are14.41/14.46; school-VA-only VIFs range1.03-1.17. Validation
 compares independent full-sample PL likelihoods and expanded conditional
 logit point estimates/student-clustered covariance on deterministic complete
 lists, including long and interleaved-program examples. Detailed checks and
-errors are saved with the results. All54 independent model checks pass. On
-1393 validation rankings (9207 alternatives,66199 expanded rows), coefficient
-differences are below4e-16 and covariance differences below3e-17. Independent
-full-sample log likelihood differences are5.4e-9(main) and2.8e-7(comuna).
+errors are saved with the results. Validation includes the raw TP binary in
+both the direct and expanded likelihoods. The deterministic validation sample
+contains1393 rankings (9207 alternatives,66199 expanded rows).
+All56 independent model checks pass, with coefficient/covariance differences
+below4e-16/5e-17 and full-sample likelihood differences below5e-7.
 
 Code, derived data, tables and report use task name school_preference_va.
 Student-level data and fitted models remain in ignored clean data; commit

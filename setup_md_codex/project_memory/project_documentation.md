@@ -6,15 +6,17 @@ The approved initial demand extension uses all 294198 Table 2 timely grade-9
 applicants (2018-2020), not only those with assignment risk. Two exact joint
 rank-ordered logits condition on submitted schools: standardized current paper
 EB VAs for math, exam taking, high-premium field and high-premium institution,
-plus logged student-to-campus distance, with published coordinates
+plus a raw TP-school indicator and logged student-to-campus distance, with published coordinates
 or home-comuna centers. Use raw C1 genuine submitted choices, retain priority
 applications, collapse each RBD to its first submitted program/campus, and
 exclude incomplete rankings intact. Recompute coverage and normalization for
 the selected four VAs. Code/clean data/table/report use task
 name school_preference_va. Final four-VA sample: 276193 rankings, 985285 pairs,
-2501 schools; no geography loss. Main slopes are positive for field and math,
-negative for exam taking and institution, with the same signs under comuna
-distances. These are
+2501 schools; no geography or TP loss. TP comes directly from 2024 Directorio
+ENS codes and includes mixed HC/TP schools. Main slopes are positive for
+math, exam taking, field and TP, and negative for institution, with the same
+signs under comuna distances. Adding TP flips the exam-VA coefficient from
+negative to positive relative to the saved no-TP model. These are
 within-submitted-set associations. See `decisions/2026-10-14-school-preference-va.md`
 and the task README for exact normalization, geography and inference.
 
