@@ -23,6 +23,18 @@ operation is not a verified legal founding date. See project-memory decision
 
 Earlier SAE-based work is documented below for reproducibility.
 
+### Preschool-only establishments
+
+Run `05_count_preschool_only.R` to count operating schools with ENS=10 and no
+other positive ENS code in any teaching slot. Zero/NA slots are ignored.
+This describes enrolled teaching types, not every authorized offering. Active
+still means ESTADO_ESTAB=1 and MATRICULA=1. New CSVs in
+`data/clean/school_directory_preschool/` contain annual preschool-only versus
+mixed-school counts, the 2025 school list, and its dependency split. The 2025
+preschool-only sample is independently verified to have MAT_TOTAL=MAT_ENS_1
+and zero enrollment in all other MAT_ENS categories. ENS10 covers all
+educacion parvularia, not kindergarten alone.
+
 Run from the repository root:
 
 ```powershell

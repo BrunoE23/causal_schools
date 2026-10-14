@@ -44,3 +44,24 @@ Outputs are under data/clean/school_directory_preschool/ and the directory-only
 report is output/reports/kinder_capacity/directory_only_preschool_changes.html.
 PNG/PDF plots are under output/figures/kinder_capacity/. Source manifests and
 field-availability audits accompany the data; raw directories are unchanged.
+
+## Preschool-only schools
+
+Follow-up asks whether the data include schools offering only preschool.
+Script 05_count_preschool_only.R defines this as active schools (state=1,
+MATRICULA=1) with at least one ENS=10 and no other positive ENS code across
+all teaching slots. Zero/NA slots are ignored. This identifies recorded
+teaching types with enrollment, not every authorized offering. Preschool
+continues to mean all educacion parvularia levels, rather than kindergarten
+alone. No SAE restriction is used.
+
+Annual preschool-only counts 2015-2025 are 645,603,577,527,493,439,423,420,
+395,380,355. Mixed preschool/other-teaching counts are 5488 in 2015 and 5486
+in 2025: 290 of the 292 net decline in active preschool schools is accounted
+for by the decline in preschool-only establishments. This is a stock
+composition statement, not a claim that all 290 schools permanently closed.
+In 2025, 277 are public/subsidized and 78 private paid. Independent raw-source
+recomputation confirms 355 schools, all with MAT_TOTAL=MAT_ENS_1 and no
+enrollment in other MAT_ENS groups; their preschool enrollment totals 18948.
+Annual counts, the latest school list, and dependency counts are separate CSVs
+under data/clean/school_directory_preschool/.
