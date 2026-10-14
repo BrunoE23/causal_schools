@@ -1,5 +1,28 @@
 # Kinder capacity accounting
 
+The latest user instruction is to ignore SAE years and use the school
+directories. Run `04_directory_preschool_changes.R` for that standalone
+national 2015-2025 exercise; it reads only the raw directories and needs none
+of the earlier SAE-derived caches. Its report is
+`output/reports/kinder_capacity/directory_only_preschool_changes.html`.
+Derived school-year records, candidate openings, exact preschool stock-change
+accounting, field availability, and source manifests are under
+`data/clean/school_directory_preschool/`. The figure is
+`output/figures/kinder_capacity/directory_only_preschool_changes.png` (and PDF).
+
+Directories identify active preschool enrollment (any ENS=10 at a school
+with ESTADO_ESTAB=1 and MATRICULA=1), covering all educacion parvularia levels. They
+do not report a consistent annual preschool capacity measure. Hence the
+greater-than-10-seat analysis cannot be replicated using directory data alone.
+Instead the report explicitly labels changes in school numbers: candidate
+first operations with preschool, continuing schools adding/dropping preschool,
+returning operations, and schools ceasing observed operation. Their exact
+accounting reproduces the stock difference every year. The first observed
+operation is not a verified legal founding date. See project-memory decision
+`2026-10-14-directory-only-preschool-accounting.md`.
+
+Earlier SAE-based work is documented below for reproducibility.
+
 Run from the repository root:
 
 ```powershell

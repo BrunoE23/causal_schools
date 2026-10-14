@@ -1,5 +1,21 @@
 # Project Documentation
 
+## Directory-only preschool entry and changes (2026-10-14)
+
+For the latest school-supply request Bruno explicitly says to ignore SAE years
+and use the national school directories, available locally for 2015-2025.
+The standalone script `code/codex/kinder_capacity/04_directory_preschool_changes.R`
+reads only raw directories. Report:
+`output/reports/kinder_capacity/directory_only_preschool_changes.html`.
+Use active preschool enrollment (any ENS=10, state=1, MATRICULA=1), not SAE
+participation. Preschool covers all educacion parvularia levels and cannot
+isolate kinder. These directories
+support first observed operation and preschool status changes, but no consistent
+annual preschool capacity or available-seat series. MAT_TOTAL only starts in
+2022 and covers the whole school; preschool enrollment counts appear in 2025.
+Do not substitute enrollment for seat capacity or call first observed operation
+a verified founding date. See `decisions/2026-10-14-directory-only-preschool-accounting.md`.
+
 ## Main IV tables by continuation group (2026-10-12)
 
 The report `output/reports/empirical_bayes_school_va/main_by_continuation.html`
