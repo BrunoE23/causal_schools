@@ -1097,3 +1097,17 @@ the school-only penalty-boundary repair are documented in
 
 ### Observational VA consolidated inputs (2026-09-21)
 The observational school-VA constructor now prefers middle-school controls and full program-income columns already included in univ_gr8_df.csv, with external files used only when columns are absent. It normalizes most_time_rbd_middle to its existing internal capitalization and preserves legacy program_income/log_program_income names as aliases of the full-income measures, as defined by the income constructor. Field binaries and STEM are rebuilt from the current field_reclassified columns. The regression specification is unchanged. The constructor defaults to grade-8 cohorts 2017-2020 and supports explicit cohort windows; the second paper-facing run uses 2017-2018, and 2021 is excluded because complete baseline data select a small subset of that cohort.
+
+### SAE applications by target grade (2026-10-14)
+
+`all_apps.Rdata` and `all_apps.dta` contain PSU/PAES student records and college
+outcomes, constructed in `code/merge_all_data.R`; they are not all-grade SAE files.
+Existing cleaned SAE application objects retain grade 9. Full target-grade counts
+therefore use the raw regular-round C1 files. The all-grade diagnostic in
+`code/codex/applicant_priority_comparison/03_count_sae_applications_by_grade.R`
+covers SAE process years 2018-2020, excludes `agregada_por_continuidad == 1`, and
+keeps all other priority categories. Applications mean distinct
+year-grade-student-school pairs; program rows and distinct student counts are
+also retained. No paper-sample age or observed-high-school restrictions or
+earliest-process selection apply. Counts summed over years represent
+applicant-years, not distinct people across all years.

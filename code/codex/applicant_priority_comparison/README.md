@@ -36,3 +36,15 @@ school and attach pooled 2018-2020 grade-9 vacancies, run:
 This writes the top-100 CSV and summary to
 `output/tables/applicant_priority_comparison/` and an HTML report to
 `output/reports/applicant_priority_comparison/top_100_sae_destination_schools.html`.
+
+`03_count_sae_applications_by_grade.R` reports all-grade counts in the regular
+SAE rounds of 2018-2020 directly from the raw C1 files. It excludes automatically
+added continuity entries and reports distinct applicants, distinct applicant-school
+pairs, and applicant-program rows separately. Counts cover the full SAE system in
+each year, without the paper's age, observed-high-school, or earliest-process
+restrictions. Pooled applicant totals count applicant-years, so a person returning
+in a later year is counted again. Derived summaries are written to
+`data/clean/sae_applications_by_grade/`.
+The local 2018 C1 codebook confirms target-grade codes -1 = pre-kinder,
+0 = kinder, 1-8 = basic education, and 9-12 = first through fourth medio,
+and defines the automatically added continuity flag on its second page.
