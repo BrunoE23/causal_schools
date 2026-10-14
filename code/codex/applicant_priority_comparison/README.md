@@ -25,3 +25,14 @@ The paper-ready LaTeX table is written to
 `output/tables/applicant_priority_comparison/applicants_and_attended_schools_by_priority_continuation.tex`.
 Reusable cell statistics and coverage diagnostics are under
 `data/clean/applicant_priority_comparison/`.
+
+To rank destination schools by the number of distinct applicants listing each
+school and attach pooled 2018-2020 grade-9 vacancies, run:
+
+```powershell
+& 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/applicant_priority_comparison/02_top_sae_destination_schools.R
+```
+
+This writes the top-100 CSV and summary to
+`output/tables/applicant_priority_comparison/` and an HTML report to
+`output/reports/applicant_priority_comparison/top_100_sae_destination_schools.html`.
