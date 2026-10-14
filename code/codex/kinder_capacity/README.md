@@ -30,3 +30,32 @@ The report is `output/reports/kinder_capacity/kinder_capacity_changes.html`.
 The report can be rebuilt without re-reading sources by running
 `02_report_capacity.R`. Methods are documented in project-memory decision
 `2026-10-14-kinder-capacity-accounting.md`.
+
+## Large changes and longer opening series
+
+After building the caches, run:
+
+```powershell
+& 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/kinder_capacity/03_plot_large_changes_and_openings.R
+```
+
+This reports strict changes greater than 10 seats (11 or more) at continuing
+positive-capacity kinder offerings, excluding entry/exit. National changes are
+available for entry 2021-2022. A longer comparable series for entry 2019-2022
+keeps the five 2017 rollout regions fixed (Tarapaca, Coquimbo, O'Higgins, Los
+Lagos, Magallanes). Counts, seat totals, and school lists are saved in new CSVs
+under `data/clean/kinder_capacity/`; thresholded vacancy changes are separate
+diagnostics and must not be called capacity changes.
+
+Annual national candidate school openings are first observed operating with
+enrollment in the 2015-2025 directory history. Exclude the left-censored 2015
+baseline and report 2016-2025. The first operating year's dependency and
+preschool status determine the split: private paid is COD_DEPE=4, and an
+ENS code of 10 identifies any preschool (not kinder alone). Previously
+registered but never previously observed operating schools are distinguished
+from RBDs newly recorded in their first operating year. These are not verified
+legal founding dates. The directory series is broader than SAE; kinder seat
+capacity is not known for all its candidate openings.
+
+PNG/PDF figures are under `output/figures/kinder_capacity/`. The new report is
+`output/reports/kinder_capacity/large_changes_and_school_openings.html`.
