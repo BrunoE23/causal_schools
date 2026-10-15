@@ -2,6 +2,17 @@
 
 ## Submitted school rankings and joint VA preferences (2026-10-14)
 
+The subsequent2026-10-15 PAES extension adds school-average current regular
+M1 for admission process2025(2024 graduates) and both type interactions.
+Construct from raw MATE1_REG_ACTUAL among current-graduate valid takers,
+not MATE1_MAX; no GPA/SAE-sample restriction or zero scores. Keep all prior
+VA terms/type interactions and distance:18coefficients. Preserve existing
+VA scaling; normalize M1 equally across unique retained destinations.
+Exclude incomplete rankings intact. Refit the15-term baseline on the same
+sample for comparison, pooled and four groups with both distances. These
+later scores are a school-performance measure, not necessarily information
+available at application. See decisions/2026-10-15-paes-m1-school-preferences.md.
+
 Estimate the exact Plackett-Luce ordering likelihood conditional on each
 student's submitted RBD set. The initial two specifications include four
 current pooled EB VAs simultaneously (math, exam taking, high-premium field

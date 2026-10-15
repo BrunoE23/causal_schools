@@ -1,6 +1,78 @@
 # School preferences and four-dimensional EB value added
 
-The current user specification is math, exam-taking, high-premium-field and
+## PAES M1 school-average extension (2026-10-15)
+
+The subsequent user request adds a constructed school-average PAES M1
+performance measure alongside the four existing VAs. The separate extension
+uses paes_common.R and scripts13/14/16/15 below; the previous four-VA models,
+inputs, tables and reports remain available unchanged.
+
+```powershell
+& 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/school_preference_va/13_build_paes_m1.R
+& 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/school_preference_va/14_fit_paes_m1.R
+& 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/school_preference_va/16_verify_paes_m1.R
+& 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/school_preference_va/15_report_paes_m1.R
+```
+
+Construct school means directly from the raw2024 and2025 Inscritos-Puntajes
+files, reading selected columns only after checking their230/234MB sizes.
+Use current graduates (ANYO_DE_EGRESO=ANYO_PROCESO-1), positive graduation RBD
+and a valid100-1000 MATE1_REG_ACTUAL score. Each student contributes once.
+Do not restrict to our SAE/VA sample or impose a GPA requirement. This is the
+current regular-sitting mean among M1 takers, not MATE1_MAX and not the mean
+for every pupil enrolled at a school. Retain taker counts and score SDs.
+
+The primary regressor uses admission process2025: graduates of2024 taking
+the regular exam in late2024. Process2024 is constructed for a coverage
+comparison only, with no cross-year fallback or pooling. These are later
+school-performance measures relative to2018-2020 SAE applications; their
+associations cannot establish that parents knew these exact future scores.
+
+Retain the original four VA normalization parameters unchanged. Center the
+new M1 mean and divide by its N-1 SD across unique destination RBDs in the
+final pooled complete-ranking sample, giving every school equal weight.
+Use this M1 scaling in every group and both distance specifications. If any
+listed school lacks the primary M1 mean, exclude its entire ranking. Do not
+shorten lists or impute scores. Apply no arbitrary minimum-taker restriction.
+
+The extended utility includes all five standardized metrics, two type main
+effects, all ten type-by-metric products and logged distance:18 coefficients.
+Report15 total metric slopes across the three school types using exact
+student-clustered contrast SEs. Type intercepts refer to all five metrics=0.
+For comparison, refit the previous15-coefficient specification on exactly
+the same retained lists (matched_baseline). Both variants use published
+coordinates and home-comuna centers in the pooled and four applicant-group
+samples,20 fitted objects total. These are associations conditional on the
+submitted school set. Inference treats school means and EB VAs as fixed.
+
+Derived inputs, school means, source manifests, normalization, sample flow,
+models and diagnostics are under data/clean/school_preference_va/paes_m1.
+New table fragments/companion CSVs are under output/tables/school_preference_va/
+paes_m1. The new report is output/reports/school_preference_va/with_paes_m1.html.
+Independent validation reconstructs the school means, list exclusions,
+products, full-covariance total slopes and exact likelihood; expanded
+conditional logits check the18/15-term models on complete validation lists.
+prior_outputs_preservation.csv records hashes of26 prior artifacts.
+
+Primary construction retains273516 applicants,970924 school pairs and2483
+schools;2677 baseline rankings(0.969%) lose at least one school's2025 M1
+mean and are excluded intact. The four group sizes are86353/153798/15153/
+13646. New M1 normalization is585.7118 points with school SD60.02695.
+Its pooled main total slopes are non-TP.1541(.0038),mixed.2066(.0060),
+TP-only.1213(.0099). Math-VA slopes are negative conditional on M1; the
+report compares them with the same-sample baseline. All30 build checks pass.
+All20 fits converge in three iterations and pass236 fit checks. Independent
+verification passes1187 checks, including fresh raw-score extraction,
+330 coefficient rows,270 total metric slopes/full-covariance SEs and
+expanded conditional-logit equivalence. Maximum coefficient/covariance
+differences are below6e-15; full PL likelihood discrepancies are below3e-7.
+All26 protected original inputs/models/tables/reports remain byte-identical.
+The report generation passes162 additional consistency checks and exports
+the pooled and subgroup total slopes, raw coefficients and matched changes.
+
+## Original four-VA specification and construction
+
+The preceding user specification is math, exam-taking, high-premium-field and
 high-premium-institution VA, entered jointly with mixed-HC/TP and TP-only
 school indicators, all eight school-type-by-VA interactions and
 log(1+distance in km). The latest 2026-10-15 request allows all four VA slopes

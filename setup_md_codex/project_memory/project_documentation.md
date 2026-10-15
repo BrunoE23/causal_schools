@@ -2,6 +2,19 @@
 
 ## School rankings and four-dimensional VA preferences (2026-10-14)
 
+The2026-10-15 PAES extension constructs graduation-RBD mean MATE1_REG_ACTUAL
+for current2024 graduates in admission process2025, retaining positive valid
+M1 scores100-1000. It adds that standardized mean and its two school-type
+interactions alongside all prior terms(18coefficients). Keep original VA
+scaling and whole-list exclusions; refit the15-term baseline on identical
+retained rankings. Separate paes_m1 data/table folders and report
+school_preference_va/with_paes_m1.html preserve prior results. These scores
+postdate SAE applications. See decisions/2026-10-15-paes-m1-school-preferences.md.
+The strict2025 sample retains273516 rankings,970924 pairs and2483 schools;
+new M1 school SD is60.02695 points. Pooled total M1 slopes are positive
+for non-TP,mixed andTP-only(.1541/.2066/.1213); math-VA partial slopes
+are negative in all three types after adding M1 on the matched sample.
+
 The approved initial demand extension uses all 294198 Table 2 timely grade-9
 applicants (2018-2020), not only those with assignment risk. Two exact joint
 rank-ordered logits condition on submitted schools: standardized current paper
