@@ -285,3 +285,36 @@ mixed/TP-only estimates are.248659/.394008(ending non-prioritario),
 with larger TP-only point estimates throughout. No formal cross-group
 equality test is added; separate-logit scales and conditional-list scope
 remain relevant to comparisons.
+
+## Enrollment-weighted mean school VA by type (2026-10-15)
+
+The user requested average VAs by school type and explicitly selected2024
+school enrollment as weights, rather than SAE-sample students attending each
+school. Use MAT_TOTAL from the same2024 Directorio. Primary population is
+national functioning(ESTADO_ESTAB1), enrolled(MATRICULA1) establishments
+offering regular secondary HC310, TP410/510/610/710/810 orartistic910,
+including private-paid schools. MAT_TOTAL counts all grades, not just HS or
+one track. This is distinct from the preference-model destination support.
+
+Use current All-sample pooled2017-2020 EB VAs for math, exam, field and
+institution. Require all four at each included school, with the same school
+and enrollment denominators for every outcome. Do not impute missing VA.
+Report raw means(math in student-scoreSD, others percentagepoints) and means
+in the unchanged pooled-school-SD preference normalization; neither within-
+type nor enrollment-based restandardization occurs. A separate appendix
+restricts the same active schools to preference-model destination support.
+
+Complete-school counts/enrollments areHC2050/1575818,mixed694/515262,
+TP-only237/141705,artistic2/1525. Enrollment coverage relative to the full
+national type groups is98.8817%,100%,99.9464%,100%. In model z-units,
+HC means(math,exam,field,institution) are1.010143,.550119,.051795,.554430;
+mixed-.385978,-.469236,-.030213,-.010917; TP-only-.627792,-1.075530,
+.457084,.084110. Descriptive means agree with an independent calculation.
+Original outcome-specific VA estimation populations remain unchanged;
+institution and field estimates are among exam takers. These means are not
+outcome prevalence rates or new causal comparisons of school types.
+
+Code10_average_va_by_school_type.R writes clean results, coverage and source
+manifest plus a readable report, without changing demand estimates or raw
+inputs. The full national complete population has2983schools and2234310
+all-grade pupils.

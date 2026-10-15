@@ -41,6 +41,15 @@ school MAT_TOTAL within each set and include all grades. Code08 generates
 output/reports/school_preference_va/top_school_types.html;09 attaches the
 indicators to existing ranking data. Shared classification:school_types.R.
 
+For average VA by school type, Bruno explicitly selected2024 Directorio
+enrollment weights.10_average_va_by_school_type.R uses national active,
+enrolled regular-secondary schools with all four EB VAs, including private
+schools. MAT_TOTAL is whole-school/all-grade enrollment. The main report is
+school_preference_va/enrollment_weighted_va_by_school_type.html, with both
+raw units and unchanged pooled school-SD units. A separately labeled appendix
+restricts to preference destinations. Do not substitute SAE attendance counts
+for these requested weights or treat MAT_TOTAL as HS-only enrollment.
+
 ## Directory-only preschool entry and changes (2026-10-14)
 
 For the latest school-supply request Bruno explicitly says to ignore SAE years

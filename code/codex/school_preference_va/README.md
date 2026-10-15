@@ -304,3 +304,27 @@ count, school-share and enrollment-share tables are in
 output/reports/school_preference_va/top_school_types.html; CSVs and manifests
 are in the task clean directory, with a companion aggregate table CSV in
 output/tables/school_preference_va/top_school_type_distribution.csv.
+
+## Enrollment-weighted average VA by type
+
+10_average_va_by_school_type.R implements the subsequent descriptive request.
+The user explicitly chose2024 Directorio enrollment weights, not the number
+of SAE applicants attending each school. Primary means use national active,
+enrolled regular secondary schools, including private-paid schools, with
+all four selected EB indices observed. MAT_TOTAL includes every grade in a
+school, not secondary-only or track-specific pupils. Use the same common
+four-VA-complete population for every outcome, and show coverage by type.
+
+Raw means retain original units; also report unchanged pooled preference-
+school-SD units using va_normalization.csv. Do not restandardize within type
+or using enrollment weights. A separate appendix restricts the same schools
+to preference-model destination RBDs; it is not the primary national result.
+There are2050HC-only,694mixed,237TP-only and2artistic schools in the primary
+complete population, covering2234310pupils across all grades. The type-level
+means agree with an independent computation. No regression is refitted.
+
+Run Rscript code/codex/school_preference_va/10_average_va_by_school_type.R.
+Report:output/reports/school_preference_va/enrollment_weighted_va_by_school_type.html.
+Clean-data CSVs retain normalized/raw means, model-support comparison,
+coverage, source manifest and verification. The aggregate table companion
+CSV is in the task output/tables folder.
