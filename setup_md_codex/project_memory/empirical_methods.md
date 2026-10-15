@@ -7,8 +7,14 @@ student's submitted RBD set. The initial two specifications include four
 current pooled EB VAs simultaneously (math, exam taking, high-premium field
 and high-premium institution) and log(1+Haversine km), using published
 student points or home-comuna centers. The latest2026-10-15 user request adds
-two separate school-type indicators, mixed HC/TP and TP-only, to every pooled
-and subgroup model. Use regular HC code310 and TP codes410/510/610/710/810
+all eight interactions of the four VAs with the mixed HC/TP and TP-only
+indicators, retaining all main effects and distance in every pooled and
+subgroup model (15 coefficients). Non-TP VA slopes are beta; mixed and TP-only
+slopes are beta plus the corresponding interaction. Report total slopes and
+their SEs using the full student-clustered covariance. The type intercepts
+refer only to all four standardized VAs equal to zero; type premiums vary
+with VA. Preserve additive estimates in the dated clean-data archive.
+Use regular HC code310 and TP codes410/510/610/710/810
 from the fixed2024 Directorio. Mixed offers both; TP-only offers TP withoutHC.
 Indicators are raw0/1, not standardized; the single any-TP flag is metadata.
 The omitted category is non-TP:1557HC-only,1artistic and16other/no-regular-

@@ -2,8 +2,9 @@
 
 The current user specification is math, exam-taking, high-premium-field and
 high-premium-institution VA, entered jointly with mixed-HC/TP and TP-only
-school indicators and log(1+distance in km). The latest 2026-10-15 request
-replaces the earlier single-TP and no-TP specifications with these two types.
+school indicators, all eight school-type-by-VA interactions and
+log(1+distance in km). The latest 2026-10-15 request allows all four VA slopes
+to differ across non-TP, mixed-HC/TP and TP-only schools.
 Estimate two versions: published student coordinates and home-comuna centers.
 School-campus coordinates, ranking sample and VA normalization are identical
 between the two models. The requested priority-by-continuation splits are
@@ -30,6 +31,10 @@ top-school distributions, then09 to append the new school-type columns to
 all ranking objects without rebuilding raw applications or VAs. Process the
 71MB school and69MB program RDS files sequentially; only the minimal27MB
 estimation input is needed for fitting. Existing values and ranks are kept.
+For the interaction update on already typed data, start directly at02; the
+eight product columns are formed in memory by add_va_interactions(). No raw
+application or VA reconstruction is necessary.05 saves the product columns
+alongside the unchanged subgroup inputs.
 
 ## Rankings and sample
 
@@ -130,9 +135,16 @@ the risk set is exactly the remaining listed schools. Unique ranks imply no
 within-stratum event-time ties, so ties='breslow' is the exact specified
 Plackett-Luce likelihood. The final singleton factor is one.
 
-Four normalized VAs, two school-type indicators and one distance term enter:
-seven coefficients,
+Four normalized VAs, two school-type indicators, their eight pairwise
+type-by-VA products and one distance term enter: fifteen coefficients,
 no intercept, school fixed effects, peer controls or unlisted alternatives.
+Writing M and T for mixed and TP-only indicators and z for the four VAs,
+utility is beta'z + alpha_M M + alpha_T T + delta_M'(M*z) +
+delta_T'(T*z) + gamma*log1p(distance). The beta slopes apply to non-TP;
+mixed slopes are beta+delta_M and TP-only slopes are beta+delta_T. Report
+these totals with SEs from the full student-clustered covariance, including
+the covariance of each main coefficient and its interaction. Type intercepts
+apply only at z=0 in all four dimensions; the type premium varies with VA.
 The sandwich covariance clusters full ranking scores by student. Inference
 conditions on existing EB estimates and does not propagate their estimation
 uncertainty. Interpret slopes as conditional ranking associations, not causal
@@ -152,9 +164,12 @@ VA information effects, beliefs, consideration-set inclusion or enrollment.
   geographic precision/campus differences, coefficients/covariances and
   numerical diagnostics. models/main.rds and models/municipality.rds are
   bare coxph fits with their actual formulas and preference-model metadata.
+- type_specific_va_slopes.csv saves all12 total slopes per distance model
+  with full-covariance SEs, confidence intervals and contrast definitions.
 - The report is output/reports/school_preference_va/joint_rank_ordered_logit.html;
   the two-column table is output/tables/school_preference_va/
-  joint_rank_ordered_logit.tex (fragment) and .csv. No manuscript is edited.
+  joint_rank_ordered_logit.tex (fragment) and .csv. A companion
+  type_specific_va_slopes.tex/.csv reports total slopes. No manuscript is edited.
 
 Validation checks complete-list integrity, all joins, shared samples, saved
 normalization, within-ranking design rank and likelihood information, final
@@ -167,7 +182,35 @@ clean-data archive/seven_va_initial folder and is not the reported model.
 Methods decision: setup_md_codex/project_memory/decisions/
 2026-10-14-school-preference-va.md.
 
-## Current split-type results
+## Current type-by-VA interaction results
+
+All ten fits converge in three iterations with all15 coefficients identified.
+Samples and pooled VA normalization are unchanged. Pooled main total slopes
+(student-clustered SEs), in math/exam/field/institution order, are:
+
+- Non-TP: .0510(.0021), .1535(.0043), .0114(.0031), -.0083(.0031).
+- Mixed HC/TP: .0576(.0050), .0729(.0032), .0626(.0021), -.0573(.0041).
+- TP-only: -.0063(.0087), .0256(.0047), .0578(.0024), -.0229(.0044).
+
+Exam-taking VA has the largest pooled slope among non-TP schools; field VA
+has substantially larger slopes among mixed and TP-only schools. The
+TP-only math slope is close to zero. These remain conditional associations.
+At all four VAs equal to their pooled-school means, mixed/TP-only intercepts
+are .3387/.3850; logged distance is -.1912. Comuna-based location robustness
+is reported beside the main fit. The archival additive split-type results
+are in archive/split_types_no_va_interactions_2026_10_15, with79 hash-verified
+files and the prior inputs, fits and aggregate reports.
+
+All141 pooled and477 subgroup validation checks pass. These include all
+eight products, all15 coefficients, independent PL likelihood, expanded
+conditional-logit equivalence and120 total-slope contrasts including their
+full student-clustered covariance. Expanded-fit coefficient and covariance
+differences are below7e-15; the maximum full-sample PL discrepancy is2.73e-7.
+Eight archive-comparison checks also confirm unchanged input values, row
+ordering, samples and normalization. Saved checks:
+interaction_update_preservation_checks.csv.
+
+## Archived additive split-type results (superseded)
 
 All ten fits converge in three iterations. The pooled main coefficients
 (student-clustered SEs) are math0.0462(0.0019), exam0.0791(0.0023),
@@ -208,7 +251,8 @@ are conditional ordering associations.
 
 The following historical results are preserved in the ignored clean-data
 archive/four_va_with_tp_2026_10_15 folder, with a manifest, fitted models,
-their estimation inputs and aggregate reports. Active outputs omit TP.
+their estimation inputs and aggregate reports. Active outputs instead use
+separate mixed/TP-only indicators and their VA interactions.
 
 Both distance versions use 276,193 rankings, 985,285 school pairs and 2,501
 destination schools. Recomputed four-VA coverage retains 292,887 of 294,198
@@ -234,7 +278,7 @@ are below 5e-7. The report also includes all data-build and convergence checks.
 
 ## Prioritario by continuation groups (2026-10-15)
 
-The subsequent request fits the same seven-regressor joint model separately
+The subsequent request fits the same fifteen-regressor joint model separately
 for prioritario/non-prioritario crossed with school-ending/voluntary
 application. Run after the pooled data construction:
 
@@ -281,11 +325,14 @@ Four-column table fragments: output/tables/school_preference_va/
 by_priority_continuation_main.tex and by_priority_continuation_municipality.tex;
 the combined numeric/display table is by_priority_continuation.csv.
 
-Every current model includes mixed_hc_tp and tp_only, with non-TP as the
-reference. The previous any-TP and no-TP subgroup fits are preserved in their
-dated archives. Current inputs add the two indicators while retaining every
-pre-existing value, row and normalization parameter. Current estimates and
-validation results are generated in the active tables and report.
+Every current model includes mixed_hc_tp and tp_only and their eight VA
+interactions, with non-TP as the reference. The previous additive, any-TP and
+no-TP subgroup fits are preserved in their dated archives. Current inputs
+retain every pre-existing value, row and normalization parameter. Companion
+by_priority_continuation_type_slopes CSV and main/municipality
+LaTeX panels report12 total slopes within each of the four applicant groups.
+Current estimates and validation results are generated in the active tables
+and report.
 
 ## School types among most demanded destinations
 

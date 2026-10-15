@@ -19,7 +19,44 @@ specs[, `:=`(raw = paste0("va_", suffix), standardized = paste0("z_va_", suffix)
 va_terms <- specs$standardized
 controls <- c("mixed_hc_tp", "tp_only")
 control_labels <- c(mixed_hc_tp = "Mixed HC/TP school", tp_only = "TP-only school")
-model_static_terms <- c(va_terms, controls)
+interaction_specs <- rbindlist(lapply(controls, function(control_name) data.table(
+  control = control_name, va = va_terms, suffix = specs$suffix,
+  term = paste0(control_name, "_x_", specs$suffix),
+  label = paste0(if (control_name == "mixed_hc_tp") "Mixed HC/TP" else "TP only", " x ", specs$label))))
+interaction_terms <- interaction_specs$term
+model_static_terms <- c(va_terms, controls, interaction_terms)
+model_static_labels <- setNames(c(specs$label, unname(control_labels[controls]), interaction_specs$label), model_static_terms)
+add_va_interactions <- function(x) {
+  for (k in seq_len(nrow(interaction_specs))) {
+    s <- interaction_specs[k]
+    value <- x[[s$control]] * x[[s$va]]
+    stopifnot(length(value) == nrow(x), all(is.finite(value)))
+    if (s$term %in% names(x)) stopifnot(identical(as.numeric(x[[s$term]]), as.numeric(value)))
+    set(x, j = s$term, value = value)
+  }
+  x
+}
+type_specific_va_slopes <- function(fit, model, group = NULL) {
+  b <- coef(fit)
+  V <- vcov(fit)
+  type_controls <- c("Non-TP" = NA_character_, "Mixed HC/TP" = "mixed_hc_tp", "TP only" = "tp_only")
+  out <- rbindlist(lapply(names(type_controls), function(type_name) rbindlist(lapply(seq_len(nrow(specs)), function(k) {
+    contrast <- setNames(numeric(length(b)), names(b))
+    contrast[specs$standardized[k]] <- 1
+    control_name <- type_controls[[type_name]]
+    if (!is.na(control_name)) contrast[interaction_specs[control == control_name & va == specs$standardized[k], term]] <- 1
+    estimate <- sum(contrast * b)
+    variance <- as.numeric(t(contrast) %*% V %*% contrast)
+    stopifnot(is.finite(variance), variance > 0)
+    se <- sqrt(variance)
+    data.table(model = model, school_type = type_name, outcome = specs$outcome[k], term = specs$standardized[k],
+      label = specs$label[k], estimate = estimate, std_error = se, z = estimate / se,
+      p_value = 2 * pnorm(-abs(estimate / se)), lower95 = estimate - qnorm(.975) * se,
+      upper95 = estimate + qnorm(.975) * se, contrast_terms = paste(names(contrast)[contrast != 0], collapse = " + "))
+  }))))
+  if (!is.null(group)) out[, group := group]
+  out
+}
 distance_vars <- c(main = "log1p_distance_main", municipality = "log1p_distance_comuna")
 model_labels <- c(main = "Published student coordinates", municipality = "Home-comuna centroids")
 checks <- data.table(check = character(), passed = logical(), detail = character())

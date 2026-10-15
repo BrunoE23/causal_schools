@@ -15,12 +15,38 @@ expected_priority <- c(ending_nonpriority = 0L, ending_priority = 1L,
 
 est <- as.data.table(readRDS(file.path(clean_dir, "estimation_data.rds")))
 pooled <- as.data.table(readRDS(file.path(pooled_dir, "estimation_data.rds")))
+split_type_terms <- c("mixed_hc_tp", "tp_only")
+check("Eight interaction specifications cover every type-by-VA combination",
+  nrow(interaction_specs) == 8L && all(c("control", "va", "term") %in% names(interaction_specs)) &&
+    !anyDuplicated(interaction_specs$term) && !anyDuplicated(interaction_specs[, .(control, va)]) &&
+    setequal(paste(interaction_specs$control, interaction_specs$va),
+      as.vector(outer(split_type_terms, va_terms, paste))))
+for (input_name in c("est", "pooled")) {
+  x <- get(input_name)
+  for (k in seq_len(nrow(interaction_specs))) {
+    term <- interaction_specs$term[k]
+    if (term %in% names(x)) {
+      check(paste(input_name, term, "stored input is the exact type-by-VA product"),
+        identical(x[[term]], x[[interaction_specs$control[k]]] * x[[interaction_specs$va[k]]]))
+    }
+  }
+  x <- add_va_interactions(x)
+  for (k in seq_len(nrow(interaction_specs))) {
+    check(paste(input_name, interaction_specs$term[k], "independent product reconstruction"),
+      identical(x[[interaction_specs$term[k]]],
+        x[[interaction_specs$control[k]]] * x[[interaction_specs$va[k]]]))
+  }
+  assign(input_name, x)
+}
+rm(x)
 roster <- fread(file.path(clean_dir, "group_roster.csv"))
 builder_roster <- fread(file.path(pooled_dir, "ranking_roster.csv"))
 definitions <- fread(file.path(clean_dir, "group_definitions.csv"))
 coefficients <- fread(file.path(clean_dir, "coefficients.csv"))
 summaries <- fread(file.path(clean_dir, "model_summary.csv"))
 diagnostics <- fread(file.path(clean_dir, "model_diagnostics.csv"))
+slopes <- fread(file.path(clean_dir, "type_specific_va_slopes.csv"))
+slope_type_controls <- c("Non-TP" = NA_character_, "Mixed HC/TP" = "mixed_hc_tp", "TP only" = "tp_only")
 normalization <- fread(file.path(clean_dir, "va_normalization.csv"))
 pooled_normalization <- fread(file.path(pooled_dir, "va_normalization.csv"))
 shared <- names(pooled)
@@ -40,11 +66,16 @@ check("One diagnostic row per subgroup model", nrow(diagnostics) == 8L &&
 expected_coefficient_rows <- length(group_order) * length(distance_vars) * (length(model_static_terms) + 1L)
 check("One coefficient row per requested subgroup model term", nrow(coefficients) == expected_coefficient_rows &&
   !anyDuplicated(coefficients[, .(group, model, term)]))
-split_type_terms <- c("mixed_hc_tp", "tp_only")
-check("Requested specification contains four VAs and separate mixed and TP-only indicators",
-  identical(controls, split_type_terms) && identical(model_static_terms, c(va_terms, split_type_terms)) &&
+check("Requested specification contains four VAs, two type indicators and eight interactions",
+  identical(controls, split_type_terms) && identical(interaction_terms, interaction_specs$term) &&
+    identical(model_static_terms, c(va_terms, split_type_terms, interaction_terms)) && length(model_static_terms) == 14L &&
     !"tp_school" %in% model_static_terms)
 check("Single any-TP indicator absent from exported subgroup coefficients", !"tp_school" %in% coefficients$term)
+check("Exactly twelve type-specific VA slopes per group and distance model",
+  nrow(slopes) == length(group_order) * length(distance_vars) * nrow(specs) * length(slope_type_controls) &&
+    !anyDuplicated(slopes[, .(group, model, school_type, outcome)]) &&
+    setequal(slopes$group, group_order) && setequal(slopes$model, names(distance_vars)) &&
+    setequal(slopes$school_type, names(slope_type_controls)) && setequal(slopes$outcome, specs$outcome))
 
 # Reconstruct the classification from the existing paper sources, independently
 # of the estimation script. This also verifies unresolved origins are preserved
@@ -220,6 +251,33 @@ for (group_name in group_order) {
     check(paste(label, "exported clustered covariance equals saved model"),
       identical(exported_cov$term, terms) && identical(setdiff(names(exported_cov), "term"), terms) &&
         max(abs(as.matrix(exported_cov[, ..terms]) - vcov(fit))) < 1e-12)
+    for (school_type_name in names(slope_type_controls)) for (k in seq_len(nrow(specs))) {
+      base_term <- specs$standardized[k]
+      type_control <- slope_type_controls[[school_type_name]]
+      contrast_terms <- base_term
+      if (!is.na(type_control)) {
+        interaction_term <- interaction_specs[control == type_control & va == base_term, term]
+        check(paste(label, school_type_name, base_term, "unique interaction"), length(interaction_term) == 1L)
+        contrast_terms <- c(contrast_terms, interaction_term)
+      }
+      a <- setNames(numeric(length(coef(fit))), names(coef(fit)))
+      a[contrast_terms] <- 1
+      expected_estimate <- sum(a * coef(fit))
+      expected_se <- sqrt(as.numeric(crossprod(a, vcov(fit) %*% a)))
+      row_slope <- slopes[group == group_name & model == model_name & school_type == school_type_name &
+        outcome == specs$outcome[k]]
+      check(paste(label, school_type_name, base_term, "slope estimate and student-clustered contrast SE"),
+        nrow(row_slope) == 1L && row_slope$term == base_term &&
+          abs(row_slope$estimate - expected_estimate) < 1e-12 &&
+          abs(row_slope$std_error - expected_se) < 1e-12)
+      expected_z <- expected_estimate / expected_se
+      check(paste(label, school_type_name, base_term, "slope inference uses full clustered covariance"),
+        abs(row_slope$z - expected_z) < 1e-10 &&
+          abs(row_slope$p_value - 2 * pnorm(-abs(expected_z))) < 1e-12 &&
+          abs(row_slope$lower95 - (expected_estimate - qnorm(.975) * expected_se)) < 1e-12 &&
+          abs(row_slope$upper95 - (expected_estimate + qnorm(.975) * expected_se)) < 1e-12 &&
+          setequal(strsplit(gsub("\\s", "", row_slope$contrast_terms), "+", fixed = TRUE)[[1L]], contrast_terms))
+    }
     exact_ll <- pl_loglik(d, coef(fit), terms)
     stored_ll <- as.numeric(tail(fit$loglik, 1L))
     full_difference <- abs(exact_ll - stored_ll)

@@ -6,6 +6,26 @@ input_path <- file.path(clean_dir, "estimation_data.rds")
 stopifnot(file.exists(input_path))
 message("Validation input: ", format(file.info(input_path)$size / 1024^2, digits = 3), " MB")
 est <- as.data.table(readRDS(input_path))
+split_type_terms <- c("mixed_hc_tp", "tp_only")
+check("Eight interaction specifications cover every type-by-VA combination",
+  nrow(interaction_specs) == 8L && all(c("control", "va", "term") %in% names(interaction_specs)) &&
+    !anyDuplicated(interaction_specs$term) &&
+    !anyDuplicated(interaction_specs[, .(control, va)]) &&
+    setequal(paste(interaction_specs$control, interaction_specs$va),
+      as.vector(outer(split_type_terms, va_terms, paste))))
+for (k in seq_len(nrow(interaction_specs))) {
+  term <- interaction_specs$term[k]
+  if (term %in% names(est)) {
+    check(paste(term, "stored input is the exact type-by-VA product"),
+      identical(est[[term]], est[[interaction_specs$control[k]]] * est[[interaction_specs$va[k]]]))
+  }
+}
+est <- add_va_interactions(est)
+for (k in seq_len(nrow(interaction_specs))) {
+  check(paste(interaction_specs$term[k], "independent product reconstruction"),
+    identical(est[[interaction_specs$term[k]]],
+      est[[interaction_specs$control[k]]] * est[[interaction_specs$va[k]]]))
+}
 required <- c("mrun", "ranking_id", "sae_proceso", "rbd", "rank_school", model_static_terms, distance_vars)
 check("Validation input columns", all(required %in% names(est)))
 check("No missing joint-regression inputs", all(complete.cases(est[, ..required])))
@@ -19,9 +39,9 @@ check("Rankings contain one student and process", all(roster$students == 1L & ro
 check("Collapsed school ranks are consecutive", all(roster$consecutive))
 check("All VA, school-type and distance regressors finite", all(vapply(est[, c(model_static_terms, distance_vars), with = FALSE],
   function(z) all(is.finite(z)), logical(1))))
-split_type_terms <- c("mixed_hc_tp", "tp_only")
-check("Requested specification contains four VAs and separate mixed and TP-only indicators",
-  identical(controls, split_type_terms) && identical(model_static_terms, c(va_terms, split_type_terms)) &&
+check("Requested specification contains four VAs, two type indicators and eight interactions",
+  identical(controls, split_type_terms) && identical(interaction_terms, interaction_specs$term) &&
+    identical(model_static_terms, c(va_terms, split_type_terms, interaction_terms)) && length(model_static_terms) == 14L &&
     !"tp_school" %in% model_static_terms)
 check("School-type indicators are observed unstandardized binaries",
   all(vapply(est[, ..split_type_terms], function(x) all(x %in% 0:1), logical(1))))
@@ -128,6 +148,13 @@ pl_loglik <- function(x, beta, terms) {
 comparison <- list()
 conditions <- list()
 saved_models <- list()
+slopes <- fread(file.path(clean_dir, "type_specific_va_slopes.csv"))
+slope_type_controls <- c("Non-TP" = NA_character_, "Mixed HC/TP" = "mixed_hc_tp", "TP only" = "tp_only")
+check("Exactly twelve type-specific VA slopes per distance model",
+  nrow(slopes) == length(distance_vars) * nrow(specs) * length(slope_type_controls) &&
+    !anyDuplicated(slopes[, .(model, school_type, outcome)]) &&
+    setequal(slopes$model, names(distance_vars)) && setequal(slopes$school_type, names(slope_type_controls)) &&
+    setequal(slopes$outcome, specs$outcome))
 control <- coxph.control(eps = 1e-10, iter.max = 100L)
 for (model_name in names(distance_vars)) {
   message("Validating joint rank-ordered logit: ", model_name)
@@ -150,6 +177,32 @@ for (model_name in names(distance_vars)) {
     !is.null(fit$y) && identical(as.numeric(fit$y[, 1L]), as.numeric(est$rank_school)) &&
       all(fit$y[, 2L] == 1))
   check(paste(model_name, "Breslow likelihood"), identical(fit$method, "breslow"))
+  for (school_type_name in names(slope_type_controls)) for (k in seq_len(nrow(specs))) {
+    base_term <- specs$standardized[k]
+    type_control <- slope_type_controls[[school_type_name]]
+    contrast_terms <- base_term
+    if (!is.na(type_control)) {
+      interaction_term <- interaction_specs[control == type_control & va == base_term, term]
+      check(paste(model_name, school_type_name, base_term, "unique interaction"), length(interaction_term) == 1L)
+      contrast_terms <- c(contrast_terms, interaction_term)
+    }
+    a <- setNames(numeric(length(coef(fit))), names(coef(fit)))
+    a[contrast_terms] <- 1
+    expected_estimate <- sum(a * coef(fit))
+    expected_se <- sqrt(as.numeric(crossprod(a, vcov(fit) %*% a)))
+    row_slope <- slopes[model == model_name & school_type == school_type_name & outcome == specs$outcome[k]]
+    check(paste(model_name, school_type_name, base_term, "slope estimate and student-clustered contrast SE"),
+      nrow(row_slope) == 1L && row_slope$term == base_term &&
+        abs(row_slope$estimate - expected_estimate) < 1e-12 &&
+        abs(row_slope$std_error - expected_se) < 1e-12)
+    expected_z <- expected_estimate / expected_se
+    check(paste(model_name, school_type_name, base_term, "slope inference uses full clustered covariance"),
+      abs(row_slope$z - expected_z) < 1e-10 &&
+        abs(row_slope$p_value - 2 * pnorm(-abs(expected_z))) < 1e-12 &&
+        abs(row_slope$lower95 - (expected_estimate - qnorm(.975) * expected_se)) < 1e-12 &&
+        abs(row_slope$upper95 - (expected_estimate + qnorm(.975) * expected_se)) < 1e-12 &&
+        setequal(strsplit(gsub("\\s", "", row_slope$contrast_terms), "+", fixed = TRUE)[[1L]], contrast_terms))
+  }
   independent_likelihood <- pl_loglik(est, coef(fit), terms)
   stored_likelihood <- unname(tail(fit$loglik, 1L))
   full_difference <- abs(independent_likelihood - stored_likelihood)

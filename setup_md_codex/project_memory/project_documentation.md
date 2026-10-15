@@ -6,7 +6,8 @@ The approved initial demand extension uses all 294198 Table 2 timely grade-9
 applicants (2018-2020), not only those with assignment risk. Two exact joint
 rank-ordered logits condition on submitted schools: standardized current paper
 EB VAs for math, exam taking, high-premium field and high-premium institution,
-plus mixed-HC/TP and TP-only indicators and logged student-to-campus distance, with published coordinates
+plus mixed-HC/TP and TP-only indicators, their eight interactions with VA,
+and logged student-to-campus distance, with published coordinates
 or home-comuna centers. Use raw C1 genuine submitted choices, retain priority
 applications, collapse each RBD to its first submitted program/campus, and
 exclude incomplete rankings intact. Recompute coverage and normalization for
@@ -17,8 +18,12 @@ splits school type into mixedHC/TP(bothHC310 andregularTP) andTP-only(TP
 withoutHC). The single any-TP flag remains metadata. The non-TP reference
 includes1557HC-only,1artistic and16other/no-regular-secondary destinations;
 mixed690 andTP-only237. The sample and normalization are unchanged. Current
-pooled main coefficients are math.046228,exam.079093,field.056336,
-institution-.022007,mixed.289160,TP-only.432256,distance-.189412. Historical
+pooled main total slopes(math/exam/field/institution) are non-TP
+.051038/.153544/.011377/-.008280, mixed
+.057614/.072937/.062579/-.057258 andTP-only
+-.006330/.025639/.057808/-.022927. Each model has15 coefficients, retaining
+main effects and distance. Total-slope SEs use the full student-clustered
+covariance; type intercepts refer only to all four VAs=0. Historical additive,
 single-TP and no-TP models are preserved in dated clean-data archives. These are
 within-submitted-set associations. See `decisions/2026-10-14-school-preference-va.md`
 and the task README for exact normalization, geography and inference.
@@ -31,7 +36,9 @@ voluntary prioritario). Both distance definitions retain identical lists and
 the pooled VA normalization. Unresolved origins are excluded, not assigned to
 the voluntary group. Report: school_preference_va/by_priority_continuation.html;
 the source task adds scripts05/07/06. Current fits use the same two school-type
-indicators in every group. These are conditional ordering associations, and
+indicators and all eight VA interactions in every group. Both pooled and
+subgroup reports include total VA slopes by school type and retain the raw
+15-coefficient tables. These are conditional ordering associations, and
 separate-logit scales need not be identical.
 
 The requested top-school split reuses the original top100 list (no reranking):

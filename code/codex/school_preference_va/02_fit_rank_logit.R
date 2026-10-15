@@ -4,6 +4,7 @@ suppressPackageStartupMessages(library(survival))
 input <- file.path(clean_dir, "estimation_data.rds")
 message("Reading minimal estimation data: ", round(file.info(input)$size / 1e6, 1), " MB on disk")
 d <- as.data.table(readRDS(input))
+d <- add_va_interactions(d)
 setorder(d, ranking_id, rank_school)
 d[, event := 1L]
 check("informative rankings available", uniqueN(d$ranking_id) > 0L)
@@ -25,7 +26,7 @@ check("selected school VA correlation matrix full rank", min(eig) > 1e-10)
 fwrite(data.table(schools = nrow(schools), min_eigenvalue = min(eig), max_eigenvalue = max(eig),
   condition_number = max(eig) / min(eig)), file.path(clean_dir, "va_correlation_condition.csv"))
 
-results <- summaries <- diagnostics <- list()
+results <- summaries <- diagnostics <- slopes <- list()
 ids <- unique(d$ranking_id)
 group <- match(d$ranking_id, ids)
 group_n <- tabulate(group)
@@ -69,11 +70,13 @@ for (name in names(distance_vars)) {
   attr(fit, "preference_model") <- list(model = name, distance = dist, likelihood = "conditional submitted-set Plackett-Luce",
     normalization = "equal-weight unique destination schools in common final sample", cluster = "mrun",
     estimation_data = input, normalization_file = file.path(clean_dir, "va_normalization.csv"),
-    controls = controls, specification = "Four standardized EB VAs, mixed HC/TP, TP-only, logged distance",
+    controls = controls, interaction_terms = interaction_terms,
+    specification = "Four standardized EB VAs, mixed HC/TP, TP-only, eight type-by-VA interactions, logged distance",
     reference_school_type = "Non-TP: HC-only, artistic-only and other/no regular secondary in 2024")
   # Store the actual formula, not the mutable loop symbol fml, in the saved call.
   fit$call$formula <- fml
   saveRDS(fit, file.path(clean_dir, "models", paste0(name, ".rds")))
+  slopes[[name]] <- type_specific_va_slopes(fit, name)
   b <- coef(fit)
   se <- sqrt(diag(vcov(fit)))
   results[[name]] <- data.table(model = name, term = names(b), estimate = as.numeric(b), std_error = se,
@@ -94,6 +97,7 @@ for (name in names(distance_vars)) {
 fwrite(rbindlist(results), file.path(clean_dir, "coefficients.csv"))
 fwrite(rbindlist(summaries), file.path(clean_dir, "model_summary.csv"))
 fwrite(rbindlist(diagnostics), file.path(clean_dir, "model_diagnostics.csv"))
+fwrite(rbindlist(slopes), file.path(clean_dir, "type_specific_va_slopes.csv"))
 save_checks("estimation_verification.csv")
 writeLines(capture.output(sessionInfo()), file.path(clean_dir, "session_info.txt"))
 print(rbindlist(results))

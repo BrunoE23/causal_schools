@@ -377,3 +377,57 @@ grid values to4.83e-15 across12curves/49152gridpoints. Numerical areas are
 within2.36e-9of1 and agree with analytic finite-range Gaussian mass to1.36e-12.
 All six automated plotting checks pass. The combined density image is
 visually checked and the new densityPDF is shown through the app file panel.
+
+## VA interactions with mixed HC/TP and TP-only (2026-10-15)
+
+The user requested re-estimating the preference model with mixed-HC/TP-by-VA
+and TP-only-by-VA interactions. Retain four standardized EB indices, both
+school-type main effects and logged distance; add all eight products. Each
+pooled and prioritario-by-continuation model now has15 coefficients. Fit both
+published student coordinates and home-comuna centers, ten fits total.
+No other covariates, sample restrictions or demand extensions are added.
+
+Utility is beta'z + alpha_M M + alpha_T T + delta_M'(M*z) +
+delta_T'(T*z) + gamma*log1p(distance), where M and T indicate mixed and
+TP-only schools. Non-TP total VA slopes are beta; mixed totals are
+beta+delta_M; TP-only totals are beta+delta_T. Save and report all12 totals
+per fit. Compute contrast SEs as sqrt(c'Vc) from the full student-clustered
+covariance, including main-interaction covariance. The two school-type
+intercepts apply at all four standardized VAs=0 only; the type comparison
+changes with VA. Retain the raw15-coefficient tables beside the total slopes.
+
+Reuse the existing27MB typed minimal dataset; common.R forms products in
+memory for pooled fitting and05 saves them alongside the group inputs.
+Neither VA estimation nor application construction is rerun. All original
+input values, row ordering, samples and equal-school pooled normalization
+are unchanged. The pooled input and both normalization files are byte-
+identical to the preceding additive run. The four group sizes remain
+87407/155028/15363/13799; pooled N=276193,985285 pairs,2501 schools.
+The earlier "drop artistic" request concerned density plots only: keep the
+non-TP reference of1557HC-only,1artistic and16other destinations intact.
+
+Before fitting, preserve79 additive-run files(201.9MB) with hashes under
+data/clean/school_preference_va/archive/
+split_types_no_va_interactions_2026_10_15, based on code commit a31175b.
+All ten new fits converge in three iterations with no dropped coefficients.
+The pooled within-ranking design has rank15 and information condition
+number about109. Independent verification passes141 pooled and477 group
+checks, including expanded15-term conditional-logit point estimates and
+student-clustered covariance. Maximum coefficient/covariance discrepancies
+are below7e-15; maximum independent full-sample PL discrepancy is2.73e-7.
+All120 total slope estimates and full-covariance SEs/z/p/CI match independent
+contrasts. Eight separate archive-preservation checks pass.
+
+Pooled main total slopes(math/exam/field/institution) are:
+non-TP .051038/.153544/.011377/-.008280;
+mixed .057614/.072937/.062579/-.057258;
+TP-only -.006330/.025639/.057808/-.022927.
+TP-only math is close to zero(SE.008682). Exam-taking VA has a larger slope
+among non-TP schools, whereas field VA has larger slopes among mixed and
+TP-only schools. Main type intercepts are mixed.338660 andTP-only.385016
+only at reference VAs; logged distance is-.191209. These are conditional
+ordering associations. The unchanged model normalization makes within-model
+type slopes comparable; separate applicant-group logits can still differ
+in error scale. Both distance versions, all four applicant groups and their
+raw coefficients/full-covariance total slopes are saved in the active
+reports. No manuscript edits are made.

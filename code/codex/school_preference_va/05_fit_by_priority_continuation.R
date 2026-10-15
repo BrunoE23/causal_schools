@@ -66,6 +66,7 @@ setcolorder(flow, c("group", "label", "sae_proceso", "original_applicants", "poo
 fwrite(flow, file.path(subgroup_dir, "sample_flow.csv"))
 
 d <- as.data.table(readRDS(input))
+d <- add_va_interactions(d)
 pooled_n <- nrow(d)
 d <- merge(d, u, by = c("mrun", "sae_proceso"), all.x = TRUE, sort = FALSE)
 check("flags preserve every pooled school alternative", nrow(d) == pooled_n && !anyNA(d$group))
@@ -89,7 +90,7 @@ check("copy pooled normalization parameters unchanged", file.copy(normalization_
 check("subgroup normalization file byte-identical to pooled", unname(tools::md5sum(normalization_path)) ==
   unname(tools::md5sum(file.path(subgroup_dir, "va_normalization.csv"))))
 
-results <- summaries <- diagnostics <- correlations <- list()
+results <- summaries <- diagnostics <- correlations <- slopes <- list()
 for (g in definitions$group) {
   x <- copy(d[group == g])
   x[, event := 1L]
@@ -144,10 +145,12 @@ for (g in definitions$group) {
       normalization_file = file.path(subgroup_dir, "va_normalization.csv"), controls = controls,
       estimation_data = file.path(subgroup_dir, "estimation_data.rds"),
       group_definitions = file.path(subgroup_dir, "group_definitions.csv"),
-      specification = "Four standardized EB VAs, mixed HC/TP, TP-only, logged distance",
+      interaction_terms = interaction_terms,
+      specification = "Four standardized EB VAs, mixed HC/TP, TP-only, eight type-by-VA interactions, logged distance",
       reference_school_type = "Non-TP: HC-only, artistic-only and other/no regular secondary in 2024")
     fit$call$formula <- fml
     saveRDS(fit, file.path(subgroup_dir, "models", paste0(key, ".rds")))
+    slopes[[key]] <- type_specific_va_slopes(fit, name, g)
     b <- as.numeric(coef(fit)); se <- sqrt(diag(vcov(fit)))
     results[[key]] <- data.table(group = g, model = name, term = terms, estimate = b, std_error = as.numeric(se),
       z = b / se, p_value = 2 * pnorm(-abs(b / se)), lower95 = b - qnorm(.975) * se,
@@ -168,6 +171,7 @@ fwrite(rbindlist(results), file.path(subgroup_dir, "coefficients.csv"))
 fwrite(rbindlist(summaries), file.path(subgroup_dir, "model_summary.csv"))
 fwrite(rbindlist(diagnostics), file.path(subgroup_dir, "model_diagnostics.csv"))
 fwrite(rbindlist(correlations), file.path(subgroup_dir, "va_correlations.csv"))
+fwrite(rbindlist(slopes), file.path(subgroup_dir, "type_specific_va_slopes.csv"))
 fwrite(checks, file.path(subgroup_dir, "fit_verification.csv"))
 writeLines(capture.output(sessionInfo()), file.path(subgroup_dir, "session_info.txt"))
 print(rbindlist(results)[model == "main", .(group, term, estimate, std_error)])
