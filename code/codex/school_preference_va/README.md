@@ -127,6 +127,44 @@ converged in three iterations; independent verification and report checks
 passed. The main and comuna results, subgroup slopes and changes in existing
 attribute slopes are in the report and companion tables.
 
+## Existing grade-4-SIMCE parent-income-decile extension (2026-10-15)
+
+The subsequent request specifies reusing the previously constructed
+`income_decile_imputed` measure based on 4th-grade SIMCE parent-survey data.
+Use the existing school composition table
+`data/clean/staff_lasso_va/school_student_composition.csv`, not a new 2022
+2nd-year-high-school income response. Its `income_decile_mean` is the average
+of the existing observed/imputed student deciles for 2017-2020 grade-8
+students attending each RBD. The school composition measure is retrospective
+for the SAE 2018-2020 applicant cohort and should be interpreted descriptively.
+
+The new model jointly includes the four EB VAs, PAES M1, parent education,
+parent income decile, two school-type indicators and all 14 attribute-by-type
+interactions, plus distance. Compare it with the existing six-attribute
+parent-education model on identical full submitted lists, for pooled and four
+priority-by-continuation groups under published coordinates and comuna
+centroids. The 273,184 parent-education-complete lists all have the income
+measure; no additional applicants are lost. The pooled estimation sample has
+969,377 applicant-school pairs and 2,481 destination schools.
+
+Run from the project root:
+
+```powershell
+& 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/school_preference_va/23_build_parent_income_decile_4to.R
+& 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/school_preference_va/24_fit_parent_income_decile_4to.R
+& 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/school_preference_va/26_verify_parent_income_decile_4to.R
+& 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/school_preference_va/25_report_parent_income_decile_4to.R
+```
+
+Outputs are under `data/clean/school_preference_va/parent_income_decile_4to/`
+and `output/tables/school_preference_va/parent_income_decile_4to/`; the report
+is `output/reports/school_preference_va/parent_income_decile_4to.html`. The
+school-income-decile total slopes in the pooled published-coordinate model
+are -0.0796 (SE 0.0076) for non-TP schools, 0.0176 (0.0117) for mixed HC/TP,
+and -0.0262 (0.0153) for TP-only. These conditional associations include
+parent education and PAES M1. All 20 fits converge in 3 iterations; the
+independent model and data checks pass.
+
 ## Original four-VA specification and construction
 
 The preceding user specification is math, exam-taking, high-premium-field and
