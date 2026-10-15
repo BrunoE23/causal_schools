@@ -6,19 +6,20 @@ The approved initial demand extension uses all 294198 Table 2 timely grade-9
 applicants (2018-2020), not only those with assignment risk. Two exact joint
 rank-ordered logits condition on submitted schools: standardized current paper
 EB VAs for math, exam taking, high-premium field and high-premium institution,
-plus logged student-to-campus distance, with published coordinates
+plus mixed-HC/TP and TP-only indicators and logged student-to-campus distance, with published coordinates
 or home-comuna centers. Use raw C1 genuine submitted choices, retain priority
 applications, collapse each RBD to its first submitted program/campus, and
 exclude incomplete rankings intact. Recompute coverage and normalization for
 the selected four VAs. Code/clean data/table/report use task
 name school_preference_va. Final four-VA sample: 276193 rankings, 985285 pairs,
-2501 schools; no geography loss. On 2026-10-15 Bruno removed TP again from
-every pooled and subgroup regression. TP remains descriptive metadata from
-the 2024 Directorio but neither enters utility nor defines eligibility.
-The sample and normalization are unchanged. Current pooled main slopes are
-positive for math and field, negative for exam taking and institution, with
-the same signs under comuna distances. Prior TP fits and reports are archived
-under archive/four_va_with_tp_2026_10_15 in the task's clean-data area. These are
+2501 schools; no geography or school-type loss. The latest2026-10-15 request
+splits school type into mixedHC/TP(bothHC310 andregularTP) andTP-only(TP
+withoutHC). The single any-TP flag remains metadata. The non-TP reference
+includes1557HC-only,1artistic and16other/no-regular-secondary destinations;
+mixed690 andTP-only237. The sample and normalization are unchanged. Current
+pooled main coefficients are math.046228,exam.079093,field.056336,
+institution-.022007,mixed.289160,TP-only.432256,distance-.189412. Historical
+single-TP and no-TP models are preserved in dated clean-data archives. These are
 within-submitted-set associations. See `decisions/2026-10-14-school-preference-va.md`
 and the task README for exact normalization, geography and inference.
 
@@ -29,12 +30,16 @@ The four estimation groups have 87407, 155028, 15363 and 13799 applicants
 voluntary prioritario). Both distance definitions retain identical lists and
 the pooled VA normalization. Unresolved origins are excluded, not assigned to
 the voluntary group. Report: school_preference_va/by_priority_continuation.html;
-the source task adds scripts05/07/06. Main institution-VA coefficients are
-negative in both school-ending groups and positive in both voluntary groups;
-field slopes are positive throughout. Without TP, the school-ending prioritario
-group has negative math and exam coefficients; exam coefficients in both
-voluntary groups are not distinguished from zero at5%. These are conditional
-ordering associations, and separate-logit scales need not be identical.
+the source task adds scripts05/07/06. Current fits use the same two school-type
+indicators in every group. These are conditional ordering associations, and
+separate-logit scales need not be identical.
+
+The requested top-school split reuses the original top100 list (no reranking):
+HC-only/mixed/TP-only counts are4/2/4(top10),10/6/4(top20),18/15/17(top50),
+41/31/28(top100). School shares divide byN; enrollment shares use2024 whole-
+school MAT_TOTAL within each set and include all grades. Code08 generates
+output/reports/school_preference_va/top_school_types.html;09 attaches the
+indicators to existing ranking data. Shared classification:school_types.R.
 
 ## Directory-only preschool entry and changes (2026-10-14)
 

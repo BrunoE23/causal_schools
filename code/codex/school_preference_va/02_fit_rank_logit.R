@@ -11,7 +11,9 @@ check("one ranking per paper pupil", uniqueN(d$mrun) == uniqueN(d$ranking_id))
 check("unique student-school alternatives", !anyDuplicated(d[, .(ranking_id, rbd)]))
 check("both distance definitions complete", all(is.finite(d$log1p_distance_main)) && all(is.finite(d$log1p_distance_comuna)))
 check("all selected VA terms complete", all(is.finite(as.matrix(d[, ..va_terms]))))
-check("requested model excludes TP and other additional controls", identical(model_static_terms, va_terms))
+check("requested model uses separate mixed and TP-only indicators", identical(controls, c("mixed_hc_tp", "tp_only")))
+check("school-type indicators binary and mutually exclusive", all(d$mixed_hc_tp %in% 0:1) &&
+  all(d$tp_only %in% 0:1) && all(d$mixed_hc_tp + d$tp_only <= 1L))
 
 # One observation per unique destination school in this common estimation sample.
 schools <- unique(d[, c("rbd", va_terms), with = FALSE], by = "rbd")
@@ -67,7 +69,8 @@ for (name in names(distance_vars)) {
   attr(fit, "preference_model") <- list(model = name, distance = dist, likelihood = "conditional submitted-set Plackett-Luce",
     normalization = "equal-weight unique destination schools in common final sample", cluster = "mrun",
     estimation_data = input, normalization_file = file.path(clean_dir, "va_normalization.csv"),
-    controls = controls, specification = "Four standardized EB VAs and logged distance; TP excluded")
+    controls = controls, specification = "Four standardized EB VAs, mixed HC/TP, TP-only, logged distance",
+    reference_school_type = "Non-TP: HC-only, artistic-only and other/no regular secondary in 2024")
   # Store the actual formula, not the mutable loop symbol fml, in the saved call.
   fit$call$formula <- fml
   saveRDS(fit, file.path(clean_dir, "models", paste0(name, ".rds")))

@@ -98,6 +98,13 @@ tp_comparison <- merge(tp_map[, .(rbd, tp_school)], tp_direct[, .(rbd = RBD, tp_
 check("paper_TP_matches_Directorio_teaching_codes", all(tp_comparison[!is.na(tp_directory) & !is.na(tp_school), tp_school == tp_directory]))
 fwrite(tp_comparison[rbd %in% programs$rbd], file.path(clean_dir, "tp_directory_verification.csv"))
 programs <- merge(programs, tp_direct[, .(rbd = RBD, tp_school = tp_directory)], by = "rbd", all.x = TRUE, sort = FALSE)
+source(file.path(code_dir, "school_types.R"))
+school_types <- read_school_types()
+fwrite(school_types, file.path(clean_dir, "school_type_classification.csv"))
+programs <- merge(programs, school_types[, .(rbd, hc_school, mixed_hc_tp, tp_only, school_type)],
+  by = "rbd", all.x = TRUE, sort = FALSE)
+check("all school-type controls observed", all(complete.cases(programs[, ..controls])))
+check("TP subtypes reproduce previous TP indicator", all(programs$mixed_hc_tp + programs$tp_only == programs$tp_school))
 setorder(programs, ranking_id, rank_program)
 message("Attaching published geography and the separate home-comuna sensitivity distance.")
 program_rows_before_geography <- nrow(programs)
@@ -253,7 +260,7 @@ audit <- merge(rbindlist(raw_counts), roster[, .(genuine_rankings = .N,
   by = "sae_proceso", sort = TRUE)
 
 estimation_columns <- c("mrun", "ranking_id", "sae_proceso", "rbd", "rank_school",
-  specs$standardized, controls, "log1p_distance_main", "log1p_distance_comuna")
+  specs$standardized, controls, "tp_school", "log1p_distance_main", "log1p_distance_comuna")
 estimation <- schools[estimation_eligible == TRUE, ..estimation_columns]
 setorder(estimation, ranking_id, rank_school)
 check("estimation_no_missing_covariates", all(vapply(estimation, function(x) all(is.finite(x)), logical(1L))))

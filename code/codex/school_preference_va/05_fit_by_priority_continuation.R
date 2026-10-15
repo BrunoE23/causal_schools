@@ -80,7 +80,9 @@ check("one complete ranking per student", uniqueN(d$mrun) == uniqueN(d$ranking_i
 check("four groups all available", setequal(unique(d$group), definitions$group))
 check("both distance definitions and static regressors finite", all(vapply(
   d[, c(model_static_terms, unname(distance_vars)), with = FALSE], function(z) all(is.finite(z)), logical(1))))
-check("requested model excludes TP and other additional controls", identical(model_static_terms, va_terms))
+check("requested model uses separate mixed and TP-only indicators", identical(controls, c("mixed_hc_tp", "tp_only")))
+check("school-type indicators binary and mutually exclusive", all(d$mixed_hc_tp %in% 0:1) &&
+  all(d$tp_only %in% 0:1) && all(d$mixed_hc_tp + d$tp_only <= 1L))
 saveRDS(d, file.path(subgroup_dir, "estimation_data.rds"))
 check("copy pooled normalization parameters unchanged", file.copy(normalization_path,
   file.path(subgroup_dir, "va_normalization.csv"), overwrite = TRUE))
@@ -142,7 +144,8 @@ for (g in definitions$group) {
       normalization_file = file.path(subgroup_dir, "va_normalization.csv"), controls = controls,
       estimation_data = file.path(subgroup_dir, "estimation_data.rds"),
       group_definitions = file.path(subgroup_dir, "group_definitions.csv"),
-      specification = "Four standardized EB VAs and logged distance; TP excluded")
+      specification = "Four standardized EB VAs, mixed HC/TP, TP-only, logged distance",
+      reference_school_type = "Non-TP: HC-only, artistic-only and other/no regular secondary in 2024")
     fit$call$formula <- fml
     saveRDS(fit, file.path(subgroup_dir, "models", paste0(key, ".rds")))
     b <- as.numeric(coef(fit)); se <- sqrt(diag(vcov(fit)))

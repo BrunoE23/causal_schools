@@ -6,20 +6,22 @@
 \toprule
  & Published coordinates & Comuna centers \\
 \midrule
-Math VA & 0.0156 (0.0018) & 0.0146 (0.0018) \\
-Exam-taking VA & -0.0180 (0.0019) & -0.0145 (0.0019) \\
-High-premium-field VA & 0.0571 (0.0014) & 0.0551 (0.0014) \\
-High-premium-institution VA & -0.0082 (0.0030) & -0.0132 (0.0029) \\
-log(1 + distance in km) & -0.1815 (0.0031) & -0.0589 (0.0057) \\
+Math VA & 0.0462 (0.0019) & 0.0443 (0.0019) \\
+Exam-taking VA & 0.0791 (0.0023) & 0.0791 (0.0023) \\
+High-premium-field VA & 0.0563 (0.0014) & 0.0546 (0.0014) \\
+High-premium-institution VA & -0.0220 (0.0030) & -0.0263 (0.0030) \\
+Mixed HC/TP school & 0.2892 (0.0048) & 0.2916 (0.0048) \\
+TP-only school & 0.4323 (0.0065) & 0.4056 (0.0064) \\
+log(1 + distance in km) & -0.1894 (0.0031) & -0.0674 (0.0057) \\
 \midrule
 Student rankings & 276,193 & 276,193 \\
 Student-school pairs & 985,285 & 985,285 \\
 Destination schools & 2,501 & 2,501 \\
-Log likelihood & -788,306.6406 & -790,781.3523 \\
+Log likelihood & -785,443.9059 & -788,093.5166 \\
 \bottomrule
 \end{tabular}
 \par\smallskip
 \begin{minipage}{0.98\linewidth}\footnotesize
-\textit{Notes:} Joint rank-ordered logit conditional on each student's submitted schools. Four selected VA measures and distance enter simultaneously. Coefficients are followed by student-clustered standard errors in parentheses. VA is standardized with equal weight per unique destination school in the common pooled estimation sample. Straight-line distance in kilometers enters as $\log(1+d)$. The first column retains all published student locations, including municipality imputations; the second replaces the student point with the home-comuna center. Both retain the same school-campus coordinates and complete rankings. Inference conditions on the estimated EB indices; VA-estimation uncertainty is not propagated. No school fixed effects or unlisted alternatives enter.
+\textit{Notes:} Joint rank-ordered logit conditional on each student's submitted schools. Four selected VA measures, mixed HC/TP and TP-only school indicators, and distance enter simultaneously. Coefficients are followed by student-clustered standard errors in parentheses. VA is standardized with equal weight per unique destination school in the common pooled estimation sample. The two school-type indicators remain unstandardized 0/1 variables; both are relative to omitted non-TP schools. Straight-line distance in kilometers enters as $\log(1+d)$. The first column retains all published student locations, including municipality imputations; the second replaces the student point with the home-comuna center. Both retain the same school-campus coordinates and complete rankings. Inference conditions on the estimated EB indices; VA-estimation uncertainty is not propagated. No school fixed effects or unlisted alternatives enter.
 \end{minipage}
 \end{table}

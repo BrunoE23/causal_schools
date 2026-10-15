@@ -234,3 +234,54 @@ not distinguished from zero at5% for either voluntary group. Institution VA
 remains positive for both voluntary groups and negative for both ending
 groups. Field slopes are positive throughout. These are conditional
 associations; no cross-group equality test or causal interpretation is added.
+
+## Separate mixed HC/TP and TP-only indicators (2026-10-15)
+
+The user next requested separate mixed-HC/TP and TP-only indicators, first
+describing the top10/20/50/100 most demanded schools and then refitting the
+preference models. This supersedes the immediately preceding no-TP model.
+Keep all four VAs, both distance versions, pooled normalization, original
+rankings and student clustering. Enter mixed_hc_tp and tp_only as raw0/1
+regressors:7coefficients per model. Do not enter the redundant any-TP binary.
+
+Use the same2024 Directorio source. HC is regular youth ENS310; TP is any
+of410/510/610/710/810. Mixed meansHC andTP, TP-only meansTP withoutHC; these
+labels do not exclude lower grades. The reference is non-TP rather than pure
+HC: among2501 estimation destinations,1557HC-only,1artistic-only and16other/
+no-regular-secondary remain; mixed690 andTP-only237. All RBDs match. Preserve
+the non-HC reference schools and do not add2024 activity restrictions or
+change rankings to force a pure-HC reference. Classification is fixed2024,
+not an application-year or individual-track measure.
+
+The top-school analysis reuses the earlier published top100 ranking rather
+than recomputing rankings with the new genuine-list cache. Counts(HC-only,
+mixed,TP-only) are4/2/4(top10),10/6/4(top20),18/15/17(top50),41/31/28(top100).
+School shares divide by eachN. Enrollment shares weight by2024 MAT_TOTAL
+within those same schools, explicitly including all grades. They are not
+track-specific or HS-only enrollment shares. All100 RBDs match uniquely.
+
+school_types.R supplies the common map;08 generates the top-school summary
+first,09 attaches the new columns to existing full and minimal ranking data
+without altering pre-existing values.01 is updated for future reconstruction.
+The no-TP models and inputs are saved in the ignored dated archive
+four_va_no_tp_before_split_2026_10_15, with copy hashes. Pooled and subgroup
+sample sizes and VA normalization remain fixed; all school-type inputs are
+observed, so no new whole-list exclusion is necessary.
+
+All ten split-type fits converge in three iterations.67 pooled and195
+subgroup independent validation checks pass. Expanded conditional-logit
+coefficient/covariance errors are below6e-16; maximum full PL likelihood
+discrepancy is6.95e-8. A direct comparison to archived no-TP inputs confirms
+all pre-existing columns and their values, group/pooled counts and
+normalization parameters are unchanged. New indicators add no sample loss.
+
+Pooled main estimates(SEs) are math.046228(.001866), exam.079093(.002327),
+field.056336(.001399), institution-.022007(.002980), mixedHC/TP.289160(.004798),
+TP-only.432256(.006465), log distance-.189412(.003147). Pooled comuna type
+estimates are.291566(.004774) mixed and.405614(.006417) TP-only. Group main
+mixed/TP-only estimates are.248659/.394008(ending non-prioritario),
+.329599/.457516(ending prioritario),.225217/.355919(voluntary non-prioritario),
+.254843/.500053(voluntary prioritario). Both type associations are positive,
+with larger TP-only point estimates throughout. No formal cross-group
+equality test is added; separate-logit scales and conditional-list scope
+remain relevant to comparisons.

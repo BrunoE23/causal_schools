@@ -1,8 +1,9 @@
 # School preferences and four-dimensional EB value added
 
 The current user specification is math, exam-taking, high-premium-field and
-high-premium-institution VA, entered jointly with log(1+distance in km).
-The 2026-10-15 request removes TP from the pooled and subgroup regressions.
+high-premium-institution VA, entered jointly with mixed-HC/TP and TP-only
+school indicators and log(1+distance in km). The latest 2026-10-15 request
+replaces the earlier single-TP and no-TP specifications with these two types.
 Estimate two versions: published student coordinates and home-comuna centers.
 School-campus coordinates, ranking sample and VA normalization are identical
 between the two models. The requested priority-by-continuation splits are
@@ -12,6 +13,8 @@ Run from the repository root:
 
 ```powershell
 & 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/school_preference_va/01_build_rankings.R
+& 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/school_preference_va/08_top_school_types.R
+& 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/school_preference_va/09_attach_school_types.R
 & 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/school_preference_va/02_fit_rank_logit.R
 & 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/school_preference_va/04_verify.R
 & 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/school_preference_va/03_report.R
@@ -21,6 +24,12 @@ Dependencies: data.table and survival. Set CAUSAL_SCHOOLS_DATA_WD to override
 the default Box data root. Raw data, existing clean source files and the
 paper manuscript are read-only. New person-level files stay under the
 Git-ignored data/clean/school_preference_va directory.
+
+For the existing constructed data, skip01: run08 first for the requested
+top-school distributions, then09 to append the new school-type columns to
+all ranking objects without rebuilding raw applications or VAs. Process the
+71MB school and69MB program RDS files sequentially; only the minimal27MB
+estimation input is needed for fitting. Existing values and ranks are kept.
 
 ## Rankings and sample
 
@@ -37,7 +46,8 @@ program's campus. The full data have 1,007,253 student-school pairs. Flag the
 This school-level aggregation was explicitly selected by the user.
 
 Keep all original lists in the full data with coverage and eligibility flags.
-Estimate only whole lists with all four selected VAs, both finite distances,
+Estimate only whole lists with all four selected VAs, both observed school-type
+indicators, both finite distances,
 and at least two distinct schools. A missing alternative excludes the entire
 list. Single-school lists have likelihood one and provide no ordering signal.
 Coverage and normalization are recomputed for the selected four VAs; they
@@ -61,7 +71,7 @@ years. Each school has equal normalization weight; list length/application
 frequency do not determine moments. Save means/SDs and reuse them unchanged
 in both models. Preserve raw EB values alongside normalized regressors.
 
-## Retained Tecnico Profesional metadata
+## Secondary school-type indicators
 
 tp_school is a raw, unstandardized 0/1 school-level indicator constructed from
 any ENS code in {410,510,610,710,810} in the raw 2024 Directorio. The builder
@@ -74,10 +84,18 @@ student's particular grade-9 program or eventual track is TP. It is a fixed
 2024 classification, consistent with the prior paper tables, rather than a
 claim about every school's offerings in its application year.
 
-The indicator is retained as metadata but no longer enters any current model
-or defines eligibility. All original schools are classified, so removing the
-TP regressor preserves the estimation sample and VA normalization exactly.
-tp_coverage.csv records descriptive coverage; the direct
+The single tp_school flag remains metadata. Current models enter two raw0/1
+indicators: mixed_hc_tp means both HC(ENS310) and TP; tp_only means TP without
+HC. No active-status filter is applied to historical SAE destination schools.
+All original schools match the2024 source, preserving the sample and pooled
+VA normalization. The omitted category is non-TP, not exclusively HC-only:
+1557HC-only,1artistic-only and16other/no-regular-secondary schools among2501
+estimation destinations. Mixed and TP-only counts are690 and237. The latter
+labels concern secondary offerings and allow lower grades in the school.
+school_types.R defines the classification shared by construction, attachment
+and top-school reporting. school_type_classification.csv retains every RBD;
+school_type_coverage.csv records destination and alternative counts.
+tp_coverage.csv records descriptive coverage of the older any-TP flag; the direct
 directory comparison is saved as tp_directory_verification.csv. Missing TP
 values are never implicitly zero-coded. In the existing estimation sample,
 all 2501 schools are classified, 927 are TP, and 690 of those are mixed HC/TP.
@@ -112,7 +130,8 @@ the risk set is exactly the remaining listed schools. Unique ranks imply no
 within-stratum event-time ties, so ties='breslow' is the exact specified
 Plackett-Luce likelihood. The final singleton factor is one.
 
-Four normalized VAs and one distance term enter: five coefficients,
+Four normalized VAs, two school-type indicators and one distance term enter:
+seven coefficients,
 no intercept, school fixed effects, peer controls or unlisted alternatives.
 The sandwich covariance clusters full ranking scores by student. Inference
 conditions on existing EB estimates and does not propagate their estimation
@@ -148,7 +167,26 @@ clean-data archive/seven_va_initial folder and is not the reported model.
 Methods decision: setup_md_codex/project_memory/decisions/
 2026-10-14-school-preference-va.md.
 
-## Current four-VA run without TP
+## Current split-type results
+
+All ten fits converge in three iterations. The pooled main coefficients
+(student-clustered SEs) are math0.0462(0.0019), exam0.0791(0.0023),
+field0.0563(0.0014), institution-0.0220(0.0030), mixedHC/TP0.2892(0.0048),
+TP-only0.4323(0.0065), logged distance-0.1894(0.0031). Both type indicators
+have positive coefficients, with a larger TP-only point estimate in each
+group. The pooled comuna estimates are mixed0.2916(0.0048) and
+TP-only0.4056(0.0064). These are conditional ranking associations.
+
+Pooled independent validation passes67 checks; subgroup validation195.
+Expanded conditional-logit coefficients and student-clustered covariances
+agree to machine precision, and full-sample likelihood discrepancies are
+below7e-8. Archive comparisons confirm every pre-existing input value,
+sample count and VA normalization parameter is preserved.
+
+## Archived four-VA run without TP (superseded)
+
+This previous specification is saved under
+archive/four_va_no_tp_before_split_2026_10_15, with model inputs and copy hashes.
 
 Removing TP preserves the estimation data and normalization byte for byte.
 All ten pooled/subgroup fits converge in three iterations with five terms.
@@ -196,7 +234,7 @@ are below 5e-7. The report also includes all data-build and convergence checks.
 
 ## Prioritario by continuation groups (2026-10-15)
 
-The subsequent request fits the same five-regressor joint model separately
+The subsequent request fits the same seven-regressor joint model separately
 for prioritario/non-prioritario crossed with school-ending/voluntary
 application. Run after the pooled data construction:
 
@@ -243,8 +281,26 @@ Four-column table fragments: output/tables/school_preference_va/
 by_priority_continuation_main.tex and by_priority_continuation_municipality.tex;
 the combined numeric/display table is by_priority_continuation.csv.
 
-Every current model omits TP. The previous subgroup models with TP are
-preserved in the same dated archive as the pooled models. The current
-estimation inputs and fixed normalization are identical to that archived run;
-only the regression specification changes. Current estimates and validation
-results are generated in the active tables and report.
+Every current model includes mixed_hc_tp and tp_only, with non-TP as the
+reference. The previous any-TP and no-TP subgroup fits are preserved in their
+dated archives. Current inputs add the two indicators while retaining every
+pre-existing value, row and normalization parameter. Current estimates and
+validation results are generated in the active tables and report.
+
+## School types among most demanded destinations
+
+08_top_school_types.R uses the exact previously reported top100 ranking from
+output/tables/applicant_priority_comparison/top_100_sae_destination_schools.csv;
+it does not rerank using the newly reconstructed preference lists. Attach the
+same2024 directory classification by unique numeric RBD. School shares use
+N=10,20,50,100. Enrollment shares use MAT_TOTAL within each selected topN;
+this is whole-establishment enrollment across all grades, not HS enrollment
+or enrollment in a particular track. No school is dropped or recategorized
+using2024 activity status. All100 schools match.
+
+HC-only/mixed/TP-only counts are4/2/4(top10),10/6/4(top20),18/15/17(top50),
+41/31/28(top100). No artistic/other schools appear in these sets. Readable
+count, school-share and enrollment-share tables are in
+output/reports/school_preference_va/top_school_types.html; CSVs and manifests
+are in the task clean directory, with a companion aggregate table CSV in
+output/tables/school_preference_va/top_school_type_distribution.csv.

@@ -17,8 +17,8 @@ specs <- data.table(
   label = c("Math VA", "Exam-taking VA", "High-premium-field VA", "High-premium-institution VA"))
 specs[, `:=`(raw = paste0("va_", suffix), standardized = paste0("z_va_", suffix))]
 va_terms <- specs$standardized
-controls <- character()
-control_labels <- c(tp_school = "Tecnico Profesional school")
+controls <- c("mixed_hc_tp", "tp_only")
+control_labels <- c(mixed_hc_tp = "Mixed HC/TP school", tp_only = "TP-only school")
 model_static_terms <- c(va_terms, controls)
 distance_vars <- c(main = "log1p_distance_main", municipality = "log1p_distance_comuna")
 model_labels <- c(main = "Published student coordinates", municipality = "Home-comuna centroids")

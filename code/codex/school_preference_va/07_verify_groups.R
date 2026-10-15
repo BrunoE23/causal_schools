@@ -40,9 +40,11 @@ check("One diagnostic row per subgroup model", nrow(diagnostics) == 8L &&
 expected_coefficient_rows <- length(group_order) * length(distance_vars) * (length(model_static_terms) + 1L)
 check("One coefficient row per requested subgroup model term", nrow(coefficients) == expected_coefficient_rows &&
   !anyDuplicated(coefficients[, .(group, model, term)]))
-check("Requested specification contains four VAs and no TP regressor",
-  identical(model_static_terms, va_terms) && !"tp_school" %in% model_static_terms)
-check("TP absent from exported subgroup coefficients", !"tp_school" %in% coefficients$term)
+split_type_terms <- c("mixed_hc_tp", "tp_only")
+check("Requested specification contains four VAs and separate mixed and TP-only indicators",
+  identical(controls, split_type_terms) && identical(model_static_terms, c(va_terms, split_type_terms)) &&
+    !"tp_school" %in% model_static_terms)
+check("Single any-TP indicator absent from exported subgroup coefficients", !"tp_school" %in% coefficients$term)
 
 # Reconstruct the classification from the existing paper sources, independently
 # of the estimation script. This also verifies unresolved origins are preserved
@@ -106,6 +108,24 @@ check("Roster sizes equal complete submitted list lengths", all(ranking_check$al
   roster$n_schools[match(ranking_check$ranking_id, roster$ranking_id)]))
 if ("tp_school" %in% names(est)) {
   check("Retained TP metadata remains an unstandardized observed binary", all(est$tp_school %in% 0:1))
+  check("Split school-type indicators partition the retained any-TP metadata",
+    all(est$mixed_hc_tp + est$tp_only == est$tp_school))
+}
+check("Both school-type indicators are observed unstandardized binaries",
+  all(vapply(est[, ..split_type_terms], function(x) all(x %in% 0:1), logical(1))))
+check("Mixed HC/TP and TP-only indicators are mutually exclusive",
+  all(est$mixed_hc_tp + est$tp_only <= 1L))
+check("Both school-type indicators are constant within destination school",
+  all(est[, lapply(.SD, uniqueN), by = rbd, .SDcols = split_type_terms][,
+    unlist(.SD), .SDcols = split_type_terms] == 1L))
+type_source <- fread(file.path(pooled_dir, "school_type_classification.csv"))
+check("School-type classification source contains unique destination schools",
+  all(c("rbd", split_type_terms) %in% names(type_source)) && !anyDuplicated(type_source$rbd))
+type_index <- match(est$rbd, type_source$rbd)
+check("All subgroup schools match the school-type classification source", !anyNA(type_index))
+for (type_term in split_type_terms) {
+  check(paste(type_term, "matches saved Directorio school-type classification"),
+    all(est[[type_term]] == type_source[[type_term]][type_index]))
 }
 est[, event1 := 1L]
 
@@ -169,7 +189,7 @@ for (group_name in group_order) {
     saved[[model_name]] <- fit
     check(paste(label, "saved coxph model with exactly requested terms"),
       inherits(fit, "coxph") && identical(names(coef(fit)), terms))
-    check(paste(label, "TP absent from fitted coefficients and formula"),
+    check(paste(label, "single any-TP indicator absent from fitted coefficients and formula"),
       !"tp_school" %in% names(coef(fit)) && !"tp_school" %in% all.vars(fit$call$formula))
     check(paste(label, "student clustering and robust covariance"),
       !is.null(fit$naive.var) && identical(gsub("\\s", "", paste(deparse(fit$call$cluster), collapse = "")), "mrun"))

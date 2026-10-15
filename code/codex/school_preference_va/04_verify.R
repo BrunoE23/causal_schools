@@ -17,13 +17,33 @@ roster <- est[, .(alternatives = .N, students = uniqueN(mrun), years = uniqueN(s
 check("Every estimation ranking has at least two schools", all(roster$alternatives >= 2L))
 check("Rankings contain one student and process", all(roster$students == 1L & roster$years == 1L))
 check("Collapsed school ranks are consecutive", all(roster$consecutive))
-check("All VA and distance regressors finite", all(vapply(est[, c(model_static_terms, distance_vars), with = FALSE],
+check("All VA, school-type and distance regressors finite", all(vapply(est[, c(model_static_terms, distance_vars), with = FALSE],
   function(z) all(is.finite(z)), logical(1))))
-check("Requested specification contains four VAs and no TP regressor",
-  identical(model_static_terms, va_terms) && !"tp_school" %in% model_static_terms)
+split_type_terms <- c("mixed_hc_tp", "tp_only")
+check("Requested specification contains four VAs and separate mixed and TP-only indicators",
+  identical(controls, split_type_terms) && identical(model_static_terms, c(va_terms, split_type_terms)) &&
+    !"tp_school" %in% model_static_terms)
+check("School-type indicators are observed unstandardized binaries",
+  all(vapply(est[, ..split_type_terms], function(x) all(x %in% 0:1), logical(1))))
+check("Mixed HC/TP and TP-only indicators are mutually exclusive",
+  all(est$mixed_hc_tp + est$tp_only <= 1L))
+check("Both school-type indicators are constant within destination school",
+  all(est[, lapply(.SD, uniqueN), by = rbd, .SDcols = split_type_terms][,
+    unlist(.SD), .SDcols = split_type_terms] == 1L))
+type_source <- fread(file.path(clean_dir, "school_type_classification.csv"))
+check("School-type classification source contains unique destination schools",
+  all(c("rbd", split_type_terms) %in% names(type_source)) && !anyDuplicated(type_source$rbd))
+type_index <- match(est$rbd, type_source$rbd)
+check("All estimation schools match the school-type classification source", !anyNA(type_index))
+for (type_term in split_type_terms) {
+  check(paste(type_term, "matches saved Directorio school-type classification"),
+    all(est[[type_term]] == type_source[[type_term]][type_index]))
+}
 if ("tp_school" %in% names(est)) {
   check("Retained TP metadata remains unstandardized binary", all(est$tp_school %in% c(0L, 1L)))
   check("Retained TP metadata constant within destination school", all(est[, uniqueN(tp_school), by = rbd]$V1 == 1L))
+  check("Split school-type indicators partition the retained any-TP metadata",
+    all(est$mixed_hc_tp + est$tp_only == est$tp_school))
 }
 check("Standardized VA constant by school across both specifications", all(est[,
   lapply(.SD, uniqueN), by = rbd, .SDcols = va_terms][, unlist(.SD), .SDcols = va_terms] == 1L))
@@ -117,7 +137,7 @@ for (model_name in names(distance_vars)) {
   saved_models[[model_name]] <- fit
   check(paste(model_name, "saved object is coxph"), inherits(fit, "coxph"))
   check(paste(model_name, "all requested coefficients"), identical(names(coef(fit)), terms))
-  check(paste(model_name, "TP absent from fitted coefficients and formula"),
+  check(paste(model_name, "single any-TP indicator absent from fitted coefficients and formula"),
     !"tp_school" %in% names(coef(fit)) && !"tp_school" %in% all.vars(fit$call$formula))
   check(paste(model_name, "finite coefficients and student-cluster SEs"),
     all(is.finite(coef(fit))) && all(is.finite(vcov(fit))) && all(diag(vcov(fit)) > 0))

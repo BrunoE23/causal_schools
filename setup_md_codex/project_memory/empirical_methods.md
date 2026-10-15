@@ -6,13 +6,15 @@ Estimate the exact Plackett-Luce ordering likelihood conditional on each
 student's submitted RBD set. The initial two specifications include four
 current pooled EB VAs simultaneously (math, exam taking, high-premium field
 and high-premium institution) and log(1+Haversine km), using published
-student points or home-comuna centers. On 2026-10-15 the user removed the
-previously added TP indicator from every pooled and subgroup model. Current
-models contain exactly four VAs and distance. Retain TP only as descriptive
-metadata from 2024 Directorio ENS codes410,510,610,710,810 (mixed schools
-included, pure artistic schools excluded). TP does not define eligibility;
-removing it changes no rows because all schools were classified. Both
-distance versions retain actual campuses.
+student points or home-comuna centers. The latest2026-10-15 user request adds
+two separate school-type indicators, mixed HC/TP and TP-only, to every pooled
+and subgroup model. Use regular HC code310 and TP codes410/510/610/710/810
+from the fixed2024 Directorio. Mixed offers both; TP-only offers TP withoutHC.
+Indicators are raw0/1, not standardized; the single any-TP flag is metadata.
+The omitted category is non-TP:1557HC-only,1artistic and16other/no-regular-
+secondary schools on the2501-school support. Preserve these alternatives and
+the exact sample; do not impose2024 activity restrictions on historical lists.
+Both distance versions retain actual campuses.
 Use the Table 2 applicant roster, retain genuine priority choices, exclude
 auto-continuity alternatives, collapse RBD to its first submitted program,
 and exclude an entire ranking if any regressor is missing. Single-school
