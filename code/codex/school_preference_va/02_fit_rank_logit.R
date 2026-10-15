@@ -11,7 +11,7 @@ check("one ranking per paper pupil", uniqueN(d$mrun) == uniqueN(d$ranking_id))
 check("unique student-school alternatives", !anyDuplicated(d[, .(ranking_id, rbd)]))
 check("both distance definitions complete", all(is.finite(d$log1p_distance_main)) && all(is.finite(d$log1p_distance_comuna)))
 check("all selected VA terms complete", all(is.finite(as.matrix(d[, ..va_terms]))))
-check("TP school indicator observed and binary", all(d$tp_school %in% 0:1))
+check("requested model excludes TP and other additional controls", identical(model_static_terms, va_terms))
 
 # One observation per unique destination school in this common estimation sample.
 schools <- unique(d[, c("rbd", va_terms), with = FALSE], by = "rbd")
@@ -67,7 +67,7 @@ for (name in names(distance_vars)) {
   attr(fit, "preference_model") <- list(model = name, distance = dist, likelihood = "conditional submitted-set Plackett-Luce",
     normalization = "equal-weight unique destination schools in common final sample", cluster = "mrun",
     estimation_data = input, normalization_file = file.path(clean_dir, "va_normalization.csv"),
-    controls = controls, tp_definition = "Paper 2024 school-level TP classification, mixed schools included")
+    controls = controls, specification = "Four standardized EB VAs and logged distance; TP excluded")
   # Store the actual formula, not the mutable loop symbol fml, in the saved call.
   fit$call$formula <- fml
   saveRDS(fit, file.path(clean_dir, "models", paste0(name, ".rds")))

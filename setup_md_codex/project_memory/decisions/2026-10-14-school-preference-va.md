@@ -189,3 +189,48 @@ distances. Main distance slopes are negative throughout; comuna distance is
 near zero and not distinguished from zero in the voluntary groups
 (.015511, SE.025276; .019703, SE.028660). These are sensitivity results for
 the existing location definitions, not evidence of a preference for travel.
+
+## TP removal requested after subgroup results (2026-10-15)
+
+The user asked to remove TP again. This supersedes the TP addition above:
+all active pooled and four-group models now include only the four normalized
+VAs and log1p distance, five coefficients in each model. Retain both distance
+versions, exact submitted-list likelihood, full-list eligibility and
+student-clustered covariance. TP is neither a regressor nor an eligibility
+requirement. Retain its school classification in existing data as metadata.
+
+Preserve the existing sample and pooled VA parameters unchanged. All original
+destination schools already have a TP classification, so removing its old
+completeness condition changes no list. Reuse the existing inputs instead
+of rereading raw SAE files or reconstructing VAs. The builder is updated so
+future reconstruction also omits TP from eligibility. Archive all prior TP
+fits, their estimation inputs, normalization, covariance/diagnostics and
+aggregate reports under data/clean/school_preference_va/archive/
+four_va_with_tp_2026_10_15, with copy hashes and a manifest. Original sources
+and individual submitted lists are unchanged.
+
+The two pooled and eight subgroup fits are re-estimated; current reports
+and tables replace their TP versions at the existing paths. Validation now
+explicitly checks that TP is absent from fitted formulas and all coefficient
+exports, alongside unchanged sample/normalization, exact PL likelihood and
+expanded conditional-logit coefficients and clustered covariance.
+
+All ten no-TP fits converge in three iterations. Both pooled and subgroup
+estimation inputs and normalization are byte-identical to the archived TP
+run; cached whole-list eligibility equals eligibility computed ignoring TP.
+The pooled verifier passes59 checks and subgroup verifier187, including
+explicit absence of TP in every model formula and coefficient set. Expanded
+coefficient/covariance maximum errors are below1.1e-15; independent full PL
+likelihood maximum errors are2.80e-7 pooled and4.82e-8 grouped.
+
+Current pooled main estimates (student-clustered SEs): math.015557(.001824),
+exam-.018020(.001923), field.057109(.001393), institution-.008186(.002951),
+log distance-.181531(.003119). The main four-group math slopes are
+.025291/-.006499/.045723/.023898, exam slopes.027173/-.044080/.016557/-.001987,
+field slopes.061484/.054992/.056016/.054956, institution slopes
+-.019587/-.028795/.045248/.049206 (ending non-prioritario, ending prioritario,
+voluntary non-prioritario, voluntary prioritario). Exam-taking slopes are
+not distinguished from zero at5% for either voluntary group. Institution VA
+remains positive for both voluntary groups and negative for both ending
+groups. Field slopes are positive throughout. These are conditional
+associations; no cross-group equality test or causal interpretation is added.

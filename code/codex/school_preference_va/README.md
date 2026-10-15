@@ -1,8 +1,8 @@
 # School preferences and four-dimensional EB value added
 
 The current user specification is math, exam-taking, high-premium-field and
-high-premium-institution VA, entered jointly with a TP-school binary and
-log(1+distance in km).
+high-premium-institution VA, entered jointly with log(1+distance in km).
+The 2026-10-15 request removes TP from the pooled and subgroup regressions.
 Estimate two versions: published student coordinates and home-comuna centers.
 School-campus coordinates, ranking sample and VA normalization are identical
 between the two models. The requested priority-by-continuation splits are
@@ -37,7 +37,7 @@ program's campus. The full data have 1,007,253 student-school pairs. Flag the
 This school-level aggregation was explicitly selected by the user.
 
 Keep all original lists in the full data with coverage and eligibility flags.
-Estimate only whole lists with all four selected VAs, an observed TP indicator, both finite distances,
+Estimate only whole lists with all four selected VAs, both finite distances,
 and at least two distinct schools. A missing alternative excludes the entire
 list. Single-school lists have likelihood one and provide no ordering signal.
 Coverage and normalization are recomputed for the selected four VAs; they
@@ -61,7 +61,7 @@ years. Each school has equal normalization weight; list length/application
 frequency do not determine moments. Save means/SDs and reuse them unchanged
 in both models. Preserve raw EB values alongside normalized regressors.
 
-## Tecnico Profesional indicator
+## Retained Tecnico Profesional metadata
 
 tp_school is a raw, unstandardized 0/1 school-level indicator constructed from
 any ENS code in {410,510,610,710,810} in the raw 2024 Directorio. The builder
@@ -74,8 +74,10 @@ student's particular grade-9 program or eventual track is TP. It is a fixed
 2024 classification, consistent with the prior paper tables, rather than a
 claim about every school's offerings in its application year.
 
-The indicator is added to both joint models without changing VA units.
-tp_coverage.csv records coverage and any whole-list attrition; the direct
+The indicator is retained as metadata but no longer enters any current model
+or defines eligibility. All original schools are classified, so removing the
+TP regressor preserves the estimation sample and VA normalization exactly.
+tp_coverage.csv records descriptive coverage; the direct
 directory comparison is saved as tp_directory_verification.csv. Missing TP
 values are never implicitly zero-coded. In the existing estimation sample,
 all 2501 schools are classified, 927 are TP, and 690 of those are mixed HC/TP.
@@ -110,7 +112,7 @@ the risk set is exactly the remaining listed schools. Unique ranks imply no
 within-stratum event-time ties, so ties='breslow' is the exact specified
 Plackett-Luce likelihood. The final singleton factor is one.
 
-Four normalized VAs, the unstandardized TP binary, and one distance term enter: six coefficients,
+Four normalized VAs and one distance term enter: five coefficients,
 no intercept, school fixed effects, peer controls or unlisted alternatives.
 The sandwich covariance clusters full ranking scores by student. Inference
 conditions on existing EB estimates and does not propagate their estimation
@@ -146,7 +148,29 @@ clean-data archive/seven_va_initial folder and is not the reported model.
 Methods decision: setup_md_codex/project_memory/decisions/
 2026-10-14-school-preference-va.md.
 
-## Completed four-VA plus TP run
+## Current four-VA run without TP
+
+Removing TP preserves the estimation data and normalization byte for byte.
+All ten pooled/subgroup fits converge in three iterations with five terms.
+The pooled main slopes (student-clustered SEs) are math0.0156(0.0018),
+exam taking-0.0180(0.0019), field0.0571(0.0014), institution-0.0082(0.0030)
+and log distance-0.1815(0.0031). The pooled sample remains276193 rankings,
+985285 school pairs and2501 schools. Pooled validation passes59 checks;
+subgroup validation passes187, including explicit absence of TP from all
+formulas and coefficients. Expanded-logit coefficients and clustered
+covariances agree to machine precision; full likelihood errors are below3e-7.
+
+The school-ending prioritario subgroup has negative math/exam slopes;
+exam-taking VA is not distinguished from zero at5% in either voluntary
+group. Institution VA remains negative for ending groups and positive for
+voluntary groups; field VA remains positive in all four main fits. These
+are conditional ordering associations.
+
+## Archived four-VA plus TP run (superseded)
+
+The following historical results are preserved in the ignored clean-data
+archive/four_va_with_tp_2026_10_15 folder, with a manifest, fitted models,
+their estimation inputs and aggregate reports. Active outputs omit TP.
 
 Both distance versions use 276,193 rankings, 985,285 school pairs and 2,501
 destination schools. Recomputed four-VA coverage retains 292,887 of 294,198
@@ -172,7 +196,7 @@ are below 5e-7. The report also includes all data-build and convergence checks.
 
 ## Prioritario by continuation groups (2026-10-15)
 
-The subsequent request fits the same six-regressor joint model separately
+The subsequent request fits the same five-regressor joint model separately
 for prioritario/non-prioritario crossed with school-ending/voluntary
 application. Run after the pooled data construction:
 
@@ -200,7 +224,7 @@ Singleton and missing-regressor losses are recorded by group and year.
 
 Reuse the pooled four-VA standardized columns without restandardizing on
 group-specific school support. Save an identical copy of the pooled mean/SD
-parameters. Whole-list eligibility, TP coding, both geographic definitions,
+parameters. Whole-list eligibility, both geographic definitions,
 and student-clustered inference are unchanged. Estimate both distances
 within every group, with identical applicants and lists. Separate logits
 normalize unobserved utility errors separately, so cross-group coefficient
@@ -219,12 +243,8 @@ Four-column table fragments: output/tables/school_preference_va/
 by_priority_continuation_main.tex and by_priority_continuation_municipality.tex;
 the combined numeric/display table is by_priority_continuation.csv.
 
-All eight subgroup fits converge in three iterations, with all six terms
-identified. The 177 independent checks pass: full-sample PL likelihood error
-is below 7e-8, and validation coefficients/student-clustered covariances agree
-with the expanded conditional logit to machine precision. Institution-VA main
-coefficients are -0.0250/-0.0444 for ending non-prioritario/prioritario and
-0.0461/0.0425 for voluntary non-prioritario/prioritario. All four VA and TP
-signs persist with comuna distances. The distance slope is negative in every
-main fit; its comuna-based counterpart is not statistically distinguished
-from zero in either voluntary group.
+Every current model omits TP. The previous subgroup models with TP are
+preserved in the same dated archive as the pooled models. The current
+estimation inputs and fixed normalization are identical to that archived run;
+only the regression specification changes. Current estimates and validation
+results are generated in the active tables and report.

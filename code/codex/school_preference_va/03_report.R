@@ -5,7 +5,6 @@ coef_dt <- read_clean("coefficients.csv")
 samples <- read_clean("model_summary.csv")
 flow <- read_clean("sample_flow.csv")
 coverage <- read_clean("va_coverage.csv")
-tp_coverage <- read_clean("tp_coverage.csv")
 normalization <- read_clean("va_normalization.csv")
 geo <- read_clean("geography_coverage.csv")
 quality <- read_clean("geography_quality.csv")
@@ -18,6 +17,8 @@ audit <- read_clean("ranking_audit.csv")
 geo_notes <- readLines(file.path(clean_dir, "geography_notes.txt"), warn = FALSE)
 
 n_coefficients <- length(model_static_terms) + 1L
+check("Reported specification contains only four VA measures and distance",
+  identical(model_static_terms, va_terms) && length(va_terms) == 4L && length(controls) == 0L)
 check("Report contains exactly two joint models", setequal(unique(coef_dt$model), names(distance_vars)) &&
   nrow(coef_dt) == length(distance_vars) * n_coefficients)
 for (name in names(distance_vars)) {
@@ -34,7 +35,7 @@ f4 <- function(x) formatC(x, digits = 4L, format = "f", big.mark = ",")
 pct <- function(x) paste0(formatC(100 * x, digits = 2L, format = "f"), "%")
 coef_cell <- function(b, se) paste0(f4(b), " (", f4(se), ")")
 regression <- data.table(row_type = "coefficient",
-  regressor = c(specs$label, unname(control_labels[controls]), "log(1 + distance in km)"))
+  regressor = c(specs$label, "log(1 + distance in km)"))
 for (name in names(distance_vars)) {
   terms <- c(model_static_terms, distance_vars[[name]])
   x <- coef_dt[model == name][match(terms, term)]
@@ -71,10 +72,9 @@ tex <- c(paste0(bs, "begin{table}[!htbp]"), paste0(bs, "centering"),
   paste0(bs, "midrule"), tex_rows, paste0(bs, "bottomrule"), paste0(bs, "end{tabular}"),
   paste0(bs, "par", bs, "smallskip"), paste0(bs, "begin{minipage}{0.98", bs, "linewidth}", bs, "footnotesize"),
   paste0(bs, "textit{Notes:} Joint rank-ordered logit conditional on each student's submitted schools. ",
-    "Four selected VA measures, a Tecnico Profesional (TP) school indicator, and distance enter simultaneously. Coefficients are followed by ",
+    "Four selected VA measures and distance enter simultaneously. Coefficients are followed by ",
     "student-clustered standard errors in parentheses. VA is standardized with equal weight per unique destination ",
-    "school in the common pooled estimation sample. TP is a raw 0/1 school indicator, not standardized. ",
-    "It uses the paper's 2024 directory classification, includes mixed schools offering TP, and excludes artistic-only schools. ",
+    "school in the common pooled estimation sample. ",
     "Straight-line distance in kilometers enters as $", bs, "log(1+d)$. ",
     "The first column retains all published student locations, including municipality imputations; the second replaces ",
     "the student point with the home-comuna center. Both retain the same school-campus coordinates and complete rankings. ",
@@ -92,7 +92,7 @@ interpretation <- if (nrow(positive)) {
   paste0("The largest positive conditional VA coefficient is for ", top$label, ": ",
     f4(top$estimate), " (SE ", f4(top$std_error), "). A one-school-SD difference corresponds to ",
     f4(exp(top$estimate)), " times the relative odds of selecting that school next among the schools ",
-    "remaining in a submitted ranking, holding other VA dimensions, school TP status and distance fixed.")
+    "remaining in a submitted ranking, holding other VA dimensions and distance fixed.")
 } else "None of the selected VA dimensions has a positive conditional point estimate in the main model."
 other_positive <- positive[-1L]
 if (nrow(other_positive)) interpretation <- paste0(interpretation,
@@ -120,46 +120,28 @@ distance_comuna_b <- coef_dt[model == "municipality" & term == distance_vars[["m
 distance_text <- paste0("The distance coefficient is ", f4(distance_b), " with published student coordinates and ",
   f4(distance_comuna_b), " with home-comuna centers. In the main model greater distance is associated with ",
   if (distance_b < 0) "lower" else if (distance_b > 0) "higher" else "unchanged",
-  " relative ranking utility, conditional on the four VA measures and TP status.")
-tp_main <- coef_dt[model == "main" & term == "tp_school"]
-tp_alternative <- coef_dt[model == "municipality" & term == "tp_school"]
-tp_text <- paste0("The TP-school coefficient is ", f4(tp_main$estimate), " (SE ", f4(tp_main$std_error),
-  ") in the main model and ", f4(tp_alternative$estimate), " with home-comuna centers. ",
-  "The main estimate corresponds to ", f4(exp(tp_main$estimate)),
-  " times the conditional relative odds for a TP school versus a school without the TP flag, ",
-  "holding the four VA measures and distance fixed. This school-type comparison is an association, not a causal TP effect.")
+  " relative ranking utility, conditional on the four VA measures.")
 
 all_flow <- flow[sae_proceso == "All"][order(stage_order)]
 stage_n <- function(stage_name) all_flow[stage == stage_name, rankings]
 n_all <- stage_n("all_submitted")
 n_informative <- stage_n("two_or_more_schools")
 n_selected <- stage_n("all_selected_va")
-n_tp <- stage_n("all_selected_va_and_tp")
 n_final <- stage_n("shared_main_and_comuna_distance")
 coverage_text <- paste0("The paper roster contains ", fmt_n(n_all), " submitted student rankings. ",
   fmt_n(n_all - n_informative), " contain only one distinct school and provide no ranking information. ",
   "Requiring all four selected VAs for every submitted school removes ", fmt_n(n_informative - n_selected), " of the ",
   fmt_n(n_informative), " informative lists (", pct((n_informative - n_selected) / n_informative),
-  "). Requiring a known TP classification removes ", fmt_n(n_selected - n_tp), " additional informative lists. ",
-  "The common final sample contains ", fmt_n(n_final), " rankings. Any missing selected VA, TP classification or required distance ",
+  "). The common final sample contains ", fmt_n(n_final), " rankings. Any missing selected VA or required distance ",
   "excludes the entire list; unavailable alternatives never silently disappear from retained lists.")
 renamed <- function(x, labels) { setnames(x, labels); x }
 coverage_display <- renamed(coverage[sae_proceso == "All", .(dimension, fmt_n(covered_school_pairs),
   pct(covered_school_pairs / school_pairs), fmt_n(covered_schools), fmt_n(complete_rankings), pct(complete_ranking_share))],
   c("Dimension", "Covered student-school pairs", "Pair coverage", "Covered schools", "Complete submitted lists", "Complete-list coverage"))
-flow_display <- renamed(flow[, .(sae_proceso, stage, fmt_n(rankings), fmt_n(school_pairs), fmt_n(unique_schools), pct(share_of_roster))],
+flow_display <- renamed(flow[stage != "all_selected_va_and_tp", .(sae_proceso, stage, fmt_n(rankings), fmt_n(school_pairs), fmt_n(unique_schools), pct(share_of_roster))],
   c("Year", "Stage", "Rankings", "Student-school pairs", "Schools", "Roster share"))
 normalization_display <- renamed(normalization[, .(label, f4(reference_mean), f4(reference_sd), fmt_n(n_reference_schools))],
   c("Dimension", "Reference mean", "Reference SD", "Reference schools"))
-tp_display <- renamed(tp_coverage[sae_proceso == "All", .(population, fmt_n(rankings), pct(complete_tp_ranking_share),
-  fmt_n(classified_school_pairs), fmt_n(missing_school_pairs), fmt_n(tp_school_pairs),
-  fmt_n(classified_schools), fmt_n(tp_schools))], c("Population", "Rankings", "Complete TP lists",
-  "Classified student-school pairs", "Unclassified pairs", "TP pairs", "Classified schools", "TP schools"))
-tp_final <- tp_coverage[sae_proceso == "All" & population == "Final estimation rankings"]
-tp_sample_text <- paste0("In the final estimation sample, ", fmt_n(tp_final$tp_schools), " of ",
-  fmt_n(tp_final$unique_schools), " destination schools (", pct(tp_final$tp_schools / tp_final$unique_schools),
-  ") offer TP. They account for ", fmt_n(tp_final$tp_school_pairs), " of ", fmt_n(tp_final$school_pairs),
-  " submitted student-school pairs (", pct(tp_final$tp_school_pairs / tp_final$school_pairs), ").")
 geo_display <- renamed(geo[, .(sae_proceso, fmt_n(program_rows), fmt_n(applicant_years),
   pct(student_coordinates_valid / program_rows), pct(school_coordinates_valid / program_rows),
   pct(home_comuna_centers_matched / program_rows), f4(main_distance_median_km), f4(main_distance_p99_km), f4(main_distance_max_km))],
@@ -227,12 +209,12 @@ html <- paste0('<!doctype html><html lang="en"><head><meta charset="utf-8">',
   '.regression tbody tr:nth-child(', n_coefficients + 1L, ') td{border-top:2px solid #7a8794}</style></head><body><main>',
   '<h1>Do families rank more effective schools higher?</h1>',
   '<p class="muted">Joint rank-ordered logit of submitted SAE school rankings, 2018-2020. Four existing ',
-  'Empirical Bayes VA measures, a TP school indicator and distance enter together.</p><div class="regression">',
+  'Empirical Bayes VA measures and distance enter together.</p><div class="regression">',
   html_table(regression_display), '</div><p class="notes">Coefficients with student-clustered standard errors in parentheses, ',
   'shown to four decimals. Both columns use identical students, schools and VA normalization. The main model retains ',
   'every published student-coordinate quality code, including municipality imputations. Both distances enter as log(1 + kilometers).</p>',
   '<h2>Interpretation</h2><p>', esc_html(interpretation), '</p><p>', esc_html(negative_text), ' ',
-  esc_html(distance_text), '</p><p>', esc_html(sensitivity), '</p><p>', esc_html(tp_text), '</p>',
+  esc_html(distance_text), '</p><p>', esc_html(sensitivity), '</p>',
   '<p>These are conditional associations with submitted ordering. They do not establish that families observe or causally ',
   'respond to VA; unmeasured school attributes may account for the associations. The model does not explain which schools enter a portfolio.</p>',
   '<h2>Sample and missing data</h2><p>', esc_html(coverage_text), '</p>', html_table(coverage_display),
@@ -245,10 +227,6 @@ html <- paste0('<!doctype html><html lang="en"><head><meta charset="utf-8">',
   '(N-1 denominator) across unique destination schools in the final common sample. Each school has equal normalization weight, ',
   'independently of application frequency or list length. Both models and every application year use the same indices and moments. ',
   'No VA is re-estimated or imputed.</p>', html_table(normalization_display),
-  '<p>The TP regressor is the paper\'s 2024 directory-based school indicator. It includes mixed schools offering TP ',
-  'and excludes artistic-only schools. It describes the school\'s offering, not the individual student\'s curricular track. ',
-  'Its values remain zero and one; only the four VA indices are standardized.</p>',
-  '<p>', esc_html(tp_sample_text), '</p>', html_table(tp_display),
   '<p>The existing source populations differ: math VA uses the observed-score sample; high-premium-institution and ',
   'high-premium-field VAs use exam takers; exam-taking VA uses the broad complete-control sample. These definitions ',
   'are preserved. Raw math VA uses within-exam-year outcome SDs; the three binary-outcome VAs use probability units. ',
@@ -268,7 +246,7 @@ html <- paste0('<!doctype html><html lang="en"><head><meta charset="utf-8">',
   'over schools remaining in that submitted list. The final singleton factor is one. A stratified Cox representation with ',
   'unique event ranks evaluates this exact likelihood. Expanded conditional logit independently verifies coefficients, ',
   'likelihood and student-cluster covariance on complete validation rankings. There is no intercept, school fixed effect, ',
-  'outside option or unlisted alternative. The four VA measures, TP indicator and distance are the complete specification. ',
+  'outside option or unlisted alternative. The four VA measures and distance are the complete specification. ',
   'The only sensitivity fit replaces student points with home-comuna centers.</p>',
   '<h2>Reusable outputs</h2>', downloads,
   '<p class="notes">Run scripts in code/codex/school_preference_va from the repository root in this order: ',

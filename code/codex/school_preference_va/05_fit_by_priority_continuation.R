@@ -80,7 +80,7 @@ check("one complete ranking per student", uniqueN(d$mrun) == uniqueN(d$ranking_i
 check("four groups all available", setequal(unique(d$group), definitions$group))
 check("both distance definitions and static regressors finite", all(vapply(
   d[, c(model_static_terms, unname(distance_vars)), with = FALSE], function(z) all(is.finite(z)), logical(1))))
-check("TP binary preserved", all(d$tp_school %in% 0:1))
+check("requested model excludes TP and other additional controls", identical(model_static_terms, va_terms))
 saveRDS(d, file.path(subgroup_dir, "estimation_data.rds"))
 check("copy pooled normalization parameters unchanged", file.copy(normalization_path,
   file.path(subgroup_dir, "va_normalization.csv"), overwrite = TRUE))
@@ -114,7 +114,7 @@ for (g in definitions$group) {
       control = coxph.control(iter.max = 60L, eps = 1e-10)),
       warning = function(w) { warnings <<- c(warnings, conditionMessage(w)); invokeRestart("muffleWarning") }))[["elapsed"]]
     check(paste(key, "no fitting warnings"), !length(warnings), paste(warnings, collapse = "; "))
-    check(paste(key, "all six requested coefficients retained"), identical(names(coef(fit)), terms))
+    check(paste(key, "all requested coefficients retained"), identical(names(coef(fit)), terms))
     check(paste(key, "finite coefficients and student-cluster covariance"),
       all(is.finite(coef(fit))) && all(is.finite(vcov(fit))) && all(diag(vcov(fit)) > 0) && !is.null(fit$naive.var))
     check(paste(key, "no row deletion"), fit$n == nrow(x) && is.null(fit$na.action))
@@ -142,7 +142,7 @@ for (g in definitions$group) {
       normalization_file = file.path(subgroup_dir, "va_normalization.csv"), controls = controls,
       estimation_data = file.path(subgroup_dir, "estimation_data.rds"),
       group_definitions = file.path(subgroup_dir, "group_definitions.csv"),
-      tp_definition = "2024 Directorio school-level TP availability, mixed schools included")
+      specification = "Four standardized EB VAs and logged distance; TP excluded")
     fit$call$formula <- fml
     saveRDS(fit, file.path(subgroup_dir, "models", paste0(key, ".rds")))
     b <- as.numeric(coef(fit)); se <- sqrt(diag(vcov(fit)))

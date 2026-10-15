@@ -135,13 +135,12 @@ list_coverage <- schools[, .(list_all_selected_va = all(all_selected_va),
   list_comuna_distance_observed = all(comuna_distance_observed)), by = ranking_id]
 roster <- merge(roster, list_coverage, by = "ranking_id", sort = FALSE)
 roster[, at_least_two_schools := n_schools >= 2L]
-roster[, estimation_eligible := at_least_two_schools & list_all_selected_va & list_all_tp_observed &
+roster[, estimation_eligible := at_least_two_schools & list_all_selected_va &
   list_main_distance_observed & list_comuna_distance_observed]
 roster[, `:=`(eligible_estimation = estimation_eligible, list_complete_va = list_all_selected_va,
   list_complete_geography = list_main_distance_observed & list_comuna_distance_observed)]
 roster[, exclusion_reason := fcase(!at_least_two_schools, "single_school",
   !list_all_selected_va, "missing_any_va_in_submitted_list",
-  !list_all_tp_observed, "missing_tp_classification_in_submitted_list",
   !list_main_distance_observed, "missing_main_distance_in_submitted_list",
   !list_comuna_distance_observed, "missing_comuna_distance_in_submitted_list",
   default = "included")]
@@ -210,8 +209,7 @@ flow_for <- function(year) {
     all_submitted = rep(TRUE, nrow(z)),
     two_or_more_schools = z$at_least_two_schools,
     all_selected_va = z$at_least_two_schools & z$list_all_selected_va,
-    all_selected_va_and_tp = z$at_least_two_schools & z$list_all_selected_va & z$list_all_tp_observed,
-    main_distance = z$at_least_two_schools & z$list_all_selected_va & z$list_all_tp_observed & z$list_main_distance_observed,
+    main_distance = z$at_least_two_schools & z$list_all_selected_va & z$list_main_distance_observed,
     shared_main_and_comuna_distance = z$estimation_eligible)
   rbindlist(lapply(seq_along(stages), function(k) {
     ids <- z$ranking_id[stages[[k]]]

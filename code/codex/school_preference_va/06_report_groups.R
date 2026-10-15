@@ -17,6 +17,8 @@ headers <- c("School ends: non-prioritario", "School ends: prioritario",
 names(headers) <- groups
 terms <- c(model_static_terms, "distance")
 n_coefficients <- length(terms)
+check("Subgroup specification is four VAs and distance only", identical(model_static_terms, va_terms) &&
+  n_coefficients == 5L)
 check("Four requested groups have definitions", !anyDuplicated(definitions$group) &&
   all(groups %in% definitions$group))
 check("All eight subgroup models are available", nrow(samples) == 8L &&
@@ -54,7 +56,7 @@ pretty_numeric <- function(x) {
 # Keep numeric estimates and standard errors beside formatted cells for reuse.
 tables <- lapply(names(distance_vars), function(m) {
   x <- data.table(model = m, row_type = "coefficient", regressor = c(specs$label,
-    unname(control_labels[controls]), "log(1 + distance in km)"))
+    "log(1 + distance in km)"))
   stat <- data.table(model = m, row_type = "sample_statistic",
     regressor = c("Applicants", "Student-school pairs", "Destination schools", "Log likelihood"))
   for (g in groups) {
@@ -98,11 +100,11 @@ for (m in names(tables)) {
     paste0(bs, "par", bs, "smallskip"),
     paste0(bs, "begin{minipage}{0.98", bs, "linewidth}", bs, "footnotesize"),
     paste0(bs, "textit{Notes:} Separate joint rank-ordered logits of complete submitted school lists. ",
-      "Student-clustered standard errors are in parentheses. All four VA measures, TP status, and distance enter jointly. ",
+      "Student-clustered standard errors are in parentheses. All four VA measures and distance enter jointly. ",
       "VA retains the pooled model's equal-school normalization across 2,501 destination schools; it is not restandardized by group. ",
       "School ends denotes an origin school without an SAE offering above grade 8; voluntary denotes an origin offering grade 9. ",
       "These are application categories and do not require an eventual school move. Unresolved origins are excluded. ",
-      "TP is the 2024 school-level offering indicator, including mixed HC/TP schools. Distance is straight-line kilometers ",
+      "Distance is straight-line kilometers ",
       "and enters as $", bs, "log(1+d)$. The two distance specifications use identical samples within each group. ",
       "Any missing regressor excludes the entire ranking; singleton lists provide no ordering information. ",
       "Inference conditions on the existing EB VAs. Coefficients describe conditional ordering associations. ",
@@ -150,9 +152,11 @@ interpretation <- vapply(groups, function(g) {
   negatives <- a[estimate < 0]
   negative <- if (nrow(negatives)) paste0(" Negative conditional point estimates are ",
     paste0(negatives$label, " (", f4(negatives$estimate), ")", collapse = ", "), ".") else ""
-  tp <- coef_dt[group == g & model == "main" & term == "tp_school"]
-  paste0(headers[[g]], ": ", positive, negative, " The TP coefficient is ", f4(tp$estimate),
-    " (SE ", f4(tp$std_error), ").")
+  uncertain <- a[p_value > .05]
+  uncertainty <- if (nrow(uncertain)) paste0(" Not statistically distinguished from zero at the 5% level: ",
+    paste0(uncertain$label, " (", f4(uncertain$estimate), ", SE ", f4(uncertain$std_error), ")",
+      collapse = "; "), ".") else ""
+  paste0(headers[[g]], ": ", positive, negative, uncertainty)
 }, character(1))
 sign_patterns <- vapply(va_terms, function(v) {
   a <- coef_dt[model == "main" & term == v][match(groups, group)]
@@ -170,7 +174,7 @@ all_positive <- coef_dt[model == "main" & term %in% va_terms,
   .(positive_in_every_group = all(estimate > 0)), by = term][positive_in_every_group == TRUE, term]
 if (length(all_positive)) sign_patterns <- c(sign_patterns, paste0(
   paste(specs$label[match(all_positive, specs$standardized)], collapse = ", "),
-  " have positive point estimates in all four main fits."))
+  if (length(all_positive) == 1L) " has" else " have", " positive point estimates in all four main fits."))
 sensitivity <- rbindlist(lapply(groups, function(g) {
   a <- coef_dt[group == g & model == "main" & term %in% va_terms][match(va_terms, term)]
   b <- coef_dt[group == g & model == "municipality" & term %in% va_terms][match(va_terms, term)]
@@ -184,19 +188,21 @@ main_static <- coef_dt[model == "main" & term %in% model_static_terms, .(group, 
 comuna_static <- coef_dt[model == "municipality" & term %in% model_static_terms, .(group, term, comuna_estimate = estimate)]
 static_comparison <- merge(main_static, comuna_static, by = c("group", "term"))
 static_sign_text <- if (all(sign(static_comparison$main_estimate) == sign(static_comparison$comuna_estimate)))
-  "All four VA signs and the TP sign persist in every group when using home-comuna centers." else
-  "Some VA or TP signs change when using home-comuna centers; the complete estimates are reported above."
+  "All four VA signs persist in every group when using home-comuna centers." else
+  "Some VA signs change when using home-comuna centers; the complete estimates are reported above."
 weak_distance <- coef_dt[model == "municipality" & term == distance_vars[["municipality"]] & p_value > .05]
 weak_distance_text <- if (nrow(weak_distance)) paste0(
   " Comuna-distance estimates are not statistically distinguished from zero at the 5% level for ",
   paste0(headers[weak_distance$group], " (", f4(weak_distance$estimate), ", SE ",
     f4(weak_distance$std_error), ")", collapse = "; "),
-  ". Positive point estimates in these groups do not establish a preference for greater travel distance.") else ""
+  ".", if (any(weak_distance$estimate > 0))
+    " Positive point estimates in these groups do not establish a preference for greater travel distance." else "") else ""
 normalization_display <- normalization[, .(Dimension = label, Mean = f4(reference_mean),
   SD = f4(reference_sd), `Reference schools` = fmt_n(n_reference_schools))]
 definitions_display <- definitions[group %in% groups][match(groups, group), .(Group = label, Definition = definition)]
 diagnostics_text <- paste0("All ", fmt_n(nrow(verification)), " upstream checks passed. All ",
-  fmt_n(nrow(samples)), " fits retain all six coefficients; within each group, both distance specifications retain ",
+  fmt_n(nrow(samples)), " fits retain all ", n_coefficients,
+  " coefficients; within each group, both distance specifications retain ",
   "identical applicants and complete school lists. Model diagnostics below document convergence, within-ranking ",
   "identification and likelihood-information conditioning.")
 if ("iterations" %in% names(samples)) diagnostics_text <- paste0(diagnostics_text,
@@ -232,17 +238,17 @@ html <- paste0('<!doctype html><html lang="en"><head><meta charset="utf-8">',
   ') td{border-top:2px solid #7a8794}</style></head><body><main>',
   '<h1>School preferences by prioritario and continuation status</h1>',
   '<p class="muted">Separate joint rank-ordered logits for four groups of timely grade-9 SAE applicants, 2018-2020. ',
-  'Each model includes math, exam-taking, high-premium-field and high-premium-institution VA, TP status and distance.</p>',
+  'Each model includes math, exam-taking, high-premium-field and high-premium-institution VA and distance.</p>',
   '<h2>Main: published student coordinates</h2><div class="regression">', table_display("main"), '</div>',
   '<p class="notes">Coefficients with student-clustered standard errors in parentheses. VA units are fixed pooled ',
-  'school SDs; TP is a binary school-offering indicator; distance enters as log(1 + kilometers).</p>',
+  'school SDs; distance enters as log(1 + kilometers).</p>',
   '<h2>Robustness: home-comuna centroids</h2><div class="regression">', table_display("municipality"), '</div>',
   '<p class="notes">Every student location is replaced by the home-comuna center; actual school-campus coordinates ',
   'are retained. These models use the same applicants, complete rankings and VA normalization as the main models within each group.</p>',
   '<h2>Conditional preference patterns</h2>', paste0('<p>', esc_html(sign_patterns), '</p>', collapse = ''),
   paste0('<p>', esc_html(interpretation), '</p>', collapse = ''),
   '<p>These coefficients describe ordering associations among schools remaining in a submitted portfolio, holding the other ',
-  'five regressors fixed. They do not identify causal responses to effectiveness or explain which schools enter a portfolio. ',
+  'four regressors fixed. They do not identify causal responses to effectiveness or explain which schools enter a portfolio. ',
   'Separate logits normalize unobserved utility errors separately: differences in coefficients across groups may reflect ',
   'different error scales as well as different preferences. No formal cross-group equality tests are reported.</p>',
   '<h2>Sensitivity to municipality-based locations</h2>', html_table(sensitivity),
@@ -259,11 +265,10 @@ html <- paste0('<!doctype html><html lang="en"><head><meta charset="utf-8">',
   '<p>Singleton lists provide no ordering information. If any school in an informative list lacks a required regressor, ',
   'the entire ranking is excluded; retained lists are never shortened. Both distance specifications use identical complete rankings within each group.</p>',
   if (nrow(annual_display)) paste0('<details><summary>Sample flow by application year</summary>', html_table(annual_display), '</details>') else '',
-  '<h2>Fixed VA normalization and TP definition</h2>', html_table(normalization_display),
+  '<h2>Fixed VA normalization</h2>', html_table(normalization_display),
   '<p>The existing pooled 2017-2020 All-sample EB VAs are unchanged. Every group uses the same mean and sample SD ',
   'computed with equal weight across the 2,501 unique destination schools in the pooled estimation sample. ',
-  'There is no within-group restandardization. The TP flag uses the 2024 Directorio and includes mixed HC/TP schools; ',
-  'it describes the school offering rather than the applicant\'s eventual track. VA-estimation uncertainty is not propagated.</p>',
+  'There is no within-group restandardization. VA-estimation uncertainty is not propagated.</p>',
   '<h2>Diagnostics and verification</h2><p>', esc_html(diagnostics_text), '</p>', html_table(pretty_numeric(conditions)),
   '<details><summary>Fit sample sizes and optimizer summaries</summary>', html_table(pretty_numeric(samples)), '</details>',
   '<details><summary>Upstream validation checks</summary>', html_table(verification), '</details>',

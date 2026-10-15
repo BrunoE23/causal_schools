@@ -6,17 +6,19 @@ The approved initial demand extension uses all 294198 Table 2 timely grade-9
 applicants (2018-2020), not only those with assignment risk. Two exact joint
 rank-ordered logits condition on submitted schools: standardized current paper
 EB VAs for math, exam taking, high-premium field and high-premium institution,
-plus a raw TP-school indicator and logged student-to-campus distance, with published coordinates
+plus logged student-to-campus distance, with published coordinates
 or home-comuna centers. Use raw C1 genuine submitted choices, retain priority
 applications, collapse each RBD to its first submitted program/campus, and
 exclude incomplete rankings intact. Recompute coverage and normalization for
 the selected four VAs. Code/clean data/table/report use task
 name school_preference_va. Final four-VA sample: 276193 rankings, 985285 pairs,
-2501 schools; no geography or TP loss. TP comes directly from 2024 Directorio
-ENS codes and includes mixed HC/TP schools. Main slopes are positive for
-math, exam taking, field and TP, and negative for institution, with the same
-signs under comuna distances. Adding TP flips the exam-VA coefficient from
-negative to positive relative to the saved no-TP model. These are
+2501 schools; no geography loss. On 2026-10-15 Bruno removed TP again from
+every pooled and subgroup regression. TP remains descriptive metadata from
+the 2024 Directorio but neither enters utility nor defines eligibility.
+The sample and normalization are unchanged. Current pooled main slopes are
+positive for math and field, negative for exam taking and institution, with
+the same signs under comuna distances. Prior TP fits and reports are archived
+under archive/four_va_with_tp_2026_10_15 in the task's clean-data area. These are
 within-submitted-set associations. See `decisions/2026-10-14-school-preference-va.md`
 and the task README for exact normalization, geography and inference.
 
@@ -29,7 +31,9 @@ the pooled VA normalization. Unresolved origins are excluded, not assigned to
 the voluntary group. Report: school_preference_va/by_priority_continuation.html;
 the source task adds scripts05/07/06. Main institution-VA coefficients are
 negative in both school-ending groups and positive in both voluntary groups;
-math, exam, field and TP slopes are positive throughout. These are conditional
+field slopes are positive throughout. Without TP, the school-ending prioritario
+group has negative math and exam coefficients; exam coefficients in both
+voluntary groups are not distinguished from zero at5%. These are conditional
 ordering associations, and separate-logit scales need not be identical.
 
 ## Directory-only preschool entry and changes (2026-10-14)

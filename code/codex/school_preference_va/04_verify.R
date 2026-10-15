@@ -17,10 +17,14 @@ roster <- est[, .(alternatives = .N, students = uniqueN(mrun), years = uniqueN(s
 check("Every estimation ranking has at least two schools", all(roster$alternatives >= 2L))
 check("Rankings contain one student and process", all(roster$students == 1L & roster$years == 1L))
 check("Collapsed school ranks are consecutive", all(roster$consecutive))
-check("All VA, TP and distance regressors finite", all(vapply(est[, c(model_static_terms, distance_vars), with = FALSE],
+check("All VA and distance regressors finite", all(vapply(est[, c(model_static_terms, distance_vars), with = FALSE],
   function(z) all(is.finite(z)), logical(1))))
-check("TP indicator remains unstandardized binary", all(est$tp_school %in% c(0L, 1L)))
-check("TP indicator constant within destination school", all(est[, uniqueN(tp_school), by = rbd]$V1 == 1L))
+check("Requested specification contains four VAs and no TP regressor",
+  identical(model_static_terms, va_terms) && !"tp_school" %in% model_static_terms)
+if ("tp_school" %in% names(est)) {
+  check("Retained TP metadata remains unstandardized binary", all(est$tp_school %in% c(0L, 1L)))
+  check("Retained TP metadata constant within destination school", all(est[, uniqueN(tp_school), by = rbd]$V1 == 1L))
+}
 check("Standardized VA constant by school across both specifications", all(est[,
   lapply(.SD, uniqueN), by = rbd, .SDcols = va_terms][, unlist(.SD), .SDcols = va_terms] == 1L))
 normalization <- fread(file.path(clean_dir, "va_normalization.csv"))
@@ -113,6 +117,8 @@ for (model_name in names(distance_vars)) {
   saved_models[[model_name]] <- fit
   check(paste(model_name, "saved object is coxph"), inherits(fit, "coxph"))
   check(paste(model_name, "all requested coefficients"), identical(names(coef(fit)), terms))
+  check(paste(model_name, "TP absent from fitted coefficients and formula"),
+    !"tp_school" %in% names(coef(fit)) && !"tp_school" %in% all.vars(fit$call$formula))
   check(paste(model_name, "finite coefficients and student-cluster SEs"),
     all(is.finite(coef(fit))) && all(is.finite(vcov(fit))) && all(diag(vcov(fit)) > 0))
   check(paste(model_name, "saved robust covariance is available"), !is.null(fit$naive.var))

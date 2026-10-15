@@ -6,12 +6,13 @@ Estimate the exact Plackett-Luce ordering likelihood conditional on each
 student's submitted RBD set. The initial two specifications include four
 current pooled EB VAs simultaneously (math, exam taking, high-premium field
 and high-premium institution) and log(1+Haversine km), using published
-student points or home-comuna centers. The user's subsequent TP addition
-enters as an unstandardized binary in both joint models, using the paper's
-2024 Directorio classification (regular TP offered, including mixed HC/TP;
-pure artistic schools excluded). The flag is constructed directly from ENS
-codes410,510,610,710,810 and verified against the paper's existing cached flag.
-This is school type, not individual track; both versions retain actual campuses.
+student points or home-comuna centers. On 2026-10-15 the user removed the
+previously added TP indicator from every pooled and subgroup model. Current
+models contain exactly four VAs and distance. Retain TP only as descriptive
+metadata from 2024 Directorio ENS codes410,510,610,710,810 (mixed schools
+included, pure artistic schools excluded). TP does not define eligibility;
+removing it changes no rows because all schools were classified. Both
+distance versions retain actual campuses.
 Use the Table 2 applicant roster, retain genuine priority choices, exclude
 auto-continuity alternatives, collapse RBD to its first submitted program,
 and exclude an entire ranking if any regressor is missing. Single-school
@@ -22,7 +23,7 @@ ranking, and cluster equals student; unique ranks make Breslow exact here.
 Inference conditions on existing EB estimates. No school fixed effects,
 unlisted alternatives or peer controls enter. On 2026-10-15 the user requested
 separate fits by low-income prioritario status crossed with origin-school
-continuation. Use the same four VAs, TP, both distances, whole-list restrictions
+continuation. Use the same four VAs, both distances, whole-list restrictions
 and unchanged pooled normalization in every group; exclude unresolved origins.
 Both assignment-risk statuses enter. Separate-logit coefficient differences
 may reflect utility-error scale as well as preferences.

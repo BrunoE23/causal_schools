@@ -37,8 +37,12 @@ check("All four groups and both models exported", nrow(summaries) == 8L &&
   setequal(summaries$model, names(distance_vars)))
 check("One diagnostic row per subgroup model", nrow(diagnostics) == 8L &&
   !anyDuplicated(diagnostics[, .(group, model)]))
-check("One coefficient row per requested subgroup model term", nrow(coefficients) == 48L &&
+expected_coefficient_rows <- length(group_order) * length(distance_vars) * (length(model_static_terms) + 1L)
+check("One coefficient row per requested subgroup model term", nrow(coefficients) == expected_coefficient_rows &&
   !anyDuplicated(coefficients[, .(group, model, term)]))
+check("Requested specification contains four VAs and no TP regressor",
+  identical(model_static_terms, va_terms) && !"tp_school" %in% model_static_terms)
+check("TP absent from exported subgroup coefficients", !"tp_school" %in% coefficients$term)
 
 # Reconstruct the classification from the existing paper sources, independently
 # of the estimation script. This also verifies unresolved origins are preserved
@@ -100,7 +104,9 @@ check("Entire submitted lists and all pooled regressors preserved without change
   isTRUE(all.equal(est[, ..shared], expected_rows[, ..shared], check.attributes = FALSE, tolerance = 0)))
 check("Roster sizes equal complete submitted list lengths", all(ranking_check$alternatives ==
   roster$n_schools[match(ranking_check$ranking_id, roster$ranking_id)]))
-check("TP remains an unstandardized observed binary", all(est$tp_school %in% 0:1))
+if ("tp_school" %in% names(est)) {
+  check("Retained TP metadata remains an unstandardized observed binary", all(est$tp_school %in% 0:1))
+}
 est[, event1 := 1L]
 
 direct_formula <- function(distance) as.formula(paste("Surv(rank_school, event1) ~",
@@ -163,6 +169,8 @@ for (group_name in group_order) {
     saved[[model_name]] <- fit
     check(paste(label, "saved coxph model with exactly requested terms"),
       inherits(fit, "coxph") && identical(names(coef(fit)), terms))
+    check(paste(label, "TP absent from fitted coefficients and formula"),
+      !"tp_school" %in% names(coef(fit)) && !"tp_school" %in% all.vars(fit$call$formula))
     check(paste(label, "student clustering and robust covariance"),
       !is.null(fit$naive.var) && identical(gsub("\\s", "", paste(deparse(fit$call$cluster), collapse = "")), "mrun"))
     check(paste(label, "finite coefficients and positive clustered variance"),
