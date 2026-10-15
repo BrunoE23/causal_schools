@@ -1211,3 +1211,15 @@ year-grade-student-school pairs; program rows and distinct student counts are
 also retained. No paper-sample age or observed-high-school restrictions or
 earliest-process selection apply. Counts summed over years represent
 applicant-years, not distinct people across all years.
+
+### SIMCE parent education in school preferences (2026-10-15)
+
+The preference extension adds average family parent-education years by RBD
+from the 2022 second-year-high-school SIMCE questionnaire to the four-VA plus
+PAES-M1 joint ranking model. It averages valid mother/father years within a
+family, then family values within school; it uses all available parent reports.
+The measure is post-application for SAE cohorts 2018-2020, so its preference
+coefficient is descriptive. Details, coding, sample, normalization, subgroup
+specification and reproducible scripts are in
+`decisions/2026-10-15-simce-parent-education-school-preferences.md` and
+`code/codex/school_preference_va/README.md`.

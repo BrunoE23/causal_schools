@@ -70,6 +70,63 @@ All26 protected original inputs/models/tables/reports remain byte-identical.
 The report generation passes162 additional consistency checks and exports
 the pooled and subgroup total slopes, raw coefficients and matched changes.
 
+## SIMCE parent-education preference extension (2026-10-15)
+
+Add school-average parent education from the 2022 second-year-high-school
+SIMCE parent questionnaire to the PAES-M1 joint preference model. This cohort
+provides direct destination-school RBDs and covers nearly all schools in the
+2018-2020 SAE destination support. The measure is observed after those choices,
+so its coefficient is a descriptive association and does not establish what
+families knew at application time.
+
+The parent file has one record per SIMCE student. `cpad_p04` reports mother (or
+father's partner) education and `cpad_p05` reports father (or mother's partner)
+education. Valid codes1-20 are converted to approximate years following the
+2022 questionnaire categories; empty,0,21 (don't know),99 (double mark) and
+other values are missing. For each family, average the available parent
+reports; then take the mean of family averages at each RBD. A family with one
+valid parent report contributes that one report. The school measure is
+standardized with equal weight per unique destination RBD in the final pooled
+sample. If any school in a submitted ranking lacks a mean, exclude the whole
+ranking; never shorten the submitted list.
+
+Run the build from the SIMCE2022 source directory because its Box path has an
+accented folder name that older R installations may not resolve from the
+project root. Adjust the two local paths below if the project or Box location
+differs:
+
+```powershell
+Push-Location -LiteralPath 'C:/Users/brunem/Box/causal_schools/data/raw/simce/Simce segundo medio 2022 - Versión privada'
+& 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' 'C:/Users/brunem/Research/causal_schools/code/codex/school_preference_va/19_build_parent_education_2022.R'
+Pop-Location
+& 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/school_preference_va/20_fit_parent_education_2022.R
+& 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/school_preference_va/22_verify_parent_education_2022.R
+& 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/school_preference_va/21_report_parent_education_2022.R
+```
+
+The extension adds six school attributes (four EB VAs, PAES M1 and parent
+education), both school-type indicators, all12 type-by-attribute interactions,
+and distance. Fit the extended model and a five-attribute model on the same
+sample, for the pooled sample and all four priority-by-continuation groups,
+using both student-coordinate and comuna-centroid distances. Inference clusters
+by student. Derived data, normalization, source manifest,20 fitted objects,
+covariances, sample flow, tables and checks are under
+`data/clean/school_preference_va/parent_education_2022/` and
+`output/tables/school_preference_va/parent_education_2022/`. The report is
+`output/reports/school_preference_va/parent_education_2022.html`.
+
+Current run: SIMCE2022 provides a valid mean for2,481 of2,483 PAES-M1
+destination schools. Whole-list filtering retains273,184 of273,516 applicants
+(969,377 applicant-school pairs). The school-level mean is11.6998 years and
+its equal-school standard deviation is1.4187 years. In the pooled model with
+published student coordinates, total parent-education slopes are
+-0.0390 (0.0046) for non-TP,-0.1075 (0.0072) for mixed HC/TP and-0.0679
+(0.0117) for TP-only schools. Average parent education correlates0.710 with
+PAES M1 across destination schools; the model includes both jointly. All20 fits
+converged in three iterations; independent verification and report checks
+passed. The main and comuna results, subgroup slopes and changes in existing
+attribute slopes are in the report and companion tables.
+
 ## Original four-VA specification and construction
 
 The preceding user specification is math, exam-taking, high-premium-field and

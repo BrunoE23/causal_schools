@@ -548,3 +548,16 @@ within the leadership family (or robustness subsample), with the same HC1 model
 and contemporary 2024 controls. These are descriptive, not causal quality scores.
 Full coding-break treatment, normalization and checks are in
 `decisions/2026-09-10-leadership-characteristics-va.md`.
+
+### SIMCE parent education in school-preference models (2026-10-15)
+
+Use the 2022 second-year-high-school SIMCE CPAD, map mother/father education
+responses to approximate years, average available parent years within each
+family and then average family values by destination RBD. Normalize equally
+across the final pooled destination-school support. Enter the attribute jointly
+with the four EB VAs and PAES M1, with type interactions, for all five applicant
+groups and both distance definitions. Exclude whole lists with any destination
+school missing the mean. As the survey postdates SAE choices in 2018-2020, this
+is descriptive preference association only. The complete conversion and
+inference record is in
+`decisions/2026-10-15-simce-parent-education-school-preferences.md`.
