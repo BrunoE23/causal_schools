@@ -348,3 +348,32 @@ all11932CDFjump points and80quantiles to floating-point precision(maxCDF
 error6.66e-16,maxquantile error4.88e-15). Combined and single-panel figures
 are visually inspected; four curves, exact artistic jumps and full tails
 remain visible. No preference regression or source VA is changed.
+
+## User correction: densities and no artistic schools (2026-10-15)
+
+The user clarified "not cdf" and then "drop artistic". Supersede the active
+figure with three overlapping enrollment-weighted Gaussian kernel densities
+per dimension:HC-only,mixedHC/TP,TP-only. Keep the prior input sample,
+weights and normalization for those types,2981schools/2232785all-grade
+pupils. This exclusion applies only to these plots; preference samples and
+mean tables remain unchanged. Retain prior CDF files as historical outputs.
+
+Normalize enrollment weights within type. Choose one common bandwidth per
+dimension from all three types pooled: .9*min(weighted populationSD,
+inverse-weighted-CDFIQR/1.34)*n_eff^(-1/5), n_eff=(sumw)^2/sum(w^2).
+This is a graphical smoothing rule, not an inferential sample adjustment.
+Bandwidths(math,exam,field,institution) are.228130787,.145071028,
+.166287866,.206372531. Evaluate direct Gaussian mixtures on4096gridpoints
+over the observed full support plus5bandwidths in each tail; do not trim
+schools or use FFT/binning approximations. Verify nonnegative,unit-area
+densities and shared bandwidths within panel, then inspect PNG/PDF exports.
+
+12_plot_va_densities.R writes the new combined PDF/PNG and individual PNGs,
+plus clean curve/bandwidth/diagnostic files. The active distribution report
+at va_distributions_by_school_type.html now shows and links the density plot.
+
+Independent audit matches all4bandwidths to5e-16 and selected direct-mixture
+grid values to4.83e-15 across12curves/49152gridpoints. Numerical areas are
+within2.36e-9of1 and agree with analytic finite-range Gaussian mass to1.36e-12.
+All six automated plotting checks pass. The combined density image is
+visually checked and the new densityPDF is shown through the app file panel.

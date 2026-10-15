@@ -348,3 +348,25 @@ reconstructs the preceding means/denominators and verifies all16curves
 are monotone with unit total enrollment mass. Figures are visually checked.
 An independent reconstruction matches all11932school-dimension records,
 16CDFs and80weighted quantiles to numerical precision.
+
+## Current density plots, excluding artistic schools
+
+The user corrected the requested figure to densities and dropped artistic
+schools. Run12_plot_va_densities.R after11 to reuse the saved school inputs.
+The active distribution report now displays three overlapping Gaussian KDEs
+per dimension. Retain HC-only,mixedHC/TP andTP-only:2981schools/2232785
+all-grade pupils. Nothing changes in the preference models or mean tables.
+
+Enrollment weights normalize to one within each type. A single bandwidth
+per dimension is shared by all three types, using the weighted Silverman
+rule .9*min(weightedSD,weightedIQR/1.34)*n_eff^(-1/5), where
+n_eff=(sumw)^2/sum(w^2). Shared bandwidths(math,exam,field,institution) are
+.228131,.145071,.166288,.206373. Direct Gaussian mixtures use4096grid
+points over the full observed support plus5bandwidths in each tail.
+Each curve integrates numerically to one; no data trimming occurs.
+
+Current PNG/PDF stem:output/figures/school_preference_va/
+enrollment_weighted_va_densities_by_school_type. Four individual PNGs use
+enrollment_weighted_va_density_<suffix>.png. Clean CSVs retain density
+points, bandwidths, diagnostics, manifest and checks. Earlier CDF exports
+remain available as historical outputs; the active report links the densityPDF.

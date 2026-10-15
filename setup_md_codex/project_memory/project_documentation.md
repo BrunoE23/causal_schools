@@ -57,6 +57,13 @@ Combined and individual figures are under output/figures/school_preference_va;
 report:school_preference_va/va_distributions_by_school_type.html. Raw curve
 points and inverse-CDF quantiles are saved in the task clean-data folder.
 
+The user then specified density plots and dropped artistic schools.
+12_plot_va_densities.R is the current plotting script: three overlapping
+enrollment-weighted Gaussian densities with a common bandwidth per dimension,
+using the same school VAs and weights. Active report unchanged in name;
+current figure stem is enrollment_weighted_va_densities_by_school_type.
+Artistic exclusion is limited to the density plots, not the demand models.
+
 ## Directory-only preschool entry and changes (2026-10-14)
 
 For the latest school-supply request Bruno explicitly says to ignore SAE years
