@@ -20,7 +20,12 @@ destination schools in the final shared estimation support and reuse those
 moments in both models. Cox event time equals school rank, stratum equals
 ranking, and cluster equals student; unique ranks make Breslow exact here.
 Inference conditions on existing EB estimates. No school fixed effects,
-unlisted alternatives, peer controls, or preference heterogeneity enter.
+unlisted alternatives or peer controls enter. On 2026-10-15 the user requested
+separate fits by low-income prioritario status crossed with origin-school
+continuation. Use the same four VAs, TP, both distances, whole-list restrictions
+and unchanged pooled normalization in every group; exclude unresolved origins.
+Both assignment-risk statuses enter. Separate-logit coefficient differences
+may reflect utility-error scale as well as preferences.
 See `decisions/2026-10-14-school-preference-va.md` for sources and validation.
 
 ## Main IV by origin-school continuation (2026-10-12)

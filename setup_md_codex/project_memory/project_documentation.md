@@ -20,6 +20,18 @@ negative to positive relative to the saved no-TP model. These are
 within-submitted-set associations. See `decisions/2026-10-14-school-preference-va.md`
 and the task README for exact normalization, geography and inference.
 
+The 2026-10-15 requested subgroup extension crosses regular-round B1 low-income
+prioritario status with the existing school-ending/voluntary application flags.
+The four estimation groups have 87407, 155028, 15363 and 13799 applicants
+(ending non-prioritario, ending prioritario, voluntary non-prioritario and
+voluntary prioritario). Both distance definitions retain identical lists and
+the pooled VA normalization. Unresolved origins are excluded, not assigned to
+the voluntary group. Report: school_preference_va/by_priority_continuation.html;
+the source task adds scripts05/07/06. Main institution-VA coefficients are
+negative in both school-ending groups and positive in both voluntary groups;
+math, exam, field and TP slopes are positive throughout. These are conditional
+ordering associations, and separate-logit scales need not be identical.
+
 ## Directory-only preschool entry and changes (2026-10-14)
 
 For the latest school-supply request Bruno explicitly says to ignore SAE years

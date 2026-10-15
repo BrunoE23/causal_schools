@@ -135,3 +135,57 @@ below4e-16/5e-17 and full-sample likelihood differences below5e-7.
 Code, derived data, tables and report use task name school_preference_va.
 Student-level data and fitted models remain in ignored clean data; commit
 only reproducible code, documentation and aggregate outputs.
+
+## Requested priority-by-continuation models (2026-10-15)
+
+The user subsequently requested four separate preference models: SAE
+prioritario/non-prioritario crossed with voluntary application/school ending.
+This authorizes this specific subgroup extension to the initial pooled scope.
+Keep the four selected VAs, TP binary, log1p distance and exact submitted-set
+likelihood unchanged. Carry both existing distance specifications into each
+group, using identical group samples across geographic definitions.
+
+Reuse sample/continuation_group in all_applicant_expected_va.rds and the
+existing regular-round B1 prioritario_sae_2018_2020.csv cache, unique on
+mrun/sae_proceso. Prioritario denotes low-income status, not a C1 sibling or
+incumbent priority. The school-ending group has no origin SAE offering above
+grade 8; voluntary origins offer grade 9. These are origin-continuation and
+application categories, not proof of motive or a realized school move. Include
+both lottery-risk and no-risk applicants. Exclude unresolved/other origins
+rather than classifying them arbitrarily.
+
+The four groups contain 289432 original applicants and 271597 pooled-eligible
+rankings, respectively 87407/155028/15363/13799 in school-ending non-prioritario,
+school-ending prioritario, voluntary non-prioritario and voluntary prioritario.
+Unresolved/other continuation accounts for 4766 originals and 4596 otherwise
+eligible rankings. Group and year accounting separates this exclusion from
+singleton and incomplete-list losses. No additional alternative-level or
+outcome-dependent restriction is imposed.
+
+Keep the pooled normalization across the same 2501 unique destination schools
+fixed in every subgroup; do not standardize on group support. Student-clustered
+SEs and the fixed 2024 Directorio TP definition are unchanged. Separate-logit
+coefficient comparisons can reflect differences in utility-error scale as
+well as preferences. No cross-group equality tests or extra controls are added.
+
+Scripts05/07/06 fit, independently verify and report these models under
+school_preference_va; all subgroup outputs use by_priority_continuation and
+leave the pooled outputs unchanged. Validation checks original membership,
+whole-list preservation, identical input regressors, the full PL likelihood
+and small-sample expanded conditional-logit coefficient/covariance equivalence
+for each group and each distance definition.
+
+All eight subgroup fits converge in three iterations without fitting
+warnings, retain all six coefficients, and have information condition
+numbers13.80-16.25. All177 independent checks pass. Expanded conditional-logit
+coefficient/covariance maximum discrepancies are7.22e-16/5.83e-16; full-sample
+independent PL likelihood maximum discrepancy is6.58e-8.
+
+The main institution-VA coefficient is negative for both ending groups
+(-.024988 non-prioritario, -.044411 prioritario), and positive for both
+voluntary groups (.046082/.042474). Math, exam, field and TP coefficients are
+positive in all four main models. All VA and TP signs persist with comuna
+distances. Main distance slopes are negative throughout; comuna distance is
+near zero and not distinguished from zero in the voluntary groups
+(.015511, SE.025276; .019703, SE.028660). These are sensitivity results for
+the existing location definitions, not evidence of a preference for travel.

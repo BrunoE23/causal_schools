@@ -5,7 +5,8 @@ high-premium-institution VA, entered jointly with a TP-school binary and
 log(1+distance in km).
 Estimate two versions: published student coordinates and home-comuna centers.
 School-campus coordinates, ranking sample and VA normalization are identical
-between the two models. No other demand specification is included.
+between the two models. The requested priority-by-continuation splits are
+documented below; no other demand specification is included.
 
 Run from the repository root:
 
@@ -168,3 +169,62 @@ pass. On 1,393 validation rankings
 rows), direct Cox and expanded conditional-logit coefficients/covariances
 agree to machine precision. Independent full-sample log likelihood errors
 are below 5e-7. The report also includes all data-build and convergence checks.
+
+## Prioritario by continuation groups (2026-10-15)
+
+The subsequent request fits the same six-regressor joint model separately
+for prioritario/non-prioritario crossed with school-ending/voluntary
+application. Run after the pooled data construction:
+
+```powershell
+& 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/school_preference_va/05_fit_by_priority_continuation.R
+& 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/school_preference_va/07_verify_groups.R
+& 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/school_preference_va/06_report_groups.R
+```
+
+Use the existing paper flags in all_applicant_expected_va.rds and the
+prioritario_sae_2018_2020.csv cache, joined uniquely by mrun/sae_proceso.
+Prioritario is the regular-round B1 low-income-priority flag, not sibling or
+incumbent application priority. School ending means no SAE offering above
+grade 8 at the year-end grade-8 origin; voluntary means that origin offers
+grade 9. These categories do not require an observed school move. Both
+assignment-risk statuses enter.
+
+The four groups cover 289,432 original applicants and 271,597 informative,
+complete rankings. Respectively, final counts are 87,407 school-ending
+non-prioritario, 155,028 school-ending prioritario, 15,363 voluntary
+non-prioritario and 13,799 voluntary prioritario. Exclude the unresolved/other
+continuation category: 4,766 original applicants, including 4,596 otherwise
+eligible rankings. Do not assign this category to a substantive group.
+Singleton and missing-regressor losses are recorded by group and year.
+
+Reuse the pooled four-VA standardized columns without restandardizing on
+group-specific school support. Save an identical copy of the pooled mean/SD
+parameters. Whole-list eligibility, TP coding, both geographic definitions,
+and student-clustered inference are unchanged. Estimate both distances
+within every group, with identical applicants and lists. Separate logits
+normalize unobserved utility errors separately, so cross-group coefficient
+differences can reflect scale as well as preferences.
+
+Derived data, membership roster, manifests, diagnostics, model objects and
+covariance matrices are saved under data/clean/school_preference_va/
+by_priority_continuation. Existing pooled data/results are unchanged.
+Independent verification checks membership and complete-list preservation,
+fixed normalization, exact PL likelihood, and expanded conditional-logit
+coefficient/student-clustered-covariance equivalence on small validation
+samples from every group and for both distance specifications.
+
+Readable report: output/reports/school_preference_va/by_priority_continuation.html.
+Four-column table fragments: output/tables/school_preference_va/
+by_priority_continuation_main.tex and by_priority_continuation_municipality.tex;
+the combined numeric/display table is by_priority_continuation.csv.
+
+All eight subgroup fits converge in three iterations, with all six terms
+identified. The 177 independent checks pass: full-sample PL likelihood error
+is below 7e-8, and validation coefficients/student-clustered covariances agree
+with the expanded conditional logit to machine precision. Institution-VA main
+coefficients are -0.0250/-0.0444 for ending non-prioritario/prioritario and
+0.0461/0.0425 for voluntary non-prioritario/prioritario. All four VA and TP
+signs persist with comuna distances. The distance slope is negative in every
+main fit; its comuna-based counterpart is not statistically distinguished
+from zero in either voluntary group.
