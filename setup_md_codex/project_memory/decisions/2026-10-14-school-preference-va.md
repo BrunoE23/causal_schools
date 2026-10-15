@@ -318,3 +318,33 @@ Code10_average_va_by_school_type.R writes clean results, coverage and source
 manifest plus a readable report, without changing demand estimates or raw
 inputs. The full national complete population has2983schools and2234310
 all-grade pupils.
+
+## Distribution plots by the four school types (2026-10-15)
+
+The next request asks for four overlapping VA distributions per dimension.
+Interpret the four groups as the preceding HC-only,mixedHC/TP,TP-only and
+artistic-only table. Keep the user-selected2024 whole-school enrollment
+weights and national2983-school/2234310-pupil four-VA-complete sample,
+including private schools. Reuse the fixed pooled-school normalization.
+
+Use exact weighted empirical CDFs rather than imposing a smooth density on
+the two artistic schools. Aggregate tied VA values, accumulate positive
+MAT_TOTALmass within type, and retain the full observed support. Zero/one
+boundary segments extend plots without changing school-level jumps. Show
+artistic jumps with markers; their mass shares are941/1525 and584/1525.
+No bandwidth, tail trimming or interpolated quantile is introduced. Weighted
+quantiles are the first VA where cumulative mass reaches the target fraction.
+
+11_plot_va_distributions.R saves a combined2x2PNG/vectorPDF, individual PNGs,
+exact CDF data, weighted quantiles and a report. Checks reproduce the previous
+means and sample and establish16monotone,unit-mass curves. Visual inspection
+checks labels, legend, all curves and tails. TP-only field VA has a strong
+upper tail: weightedp90=3.5314 versusHC1.0855; weighted medians are-.0475
+versusHC.0272, despite the higher TP-only mean. This describes distributions
+of the saved school indices, not a new causal school-type comparison.
+
+The independent source-data audit matches all11932school-dimension rows,
+all11932CDFjump points and80quantiles to floating-point precision(maxCDF
+error6.66e-16,maxquantile error4.88e-15). Combined and single-panel figures
+are visually inspected; four curves, exact artistic jumps and full tails
+remain visible. No preference regression or source VA is changed.

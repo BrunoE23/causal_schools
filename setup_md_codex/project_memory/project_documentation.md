@@ -50,6 +50,13 @@ raw units and unchanged pooled school-SD units. A separately labeled appendix
 restricts to preference destinations. Do not substitute SAE attendance counts
 for these requested weights or treat MAT_TOTAL as HS-only enrollment.
 
+11_plot_va_distributions.R extends that exact population and weighting to
+four overlapping empirical CDFs per VA dimension, one per school type. The
+artistic group has two schools and is plotted as exact discrete jumps.
+Combined and individual figures are under output/figures/school_preference_va;
+report:school_preference_va/va_distributions_by_school_type.html. Raw curve
+points and inverse-CDF quantiles are saved in the task clean-data folder.
+
 ## Directory-only preschool entry and changes (2026-10-14)
 
 For the latest school-supply request Bruno explicitly says to ignore SAE years

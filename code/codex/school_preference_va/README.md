@@ -328,3 +328,23 @@ Report:output/reports/school_preference_va/enrollment_weighted_va_by_school_type
 Clean-data CSVs retain normalized/raw means, model-support comparison,
 coverage, source manifest and verification. The aggregate table companion
 CSV is in the task output/tables folder.
+
+## Four overlapping VA distributions
+
+11_plot_va_distributions.R draws one enrollment-weighted empirical CDF per
+school type and dimension, using the exact same national complete-school
+sample,2024MAT_TOTALweights and pooled VA units as10. Tied VAs aggregate
+enrollment first; the CDF is cumulative mass at or below each value. No
+smoothing, bandwidth, interpolation or tail trimming is used. Artistic-only
+has two schools, so its two discrete jumps are shown explicitly with markers.
+
+The combined2x2figure and four individual PNGs are saved under
+output/figures/school_preference_va/, with a combined vector PDF. The main
+stem is enrollment_weighted_va_cdfs_by_school_type. The report is
+output/reports/school_preference_va/va_distributions_by_school_type.html.
+Exact curve points, inverse-CDFp10/p25/p50/p75/p90, school inputs, source
+manifest and checks are under the task clean-data folder. Validation
+reconstructs the preceding means/denominators and verifies all16curves
+are monotone with unit total enrollment mass. Figures are visually checked.
+An independent reconstruction matches all11932school-dimension records,
+16CDFs and80weighted quantiles to numerical precision.
