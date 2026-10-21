@@ -614,3 +614,12 @@ average marginal effects with delta-method SEs from the middle-school
 clustered logit score covariance; raw logit coefficients and odds ratios
 are retained separately. Both AMEs keep the existing actual-score units.
 The earlier LPM outputs are archived, and no baseline predictions are refit.
+
+Basic gender comparisons of full projected log income use the broad
+2017-2020 panel (valid attended HS, age 12-16), without exam-taking or
+complete-control restrictions. Compare all students preserving the existing
+CLP 553,553 non-enrollee assignment, then condition on observed HE enrollment.
+Use the unchanged master log_program_income_full_clp_m1 values; report
+women-minus-men mean-log differences and 100*(exp(gap)-1) geometric-mean
+ratios. These are program-assigned earnings prospects, not individual wage
+observations. Script 06 in mifuturo_matricula_income saves this comparison.

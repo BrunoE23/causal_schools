@@ -1277,3 +1277,12 @@ The report's primary coefficients are average marginal effects in
 percentage points; raw logit coefficients and odds ratios are separate.
 Logit objects and diagnostics use `bg_decomposition/logit/`. LPM report
 and table archives have `_lpm` suffixes; script 08 now targets those files.
+
+Script `mifuturo_matricula_income/06_income_by_gender.R` provides the basic
+unadjusted projected-income comparison by gender, both retaining the
+non-enrollee income floor and restricting to HE enrollees. It uses the
+paper's 931,547-student broad panel (one unknown-gender record excluded)
+and the existing full log-income variable from the master. The resulting
+931,546 all-student and 625,616 enrolled samples have women-minus-men log
+gaps -0.02676 and -0.14422. Data, table and report use the task name
+`projected_income_gender`.

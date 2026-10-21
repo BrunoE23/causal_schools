@@ -182,3 +182,33 @@ for the canonical high-premium-field binary.
 `mifuturo_person_level_income_outcomes_stata_va.csv` is a thin export containing
 only these Stata-safe variables plus `MRUN`, so Stata VA/EB does not need to
 import the full wide person-level file.
+
+## Unadjusted projected-income gaps by gender
+
+`06_income_by_gender.R` reads only eight columns from the paper master
+`univ_gr8_df.csv`. Use the broad panel of grade-8 cohorts 2017-2020,
+ages 12-16 with a valid attended high-school RBD: 931,547 students.
+All have the existing full projected-income outcome; one unknown-gender
+record is excluded from gender comparisons. There are no exam-taking or
+complete-control restrictions in this descriptive exercise.
+
+Report mean natural-log projected monthly income and the unadjusted
+women-minus-men log gap for (1) all 931,546 students, preserving the
+existing CLP 553,553 value for non-enrollees, and (2) the 625,616 HE
+enrollees. Enrollees retain the same projected-income values in both
+comparisons. Income is `log_program_income_full_clp_m1` at first
+observed enrollment, with existing hierarchical program-income predictions.
+Gender codes are GEN_ALU=1 (men) and 2 (women).
+
+The implied percentage difference is `100 * (exp(log_gap) - 1)`, a
+comparison of geometric means. Raw log gaps can also be reproduced by
+OLS on a female indicator; saved confidence intervals use HC1 robust SEs.
+These are projected program-income differences, not observed wage gaps
+within the same program. First enrollment is observed in 2022-2025.
+
+Run from the repository root with Rscript. Outputs are under
+`data/clean/projected_income_gender/`, with the comparison table under
+`output/tables/projected_income_gender/` and report
+`output/reports/projected_income_gender/projected_income_by_gender.html`.
+The current log gaps are -0.02676 with the non-enrollee imputation and
+-0.14422 among enrollees, corresponding to -2.64% and -13.43%.
