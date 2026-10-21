@@ -5,7 +5,9 @@
 The current report follows the requested four-column comparison:
 
 - A: distance and directory fee bands.
-- B: A plus mixed HC/TP, TP-only and the PAES M1 school mean.
+- B: A plus mixed HC/TP, TP-only and four observed school outcome averages:
+  PAES M1 mean, exam-taking share, high-premium-field enrollment share and
+  high-premium-institution enrollment share.
 - C: A plus the four standardized EB VAs.
 - D: C plus mixed HC/TP and TP-only; PAES M1 is excluded.
 
@@ -16,9 +18,10 @@ indicators are unchanged. School-type effects use Non-TP as reference.
 All slopes are additive and common across types. Parent education, parent
 income and type-by-attribute interactions do not enter these specifications.
 
-Run 31_fit_four_specifications.R, 33_verify_four_specifications.R and
-32_report_four_specifications.R from the project root, using the existing
-directory_prices_2024 estimation input. Fit A-D with published student
+Run 34_build_school_outcome_means.R first to attach the three unadjusted
+binary-outcome means to the existing directory_prices_2024 ranking data.
+Then run 31_fit_four_specifications.R, 33_verify_four_specifications.R and
+32_report_four_specifications.R from the project root. Fit A-D with published student
 coordinates and again with home-comuna distances. Source/model hashes,
 new fitted objects, clustered covariance matrices and checks are under
 `data/clean/school_preference_va/directory_prices_2024/four_specifications/`;
@@ -36,11 +39,29 @@ only D, pass `--specifications=D` to script 31; unselected fitted objects and
 coefficient tables are preserved and checked. The default refits all four
 specifications. Then run scripts 33 and 32 as usual.
 
+The next B-only extension adds the other three observed school outcome
+averages as unadjusted counterparts to the VAs. These are existing `raw_mean`
+values from the precursor school-VA file for grade-8 cohorts 2017-2020,
+without adjustment or EB shrinkage. Exam taking uses all eligible school
+attendees; field and institution enrollment use exam takers, matching the
+outcome definitions in the VA constructor. New shares are standardized
+across the same unique destination schools with equal school weights; the
+existing PAES normalization is retained. Run script 31 with
+`--specifications=B` to update B alone after script 34; A, C and D are
+preserved. Source means, denominators, normalization and provenance are in
+`data/clean/school_preference_va/directory_prices_2024/four_specifications/school_outcome_means/`.
+
+Current B coefficients per school SD (published student coordinates) are
+PAES M1 0.0517 (SE 0.0031), exam-taking share 0.1233 (0.0033), field share
+0.0699 (0.0018) and institution share 0.0402 (0.0036). All 273,184 applicants
+remain in the sample. Construction, partial-fit, independent and report
+checks pass (22, 26, 124 and 10 respectively).
+
 All eight models converge in three iterations. In C versus the current D
 under published student coordinates, math VA changes from 0.0180 to 0.0491
 and exam-taking VA from -0.0184 to 0.0778 when school type alone is added.
 The current report shows their student-clustered standard errors. B and D
-are not nested: B includes PAES M1; D includes the four VAs instead.
+are not nested: B uses the four observed outcome averages; D uses the four VAs.
 
 ## Directorio fee-band preference extension (2026-10-21)
 

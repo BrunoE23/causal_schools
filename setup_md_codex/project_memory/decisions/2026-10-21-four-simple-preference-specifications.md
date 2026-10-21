@@ -6,7 +6,8 @@ The user replaced the increasingly complicated report with an explicit
 four-model comparison:
 
 - A: log(1 + distance) and Directorio fee bands.
-- B: A plus mixed HC/TP, TP-only and the PAES M1 school mean.
+- B: A plus mixed HC/TP, TP-only and four observed school outcome averages,
+  including PAES M1 and the three other raw outcome means after the later expansion.
 - C: A plus math, exam-taking, high-premium-field and high-premium-institution VA.
 - D: C plus mixed HC/TP and TP-only, excluding PAES M1 after the user's revision.
 
@@ -32,6 +33,12 @@ Plackett-Luce/Cox representation and covariance clustered by student.
 Check full-list/sample preservation, complete term inclusion, numerical
 convergence and nested likelihood ordering A <= B, A <= C <= D within distance.
 B and D are not nested because only B contains PAES M1.
+
+B's other observed school means are the unadjusted exam-taking, high-premium
+field and high-premium-institution enrollment averages; D contains their
+VA counterparts instead. Thus the intended B/D comparison is observed
+school outcomes versus the controlled EB VA dimensions, with school type
+included in both. PAES M1 is retained as the requested observed math proxy.
 
 ## Reporting and reproducibility
 
@@ -80,3 +87,35 @@ high-premium-field VA is 0.0569 (0.0014) and high-premium-institution VA is
 of all six A-C model files and unchanged A-C coefficient/summary exports.
 Independent verification passes 102 checks, and the updated compact report
 passes 10 checks with PAES M1 displayed only in column B.
+
+## Revision: observed school outcome means in B
+
+The user asked to treat PAES M1 as an unadjusted math outcome average and
+include analogous averages for each other VA dimension in B. Reuse the
+existing uncentered `raw_mean` from the All-sample observational school-value
+file for grade-8 cohorts 2017-2020. Its controlled school effects and
+regression counts match the precursor used by the current EB source exactly.
+Do not use controlled adjusted means or reconstruct the VA.
+
+The raw exam-taking mean uses all eligible age-12-16 school attendees with
+valid attended high-school RBD; field and institution means use exam takers,
+including non-enrollees as zero, following the paper's outcome-specific
+denominators. Raw means precede complete-control restrictions; retain their
+observed-student counts. All 2,481 current destinations have these means.
+Standardize each new share with equal weight per unique current destination
+school, retaining the current PAES scaling and common applicant sample.
+
+Script 34 creates a separate augmented ranking dataset in the
+`four_specifications/school_outcome_means` clean-data subfolder. Script 31's
+`--specifications=B` option updates the two B distance models and preserves
+A, C and D. The compact report gains three B-only mean rows; its four VA
+rows, existing simple layout and current file path remain in place.
+
+The expanded B uses the same 273,184 applicants and converges in three
+iterations under both distance measures. Main-distance coefficients per
+school SD are PAES M1 0.0517 (SE 0.0031), exam-taking share 0.1233 (0.0033),
+high-premium-field share 0.0699 (0.0018) and high-premium-institution share
+0.0402 (0.0036). All four averages have positive conditional associations.
+Construction passes 22 checks, partial fitting 26, independent verification
+124 and the compact report 10. All A, C and D fitted objects and prior input
+columns are preserved exactly.

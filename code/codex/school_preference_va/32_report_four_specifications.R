@@ -18,8 +18,10 @@ check("Models include only the requested common slopes", !any(grepl("_x_|parent_
   all(vapply(spec_order, function(s) all(vapply(names(distance_vars), function(md)
     setequal(co[specification == s & model == md, term], c(specification_terms[[s]], distance_vars[[md]])),
     logical(1))), logical(1))))
-check("PAES M1 enters only specification B", co[term == "z_paes_m1", .N] == 2L &&
-  setequal(co[term == "z_paes_m1", specification], "B"))
+check("All four school outcome averages enter only specification B", setequal(school_mean_terms,
+  c("z_paes_m1", "z_mean_exam", "z_mean_highfield", "z_mean_highinst")) && all(vapply(school_mean_terms,
+  function(term_name) co[term == term_name, .N] == 2L &&
+    setequal(co[term == term_name, specification], "B"), logical(1))))
 check("Displayed intervals match saved student-clustered standard errors",
   max(abs(co$lower95 - co$estimate + qnorm(.975) * co$std_error)) < 1e-8 &&
   max(abs(co$upper95 - co$estimate - qnorm(.975) * co$std_error)) < 1e-8)
@@ -34,9 +36,11 @@ fee_rows[, fee_order := fifelse(field == "PAGO_MENSUAL", 1L, fifelse(field == "P
 setorder(fee_rows, fee_order, code)
 fee_rows[, row_label := fifelse(field == "PAGO_MENSUAL", paste0("Monthly: ", label),
   fifelse(field == "PAGO_MATRICULA", paste0("Enrollment: ", label), "Fee information unavailable"))]
-base_rows <- data.table(term = c("distance", "mixed_hc_tp", "tp_only", "z_paes_m1", "z_va_math", "z_va_exam", "z_va_highfield", "z_va_highinst"),
-  row_label = c("log(1 + distance in km)", "Mixed HC/TP school", "TP-only school", "PAES M1 mean", "Math VA", "Exam-taking VA", "High-premium-field VA", "High-premium-institution VA"),
-  section = "School attributes")
+base_rows <- data.table(term = c("distance", "mixed_hc_tp", "tp_only", "z_paes_m1", "z_mean_exam", "z_mean_highfield", "z_mean_highinst", "z_va_math", "z_va_exam", "z_va_highfield", "z_va_highinst"),
+  row_label = c("log(1 + distance in km)", "Mixed HC/TP school", "TP-only school", "PAES M1 mean",
+    "Exam-taking share", "High-premium-field enrollment share", "High-premium-institution enrollment share",
+    "Math VA", "Exam-taking VA", "High-premium-field VA", "High-premium-institution VA"),
+  section = c(rep("School attributes", 3L), rep("Observed school outcome averages", 4L), rep("School value added", 4L)))
 rows <- rbindlist(list(base_rows, fee_rows[, .(term, row_label,
   section = fifelse(field == "PAGO_MENSUAL", "Monthly fees (reference: free)",
     fifelse(field == "PAGO_MATRICULA", "Enrollment fees (reference: free)", "Fee information")))]), use.names = TRUE)
@@ -86,11 +90,13 @@ make_table <- function(md) {
 get_b <- function(s, term_name) co[specification == s & model == "main" & term == term_name, estimate]
 math_c <- get_b("C", "z_va_math"); math_d <- get_b("D", "z_va_math")
 exam_c <- get_b("C", "z_va_exam"); exam_d <- get_b("D", "z_va_exam")
-interpretation <- paste0("Adding school type to the four-VA model changes the math-VA coefficient from ",
+b_means <- co[specification == "B" & model == "main" & term %in% school_mean_terms]
+mean_interpretation <- if (all(b_means$estimate > 0))
+  "In B, all four observed school outcome averages are positively associated with ranking earlier, conditional on fees, distance and school type." else
+  paste0("In B, the observed school outcome averages enter jointly with fees, distance and school type; ",
+    sum(b_means$estimate > 0), " of the four coefficients are positive.")
+interpretation <- paste0(mean_interpretation, " Adding school type to the four-VA model changes the math-VA coefficient from ",
   fmt(math_c), " in C to ", fmt(math_d), " in D, and exam-taking VA from ", fmt(exam_c), " to ", fmt(exam_d), ".")
-monthly_d <- co[specification == "D" & model == "main" & term %in% fee_specs[field == "PAGO_MENSUAL", term], estimate]
-if (length(monthly_d) > 0L && all(monthly_d < 0)) interpretation <- paste0(interpretation,
-  " In D, all observed monthly-fee bands have negative coefficients relative to free schools, conditional on the other attributes.")
 interpretation <- paste0(interpretation, " These are associations within submitted lists.")
 
 main_table <- make_table("main")
@@ -111,7 +117,7 @@ html <- paste0('<!doctype html><html lang="en"><head><meta charset="utf-8"><meta
   'tfoot tr:first-child th,tfoot tr:first-child td{border-top:2px solid #aebccc}details{margin:22px 0}summary{cursor:pointer;font-weight:600}',
   '.notes{font-size:13px;color:#4e6076}.interpretation{margin-top:20px}a{color:#245d9b}</style></head><body><main>',
   '<h1>School preferences: four specifications</h1>',
-  '<p class="specs"><b>A:</b> Distance + fees.<br><b>B:</b> A + school type (Mixed HC/TP, TP-only) + PAES M1 mean.<br>',
+  '<p class="specs"><b>A:</b> Distance + fees.<br><b>B:</b> A + school type + four school outcome averages.<br>',
   '<b>C:</b> A + four VAs.<br><b>D:</b> C + school type (Mixed HC/TP, TP-only).</p>',
   main_table,
   '<p class="notes">Student-clustered standard errors in parentheses. A dash means the attribute is excluded. Fee coefficients compare each band with free in that field; the shared unknown-fee indicator compares unavailable prices with free in both fields.',
@@ -119,7 +125,8 @@ html <- paste0('<!doctype html><html lang="en"><head><meta charset="utf-8"><meta
   '<p class="interpretation">', esc_html(interpretation), '</p>',
   '<details><summary>Municipality-distance robustness</summary><p class="notes">Home-comuna centroid to the same school campus; identical applicants, rankings and school-attribute normalization.</p>',
   municipality_table, '</details>',
-  '<p class="notes">All columns use the same complete submitted rankings in an exact Plackett-Luce model, conditional on the schools listed; unlisted alternatives are outside this exercise. VAs and PAES M1 are measured per one destination-school SD using the existing common normalization. Non-TP is the reference school type. Slopes are common across school types.</p>',
+  '<p class="notes">All columns use the same complete submitted rankings in an exact Plackett-Luce model, conditional on the schools listed; unlisted alternatives are outside this exercise. VAs and all four school outcome averages are measured per one destination-school SD. The three new shares use equal weights across unique destination schools; existing VA and PAES normalizations are unchanged. Non-TP is the reference school type. Slopes are common across school types.</p>',
+  '<p class="notes">Observed outcome shares use grade-8 cohorts 2017-2020 (ages 12-16 at grade 8), grouped by the high school attended most. The exam-taking share covers all eligible students. Field and institution enrollment shares are among exam takers, counting non-enrollees as zero. PAES M1 is the current school math-score average, not a value-added measure.</p>',
   '<p class="notes">Directory fees are a 2024 snapshot and PAES M1 is measured in the 2025 admission process, after the 2018-2020 applications. Coefficients describe conditional ranking associations, not causal price effects or information necessarily available at application. Changes across logit specifications can also reflect utility-scale changes.</p>',
   '<p class="notes"><a href="../../tables/school_preference_va/directory_prices_2024/four_specifications/four_specifications.csv">Coefficient table (CSV)</a> &middot; ',
   '<a href="../../tables/school_preference_va/directory_prices_2024/four_specifications/common_sample_and_specifications.csv">Common sample and specifications (CSV)</a></p>',

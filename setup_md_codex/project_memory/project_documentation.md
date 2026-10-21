@@ -1240,7 +1240,8 @@ payments at application time. Specification and inference are recorded in
 `decisions/2026-10-21-directory-prices-school-preferences.md`.
 
 The current report was subsequently simplified to A-D additive models:
-distance+fees; add school type+PAES; add four VAs; add school type+four VAs
+distance+fees; add school type+four observed outcome averages; add four VAs;
+add school type+four VAs
 without PAES. The user excluded PAES M1 from D only, leaving B unchanged. It uses
 the same 273,184 applicant lists, with no parent controls or type interactions.
 Scripts 31-33 save eight pooled models (four per distance definition) under
@@ -1248,3 +1249,9 @@ the `directory_prices_2024/four_specifications` subfolders. The current HTML
 path stays the same; the older comprehensive report is retained with the
 `_full.html` suffix. See
 `decisions/2026-10-21-four-simple-preference-specifications.md`.
+
+B's observed outcome block contains the current PAES M1 mean plus the
+existing unadjusted school means of exam taking, high-premium-field and
+high-premium-institution enrollment. Script 34 reuses the school-VA
+precursor raw means and records denominators and normalization separately;
+it preserves the ranking sample and all other model specifications.

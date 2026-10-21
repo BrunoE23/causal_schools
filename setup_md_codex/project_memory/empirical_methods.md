@@ -577,10 +577,17 @@ causal price response or peso-valued willingness to pay. See
 `decisions/2026-10-21-directory-prices-school-preferences.md`.
 
 The subsequent simplified report compares four additive pooled models on
-the same complete sample: A distance+fees; B A+mixed HC/TP+TP-only+PAES M1;
+the same complete sample: A distance+fees; B A+mixed HC/TP+TP-only+four observed
+school means (PAES M1, exam taking, high-premium field and institution enrollment);
 C A+four VAs; D C+school type, with PAES M1 excluded from D only. B retains
 PAES M1, so B and D are not nested. These models omit parent composition and all
 attribute-by-type interactions, with the same units, fees and student
 clustering. The main report has one A-D table and a collapsed comuna-distance
 replication. See
 `decisions/2026-10-21-four-simple-preference-specifications.md`.
+
+The three binary-outcome means added to B are existing unadjusted `raw_mean`
+values from the school-VA precursor, pooled over grade-8 cohorts 2017-2020.
+Exam taking uses all eligible school attendees; field and institution use
+exam takers, matching their VA risk sets. Preserve outcome-specific observed
+counts and use equal-destination-school normalization for the added shares.
