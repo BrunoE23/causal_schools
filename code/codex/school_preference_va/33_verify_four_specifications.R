@@ -1,4 +1,4 @@
-# Independently verify the four pooled specifications and their saved estimates.
+# Independently verify the pooled specifications and their saved estimates.
 source("code/codex/school_preference_va/four_specifications_common.R")
 suppressPackageStartupMessages(library(survival))
 same_num <- function(a, b, tol = 1e-9) {
@@ -16,12 +16,13 @@ expected_mean_specs <- data.table(outcome = c("admission_exam_taker", "high_payi
   standardized = c("z_mean_exam", "z_mean_highfield", "z_mean_highinst"))
 expected_mean_terms <- c("z_paes_m1", expected_mean_specs$standardized)
 expected_types_means <- c("mixed_hc_tp", "tp_only", expected_mean_terms)
-expected_specifications <- list(A = expected_fees, B = c(expected_fees, expected_types_means),
+expected_specifications <- list(A = expected_fees, A_means = c(expected_fees, expected_mean_terms),
+  B = c(expected_fees, expected_types_means),
   C = c(expected_fees, expected_vas), D = c(expected_fees, "mixed_hc_tp", "tp_only", expected_vas))
-check("Four specifications exactly match the requested additive models", identical(specification_terms, expected_specifications))
-check("The complete block of four school outcome means appears only in B", identical(school_mean_terms, expected_mean_terms) &&
+check("Five specifications exactly match the requested additive models", identical(specification_terms, expected_specifications))
+check("The complete block of four school outcome means appears only in A plus averages and B", identical(school_mean_terms, expected_mean_terms) &&
   all(vapply(expected_mean_terms, function(term) identical(names(specification_terms)[vapply(
-    specification_terms, function(terms) term %in% terms, logical(1))], "B"), logical(1))))
+    specification_terms, function(terms) term %in% terms, logical(1))], c("A_means", "B")), logical(1))))
 check("School outcome means use the requested raw outcomes", identical(school_mean_specs[, .(outcome, raw, standardized)], expected_mean_specs))
 check("Only the ten identified fee terms enter all specifications", identical(active_fee_terms, expected_fees) &&
   !"monthly_fee_band_2" %in% unlist(specification_terms))
@@ -30,7 +31,7 @@ check("No parental characteristics or interaction terms enter any model", !any(g
 preservation <- fread(file.path(clean_dir, "source_preservation.csv"))
 check("All previous inputs and fitted results retain their recorded hashes", nrow(preservation) > 0L &&
   all(file.exists(preservation$path)) && identical(unname(tools::md5sum(preservation$path)), preservation$md5_before))
-current_model_paths <- vapply(c("A", "B", "C", "D"), function(s) vapply(names(distance_vars), function(m)
+current_model_paths <- vapply(names(expected_specifications), function(s) vapply(names(distance_vars), function(m)
   four_spec_model_path(s, m), character(1)), character(length(distance_vars)))
 preserved_models <- preservation[path %in% as.vector(current_model_paths)]
 check("All fitted objects recorded as unchanged retain their hashes", !anyDuplicated(preserved_models$path) &&
@@ -124,20 +125,20 @@ check("All selected covariates and both distances are finite", all(vapply(d[, al
   function(z) all(is.finite(z)), logical(1))))
 co <- fread(file.path(clean_dir, "coefficients.csv"))
 ms <- fread(file.path(clean_dir, "model_summary.csv"))
-check("Eight fitted models cover four specifications and both distances", nrow(ms) == 8L &&
-  !anyDuplicated(ms[, .(specification, model)]) && setequal(ms$specification, c("A", "B", "C", "D")) &&
+check("Ten fitted models cover five specifications and both distances", nrow(ms) == 10L &&
+  !anyDuplicated(ms[, .(specification, model)]) && setequal(ms$specification, names(expected_specifications)) &&
   setequal(ms$model, names(distance_vars)))
 check("All model summaries retain the identical complete sample", all(ms$applicants == 273184L) &&
   all(ms$rankings == 273184L) && all(ms$applicant_school_pairs == 969377L) && all(ms$schools == 2481L) &&
   all(ms$informative_rank_decisions == 696193L))
 check("All coefficients and clustered errors are finite", all(is.finite(co$estimate)) &&
   all(is.finite(co$std_error) & co$std_error > 0) && !any(grepl("parent|income|_x_|:", co$term)))
-check("The eight exported school-mean coefficients occur only in B", nrow(co[term %in% expected_mean_terms]) == 8L &&
-  all(co[term %in% expected_mean_terms, specification] == "B"))
+check("Sixteen exported school-mean coefficients occur only in A plus averages and B", nrow(co[term %in% expected_mean_terms]) == 16L &&
+  setequal(co[term %in% expected_mean_terms, specification], c("A_means", "B")))
 ranking_group <- match(d$ranking_id, unique(d$ranking_id)); ranking_n <- tabulate(ranking_group)
 # Both names are available so residual reconstruction honors the stored data call.
 x <- d
-for (s in c("A", "B", "C", "D")) for (m in names(distance_vars)) {
+for (s in names(expected_specifications)) for (m in names(distance_vars)) {
   key <- paste(s, m, sep = "_")
   wanted <- c(unname(distance_vars[m]), expected_specifications[[s]])
   fit <- readRDS(four_spec_model_path(s, m))
@@ -178,11 +179,12 @@ for (s in c("A", "B", "C", "D")) for (m in names(distance_vars)) {
 }
 for (m in names(distance_vars)) {
   ll <- setNames(ms[model == m, log_likelihood], ms[model == m, specification])
-  check(paste(m, "adding school type and four outcome means weakly improves A to B"), ll["B"] >= ll["A"] - 1e-7)
+  check(paste(m, "adding four outcome means weakly improves A to A plus averages"), ll["A_means"] >= ll["A"] - 1e-7)
+  check(paste(m, "adding school type weakly improves A plus averages to B"), ll["B"] >= ll["A_means"] - 1e-7)
   check(paste(m, "adding four VAs weakly improves A to C"), ll["C"] >= ll["A"] - 1e-7)
   check(paste(m, "adding school type alone weakly improves C to D"), ll["D"] >= ll["C"] - 1e-7)
 }
 check("All preceding input and model hashes are unchanged after verification", identical(
   unname(tools::md5sum(preservation$path)), preservation$md5_before))
 save_checks("verification.csv")
-message("Independent four-specification verification: ", sum(checks$passed), "/", nrow(checks), " checks passed.")
+message("Independent preference-specification verification: ", sum(checks$passed), "/", nrow(checks), " checks passed.")

@@ -1,12 +1,12 @@
-# Compact four-specification report from saved pooled estimates only.
+# Compact specification comparison from saved pooled estimates only.
 source("code/codex/school_preference_va/four_specifications_common.R")
 read_clean <- function(name) fread(file.path(clean_dir, name))
 co <- read_clean("coefficients.csv")
 ms <- read_clean("model_summary.csv")
 verification <- read_clean("verification.csv")
 
-spec_order <- c("A", "B", "C", "D")
-check("Eight unique saved pooled models", nrow(ms) == 8L &&
+spec_order <- c("A", "A_means", "B", "C", "D")
+check("Ten unique saved pooled models", nrow(ms) == 10L &&
   !anyDuplicated(ms[, .(specification, model)]) &&
   setequal(ms$specification, spec_order) && setequal(ms$model, names(distance_vars)))
 check("Independent verification passed", nrow(verification) > 0L && all(verification$passed))
@@ -18,10 +18,12 @@ check("Models include only the requested common slopes", !any(grepl("_x_|parent_
   all(vapply(spec_order, function(s) all(vapply(names(distance_vars), function(md)
     setequal(co[specification == s & model == md, term], c(specification_terms[[s]], distance_vars[[md]])),
     logical(1))), logical(1))))
-check("All four school outcome averages enter only specification B", setequal(school_mean_terms,
+check("All four school outcome averages enter only A plus averages and B", setequal(school_mean_terms,
   c("z_paes_m1", "z_mean_exam", "z_mean_highfield", "z_mean_highinst")) && all(vapply(school_mean_terms,
-  function(term_name) co[term == term_name, .N] == 2L &&
-    setequal(co[term == term_name, specification], "B"), logical(1))))
+  function(term_name) co[term == term_name, .N] == 4L &&
+    setequal(co[term == term_name, specification], c("A_means", "B")), logical(1))))
+check("The outcome-average-only column excludes school-type indicators", co[specification == "A_means" &
+  term %in% controls, .N] == 0L)
 check("Displayed intervals match saved student-clustered standard errors",
   max(abs(co$lower95 - co$estimate + qnorm(.975) * co$std_error)) < 1e-8 &&
   max(abs(co$upper95 - co$estimate - qnorm(.975) * co$std_error)) < 1e-8)
@@ -70,7 +72,7 @@ make_table <- function(md) {
   x <- table_data[model == md]
   body <- vapply(seq_len(nrow(x)), function(i) {
     block <- if (i == 1L || x$section[i] == x$section[i - 1L]) "" else
-      paste0("<tr class='block'><th colspan='5'>", esc_html(x$section[i]), "</th></tr>")
+      paste0("<tr class='block'><th colspan='", length(spec_order) + 1L, "'>", esc_html(x$section[i]), "</th></tr>")
     cells <- vapply(spec_order, function(s) display_cell(x[[paste0(s, "_estimate")]][i],
       x[[paste0(s, "_std_error")]][i]), character(1))
     paste0(block, "<tr><th scope='row'>", esc_html(x$row_label[i]), "</th>",
@@ -83,7 +85,7 @@ make_table <- function(md) {
   footer <- paste(vapply(names(footer_values), function(label) paste0("<tr><th scope='row'>", label,
     "</th>", paste0("<td>", footer_values[[label]], "</td>", collapse = ""), "</tr>"), character(1)), collapse = "")
   paste0("<div class='table-wrap'><table><thead><tr><th>Attribute</th>",
-    paste0("<th>", spec_order, "</th>", collapse = ""), "</tr></thead><tbody>",
+    paste0("<th>", esc_html(unname(specification_display_labels[spec_order])), "</th>", collapse = ""), "</tr></thead><tbody>",
     paste(body, collapse = ""), "</tbody><tfoot>", footer, "</tfoot></table></div>")
 }
 
@@ -101,14 +103,15 @@ interpretation <- paste0(interpretation, " These are associations within submitt
 
 main_table <- make_table("main")
 municipality_table <- make_table("municipality")
-check("Each coefficient table has four specification columns", all(vapply(list(main_table, municipality_table),
+check("Each coefficient table has five specification columns in the requested order", all(vapply(list(main_table, municipality_table),
   function(h) length(regmatches(h, gregexpr("<table>", h, fixed = TRUE))[[1L]]) == 1L &&
-    grepl("<th>A</th><th>B</th><th>C</th><th>D</th>", h, fixed = TRUE), logical(1))))
+    grepl(paste0("<th>", esc_html(unname(specification_display_labels[spec_order])), "</th>", collapse = ""),
+      h, fixed = TRUE), logical(1))))
 unsupported_monthly <- fee_specs[field == "PAGO_MENSUAL" & !term %in% active_fee_terms]
 support_note <- if (nrow(unsupported_monthly)) paste0(" The monthly ",
   paste(unsupported_monthly$label, collapse = ", "), " band has no schools and is not estimated.") else ""
 html <- paste0('<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">',
-  '<title>School preferences: four specifications</title><style>',
+  '<title>School preferences</title><style>',
   'body{font:16px/1.5 system-ui,sans-serif;color:#18283b;margin:28px}main{max-width:1000px;margin:auto}h1{font-size:26px;margin-bottom:16px}',
   '.specs{background:#f2f5f9;padding:12px 16px}.table-wrap{overflow:auto}table{border-collapse:collapse;width:100%;font-size:14px}',
   'th,td{padding:7px 12px;text-align:right;vertical-align:top;border-bottom:1px solid #e1e6ec}th:first-child{text-align:left}',
@@ -116,8 +119,9 @@ html <- paste0('<!doctype html><html lang="en"><head><meta charset="utf-8"><meta
   '.block th{padding-top:17px;border-bottom:1px solid #aebccc;font-weight:650;background:#fafbfd}tfoot th,tfoot td{font-weight:600}',
   'tfoot tr:first-child th,tfoot tr:first-child td{border-top:2px solid #aebccc}details{margin:22px 0}summary{cursor:pointer;font-weight:600}',
   '.notes{font-size:13px;color:#4e6076}.interpretation{margin-top:20px}a{color:#245d9b}</style></head><body><main>',
-  '<h1>School preferences: four specifications</h1>',
-  '<p class="specs"><b>A:</b> Distance + fees.<br><b>B:</b> A + school type + four school outcome averages.<br>',
+  '<h1>School preferences</h1>',
+  '<p class="specs"><b>A:</b> Distance + fees.<br><b>A + averages:</b> A + four school outcome averages (no school-type indicators).<br>',
+  '<b>B:</b> A + school type + four school outcome averages.<br>',
   '<b>C:</b> A + four VAs.<br><b>D:</b> C + school type (Mixed HC/TP, TP-only).</p>',
   main_table,
   '<p class="notes">Student-clustered standard errors in parentheses. A dash means the attribute is excluded. Fee coefficients compare each band with free in that field; the shared unknown-fee indicator compares unavailable prices with free in both fields.',
@@ -140,4 +144,4 @@ report_path <- file.path(report_dir, "with_directory_prices_2024.html")
 writeLines(html, report_path, useBytes = TRUE)
 writeLines(capture.output(sessionInfo()), file.path(clean_dir, "report_session_info.txt"))
 fwrite(checks, file.path(clean_dir, "report_verification.csv"))
-message("Replaced price report with four specifications; all ", nrow(checks), " report checks passed.")
+message("Updated price report specification comparison; all ", nrow(checks), " report checks passed.")

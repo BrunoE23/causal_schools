@@ -1,4 +1,4 @@
-# Four simple, additive school-preference specifications on a common sample.
+# Simple, additive school-preference specifications on a common sample.
 source("code/codex/school_preference_va/directory_prices_common.R")
 source_price_dir <- clean_dir
 four_spec_base_input_path <- price_input_path
@@ -18,8 +18,10 @@ school_mean_terms <- c("z_paes_m1", school_mean_specs$standardized)
 active_fee_terms <- setdiff(fee_terms, "monthly_fee_band_2")
 school_type_terms <- c("mixed_hc_tp", "tp_only")
 observable_terms <- c(school_type_terms, school_mean_terms)
-specification_terms <- list(A = active_fee_terms, B = c(active_fee_terms, observable_terms),
+specification_terms <- list(A = active_fee_terms, A_means = c(active_fee_terms, school_mean_terms), B = c(active_fee_terms, observable_terms),
   C = c(active_fee_terms, va_terms), D = c(active_fee_terms, school_type_terms, va_terms))
-specification_labels <- c(A = "Distance + fees", B = "A + school type + four school outcome averages",
+specification_labels <- c(A = "Distance + fees", A_means = "A + four school outcome averages (no school type)",
+  B = "A + school type + four school outcome averages",
   C = "A + four VAs", D = "C + school type (no PAES)")
+specification_display_labels <- c(A = "A", A_means = "A + averages", B = "B", C = "C", D = "D")
 four_spec_model_path <- function(specification, model) file.path(clean_dir, "models", paste0(specification, "_", model, ".rds"))

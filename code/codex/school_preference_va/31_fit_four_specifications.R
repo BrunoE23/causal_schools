@@ -29,6 +29,7 @@ check("One complete unique ranking per student is preserved", uniqueN(d$mrun) ==
 check("Every required regressor is finite on the common sample", all(vapply(
   d[, setdiff(needed, c("ranking_id", "mrun")), with = FALSE], function(x) all(is.finite(x)), logical(1))))
 check("Specifications contain precisely the requested additive terms", identical(specification_terms$A, active_fee_terms) &&
+  identical(specification_terms$A_means, c(active_fee_terms, school_mean_terms)) &&
   identical(specification_terms$B, c(active_fee_terms, observable_terms)) && identical(specification_terms$C, c(active_fee_terms, va_terms)) &&
   identical(specification_terms$D, c(active_fee_terms, school_type_terms, va_terms)) &&
   !"z_paes_m1" %in% specification_terms$D)
@@ -78,9 +79,10 @@ for (model_name in names(distance_vars)) for (spec_name in selected_specs) {
 summary <- rbindlist(summaries)
 for (m in names(distance_vars)) {
   s <- summary[model == m]
-  check(paste(m, "all four columns use identical samples and null likelihood"), all(vapply(s[, .(applicants, rankings, applicant_school_pairs, schools, null_log_likelihood)], function(x) uniqueN(x) == 1L, logical(1))))
+  check(paste(m, "all columns use identical samples and null likelihood"), all(vapply(s[, .(applicants, rankings, applicant_school_pairs, schools, null_log_likelihood)], function(x) uniqueN(x) == 1L, logical(1))))
   ll <- setNames(s$log_likelihood, s$specification)
-  check(paste(m, "nested specification likelihoods weakly increase"), ll["B"] >= ll["A"] - 1e-7 && ll["C"] >= ll["A"] - 1e-7 && ll["D"] >= ll["C"] - 1e-7)
+  check(paste(m, "nested specification likelihoods weakly increase"), ll["A_means"] >= ll["A"] - 1e-7 && ll["B"] >= ll["A_means"] - 1e-7 &&
+    ll["C"] >= ll["A"] - 1e-7 && ll["D"] >= ll["C"] - 1e-7)
 }
 if (length(preserved_specs)) {
   check("Unselected coefficient exports are unchanged", identical(rbindlist(coefficients)[specification %in% preserved_specs], old_co))

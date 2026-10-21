@@ -1255,3 +1255,9 @@ existing unadjusted school means of exam taking, high-premium-field and
 high-premium-institution enrollment. Script 34 reuses the school-VA
 precursor raw means and records denominators and normalization separately;
 it preserves the ranking sample and all other model specifications.
+
+The current table also inserts `A + averages` between A and B. This new
+column contains distance, fees and the four school outcome averages;
+school type first enters B. The internal key is `A_means`. Both distances
+are estimated, giving ten current model objects on the same sample; the
+historical `four_specifications` file paths stay stable.

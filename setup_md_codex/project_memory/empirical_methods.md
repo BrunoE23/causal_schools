@@ -591,3 +591,9 @@ values from the school-VA precursor, pooled over grade-8 cohorts 2017-2020.
 Exam taking uses all eligible school attendees; field and institution use
 exam takers, matching their VA risk sets. Preserve outcome-specific observed
 counts and use equal-destination-school normalization for the added shares.
+
+An additional column between A and B, shown as `A + averages`, includes
+distance, fees and the four observed school outcome averages with no
+school-type indicators. Existing A-D specifications and their fitted
+objects remain unchanged. It isolates the means block before adding type
+in B; all five columns share the same complete ranking sample and units.

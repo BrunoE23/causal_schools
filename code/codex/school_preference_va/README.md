@@ -1,17 +1,19 @@
 # School preferences and four-dimensional EB value added
 
-## Current report: four additive specifications (2026-10-21)
+## Current report: additive specifications (2026-10-21)
 
-The current report follows the requested four-column comparison:
+The current report follows the requested comparison:
 
 - A: distance and directory fee bands.
+- A + averages: A plus the four observed school outcome averages, with no
+  school-type indicators. This column is inserted between A and B.
 - B: A plus mixed HC/TP, TP-only and four observed school outcome averages:
   PAES M1 mean, exam-taking share, high-premium-field enrollment share and
   high-premium-institution enrollment share.
 - C: A plus the four standardized EB VAs.
 - D: C plus mixed HC/TP and TP-only; PAES M1 is excluded.
 
-All four specifications use the same 273,184 full submitted lists, 969,377
+All five specifications use the same 273,184 full submitted lists, 969,377
 school alternatives and 2,481 destination schools from the preceding fee
 extension. School-attribute normalizations and the ten identified fee
 indicators are unchanged. School-type effects use Non-TP as reference.
@@ -21,7 +23,7 @@ income and type-by-attribute interactions do not enter these specifications.
 Run 34_build_school_outcome_means.R first to attach the three unadjusted
 binary-outcome means to the existing directory_prices_2024 ranking data.
 Then run 31_fit_four_specifications.R, 33_verify_four_specifications.R and
-32_report_four_specifications.R from the project root. Fit A-D with published student
+32_report_four_specifications.R from the project root. Fit all columns with published student
 coordinates and again with home-comuna distances. Source/model hashes,
 new fitted objects, clustered covariance matrices and checks are under
 `data/clean/school_preference_va/directory_prices_2024/four_specifications/`;
@@ -29,14 +31,14 @@ two aggregate companion tables use the same output/tables subfolder.
 
 The current report remains
 `output/reports/school_preference_va/with_directory_prices_2024.html`.
-It displays one A-D table, with the municipality version in a collapsed
+It displays one comparison table, with the municipality version in a collapsed
 section. The earlier comprehensive report is preserved as
 `with_directory_prices_2024_full.html`; script 29 now renders that archived
 view so rerunning it does not overwrite the simplified current report.
 
 The user subsequently removed PAES M1 from D only; B retains it. To update
 only D, pass `--specifications=D` to script 31; unselected fitted objects and
-coefficient tables are preserved and checked. The default refits all four
+coefficient tables are preserved and checked. The default refits all five
 specifications. Then run scripts 33 and 32 as usual.
 
 The next B-only extension adds the other three observed school outcome
@@ -57,11 +59,24 @@ PAES M1 0.0517 (SE 0.0031), exam-taking share 0.1233 (0.0033), field share
 remain in the sample. Construction, partial-fit, independent and report
 checks pass (22, 26, 124 and 10 respectively).
 
-All eight models converge in three iterations. In C versus the current D
+The original eight models converge in three iterations. In C versus the current D
 under published student coordinates, math VA changes from 0.0180 to 0.0491
 and exam-taking VA from -0.0184 to 0.0778 when school type alone is added.
 The current report shows their student-clustered standard errors. B and D
 are not nested: B uses the four observed outcome averages; D uses the four VAs.
+
+To add/update just the intermediate column, run script 31 with
+`--specifications=A_means`, then scripts 33 and 32. Its visible label is
+`A + averages`. It retains A's distance and fee controls and adds the four
+school outcome averages, isolating that block before adding school type
+in B. Existing A, B, C and D objects and exports are preserved. There are
+now ten model objects including the comuna-distance counterparts; the
+legacy `four_specifications` folder and script names are retained.
+Both new fits converge in three iterations and the expanded independent
+verification passes 142 checks. Under published student coordinates, the
+four average coefficients are PAES M1 0.0306, exam taking -0.0302, field
+0.0743 and institution 0.0506 per school SD; the report includes their
+student-clustered standard errors.
 
 ## Directorio fee-band preference extension (2026-10-21)
 

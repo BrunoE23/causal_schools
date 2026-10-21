@@ -1,4 +1,4 @@
-# Simplify the school-preference report to four additive specifications
+# Simple additive school-preference specifications
 
 ## Request and specification
 
@@ -6,6 +6,8 @@ The user replaced the increasingly complicated report with an explicit
 four-model comparison:
 
 - A: log(1 + distance) and Directorio fee bands.
+- A + averages: A plus the four observed school outcome averages, without
+  school type, inserted before B after the subsequent user request.
 - B: A plus mixed HC/TP, TP-only and four observed school outcome averages,
   including PAES M1 and the three other raw outcome means after the later expansion.
 - C: A plus math, exam-taking, high-premium-field and high-premium-institution VA.
@@ -119,3 +121,25 @@ high-premium-field share 0.0699 (0.0018) and high-premium-institution share
 Construction passes 22 checks, partial fitting 26, independent verification
 124 and the compact report 10. All A, C and D fitted objects and prior input
 columns are preserved exactly.
+
+## Additional averages column between A and B
+
+The user requested an intermediate column with the four school outcome
+averages. Retain A's distance and fee controls, add the four averages, and
+omit school-type indicators; this interpretation was stated before fitting.
+The new internal key is `A_means` and its visible heading is `A + averages`.
+The existing A, B, C and D columns keep their labels and results.
+
+Fit only the two new distance models using the same complete rankings,
+school normalizations and student-clustered covariance. Both the new column
+and B include all four means, so check A <= A_means <= B within each
+distance definition; A <= C <= D remains valid. The report now has one
+visible five-column comparison plus the collapsed municipality version.
+There are ten model objects, retaining the historical four-specification
+file/directory names for reproducibility and stable output paths.
+
+Both new fits converge in three iterations. Published-coordinate slopes
+per school SD are PAES M1 0.0306 (SE 0.0030), exam-taking share -0.0302
+(0.0028), high-premium-field share 0.0743 (0.0018) and institution share
+0.0506 (0.0035). The existing eight models remain unchanged. Expanded
+independent verification passes 142 checks.
