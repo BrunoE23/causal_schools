@@ -209,6 +209,36 @@ within the same program. First enrollment is observed in 2022-2025.
 Run from the repository root with Rscript. Outputs are under
 `data/clean/projected_income_gender/`, with the comparison table under
 `output/tables/projected_income_gender/` and report
-`output/reports/projected_income_gender/projected_income_by_gender.html`.
+`output/reports/projected_income_gender/projected_income_by_gender_unadjusted.html`.
 The current log gaps are -0.02676 with the non-enrollee imputation and
 -0.14422 among enrollees, corresponding to -2.64% and -13.43%.
+
+## Gender gaps controlling for entrance-exam scores
+
+Run `07_income_gender_score_controls.R` after 06 to join only `mrun`,
+`psu_year`, `math_max` and `leng_max` from the master to the cached income
+sample. Require positive observed math and verbal entrance-exam scores
+and an observed admission year. Missing tests are not zero-imputed.
+Standardize each score within admission year using all complete-score
+students in the broad panel. Use unchanged normalization in both samples.
+
+For each of the two income samples, estimate OLS on a female indicator,
+then OLS adding linear math and verbal scores plus admission-year fixed
+effects. Use exactly the same complete-score students in those two
+regressions and HC1 heteroskedasticity-robust covariance. The comparison
+table also retains the original full-sample raw gap, so score-related
+sample loss is visible separately from score adjustment. All original
+income values, samples and raw estimates are preserved and hash-checked.
+
+Both scores are observed for 643,236 of 931,546 students (69.1%), including
+528,005 of 625,616 enrollees (84.4%). Within those matched samples, raw
+women-minus-men log gaps are -0.11217/-0.14220; score-adjusted coefficients
+are -0.07138/-0.09896, respectively. Adjusted relative geometric-mean gaps
+are -6.89% and -9.42%.
+
+Models, covariance matrices, normalization and sample coverage are in
+`data/clean/projected_income_gender/score_controls/`. The active report is
+`output/reports/projected_income_gender/projected_income_by_gender.html`,
+with companion `projected_income_by_gender_score_controls.csv` in the
+task's table folder. Script 06 writes the separate unadjusted report so
+rerunning it does not replace the current score-controlled comparison.

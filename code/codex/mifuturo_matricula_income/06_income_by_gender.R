@@ -92,7 +92,7 @@ html <- c('<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name
   '<p class="note">The relative gap is 100 &times; [exp(mean log income of women &minus; mean log income of men) &minus; 1], comparing geometric means. These projections describe enrollment and program sorting; they do not measure observed individual wages or within-program gender wage differences.</p>',
   '<p class="note">The broad panel contains 931,547 students. Income is observed for all; one record with unknown gender is excluded, leaving 931,546 students, of whom 625,616 have observed HE enrollment. The descriptive comparison imposes no exam-taking or baseline-control restriction.</p>',
   '<p><a href="../../tables/projected_income_gender/projected_income_by_gender.csv">Full table and robust confidence intervals (CSV)</a></p></body></html>')
-writeLines(html, file.path(report_dir, "projected_income_by_gender.html"), useBytes = TRUE)
+writeLines(html, file.path(report_dir, "projected_income_by_gender_unadjusted.html"), useBytes = TRUE)
 message("Finished: ", nrow(checks), " checks passed.")
 print(means)
 print(gaps)

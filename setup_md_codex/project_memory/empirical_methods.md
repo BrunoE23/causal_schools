@@ -623,3 +623,12 @@ Use the unchanged master log_program_income_full_clp_m1 values; report
 women-minus-men mean-log differences and 100*(exp(gap)-1) geometric-mean
 ratios. These are program-assigned earnings prospects, not individual wage
 observations. Script 06 in mifuturo_matricula_income saves this comparison.
+
+The subsequent score-controlled comparison adds linear entrance-exam math
+and verbal scores and admission-year fixed effects to the female-indicator
+OLS regression. Require both positive observed scores and normalize within
+admission year; missing tests are not imputed. Retain the original full-panel
+raw gap, but compare adjusted and unadjusted coefficients on the identical
+scored sample (643,236 with the non-enrollee income assignment; 528,005 HE
+enrollees). Use HC1 covariance. This prevents score-availability selection
+from being mistaken for the effect of conditioning on achievement.

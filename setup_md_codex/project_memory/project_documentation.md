@@ -1286,3 +1286,11 @@ and the existing full log-income variable from the master. The resulting
 931,546 all-student and 625,616 enrolled samples have women-minus-men log
 gaps -0.02676 and -0.14422. Data, table and report use the task name
 `projected_income_gender`.
+
+`mifuturo_matricula_income/07_income_gender_score_controls.R` adds entrance-exam
+math/verbal scores and admission-year fixed effects to that gender comparison.
+It preserves the original income cache, requires both observed positive test
+scores, and compares adjusted/unadjusted estimates on the same scored students.
+The active gender-income report now shows those comparisons; the original
+unadjusted report has the `_unadjusted` suffix. Score-controlled models and
+coverage use `data/clean/projected_income_gender/score_controls/`.

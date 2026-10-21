@@ -1,11 +1,15 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Projected income by gender</title><style>body{max-width:1000px;margin:38px auto;padding:0 22px;font:16px/1.55 system-ui;color:#243143}h1{font-size:27px}table{border-collapse:collapse;width:100%;margin:24px 0}th,td{padding:12px;border-bottom:1px solid #dbe0e6;text-align:right}th:first-child{text-align:left}thead th{background:#f3f6f9}.note{font-size:14px;color:#526171}</style></head><body>
-<h1>Projected income by gender</h1><p>Unadjusted comparisons in the paper&rsquo;s broad panel: grade-8 cohorts 2017&ndash;2020, ages 12&ndash;16, with an observed attended high school.</p>
-<table><thead><tr><th>Sample</th><th>Men: mean log income</th><th>Women: mean log income</th><th>Women &minus; men</th><th>Relative gap</th><th>Students</th></tr></thead><tbody>
-<tr><th>All students, including non-enrollee income floor</th><td>13.8612</td><td>13.8345</td><td>-0.0268</td><td>-2.64%</td><td>931,546</td></tr>
-<tr><th>HE enrollees only</th><td>14.2281</td><td>14.0839</td><td>-0.1442</td><td>-13.43%</td><td>625,616</td></tr>
-</tbody></table>
-<p class="note">The outcome is the master&rsquo;s log_program_income_full_clp_m1: natural log projected monthly income assigned to the first observed HE program. Non-enrollees receive the existing CLP 553,553 floor. Enrollees retain the paper&rsquo;s hierarchical MiFuturo program-income predictions in both rows.</p>
-<p class="note">The relative gap is 100 &times; [exp(mean log income of women &minus; mean log income of men) &minus; 1], comparing geometric means. These projections describe enrollment and program sorting; they do not measure observed individual wages or within-program gender wage differences.</p>
-<p class="note">The broad panel contains 931,547 students. Income is observed for all; one record with unknown gender is excluded, leaving 931,546 students, of whom 625,616 have observed HE enrollment. The descriptive comparison imposes no exam-taking or baseline-control restriction.</p>
-<p><a href="../../tables/projected_income_gender/projected_income_by_gender.csv">Full table and robust confidence intervals (CSV)</a></p></body></html>
+<title>Projected income by gender: score controls</title><style>body{max-width:1100px;margin:38px auto;padding:0 22px;font:16px/1.55 system-ui;color:#243143}h1{font-size:27px}table{border-collapse:collapse;width:100%;margin:24px 0}th,td{padding:12px;border-bottom:1px solid #dbe0e6;text-align:right}th:first-child{text-align:left}thead th{background:#f3f6f9}.note,td span{font-size:14px;color:#526171}td span{display:block}.wrap{overflow:auto}</style></head><body>
+<h1>Projected income by gender, controlling for scores</h1><p>Women-minus-men coefficients in natural-log projected monthly income. The score-adjusted OLS regression controls linearly for entrance-exam math and verbal scores and includes admission-year fixed effects.</p>
+<div class="wrap"><table><thead><tr><th>Sample</th><th>Original raw gap</th><th>Raw gap: scored sample</th><th>Score-adjusted gap</th><th>Adjusted relative gap</th><th>Scored students</th></tr></thead><tbody>
+<tr><th>Including non-enrollee income assignment</th><td>-0.0268</td><td>-0.1122</td><td>-0.0714<span>(0.0011)</span></td><td>-6.89%</td><td>643,236</td></tr>
+<tr><th>HE enrollees only</th><td>-0.1442</td><td>-0.1422</td><td>-0.0990<span>(0.0008)</span></td><td>-9.42%</td><td>528,005</td></tr>
+</tbody></table></div>
+<p class="note">The raw scored-sample and adjusted regressions use exactly the same students. Parentheses show HC1 heteroskedasticity-robust SEs. Adjusted percentage gaps are 100 &times; [exp(female coefficient) &minus; 1].</p>
+<ul>
+<li>Including non-enrollee income assignment: 643,236 of 931,546 students have both scores (69.1%).</li>
+<li>HE enrollees only: 528,005 of 625,616 students have both scores (84.4%).</li>
+</ul>
+<p class="note">The original broad panel covers grade-8 cohorts 2017&ndash;2020, ages 12&ndash;16 with a valid attended high school. The unchanged income sample has 931,546 students with known gender, including 625,616 HE enrollees. Adding scores requires both positive observed entrance-exam components and an observed admission year; missing tests are not assigned zero scores. Scores are standardized within admission year before regression.</p>
+<p class="note">Income is the existing master outcome at first observed HE enrollment. Non-enrollees retain CLP 553,553; enrollees retain the same hierarchical MiFuturo projections. These are conditional program-income associations, rather than observed individual wages or causal gender effects.</p>
+<p><a href="../../tables/projected_income_gender/projected_income_by_gender_score_controls.csv">Comparison table (CSV)</a></p></body></html>
