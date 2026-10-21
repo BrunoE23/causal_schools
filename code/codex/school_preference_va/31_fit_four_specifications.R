@@ -1,9 +1,20 @@
-# Fit A:distance+fees, B:A+observables, C:A+VA, D:B+VA on identical lists.
+# Fit A:distance+fees, B:A+observables, C:A+VA, D:C+school type on identical lists.
 source("code/codex/school_preference_va/four_specifications_common.R")
 suppressPackageStartupMessages(library(survival))
+args <- commandArgs(trailingOnly = TRUE)
+check("Only the optional specifications argument is accepted", length(args) <= 1L && all(grepl("^--specifications=", args)))
+selected_specs <- if (length(args)) strsplit(sub("^--specifications=", "", args), ",", fixed = TRUE)[[1L]] else names(specification_terms)
+check("Selected specifications are valid and unique", length(selected_specs) > 0L && !anyDuplicated(selected_specs) && all(selected_specs %in% names(specification_terms)))
+preserved_specs <- setdiff(names(specification_terms), selected_specs)
+if (length(preserved_specs)) {
+  old_co <- fread(file.path(clean_dir, "coefficients.csv"))[specification %in% preserved_specs]
+  old_summary <- fread(file.path(clean_dir, "model_summary.csv"))[specification %in% preserved_specs]
+  old_diagnostics <- fread(file.path(clean_dir, "diagnostics.csv"))[specification %in% preserved_specs]
+}
 source_paths <- c(four_spec_input_path,
   file.path(source_price_dir, c("coefficients.csv", "model_summary.csv", "school_prices.csv", "fee_specs.csv")),
-  list.files(file.path(source_price_dir, "models"), pattern = "[.]rds$", full.names = TRUE))
+  list.files(file.path(source_price_dir, "models"), pattern = "[.]rds$", full.names = TRUE),
+  unlist(lapply(preserved_specs, function(s) vapply(names(distance_vars), function(m) four_spec_model_path(s, m), character(1)))))
 check("Existing source files are present and distinct", all(file.exists(source_paths)) && !anyDuplicated(source_paths))
 fwrite(data.table(path = source_paths, md5_before = unname(tools::md5sum(source_paths))), file.path(clean_dir, "source_preservation.csv"))
 fwrite(data.table(path = four_spec_input_path, bytes = file.info(four_spec_input_path)$size,
@@ -19,10 +30,14 @@ check("Every required regressor is finite on the common sample", all(vapply(
   d[, setdiff(needed, c("ranking_id", "mrun")), with = FALSE], function(x) all(is.finite(x)), logical(1))))
 check("Specifications contain precisely the requested additive terms", identical(specification_terms$A, active_fee_terms) &&
   identical(specification_terms$B, c(active_fee_terms, observable_terms)) && identical(specification_terms$C, c(active_fee_terms, va_terms)) &&
-  identical(specification_terms$D, c(active_fee_terms, observable_terms, va_terms)))
+  identical(specification_terms$D, c(active_fee_terms, school_type_terms, va_terms)) &&
+  !"z_paes_m1" %in% specification_terms$D)
 ids <- unique(d$ranking_id); ranking_group <- match(d$ranking_id, ids); group_n <- tabulate(ranking_group)
 coefficients <- summaries <- diagnostics <- list()
-for (model_name in names(distance_vars)) for (spec_name in names(specification_terms)) {
+if (length(preserved_specs)) {
+  coefficients$preserved <- old_co; summaries$preserved <- old_summary; diagnostics$preserved <- old_diagnostics
+}
+for (model_name in names(distance_vars)) for (spec_name in selected_specs) {
   terms <- c(unname(distance_vars[model_name]), specification_terms[[spec_name]])
   key <- paste(spec_name, model_name, sep = "_")
   message("Fitting ", key, ": ", length(terms), " coefficients, ", length(ids), " full rankings")
@@ -65,7 +80,12 @@ for (m in names(distance_vars)) {
   s <- summary[model == m]
   check(paste(m, "all four columns use identical samples and null likelihood"), all(vapply(s[, .(applicants, rankings, applicant_school_pairs, schools, null_log_likelihood)], function(x) uniqueN(x) == 1L, logical(1))))
   ll <- setNames(s$log_likelihood, s$specification)
-  check(paste(m, "nested specification likelihoods weakly increase"), ll["B"] >= ll["A"] - 1e-7 && ll["C"] >= ll["A"] - 1e-7 && ll["D"] >= max(ll[c("B", "C")]) - 1e-7)
+  check(paste(m, "nested specification likelihoods weakly increase"), ll["B"] >= ll["A"] - 1e-7 && ll["C"] >= ll["A"] - 1e-7 && ll["D"] >= ll["C"] - 1e-7)
+}
+if (length(preserved_specs)) {
+  check("Unselected coefficient exports are unchanged", identical(rbindlist(coefficients)[specification %in% preserved_specs], old_co))
+  check("Unselected model summaries and diagnostics are unchanged", identical(summary[specification %in% preserved_specs], old_summary) &&
+    identical(rbindlist(diagnostics)[specification %in% preserved_specs], old_diagnostics))
 }
 preservation <- fread(file.path(clean_dir, "source_preservation.csv"))
 check("All existing data and previous fitted models remain unchanged", identical(unname(tools::md5sum(preservation$path)), preservation$md5_before))

@@ -18,6 +18,8 @@ check("Models include only the requested common slopes", !any(grepl("_x_|parent_
   all(vapply(spec_order, function(s) all(vapply(names(distance_vars), function(md)
     setequal(co[specification == s & model == md, term], c(specification_terms[[s]], distance_vars[[md]])),
     logical(1))), logical(1))))
+check("PAES M1 enters only specification B", co[term == "z_paes_m1", .N] == 2L &&
+  setequal(co[term == "z_paes_m1", specification], "B"))
 check("Displayed intervals match saved student-clustered standard errors",
   max(abs(co$lower95 - co$estimate + qnorm(.975) * co$std_error)) < 1e-8 &&
   max(abs(co$upper95 - co$estimate - qnorm(.975) * co$std_error)) < 1e-8)
@@ -84,7 +86,7 @@ make_table <- function(md) {
 get_b <- function(s, term_name) co[specification == s & model == "main" & term == term_name, estimate]
 math_c <- get_b("C", "z_va_math"); math_d <- get_b("D", "z_va_math")
 exam_c <- get_b("C", "z_va_exam"); exam_d <- get_b("D", "z_va_exam")
-interpretation <- paste0("Adding school type and PAES M1 to the four-VA model changes the math-VA coefficient from ",
+interpretation <- paste0("Adding school type to the four-VA model changes the math-VA coefficient from ",
   fmt(math_c), " in C to ", fmt(math_d), " in D, and exam-taking VA from ", fmt(exam_c), " to ", fmt(exam_d), ".")
 monthly_d <- co[specification == "D" & model == "main" & term %in% fee_specs[field == "PAGO_MENSUAL", term], estimate]
 if (length(monthly_d) > 0L && all(monthly_d < 0)) interpretation <- paste0(interpretation,
@@ -110,7 +112,7 @@ html <- paste0('<!doctype html><html lang="en"><head><meta charset="utf-8"><meta
   '.notes{font-size:13px;color:#4e6076}.interpretation{margin-top:20px}a{color:#245d9b}</style></head><body><main>',
   '<h1>School preferences: four specifications</h1>',
   '<p class="specs"><b>A:</b> Distance + fees.<br><b>B:</b> A + school type (Mixed HC/TP, TP-only) + PAES M1 mean.<br>',
-  '<b>C:</b> A + four VAs.<br><b>D:</b> B + four VAs.</p>',
+  '<b>C:</b> A + four VAs.<br><b>D:</b> C + school type (Mixed HC/TP, TP-only).</p>',
   main_table,
   '<p class="notes">Student-clustered standard errors in parentheses. A dash means the attribute is excluded. Fee coefficients compare each band with free in that field; the shared unknown-fee indicator compares unavailable prices with free in both fields.',
   esc_html(support_note), '</p>',

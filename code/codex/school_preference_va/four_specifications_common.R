@@ -7,9 +7,10 @@ table_dir <- file.path(table_dir, "four_specifications")
 for (p in c(clean_dir, table_dir, file.path(clean_dir, "models"))) dir.create(p, recursive = TRUE, showWarnings = FALSE)
 # The monthly CLP1,000-10,000 band is absent in this fixed common sample.
 active_fee_terms <- setdiff(fee_terms, "monthly_fee_band_2")
-observable_terms <- c("mixed_hc_tp", "tp_only", "z_paes_m1")
+school_type_terms <- c("mixed_hc_tp", "tp_only")
+observable_terms <- c(school_type_terms, "z_paes_m1")
 specification_terms <- list(A = active_fee_terms, B = c(active_fee_terms, observable_terms),
-  C = c(active_fee_terms, va_terms), D = c(active_fee_terms, observable_terms, va_terms))
+  C = c(active_fee_terms, va_terms), D = c(active_fee_terms, school_type_terms, va_terms))
 specification_labels <- c(A = "Distance + fees", B = "A + school type + PAES average",
-  C = "A + four VAs", D = "B + four VAs")
+  C = "A + four VAs", D = "C + school type (no PAES)")
 four_spec_model_path <- function(specification, model) file.path(clean_dir, "models", paste0(specification, "_", model, ".rds"))

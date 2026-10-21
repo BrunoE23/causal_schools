@@ -10,8 +10,10 @@ expected_fees <- c(paste0("enrollment_fee_band_", 2:6), paste0("monthly_fee_band
 expected_vas <- c("z_va_math", "z_va_exam", "z_va_highfield", "z_va_highinst")
 expected_types_m1 <- c("mixed_hc_tp", "tp_only", "z_paes_m1")
 expected_specifications <- list(A = expected_fees, B = c(expected_fees, expected_types_m1),
-  C = c(expected_fees, expected_vas), D = c(expected_fees, expected_types_m1, expected_vas))
+  C = c(expected_fees, expected_vas), D = c(expected_fees, "mixed_hc_tp", "tp_only", expected_vas))
 check("Four specifications exactly match the requested additive models", identical(specification_terms, expected_specifications))
+check("PAES M1 is included only in specification B", identical(names(specification_terms)[vapply(
+  specification_terms, function(terms) "z_paes_m1" %in% terms, logical(1))], "B"))
 check("Only the ten identified fee terms enter all specifications", identical(active_fee_terms, expected_fees) &&
   !"monthly_fee_band_2" %in% unlist(specification_terms))
 check("No parental characteristics or interaction terms enter any model", !any(grepl(
@@ -19,6 +21,12 @@ check("No parental characteristics or interaction terms enter any model", !any(g
 preservation <- fread(file.path(clean_dir, "source_preservation.csv"))
 check("All previous inputs and fitted results retain their recorded hashes", nrow(preservation) > 0L &&
   all(file.exists(preservation$path)) && identical(unname(tools::md5sum(preservation$path)), preservation$md5_before))
+abc_paths <- vapply(c("A", "B", "C"), function(s) vapply(names(distance_vars), function(m)
+  four_spec_model_path(s, m), character(1)), character(length(distance_vars)))
+abc_manifest <- preservation[path %in% as.vector(abc_paths)]
+check("Partial refits preserve all six A, B and C objects; full rebuilds have no such snapshot", nrow(abc_manifest) == 0L ||
+  (nrow(abc_manifest) == 6L && setequal(abc_manifest$path, as.vector(abc_paths)) &&
+    identical(unname(tools::md5sum(abc_manifest$path)), abc_manifest$md5_before)))
 check("The simplified models directly reuse the existing ranking data", normalizePath(four_spec_input_path, winslash = "/") ==
   normalizePath(file.path(source_price_dir, "estimation_data.rds"), winslash = "/"))
 d <- as.data.table(readRDS(four_spec_input_path))
@@ -66,6 +74,8 @@ check("All model summaries retain the identical complete sample", all(ms$applica
   all(ms$informative_rank_decisions == 696193L))
 check("All coefficients and clustered errors are finite", all(is.finite(co$estimate)) &&
   all(is.finite(co$std_error) & co$std_error > 0) && !any(grepl("parent|income|_x_|:", co$term)))
+check("Exported PAES M1 coefficients occur only in B", nrow(co[term == "z_paes_m1"]) == 2L &&
+  all(co[term == "z_paes_m1", specification] == "B"))
 ranking_group <- match(d$ranking_id, unique(d$ranking_id)); ranking_n <- tabulate(ranking_group)
 # Both names are available so residual reconstruction honors the stored data call.
 x <- d
@@ -112,8 +122,7 @@ for (m in names(distance_vars)) {
   ll <- setNames(ms[model == m, log_likelihood], ms[model == m, specification])
   check(paste(m, "adding school type and PAES M1 weakly improves A to B"), ll["B"] >= ll["A"] - 1e-7)
   check(paste(m, "adding four VAs weakly improves A to C"), ll["C"] >= ll["A"] - 1e-7)
-  check(paste(m, "adding four VAs weakly improves B to D"), ll["D"] >= ll["B"] - 1e-7)
-  check(paste(m, "adding school type and PAES M1 weakly improves C to D"), ll["D"] >= ll["C"] - 1e-7)
+  check(paste(m, "adding school type alone weakly improves C to D"), ll["D"] >= ll["C"] - 1e-7)
 }
 check("All preceding input and model hashes are unchanged after verification", identical(
   unname(tools::md5sum(preservation$path)), preservation$md5_before))

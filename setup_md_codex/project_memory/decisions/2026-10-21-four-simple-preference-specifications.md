@@ -8,7 +8,7 @@ four-model comparison:
 - A: log(1 + distance) and Directorio fee bands.
 - B: A plus mixed HC/TP, TP-only and the PAES M1 school mean.
 - C: A plus math, exam-taking, high-premium-field and high-premium-institution VA.
-- D: B plus those four VAs.
+- D: C plus mixed HC/TP and TP-only, excluding PAES M1 after the user's revision.
 
 Interpret the models additively, with common attribute slopes across school
 types. Parent education, parent income and all attribute-by-type interactions
@@ -30,7 +30,8 @@ Estimate four pooled models under published student coordinates and another
 four under comuna-centroid distances. Use the exact submitted-set
 Plackett-Luce/Cox representation and covariance clustered by student.
 Check full-list/sample preservation, complete term inclusion, numerical
-convergence and nested likelihood ordering A <= B,C <= D within distance.
+convergence and nested likelihood ordering A <= B, A <= C <= D within distance.
+B and D are not nested because only B contains PAES M1.
 
 ## Reporting and reproducibility
 
@@ -49,7 +50,7 @@ The directory and PAES variables remain later school snapshots; coefficients
 are conditional ranking associations. Differences across logit specifications
 can also reflect utility-error-scale changes.
 
-## Current results and validation
+## Prior D specification with PAES M1
 
 All eight fits converge in three iterations. Fitting checks pass 58/58;
 independent verification passes 101/101, including a student-clustered
@@ -62,3 +63,20 @@ taking VA from -0.0184 (0.0020) to 0.0431 (0.0024). High-premium-field VA
 changes from 0.0578 (0.0014) to 0.0445 (0.0014); high-premium-institution VA
 from -0.0046 (0.0030) to -0.0093 (0.0030). These are joint conditional slopes,
 not causal preference parameters or comparable utility scales by construction.
+
+## Revision: remove PAES M1 from D only
+
+The user then explicitly excluded the PAES M1 mean from D. The current D
+contains distance, fees, school type and the four VAs. B retains PAES M1;
+A, B and C fitted objects and exports are unchanged. Script 31 now supports
+`--specifications=D` for a partial refit with preserved-object hashes; its
+default continues to fit all models reproducibly.
+
+Both revised D distance models converge in three iterations on the same
+273,184 applicants. For published student coordinates, the revised D's
+math VA coefficient is 0.0491 (SE 0.0019), exam-taking VA is 0.0778 (0.0024),
+high-premium-field VA is 0.0569 (0.0014) and high-premium-institution VA is
+-0.0181 (0.0030). All 26 partial-refit checks pass, including preservation
+of all six A-C model files and unchanged A-C coefficient/summary exports.
+Independent verification passes 102 checks, and the updated compact report
+passes 10 checks with PAES M1 displayed only in column B.

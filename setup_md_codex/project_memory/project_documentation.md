@@ -1240,7 +1240,8 @@ payments at application time. Specification and inference are recorded in
 `decisions/2026-10-21-directory-prices-school-preferences.md`.
 
 The current report was subsequently simplified to A-D additive models:
-distance+fees; add school type+PAES; add four VAs; add both blocks. It uses
+distance+fees; add school type+PAES; add four VAs; add school type+four VAs
+without PAES. The user excluded PAES M1 from D only, leaving B unchanged. It uses
 the same 273,184 applicant lists, with no parent controls or type interactions.
 Scripts 31-33 save eight pooled models (four per distance definition) under
 the `directory_prices_2024/four_specifications` subfolders. The current HTML

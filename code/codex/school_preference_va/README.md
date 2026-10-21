@@ -7,7 +7,7 @@ The current report follows the requested four-column comparison:
 - A: distance and directory fee bands.
 - B: A plus mixed HC/TP, TP-only and the PAES M1 school mean.
 - C: A plus the four standardized EB VAs.
-- D: B plus the four VAs.
+- D: C plus mixed HC/TP and TP-only; PAES M1 is excluded.
 
 All four specifications use the same 273,184 full submitted lists, 969,377
 school alternatives and 2,481 destination schools from the preceding fee
@@ -31,11 +31,16 @@ section. The earlier comprehensive report is preserved as
 `with_directory_prices_2024_full.html`; script 29 now renders that archived
 view so rerunning it does not overwrite the simplified current report.
 
-All eight fits converge in three iterations, with 58 fitting and 101
-independent checks passing. In C versus D under published student coordinates,
-math VA changes from 0.0180 to -0.0506 and exam-taking VA from -0.0184 to
-0.0431 when school type and PAES are added. The current report shows their
-student-clustered standard errors in the same four-column table.
+The user subsequently removed PAES M1 from D only; B retains it. To update
+only D, pass `--specifications=D` to script 31; unselected fitted objects and
+coefficient tables are preserved and checked. The default refits all four
+specifications. Then run scripts 33 and 32 as usual.
+
+All eight models converge in three iterations. In C versus the current D
+under published student coordinates, math VA changes from 0.0180 to 0.0491
+and exam-taking VA from -0.0184 to 0.0778 when school type alone is added.
+The current report shows their student-clustered standard errors. B and D
+are not nested: B includes PAES M1; D includes the four VAs instead.
 
 ## Directorio fee-band preference extension (2026-10-21)
 
