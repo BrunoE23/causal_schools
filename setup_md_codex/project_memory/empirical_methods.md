@@ -597,3 +597,13 @@ distance, fees and the four observed school outcome averages with no
 school-type indicators. Existing A-D specifications and their fitted
 objects remain unchanged. It isolates the means block before adding type
 in B; all five columns share the same complete ranking sample and units.
+
+The predicted-exam-score exercise uses grade-8 cohorts 2017/2019 with
+observed grade-8 SIMCE and timely entrance-exam scores. Five-fold predictions
+of the standardized math-verbal composite use the full baseline controls,
+including middle-school fixed effects and grade-8 SIMCE. Define b_i as the
+out-of-fold score and g_i as actual minus b_i, preserving common actual-score
+SD units. Regress the master's HE-application and premium-field outcomes on
+both components with an intercept and middle-school-clustered SEs. See
+`decisions/2026-10-21-predicted-exam-score-and-gap.md` for sample, follow-up,
+outcome definitions and conditional-inference limitations.

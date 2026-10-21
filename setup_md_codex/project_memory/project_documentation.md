@@ -1261,3 +1261,12 @@ column contains distance, fees and the four school outcome averages;
 school type first enters B. The internal key is `A_means`. Both distances
 are estimated, giving ten current model objects on the same sample; the
 historical `four_specifications` file paths stay stable.
+
+The paper master `univ_gr8_df.csv` already contains `year_1st_app` and
+`high_paying_field_m1`. Observed `year_1st_app` identifies any recorded
+regular centralized university application (2021-2026), distinct from
+financial-aid application or enrollment. Scripts 07/08 in the
+`simce4_exam_predictiveness` task read these existing outcomes and construct
+cross-fitted predicted exam scores b_i and realized gaps g_i for grade-8
+cohorts 2017/2019. Derived data are under the task's clean-data
+`bg_decomposition` folder; the separate report is `predicted_score_and_gap.html`.

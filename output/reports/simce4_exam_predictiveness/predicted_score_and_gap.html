@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Predicted entrance-exam score and score residual</title>
+<style>body{max-width:960px;margin:42px auto;padding:0 24px;color:#20242a;font:16px/1.55 system-ui,sans-serif}h1{font-size:27px;line-height:1.25;margin-bottom:12px}p{margin:14px 0}.subtitle,.note{color:#525c66}.subtitle{font-size:15px}table{width:100%;border-collapse:collapse;margin:24px 0}th,td{padding:12px 15px;border-bottom:1px solid #e0e4e8}thead th{border-bottom:2px solid #687788;text-align:right}thead th:first-child,tbody th{text-align:left}tbody th{font-weight:500}td{text-align:right;font-variant-numeric:tabular-nums}.se{display:block;font-size:14px;color:#596473;margin-top:3px}.section th,.section td{border-top:2px solid #b4bdc6}.note{font-size:14px}details{margin:25px 0}summary{cursor:pointer;font-weight:600}.flow{font-size:12px;overflow:auto}.flow th,.flow td{padding:7px}.flow th{text-align:left}a{color:#265dad}.pass{color:#276339}</style>
+</head><body>
+<h1>Predicted entrance-exam score and score residual</h1>
+<p class="subtitle">Grade-8 cohorts 2017 and 2019 &middot; 233,787 exam takers &middot; Five-fold cross-fitted predictions</p>
+<p>The observed math&ndash;verbal entrance-exam composite is split into its baseline prediction, <i>b</i><sub>i</sub>, and the residual, <i>g</i><sub>i</sub> = actual score &minus; <i>b</i><sub>i</sub>. Each outcome is regressed jointly on these two components and an intercept.</p>
+<p>Cross-fitted score prediction explains <strong>72.0%</strong> of observed score variation overall (2017: 69.2%; 2019: 74.5%).</p>
+<table aria-label="Outcome regressions on predicted entrance-exam score and score residual"><thead><tr><th></th>
+<th scope="col">Centralized HE application</th><th scope="col">High-premium field enrollment</th>
+</tr></thead><tbody>
+<tr class=""><th scope="row">Predicted score, <i>b</i><sub>i</sub></th><td>18.95<span class="se">(0.18)</span></td><td>14.23<span class="se">(0.23)</span></td></tr>
+<tr class=""><th scope="row">Score residual, <i>g</i><sub>i</sub></th><td>18.61<span class="se">(0.21)</span></td><td>12.49<span class="se">(0.21)</span></td></tr>
+<tr class="section"><th scope="row">Students</th><td>233,787</td><td>233,787</td></tr>
+<tr class=""><th scope="row">Middle-school clusters</th><td>5,647</td><td>5,647</td></tr>
+<tr class=""><th scope="row">Outcome mean</th><td>74.7%</td><td>43.1%</td></tr>
+<tr class=""><th scope="row">Regression R<sup>2</sup></th><td>0.185</td><td>0.076</td></tr>
+<tr class=""><th scope="row"><i>p</i>: coefficient on <i>b</i> equals coefficient on <i>g</i></th><td>0.105</td><td>&lt;0.001</td></tr>
+</tbody></table>
+<p class="note"><strong>Units:</strong> percentage-point changes for a one-unit increase in the relevant score component. Both components retain the units of the actual score: one within-admission-year standard deviation of the math&ndash;verbal composite. They are not standardized separately. Parentheses contain middle-school clustered standard errors; inference is conditional on the cross-fitted predictions.</p>
+<p class="note"><strong>Prediction:</strong> fifths of students are held out in turn. Predictors include cubic grade-4 and grade-8 SIMCE math and reading scores, parental background, middle-school GPA and attendance, and cohort, sex, age, residence-comuna, middle-years-observed and middle-school fixed effects. No high-school identifiers enter the prediction. Actual entrance scores refer to timely admission years 2022 (PDT) and 2024 (PAES), standardized within admission year.</p>
+<p class="note"><strong>Outcomes:</strong> centralized HE application is the master data&rsquo;s regular-application indicator, observed in 2021&ndash;2026 and derived from its first-application-year variable; it is neither financial-aid application nor application to every IP/CFT. Observed first applications in this sample span 2022&ndash;2026. High-premium field is the existing indicator at first observed higher-education enrollment in 2022&ndash;2025, with non-enrollment coded zero. Follow-up differs across cohorts. Both regressions use the same students, all with observed SIMCE8 and timely entrance-exam scores.</p>
+<p class="note"><strong>Coverage:</strong> Of 297,397 timely exam takers, 265,911 have both grade-8 SIMCE scores and 234,140 have complete baseline controls. Cross-fitting excludes 353 students whose held-out fixed-effect levels are absent from training; no further students are lost to missing HE outcomes.</p>
+<p class="note"><strong>Interpretation:</strong> these are conditional associations. The residual is everything in the actual score left unexplained by measured baseline predictors; it is not a causal estimate of a high school&rsquo;s contribution. The second-stage specification contains only an intercept, <i>b</i><sub>i</sub> and <i>g</i><sub>i</sub>.</p>
+<details><summary>Sample accounting and saved results</summary><div class="flow"><table><thead><tr>
+<th>cohort_gr8</th><th>N</th><th>stage</th>
+</tr></thead><tbody>
+<tr><td>2019</td><td>233475</td><td>1. Master grade-8 cohorts 2017 and 2019</td></tr>
+<tr><td>2017</td><td>238468</td><td>1. Master grade-8 cohorts 2017 and 2019</td></tr>
+<tr><td>All</td><td>471943</td><td>1. Master grade-8 cohorts 2017 and 2019</td></tr>
+<tr><td>2019</td><td>155461</td><td>2. Both entrance-exam components observed in the expected admission year</td></tr>
+<tr><td>2017</td><td>141936</td><td>2. Both entrance-exam components observed in the expected admission year</td></tr>
+<tr><td>All</td><td>297397</td><td>2. Both entrance-exam components observed in the expected admission year</td></tr>
+<tr><td>2017</td><td>127939</td><td>3. Both grade-8 SIMCE scores observed</td></tr>
+<tr><td>2019</td><td>137972</td><td>3. Both grade-8 SIMCE scores observed</td></tr>
+<tr><td>All</td><td>265911</td><td>3. Both grade-8 SIMCE scores observed</td></tr>
+<tr><td>2017</td><td>109858</td><td>4. Complete baseline controls, including middle-school identity</td></tr>
+<tr><td>2019</td><td>124282</td><td>4. Complete baseline controls, including middle-school identity</td></tr>
+<tr><td>All</td><td>234140</td><td>4. Complete baseline controls, including middle-school identity</td></tr>
+<tr><td>2017</td><td>109764</td><td>5. Out-of-fold prediction available</td></tr>
+<tr><td>2019</td><td>124023</td><td>5. Out-of-fold prediction available</td></tr>
+<tr><td>All</td><td>233787</td><td>5. Out-of-fold prediction available</td></tr>
+<tr><td>2017</td><td>109764</td><td>6. Common sample for both requested HE outcomes</td></tr>
+<tr><td>2019</td><td>124023</td><td>6. Common sample for both requested HE outcomes</td></tr>
+<tr><td>All</td><td>233787</td><td>6. Common sample for both requested HE outcomes</td></tr>
+</tbody></table></div>
+<p><a href="../../tables/simce_prediction/predicted_score_and_gap.csv">Regression estimates and confidence intervals (CSV)</a></p>
+</details>
+<p class="note pass">Independent verification: 52 checks passed, including exact score decomposition and reconstruction of the clustered covariance matrices.</p>
+</body></html>
