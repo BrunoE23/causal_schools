@@ -1,7 +1,10 @@
 # Predicted entrance-exam score and realized gap
 
-The current exercise is implemented by `07_construct_regress_bg.R` and
-`08_verify_report_bg.R`. Scripts 00-06 and their earlier outputs are
+Script `07_construct_regress_bg.R` builds the score decomposition.
+The current logistic outcome models are implemented by `09_fit_logit_bg.R`
+and `10_verify_report_logit_bg.R`. Script `08_verify_report_bg.R` verifies
+and reports the preceding linear-probability models in archived outputs.
+Scripts 00-06 and their earlier outputs are
 pre-existing exploratory analyses and are not rerun by this exercise.
 
 ## Inputs and sample
@@ -46,13 +49,25 @@ separately; both retain units of one actual composite-score SD.
 
 ## Requested regressions
 
-For each binary outcome estimate the additive linear-probability model
-`Y_i = alpha + beta_b b_i + beta_g g_i + error_i` with an intercept and
-no other second-stage controls. Cluster SEs by most-attended middle
-school, with correction `G/(G-1) * (N-1)/(N-3)` and t inference using
-`G-1` degrees of freedom. These SEs are conditional on the generated
-scores and do not incorporate first-stage estimation uncertainty.
-The report also tests equality of the two slopes.
+At the user's request, fit logistic regressions for each binary outcome:
+`Pr(Y_i=1) = logit_inverse(alpha + beta_b b_i + beta_g g_i)`.
+The intercept and the two existing score components are the only
+second-stage regressors. Reuse the cached student scores unchanged;
+no prediction refitting or master-data reads are needed for this change.
+Cluster the logit score sandwich by most-attended middle school, with
+correction `G/(G-1) * (N-1)/(N-3)` and t inference using `G-1` degrees
+of freedom. These SEs condition on the generated scores and do not
+incorporate first-stage estimation uncertainty.
+
+The main table shows average marginal effects (AMEs) in percentage
+points, not log-odds coefficients or discrete one-SD probability changes.
+For a continuous score component k, the AME is
+`beta_k * mean(p_i * (1-p_i))`. Delta-method covariance uses the full
+middle-school-clustered coefficient covariance and the derivative of
+the mean logistic weight. Raw logit coefficients and odds ratios are
+available separately. Test equality of the two logit slopes as the
+primary comparison; the two AMEs share a common positive multiplier.
+The earlier LPMs remain saved as a historical comparison.
 
 Application follow-up covers 2021-2026 and first-enrollment data cover
 2022-2025, so follow-up length differs by cohort. These are descriptive
@@ -64,19 +79,33 @@ From the repository root:
 
 ```powershell
 & 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/simce4_exam_predictiveness/07_construct_regress_bg.R
-& 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/simce4_exam_predictiveness/08_verify_report_bg.R
+& 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/simce4_exam_predictiveness/09_fit_logit_bg.R
+& 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/simce4_exam_predictiveness/10_verify_report_logit_bg.R
 ```
 
 Derived student scores, fold models, regression models and covariance
 matrices, normalization, sample accounting, manifests and checks are in
 `data/clean/simce4_exam_predictiveness/bg_decomposition/`.
+Logistic model objects, covariance matrices, AMEs and preservation hashes
+are in the `logit/` subfolder. Run only scripts 09/10 to refit the current
+outcome models when `student_scores.rds` already exists.
 The report is
 `output/reports/simce4_exam_predictiveness/predicted_score_and_gap.html`.
 Its companion table is
 `output/tables/simce_prediction/predicted_score_and_gap.csv`.
+Archived LPM report/table paths have the suffix `_lpm`; script 08 now
+writes those archive paths, preserving the active logistic report.
+Script 09 archives existing LPM reports before the first logit update.
 The existing preference-model report remains unchanged.
 
 The current run retains 233,787 students at 5,647 middle schools after
 excluding 353 out-of-fold predictions with unseen fixed-effect levels.
 Cross-fitted score R-squared is 72.0% overall (2017: 69.2%; 2019: 74.5%).
-Construction passes 22 checks and independent verification passes 52.
+Score construction passes 22 checks; the earlier independent LPM
+verification passes 52. The logistic fitter separately verifies convergence,
+score equations, covariance identification and preservation of earlier inputs.
+The current logit run passes 14 fit checks and 28 independent verification
+checks. AMEs for b_i/g_i are 21.71/19.40 pp for centralized HE application
+and 13.86/12.36 pp for premium-field enrollment. Both coefficient-equality
+tests reject at p<0.001, so the baseline component now has the larger
+association for both outcomes in this specification.

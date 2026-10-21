@@ -174,7 +174,7 @@ display_table[, outcome_label := unname(outcome_labels[outcome])]
 display_table[, `:=`(estimate_pp = 100 * estimate, std_error_pp = 100 * std_error,
   lower95_pp = 100 * lower95, upper95_pp = 100 * upper95)]
 display_table <- merge(display_table, summary, by = "outcome", all.x = TRUE, sort = FALSE)
-fwrite(display_table, file.path(table_dir, "predicted_score_and_gap.csv"))
+fwrite(display_table, file.path(table_dir, "predicted_score_and_gap_lpm.csv"))
 
 escape_html <- function(x) {
   x <- gsub("&", "&amp;", as.character(x), fixed = TRUE)
@@ -237,13 +237,13 @@ html <- c('<!doctype html>', '<html lang="en"><head><meta charset="utf-8">',
   '<p class="note"><strong>Interpretation:</strong> these are conditional associations. The residual is everything in the actual score left unexplained by measured baseline predictors; it is not a causal estimate of a high school&rsquo;s contribution. The second-stage specification contains only an intercept, <i>b</i><sub>i</sub> and <i>g</i><sub>i</sub>.</p>',
   '<details><summary>Sample accounting and saved results</summary><div class="flow"><table><thead><tr>', flow_headers,
   '</tr></thead><tbody>', flow_rows, '</tbody></table></div>',
-  '<p><a href="../../tables/simce_prediction/predicted_score_and_gap.csv">Regression estimates and confidence intervals (CSV)</a></p>',
+  '<p><a href="../../tables/simce_prediction/predicted_score_and_gap_lpm.csv">Regression estimates and confidence intervals (CSV)</a></p>',
   '</details>',
   paste0('<p class="note pass">Independent verification: ', length(checks) + 1L, ' checks passed, including exact score decomposition and reconstruction of the clustered covariance matrices.</p>'),
   '</body></html>')
-report_path <- file.path(report_dir, "predicted_score_and_gap.html")
+report_path <- file.path(report_dir, "predicted_score_and_gap_lpm.html")
 writeLines(html, report_path, useBytes = TRUE)
 check("The report and companion table are saved", file.exists(report_path) &&
-  file.exists(file.path(table_dir, "predicted_score_and_gap.csv")))
+  file.exists(file.path(table_dir, "predicted_score_and_gap_lpm.csv")))
 fwrite(rbindlist(checks), file.path(clean_dir, "verification_checks.csv"))
 message("Done: ", report_path)

@@ -1270,3 +1270,10 @@ financial-aid application or enrollment. Scripts 07/08 in the
 cross-fitted predicted exam scores b_i and realized gaps g_i for grade-8
 cohorts 2017/2019. Derived data are under the task's clean-data
 `bg_decomposition` folder; the separate report is `predicted_score_and_gap.html`.
+
+The current b_i/g_i outcome models are logistic, fitted and verified by
+scripts 09/10 in that task using the unchanged saved score dataset.
+The report's primary coefficients are average marginal effects in
+percentage points; raw logit coefficients and odds ratios are separate.
+Logit objects and diagnostics use `bg_decomposition/logit/`. LPM report
+and table archives have `_lpm` suffixes; script 08 now targets those files.

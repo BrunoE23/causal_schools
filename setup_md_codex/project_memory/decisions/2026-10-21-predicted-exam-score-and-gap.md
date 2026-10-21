@@ -64,3 +64,37 @@ and p<0.001 for premium field. Outcome means are 0.7468 and 0.4305.
 Construction passes 22 checks and independent verification passes 52,
 including exact decomposition, held-out prediction reproduction and
 independent reconstruction of both clustered covariance matrices.
+
+## Logistic replacement requested by the user
+
+The user subsequently requested logistic regression instead of the LPM.
+Reuse the same cached 233,787 students, b_i/g_i values, score units and
+master outcomes. Fit binomial-logit models with an intercept and b_i/g_i
+only; preserve the prediction stage and historical LPM models unchanged.
+
+Use the logit score sandwich with middle-school clusters and the same
+G/(G-1)*(N-1)/(N-3) correction and t(G-1) inference. Average marginal
+effects are beta_k times mean[p_i(1-p_i)]. Compute their standard errors
+by the delta method using the entire clustered coefficient covariance,
+including the derivative of the average logistic weight. These are local
+average derivatives, not finite changes from raising a component by one SD.
+The coefficient-equality test is primary; equality of the two AMEs is the
+same null because both share a common positive multiplier.
+
+Script 09 fits the two logits from the saved scores and records input
+preservation hashes. Script 10 verifies the likelihood, score sandwich,
+AME derivatives and covariance independently and updates the current
+predicted_score_and_gap.html report. Its main table shows AMEs in
+percentage points and a collapsed table retains raw logit coefficients
+and odds ratios. The prior LPM report and table are archived as `_lpm`;
+script 08 writes those archive paths on reruns.
+
+The two logits converge in five and four iterations. Average marginal
+effects on b_i/g_i are 0.21708/0.19401 for HE application (clustered
+delta-method SEs 0.00127/0.00160) and 0.13864/0.12355 for premium-field
+enrollment (0.00220/0.00207). The b_i coefficient is larger for both
+outcomes; coefficient-equality p-values are 3.75e-29 and 1.11e-7.
+This changes the application's comparison relative to the preceding LPM,
+where equality was not rejected. Fit validation passes 14 checks and
+independent logit/AME verification passes 28, including numerical
+finite-difference verification of the marginal-effect gradients.

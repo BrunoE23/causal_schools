@@ -607,3 +607,10 @@ SD units. Regress the master's HE-application and premium-field outcomes on
 both components with an intercept and middle-school-clustered SEs. See
 `decisions/2026-10-21-predicted-exam-score-and-gap.md` for sample, follow-up,
 outcome definitions and conditional-inference limitations.
+
+The user replaced the second-stage LPMs in that exercise with logistic
+regressions on the identical b_i/g_i sample. The current table reports
+average marginal effects with delta-method SEs from the middle-school
+clustered logit score covariance; raw logit coefficients and odds ratios
+are retained separately. Both AMEs keep the existing actual-score units.
+The earlier LPM outputs are archived, and no baseline predictions are refit.
