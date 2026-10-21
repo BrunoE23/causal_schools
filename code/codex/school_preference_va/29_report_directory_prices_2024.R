@@ -237,7 +237,7 @@ html <- paste0('<!doctype html><html lang="en"><head><meta charset="utf-8"><meta
   '<a href="../../tables/school_preference_va/directory_prices_2024/sample_and_fit_comparison.csv">Sample and fit comparison</a></p>',
   '<footer>Reproducible report: 29_report_directory_prices_2024.R. Tables are constructed from saved estimates and student-clustered covariance contrasts; this report script does not fit regressions.</footer>',
   '</main></body></html>')
-report_path <- file.path(report_dir, "with_directory_prices_2024.html")
+report_path <- file.path(report_dir, "with_directory_prices_2024_full.html")
 writeLines(html, report_path, useBytes = TRUE)
 check("Report contains complete price, slope and sample sections", file.exists(report_path) &&
   all(vapply(c("Price associations in the pooled model", "How adding fees changes preference associations",

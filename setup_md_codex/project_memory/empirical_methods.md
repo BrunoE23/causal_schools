@@ -575,3 +575,11 @@ priority-by-continuation groups and both distances. The post-choice 2024
 snapshot describes school-level fee associations; it does not identify a
 causal price response or peso-valued willingness to pay. See
 `decisions/2026-10-21-directory-prices-school-preferences.md`.
+
+The subsequent simplified report compares four additive pooled models on
+the same complete sample: A distance+fees; B A+mixed HC/TP+TP-only+PAES M1;
+C A+four VAs; D B+four VAs. These models omit parent composition and all
+attribute-by-type interactions, with the same units, fees and student
+clustering. The main report has one A-D table and a collapsed comuna-distance
+replication. See
+`decisions/2026-10-21-four-simple-preference-specifications.md`.

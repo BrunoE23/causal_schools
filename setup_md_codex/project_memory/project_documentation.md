@@ -1238,3 +1238,12 @@ the report is `output/reports/school_preference_va/with_directory_prices_2024.ht
 The 2024 fees are later reported school attributes, not exact household
 payments at application time. Specification and inference are recorded in
 `decisions/2026-10-21-directory-prices-school-preferences.md`.
+
+The current report was subsequently simplified to A-D additive models:
+distance+fees; add school type+PAES; add four VAs; add both blocks. It uses
+the same 273,184 applicant lists, with no parent controls or type interactions.
+Scripts 31-33 save eight pooled models (four per distance definition) under
+the `directory_prices_2024/four_specifications` subfolders. The current HTML
+path stays the same; the older comprehensive report is retained with the
+`_full.html` suffix. See
+`decisions/2026-10-21-four-simple-preference-specifications.md`.

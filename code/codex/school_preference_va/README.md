@@ -1,5 +1,42 @@
 # School preferences and four-dimensional EB value added
 
+## Current report: four additive specifications (2026-10-21)
+
+The current report follows the requested four-column comparison:
+
+- A: distance and directory fee bands.
+- B: A plus mixed HC/TP, TP-only and the PAES M1 school mean.
+- C: A plus the four standardized EB VAs.
+- D: B plus the four VAs.
+
+All four specifications use the same 273,184 full submitted lists, 969,377
+school alternatives and 2,481 destination schools from the preceding fee
+extension. School-attribute normalizations and the ten identified fee
+indicators are unchanged. School-type effects use Non-TP as reference.
+All slopes are additive and common across types. Parent education, parent
+income and type-by-attribute interactions do not enter these specifications.
+
+Run 31_fit_four_specifications.R, 33_verify_four_specifications.R and
+32_report_four_specifications.R from the project root, using the existing
+directory_prices_2024 estimation input. Fit A-D with published student
+coordinates and again with home-comuna distances. Source/model hashes,
+new fitted objects, clustered covariance matrices and checks are under
+`data/clean/school_preference_va/directory_prices_2024/four_specifications/`;
+two aggregate companion tables use the same output/tables subfolder.
+
+The current report remains
+`output/reports/school_preference_va/with_directory_prices_2024.html`.
+It displays one A-D table, with the municipality version in a collapsed
+section. The earlier comprehensive report is preserved as
+`with_directory_prices_2024_full.html`; script 29 now renders that archived
+view so rerunning it does not overwrite the simplified current report.
+
+All eight fits converge in three iterations, with 58 fitting and 101
+independent checks passing. In C versus D under published student coordinates,
+math VA changes from 0.0180 to -0.0506 and exam-taking VA from -0.0184 to
+0.0431 when school type and PAES are added. The current report shows their
+student-clustered standard errors in the same four-column table.
+
 ## Directorio fee-band preference extension (2026-10-21)
 
 Add 2024 Directorio PAGO_MATRICULA and PAGO_MENSUAL as categorical fee levels
@@ -30,7 +67,7 @@ Run from the project root:
 Derived inputs, models, covariance matrices, support and checks are in
 `data/clean/school_preference_va/directory_prices_2024/`. Aggregate tables
 are in `output/tables/school_preference_va/directory_prices_2024/`, with
-report `output/reports/school_preference_va/with_directory_prices_2024.html`.
+report `output/reports/school_preference_va/with_directory_prices_2024_full.html`.
 Coefficients compare reported fee bands with free schools conditional on
 other attributes and the submitted list. The 2024 snapshot follows choices
 in 2018-2020 and need not measure each household's net payment; do not

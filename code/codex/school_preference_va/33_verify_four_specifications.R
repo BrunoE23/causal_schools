@@ -1,0 +1,121 @@
+# Independently verify the four pooled specifications and their saved estimates.
+source("code/codex/school_preference_va/four_specifications_common.R")
+suppressPackageStartupMessages(library(survival))
+same_num <- function(a, b, tol = 1e-9) {
+  if (length(a) != length(b)) return(FALSE)
+  a <- as.numeric(a); b <- as.numeric(b)
+  all((is.na(a) & is.na(b)) | (is.finite(a) & is.finite(b) & abs(a - b) <= tol))
+}
+expected_fees <- c(paste0("enrollment_fee_band_", 2:6), paste0("monthly_fee_band_", 3:6), "fee_information_unknown")
+expected_vas <- c("z_va_math", "z_va_exam", "z_va_highfield", "z_va_highinst")
+expected_types_m1 <- c("mixed_hc_tp", "tp_only", "z_paes_m1")
+expected_specifications <- list(A = expected_fees, B = c(expected_fees, expected_types_m1),
+  C = c(expected_fees, expected_vas), D = c(expected_fees, expected_types_m1, expected_vas))
+check("Four specifications exactly match the requested additive models", identical(specification_terms, expected_specifications))
+check("Only the ten identified fee terms enter all specifications", identical(active_fee_terms, expected_fees) &&
+  !"monthly_fee_band_2" %in% unlist(specification_terms))
+check("No parental characteristics or interaction terms enter any model", !any(grepl(
+  "parent|income|_x_|:", unlist(specification_terms))))
+preservation <- fread(file.path(clean_dir, "source_preservation.csv"))
+check("All previous inputs and fitted results retain their recorded hashes", nrow(preservation) > 0L &&
+  all(file.exists(preservation$path)) && identical(unname(tools::md5sum(preservation$path)), preservation$md5_before))
+check("The simplified models directly reuse the existing ranking data", normalizePath(four_spec_input_path, winslash = "/") ==
+  normalizePath(file.path(source_price_dir, "estimation_data.rds"), winslash = "/"))
+d <- as.data.table(readRDS(four_spec_input_path))
+setorder(d, ranking_id, rank_school); d[, event := 1L]
+check("The complete estimation sample contains the agreed applicants, pairs and schools", nrow(d) == 969377L &&
+  uniqueN(d$ranking_id) == 273184L && uniqueN(d$mrun) == 273184L && uniqueN(d$rbd) == 2481L)
+check("Submitted school lists remain unique and have consecutive ranks", !anyDuplicated(d[, .(ranking_id, rbd)]) &&
+  !anyDuplicated(d[, .(ranking_id, rank_school)]) && all(d[, .(ok = .N >= 2L && min(rank_school) == 1L &&
+    max(rank_school) == .N), by = ranking_id]$ok))
+roster <- fread(file.path(source_price_dir, "ranking_roster.csv"))
+check("Estimation includes exactly the eligible whole lists", setequal(unique(d$ranking_id),
+  roster[price_estimation_eligible == TRUE, ranking_id]))
+directory_path <- list.files(file.path(data_root, "data/raw/school_directory/2024"), pattern = "[.]csv$", full.names = TRUE)
+stopifnot(length(directory_path) == 1L)
+raw <- fread(directory_path, sep = ";", encoding = "UTF-8", select = c("AGNO", "RBD", "PAGO_MATRICULA", "PAGO_MENSUAL"))
+raw_map <- c("SIN INFORMACION" = 0L, "GRATUITO" = 1L, "$1.000 A $10.000" = 2L,
+  "$10.001 A $25.000" = 3L, "$25.001 A $50.000" = 4L, "$50.001 A $100.000" = 5L, "MAS DE $100.000" = 6L)
+ix <- match(d$rbd, raw$RBD)
+check("Every listed estimation school matches a unique 2024 directory school", !anyDuplicated(raw$RBD) &&
+  !anyNA(ix) && all(raw$AGNO[ix] == 2024L))
+for (field_name in c("PAGO_MATRICULA", "PAGO_MENSUAL")) {
+  expected <- unname(raw_map[toupper(trimws(raw[[field_name]][ix]))])
+  check(paste(field_name, "source fee codes are unchanged"), !anyNA(expected) &&
+    same_num(d[[paste0(field_name, "_CODE")]], expected, 0))
+  prefix <- if (field_name == "PAGO_MATRICULA") "enrollment_fee" else "monthly_fee"
+  for (band in 2:6) {
+    term <- paste0(prefix, "_band_", band)
+    check(paste(term, "indicator matches the raw directory price band"), same_num(d[[term]], as.integer(expected == band), 0))
+  }
+}
+check("Unknown fee information is shared and kept distinct from free", identical(d$PAGO_MATRICULA_CODE == 0L,
+  d$PAGO_MENSUAL_CODE == 0L) && same_num(d$fee_information_unknown, as.integer(d$PAGO_MENSUAL_CODE == 0L), 0))
+check("The excluded lowest monthly band has no observations", !any(d$PAGO_MENSUAL_CODE == 2L) &&
+  all(d$monthly_fee_band_2 == 0L))
+all_requested <- c(unique(unlist(expected_specifications)), unname(distance_vars))
+check("All selected covariates and both distances are finite", all(vapply(d[, all_requested, with = FALSE],
+  function(z) all(is.finite(z)), logical(1))))
+co <- fread(file.path(clean_dir, "coefficients.csv"))
+ms <- fread(file.path(clean_dir, "model_summary.csv"))
+check("Eight fitted models cover four specifications and both distances", nrow(ms) == 8L &&
+  !anyDuplicated(ms[, .(specification, model)]) && setequal(ms$specification, c("A", "B", "C", "D")) &&
+  setequal(ms$model, names(distance_vars)))
+check("All model summaries retain the identical complete sample", all(ms$applicants == 273184L) &&
+  all(ms$rankings == 273184L) && all(ms$applicant_school_pairs == 969377L) && all(ms$schools == 2481L) &&
+  all(ms$informative_rank_decisions == 696193L))
+check("All coefficients and clustered errors are finite", all(is.finite(co$estimate)) &&
+  all(is.finite(co$std_error) & co$std_error > 0) && !any(grepl("parent|income|_x_|:", co$term)))
+ranking_group <- match(d$ranking_id, unique(d$ranking_id)); ranking_n <- tabulate(ranking_group)
+# Both names are available so residual reconstruction honors the stored data call.
+x <- d
+for (s in c("A", "B", "C", "D")) for (m in names(distance_vars)) {
+  key <- paste(s, m, sep = "_")
+  wanted <- c(unname(distance_vars[m]), expected_specifications[[s]])
+  fit <- readRDS(four_spec_model_path(s, m))
+  b <- coef(fit); V <- vcov(fit)
+  tab <- co[specification == s & model == m]; row <- ms[specification == s & model == m]
+  check(paste(key, "saved coefficients exactly match the requested specification"), identical(names(b), wanted) &&
+    nrow(tab) == length(wanted) && setequal(tab$term, wanted) && row$parameters == length(wanted))
+  check(paste(key, "exports reproduce fitted coefficients and clustered errors"), same_num(b, tab$estimate[match(wanted, tab$term)]) &&
+    same_num(sqrt(diag(V)), tab$std_error[match(wanted, tab$term)]))
+  vf <- fread(file.path(clean_dir, paste0("vcov_", key, ".csv")))
+  check(paste(key, "exported covariance matches the model"), identical(vf$term, wanted) &&
+    same_num(as.matrix(vf[, ..wanted]), as.vector(V)) && max(abs(V - t(V))) < 1e-10 && all(diag(V) > 0))
+  check(paste(key, "inference explicitly clusters by student"), identical(as.character(fit$call$cluster), "mrun") &&
+    !is.null(fit$naive.var))
+  check(paste(key, "model used every submitted alternative and converged"), fit$n == nrow(d) &&
+    is.null(fit$na.action) && fit$iter < 60L && row$iterations == fit$iter &&
+    abs(row$log_likelihood - as.numeric(logLik(fit))) < 1e-7 &&
+    abs(row$null_log_likelihood - fit$loglik[1L]) < 1e-7)
+  information <- solve(fit$naive.var)
+  check(paste(key, "observed likelihood information is positive definite"),
+    min(eigen(information, symmetric = TRUE, only.values = TRUE)$values) > 0 && all(is.finite(V)))
+  X <- as.matrix(d[, ..wanted]); sums <- rowsum(X, ranking_group, reorder = FALSE)
+  gram <- crossprod(X) - crossprod(sums / sqrt(ranking_n))
+  eig <- eigen(gram, symmetric = TRUE, only.values = TRUE)$values
+  check(paste(key, "requested covariates are identified within rankings"), sum(eig > max(eig) * 1e-10) == length(wanted))
+  rm(X, sums, gram)
+  score <- residuals(fit, type = "score")
+  check(paste(key, "score gradient is small per applicant ranking"),
+    max(abs(colSums(score))) / uniqueN(d$ranking_id) < 1e-7)
+  if (s == "D" && m == "main") {
+    cluster_score <- rowsum(score, d$mrun, reorder = FALSE)
+    sandwich <- fit$naive.var %*% crossprod(cluster_score) %*% fit$naive.var
+    check("Specification D main student-clustered covariance reconstructs independently",
+      same_num(as.vector(sandwich), as.vector(V), 1e-9))
+    rm(cluster_score, sandwich)
+  }
+  rm(score, fit); invisible(gc())
+}
+for (m in names(distance_vars)) {
+  ll <- setNames(ms[model == m, log_likelihood], ms[model == m, specification])
+  check(paste(m, "adding school type and PAES M1 weakly improves A to B"), ll["B"] >= ll["A"] - 1e-7)
+  check(paste(m, "adding four VAs weakly improves A to C"), ll["C"] >= ll["A"] - 1e-7)
+  check(paste(m, "adding four VAs weakly improves B to D"), ll["D"] >= ll["B"] - 1e-7)
+  check(paste(m, "adding school type and PAES M1 weakly improves C to D"), ll["D"] >= ll["C"] - 1e-7)
+}
+check("All preceding input and model hashes are unchanged after verification", identical(
+  unname(tools::md5sum(preservation$path)), preservation$md5_before))
+save_checks("verification.csv")
+message("Independent four-specification verification: ", sum(checks$passed), "/", nrow(checks), " checks passed.")
