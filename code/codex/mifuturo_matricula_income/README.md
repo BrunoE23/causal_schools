@@ -242,3 +242,16 @@ Models, covariance matrices, normalization and sample coverage are in
 with companion `projected_income_by_gender_score_controls.csv` in the
 task's table folder. Script 06 writes the separate unadjusted report so
 rerunning it does not replace the current score-controlled comparison.
+
+## Parental-income quintiles, controlling for scores
+
+`08_income_quintiles_score_controls.R` reuses the scored income sample and
+links the master's existing `income_decile_imputed`. Combine deciles 1/2,
+3/4, 5/6, 7/8 and 9/10 into Q1-Q5, without re-ranking the selected sample.
+Drop missing baseline income deciles. Regress projected log income on
+quintile indicators (Q1 reference), linear entrance-exam math/verbal scores
+and admission-year fixed effects, separately with the existing non-enrollee
+income assignment and among HE enrollees. No gender control is added.
+Retain HC1 covariance and raw regressions on identical samples.
+The report, table and derived data use the task name
+`projected_income_quintiles`; prior gender results remain unchanged.

@@ -632,3 +632,11 @@ raw gap, but compare adjusted and unadjusted coefficients on the identical
 scored sample (643,236 with the non-enrollee income assignment; 528,005 HE
 enrollees). Use HC1 covariance. This prevents score-availability selection
 from being mistaken for the effect of conditioning on achievement.
+
+The subsequent parental-income-quintile comparison replaces gender with
+Q1-Q5 indicators while retaining the same entrance-exam score/year controls
+and two income samples. Quintiles combine adjacent existing imputed grade-4
+SIMCE income deciles; do not recompute ranks in the scored sample. Q1 is the
+reference, and missing baseline deciles are excluded. No gender control is
+included. Script 08 in mifuturo_matricula_income saves OLS/HC1 results under
+the task name projected_income_quintiles.
