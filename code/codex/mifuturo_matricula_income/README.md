@@ -255,3 +255,27 @@ income assignment and among HE enrollees. No gender control is added.
 Retain HC1 covariance and raw regressions on identical samples.
 The report, table and derived data use the task name
 `projected_income_quintiles`; prior gender results remain unchanged.
+
+## High-premium outcomes by parental-income quintile
+
+`09_high_premium_income_quintiles.R` uses that same scored/quintile cache
+and links the master's existing `high_paying_field_m1` and `high_inst_m1`.
+Fit logistic models on Q1-Q5 indicators, linear math/verbal scores and
+admission-year fixed effects, separately for all scored students and HE
+enrollees. Non-enrollees have the existing binary zeros, not a monetary
+income imputation. Use common observed outcomes and year support across
+the two outcomes within each sample; omit admission-year cells without
+variation in either outcome to avoid separated year effects.
+
+Report average discrete predicted-probability differences relative to Q1,
+evaluated over each model's observed score/year distribution. HC1 logit
+score covariance and the delta method supply standard errors. Model
+convergence, score equations and numerical contrast derivatives are checked.
+Code saves compact fitted-model summaries, covariance matrices and data
+under `data/clean/high_premium_income_quintiles/`. Table/report use the same
+task name, with report `high_premium_income_quintiles.html`.
+The current all-student sample has 559,934 students after omitting 5,105
+admission-2026 records whose outcomes are both uniformly zero. The HE-only
+sample retains 467,323 students. Q5-minus-Q1 adjusted probability gaps are
+-2.46/+15.86 pp for field/institution overall and -2.74/+19.22 pp among
+HE enrollees.

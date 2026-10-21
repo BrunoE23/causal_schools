@@ -640,3 +640,14 @@ SIMCE income deciles; do not recompute ranks in the scored sample. Q1 is the
 reference, and missing baseline deciles are excluded. No gender control is
 included. Script 08 in mifuturo_matricula_income saves OLS/HC1 results under
 the task name projected_income_quintiles.
+
+The high-premium replacement uses the existing premium-field and premium-
+institution enrollment flags as binary outcomes. Retain parental-income
+quintiles and entrance-exam score/year controls, and use logit for all
+scored students and HE enrollees separately. Non-enrollees retain zeros.
+Omit admission-year cells lacking variation in either outcome from both
+models within a sample; use common observed outcome support. Report
+average discrete probability contrasts Q2-Q5 versus Q1, holding each
+student's observed score/year controls fixed. HC1 delta-method covariance
+uses the full fitted-logit coefficient covariance. Script 09 in the
+mifuturo_matricula_income task produces high_premium_income_quintiles.
