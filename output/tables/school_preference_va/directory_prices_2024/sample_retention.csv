@@ -1,0 +1,6 @@
+group,label,income_model_applicants,excluded_missing_directory,price_model_applicants,retained_share
+pooled,All applicants,273184,0,273184,1
+ending_nonpriority,"School ending, non-prioritario",86259,0,86259,1
+ending_priority,"School ending, prioritario",153587,0,153587,1
+voluntary_nonpriority,"Voluntary, non-prioritario",15144,0,15144,1
+voluntary_priority,"Voluntary, prioritario",13629,0,13629,1

@@ -1223,3 +1223,18 @@ coefficient is descriptive. Details, coding, sample, normalization, subgroup
 specification and reproducible scripts are in
 `decisions/2026-10-15-simce-parent-education-school-preferences.md` and
 `code/codex/school_preference_va/README.md`.
+
+### Directory fee bands in school preferences (2026-10-21)
+
+The current school-preference extension adds 2024 Directorio enrollment
+and monthly fee bands to the seven-attribute joint model, retaining the
+273,184 applicants, 969,377 school pairs, group definitions, normalizations
+and both distances. Free is the reference in each field; the unobserved
+lowest monthly paid band has no coefficient, and the coincident unknown
+categories enter once. Code is in scripts 27-30 and
+`directory_prices_common.R` within `code/codex/school_preference_va/`.
+Derived outputs use the `directory_prices_2024` clean-data/table subfolders;
+the report is `output/reports/school_preference_va/with_directory_prices_2024.html`.
+The 2024 fees are later reported school attributes, not exact household
+payments at application time. Specification and inference are recorded in
+`decisions/2026-10-21-directory-prices-school-preferences.md`.

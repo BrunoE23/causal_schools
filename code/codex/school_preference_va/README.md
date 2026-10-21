@@ -1,5 +1,53 @@
 # School preferences and four-dimensional EB value added
 
+## Directorio fee-band preference extension (2026-10-21)
+
+Add 2024 Directorio PAGO_MATRICULA and PAGO_MENSUAL as categorical fee levels
+to the latest joint model with four EB VAs, PAES M1, parent education and
+grade-4-SIMCE income composition. Keep existing type interactions, both
+distance definitions and all five applicant groups. This source contains
+reported ranges, so free is the reference and paid bands are separate raw
+indicators. The lowest monthly paid band has no observations. Missing fee
+information occurs for the same schools in both fields and enters through
+one shared indicator. Ten identified fee controls are added; there are no
+new fee interactions or midpoint-based continuous prices.
+
+All 2,481 estimation destination schools match, preserving 273,184 rankings
+and 969,377 school alternatives. Previous attributes and normalization are
+unchanged. Reuse saved baseline models when the full sample is identical;
+fit only the ten new fee specifications. Hashes check that prior inputs,
+models and reports remain unchanged.
+
+Run from the project root:
+
+```powershell
+& 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/school_preference_va/27_build_directory_prices_2024.R
+& 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/school_preference_va/28_fit_directory_prices_2024.R
+& 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/school_preference_va/30_verify_directory_prices_2024.R
+& 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/school_preference_va/29_report_directory_prices_2024.R
+```
+
+Derived inputs, models, covariance matrices, support and checks are in
+`data/clean/school_preference_va/directory_prices_2024/`. Aggregate tables
+are in `output/tables/school_preference_va/directory_prices_2024/`, with
+report `output/reports/school_preference_va/with_directory_prices_2024.html`.
+Coefficients compare reported fee bands with free schools conditional on
+other attributes and the submitted list. The 2024 snapshot follows choices
+in 2018-2020 and need not measure each household's net payment; do not
+interpret these as causal price elasticities or peso-valued willingness to
+pay. Full specification rationale is in the project-memory decision dated
+2026-10-21.
+
+Current pooled monthly-band coefficients (relative to free) are -0.2223
+(SE 0.0185), -0.0895 (0.0083), -0.0590 (0.0078) and -0.1622 (0.0115) for
+CLP 10,001-25,000, 25,001-50,000, 50,001-100,000 and above 100,000.
+These categorical associations are not monotone in the fee range. The four
+VA patterns remain similar: the largest absolute total-slope movement across
+school types is 0.0069; non-TP exam-taking VA moves from 0.1110 to 0.1081.
+All ten new fits converge in three or four iterations. All 144 estimation
+checks and 245 independent checks pass, including the student-clustered
+covariance reconstruction and unchanged prior-output hashes.
+
 ## PAES M1 school-average extension (2026-10-15)
 
 The subsequent user request adds a constructed school-average PAES M1

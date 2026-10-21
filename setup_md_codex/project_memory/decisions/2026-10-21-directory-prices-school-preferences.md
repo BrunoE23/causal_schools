@@ -1,0 +1,67 @@
+# Add Directorio fee bands to school preferences
+
+## Data and coding
+
+Use PAGO_MATRICULA and PAGO_MENSUAL from the fixed 2024 Directorio, consistent
+with current school-type attributes and the previously approved fee coding
+in `2026-09-20-staff-lasso-fee-bands.md`. The source reports ranges, not exact
+peso prices. Enter separate paid-band indicators for each fee with free as
+the reference: CLP 1,000-10,000; 10,001-25,000; 25,001-50,000; 50,001-100,000;
+and above 100,000. Do not convert the codes to a continuous numeric regressor,
+choose top-code midpoints or construct a scalar annual price.
+
+The monthly CLP 1,000-10,000 band has no destination schools and is shown as
+unavailable, with no coefficient. Both fee fields lack information for the
+same 37 schools, so a single `fee_information_unknown` indicator captures this
+shared missingness. Unknown is not treated as free. The ten identified fee
+controls are five enrollment-fee bands, four monthly-fee bands and the shared
+unknown indicator. All have within-ranking support in each applicant group.
+
+## Sample and model
+
+All 2,481 destination RBDs in the latest parent-income model match the 2024
+directory. Retain 273,184 complete lists and 969,377 student-school pairs.
+Preserve previous attribute values, normalizations, school-type interactions,
+groups and distances. Add categorical fees with common slopes within each
+group; do not add further fee-by-type or fee-by-attribute interactions.
+
+Fit pooled and the four prioritario-by-continuation groups under published
+student coordinates and home-comuna distances. Compare with the previous
+seven-attribute model on the same sample. Where the sample is exactly the
+same, reuse the saved prior fitted baseline and its student-clustered
+covariance. Estimate new fee models using the exact stratified-Cox
+Plackett-Luce representation; retain all identified existing coefficients.
+Save covariance-aware total attribute slopes and coefficient changes, fee
+support, information conditioning, clustered joint Wald tests of fees,
+source hashes and full-list sample accounting.
+
+## Interpretation and reproducibility
+
+These are submitted-set preference associations conditional on four EB VAs,
+PAES M1, parent education, baseline income composition, school type and
+distance. The 2024 fee snapshot follows the 2018-2020 SAE decisions, and the
+reported school bands need not equal a particular household's net payments.
+Do not interpret fee coefficients as causal price elasticities or peso-valued
+willingness to pay. Contemporaneous fee directories exist for 2018-2020 but
+are outside this fixed-2024 extension.
+
+Scripts 27-30 and `directory_prices_common.R` in
+`code/codex/school_preference_va/` build, fit, verify and report. Outputs use
+the `directory_prices_2024` clean-data/table subfolders and
+`output/reports/school_preference_va/with_directory_prices_2024.html`.
+
+## Current results and checks
+
+Pooled monthly-fee total utility coefficients versus free are -0.2223
+(SE 0.0185), -0.0895 (0.0083), -0.0590 (0.0078) and -0.1622 (0.0115),
+respectively for the four observed paid bands. Enrollment-fee coefficients
+are non-monotonic and several categories have few schools. The four VA
+total-slope patterns remain broadly similar; the largest absolute change
+across types is 0.0069, for TP-only high-premium-institution VA. The non-TP
+exam-taking slope changes from 0.1110 to 0.1081.
+
+All ten new fits converge in three or four iterations. Construction passes
+10 checks, estimation passes 144 and independent verification passes 245,
+including identical prior-file hashes, whole-list retention, all exported
+estimates/covariances, 420 metric-by-type total slopes and an independently
+reconstructed student-clustered covariance for the pooled model.

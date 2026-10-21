@@ -561,3 +561,17 @@ school missing the mean. As the survey postdates SAE choices in 2018-2020, this
 is descriptive preference association only. The complete conversion and
 inference record is in
 `decisions/2026-10-15-simce-parent-education-school-preferences.md`.
+
+### Directorio fee bands in school preferences (2026-10-21)
+
+Add 2024 reported enrollment-fee and monthly-fee band indicators jointly to
+the seven-attribute school-preference model (four EB VAs, PAES M1, parent
+education and grade-4-SIMCE income composition). Free is the reference for
+each fee. Omit the unobserved lowest monthly paid band; use one shared
+unknown-fee indicator because both source fields are missing for the same
+schools. Preserve complete lists, normalizations and student clustering.
+Compare against the identical-sample saved baseline, for pooled and four
+priority-by-continuation groups and both distances. The post-choice 2024
+snapshot describes school-level fee associations; it does not identify a
+causal price response or peso-valued willingness to pay. See
+`decisions/2026-10-21-directory-prices-school-preferences.md`.
