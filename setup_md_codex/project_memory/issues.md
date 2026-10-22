@@ -18,6 +18,13 @@
   ranks genuine C1 choices, retaining 99 previous top schools and replacing RBD 52
   with RBD 4977. The previous ranking and its dependent analyses remain unchanged.
 - See `decisions/2026-10-22-applicant-composition-trends.md` and task diagnostics.
+- Probability-weighted follow-up: nine populated school-cohort cells have zero
+  simulated admission mass, and another parent-education cell has zero observed
+  mass. Three schools (20266, 9071, 31103) retain only one cohort. Some remaining
+  cells have effective N near one. Retain/flag them for the user-authorized proxy;
+  do not interpret absence in finite simulation output as proof of a structural
+  zero probability, or compare rejection counts without reporting eligibility.
+  See `decisions/2026-10-22-probability-weighted-applicant-composition.md`.
 
 ### Existing comuna-center lookup mislabels code 1401
 

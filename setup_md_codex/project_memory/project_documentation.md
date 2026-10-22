@@ -15,6 +15,16 @@ counts are 8/0/0 (86 schools testable); independent-applicant exact counts are
 school-level counts: `data/clean/applicant_composition_trends/`. See
 `decisions/2026-10-22-applicant-composition-trends.md` for inference and selection.
 
+The requested admission-probability-weighted proxy uses school-specific simulated
+probabilities, normalized within each school/cohort/observed characteristic, on
+the same top-100 submitted-choice panel. With unadjusted p < .05, cohort OLS finds
+9/80 schools with any trend (all exactly one); independent-applicant HC2 finds
+68/97, with exact 1/2/3 counts 47/20/1. Zero probability mass reduces supported
+cohorts; three schools have no identifiable trend. Report:
+`output/reports/applicant_composition_trends/probability_weighted.html`.
+Derived data: `data/clean/applicant_composition_trends/probability_weighted/`. Details:
+`decisions/2026-10-22-probability-weighted-applicant-composition.md`.
+
 ## School rankings and four-dimensional VA preferences (2026-10-14)
 
 The2026-10-15 PAES extension constructs graduation-RBD mean MATE1_REG_ACTUAL

@@ -4,7 +4,7 @@ const path = require('path');
 const vm = require('vm');
 
 try {
-  const report = path.resolve('output/reports/applicant_composition_trends/report.html');
+  const report = path.resolve(process.argv[2] || 'output/reports/applicant_composition_trends/report.html');
   const html = fs.readFileSync(report, 'utf8');
   const scripts = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)];
   if (scripts.length !== 1) throw new Error('Unexpected script count');

@@ -109,3 +109,71 @@ are 0.0468 average subject-z units, 2.062 percentage points and 0.437 years.
 The parental-education change is mostly a 2018-2019 fall followed by a small
 recovery. Coverage and questionnaire differences merit investigation before
 attributing it to the full applicant population; see the project issues log.
+
+## Admission-probability-weighted proxy (requested follow-up)
+
+Keep the exact same top 100 schools, submitted applicant-school pairs and X
+definitions. Define each school-cohort mean as `sum(p_is * X_i) / sum(p_is)` among
+applicants with X observed, where `p_is` is the simulated assignment probability
+to that destination RBD. Sum mutually exclusive program probabilities within RBD
+before joining. This is a ratio of expected totals, used as a proxy for admitted
+student composition; it does not account for take-up or random denominators.
+
+Read the existing `DA_probs/DA_probs_2018.csv` through `DA_probs_2020.csv`.
+Every one of the 115,880 distinct applicants in the top-school panel has a
+probability distribution summing to one, including unmatched. Only after checking
+this distribution, treat an absent destination as zero recorded simulation
+probability. Preserve genuinely submitted pairs: do not add the 346 simulated
+top-school destinations absent from the original submitted-choice panel.
+
+There are 134,426 positive-weight and 78,182 zero-weight applicant-school pairs.
+Nine populated school-cohort cells have no admission probability mass, and one
+additional parent-education cell has no observed characteristic with positive
+weight. Their weighted means are missing. Three schools have only one supported
+cohort and cannot have a trend estimated. Keep all 100 school rows in the outputs;
+do not silently trim low effective sample sizes or substitute zero for missing means.
+
+Primary inference still uses equal-cohort OLS. For supplementary inference, WLS
+weights are `p_is / sum(p_is)` within the observed school-cohort-outcome; exclude
+zero weights. This reproduces the cohort OLS coefficient exactly. HC2 treats the
+simulation probabilities as fixed and assumes independent applicants; use
+`N_positive - 2` residual degrees of freedom. Effective N, `(sum p)^2 / sum(p^2)`,
+is a concentration diagnostic only, never a substitute for regression covariance.
+Undefined tests and constant outcomes receive missing p-values.
+
+Run after the original panel is built:
+
+```powershell
+& 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/applicant_composition_trends/06_probability_weighted_panel.R
+$env:APPLICANT_COMPOSITION_DIR = 'data/clean/applicant_composition_trends/probability_weighted'
+& 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/applicant_composition_trends/02_test_trends.R
+Remove-Item Env:APPLICANT_COMPOSITION_DIR
+& 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/applicant_composition_trends/08_verify_probability_weights.R
+& 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/applicant_composition_trends/07_probability_weighted_report.R
+node code/codex/applicant_composition_trends/05_verify_report.js output/reports/applicant_composition_trends/probability_weighted.html
+```
+
+Derived outputs use `data/clean/applicant_composition_trends/probability_weighted/`.
+The report is `output/reports/applicant_composition_trends/probability_weighted.html`.
+`weighted_vs_unweighted_school_tests.csv` and
+`weighted_vs_unweighted_count_summary.csv` compare both versions. Weighted
+denominators, effective N, missingness and source linkage audits are also exported.
+
+Using raw p < .05 across the three primary outcomes:
+
+| Inference | Testable schools | At least one | Exactly one | Exactly two | All three | At least two |
+|---|---:|---:|---:|---:|---:|---:|
+| Cohort means OLS | 80 | 9 | 9 | 0 | 0 | 0 |
+| Independent applicants HC2 | 97 | 68 | 47 | 20 | 1 | 21 |
+
+The one school with all three significant HC2 trends is RBD 17788, Colegio
+Amanecer. Counts are of detected trends; some schools have fewer than three
+available p-values. Cohort OLS has 77 schools with all three p-values and HC2 has
+91. The comparison report explicitly identifies changes in support and retains
+the strong-assumption interpretation of independent-applicant inference.
+
+Validation passed 1,828 numerical/data-integrity checks, including independent
+matrix calculations for all 964 estimable weighted HC2 regressions. A separate
+rerun of the generalized fitter on the original unweighted panel reproduced all
+1,000 original school-outcome records and school-count summaries. Report checks
+cover all ten outcome tables, RBD search and every local figure/download link.

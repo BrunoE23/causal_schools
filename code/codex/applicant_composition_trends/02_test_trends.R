@@ -1,8 +1,11 @@
 suppressPackageStartupMessages({library(data.table); library(sandwich)})
 setDTthreads(4L)
 if (.Platform$OS.type == "windows") invisible(Sys.setlocale("LC_CTYPE", "English_United States.utf8"))
-dest <- "data/clean/applicant_composition_trends"
+dest <- Sys.getenv("APPLICANT_COMPOSITION_DIR", "data/clean/applicant_composition_trends")
 d <- as.data.table(readRDS(file.path(dest, "applicant_school_frame.rds")))
+probability_weighted <- "admission_probability" %in% names(d)
+d[, composition_weight := if (probability_weighted) admission_probability else 1]
+stopifnot(all(is.finite(d$composition_weight)), all(d$composition_weight >= 0))
 cells <- fread(file.path(dest, "school_cohort_means_long.csv"))
 specs <- fread(file.path(dest, "outcome_definitions.csv"))
 top <- fread(file.path(dest, "top100_schools.csv"))
@@ -13,41 +16,47 @@ for (s in top$rbd) {
     z <- cells[rbd == s & outcome == v & n_observed > 0L & is.finite(mean)]
     setorder(z, sae_proceso)
     z[, t := sae_proceso - 2018L]
-    stopifnot(nrow(z) >= 2L)
-    fit <- lm(mean ~ t, data = z)
-    fits[[paste(s, v, sep = "_")]] <- fit
-    b <- unname(coef(fit)["t"])
-    k <- nrow(z); constant <- max(z$mean) == min(z$mean)
+    k <- nrow(z)
+    fit <- if (k >= 2L) lm(mean ~ t, data = z) else NULL
+    fits[paste(s, v, sep = "_")] <- list(fit)
+    b <- if (k >= 2L) unname(coef(fit)["t"]) else NA_real_
+    constant <- k > 0L && max(z$mean) == min(z$mean)
     test <- k > 2L && !constant
     se <- if (test) sqrt(vcov(fit)["t", "t"]) else NA_real_
     p <- if (test) 2 * pt(-abs(b / se), df = k - 2L) else NA_real_
     crit <- if (test) qt(.975, df = k - 2L) else NA_real_
 
     # Equal total weight for each cohort. This student-level regression gives
-    # exactly the same coefficient as OLS on the cohort means. HC2 is computed
+    # exactly the same coefficient as OLS on the cohort means. For the weighted
+    # proxy, normalize school-specific admission probabilities within cohort.
+    # HC2 is computed
     # from the regression, retaining within-cohort individual residual variation.
-    x <- d[rbd == s & !is.na(get(v)), .(y = get(v), t = sae_proceso - 2018L)]
-    x[, w := 1 / .N, by = t]
-    individual <- lm(y ~ t, data = x, weights = w)
-    ib <- unname(coef(individual)["t"])
-    stopifnot(abs(b - ib) < 1e-9)
-    individual_constant <- max(x$y) == min(x$y)
-    ise <- if (!individual_constant) sqrt(vcovHC(individual, type = "HC2")["t", "t"]) else NA_real_
+    x <- d[rbd == s & !is.na(get(v)) & composition_weight > 0,
+           .(y = get(v), t = sae_proceso - 2018L, raw_weight = composition_weight)]
+    x[, w := raw_weight / sum(raw_weight), by = t]
+    individual <- if (k >= 2L) lm(y ~ t, data = x, weights = w) else NULL
+    ib <- if (k >= 2L) unname(coef(individual)["t"]) else NA_real_
+    if (k >= 2L) stopifnot(abs(b - ib) < 1e-9)
+    individual_constant <- nrow(x) > 0L && max(x$y) == min(x$y)
+    individual_status <- if (k < 2L) "fewer than two supported cohorts" else if (individual_constant) "constant individual outcome" else if (nrow(x) <= 2L || max(hatvalues(individual)) >= 1 - 1e-10) "HC2 undefined: unit leverage or no residual degrees of freedom" else "estimated"
+    ise <- if (individual_status == "estimated") sqrt(vcovHC(individual, type = "HC2")["t", "t"]) else NA_real_
     ip <- if (is.finite(ise) && ise > 0) 2 * pt(-abs(ib / ise), df = nrow(x) - 2L) else NA_real_
-    icrit <- qt(.975, df = nrow(x) - 2L)
+    icrit <- if (nrow(x) > 2L) qt(.975, df = nrow(x) - 2L) else NA_real_
     results[[length(results) + 1L]] <- data.table(rbd = s, outcome = v,
-      n_cohorts = k, n_students = nrow(x), first_cohort = min(z$sae_proceso), last_cohort = max(z$sae_proceso),
-      first_mean = z$mean[1L], last_mean = z$mean[k], change = z$mean[k] - z$mean[1L],
-      cohort_mean_range = max(z$mean) - min(z$mean), slope_per_year = b,
-      cohort_ols_se = se, cohort_ols_df = k - 2L, cohort_ols_p = p,
+      n_cohorts = k, n_students = nrow(x), first_cohort = if (k > 0L) min(z$sae_proceso) else NA_integer_, last_cohort = if (k > 0L) max(z$sae_proceso) else NA_integer_,
+      first_mean = if (k > 0L) z$mean[1L] else NA_real_, last_mean = if (k > 0L) z$mean[k] else NA_real_, change = if (k >= 2L) z$mean[k] - z$mean[1L] else NA_real_,
+      cohort_mean_range = if (k > 0L) max(z$mean) - min(z$mean) else NA_real_, slope_per_year = b,
+      cohort_ols_se = se, cohort_ols_df = max(k - 2L, 0L), cohort_ols_p = p,
       cohort_ols_ci_low = b - crit * se, cohort_ols_ci_high = b + crit * se,
-      cohort_ols_status = if (constant) "constant cohort means" else if (k == 2L) "two cohorts: no residual degrees of freedom" else "estimated",
-      independent_applicant_hc2_se = ise, independent_applicant_df = nrow(x) - 2L,
+      cohort_ols_status = if (k < 2L) "fewer than two supported cohorts" else if (constant) "constant cohort means" else if (k == 2L) "two cohorts: no residual degrees of freedom" else "estimated",
+      independent_applicant_hc2_se = ise, independent_applicant_df = max(nrow(x) - 2L, 0L),
       independent_applicant_p = ip,
       independent_applicant_ci_low = b - icrit * ise, independent_applicant_ci_high = b + icrit * ise,
-      min_coverage = min(z$coverage), max_coverage = max(z$coverage),
-      coverage_change = z$coverage[k] - z$coverage[1L],
-      independent_applicant_status = if (individual_constant) "constant individual outcome" else "estimated")
+      min_coverage = if (k > 0L) min(z$coverage) else NA_real_, max_coverage = if (k > 0L) max(z$coverage) else NA_real_,
+      coverage_change = if (k >= 2L) z$coverage[k] - z$coverage[1L] else NA_real_,
+      min_cell_n = if (k > 0L) min(z$n_observed) else 0L,
+      min_cell_effective_n = if (k > 0L) min(if (probability_weighted) z$effective_n else z$n_observed) else NA_real_,
+      independent_applicant_status = individual_status)
   }
 }
 trends <- merge(rbindlist(results), specs, by = "outcome")
@@ -62,7 +71,7 @@ saveRDS(fits, file.path(dest, "cohort_ols_models.rds"))
 # Schools with no testable outcome are excluded from the zero-detection count.
 overlap <- rbindlist(lapply(c("cohort_ols_p", "independent_applicant_p"), function(pcol) {
   x <- trends[primary == TRUE]
-  x[, .(method = pcol, n_cohorts = unique(n_cohorts),
+  x[, .(method = pcol, n_cohorts = min(n_cohorts), max_outcome_cohorts = max(n_cohorts),
     n_testable = sum(!is.na(get(pcol))),
     n_significant = sum(get(pcol) < .05, na.rm = TRUE),
     significant_outcomes = paste(outcome[!is.na(get(pcol)) & get(pcol) < .05], collapse = "; "),
@@ -87,14 +96,15 @@ summary <- trends[, .(schools = .N,
   cohort_ols_testable = sum(!is.na(cohort_ols_p)), cohort_ols_p_lt_05 = sum(cohort_ols_p < .05, na.rm = TRUE),
   independent_applicant_testable = sum(!is.na(independent_applicant_p)),
   independent_applicant_p_lt_05 = sum(independent_applicant_p < .05, na.rm = TRUE),
-  median_annual_slope = median(display_slope), median_absolute_annual_slope = median(abs(display_slope)),
-  p90_absolute_annual_slope = unname(quantile(abs(display_slope), .90)),
-  mean_min_coverage = mean(min_coverage), minimum_coverage = min(min_coverage)),
+  fewer_than_two_cohort_schools = sum(n_cohorts < 2L),
+  median_annual_slope = median(display_slope, na.rm = TRUE), median_absolute_annual_slope = median(abs(display_slope), na.rm = TRUE),
+  p90_absolute_annual_slope = unname(quantile(abs(display_slope), .90, na.rm = TRUE)),
+  mean_min_coverage = mean(min_coverage, na.rm = TRUE), minimum_coverage = min(min_coverage, na.rm = TRUE)),
   by = .(outcome, label, primary, unit)]
 fwrite(summary, file.path(dest, "trend_summary.csv"))
 
 # Separate endpoint windows: a 2019-2020 change is not a 2018-2020 change.
-changes <- trends[, .(schools = .N, median_change = median(display_change),
+changes <- trends[n_cohorts >= 2L, .(schools = .N, median_change = median(display_change),
   median_absolute_change = median(abs(display_change)),
   p90_absolute_change = unname(quantile(abs(display_change), .9)),
   maximum_absolute_change = max(abs(display_change))), by = .(outcome, label, unit, first_cohort, last_cohort)]
@@ -109,10 +119,12 @@ rank_stability <- rbindlist(lapply(specs$outcome, function(v) {
   }))
 }))
 fwrite(rank_stability, file.path(dest, "cross_cohort_school_correlations.csv"))
-coverage <- cells[n_applicants > 0L, .(applicant_school_pairs = sum(n_applicants), observed_pairs = sum(n_observed),
-  coverage = sum(n_observed) / sum(n_applicants), minimum_school_coverage = min(coverage)),
-  by = .(outcome, label, sae_proceso)]
-fwrite(coverage, file.path(dest, "coverage_summary.csv"))
+if (!probability_weighted) {
+  coverage <- cells[n_applicants > 0L, .(applicant_school_pairs = sum(n_applicants), observed_pairs = sum(n_observed),
+    coverage = sum(n_observed) / sum(n_applicants), minimum_school_coverage = min(coverage)),
+    by = .(outcome, label, sae_proceso)]
+  fwrite(coverage, file.path(dest, "coverage_summary.csv"))
+}
 print(summary[primary == TRUE])
 print(changes[outcome %in% specs[primary == TRUE, outcome]])
 print(rank_stability[outcome %in% specs[primary == TRUE, outcome]])
