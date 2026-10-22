@@ -1,5 +1,30 @@
 # School preferences and four-dimensional EB value added
 
+## Destination entry grades and internal continuation
+
+Run `39_audit_destination_entry_grades.R` for the 2,454 destinations in the
+full-school peer comparison; `--use-cache` reuses its grade-9 extract.
+It reads only five fields from 2019-2021 Rendimiento, filters to youth or
+artistic grade 9, and joins the existing all-student first-observed-grade-8
+origin cache for cohorts 2018-2020. Internal continuation means a recorded
+grade-9 enrollment at the same RBD as grade 8 the preceding year. No SAE
+application restriction or preference-model change is imposed.
+
+The 2024 Directory lists 535 secondary-only destinations, 1,918 with basic
+plus secondary, and one with preschool plus secondary without basic.
+Historical 2018-2020 records show grade 8 at 1,935 destinations, other
+primary grades without grade 8 at seven, and no primary grades at 512.
+Actual same-RBD grade-8/grade-9 links occur at 1,934 destinations, for
+282,521 people. The grade-9 enrollment denominator is 692,282 person-school
+records, including repeaters and multiple-school records; 66,118 lack a
+preceding-cohort origin link. Do not describe that denominator as unique
+individuals or all first-time grade-9 entrants. Directory classification
+is a later snapshot and can differ from historical grade presence.
+
+Details, annual counts, coverage, multiple-school enrollment audit, source
+manifest and verification use
+`data/clean/school_preference_va/destination_entry_grades/`.
+
 ## Full-school peer extension (2026-10-22)
 
 The user superseded the top-100 restriction and requested the whole school

@@ -1346,3 +1346,12 @@ uses 3,964 observed destination/offer/attendee schools, reproducing the original
 (98.08% of original D), 940,605 pairs and 2,454 schools. Original VA units stay
 fixed; peer units use common attendee-school SDs on the expanded sample.
 See `decisions/2026-10-22-full-school-peer-preferences.md` and task READMEs.
+
+Destination entry-grade audit: of these 2,454 schools, the 2024 Directory
+lists 535 secondary-only schools, 1,918 basic-plus-secondary schools and one
+preschool-plus-secondary school. For grade-8 cohorts 2018-2020, 1,934 schools
+have same-RBD grade-9 continuers the next year (282,521 people). Historical
+grade-8 presence is observed at 1,935 schools; 512 have no primary grades
+observed and seven have other primary grades without grade 8. Script 39 in
+school_preference_va saves counts and school records to destination_entry_grades
+without changing models. Historical and 2024 classifications are distinct.

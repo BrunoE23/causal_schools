@@ -671,3 +671,14 @@ indicators. Peer normalization uses the expanded sample's attendee-school
 mean/SD, common across all three populations, while original VA units stay
 fixed. Missing school-group peer measures exclude entire lists and are not
 imputed. See `decisions/2026-10-22-full-school-peer-preferences.md`.
+
+Destination entry-grade audit (script 39) uses the latest 2,454 destinations.
+Classify basic/preschool/secondary offerings from 2024 Directory ENS codes,
+separately from historical 2018-2020 grade presence. Carryover means a
+person with a valid ordinary youth/artistic grade-9 record at their
+grade-8 RBD the next year, using all students and the established
+first-observed-grade-8 origin definition. Grade-9 denominators are unique
+person-school records, can include repeaters/multiple-school enrollment,
+and retain unknown preceding-cohort origin coverage separately. Do not
+equate availability of basic education with observed actual carryover or
+treat 2024 offerings as contemporaneous with the application cohorts.
