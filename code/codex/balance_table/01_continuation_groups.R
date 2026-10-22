@@ -91,4 +91,5 @@ matches <- rbindlist(lapply(groups,function(g) rbindlist(lapply(names(blocks),fu
   data.table(group=g,block=b,match=mean(complete.cases(d[get(g)==1L,blocks[[b]],with=FALSE])))))))
 for(nm in c('stats','counts','coverage','matches')) fwrite(get(nm),file.path(clean,paste0(nm,'.csv')))
 
+source('code/codex/balance_table/03_nonprivate_attendance.R')
 source('code/codex/balance_table/02_report_continuation.R')

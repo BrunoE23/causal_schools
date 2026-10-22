@@ -9,7 +9,9 @@ counts <- fread(file.path(clean,'counts.csv'))
 coverage <- fread(file.path(clean,'coverage.csv'))
 matches <- fread(file.path(clean,'matches.csv'))
 compare <- fread(file.path(clean,'paper_replication.csv'))
+attendance <- fread(file.path(clean,'nonprivate_attendance.csv'))
 stopifnot(nrow(compare)==45L,all(compare$passed))
+stopifnot(setequal(attendance$group, counts$group), !anyDuplicated(attendance$group))
 groups <- counts$group
 labels <- setNames(counts$label,groups)
 specs <- unique(stats[,.(var,label)],by='var')
@@ -37,16 +39,22 @@ add('Outcomes',section='Outcomes')
 for(v in c('z_year_math_max','z_year_leng_max','admission_exam_taker','higher_ed_enrolled_m1','high_inst_m1','high_paying_field_m1'))
   add(specs[var==v,label],v)
 display <- rbindlist(rows)
+attendance_cells <- vapply(groups,function(g) sprintf('%.2f%%',100*attendance[group==g,nonprivate_share]),character(1))
+display <- rbind(display, data.table(section='',label='Attends non-private high school',
+  broad=attendance_cells[1],applicants=attendance_cells[2],risk=attendance_cells[3],ending=attendance_cells[4],voluntary=attendance_cells[5]))
 footer <- as.data.table(setNames(lapply(groups,function(g) c(format(counts[group==g,students],big.mark=',',trim=TRUE),
+  if(g=='g_broad') '---' else sprintf('%.2f%%',counts[group==g,percent_applicants]),
   sprintf('%.1f%%',counts[group==g,percent_broad]))),names(display)[3:7]))
-footer[,`:=`(section='',label=c('N','Percent of broad panel'))]
+footer[,`:=`(section='',label=c('N','Share of SAE applicants','Percent of broad panel'))]
 setcolorder(footer,names(display))
 display <- rbindlist(list(display,footer),use.names=TRUE)
-stopifnot(nrow(display)==23L)
+stopifnot(nrow(display)==25L,
+  abs(sum(counts[group %in% c('g_ending','g_voluntary'),students])+unresolved-counts[group=='g_sae_app',students])<1e-10)
 fwrite(display,file.path(clean,'display_table.csv'))
 notes <- c('The first three columns reproduce Table 2. The broad panel contains cohorts 2017-2020 with an observed high school and age 12-16. SAE applicants are timely 2018-2020 grade-9 applicants; assignment risk requires maximum simulated assignment probability below one.',
   'The two new columns are subsets of the SAE-applicant column. School ending means the grade-8 origin has no offering above grade 8 in the contemporaneous SAE offering file. Voluntary means that origin offers grade 9. The classification concerns continuation availability, not an observed motive or actual school change.',
   sprintf('%s applicants (%.2f%%) have an unresolved origin offering or another offering pattern. They remain in the overall applicant column and, when at risk, in the risk column, but enter neither new column.',format(unresolved,big.mark=',',trim=TRUE),100*unresolved/counts[group=='g_sae_app',students]),
+  'Share of SAE applicants uses all 294,198 timely applicants as its denominator; the broad-panel cell is not applicable. The two continuation groups exclude the 1.62% with unresolved/other origins. Non-private high-school attendance uses the most-attended high school and the same private-paid sector indicator as the applicant-priority comparison; the share is among students with an observed sector classification, with coverage saved separately.',
   'Cells report means among available observations, using the same variable definitions and normalization as Table 2. Block match rates and group sizes are retained. Differences, standard errors, and joint tests are omitted.')
 esc <- function(x) {x<-gsub('&','&amp;',x,fixed=TRUE);x<-gsub('<','&lt;',x,fixed=TRUE);gsub('>','&gt;',x,fixed=TRUE)}
 html_rows <- vapply(seq_len(nrow(display)),function(i) {

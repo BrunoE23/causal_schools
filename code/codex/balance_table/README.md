@@ -1,5 +1,19 @@
 # Table 2 with applicant continuation groups
 
+The 2026-10-22 update adds two rows in both HTML and the existing LaTeX
+table fragment: share of all 294,198 SAE applicants (broad-panel cell is
+not applicable), and non-private high-school attendance. The latter uses
+the most-attended high school and the same `school__dependency_4` sector
+indicator as the applicant-priority comparison, among observed sectors.
+Coverage/numerators are retained in `nonprivate_attendance.csv`; coverage
+exceeds 99.94% in every column. School-ending/voluntary applicant shares
+are 85.17%/13.21%; non-private attendance is 99.45%/98.37%.
+
+For the new attendance row, run `03_nonprivate_attendance.R` before
+rerendering with 02. Script 01 now calls both steps automatically after
+constructing the original summaries. Script 03 reads only four master
+columns and reuses the existing exact paper-applicant roster and risk flag.
+
 Run from the repository root:
 
 1. `01_continuation_groups.R` constructs group summaries, verifies the original

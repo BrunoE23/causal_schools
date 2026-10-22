@@ -1,5 +1,18 @@
 # Table 2 variant: school-ending and voluntary SAE applicants
 
+Update 2026-10-22: at the user's request, add share of SAE applicants and
+non-private high-school attendance to the existing HTML/LaTeX variant.
+The first row divides each SAE-subset N by all 294,198 applicants, leaving
+the broad-panel cell not applicable; do not renormalize away the 1.62%
+unresolved/other group. The attendance row uses most_time_RBD and the same
+private-paid sector indicator from staff_lasso_va/school_predictors.csv
+as the four-group applicant comparison. Means condition on observed sector,
+with counts and coverage in nonprivate_attendance.csv. Attendance coverage
+is over 99.94% for all columns. School-ending/voluntary rows are
+85.17%/13.21% of applicants and 99.45%/98.37% non-private attendance.
+All original 45 paper means and group sizes remain unchanged. Script 03
+adds this small sector summary and 02 renders both new rows reproducibly.
+
 Date: 2026-10-12
 
 Bruno requested a version of Table 2 with columns for SAE applicants from
