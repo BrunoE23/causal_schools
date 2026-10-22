@@ -682,3 +682,14 @@ person-school records, can include repeaters/multiple-school enrollment,
 and retain unknown preceding-cohort origin coverage separately. Do not
 equate availability of basic education with observed actual carryover or
 treat 2024 offerings as contemporaneous with the application cohorts.
+
+Vacancy/enrollment comparison (script 40) keeps the same 1,918 2024
+basic-plus-secondary destinations, matching A1 school-year coverage:
+process t grade-9 `vacantes` versus grade 8 in t or grade 9 in t+1.
+Exclude absent grade-9 A1 listings from both numerator and denominator,
+preserving listed zeros. Denominators deduplicate valid Rendimiento
+person-school records and include repeaters. Save each school-year ratio
+(undefined for zero enrollment); annual summaries divide summed vacancies
+by summed matched-school enrollment. The user requested separate reporting,
+so no across-year pooling is reported. Advertised vacancies do not measure
+realized assignment or new-entrant shares.

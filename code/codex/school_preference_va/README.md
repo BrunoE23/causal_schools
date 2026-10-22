@@ -1,5 +1,26 @@
 # School preferences and four-dimensional EB value added
 
+## SAE vacancies versus grade-8/grade-9 enrollment
+
+Run `40_compare_sae_vacancies_enrollment.R`; `--use-cache` reuses its saved
+grade-8 counts. Use the preceding audit's 1,918 2024 Directory basic-plus-HS
+destinations. Sum regular A1 grade-9 `vacantes` across program/quota rows.
+Compare process t vacancies with grade 8 in t and grade 9 in t+1 at the
+same RBD. Both enrollment denominators count unique person-school records
+with observed final status, including repeaters; they are not unique
+individuals across schools. Exclude school-years without grade-9 A1 listings
+from both numerator and denominator; preserve explicitly listed zero slots.
+
+Report each process separately, with no across-year pooling. The separate
+2018/2019/2020 annual ratios of total advertised vacancies to total matched-
+school enrollment are 43.293%/42.406%/37.146% for grade 9 and
+61.270%/55.007%/49.237% for grade 8. Save every school-year ratio too,
+leaving zero-enrollment ratios undefined. Coverage is 1,240/1,905/1,916
+schools. Advertised vacancies are not realized SAE admissions or new entrants.
+
+Annual summaries, school-year ratios, coverage, manifest and verification use
+`data/clean/school_preference_va/destination_entry_grades/vacancies_vs_enrollment/`.
+
 ## Destination entry grades and internal continuation
 
 Run `39_audit_destination_entry_grades.R` for the 2,454 destinations in the

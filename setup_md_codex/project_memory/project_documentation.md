@@ -1355,3 +1355,10 @@ grade-8 presence is observed at 1,935 schools; 512 have no primary grades
 observed and seven have other primary grades without grade 8. Script 39 in
 school_preference_va saves counts and school records to destination_entry_grades
 without changing models. Historical and 2024 classifications are distinct.
+
+For the 1,918 basic-plus-secondary destinations, script 40 compares advertised
+SAE grade-9 vacancies with grade 8 in process t and grade 9 in t+1, matching
+school-year A1 coverage. Separate 2018/2019/2020 vacancy-to-grade-9 ratios
+are 43.3%/42.4%/37.1%; vacancy-to-grade-8 ratios are 61.3%/55.0%/49.2%.
+No across-year pooled ratio is reported. Annual counts and every school-year
+ratio use destination_entry_grades/vacancies_vs_enrollment in the task data.
