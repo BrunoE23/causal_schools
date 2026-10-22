@@ -380,3 +380,20 @@
 
 ### Resolved: observational VA selected 2021 cohort (2026-09-21)
 The consolidated Box universe includes grade-8 cohorts 2017-2021. A column-selective audit found complete-control eligible counts of 176570, 193269, 192615, 195545, and 13769 respectively; corresponding exam-taker counts are 135968, 159583, 162015, 165243, and 7003. These precede outcome-specific missingness and estimator drops. Because the 2021 group is small and selected by missing baseline data, the constructor now defaults to 2017-2020 and writes cohort-window-specific outputs. The second paper-facing observational run uses 2017-2018.
+
+### Recorded offers with zero simulated destination probability (2026-10-22)
+
+- Status: Open diagnostic; composition outputs preserve recorded offers.
+- Among the 52,019 first-round offers to the top 100 application destinations
+  in the existing 2018-2020 SAE paper roster, 53 have zero recorded simulated
+  probability at their offered RBD (12 in 2018, 30 in 2019, 11 in 2020).
+  All recipients have complete simulated student distributions summing to one.
+- The main offered-student composition keeps these actual offers; the
+  supplementary 0 < p < 1 offered group excludes them. Zero simulated mass is
+  not taken as proof that an observed offer was impossible.
+- A separate listing audit counts 403 recorded offers outside the genuine-choice
+  panel; this is not assumed to be the same discrepancy as the 53 zero-mass cases.
+- Audit files are in `data/clean/applicant_composition_trends/group_averages/`
+  (`offer_probability_audit.csv` and `offer_listing_audit.csv`). Follow up on
+  simulation support and source offer/listing records before using these cases
+  for a design that requires strictly positive destination assignment risk.

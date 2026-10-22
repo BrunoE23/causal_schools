@@ -177,3 +177,70 @@ matrix calculations for all 964 estimable weighted HC2 regressions. A separate
 rerun of the generalized fitter on the original unweighted panel reproduced all
 1,000 original school-outcome records and school-count summaries. Report checks
 cover all ten outcome tables, RBD search and every local figure/download link.
+
+## Three-year school composition by applicant, offer and attendance group
+
+The follow-up request adds income decile and averages composition across the
+2018-2020 cohorts. Bruno explicitly selected **all students, using the school
+attended most often in high school** for the attendee population. Script 09
+creates the following groups for the same fixed top 100 schools:
+
+- `weighted_applicants`: the existing genuine submitted-choice panel, with
+  destination-specific simulated admission probabilities as weights.
+- `first_round_offered`: students in the full existing 294,198-person SAE paper
+  roster whose recorded positive `rbd_treated_1R` equals the destination. This
+  includes guaranteed offers and does not condition on attending the offered
+  school. It includes 403 offers to destinations absent from the genuine-choice
+  panel, which are identified in `offer_listing_audit.csv`.
+- `actual_attendees`: every master-universe student in grade-8 cohorts 2018-2020
+  whose `most_time_RBD` is the destination, including non-SAE students. No age,
+  offer, lottery-risk, exam-taking or complete-case restriction is imposed.
+- Supplement: `offered_at_risk` retains actual first-round offers with offered-
+  school simulated probability strictly between zero and one, so users can
+  distinguish stochastic lottery offers from all realized SAE offers.
+
+The primary characteristics preserve the earlier reported available-parent mean,
+average of both grade-4 subject z-scores, and female share (stored 0-1). Income is
+the existing `income_decile_imputed` (observed plus upstream imputation), without
+reranking or further imputation. Observed-only income decile is supplementary.
+Each characteristic has its own nonmissing denominator.
+
+Aggregation columns distinguish three objects:
+
+- `mean_equal_cohort_*`: equal-weight average of the available cohort means.
+  Always inspect `n_cohorts_*`; a two-year average is not labeled as a full
+  three-cohort observation.
+- `mean_all_three_cohorts_*`: same average, but missing unless all three means
+  exist. No empty cohort is replaced with zero.
+- `mean_pooled_*`: pool students and their group weights across 2018-2020;
+  larger observed groups receive proportionally more weight.
+
+Run from the repository root:
+
+```powershell
+& 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/applicant_composition_trends/09_school_group_averages.R
+& 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/applicant_composition_trends/10_verify_group_averages.R
+```
+
+Outputs are in `data/clean/applicant_composition_trends/group_averages/`:
+
+- `school_group_averages_2018_2020.csv`: main 300-row school-by-group table with
+  all four primary measures, aggregation variants, cohort counts and coverage.
+- `school_composition_100_schools.csv`: the same main groups/measures side by
+  side, with one row per school (100 rows).
+- `school_group_averages.rds`: both main tables, full long results, annual means
+  and group/outcome definitions for reuse in R.
+- `school_group_averages_long.csv` and `school_group_cohort_means.csv`: include
+  the strictly stochastic offer subset and observed-only income, plus numerators,
+  denominators and coverage. Dictionaries and population audits accompany them.
+
+The main offer group contains 52,019 students; attendees contain 72,502, including
+21,087 outside the paper SAE roster and 49 outside ages 12-16 or with age missing.
+The stochastic-offer supplement contains 37,454 students. All 100 schools have
+three attendee cohorts for all primary characteristics. Offers and probability-
+weighted applicants can have fewer supported years. Retain the 53 actual offers
+with zero recorded simulation probability in the main offer group; do not call
+them stochastic offers based on their simulated zero. This is recorded in the
+offer probability audit. Verification checks direct pooled weighted means,
+equal-cohort averages, three-year completeness, and exact reproduction of earlier
+weighted baseline means.

@@ -25,6 +25,17 @@ cohorts; three schools have no identifiable trend. Report:
 Derived data: `data/clean/applicant_composition_trends/probability_weighted/`. Details:
 `decisions/2026-10-22-probability-weighted-applicant-composition.md`.
 
+The subsequent three-year composition table adds income decile and compares
+probability-weighted applicants, actual first-round offer recipients, and all
+attendees. Bruno explicitly chose `most_time_RBD` for attendees and inclusion of
+non-SAE students. The attendee group includes all 2018-2020 grade-8-cohort students
+in the master universe, without the SAE roster's age restriction. Save both
+equal-cohort and pooled means, supported-year counts and strict all-three means.
+Main 300-row CSV and 100-row school-wide CSV/RDS are under
+`data/clean/applicant_composition_trends/group_averages/`. The long output also
+contains strictly stochastic offers (0 < p_school < 1) and observed-only income.
+See `decisions/2026-10-22-school-composition-three-groups.md`.
+
 ## School rankings and four-dimensional VA preferences (2026-10-14)
 
 The2026-10-15 PAES extension constructs graduation-RBD mean MATE1_REG_ACTUAL
