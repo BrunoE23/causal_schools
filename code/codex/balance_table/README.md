@@ -1,5 +1,17 @@
 # Table 2 with applicant continuation groups
 
+The same HTML report now appends first-stage and second-stage lottery-IV
+tables for all seven paper outcomes, with rows for pooled (paper), school
+ending and voluntary. Script 02 sources helper 04 to render the existing
+verified by_continuation/results.csv; no models are refitted. Include the
+paper's heteroskedasticity-robust SEs, outcome-specific N, first-stage F and
+original significance stars. The pooled row includes eligible unresolved/
+other-origin applicants, so it is not the sum of only the two classified
+subgroups. All 42 current pooled beta/SE/F/N values are checked against the
+saved paper-replication results. Source estimates, checks and a companion
+CSV are retained in the task clean-data folder. Existing manuscript tables
+and the balance-table LaTeX fragment are unchanged by this HTML addition.
+
 The 2026-10-22 update adds two rows in both HTML and the existing LaTeX
 table fragment: share of all 294,198 SAE applicants (broad-panel cell is
 not applicable), and non-private high-school attendance. The latter uses

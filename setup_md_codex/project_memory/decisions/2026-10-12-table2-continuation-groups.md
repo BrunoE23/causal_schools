@@ -1,5 +1,16 @@
 # Table 2 variant: school-ending and voluntary SAE applicants
 
+Additional report update 2026-10-22: append first-stage and second-stage
+lottery-IV tables with rows for the unchanged pooled paper estimates,
+school-ending applicants and voluntary applicants across all seven outcomes.
+Reuse verified by_continuation/results.csv, retaining robust SEs, first-stage
+F and outcome-specific N. Verify all 42 current pooled statistics against
+the paper-replication object. No refits, pooled-sample restriction or new
+between-group tests are introduced. Pooled estimates retain eligible
+unresolved/other-origin applicants; note that the two subgroups are not a
+complete partition of the pooled IV sample. Helper 04 is sourced by report
+script 02; original balance-table rows and manuscript tables are preserved.
+
 Update 2026-10-22: at the user's request, add share of SAE applicants and
 non-private high-school attendance to the existing HTML/LaTeX variant.
 The first row divides each SAE-subset N by all 294,198 applicants, leaving

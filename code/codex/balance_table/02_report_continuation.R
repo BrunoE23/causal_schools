@@ -62,10 +62,11 @@ html_rows <- vapply(seq_len(nrow(display)),function(i) {
   if(nzchar(z$section)) return(paste0('<tr class="section"><th colspan="6">',esc(z$label),'</th></tr>'))
   paste0('<tr><th>',esc(z$label),'</th>',paste0('<td>',esc(unlist(z[,3:7,with=FALSE])),'</td>',collapse=''),'</tr>')
 },character(1))
+source('code/codex/balance_table/04_lottery_results_section.R')
 html <- paste0('<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Table 2: applicant continuation groups</title>',
   '<style>body{font:15px/1.5 system-ui,sans-serif;background:#f5f7fa;color:#243347;margin:0}main{max-width:1180px;margin:28px auto;background:white;padding:30px;border-radius:10px}h1{font-size:27px}.table{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:14px}th,td{padding:8px;border-bottom:1px solid #e1e5ea;text-align:right;font-variant-numeric:tabular-nums}th:first-child{text-align:left}thead th{background:#e8eef3;vertical-align:bottom}.section th{text-align:left;background:#f4f6f8;padding-top:13px}tbody th{font-weight:400}p.notes{font-size:13px}@media print{main{padding:0;margin:0}body{background:white}tr{break-inside:avoid}}</style></head><body><main><h1>Table 2: applicants by school continuation</h1><p>Means only, with the paper\'s original samples and variables.</p><div class="table"><table><thead><tr><th></th>',
   paste0('<th>',esc(labels),'</th>',collapse=''),'</tr></thead><tbody>',paste(html_rows,collapse=''),
-  '</tbody></table></div>',paste0('<p class="notes">',esc(notes),'</p>',collapse=''),'</main></body></html>')
+  '</tbody></table></div>',paste0('<p class="notes">',esc(notes),'</p>',collapse=''),lottery_html,'</main></body></html>')
 writeLines(html,file.path(reports,'table2_continuation.html'))
 tex_escape <- function(x) gsub('%','\\%',x,fixed=TRUE)
 tex_rows <- vapply(seq_len(nrow(display)),function(i) {
