@@ -1,5 +1,10 @@
 # D with applicant, offered and attendee peer composition
 
+The sample restriction in this record is superseded by the user's subsequent
+request to extend peer measures to the whole school population. See
+`2026-10-22-full-school-peer-preferences.md`. The top-100 outputs remain
+as a historical comparison.
+
 The user requested a new four-column preference report: D, then D plus
 the four peer characteristics measured in each of three populations.
 Use the supplied 300-row school-group averages for the same 100 schools:

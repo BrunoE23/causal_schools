@@ -1,5 +1,32 @@
 # SAE applicant composition trends
 
+## Whole-school extension for the preference models
+
+Run `11_extend_all_school_group_averages.R` followed by
+`10_verify_group_averages.R --all-schools`. This reuses the original
+aggregation code (09, with its full-school option) and preserves its
+default top-100 behavior. Full-school outputs use the separate
+`data/clean/applicant_composition_trends/all_school_group_averages/` folder.
+
+The school roster is the union of 2,524 genuine SAE destination RBDs,
+positive first-round offer RBDs and positive most-attended HS RBDs in the
+2018-2020 universe: 3,964 schools. Missing school-group characteristics
+remain missing. The main CSV has 11,892 rows, including explicit empty
+group cells, and the R bundle retains annual means, pooled/equal-cohort
+means, coverage and definitions. Metadata for schools outside the genuine
+SAE destination list can have missing names/ranks; numeric RBD is the key.
+
+Applicant composition uses all 1,007,253 genuine school listings of the
+294,198 paper applicants. Validate every student's full simulated
+probability mass before assigning zero to an absent school-probability
+row. Collapse program probabilities by RBD. Offers include 270,381
+students; attendees include all 698,771 master-universe students with a
+positive most-attended RBD, without conditioning on SAE or age. The
+stochastic-offer supplement remains separate. All original 100-school
+weights and primary table values reproduce; independent aggregation
+checks cover the expanded population. Never reconstruct VA or edit the
+master universe as part of this extension.
+
 Construct school-by-SAE-cohort applicant composition and test a separate linear
 time trend for each of the 100 schools receiving the most submitted applications.
 The three primary outcomes are baseline SIMCE, female share, and parents'

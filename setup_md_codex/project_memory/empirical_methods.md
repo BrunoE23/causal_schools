@@ -661,3 +661,13 @@ unchanged. Compare nested incremental ranking likelihoods for the four-peer
 and four-VA blocks; do not equate raw coefficient magnitude or significance
 with causal preference strength. See
 `decisions/2026-10-22-peer-populations-preferences.md`.
+
+The later full-school peer extension supersedes that top-100 restriction.
+Construct unchanged peer populations across all observed school RBDs, then
+retain complete original D rankings with all three sets of peer measures:
+267,937 students, 940,605 pairs and 2,454 schools (98.08% retained). D is
+re-estimated on exactly this common sample and keeps all ten original fee
+indicators. Peer normalization uses the expanded sample's attendee-school
+mean/SD, common across all three populations, while original VA units stay
+fixed. Missing school-group peer measures exclude entire lists and are not
+imputed. See `decisions/2026-10-22-full-school-peer-preferences.md`.

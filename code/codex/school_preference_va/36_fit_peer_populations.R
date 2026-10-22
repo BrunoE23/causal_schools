@@ -1,14 +1,16 @@
 # D plus three alternative peer populations, on the user-approved common sample.
 source("code/codex/school_preference_va/four_specifications_common.R")
 suppressPackageStartupMessages(library(survival))
-out <- file.path(base_clean_dir, "peer_populations")
+all_schools <- "--all-schools" %in% commandArgs(trailingOnly = TRUE)
+out <- file.path(base_clean_dir, if (all_schools) "peer_populations_all_schools" else "peer_populations")
 dir.create(file.path(out, "models"), recursive = TRUE, showWarnings = FALSE)
-peer_path <- file.path(root, "data/clean/applicant_composition_trends/group_averages/school_group_averages_2018_2020.csv")
-input <- file.path(out, "top100_complete_rankings.rds")
+peer_path <- file.path(root, "data/clean/applicant_composition_trends", if (all_schools) "all_school_group_averages" else "group_averages", "school_group_averages_2018_2020.csv")
+input <- file.path(out, if (all_schools) "complete_rankings.rds" else "top100_complete_rankings.rds")
 protected <- c(input, peer_path, four_spec_model_path("D", "main"), four_spec_input_path)
 hashes <- data.table(path = protected, md5_before = unname(tools::md5sum(protected)))
 d <- as.data.table(readRDS(input)); setorder(d, ranking_id, rank_school)
-check("Approved full-list sample is intact", nrow(d) == 36276L && uniqueN(d$ranking_id) == 13037L && uniqueN(d$rbd) == 99L &&
+expected <- if (all_schools) fread(file.path(out, "preflight_coverage.csv"))[2L] else data.table(rankings = 13037L, school_pairs = 36276L, schools = 99L)
+check("Approved full-list sample is intact", nrow(d) == expected$school_pairs && uniqueN(d$ranking_id) == expected$rankings && uniqueN(d$rbd) == expected$schools &&
   !anyDuplicated(d[, .(ranking_id, rbd)]) && all(d[, identical(as.integer(rank_school), seq_len(.N)), by = ranking_id]$V1))
 peer <- fread(peer_path)
 metrics <- c("parents_education", "simce_baseline", "female", "income_decile_imputed")
@@ -19,7 +21,7 @@ ref <- peer[group == "actual_attendees" & rbd %in% d$rbd]
 normalization <- rbindlist(lapply(metrics, function(v) data.table(metric = v,
   reference_mean = mean(ref[[paste0("mean_equal_cohort_", v)]]),
   reference_sd = sd(ref[[paste0("mean_equal_cohort_", v)]]), schools = nrow(ref))))
-check("Four common peer normalization units exist", nrow(ref) == 99L && all(is.finite(normalization$reference_sd) & normalization$reference_sd > 0))
+check("Four common peer normalization units exist", nrow(ref) == expected$schools && all(is.finite(normalization$reference_sd) & normalization$reference_sd > 0))
 for (g in names(group_map)) {
   lookup <- peer[group == group_map[[g]], c("rbd", paste0("mean_equal_cohort_", metrics)), with = FALSE]
   check(paste(g, "peer join is unique"), !anyDuplicated(lookup$rbd))
@@ -36,15 +38,15 @@ constant <- base_terms[vapply(base_terms, function(v) uniqueN(d[[v]]) < 2L, logi
 check("Only absent fee indicators are omitted from restricted D", all(constant %in% active_fee_terms))
 base_terms <- setdiff(base_terms, constant)
 peer_terms <- setNames(lapply(names(group_map), function(g) paste0("peer_", g, "_", metrics)), names(group_map))
-check("Peer composition is complete on every original alternative", nrow(d) == 36276L && all(vapply(d[, unlist(peer_terms), with = FALSE], function(v) all(is.finite(v)), logical(1))))
+check("Peer composition is complete on every original alternative", nrow(d) == expected$school_pairs && all(vapply(d[, unlist(peer_terms), with = FALSE], function(v) all(is.finite(v)), logical(1))))
 fwrite(normalization, file.path(out, "peer_normalization.csv"))
-fwrite(data.table(term = constant, reason = "Identically zero in the approved top-100 complete-list sample"), file.path(out, "omitted_constant_fees.csv"))
+fwrite(data.table(term = constant, reason = rep("Identically zero in the common complete-list sample", length(constant))), file.path(out, "omitted_constant_fees.csv"))
 fwrite(peer[rbd %in% d$rbd], file.path(out, "source_peer_characteristics_used.csv"))
 saveRDS(d, file.path(out, "estimation_data.rds"))
 
 fits <- list(); coef_rows <- list(); summary_rows <- list(); diagnostic_rows <- list()
 fit_one <- function(key, terms, auxiliary = FALSE) {
-  message("Fitting ", key, ": ", length(terms), " coefficients, 13037 complete rankings")
+  message("Fitting ", key, ": ", length(terms), " coefficients, ", expected$rankings, " complete rankings")
   fml <- as.formula(paste("Surv(rank_school, event) ~", paste(terms, collapse = " + "), "+ strata(ranking_id)"), env = .GlobalEnv)
   warnings <- character()
   fit <- withCallingHandlers(coxph(fml, data = d, cluster = mrun, ties = "breslow", singular.ok = FALSE,
@@ -55,7 +57,7 @@ fit_one <- function(key, terms, auxiliary = FALSE) {
     identical(names(b), terms) && fit$n == nrow(d) && all(is.finite(b)) && all(is.finite(V)) && all(diag(V) > 0))
   check(paste(key, "matches the exact submitted-ranking likelihood"), abs(paes_pl_loglik(d, b, terms) - as.numeric(logLik(fit))) < 1e-6)
   score <- residuals(fit, type = "score")
-  check(paste(key, "score equations hold"), max(abs(colSums(score))) / 13037 < 1e-7)
+  check(paste(key, "score equations hold"), max(abs(colSums(score))) / expected$rankings < 1e-7)
   H <- solve(fit$naive.var); ev <- eigen(H, symmetric = TRUE, only.values = TRUE)$values
   check(paste(key, "information is identified"), min(ev) > 0)
   # Reconstruct the student-clustered sandwich independently from Cox scores.

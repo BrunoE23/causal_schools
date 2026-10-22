@@ -4,18 +4,20 @@ suppressPackageStartupMessages(library(data.table))
 setDTthreads(4L)
 if (.Platform$OS.type == "windows") invisible(Sys.setlocale("LC_CTYPE", "English_United States.utf8"))
 base <- "data/clean/applicant_composition_trends"
-dest <- file.path(base, "group_averages")
+all_schools <- isTRUE(getOption("school_composition.all_schools", FALSE))
+dest <- file.path(base, if (all_schools) "all_school_group_averages" else "group_averages")
 dir.create(dest, recursive = TRUE, showWarnings = FALSE)
 data_root <- Sys.getenv("CAUSAL_SCHOOLS_DATA_WD", "C:/Users/brunem/Box/causal_schools")
 universe_path <- file.path(data_root, "data/clean/univ_gr8_df.csv")
-weighted_path <- file.path(base, "probability_weighted/applicant_school_frame.rds")
+weighted_path <- if (all_schools) file.path(dest, "applicant_school_weights.rds") else
+  file.path(base, "probability_weighted/applicant_school_frame.rds")
 roster_path <- "data/clean/empirical_bayes_school_va/va_2017_2020__sae_2018_2020/by_continuation/all_applicant_expected_va.rds"
 prob_paths <- file.path(data_root, "data/clean/DA_probs", paste0("DA_probs_", 2018:2020, ".csv"))
 paths <- c(universe_path, weighted_path, roster_path, prob_paths)
 stopifnot(all(file.exists(paths)))
 fwrite(data.table(path = paths, bytes = file.info(paths)$size, modified = as.character(file.info(paths)$mtime)),
        file.path(dest, "input_manifest.csv"))
-top <- fread(file.path(base, "top100_schools.csv"), encoding = "UTF-8")
+top <- fread(file.path(base, if (all_schools) "all_school_application_ranking.csv" else "top100_schools.csv"), encoding = "UTF-8")
 roster <- as.data.table(readRDS(roster_path))[, .(mrun, sae_proceso, cohort_gr8)]
 stopifnot(nrow(roster) == 294198L, !anyDuplicated(roster$mrun), all(roster$sae_proceso == roster$cohort_gr8))
 
@@ -29,6 +31,12 @@ message("Reading 16 selected fields from the master student universe.")
 u <- fread(universe_path, select = columns, na.strings = c("", "NA"), showProgress = FALSE)
 u <- u[cohort_gr8 %in% 2018:2020]
 stopifnot(!anyDuplicated(u$mrun))
+if (all_schools) {
+  school_ids <- sort(unique(c(top$rbd, u[most_time_RBD > 0, most_time_RBD], u[rbd_treated_1R > 0, rbd_treated_1R])))
+  top <- merge(data.table(rbd = school_ids), top[, .(rbd, rank, school_name, comuna)], by = "rbd", all.x = TRUE)
+  stopifnot(!anyDuplicated(top$rbd))
+  fwrite(top, file.path(dest, "school_population.csv"))
+}
 u[, female := fifelse(GEN_ALU %in% 1:2, as.numeric(GEN_ALU == 2), NA_real_)]
 u[, simce_baseline := (z_sim_mat_4to + z_sim_leng_4to) / 2]
 u[, parents_education := {
@@ -49,14 +57,17 @@ fwrite(specs, file.path(dest, "outcome_definitions.csv"))
 
 weighted <- as.data.table(readRDS(weighted_path))
 baseline <- u[, c("mrun", "cohort_gr8", variables), with = FALSE]
+if (!all_schools) {
 old_check <- merge(weighted[, .(mrun, cohort_gr8, parents_education, simce_baseline, female)],
   baseline[, .(mrun, cohort_gr8, parents_education, simce_baseline, female)],
   by = c("mrun", "cohort_gr8"), suffixes = c("_cached", "_master"))
 stopifnot(nrow(old_check) == nrow(weighted))
 for (v in variables[1:3]) stopifnot(isTRUE(all.equal(old_check[[paste0(v, "_cached")]],
   old_check[[paste0(v, "_master")]], tolerance = 1e-12)))
+}
 weighted <- merge(weighted[, .(mrun, cohort_gr8, rbd, weight = admission_probability)],
   baseline, by = c("mrun", "cohort_gr8"), all.x = TRUE)
+stopifnot(nrow(weighted) == if (all_schools) 1007253L else 212608L)
 weighted[, group := "weighted_applicants"]
 
 # Actual offers use the full existing SAE applicant roster, without conditioning
@@ -166,7 +177,7 @@ for (name in c("cohorts", "averages")) {
 fwrite(cohorts, file.path(dest, "school_group_cohort_means.csv"))
 fwrite(averages, file.path(dest, "school_group_averages_long.csv"))
 
-# Main saved table: one row per school/group (300 rows), four requested measures,
+# Main saved table: one row per school/group, four requested measures,
 # both aggregation rules, strict all-three means and per-outcome coverage counts.
 main <- averages[primary_group == TRUE & primary == TRUE]
 wide <- dcast(main, rank + rbd + school_name + comuna + group + group_label ~ outcome,
@@ -174,7 +185,7 @@ wide <- dcast(main, rank + rbd + school_name + comuna + group + group_label ~ ou
 fwrite(wide, file.path(dest, "school_group_averages_2018_2020.csv"))
 schoolwide <- dcast(main, rank + rbd + school_name + comuna ~ group + outcome,
   value.var = c("mean_equal_cohort", "mean_pooled", "n_cohorts"))
-fwrite(schoolwide, file.path(dest, "school_composition_100_schools.csv"))
+fwrite(schoolwide, file.path(dest, if (all_schools) "school_composition_all_schools.csv" else "school_composition_100_schools.csv"))
 saveRDS(list(school_group_averages = wide, school_averages = schoolwide, long = averages, cohort_means = cohorts,
              group_definitions = groups, outcome_definitions = specs),
   file.path(dest, "school_group_averages.rds"))

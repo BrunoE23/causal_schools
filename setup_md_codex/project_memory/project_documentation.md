@@ -1331,10 +1331,18 @@ The active gender-income report now shows those comparisons; the original
 unadjusted report has the `_unadjusted` suffix. Score-controlled models and
 coverage use `data/clean/projected_income_gender/score_controls/`.
 
-The new preference report `school_preference_va/with_peer_populations.html`
+The historical preference report `school_preference_va/with_peer_populations.html`
 has D plus three alternative peer populations from the supplied 100-school
 school_group_averages_2018_2020.csv. The user selected all four columns on
 the 13,037 complete rankings within this file (99 used schools). Scripts
 35-37 in school_preference_va reproduce its data, estimates and report;
 derived artifacts use the task subfolder peer_populations. Original D and
 earlier preference reports are preserved.
+
+The user's subsequent full-school extension is now the active peer comparison:
+`school_preference_va/with_peer_populations_all_schools.html`. Expanded composition
+uses 3,964 observed destination/offer/attendee schools, reproducing the original
+100-school measures. All four columns retain the same 267,937 complete rankings
+(98.08% of original D), 940,605 pairs and 2,454 schools. Original VA units stay
+fixed; peer units use common attendee-school SDs on the expanded sample.
+See `decisions/2026-10-22-full-school-peer-preferences.md` and task READMEs.

@@ -1,24 +1,26 @@
 suppressPackageStartupMessages(library(data.table))
 setDTthreads(4L)
 base <- "data/clean/applicant_composition_trends"
-dest <- file.path(base, "group_averages")
+all_schools <- "--all-schools" %in% commandArgs(trailingOnly = TRUE)
+dest <- file.path(base, if (all_schools) "all_school_group_averages" else "group_averages")
 d <- as.data.table(readRDS(file.path(dest, "group_student_frame.rds")))
 cohorts <- fread(file.path(dest, "school_group_cohort_means.csv"))
 averages <- fread(file.path(dest, "school_group_averages_long.csv"))
 main <- fread(file.path(dest, "school_group_averages_2018_2020.csv"))
-schools <- fread(file.path(dest, "school_composition_100_schools.csv"))
+schools <- fread(file.path(dest, if (all_schools) "school_composition_all_schools.csv" else "school_composition_100_schools.csv"))
 specs <- fread(file.path(dest, "outcome_definitions.csv"))
 checks <- list()
 check <- function(label, passed, error = 0) {
   checks[[length(checks) + 1L]] <<- data.table(check = label, passed = isTRUE(passed), max_error = error)
   if (!isTRUE(passed)) stop(label)
 }
-check("requested table dimensions", nrow(main) == 300L && nrow(schools) == 100L && uniqueN(main$rbd) == 100L)
+expected_schools <- if (all_schools) nrow(fread(file.path(dest, "school_population.csv"))) else 100L
+check("requested table dimensions", nrow(main) == 3L * expected_schools && nrow(schools) == expected_schools && uniqueN(main$rbd) == expected_schools)
 check("unique records within each group", !anyDuplicated(d[, .(group, mrun, cohort_gr8, rbd)]))
 check("one attendee school per person", !anyDuplicated(d[group == "actual_attendees", mrun]))
 check("one offered school per person", !anyDuplicated(d[group == "first_round_offered", mrun]))
 check("realized offer and attendance groups are unweighted", d[group != "weighted_applicants", all(weight == 1)])
-check("all attendee school outcomes span all three years", averages[group == "actual_attendees" & primary == TRUE, all(n_cohorts == 3L)])
+if (!all_schools) check("all attendee school outcomes span all three years", averages[group == "actual_attendees" & primary == TRUE, all(n_cohorts == 3L)])
 check("missing cohort means never become zero", cohorts[observed_weight == 0, all(is.na(mean))])
 check("strict three-year means require three years", averages[n_cohorts < 3L, all(is.na(mean_all_three_cohorts))])
 check("strict and available means agree with full coverage", averages[n_cohorts == 3L, all(mean_equal_cohort == mean_all_three_cohorts)])
@@ -55,5 +57,5 @@ check("previous weighted composition reproduced", nrow(z) == 900L &&
 offer_frame <- d[group == "first_round_offered", .(mrun, cohort_gr8, rbd)]
 risk_frame <- d[group == "offered_at_risk", .(mrun, cohort_gr8, rbd)]
 check("stochastic-offer supplement is subset of actual offers", nrow(risk_frame[!offer_frame, on = .(mrun, cohort_gr8, rbd)]) == 0L)
-fwrite(rbindlist(checks), file.path(dest, "verification.csv"))
+fwrite(rbindlist(checks), file.path(dest, if (all_schools) "aggregation_verification.csv" else "verification.csv"))
 message("Passed ", length(checks), " checks for group composition averages.")

@@ -1,5 +1,38 @@
 # School preferences and four-dimensional EB value added
 
+## Full-school peer extension (2026-10-22)
+
+The user superseded the top-100 restriction and requested the whole school
+population. Run from the project root, using Rscript:
+
+1. `code/codex/applicant_composition_trends/11_extend_all_school_group_averages.R`
+2. `code/codex/applicant_composition_trends/10_verify_group_averages.R --all-schools`
+3. `code/codex/school_preference_va/38_all_school_peer_preflight.R`
+4. `code/codex/school_preference_va/36_fit_peer_populations.R --all-schools`
+5. `code/codex/school_preference_va/37_report_peer_populations.R --all-schools`
+
+Peer construction now includes all 2,524 genuine SAE destinations plus all
+positive offered and most-attended-school RBDs in the 2018-2020 universe:
+3,964 schools and 11,892 primary school-group rows. Retain the same three
+population definitions, four measures and equal-available-cohort means.
+The original 100-school measures reproduce exactly to numerical precision.
+
+All 2,481 original D schools have attendee measures; applicant and offer
+measures are complete at 2,456 and 2,469 schools respectively. Complete-list
+intersection retains 267,937 rankings (98.08%), 940,605 pairs and 2,454
+destinations. Entire rankings with any missing peer regressor are excluded,
+never trimmed. Re-estimate D on this common sample with all ten original
+fee indicators. The four main columns have identical samples and controls.
+
+Peer normalization is common across populations, using attendee-school
+means/SDs across the 2,454 retained destinations. Original VA units remain
+unchanged. Models, covariances, normalization, eligibility, coverage by year,
+diagnostics and block comparisons use the new `peer_populations_all_schools`
+clean-data subfolder. The main report is
+`output/reports/school_preference_va/with_peer_populations_all_schools.html`;
+table companions use the corresponding output/tables subfolder. Earlier
+top-100 inputs, reports and model objects remain unchanged.
+
 ## D plus three peer populations (2026-10-22)
 
 Run `35_peer_composition_preflight.R`, `36_fit_peer_populations.R`, then
