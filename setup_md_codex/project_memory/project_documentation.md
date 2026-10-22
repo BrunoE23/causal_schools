@@ -1,5 +1,20 @@
 # Project Documentation
 
+## SAE applicant composition stability (2026-10-22)
+
+`code/codex/applicant_composition_trends/` constructs a school-cohort panel for
+the 100 largest genuine submitted-choice destinations in the existing 294,198
+timely grade-9 SAE applicant roster, 2018-2020. Primary measures are the average
+of both grade-4 subject z-scores, female share, and reported available-parent
+education years. It reports equal-cohort OLS trends and separately labeled
+independent-applicant HC2 tests with identical slopes. Bruno requested raw
+p-values and counts of schools with trends in one/two/three outcomes. Cohort OLS
+counts are 8/0/0 (86 schools testable); independent-applicant exact counts are
+56/23/2 (100 schools). Fourteen schools have only two cohorts. Report:
+`output/reports/applicant_composition_trends/report.html`; reusable data and
+school-level counts: `data/clean/applicant_composition_trends/`. See
+`decisions/2026-10-22-applicant-composition-trends.md` for inference and selection.
+
 ## School rankings and four-dimensional VA preferences (2026-10-14)
 
 The2026-10-15 PAES extension constructs graduation-RBD mean MATE1_REG_ACTUAL

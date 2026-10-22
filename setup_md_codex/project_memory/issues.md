@@ -1,5 +1,24 @@
 # Project Issues Log
 
+### Applicant parent-education shift and missing baseline coverage (2026-10-22)
+
+- In the 86 top-application schools observed in all three SAE cohorts, equal-school
+  mean reported parent education is 11.113 in 2018, 10.554 in 2019 and 10.638 in
+  2020. The median school declines .437 years between endpoints. Both-parent and
+  existing-imputation variants also decline. This does not establish why.
+- Parent coverage among top-100 applicant-school pairs is 78.8%/78.8%/75.3%; both
+  SIMCE scores are observed for 84.4%/84.0%/80.9%. Baseline questionnaires mostly
+  correspond to 2014/2015/2016 and have different category layouts, handled by the
+  existing crosswalk. Survey comparability and selective missingness remain to be
+  audited before attributing the full parent shift to population composition.
+- Cohort-mean OLS uses just three time observations for 86 schools and only two
+  for 14. Independent-applicant tests are much more powerful but assume no common
+  cohort or origin-school dependence. Do not conflate their conclusions.
+- The earlier top-100 script includes automatic continuity entries. This task
+  ranks genuine C1 choices, retaining 99 previous top schools and replacing RBD 52
+  with RBD 4977. The previous ranking and its dependent analyses remain unchanged.
+- See `decisions/2026-10-22-applicant-composition-trends.md` and task diagnostics.
+
 ### Existing comuna-center lookup mislabels code 1401
 
 - Noted 2026-10-14 while implementing school-preference distances. The source

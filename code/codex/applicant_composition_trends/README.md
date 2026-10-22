@@ -1,0 +1,111 @@
+# SAE applicant composition trends
+
+Construct school-by-SAE-cohort applicant composition and test a separate linear
+time trend for each of the 100 schools receiving the most submitted applications.
+The three primary outcomes are baseline SIMCE, female share, and parents'
+education. The user explicitly requested **unadjusted p-values** and counts of
+schools with trends in one, two, or all three outcomes (threshold p < 0.05).
+
+## Run
+
+From the repository root, with R 4.5.1 and packages data.table, sandwich,
+ggplot2 and jsonlite:
+
+```powershell
+& 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/applicant_composition_trends/01_build_panel.R
+& 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/applicant_composition_trends/02_test_trends.R
+& 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/applicant_composition_trends/03_report.R
+& 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/applicant_composition_trends/04_verify.R
+node code/codex/applicant_composition_trends/05_verify_report.js
+```
+
+Inputs default to `C:/Users/brunem/Box/causal_schools`; override with
+`CAUSAL_SCHOOLS_DATA_WD`. Inputs are read-only. The 1.23 GB universe CSV is
+preflighted and read with only the necessary baseline columns. New derived data
+and diagnostics go in `data/clean/applicant_composition_trends/` and stay local.
+Figures go in `output/figures/applicant_composition_trends/`; the main report is
+`output/reports/applicant_composition_trends/report.html`.
+
+## Population and schools
+
+Use the existing paper roster `all_applicant_expected_va.rds`: 294,198 timely
+grade-9 SAE applicants, processes 2018-2020, ages 12-16 at grade 8, and observed
+positive attended high-school RBD. Retain all continuation/priority groups,
+without conditioning on lottery risk or exam taking. SAE process year precedes
+grade-9 entry by one year. The first observed SAE process convention is inherited.
+
+Read raw regular-round C1 applications; require grade 9 and exclude automatically
+added continuity entries (`agregada_por_continuidad == 1`). Do not exclude genuine
+priority applications. Collapse programs/campuses within applicant-process-RBD.
+Rank schools by pooled distinct applicant-school pairs, breaking ties by RBD;
+fix the resulting 100 schools across years. This retains 99 schools from the
+earlier ranking: RBD 4977 replaces RBD 52. Do not alter the earlier ranking.
+
+The top 100 have 212,608 applicant-school pairs. There are 86 schools present in
+three cohorts and 14 present in two. A school-year with no applicants remains an
+explicit empty cell with missing means, never an outcome of zero.
+
+## Outcomes
+
+- `simce_baseline`: arithmetic mean of grade-4 math and verbal z-scores, requiring
+  both subjects. These existing z-scores are standardized within baseline test
+  year. Their average is **not** restandardized to unit variance.
+- `female`: GEN_ALU = 2 for valid codes 1/2; other codes missing. CSV means are
+  shares, with display columns in percent/percentage points.
+- `parents_education`: average available mother/father reported education years
+  per student, then average those student values. At least one parent is required.
+  The underlying questionnaire categories have already been mapped to approximate
+  years using the project's year-specific crosswalk.
+
+Seven secondary measures retain math, verbal, mother and father separately;
+both-parent complete reports; existing observed-plus-imputed parent values; and
+the mean of raw SIMCE points requiring both subjects. No new imputation occurs.
+Each cell/outcome records its own observed denominator, SD and coverage.
+
+## Estimation
+
+For each school/outcome fit `mean ~ (sae_proceso - 2018)` with equal weight for each
+observed cohort. Export annual slope, observed endpoint change, standard errors,
+confidence intervals and raw two-sided p-values. Keep two inference models separate:
+
+1. **Cohort OLS (primary)**: ordinary lm covariance and t(G - 2). Three cohorts
+   provide only one residual degree of freedom. With two cohorts the slope is
+   identified, but this test is undefined. Constant means receive no artificial
+   p-value. Saved lm objects are in `cohort_ols_models.rds`.
+2. **Independent applicants (supplementary)**: regress individual outcome on year
+   with weight 1/n_observed for its school-cohort. This is exactly equal-weight
+   OLS on cohort means for the coefficient. Compute the actual regression HC2
+   covariance and t(N - 2) p-value. It assumes independent students within school,
+   without common cohort shocks or origin-school dependence. Five schools have
+   constant individual gender values, for which no p-value is supplied.
+
+The second model supports a two-cohort comparison under stronger assumptions;
+it does not manufacture residual degrees of freedom for the first model. Neither
+model establishes a persistent time trend outside this short period or a causal
+peer effect. Overlap of applicants across schools also means tests across schools
+are dependent. Per the user, no multiple-testing corrections are calculated.
+
+## Main outputs and results (2026-10-22)
+
+- `school_cohort_panel.csv`: 300 school-cohort cells, wide outcome means/counts/coverage.
+- `school_cohort_means_long.csv`: 3,000 cells including components/sensitivity measures.
+- `primary_school_trend_tests.csv`: 300 school-outcome records.
+- `school_trend_tests.csv`: 1,000 records including seven secondary outcomes.
+- `school_significant_trend_counts.csv`: each school's 0-3 detected trends and
+  outcome flags under both inference models; unavailable tests remain missing.
+- `significant_trend_count_summary.csv`: exactly one/two/three and at-least counts.
+- `verification.csv`: independent aggregation, closed-form cohort OLS checks,
+  explicit matrix HC2 calculations and significance-count reconciliation.
+
+Cohort OLS: among 86 schools with tests, 8 have at least one significant trend,
+all in exactly one outcome; 0 have two or three. Fourteen schools have no test and
+are not included in the zero-detection group. Independent applicants: among 100,
+81 have at least one, 25 have at least two, and 2 have all three; exact counts are
+56/23/2. These figures use the three primary outcomes only.
+
+2018-2020 cross-school correlations (86 schools) are 0.899 for SIMCE, 0.978 for
+female share, and 0.968 for parent education. Median absolute endpoint changes
+are 0.0468 average subject-z units, 2.062 percentage points and 0.437 years.
+The parental-education change is mostly a 2018-2019 fall followed by a small
+recovery. Coverage and questionnaire differences merit investigation before
+attributing it to the full applicant population; see the project issues log.
