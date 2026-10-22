@@ -1,5 +1,32 @@
 # School preferences and four-dimensional EB value added
 
+## D plus three peer populations (2026-10-22)
+
+Run `35_peer_composition_preflight.R`, `36_fit_peer_populations.R`, then
+`37_report_peer_populations.R` from the project root. This new report uses
+the supplied 100-school composition table in
+`data/clean/applicant_composition_trends/group_averages/` directly.
+The user selected the 13,037 complete lists entirely inside its coverage:
+36,276 pairs and 99 destinations, shared by all four columns. Do not trim
+rankings. D is re-estimated on this restricted sample; five identically
+zero fee indicators are omitted from every model.
+
+Add parent education, baseline SIMCE, female share and income decile
+jointly, separately for weighted applicants, first-round offered students,
+and all most-attended-school attendees. Use equal-cohort means over
+available 2018-2020 cohorts. All peer variables share attendee-school mean/SD
+normalization over the 99 estimation destinations; existing VA units stay
+unchanged. Retain student-clustered covariance and the original distance.
+
+The new report is `output/reports/school_preference_va/with_peer_populations.html`.
+Models, covariance matrices, source preservation, diagnostics and peer
+normalizations use `data/clean/school_preference_va/peer_populations/`.
+The four-column table and sample/fit companions are under the matching
+`output/tables` subfolder. Three auxiliary no-VA fits support incremental
+fit comparisons without adding columns to the main table. Source data,
+the full-sample D model and all previous reports remain unchanged.
+See the decision record `2026-10-22-peer-populations-preferences.md`.
+
 ## Current report: additive specifications (2026-10-21)
 
 The current report follows the requested comparison:

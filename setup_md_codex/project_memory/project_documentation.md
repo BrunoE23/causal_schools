@@ -1330,3 +1330,11 @@ scores, and compares adjusted/unadjusted estimates on the same scored students.
 The active gender-income report now shows those comparisons; the original
 unadjusted report has the `_unadjusted` suffix. Score-controlled models and
 coverage use `data/clean/projected_income_gender/score_controls/`.
+
+The new preference report `school_preference_va/with_peer_populations.html`
+has D plus three alternative peer populations from the supplied 100-school
+school_group_averages_2018_2020.csv. The user selected all four columns on
+the 13,037 complete rankings within this file (99 used schools). Scripts
+35-37 in school_preference_va reproduce its data, estimates and report;
+derived artifacts use the task subfolder peer_populations. Original D and
+earlier preference reports are preserved.

@@ -651,3 +651,13 @@ average discrete probability contrasts Q2-Q5 versus Q1, holding each
 student's observed score/year controls fixed. HC1 delta-method covariance
 uses the full fitted-logit coefficient covariance. Script 09 in the
 mifuturo_matricula_income task produces high_premium_income_quintiles.
+
+The D-plus-peer preference extension uses the user-approved 13,037 complete
+rankings entirely covered by the supplied top-100 composition file. Replicate
+D and add four peer characteristics jointly under each population definition
+on the identical sample, without trimming lists. Peer units use a common
+attendee-school SD across 99 estimation destinations, while VA units remain
+unchanged. Compare nested incremental ranking likelihoods for the four-peer
+and four-VA blocks; do not equate raw coefficient magnitude or significance
+with causal preference strength. See
+`decisions/2026-10-22-peer-populations-preferences.md`.
