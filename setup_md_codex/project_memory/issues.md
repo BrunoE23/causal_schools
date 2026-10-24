@@ -1,5 +1,20 @@
 # Project Issues Log
 
+### PAES form assignment and test-room dependence (2026-10-24)
+
+- Status: Open identification limitation, not a detected data-processing error.
+- The form-score diagnostic finds small differences after observed controls and
+  attended-school effects, with no corrected baseline balance rejection. However,
+  available raw files lack verified test-center/room identifiers, and the sources
+  inspected do not establish randomized assignment of forms.
+- Treat results as conditional associations. Attended-school clustering need not
+  capture cross-school dependence within a test room. Do not treat forms as a
+  validated instrument without investigating assignment and exclusion further.
+- `LOCAL_EDUCACIONAL` describes educational-establishment metadata; it was not
+  substituted for a test-center identifier.
+- See `decisions/2026-10-24-paes-test-form-advantages.md` and
+  `output/reports/paes_test_forms/report.html`.
+
 ### Applicant parent-education shift and missing baseline coverage (2026-10-22)
 
 - In the 86 top-application schools observed in all three SAE cohorts, equal-school

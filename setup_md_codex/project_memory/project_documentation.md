@@ -1,5 +1,17 @@
 # Project Documentation
 
+## PAES test forms (2026-10-24)
+
+Raw PAES admissions score files 2023-2026 include same-sitting form codes and
+scores. `code/codex/paes_test_forms/` pairs these fields within year/sitting/test,
+keeps science modules separate, and estimates school-adjusted form-score gaps.
+Thirteen of 32 regular-sitting joint tests survive Holm correction. The largest
+fitted gap is Reading admissions 2026, form 103 minus 106: 7.44 points (0.060 SD;
+simultaneous 95% interval 5.69-9.19). No corrected baseline balance test rejects.
+Assignment randomization and test-center/room information remain unverified, so
+these are conditional associations. Report: `output/reports/paes_test_forms/report.html`.
+See `decisions/2026-10-24-paes-test-form-advantages.md` for sample, inference and limits.
+
 ## SAE applicant composition stability (2026-10-22)
 
 `code/codex/applicant_composition_trends/` constructs a school-cohort panel for
