@@ -92,13 +92,28 @@ stopifnot(nrow(cross)==16L)
 fwrite(cross, file.path(out,"cross_outcome_paper.csv"))
 stars <- function(p) ifelse(p<.01,"***",ifelse(p<.05,"**",ifelse(p<.1,"*","")))
 lines <- c("\\begin{tabular}{lcccc}","\\toprule",
-  paste0("School VA & Math & Verbal & \\shortstack{High-premium\\\\institution} & \\shortstack{High-premium\\\\field} ", strrep("\\",2)),"\\midrule")
+  paste0("& \\multicolumn{4}{c}{\\textbf{Student outcome (dependent variable)}} ",strrep("\\",2)),
+  "\\cmidrule(lr){2-5}",
+  paste0("\\shortstack[l]{School VA measure\\\\(instrumented treatment)} & Math & Verbal & \\shortstack{High-premium\\\\institution} & \\shortstack{High-premium\\\\field} ", strrep("\\",2)),"\\midrule")
 for(i in 1:4) {
   r <- cross[from_key==keys[i]][match(keys,to_key)]
   lines <- c(lines,paste0(specs$label[i]," & ",paste(sprintf("%.3f%s",r$direct_iv,stars(r$direct_p)),collapse=" & ")," \\\\"),
     paste0(" & ",paste(sprintf("(%.3f)",r$direct_se),collapse=" & ")," \\\\"))
 }
 writeLines(c(lines,"\\bottomrule","\\end{tabular}"),file.path(tab,"cross_outcome.tex"))
+small_keys <- c("math", "highpay")
+small_lines <- c("\\begin{tabular}{lcc}", "\\toprule",
+  paste0("& \\multicolumn{2}{c}{\\textbf{Student outcome (dependent variable)}} ",strrep("\\",2)),
+  "\\cmidrule(lr){2-3}",
+  paste0("\\shortstack[l]{School VA measure\\\\(instrumented treatment)} & Math score & High-premium field ",strrep("\\",2)),"\\midrule")
+for (k in small_keys) {
+  r <- cross[from_key==k][match(small_keys,to_key)]
+  label <- if (k=="math") "Math VA" else "High-premium-field VA"
+  small_lines <- c(small_lines,
+    paste0(label," & ",paste(sprintf("%.3f%s",r$direct_iv,stars(r$direct_p)),collapse=" & ")," ",strrep("\\",2)),
+    paste0(" & ",paste(sprintf("(%.3f)",r$direct_se),collapse=" & ")," ",strrep("\\",2)))
+}
+writeLines(c(small_lines,"\\bottomrule","\\end{tabular}"),file.path(tab,"cross_outcome_2x2.tex"))
 writeLines(capture.output(sessionInfo()),file.path(out,"session_info.txt"))
 print(results)
 print(contrasts)
