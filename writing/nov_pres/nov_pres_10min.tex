@@ -446,31 +446,62 @@ $\varphi^m=0$: no causal content at the lottery margin.
 
 
 % 7
-\begin{frame}[label=results_one]{Results: Value added predicts causal gains in all five outcomes}
+% September paper: first_stage_kappa_table.tex and main_table.tex,
+% output/tables/empirical_bayes_school_va/va_2017_2020__sae_2018_2020/.
+\begin{frame}{Results: First stage}
 \centering
-\scriptsize
-\setlength{\tabcolsep}{6pt}
-\begin{tabular}{lccccc}
+\small
+\setlength{\tabcolsep}{7pt}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{lcccc}
 \toprule
-& \multicolumn{2}{c}{Achievement} & \multicolumn{3}{c}{Higher-education choices} \\
-\cmidrule(lr){2-3}\cmidrule(lr){4-6}
-& Math & Verbal & High-premium inst. & High-premium field & Log proj. income \\
+& \multicolumn{2}{c}{Achievement} & \multicolumn{2}{c}{Higher-education choices} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+& Math & Verbal & \shortstack{High-premium\\institution} & \shortstack{High-premium\\field} \\
+\midrule
+$\kappa^{EB}$ & \textbf{0.442***} & \textbf{0.435***} & \textbf{0.269***} & \textbf{0.474***} \\
+& (0.008) & (0.007) & (0.009) & (0.007) \\
+First-stage $F$ & 3,189.8 & 4,210.0 & 821.1 & 4,278.6 \\
+$N$ & 92,361 & 93,980 & 94,487 & 94,487 \\
+\bottomrule
+\end{tabular}
+
+\vspace{0.8em}
+\footnotesize
+Lottery offers shift attended-school value added in all four specifications.
+
+\vspace{0.6em}
+\scriptsize
+Controls: expected EB value added, cohort, grade-4 math and verbal scores, gender, and age.
+High-premium outcomes use exam takers, with non-enrollees coded zero.
+Robust standard errors in parentheses. $^{***}p<0.01$.
+\end{frame}
+
+\begin{frame}[label=results_one]{Results: Second stage}
+\centering
+\small
+\setlength{\tabcolsep}{7pt}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{lcccc}
+\toprule
+& \multicolumn{2}{c}{Achievement} & \multicolumn{2}{c}{Higher-education choices} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+& Math & Verbal & \shortstack{High-premium\\institution} & \shortstack{High-premium\\field} \\
 \midrule
 $\varphi^{EB}$
-& \textbf{0.884***}
-& \textbf{0.885***}
-& \textbf{0.497***}
-& \textbf{0.803***}
-& \textbf{0.311***} \\
-& (0.073) & (0.087) & (0.111) & (0.100) & (0.103) \\
-$N$ & 93,438 & 95,107 & 95,651 & 90,338 & 95,651 \\
+& \textbf{1.197***}
+& \textbf{1.031***}
+& \textbf{0.667***}
+& \textbf{0.861***} \\
+& (0.097) & (0.098) & (0.120) & (0.087) \\
+$N$ & 92,361 & 93,980 & 94,487 & 94,487 \\
 \bottomrule
 \end{tabular}
 
 \vspace{0.7em}
 \begin{wideitemize}
-  \item Achievement pass-through is close to one despite the absence of immediately lagged test scores.
-  \item School value added also predicts movement into higher-premium institutions, fields, and programs with higher projected income.
+  \item Achievement pass-through is 1.20 for math and 1.03 for verbal.
+  \item Pass-through is positive for both higher-education choices.
 \end{wideitemize}
 
 \vspace{0.25em}
@@ -479,7 +510,7 @@ $N$ & 93,438 & 95,107 & 95,651 & 90,338 & 95,651 \\
 \hyperlink{heterogeneity_gender}{\beamergotobutton{Heterogeneity by gender}}
 
 \vspace{0.35em}
-\tiny Robust standard errors in parentheses. All models control for expected EB value added and baseline covariates. $^{***}p<0.01$.
+\scriptsize Robust standard errors in parentheses. Same controls and samples as the first stage. $^{***}p<0.01$.
 \end{frame}
 
 % 8
@@ -496,11 +527,10 @@ Outcome
 & $\varphi$
 & \shortstack{Implied causal gain\\$(P_{90}-P_{10})\times\varphi$} \\
 \midrule
-Math & 0.043 & 0.492 SD & 0.884 & \textbf{0.435 SD} \\
-Verbal & 0.049 & 0.374 SD & 0.885 & \textbf{0.331 SD} \\
-High-premium institution & 0.142 & 23.4 pp & 0.497 & \textbf{11.6 pp} \\
-High-premium field & 0.347 & 12.3 pp & 0.803 & \textbf{9.9 pp} \\
-Log projected income & 13.893 & 0.183 log points & 0.311 & \textbf{0.057 log points} \\
+Math & 0.043 & 0.496 SD & 1.197 & \textbf{0.594 SD} \\
+Verbal & 0.049 & 0.375 SD & 1.031 & \textbf{0.387 SD} \\
+High-premium institution & 0.142 & 29.3 pp & 0.667 & \textbf{19.6 pp} \\
+High-premium field & 0.347 & 12.6 pp & 0.861 & \textbf{10.8 pp} \\
 \bottomrule
 \end{tabular}
 
