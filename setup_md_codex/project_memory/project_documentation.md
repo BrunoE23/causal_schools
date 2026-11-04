@@ -1,5 +1,23 @@
 # Project Documentation
 
+## November 2026 ten-minute presentation
+
+Working deck: `writing/nov_pres/nov_pres_10min.tex` and compiled PDF alongside.
+Copied from `writing/august_pres/short_10min/august_pres_10min.tex`, preserving
+the August sources. November title date and relocated relative asset paths.
+On 2026-11-04 Bruno requested the Preview of Results numbers from sept_draft.
+This is PDF page 5 in the inherited short deck (referred to as slide 6 in chat).
+Math: mean .043, EB 90-10 .496 SD, pass-through 1.197, implied gain .594 SD.
+High-premium field: mean .347, EB 90-10 12.6 pp, pass-through .861, gain 10.8 pp.
+Sources: `output/tables/results_section/primary_seven_va_distribution.tex` and
+`output/tables/empirical_bayes_school_va/va_2017_2020__sae_2018_2020/main_table.tex`.
+Only preview numbers and title date changed; other results remain August values
+pending Bruno's sequential instructions. Build from nov_pres with
+`latexmk -pdf -interaction=nonstopmode -halt-on-error nov_pres_10min.tex`.
+Validated 24 PDF pages; only title and preview text differ from the valid August
+`august_pres_10min_fixed.pdf`. Existing overfull warnings on outcome/sample
+slides and missing cross_outcome_spec target are inherited, not repaired here.
+
 ## PAES test forms (2026-10-24)
 
 Raw PAES admissions score files 2023-2026 include same-sitting form codes and
