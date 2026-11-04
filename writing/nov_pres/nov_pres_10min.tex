@@ -547,42 +547,24 @@ The final column is the lottery-validated causal gain implied by moving from a $
 \end{frame}
 
 % 9
-\begin{frame}[label=cross_outcome_results]{Cross-outcome results: Math and field VA capture different margins}
+\begin{frame}[label=cross_outcome_results]{Cross-outcome results: Achievement and college choices}
 \centering
 \scriptsize
-\input{../../output/tables/empirical_bayes_school_va/math_field_cross_outcome_iv_eb.tex}
+\setlength{\tabcolsep}{7pt}
+\renewcommand{\arraystretch}{1.0}
+\input{../../output/tables/nov_pres_analysis/cross_outcome.tex}
 
-\vspace{0.45em}
-\tiny
-Each cell is a separate lottery IV. The attended-school VA in that row is instrumented by the corresponding offered-school VA; models control for its expected VA and baseline covariates.
+\vspace{0.6em}
+\footnotesize
+Math and verbal VA predict lower high-premium-field enrollment.
+Field VA predicts institution choice, but its effect on math is imprecise.
 
-\vspace{0.7em}
-\begin{columns}[T,onlytextwidth]
-  \column{0.47\textwidth}
-  \centering
-  \textbf{Math VA $\rightarrow$ field choice}
-
-  \vspace{0.25em}
-  \normalsize
-  $P_{90}-P_{10}$ effect: \key{$-9.1$ pp}
-
-  \footnotesize
-  Higher math VA does not proxy for movement into high-premium fields.
-
-  \column{0.47\textwidth}
-  \centering
-  \textbf{Field VA $\rightarrow$ math score}
-
-  \vspace{0.25em}
-  \normalsize
-  $P_{90}-P_{10}$ effect: \key{$+0.012$ SD}
-
-  \footnotesize
-  The estimate is small and statistically insignificant ($p=0.429$).
-\end{columns}
-
-\vspace{0.45em}
-\hyperlink{cross_outcome_spec}{\beamergotobutton{Cross-outcome IV specification}}
+\vspace{0.5em}
+\scriptsize
+Direct IV using \textbf{unshrunk VA}, as in the September paper.
+Rows: school VA. Columns: student outcomes.
+Controls: expected VA and baseline covariates.
+Robust SEs in parentheses. $^{*}p<0.10$, $^{**}p<0.05$, $^{***}p<0.01$.
 \end{frame}
 
 \section{Conclusion}
@@ -596,7 +578,7 @@ Each cell is a separate lottery IV. The attended-school VA in that row is instru
 
   \item The effects are large enough to be relevant.
 
-  \item Cross-outcome tests suggest that the effects on choices are not predicted by achievement: the effects operate through different margins.
+  \item Cross-outcome estimates distinguish achievement from field choice: higher math and verbal VA predict lower high-premium-field enrollment.
 \end{wideitemize}
 
 %\begin{alertblock}{Takeaway}
@@ -631,40 +613,32 @@ brunem@uchicago.edu
 \appendix
 \section{Extra slides}
 
-\begin{frame}[label=heterogeneity_baseline]{Math pass-through is weakest for students with low baseline achievement}
-\begin{columns}[c,onlytextwidth]
-  \column{0.62\textwidth}
-  \centering
-  \includegraphics[width=\textwidth]{../../output/figures/results_section/simce4_math_quintile_primary_five_eb.png}
+\begin{frame}[label=heterogeneity_baseline]{Pass-through by baseline math achievement}
+\centering
+\includegraphics[height=0.64\textheight]{../../output/figures/nov_pres_analysis/quintile.png}
 
-  \column{0.34\textwidth}
-  \begin{itemize}
-    \addtolength{\itemsep}{0.6em}
-    \item Math: $\widehat\varphi_{Q1}=0.083$ versus $\widehat\varphi_{Q3}=0.929$.
-    \item Difference: $-0.846$ ($p<0.01$).
-    \item Higher-education pass-through is stable across baseline math quintiles.
-  \end{itemize}
-\end{columns}
-\vspace{0.1em}
+\footnotesize
+Math: $\widehat\varphi_{Q1}=0.211$, $\widehat\varphi_{Q3}=1.216$, $\widehat\varphi_{Q5}=1.696$.
+The Q1--Q3 difference is $-1.005$ ($p<0.001$).
+
+\scriptsize
+Grade-4 math quintiles in the September lottery dataframe.
+Separate subgroup IVs with main controls and outcome-specific samples.
+Bars show robust 95\% confidence intervals.
 \hfill\hyperlink{results_one}{\beamerreturnbutton{Results 1}}
 \end{frame}
 
-\begin{frame}[label=heterogeneity_gender]{Achievement value added is more predictive for girls}
-\begin{columns}[c,onlytextwidth]
-  \column{0.67\textwidth}
-  \centering
-  \includegraphics[width=\textwidth]{../../output/figures/results_section/primary_five_eb_by_gender.png}
+\begin{frame}[label=heterogeneity_gender]{Pass-through by gender}
+\centering
+\includegraphics[height=0.60\textheight]{../../output/figures/nov_pres_analysis/gender.png}
 
-  \column{0.29\textwidth}
-  \small
-  \begin{itemize}
-    \addtolength{\itemsep}{0.4em}
-    \item Math: girls' pass-through is 0.349 higher ($p=0.017$).
-    \item Verbal: girls' pass-through is 0.382 higher ($p=0.029$).
-    \item Gender differences are small and insignificant for the choice outcomes.
-  \end{itemize}
-\end{columns}
-\vspace{0.1em}
+\footnotesize
+Girls' pass-through is higher by 0.482 in math ($p=0.013$) and 0.444 in verbal ($p=0.024$).
+Choice-outcome gender differences are not statistically significant.
+
+\scriptsize
+September samples and main controls, estimated separately by gender.
+Bars show robust 95\% confidence intervals.
 \hfill\hyperlink{results_one}{\beamerreturnbutton{Results 1}}
 \end{frame}
 

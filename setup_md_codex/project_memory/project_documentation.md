@@ -2,6 +2,17 @@
 
 ## November 2026 ten-minute presentation
 
+November 4 follow-up: sample construction and the four-outcome first-stage,
+second-stage and implied-gain tables now follow September. The cross-outcome
+slide uses the four-by-four direct **unshrunk** IV block from the September paper,
+explicitly distinguished from EB main results. Appendix heterogeneity is rerun
+for the September samples by grade-4 math quintile and gender. Reproduction code
+and definitions: `code/codex/nov_pres_analysis/README.md` and `run.R`.
+The script checks all four main coefficients, SEs, Ns and first-stage F statistics
+against the saved September results before estimating subgroups. These use
+HC1 inference with estimated VA treated as fixed; contrasts are exploratory and
+unadjusted. Earlier August heterogeneity assets remain unchanged.
+
 Working deck: `writing/nov_pres/nov_pres_10min.tex` and compiled PDF alongside.
 Copied from `writing/august_pres/short_10min/august_pres_10min.tex`, preserving
 the August sources. November title date and relocated relative asset paths.
