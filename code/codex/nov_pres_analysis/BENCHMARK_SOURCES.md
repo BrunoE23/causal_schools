@@ -12,6 +12,28 @@ an evaluated intervention or a direct STEM effect.
 
 ## Published benchmarks (verified November 4, 2026)
 
+Expanded to three distinct papers per panel (six external papers total).
+The selected math estimates range from 0.135 to 0.370 SD, versus 0.594 SD for
+the paper's implied school contrast. Selected STEM/technology-choice effects
+range from 2.2 to 5.4 pp, versus 10.8 pp for high-premium-field enrollment.
+These comparisons describe magnitudes only, not relative effectiveness.
+
+- Fryer (2014), *Injecting Charter School Best Practices into Traditional Public
+  Schools*: Table III column 3, experimental Houston elementary sample,
+  pooled 2012/2013 ITT math effect 0.135 SD (SE 0.051). This is the pooled
+  observation-level offer estimate, not the abstract's annual participation
+  summary and not a three-year cumulative gain.
+  https://fryer.scholars.harvard.edu/sites/g/files/omnuum5986/files/fryer/files/2014_injecting_charter_school_best_practices_into_traditional_public_schools.pdf
+- Canaan and Mouganie (2023), *The Impact of Advisor Gender on Female Students'
+  STEM Enrollment and Persistence*: verified in December 17, 2020 manuscript,
+  Table 5 column 2. Assignment to a female rather than male science advisor
+  increases female students' STEM enrollment after freshman year by 5.4 pp
+  (SE 2.4 pp) at the American University of Beirut. This is the effect on women,
+  not the 8.6 pp reduction in the gender gap. Publication identified by IZA:
+  Journal of Human Resources 58(2), 593-632. The graph flags the manuscript
+  version rather than claiming a verified final-publication table value.
+  https://swlb1.aeaweb.org/conference/2021/preliminary/paper/BkAyA2Tn
+
 - Muralidharan, Singh and Ganimian (2019), *Disrupting Education? Experimental
   Evidence on Technology-Aided Instruction in India*: Table 2, math ITT 0.37 SD,
   4.5-month intervention in Delhi, grades 6-9.
