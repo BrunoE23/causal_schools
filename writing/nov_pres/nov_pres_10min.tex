@@ -250,34 +250,47 @@ Using the original lottery numbers, the replicated mechanism reproduces more tha
 % 4
 \begin{frame}{Sample description}
 \centering
+\small
 \begin{columns}[T,onlytextwidth]
-  \column{0.455\textwidth}
+  \column{0.48\textwidth}
   \centering
-  {\large\bfseries Value-added estimation}\par
-  \vspace{0.18em}
+  {\bfseries Value-added estimation}\par
+  \vspace{0.5em}
+  \begin{tabular}{@{}p{0.68\linewidth}r@{}}
+    \toprule
+    Sample restriction & Students \\
+    \midrule
+    Grade-8 cohorts 2017--2020 & 944,510 \\
+    + Valid HS and age 12--16 & 931,547 \\
+    + Complete VA controls & \key{757,999} \\
+    + Admission test & 622,809 \\
+    \bottomrule
+  \end{tabular}
 
-  \samplestep{sampleneutral}{Grade-8 universe, 2017--2020}{944,510}
-  \samplearrow
-  \samplestep{samplescore}{Complete value-added controls\\[-0.15em]
-    \scriptsize Choice + income VA base}{757,999}
-  \samplearrow
-  \samplestep{samplescore}{Math or verbal score observed\\[-0.15em]
-    \scriptsize Math + verbal VA}{571,110}
-
-  \column{0.455\textwidth}
+  \column{0.48\textwidth}
   \centering
-  {\large\bfseries Lottery IV}\par
-  \vspace{0.18em}
-
-  \samplestep{sampleneutral}{Timely grade-9 SAE applicants, 2018--2021}{409,737}
-  \samplearrow
-  \samplestep{sampleneutral}{Applicants with assignment risk}{226,195}
-  \samplearrow
-  \samplestep{sampleneutral}{Complete grade-4 SIMCE controls}{139,317}
-  \samplearrow
-  \samplestep{samplescore}{Exam takers with math or verbal score\\[-0.15em]
-    \scriptsize All five IV outcomes}{95,705}
+  {\bfseries SAE lottery sample}\par
+  \vspace{0.5em}
+  \begin{tabular}{@{}p{0.68\linewidth}r@{}}
+    \toprule
+    Sample restriction & Students \\
+    \midrule
+    Grade-8 cohorts 2018--2020 & 706,042 \\
+    + Valid HS and age 12--16 & 696,817 \\
+    + Complete lottery controls & 587,142 \\
+    + Grade-9 SAE application & 241,490 \\
+    + Assignment risk & \key{135,916} \\
+    + Admission test & 108,418 \\
+    \bottomrule
+  \end{tabular}
 \end{columns}
+\vspace{0.8em}
+\begin{minipage}{\textwidth}
+\footnotesize
+Restrictions are cumulative within each column; age is measured in grade 8.
+Assignment risk means nondegenerate offer probabilities.\\[0.35em]
+Math and verbal outcomes require admission-test scores; higher-education choice outcomes retain non-test-takers when observed.
+\end{minipage}
 \end{frame}
 
 \section{Methodology}
