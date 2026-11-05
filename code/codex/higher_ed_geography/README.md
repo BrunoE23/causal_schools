@@ -116,3 +116,17 @@ Validation covers unique student/process keys, valid probability and region
 codes, unchanged applicant/risk totals, exact program/year links to raw SIES,
 unique campus regions, observed entry-year consistency, and zeros for
 non-enrollees. No regressions or VA estimates are changed.
+
+## Outside-home enrollment by PAES home in RM versus elsewhere
+
+Run `03_tabulate_by_paes_home_rm.R` after the two construction scripts. It reads
+the cached student RDS and splits SAE applicants and at-risk enrollees by PAES
+HOME region code 13 versus codes 1-12,14-16, not by campus location. The first
+enrollment split uses `home_region_paes_pre_entry`; the 2025 split requires
+PAES process <= 2025, preserving the previous timing rules. Missing PAES homes
+cannot be stratified and are excluded with their counts recorded. The output
+`enrollment_outside_home_by_paes_home_rm.csv` contains both outside-SAE and
+outside-PAES shares, their counts/denominators, and an additional common-sample
+comparison. The standard outside-SAE column excludes missing SAE homes within
+each PAES-defined stratum. Assertions verify that strata reconstruct the
+preceding PAES outcome's enrolled denominator and numerator for each sample/window.
