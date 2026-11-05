@@ -130,3 +130,13 @@ outside-PAES shares, their counts/denominators, and an additional common-sample
 comparison. The standard outside-SAE column excludes missing SAE homes within
 each PAES-defined stratum. Assertions verify that strata reconstruct the
 preceding PAES outcome's enrolled denominator and numerator for each sample/window.
+
+`04_tabulate_non_rm_destinations.R` further splits the PAES-home-outside-RM
+enrollees into any RM campus, another non-home region outside RM with no RM
+enrollment, and home-region-only enrollment. It uses the same first-entry and
+2025 timing/coverage rules. These categories partition the enrolled sample and
+the first two sum to the preceding outside-home count. For 2025, simultaneous
+RM and third-region enrollment is assigned to the any-RM category and separately
+counted in `n_rm_and_other_non_home`; first-entry campus is unique. Output:
+`non_rm_paes_home_enrollment_destinations.csv`, including counts, enrolled shares,
+and the share of outside-home students whose campus set includes RM.
