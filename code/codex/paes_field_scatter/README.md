@@ -158,3 +158,18 @@ student/school group Ns, partition checks, classified individual RDS, observed
 bins, model coefficients and fitted curves. Assertions verify unique school
 and student/outcome keys, full school-ID linkage, conserved group and bin Ns,
 preserved outcome means, logit convergence and bounded probabilities.
+
+### All five VA quintiles separately
+
+```powershell
+$env:VA_GROUPING = 'quintiles'
+& 'C:/Program Files/R/R-4.4.1/bin/Rscript.exe' code/codex/paes_field_scatter/04_plot_logit_by_va_group_gender.R
+```
+
+This fits twenty models: Q1, Q2, Q3, Q4 and Q5 separately within each outcome
+and gender. It uses the identical school quintile definitions, student samples,
+score reference and common bins. Every panel labels all five student Ns.
+Outputs go to `raw_stata_va_quintiles/` rather than `raw_stata_va_groups/`,
+preserving the preceding three-group figures and diagnostics. The default
+`VA_GROUPING=three_groups` retains that earlier version. All partition, bin,
+outcome-mean and model checks adapt to the requested number of groups.

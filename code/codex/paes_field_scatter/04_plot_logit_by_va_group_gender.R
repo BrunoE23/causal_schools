@@ -2,19 +2,25 @@ suppressPackageStartupMessages({library(data.table); library(ggplot2)})
 repo <- normalizePath(getwd(), winslash = "/")
 root <- Sys.getenv("CAUSAL_SCHOOLS_DATA_WD", "C:/Users/xd-br/Dropbox/causal_schools")
 base <- file.path(repo, "data", "clean", "paes_field_scatter", "broad_panel", "by_gender")
+grouping <- Sys.getenv("VA_GROUPING", "three_groups")
+stopifnot(grouping %in% c("three_groups", "quintiles"))
+variant <- if (grouping == "quintiles") "raw_stata_va_quintiles" else "raw_stata_va_groups"
 input_path <- file.path(base, "gender_scatter_input.rds")
 if (!file.exists(input_path)) {
   source(file.path(repo, "code", "codex", "paes_field_scatter", "02_plot_broad_panel_by_gender.R"),
          local = new.env(parent = globalenv()))
 }
-out <- file.path(base, "raw_stata_va_groups")
-fig <- file.path(repo, "output", "figures", "paes_field_scatter", "broad_panel", "by_gender", "raw_stata_va_groups")
+out <- file.path(base, variant)
+fig <- file.path(repo, "output", "figures", "paes_field_scatter", "broad_panel", "by_gender", variant)
 dir.create(out, recursive = TRUE, showWarnings = FALSE)
 dir.create(fig, recursive = TRUE, showWarnings = FALSE)
 setDTthreads(2)
 labels <- c(high_paying_field_m1 = "High-premium field", high_inst_m1 = "High-premium institution")
-groups <- c("Q1", "Q2-Q4", "Q5")
-colors <- setNames(c("#BC4B37", "#79838F", "#244F78"), groups)
+groups <- if (grouping == "quintiles") paste0("Q", 1:5) else c("Q1", "Q2-Q4", "Q5")
+colors <- setNames(if (grouping == "quintiles") {
+  c("#BC4B37", "#C18A32", "#79838F", "#3C8E89", "#244F78")
+} else c("#BC4B37", "#79838F", "#244F78"), groups)
+legend_labels <- c("Q1 (lowest VA)", groups[-c(1L, length(groups))], "Q5 (highest VA)")
 
 x <- as.data.table(readRDS(input_path))
 x[, outcome := as.character(outcome)]
@@ -50,7 +56,11 @@ va <- rbindlist(lapply(names(keys), function(o) {
   v[, .(school_rbd, outcome, va_raw, n_va_students = n_students, source_path = path)]
 }))
 va[, va_quintile := pmin(5L, as.integer(ceiling(5 * frank(va_raw, ties.method = "average") / .N))), by = outcome]
-va[, va_group := fifelse(va_quintile == 1L, "Q1", fifelse(va_quintile == 5L, "Q5", "Q2-Q4"))]
+if (grouping == "quintiles") {
+  va[, va_group := paste0("Q", va_quintile)]
+} else {
+  va[, va_group := fifelse(va_quintile == 1L, "Q1", fifelse(va_quintile == 5L, "Q5", "Q2-Q4"))]
+}
 stopifnot(!anyDuplicated(va[, .(school_rbd, outcome)]))
 quintiles <- va[, .(n_schools = .N, min_va = min(va_raw), max_va = max(va_raw),
                    mean_va = mean(va_raw)), by = .(outcome, va_quintile)]
@@ -72,7 +82,7 @@ x[, `:=`(va_group = factor(va_group, levels = groups),
 stopifnot(!anyDuplicated(x[, .(mrun, outcome)]))
 counts <- x[, .(n_students = .N, n_schools = uniqueN(school_rbd), n_events = sum(enrollment),
                 enrollment_share_pct = 100 * mean(enrollment)), by = .(outcome, panel, gender, va_group)]
-stopifnot(nrow(counts) == 12L)
+stopifnot(nrow(counts) == 4L * length(groups))
 partition <- merge(counts[, .(n_group_total = sum(n_students)), by = .(outcome, gender)],
                    coverage, by = c("outcome", "gender"))
 stopifnot(all(partition$n_group_total == partition$n_va_matched))
@@ -123,8 +133,7 @@ p <- ggplot(bins, aes(mean_math_score, enrollment_share_pct, color = va_group)) 
   geom_text(data = annotations, aes(x_label, y_label, label = n_label), hjust = 0, size = 3.6,
             show.legend = FALSE) +
   facet_grid(panel ~ gender) +
-  scale_color_manual(values = colors, breaks = groups,
-    labels = c("Q1 (lowest VA)", "Q2-Q4", "Q5 (highest VA)")) +
+  scale_color_manual(values = colors, breaks = groups, labels = legend_labels) +
   scale_y_continuous(breaks = seq(0, 100, 20), labels = function(v) paste0(v, "%")) +
   coord_cartesian(ylim = c(0, 100)) +
   labs(title = "PAES math and enrollment, by school VA and gender",
