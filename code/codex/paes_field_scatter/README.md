@@ -250,3 +250,17 @@ ratios, marginal effects and Ns are saved to clean-data
 `broad_panel/by_gender/simple_pooled_logit/pooled_logit_coefficients.csv`.
 Checks verify sample uniqueness, domains, model convergence, bounded fitted
 probabilities and agreement of fitted and observed outcome means.
+
+## Correlations between raw school VA estimates
+
+Run `07_correlate_raw_school_va.R`. It uses All-sample `va_raw` from the saved
+Stata math, highpay and highinst input files, including private schools, before
+EB. Compute Pearson correlations with equal school weights, using each pair's
+common finite-VA school support. Math-field correlation is 0.2730942 across
+3,371 schools; math-institution correlation is 0.4929589 across 3,373 schools.
+These are correlations of estimated school effects, without correction for
+estimation noise. They are not student-weighted or latent-effect correlations.
+Checks verify unique school IDs, outcome/sample labels, constant raw-minus-
+centered shifts and invariance of both correlations to recentering. Results
+and matched school values are under clean-data
+`paes_field_scatter/school_va_correlations/`.
