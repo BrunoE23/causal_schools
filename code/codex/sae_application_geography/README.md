@@ -95,3 +95,37 @@ shares for all SAE applicants are math 55.85/49.78/27.70%, verbal
 49.27/47.66/34.10%. At-risk counterparts are math 55.65/47.00/23.82%, verbal
 55.16/47.59/24.83%, field 55.48/47.17/20.98%, institution
 49.34/47.37/37.60%. These are confirmed lower shares; full bounds are saved.
+
+## Q1 assignment probability by income decile
+
+Run `03_q1_probability_by_income.R` from the repository root, with the same
+R environment used above. Inputs are the cached SAE applicant/E roster,
+the saved school quintiles verified against the current R EB output, and
+the original 2018-2020 DA probability files. `CAUSAL_SCHOOLS_DATA_WD` can
+override the default Dropbox input root.
+
+For each student and each separate VA ranking, sum SAE assignment
+probabilities over Q1 schools. Average these probabilities within each
+existing imputed family-income decile, separately for all SAE applicants
+and the at-risk subset. These are assignment probabilities, not subsequent
+attendance rates. Include automatic continuity options and retain the
+original distribution without renormalizing; unmatched contributes zero.
+Q1 is the lowest quintile, with exactly the preceding national school
+cutoffs, including private schools.
+
+Probability on real schools without VA is recorded separately. Confirmed
+Q1 probability is the lower bound; adding unknown school mass gives the
+upper bound. These are coverage bounds, not confidence intervals. Income
+is available for 240,719/294,198 applicants and 135,668/162,633 at risk.
+Missing income is reported separately and remains in the overall rows;
+income deciles are neither recomputed nor newly imputed.
+
+The script validates complete probability partitions, reproduces risk
+flags, and reconstructs continuous E and unknown-VA mass against the saved
+roster (maximum absolute discrepancy below 4e-16). Student probabilities,
+summary CSVs, income coverage, and validation audits are under
+`data/clean/sae_application_geography/q1_probability_by_income/`. The HTML
+tables and four-panel PNG are in the corresponding `output/tables/` and
+`output/figures/` subdirectories. At-risk decile-1/decile-10 probabilities
+are math 28.50/13.75%, verbal 32.42/11.79%, field 24.70/15.59%, and
+institution 40.07/17.84%.
