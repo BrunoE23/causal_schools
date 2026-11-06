@@ -54,3 +54,44 @@ school choice. Two additional all-SAE applicants have a known outside choice
 on a partially observed list, giving an any-known-outside count of 4,645.
 Including automatic continuity schools gives outside-choice shares 1.0142%
 and 0.8795%, respectively. These are school-choice shares, not migration rates.
+
+## Q1 school exposure anywhere, top three, and first
+
+Run `02_q1_exposure.R` after the baseline-by-VA-quintile construction. This
+uses the same 294,198 SAE applicants and 162,633 at-risk students and actual
+C1 submitted choices, without geography, PAES, or baseline-completeness
+restrictions. Automatic continuity options are excluded; all other priority
+categories remain. Each applicant has exactly one submitted rank-one school.
+
+Use the four separate current unified R EB school rankings: math, verbal,
+high-premium field and high-premium institution. Q1 is the lowest quintile,
+with the same fixed equal-school-weight cutoffs over all finite-VA schools,
+including private schools, as the preceding baseline tables. Verify the
+saved assignments against the current EB source. Do not rerank schools within
+SAE, regions, lists or risk groups.
+
+Multiple programs at one RBD inherit the school's best original preference
+rank. Top three means original C1 rank <=3, and top one means rank one;
+distinct RBDs are not reranked after programs/automatic options are removed.
+Each cell counts students with at least one Q1 school in that list segment,
+not the fraction of school choices in Q1. The full applicant denominator is
+retained for every outcome/window.
+
+An event is confirmed if any school in the segment is known Q1, ruled out if
+all schools are classified and none is Q1, and otherwise unknown. Main CSVs
+give confirmed shares over all students, upper bounds allowing unknown events
+to be positive, and classifiable-event shares with their own denominators.
+Thus missing school VA is never silently treated as a known non-Q1 school.
+The largest unknown-event share is 0.344 pp (all-applicant field, anywhere).
+Student-level positive exposure is checked to nest: first implies top three,
+which implies anywhere.
+
+Outputs are in `q1_exposure/` subdirectories of the preceding clean-data and
+table folders. They include all 24 outcome/group/window results, cutoffs,
+rank audits, a compact student-exposure RDS, bounds and classifiable-share
+tables, and HTML with counts and uncertainty. Confirmed anywhere/top3/top1
+shares for all SAE applicants are math 55.85/49.78/27.70%, verbal
+58.41/53.17/31.98%, field 54.22/48.37/24.22%, institution
+49.27/47.66/34.10%. At-risk counterparts are math 55.65/47.00/23.82%, verbal
+55.16/47.59/24.83%, field 55.48/47.17/20.98%, institution
+49.34/47.37/37.60%. These are confirmed lower shares; full bounds are saved.
