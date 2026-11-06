@@ -173,3 +173,62 @@ Outputs go to `raw_stata_va_quintiles/` rather than `raw_stata_va_groups/`,
 preserving the preceding three-group figures and diagnostics. The default
 `VA_GROUPING=three_groups` retains that earlier version. All partition, bin,
 outcome-mean and model checks adapt to the requested number of groups.
+
+### School VA terciles and score-observation diagnostic
+
+```powershell
+$env:VA_GROUPING = 'terciles'
+& 'C:/Program Files/R/R-4.4.1/bin/Rscript.exe' code/codex/paes_field_scatter/04_plot_logit_by_va_group_gender.R
+& 'C:/Program Files/R/R-4.4.1/bin/Rscript.exe' code/codex/paes_field_scatter/05_diagnose_score_selection.R
+```
+
+T1-T3 are genuine school terciles: `ceiling(3*average_rank/N)` across the same
+finite-VA school reference, separately by outcome, before gender or score
+filtering. They are not a relabeling of the preceding Q1/Q2-Q4/Q5 groups.
+The individual samples, pooled score scale, 50 bins and no-control logit
+specification are retained. Twelve models and their usual checks are saved
+under `raw_stata_va_terciles/`, including `school_va_tercile_definitions.csv`.
+
+Script 05 reads ten selected universe columns and reconstructs the full
+931,547-student broad panel, keeping students without an admission score in the
+denominator. Math observation exactly reproduces the preceding valid-score
+and test-year-reference rule, with student ID/gender/score parity checked
+against the cached plot input. The diagnostic retains known male/female
+genders, uses the same school terciles, and checks each curve's N against the
+corresponding count of score-observed students in the full denominator.
+
+Diagnostic CSVs report observation rates overall, by Grade 8 cohort, school
+VA tercile, Grade 4 baseline-math quintile, and their relevant combinations.
+The five baseline groups use average ranks over all finite Grade 4 math values
+in the full broad panel, with common cutoffs across genders and a separate
+missing-baseline category. Saved tables also report positive math-or-language
+score coverage, baseline math means among score-observed/unobserved students,
+and recorded first higher-education enrollment rates by score-observation
+status. These enrollment summaries use the program-code presence indicator,
+not a claim about persistence or completion. All missing-baseline students are
+included in overall rates; the diagnostic figure displays the five observed
+baseline groups only.
+
+These checks describe selection into an observed score. Missing scores do not
+identify school dropout, college attrition, or why a test record is absent.
+Because the missing students' PAES scores are unobserved, different coverage
+rates cannot establish either the size or direction of slope selection bias.
+No imputation, inverse-probability weighting, or causal interpretation is added.
+Outputs are under `raw_stata_va_terciles/score_selection/` in clean data and
+figures. The main curves still use the score-observed sample.
+
+Observed math coverage is 64.35% among 473,379 males and 74.49% among 458,167
+females; one broad-panel student has an unusable gender code. Coverage is
+47.00% versus 60.76% in baseline-math Q1, and 87.51% versus 91.00% in Q5.
+The male gap persists in each Grade 8 cohort. Within field-VA T1/T2/T3,
+male coverage is 51.03/67.10/69.62%, versus 62.94/75.38/82.34% for females.
+Among students with observed baseline math, scored males average +0.265 SD
+and unscored males -0.411 SD; female counterparts are +0.151 and -0.461 SD.
+This supports differential selection as a plausible contributor, without
+identifying its effect on the conditional field-score slope.
+
+Interpretation: logit nonlinearity itself can produce nonparallel probability
+curves even with a common score coefficient and additive VA-group shifts:
+the score derivative is beta*p*(1-p). These figures fit separate group slopes,
+but do not establish causal VA-by-ability interactions. PAES is measured after
+high-school exposure, and school VA also uses these cohorts' outcomes.

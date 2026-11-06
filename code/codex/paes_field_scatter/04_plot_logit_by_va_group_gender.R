@@ -3,8 +3,12 @@ repo <- normalizePath(getwd(), winslash = "/")
 root <- Sys.getenv("CAUSAL_SCHOOLS_DATA_WD", "C:/Users/xd-br/Dropbox/causal_schools")
 base <- file.path(repo, "data", "clean", "paes_field_scatter", "broad_panel", "by_gender")
 grouping <- Sys.getenv("VA_GROUPING", "three_groups")
-stopifnot(grouping %in% c("three_groups", "quintiles"))
-variant <- if (grouping == "quintiles") "raw_stata_va_quintiles" else "raw_stata_va_groups"
+stopifnot(grouping %in% c("three_groups", "quintiles", "terciles"))
+variant <- switch(grouping, quintiles = "raw_stata_va_quintiles",
+                  terciles = "raw_stata_va_terciles", "raw_stata_va_groups")
+quantile_col <- if (grouping == "terciles") "va_tercile" else "va_quintile"
+n_quantiles <- if (grouping == "terciles") 3L else 5L
+quantile_label <- if (grouping == "terciles") "Terciles" else "Quintiles"
 input_path <- file.path(base, "gender_scatter_input.rds")
 if (!file.exists(input_path)) {
   source(file.path(repo, "code", "codex", "paes_field_scatter", "02_plot_broad_panel_by_gender.R"),
@@ -16,11 +20,12 @@ dir.create(out, recursive = TRUE, showWarnings = FALSE)
 dir.create(fig, recursive = TRUE, showWarnings = FALSE)
 setDTthreads(2)
 labels <- c(high_paying_field_m1 = "High-premium field", high_inst_m1 = "High-premium institution")
-groups <- if (grouping == "quintiles") paste0("Q", 1:5) else c("Q1", "Q2-Q4", "Q5")
+groups <- switch(grouping, quintiles = paste0("Q", 1:5), terciles = paste0("T", 1:3), c("Q1", "Q2-Q4", "Q5"))
 colors <- setNames(if (grouping == "quintiles") {
   c("#BC4B37", "#C18A32", "#79838F", "#3C8E89", "#244F78")
 } else c("#BC4B37", "#79838F", "#244F78"), groups)
-legend_labels <- c("Q1 (lowest VA)", groups[-c(1L, length(groups))], "Q5 (highest VA)")
+legend_labels <- c(paste0(groups[1], " (lowest VA)"), groups[-c(1L, length(groups))],
+                   paste0(tail(groups, 1), " (highest VA)"))
 
 x <- as.data.table(readRDS(input_path))
 x[, outcome := as.character(outcome)]
@@ -55,20 +60,22 @@ va <- rbindlist(lapply(names(keys), function(o) {
     all(check$n_students == check$n_students_eb), max(abs(check$va_raw - check$va_raw_eb)) < 1e-6)
   v[, .(school_rbd, outcome, va_raw, n_va_students = n_students, source_path = path)]
 }))
-va[, va_quintile := pmin(5L, as.integer(ceiling(5 * frank(va_raw, ties.method = "average") / .N))), by = outcome]
-if (grouping == "quintiles") {
-  va[, va_group := paste0("Q", va_quintile)]
+va[, (quantile_col) := pmin(n_quantiles,
+  as.integer(ceiling(n_quantiles * frank(va_raw, ties.method = "average") / .N))), by = outcome]
+if (grouping %in% c("quintiles", "terciles")) {
+  va[, va_group := paste0(if (grouping == "terciles") "T" else "Q", get(quantile_col))]
 } else {
   va[, va_group := fifelse(va_quintile == 1L, "Q1", fifelse(va_quintile == 5L, "Q5", "Q2-Q4"))]
 }
 stopifnot(!anyDuplicated(va[, .(school_rbd, outcome)]))
 quintiles <- va[, .(n_schools = .N, min_va = min(va_raw), max_va = max(va_raw),
-                   mean_va = mean(va_raw)), by = .(outcome, va_quintile)]
-stopifnot(nrow(quintiles) == 10L)
+                   mean_va = mean(va_raw)), by = c("outcome", quantile_col)]
+stopifnot(nrow(quintiles) == 2L * n_quantiles)
+setorderv(quintiles, c("outcome", quantile_col))
 fwrite(va, file.path(out, "school_va_group_assignments.csv"))
-fwrite(quintiles[order(outcome, va_quintile)], file.path(out, "school_va_quintile_definitions.csv"))
+fwrite(quintiles, file.path(out, paste0("school_", quantile_col, "_definitions.csv")))
 
-x <- merge(x, va[, .(school_rbd, outcome, va_raw, va_quintile, va_group)],
+x <- merge(x, va[, c("school_rbd", "outcome", "va_raw", quantile_col, "va_group"), with = FALSE],
            by = c("school_rbd", "outcome"), all.x = TRUE, sort = FALSE)
 stopifnot(nrow(x) == 2L * 645902L)
 coverage <- x[, .(n_preceding_sample = .N, n_va_matched = sum(!is.na(va_group)),
@@ -137,10 +144,11 @@ p <- ggplot(bins, aes(mean_math_score, enrollment_share_pct, color = va_group)) 
   scale_y_continuous(breaks = seq(0, 100, 20), labels = function(v) paste0(v, "%")) +
   coord_cartesian(ylim = c(0, 100)) +
   labs(title = "PAES math and enrollment, by school VA and gender",
-    subtitle = "Broad panel, including private schools | Quintiles of the corresponding outcome's saved raw Stata school VA",
+    subtitle = paste0("Broad panel, including private schools | ", quantile_label,
+                       " of the corresponding outcome's saved raw Stata school VA"),
     x = "PAES/PDT math score (standard deviations within test year)", y = "Enrollment share", color = NULL,
     caption = paste0("Lines: separate individual-level logit fits, without controls. Points: cell means within the preceding 50 common score bins. N counts students.\n",
-      "Quintiles give equal weight to schools and use common cutoffs across genders. Raw VA before centering/EB; students without school VA excluded.\n",
+      quantile_label, " give equal weight to schools and use common cutoffs across genders. Raw VA before centering/EB; students without school VA excluded.\n",
       "First enrollment recorded in 2022-2025; non-enrollees coded zero. Descriptive associations; VA estimated using these cohorts' outcomes.")) +
   theme_classic(base_size = 12) +
   theme(plot.title = element_text(face = "bold", size = 18, color = "#172B40"),
@@ -164,5 +172,5 @@ for (o in names(labels)) {
   ggsave(file.path(fig, paste0("paes_math_", stub, "_logit_by_va_group_and_gender.png")),
          single, width = 13.5, height = 6.8, dpi = 220, bg = "white")
 }
-print(quintiles[order(outcome, va_quintile)])
+print(quintiles)
 print(counts)
