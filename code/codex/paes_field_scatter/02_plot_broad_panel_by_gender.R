@@ -99,6 +99,9 @@ long <- long[!is.na(enrollment)]
 stopifnot(all(long$enrollment %in% 0:1), all(long[matriculated_m1 == FALSE, enrollment] == 0L))
 long[, `:=`(enrollment_pct = 100 * enrollment,
              panel = factor(as.character(outcome), levels = names(labels), labels = unname(labels)))]
+# Compact, validated individual input for subsequent functional-form comparisons.
+saveRDS(long[, .(mrun, gender, math_score, bin, outcome, enrollment, panel)],
+        file.path(out, "gender_scatter_input.rds"))
 bins <- long[, .(n_students = .N, mean_math_score = mean(math_score),
                  enrollment_share_pct = mean(enrollment_pct)), by = .(outcome, panel, gender, bin)]
 stopifnot(nrow(bins) == 200L, sum(bins$n_students) == nrow(long))

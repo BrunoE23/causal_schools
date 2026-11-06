@@ -74,3 +74,43 @@ and main-outcome/previous-pooled-fit validation CSVs are saved in the analogous
 clean-data folder. Checks verify that the preceding pooled field slope/N/R2
 are reproduced before excluding the unusable gender code, and that every
 group's bin counts and weighted means reproduce its fitted sample.
+
+## Logit versus linear fit by gender
+
+Run `03_compare_logit_by_gender.R`. It reuses the compact validated individual
+input `gender_scatter_input.rds` now exported by script 02; if absent, it runs
+02 to reconstruct that input using all its preceding checks. Rerun 02 first
+if the upstream data or definitions change. The sample, outcomes, pooled
+within-test-year score scale and 50 bins are identical to the preceding gender
+figure (645,902 students, each with both binary outcomes).
+
+For each gender and outcome it fits individual-level `glm(enrollment ~
+math_score, family = binomial(link = "logit"))` alongside the original OLS
+specification, without controls or additional sample restrictions. The figure
+overlays full-sample logit (solid) and OLS (dashed) curves on the existing bin
+means. No causal interpretation or inferential bands are attached.
+
+Prediction validation separately fits both models on 80% of students and
+evaluates squared error on the remaining 20%. Seed 20261106 assigns balanced
+five-way folds within gender after sorting student IDs; fold 1 is held out.
+The same student split applies to both outcomes. Loss uses the binary outcome
+in units 0/1 and unmodified predictions; linear predictions outside [0,1] are
+audited rather than clipped. Thus the OLS metric is raw squared prediction
+error, while logit's is also a valid Brier score. This is a single random
+student holdout, not out-of-school or out-of-cohort validation. No AIC or
+pseudo-R2 comparison between different likelihoods is used.
+
+Institution held-out MSE falls from 0.123829 to 0.120169 for males (2.96%) and
+from 0.115953 to 0.113499 for females (2.12%). Field MSE is essentially unchanged:
+0.239632 versus 0.239633 for males, 0.186161 versus 0.186244 for females. Logit
+therefore improves the institution approximation; there is no held-out squared
+error gain for field in this split. Institution linear predictions are outside
+[0,1] for 9.84% of male and 8.83% of female test students.
+
+Outputs are under `broad_panel/by_gender/logit_comparison/` in the figure and
+clean-data folders: combined PNG/PDF, full-sample coefficient and range audit,
+fitted curves, held-out losses, fold counts and reproducible student assignments.
+Coefficients are on probability units for OLS and log-odds units for logit;
+they should not be compared directly as marginal effects. Assertions reproduce
+the preceding OLS sample sizes, coefficients and bin totals and verify logit
+convergence and valid probabilities.
