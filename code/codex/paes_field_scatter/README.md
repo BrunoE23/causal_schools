@@ -48,3 +48,29 @@ mean/SD, saved in a separate audit. The earlier saved main-IV frame implicitly
 uses an SAE-only score-standardization population; this reference-population
 difference is explicit here. No raw scores are pooled across scales.
 Outputs go under `broad_panel/` subdirectories, preserving the at-risk figures.
+
+## Broad panel by gender, field and institution
+
+Run `02_plot_broad_panel_by_gender.R` after the broad-panel version above.
+It uses the same broad panel and saved pooled test-year score means/SDs;
+scores are not separately standardized within gender. `GEN_ALU == 1` is male
+and `GEN_ALU == 2` female. Of 645,903 score-observed students, one has an unusable
+gender code, leaving 304,610 male and 341,292 female students.
+
+Both outcomes use the canonical person-outcome helpers. High-premium institution
+means the institution's centered MiFuturo FE exceeds 0.1 log points, keyed by
+institution code/type/normalized name as in the original constructor. Observed
+non-enrollees and enrolled institutions without an estimated FE are zero,
+matching the current main outcome. Each reconstructed outcome must match all
+162,633 students in the saved main-IV frame exactly, including missingness.
+
+Points are gender-specific means within 50 common pooled-score rank bins.
+Separate OLS lines use every individual's binary outcome within gender,
+with no controls. Displayed axes are common across outcomes and genders;
+the bin display does not change the individual-level regression. The combined
+PNG/PDF and separate field/institution PNGs are saved under figure
+`broad_panel/by_gender/`. Fits, bins, gender coverage, score normalization,
+and main-outcome/previous-pooled-fit validation CSVs are saved in the analogous
+clean-data folder. Checks verify that the preceding pooled field slope/N/R2
+are reproduced before excluding the unusable gender code, and that every
+group's bin counts and weighted means reproduce its fitted sample.
