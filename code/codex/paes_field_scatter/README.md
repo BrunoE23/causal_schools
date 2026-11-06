@@ -24,3 +24,27 @@ PNG/PDF outputs: `output/figures/paes_field_scatter/`. Aggregate bins and fit
 summary: `data/clean/paes_field_scatter/`. Checks verify unique students,
 sample flags, valid binary outcomes, non-enrollee zero coding, exactly 50
 nonempty bins, and preservation of sample size and the overall outcome mean.
+
+## Broad-panel version
+
+```powershell
+$env:SCATTER_SAMPLE = 'broad_panel'
+& 'C:/Program Files/R/R-4.4.1/bin/Rscript.exe' code/codex/paes_field_scatter/01_plot_paes_math_field.R
+```
+
+This uses the established 931,547-student broad panel: Grade 8 cohorts
+2017-2020, Grade 8 age 12-16, positive observed most-time high-school RBD,
+unique mrun, including private schools. No SAE or baseline-completeness
+restriction is imposed. Score/outcome missingness is the only subsequent
+filter. It reads selected universe columns and joins the existing small
+`program_info_22-25.rds` by the unique program code to recover generic career
+area. The exact `derive_high_paying_field` helper and dependencies are imported
+from the existing person-outcome constructor without running its pipeline.
+The reconstructed binary is checked against all 162,633 students in the
+previous at-risk input; every value and missingness pattern must agree.
+
+PAES/PDT math is standardized using the **broad panel's** within-test-year
+mean/SD, saved in a separate audit. The earlier saved main-IV frame implicitly
+uses an SAE-only score-standardization population; this reference-population
+difference is explicit here. No raw scores are pooled across scales.
+Outputs go under `broad_panel/` subdirectories, preserving the at-risk figures.
