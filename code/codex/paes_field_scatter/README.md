@@ -114,3 +114,47 @@ Coefficients are on probability units for OLS and log-odds units for logit;
 they should not be compared directly as marginal effects. Assertions reproduce
 the preceding OLS sample sizes, coefficients and bin totals and verify logit
 convergence and valid probabilities.
+
+## Logit curves by school VA group and gender
+
+Run `04_plot_logit_by_va_group_gender.R`. This retains the preceding broad-panel
+score scale, outcomes and gender samples, including private schools. It links
+the compact individual input to `most_time_RBD` via a four-column read of the
+universe, reproducing the broad-panel filter and first-mrun deduplication.
+The preceding sample contains 645,902 students. School VA is missing for 20
+field observations (15 male, 5 female) and 15 institution observations (11 male,
+4 female), leaving 645,882 and 645,887 respectively. No score reference or bin
+boundaries are recomputed after this exclusion.
+
+School quintiles use the outcome-specific All-sample `va_raw` from saved
+`stata_va_eb_input_highpay.csv` and `stata_va_eb_input_highinst.csv`, before
+centering or EB. This follows the user's earlier authorization of that separate
+Stata run; these are not the current unified R/EB estimates. Raw values and
+VA-regression student counts are verified against the corresponding Stata EB
+outputs, and the raw-minus-centered location shift must be constant. The raw
+normalization changes levels, not ranks; shrinkage could change ranks.
+
+Define quintiles once across all schools with finite All-sample VA, separately
+by outcome, with equal school weights and `ceiling(5*average_rank/N)`, keeping
+ties together. The reference is 3,680 field schools and 3,682 institution
+schools, including private schools. Do not re-form quintiles within gender,
+score-observed students, or a reduced set of matched schools. Collapse Q2-Q4
+into a single middle group. Student Ns therefore need not be 20/60/20 or equal
+across gender/outcome. Each outcome uses its own school ranking.
+
+The figure contains separate male/female panels and three independent
+individual-level binomial-logit curves for each outcome. There are twelve
+models, all `enrollment ~ math_score`, without controls. Points are group/gender
+means in the same preceding 50 pooled-score bins, and curves span each cell's
+bin-mean score range. Colored N annotations count students in that panel/group;
+school counts are also saved in the CSV. The relationship is descriptive:
+school VA is estimated using these cohorts' outcomes, so separation of curves
+is not an independent causal validation or an out-of-sample exercise.
+
+Combined PNG/PDF and separate field/institution PNGs go to figure
+`broad_panel/by_gender/raw_stata_va_groups/`. The analogous clean-data folder
+contains school quintile/group assignments and definitions, matching coverage,
+student/school group Ns, partition checks, classified individual RDS, observed
+bins, model coefficients and fitted curves. Assertions verify unique school
+and student/outcome keys, full school-ID linkage, conserved group and bin Ns,
+preserved outcome means, logit convergence and bounded probabilities.
