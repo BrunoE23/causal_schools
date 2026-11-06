@@ -264,3 +264,15 @@ Checks verify unique school IDs, outcome/sample labels, constant raw-minus-
 centered shifts and invariance of both correlations to recentering. Results
 and matched school values are under clean-data
 `paes_field_scatter/school_va_correlations/`.
+
+Run `08_correlate_eb_school_va.R` after script 07 for the corresponding saved
+Stata EB estimates. It reads `va_eb_centered` from
+`stata_eb_school_values_{math,highpay,highinst}.csv`, All sample, retaining equal
+school weights and private schools. Exact school-ID sets must match each
+preceding raw pair. Source raw values and regression Ns must also match the
+original Stata input files. Math-field correlation after EB is 0.2662580
+(3,371 schools); math-institution is 0.5560672 (3,373 schools). Both are verified
+invariant to the additional EB recentering shift. These are correlations of
+shrunk school estimates, not a joint-model estimate of the latent correlation.
+Results and matched EB school values are saved alongside the raw outputs,
+with `eb_school_va_correlations.csv` as the summary.
