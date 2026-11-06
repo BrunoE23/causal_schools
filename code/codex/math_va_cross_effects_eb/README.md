@@ -1,4 +1,4 @@
-# Lottery cross effects of EB math school VA
+# Lottery cross effects and cross first stages with EB school VA
 
 Run `01_estimate.R` from the repository root with R, data.table and fixest.
 It re-estimates effects on high-premium field and high-premium institution
@@ -73,3 +73,26 @@ kappa=0.042335407 (SE=0.005166957, p=2.54e-16). An offer higher by 0.1 math-
 score SD predicts +0.04417 math-score SD of attended math VA, -0.02892 pp of
 attended field VA, and +0.42335 pp of attended institution VA. These last two
 changes refer to school VA indices, not student enrollment probabilities.
+
+## High-premium-field offers
+
+```powershell
+$env:CROSS_KAPPA_OFFER = 'field'
+& 'C:/Program Files/R/R-4.4.1/bin/Rscript.exe' code/codex/math_va_cross_effects_eb/02_estimate_cross_kappa.R
+```
+
+This changes the offer predictor to `z_highpay_adj_eb` and its matching risk
+control to `expected_highpay_adj_eb`, retaining the same baseline controls and
+exact 94,487 student IDs. The dependent variables remain the three attended-
+school EB VA indices. Source checks validate the field offer against the
+current unified R EB file; own-field kappa/SE/N reproduce the current main-IV
+first stage, whose exact student sample must also match. The default
+`CROSS_KAPPA_OFFER=math` retains the preceding math-offer specification.
+
+Field-offer kappas are -0.005671587 for attended math VA (SE=0.009785326,
+p=0.562184), 0.474262591 for field VA (SE=0.007250533), and 0.051897060 for
+institution VA (SE=0.009926288, p=1.71e-7). A field-VA offer higher by one
+percentage point predicts +0.47426 pp of attended field VA and +0.05190 pp
+of attended institution VA; its math-VA change is -0.00005672 math-score SD.
+The summary is `field_offer_cross_kappa_eb.csv`, with field-specific sample
+and validation files alongside it, preserving the math-offer outputs.
