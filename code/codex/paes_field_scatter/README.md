@@ -232,3 +232,21 @@ curves even with a common score coefficient and additive VA-group shifts:
 the score derivative is beta*p*(1-p). These figures fit separate group slopes,
 but do not establish causal VA-by-ability interactions. PAES is measured after
 high-school exposure, and school VA also uses these cohorts' outcomes.
+
+## Simple pooled logit for DGP calibration
+
+Run `06_fit_simple_pooled_logit.R` to estimate each choice outcome on math
+score alone, pooling genders with no gender controls, school effects, VA groups
+or other covariates. It reuses the preceding 645,902-student broad-panel plot
+sample and pooled within-test-year score scale. Non-enrollees retain zero
+outcomes. This is a descriptive association for rough DGP calibration.
+
+For `Pr(H=1|Y) = logistic(alpha_H + beta_Y*Y)`, field estimates are
+alpha_H=-0.5073755 and beta_Y=0.5930070; institution estimates are
+alpha_H=-1.8535453 and beta_Y=1.097863. Beta is a log-odds coefficient per one
+score SD, not a probability-point slope. Average marginal effects are about
+12.93 and 12.97 percentage points per SD, respectively. Coefficients, odds
+ratios, marginal effects and Ns are saved to clean-data
+`broad_panel/by_gender/simple_pooled_logit/pooled_logit_coefficients.csv`.
+Checks verify sample uniqueness, domains, model convergence, bounded fitted
+probabilities and agreement of fitted and observed outcome means.
