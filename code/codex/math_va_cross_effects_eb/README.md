@@ -44,3 +44,32 @@ p=0.00129497, and math-EB-VA to institution beta=0.08343878, SE=0.03483369,
 p=0.01660462. Both use N=94,487, with first-stage F=3,257.89. The negative field
 and positive institution signs therefore also hold with the current shrunk
 math VA, not just in the saved unshrunk cross-outcome table.
+
+## Cross first stages (cross kappa)
+
+Run `02_estimate_cross_kappa.R` after script 01. It regresses each attended-
+school EB VA (math, field, institution) on offered-school EB math VA, controlling
+for expected EB math VA and the same cohort, Grade 4 scores, gender and age
+covariates. Thus the dependent variable is a school VA index, rather than the
+student's realized score or binary enrollment outcome. These are OLS offer-to-
+attended-VA slopes, not second-stage IV coefficients or coefficients divided by
+the own-math first stage. No own-field/own-institution offer instruments or
+additional expected-VA controls enter this cross-kappa specification.
+
+The exact common 94,487-student sample from both preceding second stages is
+reconstructed and retained, including the exam-taker restriction. All three
+attended EB indices are observed on this sample. Source checks validate each
+dependent VA and the math offer against the current unified R EB source.
+The own-math coefficient and SE must reproduce the previously saved first
+stage exactly. SEs retain fixest `vcov="hetero"` and its default correction.
+Results, exact student IDs and source audits are saved alongside the second-
+stage outputs; summary: `math_offer_cross_kappa_eb.csv`. Units are attended VA
+units per one math-score-SD unit of offered math VA, without standardizing the
+school indices by their cross-school SDs.
+
+On that sample, own-math kappa=0.441748406 (SE=0.007739387), field cross-
+kappa=-0.002891537 (SE=0.002892279, p=0.317435), and institution cross-
+kappa=0.042335407 (SE=0.005166957, p=2.54e-16). An offer higher by 0.1 math-
+score SD predicts +0.04417 math-score SD of attended math VA, -0.02892 pp of
+attended field VA, and +0.42335 pp of attended institution VA. These last two
+changes refer to school VA indices, not student enrollment probabilities.
