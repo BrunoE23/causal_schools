@@ -259,3 +259,36 @@ the regression table and income-contribution summary. Full R2 is
 Income's incremental share of explained variation is
 33.54%/24.11%/1.62%/6.53%. The field-component regressions are not rerun in this
 mode. Omitting the flag preserves scripts 09/10's original eight-outcome mode.
+
+### Add home-region controls and use income decile 5 as reference
+
+Prepare the region linkage, then run the separate region-adjusted mode:
+
+```powershell
+& 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/premium_enrollment_scores_income/13_build_paes_origin_region.R
+& 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/premium_enrollment_scores_income/09_cubic_ols_income_contribution.R --high-math-main-region-d5
+& 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/premium_enrollment_scores_income/10_cubic_ols_income_tables.R --high-math-main-region-d5
+```
+
+Read only MRUN, ANYO_PROCESO, and CODIGO_REGION_DOMICILIO from the six public
+2021-2026 PAES/PDT socioeconomic-domicile files under the Box data root.
+Match by student and the existing admission year. All 93,423 selected students
+match with a valid region code 1-16; no sample exclusion or imputation occurs.
+Origin means reported home region at admission, not birthplace or necessarily
+grade-8 residence. Preserve the existing baseline family-income classification.
+
+Both full and no-income models include region indicators, the cubic score
+basis, and admission-year effects. Full-model income coefficients compare each
+decile with D5; region code 1 is the omitted nuisance category. Full K=39 and
+reduced K=30. Retain the exact same 2,735 school clusters and CR1/t inference.
+Income's incremental share is now conditional on scores, year, and home region.
+Independent D1-reference fits verify the D5 coefficient/covariance transformation
+and equality of fitted values and R2. The other existing verification checks pass.
+
+Outputs are separate under `high_math_main_region_cubic_income_contribution`.
+Full R2 is 0.3297/0.0870/0.1411/0.1741 for institution/field/either/both;
+without income it is 0.3101/0.0746/0.1404/0.1736. Income's incremental share
+is 5.94%/14.26%/0.48%/0.30%. Save region source/linkage/coverage audits,
+reference-category checks, and comparisons with the previous no-region fits
+alongside the model objects and existing diagnostics. Prior output modes remain
+available and their results are preserved.
