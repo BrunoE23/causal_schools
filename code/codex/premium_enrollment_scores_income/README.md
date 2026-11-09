@@ -146,3 +146,37 @@ diagnostic and do not apply the earlier OLS coefficient-additivity check.
 
 Outputs use task name `premium_field_groups_logit_cubic_scores_income` under
 `data/clean/`, `output/reports/` and `output/tables/`. No plots are generated.
+
+## Return to cubic OLS: income's contribution to eight outcomes
+
+Run `09_cubic_ols_income_contribution.R` and then
+`10_cubic_ols_income_tables.R`. Both use the same Rscript command and working
+directory as above. Reuse the two small original OLS analysis caches, matching
+unique student IDs and checking every shared variable. Restore the original
+565,040 students and 3,372 school clusters, including the 5,105 admission-2026
+records. No master reread, new normalization, or plot is needed.
+
+Estimate the full cubic-score OLS model for institution, field, either, both,
+Science, Law, Engineering/Manufacturing/Construction, and Medicine+. For each,
+also estimate a reduced model dropping only the nine income-decile indicators.
+Both retain the same score terms and year indicators on the exact same sample.
+Income's reported fraction is `(R2_full - R2_without_income) / R2_full`, expressed
+as a percentage. It measures incremental explanatory power after scores/year;
+it does not allocate their shared variation and is not a causal contribution.
+Use ordinary unadjusted R2. Also save, separately, income's partial R2 with
+denominator `1 - R2_without_income`; do not confuse this with the reported share.
+
+Keep actual school-clustered CR1 inference and t(G-1), with K=24 for full models
+and K=15 for reduced models. Tables show all income-decile coefficients plus
+average local math/verbal derivatives from the cubic polynomial, with their
+exact linear-combination clustered SEs. Raw basis coefficients remain in the
+HTML and coefficient CSV. Verify normal equations and covariance for both
+models, nested-model projection identities, union and component coefficient
+identities, and exact reproduction of the previous cubic OLS field estimates.
+
+Outputs use task name `premium_cubic_income_contribution` under `data/clean/`,
+`output/reports/`, and `output/tables/`. The HTML report combines the R2
+contribution summary and both four-column regression tables. Three LaTeX table
+fragments provide the contribution summary, main outcomes, and field groups.
+Model objects, covariance matrices, all coefficients, clustered income Wald
+tests, source checksums, and diagnostics stay in the clean-data task folder.
