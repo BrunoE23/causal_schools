@@ -87,3 +87,28 @@ Save the new models, estimates, sample and audits under
 `data/clean/premium_field_groups_scores_income/`, and the HTML/LaTeX tables under
 the corresponding `output/reports/` and `output/tables/` task folders. Earlier
 four-outcome regression outputs remain unchanged.
+
+## Cubic score controls and interactions
+
+The user replaced the proposed score-decile specification with polynomials up
+to degree three and math-verbal interactions. Scripts `05_cubic_field_groups.R`
+and `06_cubic_field_table.R` fit and present the four field-group OLS models with
+the full bivariate cubic basis:
+`M, V, M^2, V^2, M*V, M^3, V^3, M^2*V, M*V^2`.
+M and V retain the existing standardized scores. This is total degree at most
+three, not a tensor-product polynomial through degree six. There are no score
+deciles or score-income interactions. Keep all income indicators, admission-year
+effects, the exact student sample, and school-clustered CR1 inference.
+
+Run `05_cubic_field_groups.R` followed by `06_cubic_field_table.R` using the same
+Rscript command as above. Input is the small saved field-group analysis cache;
+no external master reread is needed. Reuse one 24-column design matrix for the
+four fits and covariance checks. Verify normal equations, clustered covariance,
+nested R-squared improvement, unchanged means/sample, and component additivity
+against the aggregate cubic OLS normal-equation solution. Report clustered Wald
+F tests for all seven added terms, the three interaction terms, and the four
+degree-three terms. Save income-coefficient comparisons to the linear-score
+models. Raw polynomial coefficients are not constant one-SD marginal effects.
+
+Outputs use task name `premium_field_groups_cubic_scores_income` under
+`data/clean/`, `output/reports/` and `output/tables/`; previous results are retained.
