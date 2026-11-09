@@ -29,3 +29,27 @@ Implementation: `code/codex/math_high_score_by_income/01_plot.R`.
 Figures: `output/figures/math_high_score_by_income/`.
 Reusable counts, normalization and verification:
 `data/clean/math_high_score_by_income/`.
+
+## Conditional premium enrollment extension
+
+The user then requested the proportion in a high-income program, institution,
+either, and both, by income decile conditional on the same high-math definition.
+Scripts 02 and 03 reuse the saved admission-year normalization and require
+identical high-math counts in every decile. The denominator for all four series
+is the full high-math group in each income decile, including non-enrollees.
+No further verbal-score, timely-exam, or HE-enrollment restriction is added.
+
+Use the existing master first-enrollment flags `high_paying_field_m1` and
+`high_inst_m1`. The program flag is the established high-paying field list,
+not a newly chosen monetary threshold on full projected program income.
+The institution flag uses the established centered income FE > 0.1 cutoff.
+Retain the master flags, including non-enrollee zeros and existing institution
+FE-support coding. Compute either as the inclusive union and both as the
+intersection. Verify outcome completeness rather than dropping students or
+changing denominators across series. The four proportions must satisfy
+P(either) = P(program) + P(institution) - P(both) in each decile.
+
+This figure conditions only on exceeding the score cutoff; remaining score
+differences within the high-math group are not regression-adjusted.
+New aggregates and a compact local student cache are saved under
+`data/clean/math_high_score_by_income/premium_enrollment/`.

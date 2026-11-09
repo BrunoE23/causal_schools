@@ -46,3 +46,29 @@ and standardized cutoffs, all ten deciles, count reconciliation, and
 `share_high_all = share_math_observed * share_high_among_scored`.
 The source master is read only. See the project-memory decision dated
 2026-11-09 for the analysis definitions.
+
+## Premium enrollment conditional on high math
+
+Run `02_premium_enrollment.R` with the same Rscript command to calculate and
+plot four first-enrollment shares within the exact previous high-math group.
+Run `03_plot_premium_enrollment.R` to re-render from saved aggregate counts.
+
+The four outcomes are the existing `high_paying_field_m1` (program),
+`high_inst_m1` (institution), their inclusive union (either), and their
+intersection (both). Program is the paper's high-paying field classification
+(Science, Law, Engineering/Manufacturing/Construction, Medicine+), not a new
+monetary cutoff for individual programs. Institution is the existing indicator
+for a centered MiFuturo institution FE above 0.1 log points. The master retains
+zeros for non-enrollees, and for institutions without an observed premium.
+
+Every denominator is all high-math students with an income decile, including
+non-enrollees. No additional enrollment, verbal-score or regression-control
+condition is imposed. Missing outcomes cause a stop rather than changing
+denominators. The prior score cutoffs are reused and all ten high-math counts
+must match the previous figure exactly. Outcomes use first observed enrollment,
+not current enrollment. These are raw conditional shares, without regression
+adjustment within the high-math group.
+
+New local inputs, counts and checks are in
+`data/clean/math_high_score_by_income/premium_enrollment/`; the PNG/PDF are
+`premium_enrollment_given_math_1sd_by_income_decile` in the same figure folder.
