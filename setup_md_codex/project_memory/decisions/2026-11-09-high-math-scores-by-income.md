@@ -53,3 +53,23 @@ This figure conditions only on exceeding the score cutoff; remaining score
 differences within the high-math group are not regression-adjusted.
 New aggregates and a compact local student cache are saved under
 `data/clean/math_high_score_by_income/premium_enrollment/`.
+
+## Four-field decomposition
+
+The user requested a separate line for each of the four high-paying fields,
+still conditional on the same math cutoff. Scripts 04 and 05 retain the
+existing 93,469-student high-math cache and its income deciles, including
+non-enrollees in all denominators. The outcomes are first-enrollment Science,
+Law, Engineering/Manufacturing/Construction, and Medicine+.
+
+Science, Law and Engineering use the master's existing positive-list flags.
+Medicine+ is recovered exactly as the intersection of `high_paying_field_m1`
+and `field_reclassified_m1 == "Medicine"`. This is algebraically equivalent
+to the original six-program definition because the combined high-paying
+indicator already incorporates that positive list and the other three groups
+are disjoint from Medicine. Verify this decomposition for every student:
+at most one component is one, and their sum equals the original combined
+indicator. Also verify all ten decile numerators and denominators against
+the prior figure. Do not substitute all Medicine enrollment or redefine the
+program list. The four conditional shares therefore sum exactly to the
+previous high-paying program curve.

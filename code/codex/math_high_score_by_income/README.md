@@ -72,3 +72,23 @@ adjustment within the high-math group.
 New local inputs, counts and checks are in
 `data/clean/math_high_score_by_income/premium_enrollment/`; the PNG/PDF are
 `premium_enrollment_given_math_1sd_by_income_decile` in the same figure folder.
+
+## Four high-paying field components
+
+Run `04_field_components.R` to build and plot the exact decomposition; run
+`05_plot_field_components.R` to re-render from saved aggregates. The sample
+and denominators are read unchanged from the prior high-math student cache.
+
+Science, Law, and Engineering/Manufacturing/Construction use their existing
+first-enrollment flags. Medicine+ is the intersection of the existing
+high-paying program flag with the Medicine classification. This preserves
+the original six-program positive list (medicine, pharmacy, nursing,
+midwifery, medical technology, dentistry), which is already encoded in the
+combined high-paying flag. It does not use all Medicine classifications.
+The script verifies mutual exclusivity and that the four components sum
+exactly to the existing combined flag for every student and income decile.
+Every component is zero for non-enrollees.
+
+Counts, shares, classification audits and checks are in the local
+`data/clean/math_high_score_by_income/field_components/` folder. The new figure
+is `field_components_given_math_1sd_by_income_decile` in the figure folder.
