@@ -92,3 +92,21 @@ figure, and save the common-observed-sample math mean as a diagnostic.
 Pool students with equal weight; impose no enrollment, verbal-threshold,
 or further complete-control restriction. These descriptive means reveal
 remaining score variation within the common high-math cutoff.
+
+## Projected income among HE enrollees and enrollment rate
+
+The user requested a figure version with log projected income among those
+enrolling in HE and the share enrolling in HE. Scripts 08 and 09 retain the
+exact selected high-math sample and the previous first-enrollment indicator.
+
+For income, average the existing `log_program_income_full_clp_m1` over HE
+enrollees only in each income decile. This is mean ln(projected monthly CLP),
+not ln(mean projected income). Verify its equivalence to the natural log of
+the raw projected-income column. Retain the established MiFuturo estimates
+and their existing fallback sources; exclude all non-enrollee assignments
+from this mean. Require income availability for every enrolled student.
+
+For enrollment, divide the number with observed first HE enrollment by all
+selected high-math students in each decile. Verify both counts against the
+previous premium-enrollment figure. Use two panels with the respective units
+and label deciles 1, 8 and 10, continuing the user's label preference.

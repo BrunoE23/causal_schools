@@ -115,3 +115,23 @@ No HE-enrollment or additional control restriction is applied.
 
 Outputs are in `data/clean/math_high_score_by_income/mean_scores/` and figure
 `mean_scores_given_math_1sd_by_income_decile` in the same figure folder.
+
+## Projected income among enrollees and HE enrollment share
+
+Run `08_income_enrollment.R` to calculate and render this version;
+`09_plot_income_enrollment.R` re-renders the saved aggregates. Keep the same
+high-math student cache and its existing first-enrollment indicator.
+
+The income panel averages `log_program_income_full_clp_m1` among HE enrollees
+only: this is mean natural log of projected monthly CLP income, not log of
+mean income, and does not include non-enrollee income assignments. Retain the
+paper's existing MiFuturo program-income estimates and fallback hierarchy.
+The enrollment panel uses observed first HE enrollment divided by every
+selected high-math student in the decile. No new score or control restriction
+is imposed. Verify income availability for all enrollees and exact agreement
+with prior enrollment and high-math counts by decile.
+
+The figure uses separate panels because the outcomes have different units;
+deciles 1, 8 and 10 are labeled. Counts and mean-log values are in
+`data/clean/math_high_score_by_income/income_enrollment/`. The PNG/PDF stem is
+`income_enrollment_given_math_1sd_by_income_decile` in the figure folder.
