@@ -52,6 +52,10 @@ The source master is read only. See the project-memory decision dated
 Run `02_premium_enrollment.R` with the same Rscript command to calculate and
 plot four first-enrollment shares within the exact previous high-math group.
 Run `03_plot_premium_enrollment.R` to re-render from saved aggregate counts.
+Set the environment variable `PREMIUM_LABEL_DECILE8=1` when running script 03
+to save a separate `_labels_d8` PNG/PDF version with rates labeled at deciles
+1, 8 and 10. This version uses the same saved proportions and leaves the
+original figure files unchanged.
 
 The four outcomes are the existing `high_paying_field_m1` (program),
 `high_inst_m1` (institution), their inclusive union (either), and their

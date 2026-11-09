@@ -1,6 +1,7 @@
 # Re-render conditional enrollment figure from the aggregate counts only.
 suppressPackageStartupMessages({library(data.table); library(ggplot2)})
 repo <- Sys.getenv("CAUSAL_SCHOOLS_REPO_WD", unset = getwd())
+label_decile8 <- identical(Sys.getenv("PREMIUM_LABEL_DECILE8", unset = "0"), "1")
 clean <- file.path(repo, "data/clean/math_high_score_by_income/premium_enrollment")
 fig <- file.path(repo, "output/figures/math_high_score_by_income")
 dir.create(fig, recursive = TRUE, showWarnings = FALSE)
@@ -49,8 +50,14 @@ p <- ggplot(plot_data, aes(income_decile_imputed, share, color = outcome, shape 
         plot.caption = element_text(hjust = 0, size = 8.5, lineheight = 1.25, margin = margin(t = 12)),
         legend.position = "bottom", legend.text = element_text(size = 10.5),
         legend.margin = margin(t = 7), plot.margin = margin(15, 20, 12, 15))
+if (label_decile8) {
+  p <- p + geom_text(data = plot_data[income_decile_imputed == 8L], aes(label = label),
+                     vjust = -1.05, size = 3.6, show.legend = FALSE)
+}
+output_stem <- paste0("premium_enrollment_given_math_1sd_by_income_decile",
+                      if (label_decile8) "_labels_d8" else "")
 for (ext in c("png", "pdf")) {
-  path <- file.path(fig, paste0("premium_enrollment_given_math_1sd_by_income_decile.", ext))
+  path <- file.path(fig, paste0(output_stem, ".", ext))
   if (ext == "pdf") {
     ggsave(path, p, width = 10, height = 7.3, device = grDevices::cairo_pdf, bg = "white")
   } else ggsave(path, p, width = 10, height = 7.3, dpi = 180, bg = "white")
