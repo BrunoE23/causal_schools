@@ -28,6 +28,20 @@ institution flags, including non-enrollee zeros. Label deciles 1, 8 and 10.
 No new model or causal effect is estimated; the figures use the existing
 pooled estimated VA and observed student outcomes.
 
+On the user's follow-up, add average math and verbal scores to each combined
+figure, producing four panels. Reuse the earlier standardized score cache,
+joining by student ID and verifying admission year and math-score agreement.
+Both scores retain the original admission-year broad-panel normalization.
+Math means retain all matched students; verbal means use observed verbal scores
+only. Do not drop verbal-missing students from any other outcome, the school
+weights, or the VA-decile construction. Save subject-specific denominators and
+the mean math score on verbal-observed support for transparency. Verify that
+previous outcome aggregates, school assignments, and cutoffs remain unchanged.
+Validation confirmed exact equality of all pre-existing aggregate columns,
+school-decile assignments, and cutoffs. The added panel uses 93,466 math scores
+and 93,420 verbal scores (46 missing). Weighted overall means reconcile across
+all three VA partitions: math 1.771516 and verbal 1.209194 SD units.
+
 Implementation: `code/codex/high_math_by_attended_va/`.
 Derived data: `data/clean/high_math_by_attended_va/`.
 Figures: `output/figures/high_math_by_attended_va/`.

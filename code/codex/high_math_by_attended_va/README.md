@@ -43,8 +43,16 @@ monthly CLP income uses HE enrollees only. The original binary definitions,
 income estimates and high-math normalization are unchanged. These are
 descriptive associations with estimated school VA, not new causal estimates.
 
+The added score panel joins the existing `mean_scores/high_math_with_verbal.rds`
+cache by student ID after checking that IDs, admission years, and math scores
+match the income cache. Math and verbal remain separately standardized within
+admission year in the original broad panel. Math means use all matched students;
+verbal means omit missing verbal scores only. Missing verbal scores never change
+the selected sample, school weights, or VA-decile assignments. The aggregates
+include subject-specific counts and a common-verbal-support math mean diagnostic.
+
 Aggregates, school maps, cutoffs, sample coverage and verification are under
 `data/clean/high_math_by_attended_va/`; figures under
 `output/figures/high_math_by_attended_va/`. Each VA dimension has separate
-premium and income/enrollment plots plus a combined three-panel version.
+premium, income/enrollment, and mean-score plots plus a combined four-panel version.
 Labels show deciles 1, 8 and 10.

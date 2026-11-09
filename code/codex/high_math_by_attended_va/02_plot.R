@@ -1,4 +1,4 @@
-# Three VA-specific versions of the two preceding descriptive figures.
+# Three VA-specific figures, including the selected sample's mean test scores.
 suppressPackageStartupMessages({
   library(data.table)
   library(ggplot2)
@@ -42,6 +42,11 @@ income_labels <- c("Mean log projected income\nHE enrollees only; ln(CLP/month)"
                    "Share enrolled in higher education\nAll selected high-math students")
 income_bounds <- c(floor(min(summ$mean_log_income_enrolled) * 50) / 50,
                    ceiling(max(summ$mean_log_income_enrolled) * 50) / 50)
+score_vars <- c("mean_math_score", "mean_verbal_score")
+score_bounds <- c(0, ceiling(max(summ[, ..score_vars]) * 2) / 2)
+score_note <- paste0("Math and verbal scores are standardized separately within admission year in the original broad panel.\n",
+                     "Math means use all ", fmt_n(sample_counts$matched_n), "; verbal means use ",
+                     fmt_n(sample_counts$n_verbal), " observed scores (", sample_counts$n_missing_verbal, " missing).")
 for (k in spec$measure) {
   z <- summ[measure == k]
   title_va <- spec[measure == k, va_label]
@@ -105,12 +110,48 @@ for (k in spec$measure) {
                        axis.text.x = element_text(size = 9.5))
   write_plot(p1, paste0(k, "_premium_enrollment"), 11, 7)
   write_plot(p2, paste0(k, "_income_enrollment"), 11, 6.5)
-  top <- p1 + labs(title = paste0("Outcomes by attended-school ", label_va),
-                   subtitle = "High math scorers (math z >= 1) | Student-weighted VA deciles", caption = NULL)
-  bottom <- p2 + labs(title = NULL, subtitle = NULL,
-    caption = paste0(common_note, "\nAll enrollment shares retain non-enrollees. Mean log projected monthly income uses only ",
-                     fmt_n(sample_counts$n_enrolled), " HE enrollees."))
-  combined <- arrangeGrob(top, bottom, ncol = 1, heights = c(1.05, 1))
-  write_plot(combined, paste0(k, "_combined"), 11, 11)
+
+  sp <- melt(z, id.vars = "va_decile", measure.vars = score_vars,
+             variable.name = "subject", value.name = "mean_score")
+  sp[, subject := factor(subject, levels = score_vars, labels = c("Math", "Verbal"))]
+  sp[, label := sprintf("%.2f", mean_score)]
+  p3 <- ggplot(sp, aes(va_decile, mean_score, color = subject, shape = subject)) +
+    geom_line(linewidth = .8) + geom_point(size = 2.4) +
+    geom_text(data = sp[va_decile %in% c(1L, 8L, 10L)], aes(label = label),
+              vjust = -1.1, size = 3.4, show.legend = FALSE) +
+    scale_color_manual(values = c("#185B84", "#B66C22")) +
+    scale_shape_manual(values = c(16, 17)) + x_scale() +
+    scale_y_continuous(limits = score_bounds, breaks = seq(0, score_bounds[2L], .5),
+                       expand = expansion(mult = c(.02, .12))) +
+    labs(title = paste0("Mean scores by attended-school ", label_va),
+         subtitle = "Conditional on PSU/PAES math score at least 1 SD above the admission-year mean",
+         x = x_title, y = "Mean score (admission-year SD units)", color = NULL, shape = NULL,
+         caption = paste0(common_note, "\n", score_note)) +
+    base_theme + theme(legend.position = "bottom", legend.text = element_text(size = 10))
+  write_plot(p3, paste0(k, "_mean_scores"), 11, 6.5)
+
+  compact_theme <- theme(plot.title = element_text(size = 13),
+                         legend.text = element_text(size = 9),
+                         legend.key.width = grid::unit(.8, "cm"),
+                         axis.title = element_text(size = 10),
+                         axis.text.x = element_text(size = 9))
+  premium_panel <- p1 + labs(title = "A. Premium enrollment", subtitle = NULL, caption = NULL) + compact_theme
+  score_panel <- p3 + labs(title = "B. Average math and verbal scores", subtitle = NULL, caption = NULL) + compact_theme
+  top <- arrangeGrob(premium_panel, score_panel, ncol = 2)
+  bottom <- p2 + labs(title = NULL, subtitle = NULL, caption = NULL) + compact_theme +
+    facet_wrap(~metric, nrow = 1, scales = "free_y",
+               labeller = as_labeller(setNames(paste0(c("C. ", "D. "), income_labels), income_labels)))
+  title <- grid::grobTree(
+    grid::textGrob(paste0("Outcomes by attended-school ", label_va),
+                   x = .015, y = .73, hjust = 0, gp = grid::gpar(fontsize = 18, fontface = "bold")),
+    grid::textGrob("High math scorers (math z >= 1) | Student-weighted VA deciles",
+                   x = .015, y = .23, hjust = 0, gp = grid::gpar(fontsize = 11)))
+  note <- grid::textGrob(paste0(common_note,
+    "\nAll enrollment shares retain non-enrollees. Mean log projected monthly income uses only ",
+    fmt_n(sample_counts$n_enrolled), " HE enrollees.\n", score_note),
+    x = .015, y = .95, hjust = 0, vjust = 1, gp = grid::gpar(fontsize = 9, lineheight = 1.3))
+  combined <- arrangeGrob(title, top, bottom, note, ncol = 1,
+                           heights = grid::unit(c(.65, 4.8, 4.5, 1.25), "in"))
+  write_plot(combined, paste0(k, "_combined"), 13.5, 11.2)
 }
 message("Saved separate and combined figures for all three VA dimensions in ", fig)

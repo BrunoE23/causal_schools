@@ -6,16 +6,26 @@ base <- file.path(repo, "data/clean/math_high_score_by_income")
 clean <- file.path(repo, "data/clean/high_math_by_attended_va")
 dir.create(clean, recursive = TRUE, showWarnings = FALSE)
 cache <- file.path(base, "income_enrollment/high_math_with_income.rds")
+score_cache <- file.path(base, "mean_scores/high_math_with_verbal.rds")
 manifest <- fread(file.path(base, "source_manifest.csv"))
 va_path <- file.path(dirname(manifest$path[1L]),
                     "empirical_bayes_school_va/cohorts_2017_2020/eb_school_rbd_observational_values.csv")
-inputs <- c(cache, va_path)
+inputs <- c(cache, score_cache, va_path)
 hashes <- unname(tools::md5sum(inputs))
 fwrite(data.table(path = inputs, bytes = file.info(inputs)$size, md5 = hashes),
        file.path(clean, "source_manifest.csv"))
 d <- as.data.table(readRDS(cache))
 stopifnot(!anyNA(d$mrun), !anyDuplicated(d$mrun), all(d$z_math >= 1),
           all(d[enrolled == TRUE, valid_income]))
+# Reuse admission-year standardization from the original score figure.
+# Missing verbal scores affect only verbal means, never sample selection or bins.
+scores <- as.data.table(readRDS(score_cache))
+si <- match(d$mrun, scores$mrun)
+stopifnot(nrow(scores) == nrow(d), !anyDuplicated(scores$mrun), !anyNA(si),
+          identical(d$psu_year, scores$psu_year[si]),
+          identical(d$z_math, scores$z_math[si]))
+d[, `:=`(z_verbal = scores$z_verbal[si], verbal_observed = scores$verbal_observed[si])]
+stopifnot(!anyNA(d$verbal_observed), all(d$verbal_observed == is.finite(d$z_verbal)))
 d[, school_rbd := as.numeric(most_time_RBD)]
 spec <- data.table(
   measure = c("math", "high_premium_field", "high_premium_institution"),
@@ -41,7 +51,8 @@ a <- d[school_rbd %in% common_school_ids]
 stopifnot(nrow(a) > 0L, !anyNA(a[, .(high_paying_field_m1, high_inst_m1, high_either, high_both, enrolled)]))
 weights <- a[, .(n_selected_students = .N), by = school_rbd]
 fwrite(data.table(original_n = nrow(d), matched_n = nrow(a), excluded_n = nrow(d) - nrow(a),
-                 n_attended_schools = nrow(weights), n_enrolled = sum(a$enrolled)),
+                 n_attended_schools = nrow(weights), n_enrolled = sum(a$enrolled),
+                 n_verbal = sum(a$verbal_observed), n_missing_verbal = sum(!a$verbal_observed)),
        file.path(clean, "sample_counts.csv"))
 
 # Weighted inverse empirical CDF: the first school VA attaining each 10% mass.
@@ -56,12 +67,17 @@ summarize <- function(x, groups) {
                share_enrolled = mean(enrolled),
                mean_log_income_enrolled = mean(log_program_income_full_clp_m1[enrolled]),
                geometric_mean_income_clp_enrolled = exp(mean(log_program_income_full_clp_m1[enrolled])),
-               mean_math_score = mean(z_math), mean_household_income_decile = mean(income_decile_imputed),
+               mean_math_score = mean(z_math), mean_verbal_score = mean(z_verbal[verbal_observed]),
+               n_math = .N, n_verbal = sum(verbal_observed), n_missing_verbal = sum(!verbal_observed),
+               mean_math_with_verbal = mean(z_math[verbal_observed]),
+               mean_household_income_decile = mean(income_decile_imputed),
                mean_attended_va = mean(va), min_va = min(va), max_va = max(va)), by = groups]
   setorderv(ans, groups)
   stopifnot(all(ans$n_high_either == ans$n_high_program + ans$n_high_institution - ans$n_high_both),
             all(ans$n_high_either <= ans$n_enrolled), all(ans$n_enrolled <= ans$n_students),
-            all(ans$n_enrolled > 0L), all(is.finite(ans$mean_log_income_enrolled)))
+            all(ans$n_enrolled > 0L), all(is.finite(ans$mean_log_income_enrolled)),
+            all(ans$n_math == ans$n_students), all(ans$n_verbal + ans$n_missing_verbal == ans$n_students),
+            all(ans$n_verbal > 0L), all(is.finite(ans$mean_verbal_score)))
   ans
 }
 for (k in spec$measure) {
@@ -104,9 +120,13 @@ fwrite(data.table(check = c("Unique school VA per dimension", "Common matched hi
                            "Student-weighted empirical decile cutoffs", "Schools never split across bins",
                            "All ten ordered VA bins represented", "Counts reconcile for every VA dimension",
                            "Premium union/intersection identities", "Enrollee-only mean log income",
-                           "Cumulative bin imbalances bounded by school size", "Original inputs unchanged"), passed = TRUE),
+                           "Cumulative bin imbalances bounded by school size",
+                           "Score cache matches original selected sample and math normalization",
+                           "Verbal observed and missing counts reconcile within each bin",
+                           "Original inputs unchanged"), passed = TRUE),
        file.path(clean, "verification.csv"))
 print(coverage)
 print(summary[, .(measure, va_decile, n_students, n_schools, share_high_program,
                   share_high_institution, share_high_either, share_high_both,
-                  mean_log_income_enrolled, share_enrolled)])
+                  mean_log_income_enrolled, share_enrolled, mean_math_score, mean_verbal_score,
+                  n_missing_verbal)])
