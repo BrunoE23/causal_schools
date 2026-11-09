@@ -73,3 +73,22 @@ indicator. Also verify all ten decile numerators and denominators against
 the prior figure. Do not substitute all Medicine enrollment or redefine the
 program list. The four conditional shares therefore sum exactly to the
 previous high-paying program curve.
+
+## Mean scores within the selected high-math sample
+
+The next user request is to show average math and verbal scores by income
+decile in this selected sample. Scripts 06 and 07 preserve the previous
+high-math student cache, existing income deciles, and math z-scores.
+Standardize positive verbal scores (`leng_max`) separately within admission
+year in the paper's broad panel (2017-2020 grade-8 cohorts, age 12-16,
+positive attended high-school RBD), before income or high-math restrictions.
+Verify verbal means and SDs against the paper's saved score diagnostics.
+Thus both plotted averages are in the paper's subject-specific
+admission-year SD units, without re-standardizing in the selected sample.
+
+Retain all selected students for the math mean. If verbal scores are missing,
+exclude them only from the verbal mean, report coverage by decile and in the
+figure, and save the common-observed-sample math mean as a diagnostic.
+Pool students with equal weight; impose no enrollment, verbal-threshold,
+or further complete-control restriction. These descriptive means reveal
+remaining score variation within the common high-math cutoff.

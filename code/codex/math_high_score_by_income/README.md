@@ -92,3 +92,22 @@ Every component is zero for non-enrollees.
 Counts, shares, classification audits and checks are in the local
 `data/clean/math_high_score_by_income/field_components/` folder. The new figure
 is `field_components_given_math_1sd_by_income_decile` in the figure folder.
+
+## Mean math and verbal scores in the selected sample
+
+Run `06_mean_scores.R` to calculate and plot means; `07_plot_mean_scores.R`
+re-renders from the aggregate statistics. Retain the entire previous
+high-math cache. Math uses its unchanged z-score. Verbal (`leng_max`) is
+standardized separately within admission year among positive observed verbal
+scores in the same broad panel as math, before income or high-math selection.
+Its normalization must match the paper's saved score diagnostics.
+
+Plot equal-student-weighted mean standardized scores by the existing income
+deciles. Do not standardize within the selected sample or decile. Math retains
+every high-math student; any missing verbal scores are excluded only from the
+verbal mean and explicitly counted. The aggregate output also includes the
+math mean among students with verbal scores to assess any sample difference.
+No HE-enrollment or additional control restriction is applied.
+
+Outputs are in `data/clean/math_high_score_by_income/mean_scores/` and figure
+`mean_scores_given_math_1sd_by_income_decile` in the same figure folder.
