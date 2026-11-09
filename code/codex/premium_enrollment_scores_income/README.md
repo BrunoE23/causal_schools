@@ -180,3 +180,32 @@ contribution summary and both four-column regression tables. Three LaTeX table
 fragments provide the contribution summary, main outcomes, and field groups.
 Model objects, covariance matrices, all coefficients, clustered income Wald
 tests, source checksums, and diagnostics stay in the clean-data task folder.
+
+## HE enrollment and log projected income
+
+Run `11_income_enrollment_cubic_ols.R` and then
+`12_income_enrollment_cubic_tables.R` using the same Rscript command. Reuse the
+original OLS sample cache plus the 23 MB broad-panel cache to obtain existing
+`log_program_income_full_clp_m1`; no master reread is needed. Verify every shared
+covariate and the natural-log income identity after matching unique student IDs.
+
+HE enrollment uses all original 565,040 scored students, including non-enrollees.
+Log projected monthly CLP income uses only their HE enrollees, with coverage
+audited explicitly. Keep the original score scaling and income deciles. Rebuild
+admission-year factor levels and school-cluster counts for each outcome sample.
+The full and no-income fits share the exact same students within each outcome.
+
+The specification, school-clustered CR1/t inference, income-share definition,
+and verification follow the eight-outcome analysis above. Report log-income
+coefficients in log points and HE-enrollment coefficients in percentage points.
+Score summaries remain average local derivatives per SD. Income assigned to
+non-enrollees is excluded from the log-income model; projected income is not
+observed individual earnings. The output task name is
+`income_enrollment_cubic_income_contribution` under clean data, reports, and tables.
+All previous results are preserved.
+
+The completed income model includes all 467,323 enrollees (3,327 schools), with
+no missing projected-income exclusions. Its full R2 is 0.3048 and income's
+incremental share is 1.37%. Enrollment retains 565,040 students (3,372 schools),
+with full R2 0.1681 and income's share 0.11%. The 5,105 admission-2026 students
+are all non-enrollees and therefore appear only in the enrollment model.
