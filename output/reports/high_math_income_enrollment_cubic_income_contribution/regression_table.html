@@ -1,0 +1,51 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HE enrollment and projected income: flexible-score OLS</title>
+<style>body{max-width:1050px;margin:36px auto;padding:0 24px;font:16px/1.5 system-ui;color:#233143}h1{font-size:28px}h2{font-size:23px;margin-top:32px}.intro{color:#526171}table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;margin:22px 0}th,td{padding:9px 12px;text-align:right;border-bottom:1px solid #e7ebef}th:first-child{text-align:left}thead{background:#eef3f7}tbody th{font-weight:500}.se{display:block;color:#64748b;font-size:13px}.block>*{border-top:2px solid #a8b5c2}.note{font-size:13px;color:#526171;margin:10px 0}details{margin-top:22px}summary{cursor:pointer;font-weight:600}</style></head><body>
+<h1>HE enrollment and projected income: math at least +1 SD</h1>
+<p class="intro">OLS with full cubic math/verbal controls, family-income-decile indicators, and admission-year effects.</p>
+<p><strong>Different units:</strong> log points for projected income among enrollees; percentage points for HE enrollment in the high-math sample.</p>
+<table><thead><tr><th>Regressor / statistic</th><th>Log projected income: HE enrollees</th><th>HE enrollment: high-math students</th></tr></thead><tbody>
+<tr class=""><th scope="row">Math: average derivative (per SD)</th><td>0.181<span class="se">(0.004)</span></td><td>1.73<span class="se">(0.26)</span></td></tr>
+<tr class=""><th scope="row">Verbal: average derivative (per SD)</th><td>0.032<span class="se">(0.002)</span></td><td>1.54<span class="se">(0.14)</span></td></tr>
+<tr class="block"><th scope="row">Income decile 1</th><td>Reference</td><td>Reference</td></tr>
+<tr class=""><th scope="row">Income decile 2 vs. 1</th><td>0.010<span class="se">(0.010)</span></td><td>-0.03<span class="se">(0.66)</span></td></tr>
+<tr class=""><th scope="row">Income decile 3 vs. 1</th><td>-0.005<span class="se">(0.009)</span></td><td>-1.42<span class="se">(0.65)</span></td></tr>
+<tr class=""><th scope="row">Income decile 4 vs. 1</th><td>-0.004<span class="se">(0.009)</span></td><td>-0.32<span class="se">(0.64)</span></td></tr>
+<tr class=""><th scope="row">Income decile 5 vs. 1</th><td>0.000<span class="se">(0.008)</span></td><td>-1.03<span class="se">(0.63)</span></td></tr>
+<tr class=""><th scope="row">Income decile 6 vs. 1</th><td>0.007<span class="se">(0.008)</span></td><td>-1.58<span class="se">(0.61)</span></td></tr>
+<tr class=""><th scope="row">Income decile 7 vs. 1</th><td>0.014<span class="se">(0.008)</span></td><td>-2.32<span class="se">(0.60)</span></td></tr>
+<tr class=""><th scope="row">Income decile 8 vs. 1</th><td>0.019<span class="se">(0.008)</span></td><td>-2.46<span class="se">(0.56)</span></td></tr>
+<tr class=""><th scope="row">Income decile 9 vs. 1</th><td>0.021<span class="se">(0.008)</span></td><td>-3.14<span class="se">(0.55)</span></td></tr>
+<tr class=""><th scope="row">Income decile 10 vs. 1</th><td>0.011<span class="se">(0.008)</span></td><td>-2.25<span class="se">(0.55)</span></td></tr>
+<tr class="block"><th scope="row">Coefficient units</th><td>Log points</td><td>Percentage points</td></tr>
+<tr class=""><th scope="row">Outcome mean</th><td>14.517 log CLP/month</td><td>90.88% enrolled</td></tr>
+<tr class=""><th scope="row">Full R-squared</th><td>0.1272</td><td>0.1968</td></tr>
+<tr class=""><th scope="row">R-squared without family income</th><td>0.1266</td><td>0.1960</td></tr>
+<tr class=""><th scope="row">Family income gain in R-squared</th><td>0.00053</td><td>0.00076</td></tr>
+<tr class=""><th scope="row">Family income share of explained variation (%)</th><td>0.42</td><td>0.38</td></tr>
+<tr class=""><th scope="row">Family income indicators: joint clustered p-value</th><td><0.001</td><td><0.001</td></tr>
+<tr class=""><th scope="row">Observations</th><td>84,901</td><td>93,423</td></tr>
+<tr class=""><th scope="row">School clusters</th><td>2,689</td><td>2,735</td></tr>
+<tr class=""><th scope="row">Admission-year indicators</th><td>Yes</td><td>Yes</td></tr>
+</tbody></table>
+<details><summary>Raw coefficients on the polynomial score basis</summary>
+<table><thead><tr><th>Score term</th><th>Log projected income: HE enrollees</th><th>HE enrollment: high-math students</th></tr></thead><tbody>
+<tr class=""><th scope="row">z_math</th><td>0.270<span class="se">(0.050)</span></td><td>-34.83<span class="se">(3.99)</span></td></tr>
+<tr class=""><th scope="row">z_verbal</th><td>-0.010<span class="se">(0.018)</span></td><td>-0.79<span class="se">(1.49)</span></td></tr>
+<tr class=""><th scope="row">math2</th><td>-0.029<span class="se">(0.025)</span></td><td>20.16<span class="se">(1.95)</span></td></tr>
+<tr class=""><th scope="row">verbal2</th><td>-0.023<span class="se">(0.006)</span></td><td>-1.65<span class="se">(0.47)</span></td></tr>
+<tr class=""><th scope="row">math_verbal</th><td>0.011<span class="se">(0.019)</span></td><td>2.57<span class="se">(1.52)</span></td></tr>
+<tr class=""><th scope="row">math3</th><td>-0.003<span class="se">(0.004)</span></td><td>-3.36<span class="se">(0.32)</span></td></tr>
+<tr class=""><th scope="row">verbal3</th><td>0.004<span class="se">(0.001)</span></td><td>0.55<span class="se">(0.13)</span></td></tr>
+<tr class=""><th scope="row">math2_verbal</th><td>0.004<span class="se">(0.005)</span></td><td>-0.71<span class="se">(0.38)</span></td></tr>
+<tr class=""><th scope="row">math_verbal2</th><td>0.009<span class="se">(0.003)</span></td><td>0.22<span class="se">(0.26)</span></td></tr>
+</tbody></table><p class="note">Raw polynomial coefficients are not constant one-SD effects. Intercepts, admission-year coefficients, confidence intervals, and covariance matrices are saved in the clean-data task folder.</p></details>
+<h2>Specification and interpretation</h2>
+<p class="note">Projected-income coefficients and SEs are in natural-log points; HE-enrollment coefficients and SEs are in percentage points. Parentheses report standard errors clustered by attended high school, using the CR1 finite-sample correction and t(G-1) inference. Income decile 1 is the reference. These are conditional descriptive associations.</p>
+<p class="note">Both full models include M, V, M^2, V^2, MV, M^3, V^3, M^2V and MV^2; nine baseline family-income-decile indicators; and admission-year indicators. Math and verbal retain their original within-admission-year broad-panel standardization. Neither scores nor income deciles are redefined among enrollees. Score rows are average local derivatives of the full cubic polynomial per SD, not finite one-SD changes.</p>
+<p class="note">The enrollment regression uses 93,423 students with original z_math >= 1 from the preceding complete-score/income OLS sample, including 8,522 non-enrollees. The projected-income regression uses its 84,901 HE enrollees. Every enrollee has valid projected income, so there is no additional exclusion for missing outcome data. Full and reduced models use exactly the same observations within each outcome; the two outcomes intentionally use different samples.</p>
+<p class="note">Log projected income is the existing log_program_income_full_clp_m1: natural log of projected monthly CLP income associated with first HE enrollment. It is a projected program/institution outcome, not observed individual earnings. Any income assigned to non-enrollees is excluded from this regression. The log outcome is verified against the existing positive income level.</p>
+<p class="note">Family income share = (R-squared with family-income indicators - R-squared without them) / R-squared with them. The reduced model retains the entire score polynomial and admission-year indicators. This measures incremental explanatory power conditional on scores and year; it is not a causal share and does not allocate their shared explanatory power. All R-squared measures are ordinary unadjusted in-sample values. Family income's partial R-squared, using 1 minus reduced-model R-squared as denominator, is saved separately.</p>
+<p class="note">The 840 admission-2026 students have no recorded HE enrollment and remain in the enrollment OLS. They are absent from the enrollee-only income regression. Factor levels and cluster counts are rebuilt for each sample. Both outcomes require the original z_math >= 1 cutoff, defined before filtering. No school-VA-availability restriction is imposed.</p>
+<p class="note">Validation covers unique-ID linkage, exact shared covariates, income/enrollment coverage, the natural-log identity, full and reduced normal equations, independently reconstructed clustered covariance matrices, nested-model projection identities, exact sample membership, and unchanged source checksums. Enrollment LPM fitted values are not clipped.</p>
+</body></html>

@@ -2,7 +2,11 @@
 suppressPackageStartupMessages({ library(data.table); library(fixest) })
 setDTthreads(min(4L, getDTthreads())); setFixest_nthreads(4L)
 repo <- Sys.getenv("CAUSAL_SCHOOLS_REPO_WD", unset = getwd())
-task <- "income_enrollment_cubic_income_contribution"
+args <- commandArgs(trailingOnly = TRUE)
+stopifnot(all(args %in% "--high-math"))
+high_math_only <- "--high-math" %in% args
+task <- if (high_math_only) "high_math_income_enrollment_cubic_income_contribution" else
+  "income_enrollment_cubic_income_contribution"
 clean <- file.path(repo, "data/clean", task)
 dir.create(clean, recursive = TRUE, showWarnings = FALSE)
 inputs <- file.path(repo, "data/clean", c("premium_enrollment_scores_income/analysis_data.rds",
@@ -24,15 +28,27 @@ rm(d)
 a[, `:=`(he_enrollment = as.integer(enrolled), log_projected_income = log_program_income_full_clp_m1,
   valid_projected_income = is.finite(program_income_full_clp_m1) & program_income_full_clp_m1 > 0 &
                            is.finite(log_program_income_full_clp_m1))]
+stopifnot(nrow(a) == 565040L, uniqueN(a$most_time_RBD) == 3372L,
+          !anyNA(a$enrolled), all(a$he_enrollment %in% 0:1),
+          all(a[enrolled == TRUE, valid_projected_income]),
+          all(is.finite(a$z_math)), all(is.finite(a$z_verbal)), all(a$income_decile_imputed %in% 1:10),
+          max(abs(a[enrolled == TRUE, log_projected_income - log(program_income_full_clp_m1)])) < 1e-10)
+parent_n <- nrow(a)
+expected_ids <- if (high_math_only) a[z_math >= 1, mrun] else a$mrun
+# Apply the original broad-panel, within-admission-year cutoff without restandardizing.
+if (high_math_only) a <- a[z_math >= 1]
+stopifnot(identical(a$mrun, expected_ids), nrow(a) > 0L,
+          !high_math_only || all(a$z_math >= 1))
+fwrite(data.table(N_parent = parent_n, N_retained = nrow(a), high_math_only = high_math_only,
+  selection = if (high_math_only) "original z_math >= 1" else "all prior complete-score students",
+  min_z_math = min(a$z_math), max_z_math = max(a$z_math), n_exactly_one = sum(a$z_math == 1)),
+  file.path(clean, "sample_selection.csv"))
 coverage <- a[, .(N_base = .N, n_enrolled = sum(enrolled), n_non_enrolled = sum(!enrolled),
   n_enrolled_valid_income = sum(enrolled & valid_projected_income),
   n_enrolled_missing_income = sum(enrolled & !valid_projected_income),
   n_admission_2026 = sum(psu_year == 2026L), n_enrolled_admission_2026 = sum(enrolled & psu_year == 2026L))]
 fwrite(coverage, file.path(clean, "sample_coverage.csv"))
-stopifnot(nrow(a) == 565040L, uniqueN(a$most_time_RBD) == 3372L,
-          !anyNA(a$enrolled), all(a$he_enrollment %in% 0:1), coverage$n_enrolled_missing_income == 0L,
-          all(is.finite(a$z_math)), all(is.finite(a$z_verbal)), all(a$income_decile_imputed %in% 1:10),
-          max(abs(a[enrolled == TRUE, log_projected_income - log(program_income_full_clp_m1)])) < 1e-10)
+stopifnot(coverage$n_enrolled_missing_income == 0L)
 saveRDS(a[, c(shared, "he_enrollment", "log_projected_income", "valid_projected_income"), with = FALSE],
         file.path(clean, "analysis_data.rds"))
 a[, `:=`(math2 = z_math^2, verbal2 = z_verbal^2, math3 = z_math^3, verbal3 = z_verbal^3,
@@ -140,6 +156,7 @@ saveRDS(reduced_models, file.path(clean, "models_without_income.rds"))
 saveRDS(covariances, file.path(clean, "covariance_matrices.rds"))
 saveRDS(list(sources = inputs, source_md5 = hashes, ids = sample_ids, rhs_full = rhs_full,
   rhs_reduced = rhs_reduced, cluster = "most_time_RBD",
+  high_math_only = high_math_only, math_selection = if (high_math_only) "original z_math >= 1" else "none",
   income_fraction = "(R2_full - R2_without_income) / R2_full"), file.path(clean, "specification.rds"))
 stopifnot(identical(unname(tools::md5sum(inputs)), hashes))
 writeLines(capture.output(sessionInfo()), file.path(clean, "session_info.txt"))

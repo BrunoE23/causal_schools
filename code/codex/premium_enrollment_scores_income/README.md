@@ -209,3 +209,27 @@ no missing projected-income exclusions. Its full R2 is 0.3048 and income's
 incremental share is 1.37%. Enrollment retains 565,040 students (3,372 schools),
 with full R2 0.1681 and income's share 0.11%. The 5,105 admission-2026 students
 are all non-enrollees and therefore appear only in the enrollment model.
+
+### Restrict both outcomes to high math scores
+
+Pass `--high-math` to both scripts:
+
+```powershell
+& 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/premium_enrollment_scores_income/11_income_enrollment_cubic_ols.R --high-math
+& 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/premium_enrollment_scores_income/12_income_enrollment_cubic_tables.R --high-math
+```
+
+This applies the earlier `z_math >= 1` definition to the original complete-score
+regression sample, using the original broad-panel within-admission-year scale.
+No restandardization or income-decile re-ranking occurs. The cubic controls,
+year effects, income-share definition, and actual clustered inference remain
+unchanged. Save exact selection diagnostics and sample IDs for both outcomes.
+
+The selected enrollment sample has 93,423 students in 2,735 schools, including
+8,522 non-enrollees and 840 admission-2026 records. Its 84,901 HE enrollees all
+have projected income and span 2,689 schools. Income's incremental share is
+0.42% for projected income (full R2 0.1272) and 0.38% for enrollment (full R2
+0.1968). Full/reduced covariance and nested-model checks pass. Outputs are
+separate under `high_math_income_enrollment_cubic_income_contribution`; prior
+unrestricted results remain unchanged. Omitting the flag retains the original
+unrestricted analysis.
