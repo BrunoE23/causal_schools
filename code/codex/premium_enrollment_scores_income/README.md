@@ -112,3 +112,37 @@ models. Raw polynomial coefficients are not constant one-SD marginal effects.
 
 Outputs use task name `premium_field_groups_cubic_scores_income` under
 `data/clean/`, `output/reports/` and `output/tables/`; previous results are retained.
+
+## Logit replacement and fit comparison
+
+The user requested logit after seeing the low OLS R-squared. Run
+`07_logit_cubic_field_groups.R` and then `08_logit_cubic_field_table.R`.
+Reuse the field-group cache and the full cubic score basis, decile indicators,
+and admission-year effects. Restrict all four models to a common set of year
+cells with outcome variation in every field. The all-zero admission-2026 cell
+has no finite logit year effect and is excluded. Refit the four cubic OLS
+comparators on exactly the same remaining sample; preserve prior OLS outputs.
+
+Estimate four independent binary logits, with attended-school-clustered CR1
+covariance. Recompute the Hessian/clustered-score sandwich at the converged
+coefficients and compare with fixest covariance. Store this reported covariance
+separately from the fitted objects, whose package covariance may use nearly
+identical weights from the preceding IRLS step. Delta-method intervals use
+normal quantiles. Check convergence, score equations and analytic effect
+gradients by directional finite differences.
+
+Main tables report probability effects: mean discrete income-decile contrasts
+versus D1 over every student's observed scores/year, and average partial score
+derivatives incorporating all polynomial terms and the logit link. Score AMEs
+are local derivatives per SD, not finite one-SD changes. Raw log-odds coefficients,
+odds ratios, full covariance and effect gradients are saved separately.
+
+Fit diagnostics distinguish McFadden pseudo-R2 (likelihood ratio versus an
+intercept-only fit), Tjur R2, AUC, and squared-error/Brier R2. The last uses
+`1 - mean((Y-p)^2)/mean((Y-mean(Y))^2)` and is directly comparable with same-sample
+OLS R2. All metrics are in-sample; no claim about held-out prediction is made.
+Independent logits need not have additive fitted probabilities, so save a sum
+diagnostic and do not apply the earlier OLS coefficient-additivity check.
+
+Outputs use task name `premium_field_groups_logit_cubic_scores_income` under
+`data/clean/`, `output/reports/` and `output/tables/`. No plots are generated.
