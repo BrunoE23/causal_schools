@@ -1,0 +1,40 @@
+% Four OLS linear probability models; coefficients and SEs are percentage points.
+\begin{table}[!htbp]\centering
+\caption{Premium-field groups, entrance-exam scores, and family income}
+\label{tab:premium-field-groups-scores-income}
+\small
+\begin{tabular}{lrrrr}\hline\hline
+ & Science & Law & Engineering & Medicine+ \\ \hline
+Math score (+1 SD) & 3.40 & -2.73 & 10.32 & 2.49 \\
+ & (0.07) & (0.06) & (0.11) & (0.09) \\
+Verbal score (+1 SD) & -0.46 & 4.37 & -6.11 & 3.78 \\
+ & (0.05) & (0.06) & (0.11) & (0.07) \\
+Income decile 2 vs. 1 & 0.30 & 0.02 & -0.18 & -0.03 \\
+ & (0.16) & (0.12) & (0.26) & (0.18) \\
+Income decile 3 vs. 1 & 1.00 & -0.06 & 0.20 & -0.04 \\
+ & (0.16) & (0.11) & (0.27) & (0.18) \\
+Income decile 4 vs. 1 & 1.02 & 0.05 & 0.34 & 0.13 \\
+ & (0.17) & (0.11) & (0.28) & (0.18) \\
+Income decile 5 vs. 1 & 1.30 & 0.12 & -0.11 & 0.47 \\
+ & (0.16) & (0.12) & (0.29) & (0.18) \\
+Income decile 6 vs. 1 & 1.42 & 0.10 & -0.07 & 0.52 \\
+ & (0.17) & (0.12) & (0.30) & (0.19) \\
+Income decile 7 vs. 1 & 1.46 & 0.20 & -0.22 & 0.46 \\
+ & (0.17) & (0.12) & (0.32) & (0.19) \\
+Income decile 8 vs. 1 & 1.29 & 0.44 & -0.58 & 0.74 \\
+ & (0.17) & (0.12) & (0.33) & (0.20) \\
+Income decile 9 vs. 1 & 0.70 & 1.18 & -0.96 & 0.41 \\
+ & (0.17) & (0.13) & (0.33) & (0.22) \\
+Income decile 10 vs. 1 & -2.68 & 2.54 & -3.84 & -2.71 \\
+ & (0.23) & (0.16) & (0.40) & (0.32) \\
+\hline
+Outcome mean (\%) & 7.42 & 4.34 & 17.58 & 9.59 \\
+Observations & 565,040 & 565,040 & 565,040 & 565,040 \\
+Attended-school clusters & 3,372 & 3,372 & 3,372 & 3,372 \\
+R-squared & 0.015 & 0.029 & 0.040 & 0.041 \\
+Admission-year effects & Yes & Yes & Yes & Yes \\
+\hline\hline\end{tabular}
+\begin{minipage}{0.98\textwidth}\footnotesize
+\textit{Notes:} OLS coefficients and school-clustered standard errors (in parentheses), both in percentage points. Math and verbal enter jointly in admission-year SD units. Income decile 1 is omitted; admission-year effects are included. All columns use the same prior regression sample; students outside each group, including non-enrollees, are zero. Engineering includes manufacturing and construction. Medicine+ comprises medicine, pharmacy, nursing, midwifery, medical technology and dentistry. Groups are mutually exclusive and sum to the original premium-field outcome. No high-score restriction. The 5,105 admission-2026 observations with uniformly zero recorded outcomes remain. These are conditional associations.
+\end{minipage}
+\end{table}

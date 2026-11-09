@@ -58,3 +58,32 @@ matrices, confidence intervals, joint tests and sample diagnostics are local in
 `data/clean/premium_enrollment_scores_income/`. Rendered table:
 `output/reports/premium_enrollment_scores_income/regression_table.html`.
 Paper table fragment: `output/tables/premium_enrollment_scores_income/regression_table.tex`.
+
+## Four premium-field groups
+
+The follow-up runs the same specification and covariance on Science, Law,
+Engineering/Manufacturing/Construction, and Medicine+. Run:
+
+```powershell
+& 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/premium_enrollment_scores_income/03_field_groups.R
+& 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/premium_enrollment_scores_income/04_field_table.R
+```
+
+Reuse the exact prior 565,040 student IDs and all covariates. Read only five
+master columns to recover the earlier field definitions. Science, Law and
+Engineering use their existing first-enrollment flags. Medicine+ is the
+intersection of `high_paying_field_m1` and `field_reclassified_m1 == "Medicine"`,
+preserving the original medicine, pharmacy, nursing, midwifery, medical
+technology and dentistry list. Each indicator is zero for non-enrollees and
+students enrolling outside that group. Do not condition on premium-field
+enrollment or change the sample or score normalization.
+
+Verify individual-level exclusivity and exact summation to the old field flag.
+The four estimated coefficient vectors must sum to the previous premium-field
+coefficient vector, including intercept and year effects. Each regression has
+its own school-clustered covariance; component SEs must not be added together.
+
+Save the new models, estimates, sample and audits under
+`data/clean/premium_field_groups_scores_income/`, and the HTML/LaTeX tables under
+the corresponding `output/reports/` and `output/tables/` task folders. Earlier
+four-outcome regression outputs remain unchanged.
