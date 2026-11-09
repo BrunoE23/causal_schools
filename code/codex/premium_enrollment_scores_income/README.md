@@ -233,3 +233,29 @@ have projected income and span 2,689 schools. Income's incremental share is
 separate under `high_math_income_enrollment_cubic_income_contribution`; prior
 unrestricted results remain unchanged. Omitting the flag retains the original
 unrestricted analysis.
+
+## Four main premium outcomes in the high-math sample
+
+Pass `--high-math-main` to scripts 09 and 10:
+
+```powershell
+& 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/premium_enrollment_scores_income/09_cubic_ols_income_contribution.R --high-math-main
+& 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/premium_enrollment_scores_income/10_cubic_ols_income_tables.R --high-math-main
+```
+
+Flagged runs fit only institution, field, either (inclusive union), and both,
+using `z_math >= 1` and exactly the same 93,423 IDs as the preceding high-math
+HE-enrollment regression. All 2,735 schools and 8,522 non-enrollees remain;
+non-enrollees have zero for all four outcomes. Keep the 840 admission-2026
+records, original score scaling and income ranks, full cubic score controls,
+year indicators, and actual school-clustered CR1/t inference. Full and reduced
+models differ only by the nine income indicators. Verify both models' normal
+equations/covariance, nested-model projection identities, and the coefficient
+identity `either = institution + field - both`.
+
+Outputs are separate under `high_math_main_cubic_income_contribution`, including
+the regression table and income-contribution summary. Full R2 is
+0.1667/0.0756/0.1308/0.0992 for institution/field/either/both, respectively.
+Income's incremental share of explained variation is
+33.54%/24.11%/1.62%/6.53%. The field-component regressions are not rerun in this
+mode. Omitting the flag preserves scripts 09/10's original eight-outcome mode.

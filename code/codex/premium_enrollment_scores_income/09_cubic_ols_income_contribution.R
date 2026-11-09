@@ -1,20 +1,26 @@
-# Eight cubic-score LPMs and income's incremental share of full-model R-squared.
+# Cubic-score LPMs and income's incremental share of full-model R-squared.
 suppressPackageStartupMessages({ library(data.table); library(fixest) })
 setDTthreads(min(4L, getDTthreads())); setFixest_nthreads(4L)
 repo <- Sys.getenv("CAUSAL_SCHOOLS_REPO_WD", unset = getwd())
-task <- "premium_cubic_income_contribution"
+args <- commandArgs(trailingOnly = TRUE)
+stopifnot(all(args %in% "--high-math-main"))
+high_math_main <- "--high-math-main" %in% args
+task <- if (high_math_main) "high_math_main_cubic_income_contribution" else "premium_cubic_income_contribution"
 clean <- file.path(repo, "data/clean", task)
 dir.create(clean, recursive = TRUE, showWarnings = FALSE)
 inputs <- file.path(repo, "data/clean", c("premium_enrollment_scores_income/analysis_data.rds",
   "premium_field_groups_scores_income/analysis_data.rds"))
+if (high_math_main) inputs <- c(inputs, file.path(repo,
+  "data/clean/high_math_income_enrollment_cubic_income_contribution/specification.rds"))
 hashes <- unname(tools::md5sum(inputs))
 fwrite(data.table(path = inputs, bytes = file.info(inputs)$size, md5 = hashes), file.path(clean, "source_manifest.csv"))
 a <- as.data.table(readRDS(inputs[1L])); fields <- as.data.table(readRDS(inputs[2L]))
 main_outcomes <- c("high_inst_m1", "high_paying_field_m1", "high_either", "high_both")
 field_outcomes <- c("science", "law", "engineering", "medicine_plus")
-outcomes <- c(main_outcomes, field_outcomes)
+outcomes <- if (high_math_main) main_outcomes else c(main_outcomes, field_outcomes)
 labels <- c("Premium institution", "Premium field", "Either (or both)", "Both",
             "Science", "Law", "Engineering / Manufacturing / Construction", "Medicine+")
+labels <- labels[seq_along(outcomes)]
 stopifnot(!anyNA(a$mrun), !anyDuplicated(a$mrun), !anyNA(fields$mrun), !anyDuplicated(fields$mrun),
           nrow(a) == nrow(fields), setequal(a$mrun, fields$mrun))
 fields <- fields[match(a$mrun, mrun)]
@@ -29,7 +35,18 @@ stopifnot(all(unlist(a[, ..outcomes]) %in% 0:1),
           all(unlist(a[enrolled == FALSE, ..outcomes]) == 0L),
           all(is.finite(a$z_math)), all(is.finite(a$z_verbal)),
           all(a$income_decile_imputed %in% 1:10), all(a$most_time_RBD > 0))
-# Restore the original OLS sample, including the all-zero admission-2026 cell.
+stopifnot(nrow(a) == 565040L, uniqueN(a$most_time_RBD) == 3372L)
+if (high_math_main) {
+  # Preserve the original within-admission-year scale and prior high-math IDs.
+  a <- a[z_math >= 1]
+  prior_selection <- readRDS(inputs[3L])
+  stopifnot(isTRUE(prior_selection$high_math_only),
+            identical(a$mrun, prior_selection$ids$he_enrollment), all(a$z_math >= 1))
+  fwrite(data.table(N_parent = 565040L, N_retained = nrow(a), selection = "original z_math >= 1",
+    min_z_math = min(a$z_math), n_exactly_one = sum(a$z_math == 1),
+    exact_prior_high_math_ids = TRUE), file.path(clean, "sample_selection.csv"))
+}
+# OLS retains the all-zero admission-2026 cell among the selected students.
 a[, `:=`(math2 = z_math^2, verbal2 = z_verbal^2, math3 = z_math^3, verbal3 = z_verbal^3,
          math_verbal = z_math * z_verbal, math2_verbal = z_math^2 * z_verbal,
          math_verbal2 = z_math * z_verbal^2,
@@ -38,13 +55,14 @@ score_terms <- c("z_math", "z_verbal", "math2", "verbal2", "math_verbal", "math3
                  "math2_verbal", "math_verbal2")
 rhs_full <- c(score_terms, "income_decile", "exam_year")
 rhs_reduced <- c(score_terms, "exam_year")
-# Reuse a single ~109 MB design for all fits and covariance/normal-equation audits.
+# Reuse one common design (~18 MB high-math; ~109 MB unrestricted) across fits.
 X <- model.matrix(reformulate(rhs_full), a)
 N <- nrow(X); K <- ncol(X); G <- uniqueN(a$most_time_RBD)
 income_terms <- paste0("income_decile", 2:10)
 keep <- which(!colnames(X) %in% income_terms); K0 <- length(keep)
 XtX <- crossprod(X)
-stopifnot(N == 565040L, G == 3372L, K == 24L, K0 == 15L, qr(XtX)$rank == K)
+stopifnot(N == if (high_math_main) 93423L else 565040L,
+          G == if (high_math_main) 2735L else 3372L, K == 24L, K0 == 15L, qr(XtX)$rank == K)
 bread <- chol2inv(chol(XtX)); bread0 <- chol2inv(chol(XtX[keep, keep]))
 cluster_index <- match(a$most_time_RBD, unique(a$most_time_RBD))
 ssc_rule <- ssc(K.adj = TRUE, G.adj = TRUE, G.df = "min", t.df = "min")
@@ -119,25 +137,31 @@ for (j in seq_along(outcomes)) {
     nested_projection_delta_error = abs(delta - projection_delta))
   models[[outcome]] <- fit; reduced_models[[outcome]] <- fit0; covariances[[outcome]] <- V
 }
-# Same-design linear coefficients preserve both identities, including in reduced models.
+# Same-design linear coefficients preserve outcome identities in both specifications.
 identities <- list()
 for (spec in c("full", "without_income")) {
   m <- if (spec == "full") models else reduced_models
   identity_union <- coef(m$high_either) - coef(m$high_inst_m1) - coef(m$high_paying_field_m1) + coef(m$high_both)
-  identity_fields <- Reduce(`+`, lapply(m[field_outcomes], coef)) - coef(m$high_paying_field_m1)
-  stopifnot(max(abs(c(identity_union, identity_fields))) < 1e-9)
+  stopifnot(max(abs(identity_union)) < 1e-9)
   identities[[spec]] <- data.table(specification = spec, term = names(identity_union),
-                                   union_error = identity_union, field_sum_error = identity_fields)
+                                   union_error = identity_union)
+  if (!high_math_main) {
+    identity_fields <- Reduce(`+`, lapply(m[field_outcomes], coef)) - coef(m$high_paying_field_m1)
+    stopifnot(max(abs(identity_fields)) < 1e-9)
+    identities[[spec]][, field_sum_error := identity_fields]
+  }
 }
-# The restored field models must reproduce the previous cubic OLS exactly.
-previous <- fread(file.path(repo, "data/clean/premium_field_groups_cubic_scores_income/coefficients.csv"))
 current <- rbindlist(coefficients)
-comparison <- merge(current[outcome %in% field_outcomes, .(outcome, term, estimate, std_error)],
-                    previous[, .(outcome, term, prior_estimate = estimate, prior_se = std_error)], by = c("outcome", "term"))
-stopifnot(nrow(comparison) == length(field_outcomes) * K,
-          max(abs(comparison$estimate - comparison$prior_estimate)) < 1e-10,
-          max(abs(comparison$std_error - comparison$prior_se)) < 1e-10)
-fwrite(comparison, file.path(clean, "prior_field_replication.csv"))
+if (!high_math_main) {
+  # The unrestricted field models must reproduce the previous cubic OLS exactly.
+  previous <- fread(file.path(repo, "data/clean/premium_field_groups_cubic_scores_income/coefficients.csv"))
+  comparison <- merge(current[outcome %in% field_outcomes, .(outcome, term, estimate, std_error)],
+                      previous[, .(outcome, term, prior_estimate = estimate, prior_se = std_error)], by = c("outcome", "term"))
+  stopifnot(nrow(comparison) == length(field_outcomes) * K,
+            max(abs(comparison$estimate - comparison$prior_estimate)) < 1e-10,
+            max(abs(comparison$std_error - comparison$prior_se)) < 1e-10)
+  fwrite(comparison, file.path(clean, "prior_field_replication.csv"))
+}
 fwrite(rbindlist(identities), file.path(clean, "coefficient_identity_verification.csv"))
 fwrite(current, file.path(clean, "coefficients.csv"))
 fwrite(rbindlist(score_effects), file.path(clean, "score_average_derivatives.csv"))
@@ -149,6 +173,8 @@ saveRDS(reduced_models, file.path(clean, "models_without_income.rds"))
 saveRDS(covariances, file.path(clean, "covariance_matrices.rds"))
 saveRDS(list(sources = inputs, source_md5 = hashes, ids = a$mrun, rhs_full = rhs_full,
   rhs_reduced = rhs_reduced, cluster = "most_time_RBD",
+  high_math_main = high_math_main, outcomes = outcomes,
+  math_selection = if (high_math_main) "original z_math >= 1" else "none",
   income_fraction = "(R2_full - R2_without_income) / R2_full"), file.path(clean, "specification.rds"))
 stopifnot(identical(unname(tools::md5sum(inputs)), hashes))
 writeLines(capture.output(sessionInfo()), file.path(clean, "session_info.txt"))
