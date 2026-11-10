@@ -438,3 +438,32 @@ the combined HTML comparison includes key coefficients and all raw coefficients.
 Completed R2 comparisons: premium field 0.07833 to 0.14485; premium institution
 0.20846 to 0.34570. Outcome means are 38.99% and 18.68%, respectively. All four
 sample, normal-equation and covariance checks pass; source caches are unchanged.
+
+### Parent education interacted with attended-school VA
+
+Run `22_parent_education_va_interactions.R` with the same Rscript command.
+Extend both previous specifications with the corresponding attended-school VA
+main effect and its interactions with father and mother years: field VA for
+field enrollment, institution VA for institution enrollment. Match the existing
+2017-2020 All-sample EB observational VA by attended RBD, using the complete VA
+source rather than the restricted SAE-offering-school plotting sample.
+
+Common support retains 559,819 students and 3,276 school clusters. Exclude 95
+students from 95 schools lacking both VAs. Center parents at sample means and
+each VA at its student-weighted mean, scaling VA by 0.10 probability units.
+Reported interaction coefficients are pp per parent schooling year per +10 pp
+VA. Include all lower-order terms; retain linear PAES and the exact previous
+full-baseline controls. Preserve non-enrollee zeros and baseline imputations.
+
+Outputs under `premium_parent_education_va_interactions` in clean data/reports
+contain four fitted models, all coefficients, common sample, scaling constants,
+coverage/exclusion audit, source hashes, exact cluster-covariance checks, and
+parent gradients at VA quartiles with linear-combination SEs. The HTML table is
+`output/reports/premium_parent_education_va_interactions/interactions.html`.
+Inference treats estimated VA as fixed; overlapping estimation cohorts/outcomes
+mean these are descriptive associations, not cross-fitted causal effects.
+
+Full-baseline father/mother interaction estimates are -0.01894/-0.01277 pp for
+field (joint p=0.82461) and 0.13081/0.10472 pp for institution (joint p=4.65e-16).
+All four independent covariance and normal-equation checks pass. Full-model R2
+is 0.15859 for field and 0.35925 for institution.
