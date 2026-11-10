@@ -1,0 +1,14 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Parent education, entrance scores, and baseline achievement</title>
+<style>body{font:16px/1.5 system-ui;max-width:1000px;margin:30px auto;padding:0 24px;color:#233143}table{border-collapse:collapse;width:100%;margin:24px 0}th,td{padding:12px;border-bottom:1px solid #ddd;text-align:right}th:first-child{text-align:left}.note{font-size:14px;color:#526171}</style></head><body>
+<h1>HE enrollment with baseline math and verbal scores</h1><p>OLS linear probability models. Both parents, both entrance scores, and both baseline scores enter linearly; no other controls. Coefficients in percentage points, school-clustered SEs in parentheses.</p>
+<table><tr><th></th><th>Without baseline, same sample</th><th>Add baseline math and verbal</th></tr>
+<tr><th>Father education (+1 year)</th><td>0.206 (0.024)</td><td>0.210 (0.024)</td></tr>
+<tr><th>Mother education (+1 year)</th><td>0.095 (0.026)</td><td>0.090 (0.026)</td></tr>
+<tr><th>PAES math (+1 SD)</th><td>2.747 (0.075)</td><td>2.405 (0.081)</td></tr>
+<tr><th>PAES verbal (+1 SD)</th><td>3.523 (0.081)</td><td>3.137 (0.088)</td></tr>
+<tr><th>Baseline SIMCE math (+1 SD)</th><td>--</td><td>0.849 (0.089)</td></tr>
+<tr><th>Baseline SIMCE verbal (+1 SD)</th><td>--</td><td>0.259 (0.082)</td></tr>
+<tr><th>R-squared</th><td>0.0262</td><td>0.0265</td></tr></table>
+<p>Both columns: N = 564,542; school clusters = 3,372; enrollment rate = 82.71%.</p>
+<p class="note">Start with the previous 569,681 students with both parent measures and both entrance scores; exclude 5,139 without both baseline scores. No high-math restriction, income controls, region controls, year effects, or nonlinear score terms. Both models use precisely the same students.</p>
+<p class="note">Math and verbal retain the existing PSU/PAES within-admission-year standardization from the broad panel; no restandardization occurs here. Baseline math and verbal use the existing grade-4 SIMCE-year standardization, with no imputation or restandardization. Parent years retain the existing SIMCE approximate-year coding and imputations. Inference uses attended-school CR1 covariance and t(G-1). Coefficients are conditional associations, not causal effects.</p></body></html>

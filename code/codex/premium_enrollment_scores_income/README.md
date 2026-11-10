@@ -371,3 +371,46 @@ R2 is 0.02619 versus 0.00734 for the same-sample parent-only model. Both retain
 school-clustered CR1 inference; normal equations and covariance checks pass.
 Save models/audits under `data/clean/parent_education_linear_scores_he_enrollment/`
 and HTML/LaTeX comparison tables in the matching reports/tables directories.
+
+### Add baseline math and verbal
+
+Run `19_add_baseline_scores.R` using the same Rscript command. Add the existing
+grade-4 SIMCE `z_sim_mat_4to` and `z_sim_leng_4to` linearly to both parent years
+and both linear entrance scores. Read only four columns from the preflighted
+universe source, matching student IDs and cohorts. Preserve each baseline
+score's original SIMCE-year normalization, without imputing or restandardizing.
+No other controls or high-math restriction are added.
+
+Requiring both baseline scores retains 564,542 of the previous 569,681 students
+(5,139 exclusions), with 3,372 school clusters. Refit the preceding four-regressor
+model on the exact same students. R2 rises from 0.0261595 to 0.0265245. Baseline
+math is 0.849157 pp per SD (SE 0.088949), and baseline verbal 0.258643 (0.081727).
+All seven-parameter/full and five-parameter/reduced OLS and covariance checks
+pass. The output task is `parent_education_baseline_scores_he_enrollment` under
+clean data, reports, and tables; source inputs and earlier results are preserved.
+
+### Complete VA baseline controls
+
+Run `20_add_va_baseline_controls.R`. Retain linear PAES math/verbal and add the
+baseline specification from `school_rbd_observational_values/01_construct_school_rbd_values.R`:
+separate cubic grade-4 math/verbal terms; linear income decile; both parent
+education years, indigenous indicators and four early-childhood controls;
+standardized middle-school GPA and attendance; cohort, sex, age, student comuna,
+middle-years-observed and middle-school indicators. Parent education enters once.
+Destination high-school effects are the VA object, not baseline controls, and
+are not included. There is no high-math or SAE-applicant restriction.
+
+Use four-column/selected-column reads of the universe and middle-school sources
+after size preflight. Complete baseline availability retains 559,914 of 569,681
+students; refit the preceding model on these exact IDs. School-clustered CR1
+inference counts all absorbed baseline effects with `K.fixef="full"` and
+`K.exact=TRUE`. Independently reconstruct covariance from demeaned regressors
+and actual residuals. Average baseline-score derivatives account for the cubic
+terms; raw polynomial coefficients are not marginal effects. Outputs use
+`he_enrollment_paes_va_baseline` under clean data and reports.
+
+The final model has 3,371 school clusters and overall R2 0.15695, versus 0.02657
+for the previous model on the same sample. Father/mother coefficients are
+0.02927/0.15042 pp per year; linear PAES math/verbal coefficients are 2.45565/
+3.10338 pp per SD. Average baseline math/verbal derivatives, conditional on all
+controls, are -0.31531/-0.86119 pp per original SD. Verification passes.
