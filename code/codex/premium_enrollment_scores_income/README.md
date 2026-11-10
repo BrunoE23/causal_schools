@@ -578,3 +578,19 @@ both models, sample, coefficients, audits and a same-sample comparison. HTML:
 (0.0002534); both p<0.001. R2=0.29860/0.29792. Parent coefficients decrease
 77.37%/79.34% relative to the parent-only models; this is descriptive attenuation,
 not a causal mediation calculation. All targeted verification checks pass.
+
+### Separate parent x institution VA in PAES-adjusted log-income models
+
+Run `28_log_income_separate_parent_paes_va.R`. Add attended-school EB premium-
+institution VA and its interaction with the selected parent's education to
+each prior OLS regression. Keep the other parent omitted, linear PAES math and
+verbal, the same 463,033 enrollees and 3,262 clusters, and CR1/t inference.
+Center each parent and VA at student means; VA unit is +10 pp. Include both
+main effects. Retain original income values, imputations and score scales.
+
+Outputs use task `log_income_separate_parent_paes_va` in clean data/reports,
+with `regressions.html`, models, exact sample, specifications, scales, coefficients,
+independent covariance checks, prior R2 comparison and parent slopes at VA
+quartiles. Father interaction -0.0040988 (SE 0.0002565), mother -0.0046366
+(0.0002995), both p<0.001. R2=0.30429/0.30403. All verification checks pass.
+These are descriptive associations, with estimated VA treated as fixed.
