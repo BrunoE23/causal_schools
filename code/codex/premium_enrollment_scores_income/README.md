@@ -497,3 +497,35 @@ All four models use 3,262 clusters and pass the covariance/normal-equation check
 Full-baseline father/mother interactions: -0.000253/-0.000952 log points;
 +332/-846 monthly CLP, per parent year per +10 pp institution VA. Joint p-values
 are 8.20e-10 (logs) and 0.07090 (levels). Full R2 is 0.35264/0.34228 respectively.
+
+### Paper institution IV with both parent-education interactions
+
+Run `24_institution_iv_parent_interactions.R` with the same Rscript command.
+Start from the September paper IV cache for VA 2017-2020 and SAE 2018-2020,
+reproducing the main highinst IV coefficient, HC1 SE, sample and first-stage F.
+The main reproduction is 0.666895 (SE 0.119817), N=94,487, F=821.068.
+Read only six linkage/parent columns from the preflighted universe; after
+requiring both existing imputed parent measures, retain 94,244 students.
+
+The outcome is high_inst_m1. Instrument attended institution VA and both
+parent-education interactions with assigned institution VA and its two matching
+parent interactions. Include both parent main effects, expected institution VA
+and both expected-VA x parent risk controls, plus the paper's linear baseline
+math/verbal and cohort/sex/age indicators. Both parents enter jointly. Keep the
+paper exam-taking restriction, non-enrollee zeros and HC1 inference; do not add
+PAES scores, the full observational-VA control set or destination-school effects.
+Center parents at sample means and all three VA variables at mean attended VA.
+VA units are +10 pp and reported outcome coefficients are pp.
+
+Output task: `institution_iv_parent_education_interactions` under clean data and
+reports. Save paper replication, coverage/imputation counts, independent 2SLS
+coefficient/residual/HC1 checks, models, sample, specification, scaling, first
+stages and VA effects at parental quartiles. First-stage joint excluded-instrument
+Wald F statistics are not conditional weak-identification tests.
+
+Completed: VA effect at mean parents is 6.4566 pp (SE 1.2019) per +10 pp VA.
+Father interaction is +1.3074 pp (0.5527), mother -1.4856 pp (0.5539), per parent
+schooling year per +10 pp VA. Joint interaction p=0.01500. All exact 2SLS and
+HC1 checks pass. Estimated VA is treated as fixed; parent main effects are not
+causal schooling returns, and IV interpretation requires validity of the
+interacted instruments as well as the paper's original assumptions.
