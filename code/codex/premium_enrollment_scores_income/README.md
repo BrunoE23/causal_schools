@@ -547,3 +547,19 @@ The HTML report is `interactions.html` in the matching reports directory.
 Father interaction: +0.57467 pp (SE 0.45742), p=0.20899; mother: -0.78364 pp
 (0.46847), p=0.09438, per schooling year per +10 pp VA. Both designs have full
 rank and all verification checks pass. Neither interaction is significant at 5%.
+
+### Log projected income on each parent's years only
+
+Run `26_log_income_parent_only.R`. Estimate two bivariate OLS regressions,
+each with an intercept and one parent's existing continuous schooling years.
+Reuse the earlier projected-income sample of 463,033 HE enrollees and 3,262
+schools; this retains its complete-baseline/PAES and VA-coverage restrictions
+for comparability, although no such controls enter these regressions. No IV,
+interactions or other controls. Preserve prior imputations and income values.
+
+Use school-clustered CR1/t inference and independently verify normal equations
+and covariance. Output task `log_projected_income_parent_only` under clean data
+and reports; report `regressions.html`. Father coefficient 0.0290273 (SE 0.0005567),
+R2=0.06768; mother 0.0303327 (0.0006177), R2=0.06166. Both p<0.001. Model-implied
+geometric-mean differences per year are 2.95% and 3.08%; these are associations.
+Both regressions and all verification checks pass.

@@ -1,0 +1,12 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Log projected income and parent schooling</title>
+<style>body{font:16px/1.5 system-ui;color:#233143;max-width:1200px;margin:30px auto;padding:0 24px}table{border-collapse:collapse;width:100%;margin:20px 0}th,td{padding:10px;border-bottom:1px solid #ddd;text-align:right}th:first-child{text-align:left}</style></head><body>
+<h1>Log projected income on each parent schooling measure</h1>
+<p>Two separate OLS regressions: natural log of projected monthly CLP income on an intercept and father years, or on an intercept and mother years. No other controls, interactions or instruments.</p>
+<p>Both models use the same 463,033 HE enrollees and 3262 attended-school clusters as the earlier projected-income analysis. Standard errors use attended-school CR1 and t(G-1) inference.</p>
+<table><tr><th>Parent</th><th>Log-point coefficient/year</th><th>Clustered SE</th><th>95% CI</th><th>p-value</th><th>Geometric-mean income change/year</th><th>R2</th></tr>
+<tr><th>father</th><td>0.02903</td><td>0.00056</td><td>[0.02794, 0.03012]</td><td>&lt;0.001</td><td>2.95%</td><td>0.0677</td></tr>
+<tr><th>mother</th><td>0.03033</td><td>0.00062</td><td>[0.02912, 0.03154]</td><td>&lt;0.001</td><td>3.08%</td><td>0.0617</td></tr>
+</table>
+<p>The percentage column is 100 x (exp(coefficient)-1), referring to the model-implied geometric mean. Income is projected from the first HE program/institution, not realized individual earnings. These are unadjusted associations.</p>
+<p>The common sample inherits the earlier complete-PAES/full-baseline and school-VA availability restrictions, although none of those variables enters these bivariate regressions. Preserve existing parent-year imputations and income values. No new exclusions, imputation, normalization or trimming.</p>
+<p>Checks passed: common sample, natural-log identity, exactly two parameters per model, OLS normal equations, independent school-clustered covariance reconstruction and unchanged source hash.</p></body></html>
