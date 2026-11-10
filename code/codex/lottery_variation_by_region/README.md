@@ -96,3 +96,30 @@ bandwidths are 0.811483 and 1.235605 pp. Axes and bandwidths are fixed across
 regions within each measure, not across outcomes with different units. The
 all-measure gallery audit and plot-specification summary are in the task's
 clean-data directory. Original math outputs are retained.
+
+## Filled histograms
+
+```powershell
+& 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/lottery_variation_by_region/04_plot_histograms.R
+```
+
+Reuse the three saved `va_*/school_plot_data.csv` files to create 48 individual
+histograms plus three 16-panel PNG/SVG overviews. The gallery is
+`output/reports/lottery_variation_by_region/histogram_all_three.html`; figures
+are under `output/figures/lottery_variation_by_region/histogram/<measure>/`.
+Previous density outputs remain available.
+
+Filled bars stack the three lottery groups. Each bin segment is its school
+count divided by all schools with VA in the region. Thus bars sum to 100%
+within a region, and the total mass of each color equals that group's share.
+This differs from the previous densities, which normalized each group to one.
+Each school receives equal weight. There are 30 equal-width bins across the
+full pooled observed VA range of each measure, with identical bins and axes
+across its regions. The final bin includes the maximum; no tails are removed.
+All group sizes are displayed, including single-school groups.
+
+School samples, lottery classifications, regions, VA values, and units are
+unchanged. The same 2,504 schools are plotted for each outcome (2,194 always,
+296 sometimes, 14 never); 25 lack VA. School-to-bin assignments, counts and
+shares, plot specifications, input hashes, and verification are saved in
+`data/clean/lottery_variation_by_region/histograms/`.
