@@ -467,3 +467,33 @@ Full-baseline father/mother interaction estimates are -0.01894/-0.01277 pp for
 field (joint p=0.82461) and 0.13081/0.10472 pp for institution (joint p=4.65e-16).
 All four independent covariance and normal-equation checks pass. Full-model R2
 is 0.15859 for field and 0.35925 for institution.
+
+### Projected income: parent education x institution VA
+
+Run `23_projected_income_institution_va_interactions.R` with the same Rscript
+command. Reuse the preceding VA-covered sample and match existing projected
+monthly CLP income and its natural log from the broad-panel cache. Restrict both
+outcomes to HE enrollees with finite positive income. This retains 463,033 of
+559,819 students: 96,786 non-enrollees excluded, no enrollees missing income.
+
+Use premium-institution VA for both income outcomes, with the VA main effect,
+both continuous parents' schooling and both interactions. Keep both previous
+control specifications: parents plus linear PAES, and the full VA baseline set.
+Recenter parental education and VA within the enrolled sample; one VA unit is
+10 pp. Estimate the level outcome in 100,000 CLP units, restoring monthly CLP
+for displayed coefficients/SEs; log coefficients are natural-log points.
+Preserve existing income values, imputations and score normalizations. No
+winsorization, trimming, high-math filter or destination-HS fixed effects.
+
+Output task `projected_income_parent_institution_va_interactions` under clean
+data/reports includes the fitted models, matched common sample, coverage,
+coefficients, specifications, scales, source hashes, independent CR1 covariance
+checks and parental slopes at institution-VA quartiles. HTML: `interactions.html`.
+Inference treats VA as fixed and uses exact baseline-FE degrees of freedom.
+These are descriptive projected-income associations conditional on HE enrollment;
+income is not observed individual earnings, and VA is not cross-fitted.
+
+All four models use 3,262 clusters and pass the covariance/normal-equation checks.
+Full-baseline father/mother interactions: -0.000253/-0.000952 log points;
++332/-846 monthly CLP, per parent year per +10 pp institution VA. Joint p-values
+are 8.20e-10 (logs) and 0.07090 (levels). Full R2 is 0.35264/0.34228 respectively.
