@@ -50,3 +50,31 @@ paper-roster supplement changes five schools from always to sometimes, yielding
 2,206 / 304 / 19. The balanced 2019-2020 universe has 2,482 schools and category
 counts 2,216 / 225 / 41 (89.28% / 9.07% / 1.65%). All verification checks pass;
 no probability school falls outside the corresponding grade-9 A1 offerings.
+
+## Regional VA distributions
+
+```powershell
+& 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/lottery_variation_by_region/02_plot_va.R math
+```
+
+This produces 16 regional PNGs, a 4-by-4 overview in PNG/SVG, and
+`output/reports/lottery_variation_by_region/va_math.html`. The additional packages
+are ggplot2 and scales. Optional arguments `field` or `institution` select those
+VA measures and write to separate destinations; the requested/default run is math.
+
+Keep the saved classifications and school regions. Join the current 2017-2020
+EB VA file, All analysis sample, student-centered adjusted value. Give each
+school equal weight and preserve the original VA units (math: test-score SD;
+field/institution: percentage points). No high-math selection or new VA estimation.
+Math VA is observed for 2,504 schools: 2,194 always, 296 sometimes, 14 never.
+Exclude 25 missing estimates (17 always, 3 sometimes, 5 never) and retain their
+IDs in the coverage audit. This does not change the earlier count table.
+
+Density curves normalize separately within each region-category. Compare shapes,
+not group shares. A common Gaussian bandwidth from pooled plotted school VA
+(math: 0.02087561 test SD) and fixed axes apply to all regions. Curves require
+at least five schools; all schools appear as colored ticks below the curves,
+with separate rows for always/sometimes/never. Label all counts, including zero
+groups. Save coverage, source hashes, plotted data, density ordinates and integral
+checks under `data/clean/lottery_variation_by_region/va_math/`. Figures go under
+`output/figures/lottery_variation_by_region/math/`. Inspect final renders.
