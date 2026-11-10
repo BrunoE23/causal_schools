@@ -414,3 +414,27 @@ for the previous model on the same sample. Father/mother coefficients are
 0.02927/0.15042 pp per year; linear PAES math/verbal coefficients are 2.45565/
 3.10338 pp per SD. Average baseline math/verbal derivatives, conditional on all
 controls, are -0.31531/-0.86119 pp per original SD. Verification passes.
+
+### Premium field/institution: parents + PAES versus full baseline
+
+Run `21_premium_outcomes_va_baseline_comparison.R`. Reuse the 559,914-person
+complete-baseline cache and attach the original `high_paying_field_m1` and
+`high_inst_m1` outcomes from the small broad-panel cache. Both outcomes and both
+models share exactly these students and 3,371 attended-school clusters, including
+non-enrollees coded zero. There is no high-math or HE-enrollment restriction.
+
+The simple model contains only both continuous parent education measures and
+linear PAES math/verbal, plus an intercept. It does not include baseline scores.
+The full model uses precisely the preceding full VA baseline specification,
+including middle-school indicators and separately cubic grade-4 scores. Existing
+outcome definitions, score normalizations, and baseline imputations are unchanged.
+Verify all source IDs/covariates, outcome support and non-enrollee zeros, common
+sample, OLS normal equations and school-clustered CR1 covariance for all four
+fits. Use exact full FE degrees of freedom and overall R2 for the full models.
+
+Output task: `premium_parent_paes_va_baseline_comparison` in clean data/reports;
+the combined HTML comparison includes key coefficients and all raw coefficients.
+
+Completed R2 comparisons: premium field 0.07833 to 0.14485; premium institution
+0.20846 to 0.34570. Outcome means are 38.99% and 18.68%, respectively. All four
+sample, normal-equation and covariance checks pass; source caches are unchanged.
