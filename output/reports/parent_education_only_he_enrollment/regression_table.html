@@ -1,0 +1,11 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>HE enrollment on parent education only</title>
+<style>body{font:16px/1.5 system-ui;color:#233143;max-width:1000px;margin:32px auto;padding:0 24px}table{border-collapse:collapse;width:100%;margin:24px 0}th,td{padding:12px;border-bottom:1px solid #dce2e8;text-align:right}th:first-child{text-align:left}.note{font-size:14px;color:#526171}</style></head><body>
+<h1>HE enrollment on parent education only</h1><p>OLS: HE enrollment = intercept + father schooling years + mother schooling years. Both parents enter jointly and continuously. No other controls or high-math restriction.</p>
+<table><tr><th>Regressor</th><th>Coefficient (pp/year)</th><th>Clustered SE</th><th>95% CI</th></tr>
+<tr><th>Father education (+1 year)</th><td>1.439</td><td>0.029</td><td>[1.382, 1.496]</td></tr>
+<tr><th>Mother education (+1 year)</th><td>1.919</td><td>0.034</td><td>[1.852, 1.985]</td></tr>
+</table>
+<p>N = 775,268; school clusters = 3,701; enrollment rate = 70.72%; R-squared = 0.0433.</p>
+<p class="note">Start with all 931,547 broad-panel students (grade-8 cohorts 2017-2020, ages 12-16, attended school observed). Retain 775,268 with both parent measures available; exclude 156,279 with remaining missing education. No restrictions on exam-taking, scores, income, region, or estimated school VA.</p>
+<p class="note">Education uses the existing grade-4 SIMCE category-to-approximate-years conversion and existing baseline-context imputations: 103,243 father and 74,011 mother values are imputed; 663,163 students report both. No new imputation is performed. Each coefficient conditions on the other parent's schooling. These are associations, not causal effects.</p>
+<p class="note">SEs cluster by attended high school with CR1 finite-sample correction and t(G-1) intervals. Enrollment and admission-year records are kept as recorded in the existing data. The model includes no admission-year effects.</p></body></html>

@@ -327,3 +327,30 @@ joint/equality tests, R2 contribution and covariance/normal-equation checks are
 under `data/clean/parent_education_he_enrollment/`. The HTML regression table is
 in `output/reports/parent_education_he_enrollment/regression_table.html`; its
 LaTeX fragment is in `output/tables/parent_education_he_enrollment/`.
+
+### Full sample, continuous parents only
+
+```powershell
+& 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/premium_enrollment_scores_income/17_parent_education_only_ols.R
+```
+
+The user's final specification is HE enrollment on continuous father and mother
+schooling years jointly, with an intercept and no other regressors. Use the
+full 931,547-person broad panel, before school-VA matching; impose no high-math,
+exam-taking, income, or region restriction. Existing reported-plus-imputed
+parent years are retained, with remaining missing values excluded. The final
+sample is 775,268 students in 3,701 schools; 156,279 lack one or both measures.
+
+Coefficients are father 1.4390 pp/year (clustered SE 0.02885) and mother 1.9187
+pp/year (SE 0.03403). Both enter continuously and jointly. Enrollment is 70.72%
+and R2 is 0.04330. Of the estimation sample, 663,163 report both education
+measures; father values are imputed for 103,243 and mother values for 74,011.
+No new imputation is performed. These are descriptive associations.
+
+Use the existing school-clustered CR1/t inference; independently check the
+three-column design, normal equations, and sandwich covariance. Code reads
+only six columns of the preflighted universe CSV and preserves original sources.
+Models, sample, coefficients, diagnostics and provenance are saved under
+`data/clean/parent_education_only_he_enrollment/`. HTML and LaTeX tables use the
+same task name under `output/reports/` and `output/tables/`. Earlier controlled
+high-math regressions remain available in their original directories.
