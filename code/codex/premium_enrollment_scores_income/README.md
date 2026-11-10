@@ -354,3 +354,20 @@ Models, sample, coefficients, diagnostics and provenance are saved under
 `data/clean/parent_education_only_he_enrollment/`. HTML and LaTeX tables use the
 same task name under `output/reports/` and `output/tables/`. Earlier controlled
 high-math regressions remain available in their original directories.
+
+### Add linear entrance math and verbal
+
+Run `18_parent_education_linear_scores.R` using the same Rscript command.
+Reuse the small parent-only sample and broad-panel score caches. Add only
+`z_math` and `z_verbal`, linearly, to father and mother years plus the intercept.
+Keep the existing within-admission-year score standardization; do not add
+year effects, income, region, interactions, polynomials, or a high-math filter.
+
+Of the previous 775,268 students, 569,681 have both scores; 205,587 are excluded.
+Refit the parent-only comparison on these same 569,681 students and 3,373 school
+clusters. Main coefficients in pp are father 0.2062 (SE 0.02345), mother 0.0942
+(0.02557), math 2.7516 per SD (0.07429), and verbal 3.5290 per SD (0.08030).
+R2 is 0.02619 versus 0.00734 for the same-sample parent-only model. Both retain
+school-clustered CR1 inference; normal equations and covariance checks pass.
+Save models/audits under `data/clean/parent_education_linear_scores_he_enrollment/`
+and HTML/LaTeX comparison tables in the matching reports/tables directories.
