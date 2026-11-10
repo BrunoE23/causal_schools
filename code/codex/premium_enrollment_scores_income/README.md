@@ -529,3 +529,21 @@ schooling year per +10 pp VA. Joint interaction p=0.01500. All exact 2SLS and
 HC1 checks pass. Estimated VA is treated as fixed; parent main effects are not
 causal schooling returns, and IV interpretation requires validity of the
 interacted instruments as well as the paper's original assumptions.
+
+### Institution IV: one parent at a time
+
+Run `25_institution_iv_separate_parents.R`. Reuse the preceding small IV sample
+cache and its exact 94,244 students, centered parent schooling and scaled VA.
+Estimate one model with father only and one with mother only: each contains
+the selected parent main effect, attended VA and its parent interaction,
+expected VA and its parent interaction, and the paper baseline controls.
+Instrument with assigned VA and the selected-parent interaction. Omit all
+terms for the other parent, including its main effect. Retain paper HC1 inference.
+
+Output task `institution_iv_separate_parent_interactions` includes both model
+objects, specifications, source checksums, all coefficients, first stages,
+independent 2SLS/HC1 audits and a comparison with the preceding joint model.
+The HTML report is `interactions.html` in the matching reports directory.
+Father interaction: +0.57467 pp (SE 0.45742), p=0.20899; mother: -0.78364 pp
+(0.46847), p=0.09438, per schooling year per +10 pp VA. Both designs have full
+rank and all verification checks pass. Neither interaction is significant at 5%.
