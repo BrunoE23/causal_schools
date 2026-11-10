@@ -563,3 +563,18 @@ and reports; report `regressions.html`. Father coefficient 0.0290273 (SE 0.00055
 R2=0.06768; mother 0.0303327 (0.0006177), R2=0.06166. Both p<0.001. Model-implied
 geometric-mean differences per year are 2.95% and 3.08%; these are associations.
 Both regressions and all verification checks pass.
+
+### Add PAES to the parent-specific log-income models
+
+Run `27_log_income_parent_paes.R`. Add existing standardized PAES math and
+verbal linearly to each previous parent-specific model. No other parent,
+interactions or further controls enter. Use the same 463,033 enrollees and
+3,262 attended-school clusters, preserving all score scales and imputations.
+School-clustered CR1/t inference and independent covariance checks are retained.
+
+Output task `log_projected_income_parent_paes` in clean data/reports includes
+both models, sample, coefficients, audits and a same-sample comparison. HTML:
+`regressions.html`. Father coefficient 0.0065685 (SE 0.0002382), mother 0.0062665
+(0.0002534); both p<0.001. R2=0.29860/0.29792. Parent coefficients decrease
+77.37%/79.34% relative to the parent-only models; this is descriptive attenuation,
+not a causal mediation calculation. All targeted verification checks pass.
