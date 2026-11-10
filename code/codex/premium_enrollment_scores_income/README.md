@@ -292,3 +292,38 @@ is 5.94%/14.26%/0.48%/0.30%. Save region source/linkage/coverage audits,
 reference-category checks, and comparisons with the previous no-region fits
 alongside the model objects and existing diagnostics. Prior output modes remain
 available and their results are preserved.
+
+## Mother and father education: HE enrollment
+
+```powershell
+& 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/premium_enrollment_scores_income/14_build_parent_education.R
+& 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/premium_enrollment_scores_income/15_parent_education_he_ols.R
+```
+
+Keep the latest high-math (`z_math >= 1`), region-linked sample and estimate HE
+enrollment on both parents' education years jointly. Controls are the same
+nine cubic score terms, income-decile indicators (D5 reference), admission-year
+indicators, and home-region indicators. Use attended-school-clustered CR1
+inference and t(G-1) confidence intervals. These are conditional associations.
+
+Parent education is from the grade-4 SIMCE parent survey, separately recorded
+as `father_educ_years` and `mother_educ_years`, with existing `_imputed` versions.
+The project maps response categories to approximate completed years; tertiary
+categories are coarse (completed university 16, master's 18, doctorate 21).
+Preserve the existing year-specific mapping and baseline-context imputations.
+Script 14 preflights the 1.23 GB universe CSV, reads only nine linkage/education
+columns, immediately filters to the 93,423 requested IDs, and caches the join.
+All IDs match. No new imputation, reranking, or score standardization is done.
+
+The main model uses reported plus existing imputed years, excluding 19 remaining
+incomplete records: N=93,404 and 2,734 school clusters. Sensitivity checks use
+both parents reported (N=80,483) and exclude the admission-2026 all-zero
+enrollment cell (N=92,565, with reported/imputed years). Parent coefficients in
+pp per year are father -0.0009 / -0.0197 / -0.0006 and mother -0.1084 / -0.0900 /
+-0.1104, respectively. Main-model clustered SEs are 0.0466 and 0.0461 pp.
+
+All raw coefficients, covariance matrices, models, sample IDs, parent coverage,
+joint/equality tests, R2 contribution and covariance/normal-equation checks are
+under `data/clean/parent_education_he_enrollment/`. The HTML regression table is
+in `output/reports/parent_education_he_enrollment/regression_table.html`; its
+LaTeX fragment is in `output/tables/parent_education_he_enrollment/`.
