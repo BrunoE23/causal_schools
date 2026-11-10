@@ -1,5 +1,18 @@
 # Project Documentation
 
+## Continuous institution-premium VA (November 10, 2026)
+
+`code/codex/continuous_institution_va/` estimates school VA using the continuous
+institution FE from the two-way MiFuturo institution/field model. Non-enrollees
+remain NA by explicit user instruction; unsupported enrollees are also missing.
+The existing 2017-2020 baseline VA specification is retained. Official unique
+institution codes recover FEs missed by the older type/name join, without
+changing the existing binary results. Final estimation: 482,583 enrollees and
+3,256 schools in one connected high-school/middle-school component. Local
+results are in `data/clean/continuous_institution_va/`; the HTML report is in
+`output/reports/continuous_institution_va/report.html`. See decision
+`2026-11-10-continuous-institution-va.md` and the join issue in `issues.md`.
+
 ## November 2026 ten-minute presentation
 
 November 4 follow-up: sample construction and the four-outcome first-stage,

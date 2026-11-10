@@ -1,5 +1,25 @@
 # Project Issues Log
 
+### MiFuturo institution FE name/type join loses supported institutes (2026-11-10)
+
+- Status: Repaired for the new continuous-institution VA; older income/binary
+  pipelines remain unchanged pending a separate update.
+- The 92-row two-way FE table has unique official institution codes, but its
+  type label `INSITUTOS PROFESIONALES` differs from enrollment's `INSTITUTOS
+  PROFESIONALES`. The existing three-part code/type/name join consequently
+  misses actual FEs for IP DUOC UC, IP INACAP, IP AIEP and other institutions.
+- Continuous-institution VA joins on verified unique official codes, checks
+  that all formerly matched FEs are identical, and exports the join audit.
+  Institutions without an estimated FE still remain missing. Investigate the
+  older person-level predictions before interpreting missing-FE flags as
+  true lack of institutional support.
+- Among 622,809 complete-baseline exam takers, this recovers 91,458 enrollees
+  across 21 institutions. Of these, 1,535 attend four institutes with FE >0.1
+  and would change from zero to one under a repaired binary join. Existing
+  binary results have not been recomputed in this task.
+- See `decisions/2026-11-10-continuous-institution-va.md` and
+  `data/clean/continuous_institution_va/institution_join_audit.csv`.
+
 ### PAES form assignment and test-room dependence (2026-10-24)
 
 - Status: Open identification limitation, not a detected data-processing error.
