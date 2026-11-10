@@ -108,13 +108,15 @@ make_plot <- function(region_id = NULL) {
     geom_hline(yintercept = 0, color = "#AEB9C4", linewidth = .3) +
     geom_vline(xintercept = 0, color = "#C4CBD2", linetype = "dashed", linewidth = .35) +
     geom_area(data = dc, aes(x, density, fill = classification, group = classification), stat = "identity", position = "identity", alpha = .055, show.legend = FALSE) +
-    geom_line(data = dc, aes(x, density, color = classification, linetype = classification), linewidth = .72) +
+    geom_line(data = dc, aes(x, density, color = classification, linetype = classification), linewidth = .72, show.legend = TRUE) +
     geom_segment(data = rr[classification != "Never"], aes(x = va, xend = va, y = rug_y, yend = rug_yend, color = classification), linewidth = .3, alpha = .55, show.legend = FALSE) +
     geom_segment(data = rr[classification == "Never"], aes(x = va, xend = va, y = rug_y, yend = rug_yend, color = classification), linewidth = .85, show.legend = FALSE) +
     geom_text(data = ll, aes(x, y, label = label, color = classification), hjust = 0, size = 2.7, fontface = "bold", show.legend = FALSE) +
     scale_color_manual(values = colors, breaks = groups, limits = groups, drop = FALSE) +
     scale_fill_manual(values = colors, breaks = groups, limits = groups, drop = FALSE) +
     scale_linetype_manual(values = linetypes, breaks = groups, limits = groups, drop = FALSE) +
+    guides(fill = "none", linetype = "none", colour = guide_legend(
+      override.aes = list(colour = unname(colors), linetype = unname(linetypes), alpha = 1))) +
     scale_x_continuous(limits = xrange, breaks = scales::breaks_pretty(n = 5), expand = expansion(mult = 0)) +
     scale_y_continuous(limits = c(-.17 * ymax, 1.15 * ymax), breaks = scales::breaks_pretty(n = 4)(c(0, ymax)), expand = expansion(mult = 0)) +
     labs(title = title, subtitle = plot_subtitle, x = paste0(spec$title, " VA (", spec$unit, ")"),

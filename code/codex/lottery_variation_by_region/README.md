@@ -60,7 +60,7 @@ no probability school falls outside the corresponding grade-9 A1 offerings.
 This produces 16 regional PNGs, a 4-by-4 overview in PNG/SVG, and
 `output/reports/lottery_variation_by_region/va_math.html`. The additional packages
 are ggplot2 and scales. Optional arguments `field` or `institution` select those
-VA measures and write to separate destinations; the requested/default run is math.
+VA measures and write to separate destinations; the default run is math.
 
 Keep the saved classifications and school regions. Join the current 2017-2020
 EB VA file, All analysis sample, student-centered adjusted value. Give each
@@ -78,3 +78,21 @@ with separate rows for always/sometimes/never. Label all counts, including zero
 groups. Save coverage, source hashes, plotted data, density ordinates and integral
 checks under `data/clean/lottery_variation_by_region/va_math/`. Figures go under
 `output/figures/lottery_variation_by_region/math/`. Inspect final renders.
+
+The user subsequently requested all three measures. To reproduce the completed
+field/institution additions and the combined gallery:
+
+```powershell
+& 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/lottery_variation_by_region/02_plot_va.R field
+& 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/lottery_variation_by_region/02_plot_va.R institution
+& 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/lottery_variation_by_region/03_all_va_gallery.R
+```
+
+`va_all_three.html` in the report directory presents all three overviews and
+48 individual plots grouped by region. All three measures have exactly the same
+2,504 observed schools and 25 exclusions, verified by IDs and classifications.
+Field and institution VA use percentage points; their common-within-measure
+bandwidths are 0.811483 and 1.235605 pp. Axes and bandwidths are fixed across
+regions within each measure, not across outcomes with different units. The
+all-measure gallery audit and plot-specification summary are in the task's
+clean-data directory. Original math outputs are retained.

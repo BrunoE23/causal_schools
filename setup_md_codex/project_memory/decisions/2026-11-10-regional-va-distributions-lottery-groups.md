@@ -41,3 +41,19 @@ under the lottery_variation_by_region task with the math subdirectory/suffix.
 The completed overview and individual plots for La Araucania (all three curves)
 and Atacama (one always curve, one sometimes tick, no never observations) were
 visually checked. Sparse groups remain explicit and labels are not clipped.
+
+The user subsequently answered "do all 3": extend the same design to
+high_paying_field_m1 and high_inst_m1, preserving math outputs. Multiply these
+probability VAs by 100 for percentage-point axes. Retain equal school weights
+and choose a separate pooled bandwidth for each outcome (0.811483 pp for field;
+1.235605 pp for institution), common across its regions. Do not impose common
+numerical axes across outcomes with different units. Verify identical school
+IDs, region/category assignments, and observed-VA flags across all three.
+The completed figures use the same 2,504 schools with the same 25 exclusions.
+The combined gallery has three overviews and all 48 individual regional plots.
+
+Field/institution overviews and representative regional plots were visually
+reviewed. Legends explicitly retain the three color/line keys even when a
+region has no observations or only ticks for a category. Re-render math with
+the same legend correction; the underlying data, densities, and counts do not
+change. The combined gallery also verifies VA unit conversion and all images.
