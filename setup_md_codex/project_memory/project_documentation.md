@@ -1416,3 +1416,14 @@ school-year A1 coverage. Separate 2018/2019/2020 vacancy-to-grade-9 ratios
 are 43.3%/42.4%/37.1%; vacancy-to-grade-8 ratios are 61.3%/55.0%/49.2%.
 No across-year pooled ratio is reported. Annual counts and every school-year
 ratio use destination_entry_grades/vacancies_vs_enrollment in the task data.
+
+## Annual secondary-school spots in SAE
+
+`code/codex/secondary_sae_spots/` describes initial regular-round A1 secondary
+capacity and advertised vacancies for every process from 2016 through 2025.
+Compare adjacent years within common region-grade coverage; full national
+secondary coverage begins in process 2020, one year after national grade-9
+coverage. An exit from positive-capacity listings is not a verified closure.
+Outputs and source manifests use `data/clean/secondary_sae_spots/`, with an HTML
+report under `output/reports/secondary_sae_spots/`. See decision
+`decisions/2026-11-11-secondary-sae-spots.md` for definitions and rollout handling.
