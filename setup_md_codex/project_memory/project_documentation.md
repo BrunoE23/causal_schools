@@ -1436,3 +1436,12 @@ absolute changes and minimum-baseline-capacity checks are separate. This is
 descriptive with overlapping VA outcomes, not a pre-2021 forecast. Report:
 `output/reports/secondary_sae_spots/capacity_growth_vs_va_2021_2025.html`.
 See `decisions/2026-11-11-secondary-capacity-growth-va.md` for exact definitions.
+
+The enrollment follow-up (scripts 03-06) uses official April-30 classroom
+counts for 2010-2025 and fixed incumbent schools around regional first SAE
+entry (2017-2020). Math/exam high-VA enrollment growth advantages predate SAE
+and weaken afterward; field/institution evidence is weaker. School and
+region-year effects, regional clustered SEs, and multiple sensitivities are
+descriptive because VA is retrospective. See
+`decisions/2026-11-12-secondary-enrollment-trends-va.md` and report
+`output/reports/secondary_sae_spots/enrollment_trends_before_after_sae_va.html`.

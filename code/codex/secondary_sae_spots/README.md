@@ -106,3 +106,64 @@ and later outcomes that overlap the capacity period, so it is not a pre-2021
 information set or a causal measure of schools' capacity response to quality.
 Independent Python source joins reproduce all 40 Ns, Pearson correlations,
 and tied-rank correlations to 1e-12.
+
+## Enrollment trends before and after SAE
+
+The 2026-11-12 follow-up uses actual April-30 enrollment to check whether
+growth differences by VA predate SAE and change at regional rollout.
+
+```powershell
+& code/codex/secondary_sae_spots/03_fetch_enrollment.ps1
+& 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/secondary_sae_spots/04_build_enrollment.R
+& 'C:/Program Files/R/R-4.5.1/bin/Rscript.exe' code/codex/secondary_sae_spots/05_analyze_enrollment_trends.R
+& 'C:/Users/brunem/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe' code/codex/secondary_sae_spots/06_validate_enrollment.py
+```
+
+The downloader retrieves official classroom aggregates for 2010-2025, about
+1.5-2 MB compressed per year, with source PDFs and hashes. It never reads the
+large student-level Rendimiento files or changes existing raw data. The R
+builder sums regular youth-secondary teaching codes 310/410/510/610/710/810/910
+in functioning schools. Combined classes use grade-specific counts. The 2014
+missing sex details concern preschool/primary rows; secondary rows reconcile.
+The gender-count reconciliation includes the new N_ALU_NB field from 2024.
+
+The population comprises 2,621 eventually SAE-listed secondary schools;
+2,419 have positive enrollment in all three years before their regional SAE
+entry cohort. VA matches 2,398 schools for math/field/institution and 2,404 for
+exam taking. Fixed top-quartile VA groups use the existing retrospective EB
+estimates. Subsequent missing regular-secondary enrollment records enter as
+zero reported enrollment, not verified legal closures. Post-baseline entrants
+are excluded; this population cannot describe every pre-SAE school closure.
+
+Normalize each school to 100 at its mean enrollment in event years -3,-2,-1.
+Entry year is 2017 in Magallanes, 2018 in four regions, 2019 in the remaining
+non-Metropolitana regions, and 2020 in Metropolitana. Nuble joins historical
+Biobio. Use the common event window -5 through +5, equal school weights,
+school and region-by-calendar-year effects, and separate high-VA differential
+pre-slope, level shift and slope change. Cluster by 15 regions with t(14)
+confidence intervals; all post-slope SEs use the actual covariance matrix.
+Grade-9 enrollment is a separate admissions-margin outcome. Sensitivities
+exclude 2020-2021, require at least 100 baseline secondary students, weight
+by baseline enrollment, use continuous VA, restrict to 2021 SAE listings,
+or require positive enrollment in all five pre-SAE years. Group thresholds
+remain fixed across sensitivities. These are descriptive comparisons, not
+SAE effects; VA uses overlapping 2017-2020 grade-8 cohorts and later outcomes.
+
+The analysis script launches one short R worker per VA measure to limit peak
+memory. A specific outcome argument reruns one worker; argument `report`
+rebuilds tables/figures from the saved worker estimates. Disabling automatic
+data.table indices and removing staging objects avoids unnecessary memory use.
+
+Outputs are in `data/clean/secondary_sae_spots/enrollment_trends/`: school-year
+counts, source audit/hashes, cohort and VA panel, event and calendar group
+means, 224 regression contrasts from 56 models, event-study estimates, and
+compact actual fixest objects in `models/`. The HTML report is
+`output/reports/secondary_sae_spots/enrollment_trends_before_after_sae_va.html`;
+three PNGs are in the corresponding figures directory.
+
+Python independently re-aggregates every school's grade counts in all 16
+sources (47,317 school-years), then uses the exact balanced-within-region
+FWL transformation and regional cluster sandwich to reproduce all 224
+coefficients/SEs to 1e-8 (observed maximum errors 1.7e-11 and 2.5e-12).
+See `independent_validation.json` and project-memory decision
+`2026-11-12-secondary-enrollment-trends-va.md`.
