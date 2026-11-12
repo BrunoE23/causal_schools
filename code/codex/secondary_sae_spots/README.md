@@ -69,3 +69,40 @@ and vacancies, vacancies not exceeding capacity, complete geography, and exact
 school and seat accounting. A separate Python reconstruction of the raw A1
 files verified all annual totals and national 2021-2025 transition counts.
 See project-memory decision `2026-11-11-secondary-sae-spots.md`.
+
+## Capacity growth and VA, 2021-2025
+
+Run `02_correlate_va.R` after the annual capacity constructor. It reads only
+the small saved school-year panel and the current Box
+`data/clean/empirical_bayes_school_va/cohorts_2017_2020/eb_school_rbd_observational_values.csv`.
+It does not rebuild or change VA estimates.
+
+The primary outcomes are the four existing school-preference VA dimensions:
+math, exam taking, high-premium field, and high-premium institution. Four
+supplementary outcomes in the same source (language, enrollment, aid application,
+and log predicted program income) are reported separately. All-sample,
+student-centered EB adjusted observational VA is the main measure; unshrunk
+VA is a sensitivity. Each school receives equal weight in the correlations.
+
+Main growth is 100*(C_2025/C_2021-1), starting with all 2,511 RBDs with positive
+2021 secondary capacity. The 24 schools with zero/no 2025 secondary listing
+enter as -100%; new listings with no positive baseline cannot define growth.
+Alternative measures are absolute seat change, Spearman rank correlation,
+log growth among positive-capacity continuers, and percentage growth at schools
+with at least 100 baseline seats. No matched schools are trimmed. The largest
+two raw percentage growth cases have no matched VA and thus do not influence
+the correlations. Outcome-specific unmatched lists are exported.
+
+Outputs: `data/clean/secondary_sae_spots/va_correlations/` (endpoint panel,
+matched long data, eight-outcome main table, 40 sensitivity rows, annual
+2021-to-2022 through 2024-to-2025 correlations, coverage, and manifests).
+The report is `output/reports/secondary_sae_spots/capacity_growth_vs_va_2021_2025.html`;
+the plot is under the corresponding figures folder. Four plot panels show all
+continuers, log growth, 20 equal-count VA-bin means, and an OLS line.
+
+The correlations are descriptive, without controls, weights, p-values, or
+measurement-error correction. VA is estimated using 2017-2020 grade-8 cohorts
+and later outcomes that overlap the capacity period, so it is not a pre-2021
+information set or a causal measure of schools' capacity response to quality.
+Independent Python source joins reproduce all 40 Ns, Pearson correlations,
+and tied-rank correlations to 1e-12.

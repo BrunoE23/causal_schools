@@ -1427,3 +1427,12 @@ coverage. An exit from positive-capacity listings is not a verified closure.
 Outputs and source manifests use `data/clean/secondary_sae_spots/`, with an HTML
 report under `output/reports/secondary_sae_spots/`. See decision
 `decisions/2026-11-11-secondary-sae-spots.md` for definitions and rollout handling.
+
+The `02_correlate_va.R` follow-up matches 2021-to-2025 capacity growth to the
+current 2017-2020 cohort EB school VA. Equal-school Pearson correlations are
+small (math .053, exam .020, high-premium field .002, institution .022), with
+99.7-99.8% coverage. Main growth retains 24 endpoint exits; logs, ranks,
+absolute changes and minimum-baseline-capacity checks are separate. This is
+descriptive with overlapping VA outcomes, not a pre-2021 forecast. Report:
+`output/reports/secondary_sae_spots/capacity_growth_vs_va_2021_2025.html`.
+See `decisions/2026-11-11-secondary-capacity-growth-va.md` for exact definitions.
