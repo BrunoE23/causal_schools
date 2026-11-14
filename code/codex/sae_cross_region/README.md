@@ -33,3 +33,17 @@ before paper-roster restrictions: 3,007 distinct people out of 302,589 (0.9938%)
 
 Every submitted destination has a same-year directory region. Combining
 Nuble with Biobio reduces the paper-sample count from 2,935 to 2,737.
+
+## Assignment risk follow-up
+
+Run `code/codex/sae_cross_region/02_count_at_risk.R` to intersect cross-region
+choices with the paper roster's existing `any_risk` flag. This flag is
+`max(prob) < 1` over simulated program/unmatched outcomes, as constructed in
+`code/codex/empirical_bayes_school_va/18_expected_va_risk_by_continuation.R`.
+It is not redefined at region or RBD level. The script uses local cached
+submitted choices and same-year directory geography, reproduces all three
+previous annual multi-region counts, and verifies the total at risk is 162,633.
+
+Of 2,935 multi-region paper applicants, 1,295 (44.1227%) are at risk: 357 in
+2018, 534 in 2019, and 404 in 2020. These are 0.7963% of all 162,633 at-risk
+paper applicants. Saved in `paper_multi_region_assignment_risk.csv`.

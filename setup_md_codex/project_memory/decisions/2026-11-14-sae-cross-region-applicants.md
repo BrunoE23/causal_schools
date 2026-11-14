@@ -28,3 +28,11 @@ multi-region list (0.4703%); the annual sum is 5,154 of 1,212,475 applicant-year
 (0.4251%). In the paper roster, 2,935 of 294,198 students (0.9976%) submitted
 multi-region lists. All destination-school region matches are complete and
 annual grade-9 denominators reproduce the existing all-grade tabulations.
+
+Follow-up: "at risk" uses the paper roster's existing `any_risk`, defined by
+`max(prob) < 1` over simulated program/unmatched outcomes. Preserve this
+definition instead of aggregating to school or region. Among the 2,935
+multi-region paper applicants, 1,295 (44.1227%) have risk; these represent
+0.7963% of the 162,633 at-risk paper applicants. Code:
+`code/codex/sae_cross_region/02_count_at_risk.R`. Annual submitted-choice
+counts and the pooled risk denominator reproduce the existing saved results.
