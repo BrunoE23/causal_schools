@@ -1,0 +1,32 @@
+\begin{table}[!htbp]\centering
+\caption{Four premium-field groups: cubic-score OLS}
+\label{tab:premium-cubic-income-fields}
+\small
+\begin{tabular}{lrrrr}\hline\hline
+ & Science & Law & Engineering & Medicine+ \\ \hline
+Math: average derivative (per SD) & 3.34 (0.07) & -2.32 (0.04) & 9.37 (0.10) & 2.36 (0.07) \\
+Verbal: average derivative (per SD) & -0.68 (0.05) & 4.36 (0.06) & -6.15 (0.11) & 3.84 (0.07) \\
+Income decile 1 & Reference & Reference & Reference & Reference \\
+Income decile 2 vs. 1 & 0.28 (0.16) & 0.01 (0.12) & -0.14 (0.26) & -0.01 (0.18) \\
+Income decile 3 vs. 1 & 0.95 (0.16) & -0.09 (0.11) & 0.32 (0.27) & 0.00 (0.18) \\
+Income decile 4 vs. 1 & 0.97 (0.17) & 0.01 (0.11) & 0.48 (0.28) & 0.17 (0.18) \\
+Income decile 5 vs. 1 & 1.21 (0.16) & 0.08 (0.12) & 0.05 (0.29) & 0.53 (0.18) \\
+Income decile 6 vs. 1 & 1.32 (0.16) & 0.05 (0.12) & 0.12 (0.30) & 0.59 (0.19) \\
+Income decile 7 vs. 1 & 1.34 (0.17) & 0.14 (0.12) & -0.03 (0.31) & 0.55 (0.19) \\
+Income decile 8 vs. 1 & 1.14 (0.17) & 0.35 (0.12) & -0.39 (0.33) & 0.84 (0.20) \\
+Income decile 9 vs. 1 & 0.53 (0.17) & 1.10 (0.13) & -0.88 (0.33) & 0.52 (0.22) \\
+Income decile 10 vs. 1 & -2.60 (0.22) & 2.86 (0.17) & -4.79 (0.41) & -2.76 (0.31) \\
+\hline
+Outcome mean (\%) & 7.42 & 4.34 & 17.58 & 9.59 \\
+Full R-squared & 0.0164 & 0.0347 & 0.0440 & 0.0422 \\
+R-squared without income & 0.0145 & 0.0330 & 0.0426 & 0.0410 \\
+Income share of explained variation (\%) & 11.4 & 4.8 & 3.2 & 2.8 \\
+Income indicators: joint clustered p-value & $<$0.001 & $<$0.001 & $<$0.001 & $<$0.001 \\
+Observations & 565,040 & 565,040 & 565,040 & 565,040 \\
+School clusters & 3,372 & 3,372 & 3,372 & 3,372 \\
+Admission-year indicators & Yes & Yes & Yes & Yes \\
+\hline\hline\end{tabular}
+\begin{minipage}{0.98\textwidth}\footnotesize
+\textit{Notes:} Income-decile coefficients and score average derivatives are in percentage points; school-clustered CR1 SEs are in parentheses. Score controls include $M,V,M^2,V^2,MV,M^3,V^3,M^2V,MV^2$. Income decile 1 is the reference. Admission-year effects are included in both full and reduced models. Income share is $(R^2_{full}-R^2_{without\ income})/R^2_{full}$, expressed as a percentage; it measures incremental explanatory power after scores and year, not a causal contribution. The original OLS sample, including 5,105 admission-2026 records and all observed non-enrollees, is retained. Engineering includes manufacturing/construction; Medicine+ retains the six-program health-field definition.
+\end{minipage}
+\end{table}

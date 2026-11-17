@@ -182,3 +182,100 @@ for the canonical high-premium-field binary.
 `mifuturo_person_level_income_outcomes_stata_va.csv` is a thin export containing
 only these Stata-safe variables plus `MRUN`, so Stata VA/EB does not need to
 import the full wide person-level file.
+
+## Unadjusted projected-income gaps by gender
+
+`06_income_by_gender.R` reads only eight columns from the paper master
+`univ_gr8_df.csv`. Use the broad panel of grade-8 cohorts 2017-2020,
+ages 12-16 with a valid attended high-school RBD: 931,547 students.
+All have the existing full projected-income outcome; one unknown-gender
+record is excluded from gender comparisons. There are no exam-taking or
+complete-control restrictions in this descriptive exercise.
+
+Report mean natural-log projected monthly income and the unadjusted
+women-minus-men log gap for (1) all 931,546 students, preserving the
+existing CLP 553,553 value for non-enrollees, and (2) the 625,616 HE
+enrollees. Enrollees retain the same projected-income values in both
+comparisons. Income is `log_program_income_full_clp_m1` at first
+observed enrollment, with existing hierarchical program-income predictions.
+Gender codes are GEN_ALU=1 (men) and 2 (women).
+
+The implied percentage difference is `100 * (exp(log_gap) - 1)`, a
+comparison of geometric means. Raw log gaps can also be reproduced by
+OLS on a female indicator; saved confidence intervals use HC1 robust SEs.
+These are projected program-income differences, not observed wage gaps
+within the same program. First enrollment is observed in 2022-2025.
+
+Run from the repository root with Rscript. Outputs are under
+`data/clean/projected_income_gender/`, with the comparison table under
+`output/tables/projected_income_gender/` and report
+`output/reports/projected_income_gender/projected_income_by_gender_unadjusted.html`.
+The current log gaps are -0.02676 with the non-enrollee imputation and
+-0.14422 among enrollees, corresponding to -2.64% and -13.43%.
+
+## Gender gaps controlling for entrance-exam scores
+
+Run `07_income_gender_score_controls.R` after 06 to join only `mrun`,
+`psu_year`, `math_max` and `leng_max` from the master to the cached income
+sample. Require positive observed math and verbal entrance-exam scores
+and an observed admission year. Missing tests are not zero-imputed.
+Standardize each score within admission year using all complete-score
+students in the broad panel. Use unchanged normalization in both samples.
+
+For each of the two income samples, estimate OLS on a female indicator,
+then OLS adding linear math and verbal scores plus admission-year fixed
+effects. Use exactly the same complete-score students in those two
+regressions and HC1 heteroskedasticity-robust covariance. The comparison
+table also retains the original full-sample raw gap, so score-related
+sample loss is visible separately from score adjustment. All original
+income values, samples and raw estimates are preserved and hash-checked.
+
+Both scores are observed for 643,236 of 931,546 students (69.1%), including
+528,005 of 625,616 enrollees (84.4%). Within those matched samples, raw
+women-minus-men log gaps are -0.11217/-0.14220; score-adjusted coefficients
+are -0.07138/-0.09896, respectively. Adjusted relative geometric-mean gaps
+are -6.89% and -9.42%.
+
+Models, covariance matrices, normalization and sample coverage are in
+`data/clean/projected_income_gender/score_controls/`. The active report is
+`output/reports/projected_income_gender/projected_income_by_gender.html`,
+with companion `projected_income_by_gender_score_controls.csv` in the
+task's table folder. Script 06 writes the separate unadjusted report so
+rerunning it does not replace the current score-controlled comparison.
+
+## Parental-income quintiles, controlling for scores
+
+`08_income_quintiles_score_controls.R` reuses the scored income sample and
+links the master's existing `income_decile_imputed`. Combine deciles 1/2,
+3/4, 5/6, 7/8 and 9/10 into Q1-Q5, without re-ranking the selected sample.
+Drop missing baseline income deciles. Regress projected log income on
+quintile indicators (Q1 reference), linear entrance-exam math/verbal scores
+and admission-year fixed effects, separately with the existing non-enrollee
+income assignment and among HE enrollees. No gender control is added.
+Retain HC1 covariance and raw regressions on identical samples.
+The report, table and derived data use the task name
+`projected_income_quintiles`; prior gender results remain unchanged.
+
+## High-premium outcomes by parental-income quintile
+
+`09_high_premium_income_quintiles.R` uses that same scored/quintile cache
+and links the master's existing `high_paying_field_m1` and `high_inst_m1`.
+Fit logistic models on Q1-Q5 indicators, linear math/verbal scores and
+admission-year fixed effects, separately for all scored students and HE
+enrollees. Non-enrollees have the existing binary zeros, not a monetary
+income imputation. Use common observed outcomes and year support across
+the two outcomes within each sample; omit admission-year cells without
+variation in either outcome to avoid separated year effects.
+
+Report average discrete predicted-probability differences relative to Q1,
+evaluated over each model's observed score/year distribution. HC1 logit
+score covariance and the delta method supply standard errors. Model
+convergence, score equations and numerical contrast derivatives are checked.
+Code saves compact fitted-model summaries, covariance matrices and data
+under `data/clean/high_premium_income_quintiles/`. Table/report use the same
+task name, with report `high_premium_income_quintiles.html`.
+The current all-student sample has 559,934 students after omitting 5,105
+admission-2026 records whose outcomes are both uniformly zero. The HE-only
+sample retains 467,323 students. Q5-minus-Q1 adjusted probability gaps are
+-2.46/+15.86 pp for field/institution overall and -2.74/+19.22 pp among
+HE enrollees.

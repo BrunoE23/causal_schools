@@ -1,5 +1,37 @@
 # Empirical-Bayes School Value Added
 
+## Main tables by origin continuation (October 12, 2026)
+
+Run `17_run_main_by_continuation.R`, `18_expected_va_risk_by_continuation.R`,
+then `19_report_main_by_continuation.R` from the repository root. The last
+script can rerender the outputs without refitting.
+
+This follow-up splits the paper's Tables 4 and 5 into school-ending and
+voluntary applicant rows, retaining the seven outcomes, original school VA,
+expected-VA controls, coding, sample restrictions and heteroskedasticity-robust
+SEs. Both IV groups require assignment risk. The existing Table 2 applicant
+groups provide denominators for risk rates and the primary expected-VA means;
+the report also shows expected VA in the exact outcome-specific IV samples.
+
+The seven-outcome regression input is the paper snapshot at
+`output/intermediate/empirical_bayes_school_va/va_2017_2020__sae_2018_2020/scalar_iv_regression_df.csv`.
+The older Box regression export lacks the higher-ed-enrollment VA columns.
+All seven pooled regressions are checked against the paper before estimating
+the subgroups. The existing `sae_participation/admin_panel.rds` supplies the
+origin-school continuation classification. Expected VA for all applicants is
+reconstructed from the original EB school values and long 2018-2020 DA
+probabilities and verified against every cached expected-VA field.
+
+Derived data, models, coverage and verification are in
+`data/clean/empirical_bayes_school_va/va_2017_2020__sae_2018_2020/by_continuation/`.
+The HTML/Markdown report is
+`output/reports/empirical_bayes_school_va/main_by_continuation.html`.
+Four new table fragments in the original cohort-pair table directory are
+`first_stage_by_continuation.tex`, `pass_through_by_continuation.tex`,
+`expected_va_by_continuation.tex`, and `assignment_risk_by_continuation.tex`.
+The source manuscript and existing tables remain as they were.
+See project-memory decision `2026-10-12-main-iv-by-continuation.md`.
+
 This folder implements an Empirical-Bayes robustness path for the scalar school-value IV design.
 
 The goal is to shrink the stage-1 observational school value-added estimates before using them as the scalar school-quality index in the expected-VA IV.
@@ -358,3 +390,14 @@ applicant file and merged by `mrun` and SAE process. The robustness uses the
 same outcome-specific samples as the main specification, additionally requiring
 observed priority status, and writes separate $\psi^{EB}$ and $\kappa^{EB}$
 tables without replacing the main results.
+
+### TP attendance by continuation group
+
+Run `Rscript code/codex/empirical_bayes_school_va/20_tp_attendance_by_continuation.R`
+from the repository root. It uses the cached Table 2 applicant roster and matches
+`most_time_RBD` to the paper's 2024 directory-based TP school flag (excluding
+artistic schools). Mixed schools offering TP are included; this does not measure
+individual curricular-track enrollment. The CSV in the `by_continuation` clean
+data directory reports counts, coverage, classified-school shares, and bounds
+allowing unclassified schools to be either TP or non-TP, for all applicants and
+the assignment-risk subset separately.

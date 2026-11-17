@@ -1,0 +1,39 @@
+\begin{table}[!htbp]
+\centering
+\caption{School-ranking preferences by priority and continuation status: home-comuna centroids}
+\label{tab:school-preference-groups-municipality}
+\small
+\setlength{\tabcolsep}{4pt}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lcccc}
+\toprule
+ & \shortstack{School ends\\Non-prioritario} & \shortstack{School ends\\Prioritario} & \shortstack{Voluntary\\Non-prioritario} & \shortstack{Voluntary\\Prioritario} \\
+\midrule
+Math VA & 0.0539 (0.0033) & 0.0350 (0.0031) & 0.0671 (0.0072) & 0.0542 (0.0095) \\
+Exam-taking VA & 0.1706 (0.0070) & 0.1414 (0.0061) & 0.1005 (0.0172) & 0.1110 (0.0196) \\
+High-premium-field VA & 0.0117 (0.0049) & 0.0065 (0.0047) & -0.0019 (0.0111) & 0.0240 (0.0143) \\
+High-premium-institution VA & -0.0277 (0.0050) & -0.0326 (0.0047) & 0.0350 (0.0120) & 0.0362 (0.0144) \\
+Mixed HC/TP school & 0.2952 (0.0089) & 0.3820 (0.0072) & 0.2404 (0.0231) & 0.2652 (0.0248) \\
+TP-only school & 0.2920 (0.0170) & 0.4007 (0.0120) & 0.2711 (0.0530) & 0.4285 (0.0448) \\
+Mixed HC/TP x Math VA & 0.0062 (0.0091) & 0.0117 (0.0071) & 0.0032 (0.0236) & 0.0195 (0.0246) \\
+Mixed HC/TP x Exam-taking VA & -0.0560 (0.0088) & -0.0908 (0.0072) & 0.0004 (0.0233) & -0.0088 (0.0245) \\
+Mixed HC/TP x High-premium-field VA & 0.0466 (0.0060) & 0.0531 (0.0054) & 0.0770 (0.0145) & 0.0425 (0.0170) \\
+Mixed HC/TP x High-premium-institution VA & -0.0227 (0.0060) & -0.0562 (0.0049) & -0.0279 (0.0183) & -0.0359 (0.0195) \\
+TP only x Math VA & -0.0525 (0.0169) & -0.0614 (0.0110) & -0.0417 (0.0567) & -0.0634 (0.0432) \\
+TP only x Exam-taking VA & -0.1162 (0.0111) & -0.1200 (0.0083) & -0.0448 (0.0325) & -0.0375 (0.0288) \\
+TP only x High-premium-field VA & 0.0543 (0.0065) & 0.0484 (0.0056) & 0.0691 (0.0168) & 0.0235 (0.0178) \\
+TP only x High-premium-institution VA & 0.0149 (0.0065) & -0.0138 (0.0053) & 0.0145 (0.0223) & -0.0293 (0.0220) \\
+log(1 + distance in km) & -0.0730 (0.0097) & -0.0835 (0.0078) & 0.0169 (0.0253) & 0.0137 (0.0287) \\
+\midrule
+Applicants & 87,407 & 155,028 & 15,363 & 13,799 \\
+Student-school pairs & 338,722 & 525,303 & 57,911 & 46,638 \\
+Destination schools & 2,484 & 2,497 & 2,261 & 2,304 \\
+Log likelihood & -292,924.0519 & -395,320.0457 & -49,695.6454 & -35,268.5212 \\
+\bottomrule
+\end{tabular}
+}
+\par\smallskip
+\begin{minipage}{0.98\linewidth}\footnotesize
+\textit{Notes:} Separate joint rank-ordered logits of complete submitted school lists. Student-clustered standard errors are in parentheses. All four VA measures, mixed HC/TP and TP-only school indicators, all eight VA-by-school-type interactions, and distance enter jointly. The omitted non-TP category includes HC-only, artistic-only, and other schools. Baseline VA coefficients apply to non-TP schools. Add the relevant interaction to obtain each other type's total VA slope. Type-indicator coefficients describe differences only when all four standardized VAs equal zero. VA retains the pooled model's equal-school normalization across 2,501 destination schools; it is not restandardized by group. School ends denotes an origin school without an SAE offering above grade 8; voluntary denotes an origin offering grade 9. These are application categories and do not require an eventual school move. Unresolved origins are excluded. School-type indicators use regular offerings in the 2024 Directorio without an active-school restriction and remain binary. Distance is straight-line kilometers and enters as $\log(1+d)$. The two distance specifications use identical samples within each group. Any missing regressor excludes the entire ranking; singleton lists provide no ordering information. Inference conditions on the existing EB VAs. Coefficients describe conditional ordering associations. Cross-group coefficient comparisons can also reflect differences in the unobserved utility-error scale.
+\end{minipage}
+\end{table}

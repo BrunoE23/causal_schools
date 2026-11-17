@@ -1,0 +1,34 @@
+\begin{table}[!htbp]\centering
+\caption{HE enrollment and projected income: math at least one SD above the mean}
+\label{tab:high-math-income-enrollment-cubic-income}
+\small
+\begin{tabular}{lrr}\hline\hline
+ & \shortstack{Log projected income\\HE enrollees} & \shortstack{HE enrollment\\High-math students} \\ \hline
+Math: average derivative (per SD) & 0.181 (0.004) & 1.73 (0.26) \\
+Verbal: average derivative (per SD) & 0.032 (0.002) & 1.54 (0.14) \\
+Income decile 1 & Reference & Reference \\
+Income decile 2 vs. 1 & 0.010 (0.010) & -0.03 (0.66) \\
+Income decile 3 vs. 1 & -0.005 (0.009) & -1.42 (0.65) \\
+Income decile 4 vs. 1 & -0.004 (0.009) & -0.32 (0.64) \\
+Income decile 5 vs. 1 & 0.000 (0.008) & -1.03 (0.63) \\
+Income decile 6 vs. 1 & 0.007 (0.008) & -1.58 (0.61) \\
+Income decile 7 vs. 1 & 0.014 (0.008) & -2.32 (0.60) \\
+Income decile 8 vs. 1 & 0.019 (0.008) & -2.46 (0.56) \\
+Income decile 9 vs. 1 & 0.021 (0.008) & -3.14 (0.55) \\
+Income decile 10 vs. 1 & 0.011 (0.008) & -2.25 (0.55) \\
+\hline
+Coefficient units & Log points & Percentage points \\
+Outcome mean & 14.517 log CLP/month & 90.88\% enrolled \\
+Full R-squared & 0.1272 & 0.1968 \\
+R-squared without family income & 0.1266 & 0.1960 \\
+Family income gain in R-squared & 0.00053 & 0.00076 \\
+Family income share of explained variation (\%) & 0.42 & 0.38 \\
+Family income indicators: joint clustered p-value & $<$0.001 & $<$0.001 \\
+Observations & 84,901 & 93,423 \\
+School clusters & 2,689 & 2,735 \\
+Admission-year indicators & Yes & Yes \\
+\hline\hline\end{tabular}
+\begin{minipage}{0.98\textwidth}\footnotesize
+\textit{Notes:} Projected-income effects are in natural-log points; enrollment effects are in percentage points. School-clustered CR1 SEs are in parentheses. Score rows are average local derivatives per original score SD. Both models contain the full total-degree-three math/verbal polynomial, nine income-decile indicators, and admission-year indicators. Decile 1 is the reference. Income share is $(R^2_{full}-R^2_{without\ family\ income})/R^2_{full}$, as a percentage. It is an incremental descriptive contribution conditional on scores/year. Projected income uses only HE enrollees, all of whom have valid income. Both samples require original $z_{math} \geq 1$, without restandardizing scores or re-ranking income. The 840 admission-2026 students remain only in the enrollment model.
+\end{minipage}
+\end{table}

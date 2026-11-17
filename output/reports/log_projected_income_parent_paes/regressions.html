@@ -1,0 +1,27 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Log projected income: parent education and PAES</title>
+<style>body{font:16px/1.5 system-ui;color:#233143;max-width:1200px;margin:30px auto;padding:0 24px}table{border-collapse:collapse;width:100%;margin:20px 0}th,td{padding:10px;border-bottom:1px solid #ddd;text-align:right}th:first-child{text-align:left}</style></head><body>
+<h1>Log projected income: each parent plus PAES scores</h1>
+<p>Two separate OLS regressions: natural log of projected monthly CLP income on an intercept, selected parent schooling years, standardized entrance math and verbal. Both scores enter linearly in their existing within-admission-year SD units. The other parent, VA and further baseline controls are omitted.</p>
+<p>Identical sample to the parent-only regressions: 463,033 HE enrollees and 3262 attended-school clusters. Coefficients in natural-log points; school-clustered CR1 SEs in parentheses and t(G-1) inference.</p>
+<table><tr><th></th><th>Father + PAES</th><th>Mother + PAES</th></tr>
+<tr><th>Selected parent education (+1 year)</th><td>0.00657 (0.00024)</td><td>0.00627 (0.00025)</td></tr>
+<tr><th>PAES math (+1 SD)</th><td>0.13967 (0.00092)</td><td>0.14058 (0.00092)</td></tr>
+<tr><th>PAES verbal (+1 SD)</th><td>0.05286 (0.00089)</td><td>0.05323 (0.00088)</td></tr>
+<tr><th>R2</th><td>0.2986</td><td>0.2979</td></tr>
+</table>
+<h2>Parent coefficients before and after adding PAES</h2><table><tr><th>Parent</th><th>Parent only (SE)</th><th>With PAES (SE)</th><th>Coefficient reduction</th><th>Previous R2</th><th>New R2</th></tr>
+<tr><th>father</th><td>0.02903 (0.00056)</td><td>0.00657 (0.00024)</td><td>77.4%</td><td>0.0677</td><td>0.2986</td></tr>
+<tr><th>mother</th><td>0.03033 (0.00062)</td><td>0.00627 (0.00025)</td><td>79.3%</td><td>0.0617</td><td>0.2979</td></tr>
+</table>
+<p>The sample retains the earlier complete-baseline and VA-coverage restrictions for comparability, although those variables are not included here. Preserve all income projections, parent imputations and original score normalization; no new exclusions. These are conditional associations in projected program/institution income, not realized earnings or causal parent-education returns. Coefficient attenuation is not a causal mediation decomposition.</p>
+<p>Checks passed: common source hash and sample size, positive income and natural-log identity, finite original scores, exactly four parameters, OLS normal equations, independent school-clustered covariance, and nested-model R2.</p>
+<details><summary>All coefficients</summary><table><tr><th>Model</th><th>Term</th><th>Estimate</th><th>SE</th><th>p-value</th></tr>
+<tr><td>father</td><td>(Intercept)</td><td>14.098834</td><td>0.003464</td><td>&lt;0.001</td></tr>
+<tr><td>father</td><td>father_years</td><td>0.006569</td><td>0.000238</td><td>&lt;0.001</td></tr>
+<tr><td>father</td><td>z_math</td><td>0.139670</td><td>0.000918</td><td>&lt;0.001</td></tr>
+<tr><td>father</td><td>z_verbal</td><td>0.052859</td><td>0.000887</td><td>&lt;0.001</td></tr>
+<tr><td>mother</td><td>(Intercept)</td><td>14.102106</td><td>0.003773</td><td>&lt;0.001</td></tr>
+<tr><td>mother</td><td>mother_years</td><td>0.006266</td><td>0.000253</td><td>&lt;0.001</td></tr>
+<tr><td>mother</td><td>z_math</td><td>0.140583</td><td>0.000917</td><td>&lt;0.001</td></tr>
+<tr><td>mother</td><td>z_verbal</td><td>0.053234</td><td>0.000883</td><td>&lt;0.001</td></tr>
+</table></details></body></html>

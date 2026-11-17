@@ -1,5 +1,80 @@
 # Project Issues Log
 
+### MiFuturo institution FE name/type join loses supported institutes (2026-11-10)
+
+- Status: Repaired for the new continuous-institution VA; older income/binary
+  pipelines remain unchanged pending a separate update.
+- The 92-row two-way FE table has unique official institution codes, but its
+  type label `INSITUTOS PROFESIONALES` differs from enrollment's `INSTITUTOS
+  PROFESIONALES`. The existing three-part code/type/name join consequently
+  misses actual FEs for IP DUOC UC, IP INACAP, IP AIEP and other institutions.
+- Continuous-institution VA joins on verified unique official codes, checks
+  that all formerly matched FEs are identical, and exports the join audit.
+  Institutions without an estimated FE still remain missing. Investigate the
+  older person-level predictions before interpreting missing-FE flags as
+  true lack of institutional support.
+- Among 622,809 complete-baseline exam takers, this recovers 91,458 enrollees
+  across 21 institutions. Of these, 1,535 attend four institutes with FE >0.1
+  and would change from zero to one under a repaired binary join. Existing
+  binary results have not been recomputed in this task.
+- See `decisions/2026-11-10-continuous-institution-va.md` and
+  `data/clean/continuous_institution_va/institution_join_audit.csv`.
+
+### PAES form assignment and test-room dependence (2026-10-24)
+
+- Status: Open identification limitation, not a detected data-processing error.
+- The form-score diagnostic finds small differences after observed controls and
+  attended-school effects, with no corrected baseline balance rejection. However,
+  available raw files lack verified test-center/room identifiers, and the sources
+  inspected do not establish randomized assignment of forms.
+- Treat results as conditional associations. Attended-school clustering need not
+  capture cross-school dependence within a test room. Do not treat forms as a
+  validated instrument without investigating assignment and exclusion further.
+- `LOCAL_EDUCACIONAL` describes educational-establishment metadata; it was not
+  substituted for a test-center identifier.
+- See `decisions/2026-10-24-paes-test-form-advantages.md` and
+  `output/reports/paes_test_forms/report.html`.
+
+### Applicant parent-education shift and missing baseline coverage (2026-10-22)
+
+- In the 86 top-application schools observed in all three SAE cohorts, equal-school
+  mean reported parent education is 11.113 in 2018, 10.554 in 2019 and 10.638 in
+  2020. The median school declines .437 years between endpoints. Both-parent and
+  existing-imputation variants also decline. This does not establish why.
+- Parent coverage among top-100 applicant-school pairs is 78.8%/78.8%/75.3%; both
+  SIMCE scores are observed for 84.4%/84.0%/80.9%. Baseline questionnaires mostly
+  correspond to 2014/2015/2016 and have different category layouts, handled by the
+  existing crosswalk. Survey comparability and selective missingness remain to be
+  audited before attributing the full parent shift to population composition.
+- Cohort-mean OLS uses just three time observations for 86 schools and only two
+  for 14. Independent-applicant tests are much more powerful but assume no common
+  cohort or origin-school dependence. Do not conflate their conclusions.
+- The earlier top-100 script includes automatic continuity entries. This task
+  ranks genuine C1 choices, retaining 99 previous top schools and replacing RBD 52
+  with RBD 4977. The previous ranking and its dependent analyses remain unchanged.
+- See `decisions/2026-10-22-applicant-composition-trends.md` and task diagnostics.
+- Probability-weighted follow-up: nine populated school-cohort cells have zero
+  simulated admission mass, and another parent-education cell has zero observed
+  mass. Three schools (20266, 9071, 31103) retain only one cohort. Some remaining
+  cells have effective N near one. Retain/flag them for the user-authorized proxy;
+  do not interpret absence in finite simulation output as proof of a structural
+  zero probability, or compare rejection counts without reporting eligibility.
+  See `decisions/2026-10-22-probability-weighted-applicant-composition.md`.
+
+### Existing comuna-center lookup mislabels code 1401
+
+- Noted 2026-10-14 while implementing school-preference distances. The source
+  comuna_info.RDS and raw boundary DBF label code 1401 TOCOPILLA, although its
+  numeric code, province/region and center coordinates identify Pozo Almonte.
+  Actual Tocopilla is separately present at code 2301.
+- Status: source name-label error remains; raw and existing clean files are
+  unchanged. The new school_preference_va pipeline joins on unique numeric
+  codes and uses residence names from universe_controls.csv, preserving all
+  294198 paper applicants. No distance is joined using the erroneous names.
+- Other analyses joining comuna_info by name may need a separate audit;
+  this task does not alter them. See the geography notes and decision
+  decisions/2026-10-14-school-preference-va.md.
+
 ### HC3 undefined for singleton nuisance cells in compact staff OLS
 
 - Noted 2026-09-21. Each of the 12 fixed 14-predictor OLS models has one
@@ -340,3 +415,20 @@
 
 ### Resolved: observational VA selected 2021 cohort (2026-09-21)
 The consolidated Box universe includes grade-8 cohorts 2017-2021. A column-selective audit found complete-control eligible counts of 176570, 193269, 192615, 195545, and 13769 respectively; corresponding exam-taker counts are 135968, 159583, 162015, 165243, and 7003. These precede outcome-specific missingness and estimator drops. Because the 2021 group is small and selected by missing baseline data, the constructor now defaults to 2017-2020 and writes cohort-window-specific outputs. The second paper-facing observational run uses 2017-2018.
+
+### Recorded offers with zero simulated destination probability (2026-10-22)
+
+- Status: Open diagnostic; composition outputs preserve recorded offers.
+- Among the 52,019 first-round offers to the top 100 application destinations
+  in the existing 2018-2020 SAE paper roster, 53 have zero recorded simulated
+  probability at their offered RBD (12 in 2018, 30 in 2019, 11 in 2020).
+  All recipients have complete simulated student distributions summing to one.
+- The main offered-student composition keeps these actual offers; the
+  supplementary 0 < p < 1 offered group excludes them. Zero simulated mass is
+  not taken as proof that an observed offer was impossible.
+- A separate listing audit counts 403 recorded offers outside the genuine-choice
+  panel; this is not assumed to be the same discrepancy as the 53 zero-mass cases.
+- Audit files are in `data/clean/applicant_composition_trends/group_averages/`
+  (`offer_probability_audit.csv` and `offer_listing_audit.csv`). Follow up on
+  simulation support and source offer/listing records before using these cases
+  for a design that requires strictly positive destination assignment risk.

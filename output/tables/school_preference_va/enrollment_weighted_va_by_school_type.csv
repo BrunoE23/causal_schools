@@ -1,0 +1,17 @@
+school_type,schools,enrollment,raw_mean,standardized_mean,normalization_identity_error,population,outcome,label,raw_unit,raw_display_mean,raw_display_unit
+TP only,237,141705,-0.153047088316892,-0.627791781395135,0,National active regular secondary schools,z_year_math_max,Math VA,Student test-score SD,-0.153047088316892,Student test-score SD
+HC only,2050,1575818,0.0641875537025837,1.01014250605989,0,National active regular secondary schools,z_year_math_max,Math VA,Student test-score SD,0.0641875537025837,Student test-score SD
+Mixed HC/TP,694,515262,-0.120976027385231,-0.385978183680283,5.55111512312578e-17,National active regular secondary schools,z_year_math_max,Math VA,Student test-score SD,-0.120976027385231,Student test-score SD
+Artistic only,2,1525,-0.215892064157928,-1.10163858486715,0,National active regular secondary schools,z_year_math_max,Math VA,Student test-score SD,-0.215892064157928,Student test-score SD
+TP only,237,141705,-0.106725079079212,-1.07553041392081,0,National active regular secondary schools,admission_exam_taker,Exam-taking VA,Probability,-10.6725079079212,Percentage points
+HC only,2050,1575818,0.0555587108031514,0.550118865552464,0,National active regular secondary schools,admission_exam_taker,Exam-taking VA,Probability,5.55587108031514,Percentage points
+Mixed HC/TP,694,515262,-0.0462004920979124,-0.469236025011789,5.55111512312578e-17,National active regular secondary schools,admission_exam_taker,Exam-taking VA,Probability,-4.62004920979124,Percentage points
+Artistic only,2,1525,-0.014339431345323,-0.150073461127582,2.77555756156289e-17,National active regular secondary schools,admission_exam_taker,Exam-taking VA,Probability,-1.4339431345323,Percentage points
+TP only,237,141705,0.0206704096670179,0.457083586557534,5.55111512312578e-17,National active regular secondary schools,high_paying_field_m1,High-premium-field VA,Probability,2.06704096670179,Percentage points
+HC only,2050,1575818,-0.000494870116047026,0.051795368425119,6.93889390390723e-18,National active regular secondary schools,high_paying_field_m1,High-premium-field VA,Probability,-0.0494870116047026,Percentage points
+Mixed HC/TP,694,515262,-0.00477757672850893,-0.0302130221815299,3.46944695195361e-18,National active regular secondary schools,high_paying_field_m1,High-premium-field VA,Probability,-0.477757672850893,Percentage points
+Artistic only,2,1525,-0.0534911995294727,-0.963017009945222,1.11022302462516e-16,National active regular secondary schools,high_paying_field_m1,High-premium-field VA,Probability,-5.34911995294727,Percentage points
+TP only,237,141705,-0.0211455747966278,0.0841098434296744,1.38777878078145e-17,National active regular secondary schools,high_inst_m1,High-premium-institution VA,Probability,-2.11455747966278,Percentage points
+HC only,2050,1575818,0.0179565240614493,0.554429624627879,0,National active regular secondary schools,high_inst_m1,High-premium-institution VA,Probability,1.79565240614493,Percentage points
+Mixed HC/TP,694,515262,-0.0290460605165821,-0.0109171454962901,4.16333634234434e-17,National active regular secondary schools,high_inst_m1,High-premium-institution VA,Probability,-2.90460605165821,Percentage points
+Artistic only,2,1525,0.277054341519799,3.67085642458652,4.44089209850063e-16,National active regular secondary schools,high_inst_m1,High-premium-institution VA,Probability,27.7054341519799,Percentage points

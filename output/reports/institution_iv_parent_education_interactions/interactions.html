@@ -1,0 +1,49 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Institution IV: parent education interactions</title>
+<style>body{font:16px/1.5 system-ui;color:#233143;max-width:1200px;margin:30px auto;padding:0 24px}table{border-collapse:collapse;width:100%;margin:20px 0}th,td{padding:10px;border-bottom:1px solid #ddd;text-align:right}th:first-child{text-align:left}</style></head><body>
+<h1>Premium-institution enrollment: IV interactions with parent education</h1>
+<p>2SLS; 94,244 students (243 excluded from the 94,487-person paper sample for missing parent schooling). Outcome: high_inst_m1. Coefficients and HC1 robust SEs in percentage points; normal/chi-square inference matches the paper.</p>
+<table><tr><th>Regressor</th><th>Coefficient (pp)</th><th>Robust SE</th><th>95% CI</th><th>p-value</th></tr>
+<tr><th>Attended institution VA (+10 pp), at mean parent education</th><td>6.457</td><td>1.202</td><td>[4.101, 8.812]</td><td>7.785e-08</td></tr>
+<tr><th>Institution VA x father education (+10 pp x +1 year)</th><td>1.307</td><td>0.553</td><td>[0.224, 2.391]</td><td>0.01801</td></tr>
+<tr><th>Institution VA x mother education (+10 pp x +1 year)</th><td>-1.486</td><td>0.554</td><td>[-2.571, -0.400]</td><td>0.007323</td></tr>
+<tr><th>Father education (+1 year), at mean attended and expected VA</th><td>0.354</td><td>0.039</td><td>[0.278, 0.430]</td><td>6.784e-20</td></tr>
+<tr><th>Mother education (+1 year), at mean attended and expected VA</th><td>0.190</td><td>0.041</td><td>[0.109, 0.271]</td><td>3.847e-06</td></tr>
+</table>
+<p>Joint test of both interactions: chi-square(2) = 8.399, p = 0.015.</p>
+<p>Endogenous regressors: attended-school institution VA and its products with centered father and mother schooling. Excluded instruments: assigned-school institution VA and its products with the same centered parent variables. Control for expected institution VA, both expected-VA x parent interactions, both parent main effects, linear grade-4 math/verbal, and cohort, sex and age indicators. VA is centered at mean attended VA and scaled by 0.10; parents are centered at their estimation-sample means. Both parents enter jointly.</p>
+<p>Use the existing September paper cache: 2017-2020 observational EB VA and timely 2018-2020 SAE applicants with nondegenerate assignment risk, complete paper variables and entrance-exam taking. Preserve the paper binary outcome, including zeros for non-enrollees. No PAES-score or full observational-VA-baseline controls are added to the second stage. Parent variables retain the existing baseline-context imputations; no new imputation.</p>
+<p>Before extension, reproduce the paper main coefficient 0.666895 (SE 0.119817), N=94,487, first-stage F=821.068. Independently reconstruct 2SLS coefficients, structural residuals and HC1 covariance for the interaction model; all checks pass.</p>
+<h2>First stages</h2><table><tr><th>Endogenous term</th><th>Joint excluded-instrument robust Wald F (3 instruments)</th><th>Partial R2</th></tr>
+<tr><td>d10</td><td>283.41</td><td>0.0363</td></tr>
+<tr><td>d_father</td><td>57.96</td><td>0.0289</td></tr>
+<tr><td>d_mother</td><td>49.55</td><td>0.0327</td></tr>
+</table>
+<p>These are ordinary joint first-stage statistics for each endogenous regressor, not conditional weak-identification statistics for the multi-endogenous-variable system. The projected design is full rank. Estimated VA is treated as fixed; interpretation requires the paper IV assumptions to extend to the parent-interacted instruments. Parent main effects are not randomized parent-education effects. The paper exam-taking sample restriction is retained.</p>
+<h2>VA effect at parental schooling quartiles</h2><p>Other parent held at their mean; outcome pp per +10 pp attended VA, using full IV covariance.</p><table><tr><th>Parent varied</th><th>Percentile</th><th>Years</th><th>VA effect (SE)</th><th>95% CI</th></tr>
+<tr><td>father</td><td>25</td><td>10.00</td><td>4.717 (1.464)</td><td>[1.849, 7.586]</td></tr>
+<tr><td>father</td><td>50</td><td>12.00</td><td>7.332 (1.226)</td><td>[4.930, 9.735]</td></tr>
+<tr><td>father</td><td>75</td><td>12.00</td><td>7.332 (1.226)</td><td>[4.930, 9.735]</td></tr>
+<tr><td>mother</td><td>25</td><td>10.00</td><td>8.767 (1.411)</td><td>[6.001, 11.533]</td></tr>
+<tr><td>mother</td><td>50</td><td>12.00</td><td>5.796 (1.249)</td><td>[3.347, 8.245]</td></tr>
+<tr><td>mother</td><td>75</td><td>13.00</td><td>4.310 (1.505)</td><td>[1.360, 7.261]</td></tr>
+</table>
+<details><summary>All coefficients</summary><table><tr><th>Term</th><th>Estimate (pp)</th><th>SE (pp)</th><th>p-value</th></tr>
+<tr><td>(Intercept)</td><td>25.1513</td><td>6.4629</td><td>9.956e-05</td></tr>
+<tr><td>fit_d10</td><td>6.4566</td><td>1.2019</td><td>7.785e-08</td></tr>
+<tr><td>fit_d_father</td><td>1.3074</td><td>0.5527</td><td>0.01801</td></tr>
+<tr><td>fit_d_mother</td><td>-1.4856</td><td>0.5539</td><td>0.007323</td></tr>
+<tr><td>factor(cohort_gr8)2019</td><td>-0.1296</td><td>0.2253</td><td>0.565</td></tr>
+<tr><td>factor(cohort_gr8)2020</td><td>-1.9443</td><td>0.2270</td><td>1.066e-17</td></tr>
+<tr><td>z_sim_mat_4to</td><td>2.5755</td><td>0.1249</td><td>1.546e-94</td></tr>
+<tr><td>z_sim_leng_4to</td><td>1.9477</td><td>0.1210</td><td>2.858e-58</td></tr>
+<tr><td>factor(GEN_ALU)2</td><td>-0.4470</td><td>0.1812</td><td>0.01364</td></tr>
+<tr><td>factor(EDAD_ALU)13</td><td>-14.5122</td><td>6.4639</td><td>0.02476</td></tr>
+<tr><td>factor(EDAD_ALU)14</td><td>-15.8700</td><td>6.4661</td><td>0.01411</td></tr>
+<tr><td>factor(EDAD_ALU)15</td><td>-18.1977</td><td>6.4802</td><td>0.004982</td></tr>
+<tr><td>factor(EDAD_ALU)16</td><td>-19.2492</td><td>6.5568</td><td>0.003327</td></tr>
+<tr><td>father_c</td><td>0.3537</td><td>0.0387</td><td>6.784e-20</td></tr>
+<tr><td>mother_c</td><td>0.1900</td><td>0.0411</td><td>3.847e-06</td></tr>
+<tr><td>e10</td><td>5.5430</td><td>1.2392</td><td>7.705e-06</td></tr>
+<tr><td>e_father</td><td>-1.2144</td><td>0.5721</td><td>0.03377</td></tr>
+<tr><td>e_mother</td><td>1.6804</td><td>0.5710</td><td>0.00325</td></tr>
+</table></details></body></html>

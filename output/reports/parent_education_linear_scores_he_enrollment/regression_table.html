@@ -1,0 +1,12 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Parent education and entrance scores</title>
+<style>body{font:16px/1.5 system-ui;max-width:1000px;margin:30px auto;padding:0 24px;color:#233143}table{border-collapse:collapse;width:100%;margin:24px 0}th,td{padding:12px;border-bottom:1px solid #ddd;text-align:right}th:first-child{text-align:left}.note{font-size:14px;color:#526171}</style></head><body>
+<h1>HE enrollment on parent education and math/verbal scores</h1><p>OLS linear probability models. All four regressors enter linearly; no other controls. Coefficients in percentage points, school-clustered SEs in parentheses.</p>
+<table><tr><th></th><th>Parents only, same sample</th><th>Add math and verbal</th></tr>
+<tr><th>Father education (+1 year)</th><td>0.648 (0.026)</td><td>0.206 (0.023)</td></tr>
+<tr><th>Mother education (+1 year)</th><td>0.538 (0.027)</td><td>0.094 (0.026)</td></tr>
+<tr><th>Math score (+1 SD)</th><td>--</td><td>2.752 (0.074)</td></tr>
+<tr><th>Verbal score (+1 SD)</th><td>--</td><td>3.529 (0.080)</td></tr>
+<tr><th>R-squared</th><td>0.0073</td><td>0.0262</td></tr></table>
+<p>Both columns: N = 569,681; school clusters = 3,373; enrollment rate = 82.68%.</p>
+<p class="note">Start with the previous 775,268 students with both parental education measures; exclude 205,587 without both entrance scores. No high-math restriction, income controls, region controls, year effects, or nonlinear score terms. The parent-only comparison uses precisely the same students.</p>
+<p class="note">Math and verbal retain the existing PSU/PAES within-admission-year standardization from the broad panel; no restandardization occurs here. Parent years retain the existing SIMCE approximate-year coding and imputations. Inference uses attended-school CR1 covariance and t(G-1). Coefficients are conditional associations, not causal effects.</p></body></html>

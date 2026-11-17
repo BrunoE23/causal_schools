@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Logistic models: predicted entrance-exam score and residual</title>
+<style>body{max-width:960px;margin:42px auto;padding:0 24px;color:#20242a;font:16px/1.55 system-ui,sans-serif}h1{font-size:27px;line-height:1.25;margin-bottom:12px}p{margin:14px 0}.subtitle,.note{color:#525c66}.subtitle{font-size:15px}table{width:100%;border-collapse:collapse;margin:24px 0}th,td{padding:12px 15px;border-bottom:1px solid #e0e4e8}thead th{border-bottom:2px solid #687788;text-align:right}thead th:first-child,tbody th{text-align:left}tbody th{font-weight:500}td{text-align:right;font-variant-numeric:tabular-nums}.se{display:block;font-size:14px;color:#596473;margin-top:3px}.section th,.section td{border-top:2px solid #b4bdc6}.note{font-size:14px}details{margin:25px 0}summary{cursor:pointer;font-weight:600}.flow{font-size:12px;overflow:auto}.flow th,.flow td{padding:7px}.flow th{text-align:left}a{color:#265dad}.pass{color:#276339}</style>
+</head><body>
+<h1>Predicted entrance-exam score and residual: logistic models</h1>
+<p class="subtitle">Grade-8 cohorts 2017 and 2019 &middot; 233,787 exam takers &middot; Average marginal effects</p>
+<p>The observed math&ndash;verbal entrance-exam composite is split into its baseline prediction, <i>b</i><sub>i</sub>, and its residual, <i>g</i><sub>i</sub> = actual score &minus; <i>b</i><sub>i</sub>. Each binary outcome is estimated using a logit with an intercept and these two score components.</p>
+<p>The existing cross-fitted score prediction explains <strong>72.0%</strong> of observed score variation (2017: 69.2%; 2019: 74.5%). Baseline predictions and the student sample are unchanged from the linear regressions.</p>
+<table aria-label="Logistic average marginal effects"><thead><tr><th></th>
+<th scope="col">Centralized HE application</th><th scope="col">High-premium field enrollment</th>
+</tr></thead><tbody>
+<tr class=""><th scope="row">Predicted score, <i>b</i><sub>i</sub></th><td>21.71<span class="se">(0.13)</span></td><td>13.86<span class="se">(0.22)</span></td></tr>
+<tr class=""><th scope="row">Score residual, <i>g</i><sub>i</sub></th><td>19.40<span class="se">(0.16)</span></td><td>12.36<span class="se">(0.21)</span></td></tr>
+<tr class="section"><th scope="row">Students</th><td>233,787</td><td>233,787</td></tr>
+<tr class=""><th scope="row">Middle-school clusters</th><td>5,647</td><td>5,647</td></tr>
+<tr class=""><th scope="row">Outcome mean</th><td>74.7%</td><td>43.1%</td></tr>
+<tr class=""><th scope="row">McFadden pseudo-R<sup>2</sup></th><td>0.196</td><td>0.057</td></tr>
+<tr class=""><th scope="row"><i>p</i>: marginal effect of <i>b</i> equals marginal effect of <i>g</i></th><td>&lt;0.001</td><td>&lt;0.001</td></tr>
+</tbody></table>
+<p>In the logistic specification, the predicted component has the larger association with both outcomes: average-marginal-effect differences of 2.31 percentage points for centralized HE application and 1.51 points for high-premium-field enrollment. The logit coefficient-equality tests give <i>p</i> &lt;0.001 and &lt;0.001, respectively.</p>
+<p class="note"><strong>Units:</strong> average marginal effects in percentage points for a one-unit increase in the indicated component, holding the other component fixed. Both retain the units of the actual score: one within-admission-year standard deviation of the math&ndash;verbal composite. They are not standardized separately. Parentheses contain delta-method standard errors from the middle-school clustered covariance; inference uses <i>t</i> with clusters minus one degrees of freedom and is conditional on the existing cross-fitted predictions.</p>
+<p class="note"><strong>Prediction:</strong> five-fold predictions use cubic grade-4 and grade-8 SIMCE math and reading, parental background, middle-school GPA and attendance, and cohort, sex, age, residence-comuna, middle-years-observed and middle-school fixed effects. No high-school identifiers enter. Actual scores refer to timely admission years 2022 (PDT) and 2024 (PAES), standardized within admission year.</p>
+<p class="note"><strong>Outcomes:</strong> centralized HE application is the master data&rsquo;s regular-application indicator, observed in 2021&ndash;2026. High-premium field is the existing indicator at first observed HE enrollment in 2022&ndash;2025, with non-enrollment coded zero. Cohort follow-up differs. Both regressions use the same students.</p>
+<p class="note"><strong>Coverage:</strong> 297,397 timely exam takers; 265,911 with both SIMCE8 scores; 234,140 with complete baseline controls. The existing cross-fit excludes 353 students with fixed-effect levels absent from training. No additional students are excluded by the logistic models.</p>
+<p class="note"><strong>Interpretation:</strong> the estimates are conditional associations. The score residual includes all score variation unexplained by measured baseline predictors; it is not a causal estimate of high-school effectiveness. McFadden pseudo-R<sup>2</sup> is not a share of outcome variance explained.</p>
+<details><summary>Logit coefficients and odds ratios</summary><table><thead><tr><th></th>
+<th scope="col">Centralized HE application</th><th scope="col">High-premium field enrollment</th>
+</tr></thead><tbody>
+<tr class=""><th scope="row">Intercept</th><td>1.385<span class="se">(0.011); OR 3.994</span></td><td>-0.342<span class="se">(0.007); OR 0.710</span></td></tr>
+<tr class=""><th scope="row">Predicted score, <i>b</i><sub>i</sub></th><td>1.456<span class="se">(0.011); OR 4.290</span></td><td>0.612<span class="se">(0.011); OR 1.844</span></td></tr>
+<tr class=""><th scope="row">Score residual, <i>g</i><sub>i</sub></th><td>1.302<span class="se">(0.011); OR 3.675</span></td><td>0.546<span class="se">(0.010); OR 1.725</span></td></tr>
+<tr class=""><th scope="row"><i>p</i>: logit coefficient on <i>b</i> equals coefficient on <i>g</i></th><td>&lt;0.001</td><td>&lt;0.001</td></tr>
+</tbody></table>
+<p class="note">Entries are logit coefficients, with clustered SEs in parentheses and odds ratios (OR) below. A one-unit increase has OR = exp(coefficient).</p>
+<p><a href="../../tables/simce_prediction/predicted_score_and_gap_logit_coefficients.csv">Logit coefficients and confidence intervals (CSV)</a></p></details>
+<details><summary>Sample accounting and saved results</summary><div class="flow"><table><thead><tr>
+<th>cohort_gr8</th><th>N</th><th>stage</th>
+</tr></thead><tbody>
+<tr><td>2019</td><td>233475</td><td>1. Master grade-8 cohorts 2017 and 2019</td></tr>
+<tr><td>2017</td><td>238468</td><td>1. Master grade-8 cohorts 2017 and 2019</td></tr>
+<tr><td>All</td><td>471943</td><td>1. Master grade-8 cohorts 2017 and 2019</td></tr>
+<tr><td>2019</td><td>155461</td><td>2. Both entrance-exam components observed in the expected admission year</td></tr>
+<tr><td>2017</td><td>141936</td><td>2. Both entrance-exam components observed in the expected admission year</td></tr>
+<tr><td>All</td><td>297397</td><td>2. Both entrance-exam components observed in the expected admission year</td></tr>
+<tr><td>2017</td><td>127939</td><td>3. Both grade-8 SIMCE scores observed</td></tr>
+<tr><td>2019</td><td>137972</td><td>3. Both grade-8 SIMCE scores observed</td></tr>
+<tr><td>All</td><td>265911</td><td>3. Both grade-8 SIMCE scores observed</td></tr>
+<tr><td>2017</td><td>109858</td><td>4. Complete baseline controls, including middle-school identity</td></tr>
+<tr><td>2019</td><td>124282</td><td>4. Complete baseline controls, including middle-school identity</td></tr>
+<tr><td>All</td><td>234140</td><td>4. Complete baseline controls, including middle-school identity</td></tr>
+<tr><td>2017</td><td>109764</td><td>5. Out-of-fold prediction available</td></tr>
+<tr><td>2019</td><td>124023</td><td>5. Out-of-fold prediction available</td></tr>
+<tr><td>All</td><td>233787</td><td>5. Out-of-fold prediction available</td></tr>
+<tr><td>2017</td><td>109764</td><td>6. Common sample for both requested HE outcomes</td></tr>
+<tr><td>2019</td><td>124023</td><td>6. Common sample for both requested HE outcomes</td></tr>
+<tr><td>All</td><td>233787</td><td>6. Common sample for both requested HE outcomes</td></tr>
+</tbody></table></div>
+<p><a href="../../tables/simce_prediction/predicted_score_and_gap.csv">Average marginal effects and confidence intervals (CSV)</a> &middot;
+<a href="predicted_score_and_gap_lpm.html">Earlier linear-probability regressions</a></p></details>
+<p class="note pass">Independent verification: 28 checks passed, including unchanged source hashes, the likelihood, clustered covariance and marginal-effect derivatives.</p>
+</body></html>

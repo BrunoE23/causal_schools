@@ -1,0 +1,54 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Institution IV: one parent at a time</title>
+<style>body{font:16px/1.5 system-ui;color:#233143;max-width:1200px;margin:30px auto;padding:0 24px}table{border-collapse:collapse;width:100%;margin:20px 0}th,td{padding:10px;border-bottom:1px solid #ddd;text-align:right}th:first-child{text-align:left}</style></head><body>
+<h1>Premium-institution IV: one parent at a time</h1>
+<p>Each model contains only the selected parent education main effect and VA interaction. Both use the same 94,244 students as the prior joint-parent IV. Outcome: premium-institution enrollment. Coefficients in percentage points; HC1 robust SEs in parentheses, normal/chi-square inference matching the paper.</p>
+<table><tr><th></th><th>Father only</th><th>Mother only</th></tr>
+<tr><th>Institution VA (+10 pp), at mean selected-parent schooling</th><td>6.403 (1.193)</td><td>6.843 (1.194)</td></tr>
+<tr><th>VA x selected parent education (+10 pp x +1 year)</th><td>0.575 (0.457)</td><td>-0.784 (0.468)</td></tr>
+<tr><th>Selected parent education (+1 year)</th><td>0.426 (0.033)</td><td>0.389 (0.035)</td></tr>
+<tr><th>Interaction p-value</th><td>0.2090</td><td>0.0944</td></tr>
+</table>
+<p>For parent P: instrument attended institution VA D and D x P with assigned VA Z and Z x P. Controls: parent P, expected VA E, E x P, linear baseline math/verbal, and cohort, sex and age indicators. The other parent main effect, VA interaction, instrument interaction and expected-VA interaction are omitted. Keep the previous common sample, parent means, VA centering and 10 pp VA unit. No new data restrictions, imputations or PAES-score controls.</p>
+<h2>Interaction comparison with the joint model</h2><table><tr><th>Parent</th><th>Separate (SE)</th><th>p-value</th><th>Joint (SE)</th><th>p-value</th></tr>
+<tr><td>father</td><td>0.575 (0.457)</td><td>0.2090</td><td>1.307 (0.553)</td><td>0.0180</td></tr>
+<tr><td>mother</td><td>-0.784 (0.468)</td><td>0.0944</td><td>-1.486 (0.554)</td><td>0.0073</td></tr>
+</table>
+<h2>First stages</h2><table><tr><th>Model</th><th>Endogenous term</th><th>Joint excluded-instrument robust Wald F (2 instruments)</th><th>Partial R2</th></tr>
+<tr><td>father</td><td>d10</td><td>419.75</td><td>0.0362</td></tr>
+<tr><td>father</td><td>d_father</td><td>86.39</td><td>0.0289</td></tr>
+<tr><td>mother</td><td>d10</td><td>422.30</td><td>0.0363</td></tr>
+<tr><td>mother</td><td>d_mother</td><td>74.38</td><td>0.0327</td></tr>
+</table>
+<p>Both models pass independent 2SLS coefficient, structural residual, HC1 covariance, moment and full-rank checks. First-stage statistics are ordinary joint tests, not conditional weak-identification diagnostics. Estimated VA is treated as fixed. Interpretation requires the interacted IV assumptions and retains the paper lottery-risk/exam-taking sample restriction. Parent main effects are not causal effects of parental education.</p>
+<details><summary>All coefficients</summary><table><tr><th>Model</th><th>Term</th><th>Coefficient (pp)</th><th>SE (pp)</th><th>p-value</th></tr>
+<tr><td>father</td><td>(Intercept)</td><td>25.0891</td><td>6.4615</td><td>0.0001032</td></tr>
+<tr><td>father</td><td>fit_d10</td><td>6.4027</td><td>1.1931</td><td>8.04e-08</td></tr>
+<tr><td>father</td><td>fit_d_father</td><td>0.5747</td><td>0.4574</td><td>0.209</td></tr>
+<tr><td>father</td><td>factor(cohort_gr8)2019</td><td>-0.1936</td><td>0.2243</td><td>0.3881</td></tr>
+<tr><td>father</td><td>factor(cohort_gr8)2020</td><td>-1.9718</td><td>0.2262</td><td>2.841e-18</td></tr>
+<tr><td>father</td><td>z_sim_mat_4to</td><td>2.5785</td><td>0.1241</td><td>8.061e-96</td></tr>
+<tr><td>father</td><td>z_sim_leng_4to</td><td>1.9682</td><td>0.1208</td><td>9.892e-60</td></tr>
+<tr><td>father</td><td>factor(GEN_ALU)2</td><td>-0.5023</td><td>0.1803</td><td>0.005341</td></tr>
+<tr><td>father</td><td>factor(EDAD_ALU)13</td><td>-14.3812</td><td>6.4624</td><td>0.02606</td></tr>
+<tr><td>father</td><td>factor(EDAD_ALU)14</td><td>-15.7879</td><td>6.4646</td><td>0.0146</td></tr>
+<tr><td>father</td><td>factor(EDAD_ALU)15</td><td>-18.1054</td><td>6.4786</td><td>0.005195</td></tr>
+<tr><td>father</td><td>factor(EDAD_ALU)16</td><td>-19.2801</td><td>6.5553</td><td>0.00327</td></tr>
+<tr><td>father</td><td>father_c</td><td>0.4261</td><td>0.0328</td><td>1.675e-38</td></tr>
+<tr><td>father</td><td>e10</td><td>5.5804</td><td>1.2288</td><td>5.585e-06</td></tr>
+<tr><td>father</td><td>e_father</td><td>-0.3956</td><td>0.4750</td><td>0.4049</td></tr>
+<tr><td>mother</td><td>(Intercept)</td><td>25.5664</td><td>6.5612</td><td>9.755e-05</td></tr>
+<tr><td>mother</td><td>fit_d10</td><td>6.8433</td><td>1.1940</td><td>9.951e-09</td></tr>
+<tr><td>mother</td><td>fit_d_mother</td><td>-0.7836</td><td>0.4685</td><td>0.09438</td></tr>
+<tr><td>mother</td><td>factor(cohort_gr8)2019</td><td>-0.1954</td><td>0.2243</td><td>0.3838</td></tr>
+<tr><td>mother</td><td>factor(cohort_gr8)2020</td><td>-1.9839</td><td>0.2249</td><td>1.121e-18</td></tr>
+<tr><td>mother</td><td>z_sim_mat_4to</td><td>2.6245</td><td>0.1246</td><td>2.002e-98</td></tr>
+<tr><td>mother</td><td>z_sim_leng_4to</td><td>1.9950</td><td>0.1208</td><td>3.175e-61</td></tr>
+<tr><td>mother</td><td>factor(GEN_ALU)2</td><td>-0.4823</td><td>0.1810</td><td>0.007707</td></tr>
+<tr><td>mother</td><td>factor(EDAD_ALU)13</td><td>-14.8258</td><td>6.5621</td><td>0.02387</td></tr>
+<tr><td>mother</td><td>factor(EDAD_ALU)14</td><td>-16.1325</td><td>6.5643</td><td>0.01399</td></tr>
+<tr><td>mother</td><td>factor(EDAD_ALU)15</td><td>-18.4315</td><td>6.5782</td><td>0.00508</td></tr>
+<tr><td>mother</td><td>factor(EDAD_ALU)16</td><td>-19.5495</td><td>6.6487</td><td>0.003279</td></tr>
+<tr><td>mother</td><td>mother_c</td><td>0.3890</td><td>0.0352</td><td>1.922e-28</td></tr>
+<tr><td>mother</td><td>e10</td><td>5.2515</td><td>1.2326</td><td>2.038e-05</td></tr>
+<tr><td>mother</td><td>e_mother</td><td>1.0282</td><td>0.4845</td><td>0.03382</td></tr>
+</table></details></body></html>

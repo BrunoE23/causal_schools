@@ -1,0 +1,21 @@
+school_type,schools,whole_school_enrollment,top_n,share_schools,share_enrollment
+HC only,4,7946,10,0.4,0.491829660807131
+Mixed HC/TP,2,2929,10,0.2,0.181294874969052
+TP only,4,5281,10,0.4,0.326875464223818
+Artistic only,0,0,10,0,0
+Other/no regular secondary,0,0,10,0,0
+HC only,10,14127,20,0.5,0.47927127154295
+Mixed HC/TP,6,10068,20,0.3,0.341566019812729
+TP only,4,5281,20,0.2,0.179162708644321
+Artistic only,0,0,20,0,0
+Other/no regular secondary,0,0,20,0,0
+HC only,18,26237,50,0.36,0.404673401712038
+Mixed HC/TP,15,18846,50,0.3,0.290676332227963
+TP only,17,19752,50,0.34,0.304650266059999
+Artistic only,0,0,50,0,0
+Other/no regular secondary,0,0,50,0,0
+HC only,41,55550,100,0.41,0.440740094257288
+Mixed HC/TP,31,40833,100,0.31,0.323973722210762
+TP only,28,29655,100,0.28,0.235286183531951
+Artistic only,0,0,100,0,0
+Other/no regular secondary,0,0,100,0,0

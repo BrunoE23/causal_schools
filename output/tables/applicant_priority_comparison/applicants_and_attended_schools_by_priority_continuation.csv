@@ -1,0 +1,30 @@
+panel_order,row_order,panel,variable,label,unit,ending_nonpriority,ending_priority,voluntary_nonpriority,voluntary_priority
+1,1,Applicant characteristics,female,Female,%,45.93,48.14,54.76,55.18
+1,2,Applicant characteristics,in_rm,Metropolitan Region,%,29.44,20.82,40.89,30.34
+1,3,Applicant characteristics,edad_alu,Age,"",13.33,13.41,13.27,13.32
+1,4,Applicant characteristics,income_decile_imputed,Income decile,"",5.43,3.69,6.40,4.43
+1,5,Applicant characteristics,mother_educ_years_imputed,Mother education years,"",11.72,10.17,12.67,11.18
+1,6,Applicant characteristics,z_sim_mat_4to,Grade-4 SIMCE math (z),"",-0.16,-0.35,0.09,-0.09
+1,7,Applicant characteristics,z_sim_leng_4to,Grade-4 SIMCE verbal (z),"",-0.11,-0.30,0.10,-0.09
+1,8,Applicant characteristics,z_gpa_middle_mean,Middle-school GPA (z),"",0.15,-0.06,0.14,0.05
+1,9,Applicant characteristics,z_att_middle_mean,Middle-school attendance (z),"",0.11,-0.01,0.04,-0.01
+1,10,Applicant characteristics,cohort_2018,Cohort 2018,%,23.62,27.07,22.61,27.08
+1,11,Applicant characteristics,cohort_2019,Cohort 2019,%,38.04,35.72,44.97,42.99
+1,12,Applicant characteristics,cohort_2020,Cohort 2020,%,38.34,37.22,32.42,29.93
+1,13,Applicant characteristics,any_risk,Assignment risk,%,61.54,49.91,63.95,59.42
+2,14,Application portfolio: expected VA,expected_math_adj_eb,Math VA,SD,-0.10,-0.11,-0.08,-0.10
+2,15,Application portfolio: expected VA,expected_leng_adj_eb,Verbal VA,SD,-0.08,-0.09,-0.05,-0.08
+2,16,Application portfolio: expected VA,expected_exam_adj_eb,Exam-taking VA,pp,-3.21,-5.46,0.38,-3.00
+2,17,Application portfolio: expected VA,expected_anypost_adj_eb,Financial-aid-application VA,pp,0.83,0.35,1.77,1.25
+2,18,Application portfolio: expected VA,expected_highered_adj_eb,Higher-ed-enrollment VA,pp,-0.65,-1.39,0.23,-0.61
+2,19,Application portfolio: expected VA,expected_highinst_adj_eb,High-premium-institution VA,pp,-2.49,-3.67,-1.69,-3.30
+2,20,Application portfolio: expected VA,expected_highpay_adj_eb,High-premium-field VA,pp,0.37,0.47,0.25,0.59
+3,21,High school attended,private_paid_hs,Private-paid high school,%,1.12,0.23,2.72,0.43
+3,22,High school attended,tp_hs,Technical-professional high school,%,59.97,72.57,38.23,57.12
+4,23,Attended-school value added,attended_va_math,Math VA,SD,-0.10,-0.12,-0.06,-0.10
+4,24,Attended-school value added,attended_va_verbal,Verbal VA,SD,-0.08,-0.10,-0.04,-0.08
+4,25,Attended-school value added,attended_va_exam,Exam-taking VA,pp,-3.31,-6.25,0.58,-3.05
+4,26,Attended-school value added,attended_va_aid,Financial-aid-application VA,pp,0.75,-0.08,1.53,1.08
+4,27,Attended-school value added,attended_va_highered,Higher-ed-enrollment VA,pp,-0.72,-1.68,0.30,-0.62
+4,28,Attended-school value added,attended_va_highinst,High-premium-institution VA,pp,-2.70,-3.78,-1.53,-3.26
+4,29,Attended-school value added,attended_va_highpay,High-premium-field VA,pp,0.28,0.40,0.21,0.46

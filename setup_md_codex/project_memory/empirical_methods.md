@@ -1,5 +1,131 @@
 # Empirical Methods
 
+## Submitted school rankings and joint VA preferences (2026-10-14)
+
+The subsequent2026-10-15 PAES extension adds school-average current regular
+M1 for admission process2025(2024 graduates) and both type interactions.
+Construct from raw MATE1_REG_ACTUAL among current-graduate valid takers,
+not MATE1_MAX; no GPA/SAE-sample restriction or zero scores. Keep all prior
+VA terms/type interactions and distance:18coefficients. Preserve existing
+VA scaling; normalize M1 equally across unique retained destinations.
+Exclude incomplete rankings intact. Refit the15-term baseline on the same
+sample for comparison, pooled and four groups with both distances. These
+later scores are a school-performance measure, not necessarily information
+available at application. See decisions/2026-10-15-paes-m1-school-preferences.md.
+
+Estimate the exact Plackett-Luce ordering likelihood conditional on each
+student's submitted RBD set. The initial two specifications include four
+current pooled EB VAs simultaneously (math, exam taking, high-premium field
+and high-premium institution) and log(1+Haversine km), using published
+student points or home-comuna centers. The latest2026-10-15 user request adds
+all eight interactions of the four VAs with the mixed HC/TP and TP-only
+indicators, retaining all main effects and distance in every pooled and
+subgroup model (15 coefficients). Non-TP VA slopes are beta; mixed and TP-only
+slopes are beta plus the corresponding interaction. Report total slopes and
+their SEs using the full student-clustered covariance. The type intercepts
+refer only to all four standardized VAs equal to zero; type premiums vary
+with VA. Preserve additive estimates in the dated clean-data archive.
+Use regular HC code310 and TP codes410/510/610/710/810
+from the fixed2024 Directorio. Mixed offers both; TP-only offers TP withoutHC.
+Indicators are raw0/1, not standardized; the single any-TP flag is metadata.
+The omitted category is non-TP:1557HC-only,1artistic and16other/no-regular-
+secondary schools on the2501-school support. Preserve these alternatives and
+the exact sample; do not impose2024 activity restrictions on historical lists.
+Both distance versions retain actual campuses.
+Use the Table 2 applicant roster, retain genuine priority choices, exclude
+auto-continuity alternatives, collapse RBD to its first submitted program,
+and exclude an entire ranking if any regressor is missing. Single-school
+lists provide no identifying information. Normalize VAs equally across unique
+destination schools in the final shared estimation support and reuse those
+moments in both models. Cox event time equals school rank, stratum equals
+ranking, and cluster equals student; unique ranks make Breslow exact here.
+Inference conditions on existing EB estimates. No school fixed effects,
+unlisted alternatives or peer controls enter. On 2026-10-15 the user requested
+separate fits by low-income prioritario status crossed with origin-school
+continuation. Use the same four VAs, both distances, whole-list restrictions
+and unchanged pooled normalization in every group; exclude unresolved origins.
+Both assignment-risk statuses enter. Separate-logit coefficient differences
+may reflect utility-error scale as well as preferences.
+See `decisions/2026-10-14-school-preference-va.md` for sources and validation.
+
+## Main IV by origin-school continuation (2026-10-12)
+
+Re-estimate the paper's seven first-stage and pass-through specifications
+separately for school-ending and voluntary applicants, using the existing
+Table 2 continuation classification. Both regression samples require assignment
+risk and retain the original outcome-specific controls/missingness restrictions.
+Keep EB school values and expected-VA construction fixed across groups, with
+the paper's heteroskedasticity-robust SEs. Assignment-risk rates and primary
+expected-VA means instead use all Table 2 applicants within each group;
+additional expected-VA means use the exact IV samples. See
+`decisions/2026-10-12-main-iv-by-continuation.md` for complete definitions.
+
+## Averaged academic histories for voluntary SAE (2026-10-10)
+
+At Bruno's request, replace each four-grade academic history with the arithmetic
+mean of its observed values in grades 5-8. Each of six summaries enters with its
+square, separately or jointly, retaining the context and annual survey-PC1
+controls. Standardize the newly constructed averages with original-training
+observed moments; use the training median when wholly missing and categorical
+observed-grade counts for every included average. Sample and clustered inference
+remain unchanged. A two-period sensitivity (5-6 and 7-8) checks whether averaging
+hides timing. For the focused GPA/math-gap comparison, use identical observed
+grades and pupils to preserve the gap identity. See
+`decisions/2026-10-10-average-grade-histories.md` for exact specifications.
+
+## Separate predictors and survey PCA (2026-10-10)
+
+For the voluntary-SAE sample, compare 24 separate grade-specific academic
+measure-plus-square OLS regressions with a model entering them all jointly.
+Use the same context and annual survey-PC1 controls, clustered by origin school.
+Focused GPA/math-gap comparisons hold the observed sample fixed within grade.
+Academic units/imputation remain unchanged from the prior prepared design.
+Survey PCA uses each year's applicable standardized items among complete
+respondents, without outcome information or answer imputation. Keep incomplete
+respondents in the full regressions with zero-reference scores and completeness
+controls. PC coefficients vary by survey year; a sensitivity includes PCs 1-3.
+The exact specifications, PCA coverage, and algebra re-expressing gaps in current
+GPA and baseline achievement are documented in
+`decisions/2026-10-10-separate-predictors-survey-pca.md`.
+
+## SAE participation prediction (2026-10-05)
+
+Fixed nested binomial logits predict any explicit regular/complementary grade-9
+SAE application in the grade-8 cohort year. School offerings, own/relative grades
+and attendance, and GPA-minus-SIMCE peer z-score gaps enter the agreed sequence;
+the administrative numeric measures include squares. Separate questionnaire
+availability from answer content. A fixed 80/20 origin-school split keeps schools
+together across cohorts, with training-only imputation/scaling and identical
+samples across specifications. Evaluate AUC, Brier loss, log loss and calibration
+overall, within continuation groups and by cohort; descriptive coefficient SEs
+cluster at origin school. Full-year grade-8 inputs make this retrospective. A
+sensitivity drops those annual grade-8 measures. No geography is estimated.
+The primary classification comparison is now Bruno's deterministic continuation
+rule: no application if grade 9 is offered, application if the school ends at
+grade 8. Use identical held-out pupils with resolved continuation status, a fixed
+0.5 cutoff for logits, equal error costs, and separate results in each school
+group. Report accuracy and mistakes corrected/introduced, with paired gain CIs
+from a pupil-level intercept-only regression clustered by origin school. CIs
+condition on the fitted models. A separate probability benchmark assigns each
+group its training application rate. No test-set threshold tuning is performed.
+Actual continuation is distinct from this application outcome.
+The voluntary-margin follow-up refits six nested logits only among origins
+offering grade 9, preserving the original school holdout and using subgroup
+training preprocessing. Two CART probability trees use inner school validation
+to choose complexity. The primary benchmark predicts no application for everyone;
+also report AUC, average precision and top-decile applicant concentration. Treat
+this follow-up as exploratory because the holdout was already examined. See
+`decisions/2026-10-05-voluntary-sae-margin.md` for exact specifications.
+The subsequent requested simple regression is a single joint OLS linear
+probability model on all 313,813 voluntary-margin pupils, with all constructed
+full-model regressors and school-clustered SEs. Existing standardization,
+imputation, quadratic and missingness terms are preserved. The full coefficient
+table in `output/reports/sae_participation/voluntary_ols.html` reports percentage
+points and SEs; R2 is .0343078. This is descriptive full-sample OLS, not held-out
+prediction performance.
+See `decisions/2026-10-05-sae-participation-prediction.md` for sample, normalization,
+questionnaire harmonization, zero-attendance and timing decisions.
+
 This file records the empirical specifications used in the causal schools project. The goal is to keep each family of regressions explicit enough that the estimand, treatment definition, controls, and interpretation are clear before implementation.
 
 ## Scalar School-Value IV
@@ -422,3 +548,148 @@ within the leadership family (or robustness subsample), with the same HC1 model
 and contemporary 2024 controls. These are descriptive, not causal quality scores.
 Full coding-break treatment, normalization and checks are in
 `decisions/2026-09-10-leadership-characteristics-va.md`.
+
+### SIMCE parent education in school-preference models (2026-10-15)
+
+Use the 2022 second-year-high-school SIMCE CPAD, map mother/father education
+responses to approximate years, average available parent years within each
+family and then average family values by destination RBD. Normalize equally
+across the final pooled destination-school support. Enter the attribute jointly
+with the four EB VAs and PAES M1, with type interactions, for all five applicant
+groups and both distance definitions. Exclude whole lists with any destination
+school missing the mean. As the survey postdates SAE choices in 2018-2020, this
+is descriptive preference association only. The complete conversion and
+inference record is in
+`decisions/2026-10-15-simce-parent-education-school-preferences.md`.
+
+### Directorio fee bands in school preferences (2026-10-21)
+
+Add 2024 reported enrollment-fee and monthly-fee band indicators jointly to
+the seven-attribute school-preference model (four EB VAs, PAES M1, parent
+education and grade-4-SIMCE income composition). Free is the reference for
+each fee. Omit the unobserved lowest monthly paid band; use one shared
+unknown-fee indicator because both source fields are missing for the same
+schools. Preserve complete lists, normalizations and student clustering.
+Compare against the identical-sample saved baseline, for pooled and four
+priority-by-continuation groups and both distances. The post-choice 2024
+snapshot describes school-level fee associations; it does not identify a
+causal price response or peso-valued willingness to pay. See
+`decisions/2026-10-21-directory-prices-school-preferences.md`.
+
+The subsequent simplified report compares four additive pooled models on
+the same complete sample: A distance+fees; B A+mixed HC/TP+TP-only+four observed
+school means (PAES M1, exam taking, high-premium field and institution enrollment);
+C A+four VAs; D C+school type, with PAES M1 excluded from D only. B retains
+PAES M1, so B and D are not nested. These models omit parent composition and all
+attribute-by-type interactions, with the same units, fees and student
+clustering. The main report has one A-D table and a collapsed comuna-distance
+replication. See
+`decisions/2026-10-21-four-simple-preference-specifications.md`.
+
+The three binary-outcome means added to B are existing unadjusted `raw_mean`
+values from the school-VA precursor, pooled over grade-8 cohorts 2017-2020.
+Exam taking uses all eligible school attendees; field and institution use
+exam takers, matching their VA risk sets. Preserve outcome-specific observed
+counts and use equal-destination-school normalization for the added shares.
+
+An additional column between A and B, shown as `A + averages`, includes
+distance, fees and the four observed school outcome averages with no
+school-type indicators. Existing A-D specifications and their fitted
+objects remain unchanged. It isolates the means block before adding type
+in B; all five columns share the same complete ranking sample and units.
+
+The predicted-exam-score exercise uses grade-8 cohorts 2017/2019 with
+observed grade-8 SIMCE and timely entrance-exam scores. Five-fold predictions
+of the standardized math-verbal composite use the full baseline controls,
+including middle-school fixed effects and grade-8 SIMCE. Define b_i as the
+out-of-fold score and g_i as actual minus b_i, preserving common actual-score
+SD units. Regress the master's HE-application and premium-field outcomes on
+both components with an intercept and middle-school-clustered SEs. See
+`decisions/2026-10-21-predicted-exam-score-and-gap.md` for sample, follow-up,
+outcome definitions and conditional-inference limitations.
+
+The user replaced the second-stage LPMs in that exercise with logistic
+regressions on the identical b_i/g_i sample. The current table reports
+average marginal effects with delta-method SEs from the middle-school
+clustered logit score covariance; raw logit coefficients and odds ratios
+are retained separately. Both AMEs keep the existing actual-score units.
+The earlier LPM outputs are archived, and no baseline predictions are refit.
+
+Basic gender comparisons of full projected log income use the broad
+2017-2020 panel (valid attended HS, age 12-16), without exam-taking or
+complete-control restrictions. Compare all students preserving the existing
+CLP 553,553 non-enrollee assignment, then condition on observed HE enrollment.
+Use the unchanged master log_program_income_full_clp_m1 values; report
+women-minus-men mean-log differences and 100*(exp(gap)-1) geometric-mean
+ratios. These are program-assigned earnings prospects, not individual wage
+observations. Script 06 in mifuturo_matricula_income saves this comparison.
+
+The subsequent score-controlled comparison adds linear entrance-exam math
+and verbal scores and admission-year fixed effects to the female-indicator
+OLS regression. Require both positive observed scores and normalize within
+admission year; missing tests are not imputed. Retain the original full-panel
+raw gap, but compare adjusted and unadjusted coefficients on the identical
+scored sample (643,236 with the non-enrollee income assignment; 528,005 HE
+enrollees). Use HC1 covariance. This prevents score-availability selection
+from being mistaken for the effect of conditioning on achievement.
+
+The subsequent parental-income-quintile comparison replaces gender with
+Q1-Q5 indicators while retaining the same entrance-exam score/year controls
+and two income samples. Quintiles combine adjacent existing imputed grade-4
+SIMCE income deciles; do not recompute ranks in the scored sample. Q1 is the
+reference, and missing baseline deciles are excluded. No gender control is
+included. Script 08 in mifuturo_matricula_income saves OLS/HC1 results under
+the task name projected_income_quintiles.
+
+The high-premium replacement uses the existing premium-field and premium-
+institution enrollment flags as binary outcomes. Retain parental-income
+quintiles and entrance-exam score/year controls, and use logit for all
+scored students and HE enrollees separately. Non-enrollees retain zeros.
+Omit admission-year cells lacking variation in either outcome from both
+models within a sample; use common observed outcome support. Report
+average discrete probability contrasts Q2-Q5 versus Q1, holding each
+student's observed score/year controls fixed. HC1 delta-method covariance
+uses the full fitted-logit coefficient covariance. Script 09 in the
+mifuturo_matricula_income task produces high_premium_income_quintiles.
+
+The D-plus-peer preference extension uses the user-approved 13,037 complete
+rankings entirely covered by the supplied top-100 composition file. Replicate
+D and add four peer characteristics jointly under each population definition
+on the identical sample, without trimming lists. Peer units use a common
+attendee-school SD across 99 estimation destinations, while VA units remain
+unchanged. Compare nested incremental ranking likelihoods for the four-peer
+and four-VA blocks; do not equate raw coefficient magnitude or significance
+with causal preference strength. See
+`decisions/2026-10-22-peer-populations-preferences.md`.
+
+The later full-school peer extension supersedes that top-100 restriction.
+Construct unchanged peer populations across all observed school RBDs, then
+retain complete original D rankings with all three sets of peer measures:
+267,937 students, 940,605 pairs and 2,454 schools (98.08% retained). D is
+re-estimated on exactly this common sample and keeps all ten original fee
+indicators. Peer normalization uses the expanded sample's attendee-school
+mean/SD, common across all three populations, while original VA units stay
+fixed. Missing school-group peer measures exclude entire lists and are not
+imputed. See `decisions/2026-10-22-full-school-peer-preferences.md`.
+
+Destination entry-grade audit (script 39) uses the latest 2,454 destinations.
+Classify basic/preschool/secondary offerings from 2024 Directory ENS codes,
+separately from historical 2018-2020 grade presence. Carryover means a
+person with a valid ordinary youth/artistic grade-9 record at their
+grade-8 RBD the next year, using all students and the established
+first-observed-grade-8 origin definition. Grade-9 denominators are unique
+person-school records, can include repeaters/multiple-school enrollment,
+and retain unknown preceding-cohort origin coverage separately. Do not
+equate availability of basic education with observed actual carryover or
+treat 2024 offerings as contemporaneous with the application cohorts.
+
+Vacancy/enrollment comparison (script 40) keeps the same 1,918 2024
+basic-plus-secondary destinations, matching A1 school-year coverage:
+process t grade-9 `vacantes` versus grade 8 in t or grade 9 in t+1.
+Exclude absent grade-9 A1 listings from both numerator and denominator,
+preserving listed zeros. Denominators deduplicate valid Rendimiento
+person-school records and include repeaters. Save each school-year ratio
+(undefined for zero enrollment); annual summaries divide summed vacancies
+by summed matched-school enrollment. The user requested separate reporting,
+so no across-year pooling is reported. Advertised vacancies do not measure
+realized assignment or new-entrant shares.

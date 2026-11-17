@@ -1,0 +1,35 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>HE enrollment with VA baseline controls</title>
+<style>body{font:16px/1.5 system-ui;max-width:1300px;margin:30px auto;padding:0 24px}table{border-collapse:collapse;width:100%}td,th{padding:9px;border-bottom:1px solid #ddd;text-align:right}td:first-child,td:nth-child(2){text-align:left}</style></head><body>
+<h1>HE enrollment with the complete VA baseline control set</h1>
+<p>Both models: 559,914 students, 3,371 attended-school clusters. R2: 0.02657 for the previous model on this sample; 0.15695 with the full baseline set.</p>
+<p>Linear PAES math/verbal; cubic grade-4 SIMCE math and verbal separately; linear income decile, both parent education years, parent indigenous indicators, nursery/daycare/prekindergarten/kindergarten attendance, standardized middle-school GPA and attendance; cohort, sex, age, student home-comuna, observed middle-school years, and middle-school indicators. This matches the observational VA baseline controls. Destination high-school effects are not baseline variables and are not included.</p>
+<p>Exclude 9,767 of the prior 569,681 students for missing baseline controls. No high-math restriction. Existing outcome, score normalization and baseline imputations are preserved. Parent education enters once. School-clustered CR1/t inference counts all baseline fixed effects using exact fixest degrees of freedom. Both covariance checks pass.</p>
+<p>Coefficients and SEs below are in percentage points. Raw cubic coefficients are not marginal effects; average baseline-score derivatives are saved separately. These are conditional associations.</p>
+<table><tr><th>Model</th><th>Term</th><th>Coefficient</th><th>Clustered SE</th><th>p-value</th></tr>
+<tr><td>previous_same_sample</td><td>(Intercept)</td><td>78.349</td><td>0.355</td><td>0</td></tr>
+<tr><td>previous_same_sample</td><td>father_years</td><td>0.212</td><td>0.024</td><td>5.873e-19</td></tr>
+<tr><td>previous_same_sample</td><td>mother_years</td><td>0.095</td><td>0.026</td><td>0.0002162</td></tr>
+<tr><td>previous_same_sample</td><td>z_math</td><td>2.402</td><td>0.081</td><td>1.296e-171</td></tr>
+<tr><td>previous_same_sample</td><td>z_verbal</td><td>3.139</td><td>0.089</td><td>2.208e-234</td></tr>
+<tr><td>previous_same_sample</td><td>z_sim_mat_4to</td><td>0.862</td><td>0.089</td><td>9.328e-22</td></tr>
+<tr><td>previous_same_sample</td><td>z_sim_leng_4to</td><td>0.242</td><td>0.082</td><td>0.003181</td></tr>
+<tr><td>all_va_baseline</td><td>z_math</td><td>2.456</td><td>0.080</td><td>1.338e-184</td></tr>
+<tr><td>all_va_baseline</td><td>z_verbal</td><td>3.103</td><td>0.082</td><td>6.291e-260</td></tr>
+<tr><td>all_va_baseline</td><td>income_decile_imputed</td><td>-0.079</td><td>0.025</td><td>0.001698</td></tr>
+<tr><td>all_va_baseline</td><td>father_educ_years_imputed</td><td>0.029</td><td>0.023</td><td>0.2084</td></tr>
+<tr><td>all_va_baseline</td><td>mother_educ_years_imputed</td><td>0.150</td><td>0.025</td><td>2.184e-09</td></tr>
+<tr><td>all_va_baseline</td><td>father_indigenous_imputed</td><td>0.069</td><td>0.266</td><td>0.7962</td></tr>
+<tr><td>all_va_baseline</td><td>mother_indigenous_imputed</td><td>-0.537</td><td>0.247</td><td>0.02953</td></tr>
+<tr><td>all_va_baseline</td><td>sala_cuna_imputed</td><td>-0.160</td><td>0.133</td><td>0.229</td></tr>
+<tr><td>all_va_baseline</td><td>jardin_imputed</td><td>0.134</td><td>0.109</td><td>0.2202</td></tr>
+<tr><td>all_va_baseline</td><td>prekinder_imputed</td><td>0.728</td><td>0.193</td><td>0.0001701</td></tr>
+<tr><td>all_va_baseline</td><td>kinder_imputed</td><td>0.550</td><td>0.558</td><td>0.325</td></tr>
+<tr><td>all_va_baseline</td><td>z_gpa_middle_mean</td><td>2.733</td><td>0.098</td><td>2.282e-155</td></tr>
+<tr><td>all_va_baseline</td><td>z_att_middle_mean</td><td>1.566</td><td>0.075</td><td>3.953e-90</td></tr>
+<tr><td>all_va_baseline</td><td>z_sim_mat_4to</td><td>-0.177</td><td>0.111</td><td>0.1119</td></tr>
+<tr><td>all_va_baseline</td><td>I(I(z_sim_mat_4to^2))</td><td>-0.518</td><td>0.048</td><td>5.236e-27</td></tr>
+<tr><td>all_va_baseline</td><td>I(I(z_sim_mat_4to^3))</td><td>0.030</td><td>0.031</td><td>0.3254</td></tr>
+<tr><td>all_va_baseline</td><td>z_sim_leng_4to</td><td>-0.708</td><td>0.116</td><td>1.314e-09</td></tr>
+<tr><td>all_va_baseline</td><td>I(I(z_sim_leng_4to^2))</td><td>-0.268</td><td>0.047</td><td>9.444e-09</td></tr>
+<tr><td>all_va_baseline</td><td>I(I(z_sim_leng_4to^3))</td><td>-0.015</td><td>0.035</td><td>0.6654</td></tr>
+</table></body></html>

@@ -1,0 +1,33 @@
+\begin{table}[!htbp]\centering
+\caption{Premium-field enrollment: cubic-score logit probability effects}
+\label{tab:premium-field-logit-cubic}
+\small
+\begin{tabular}{lrrrr}\hline\hline
+ & Science & Law & Engineering & Medicine+ \\ \hline
+Math: average marginal effect (per SD) & 3.30 (0.06) & -2.26 (0.04) & 9.36 (0.10) & 2.42 (0.07) \\
+Verbal: average marginal effect (per SD) & -0.68 (0.05) & 4.38 (0.05) & -6.19 (0.11) & 3.87 (0.07) \\
+Income decile 1 & Reference & Reference & Reference & Reference \\
+Income decile 2 vs. 1 & 0.35 (0.18) & 0.02 (0.14) & -0.16 (0.28) & -0.01 (0.22) \\
+Income decile 3 vs. 1 & 1.09 (0.19) & -0.11 (0.13) & 0.34 (0.29) & -0.10 (0.22) \\
+Income decile 4 vs. 1 & 1.12 (0.19) & 0.02 (0.13) & 0.50 (0.29) & 0.12 (0.22) \\
+Income decile 5 vs. 1 & 1.36 (0.19) & 0.09 (0.13) & 0.02 (0.31) & 0.48 (0.22) \\
+Income decile 6 vs. 1 & 1.46 (0.19) & 0.05 (0.13) & 0.08 (0.32) & 0.53 (0.23) \\
+Income decile 7 vs. 1 & 1.46 (0.19) & 0.16 (0.13) & -0.08 (0.33) & 0.46 (0.23) \\
+Income decile 8 vs. 1 & 1.22 (0.18) & 0.37 (0.13) & -0.48 (0.35) & 0.73 (0.23) \\
+Income decile 9 vs. 1 & 0.58 (0.18) & 1.01 (0.13) & -1.04 (0.34) & 0.35 (0.24) \\
+Income decile 10 vs. 1 & -1.80 (0.19) & 2.51 (0.16) & -4.36 (0.39) & -2.00 (0.27) \\
+\hline
+Outcome mean (\%) & 7.49 & 4.38 & 17.74 & 9.68 \\
+Observations & 559,935 & 559,935 & 559,935 & 559,935 \\
+School clusters & 3,363 & 3,363 & 3,363 & 3,363 \\
+McFadden pseudo-R-squared & 0.0285 & 0.0853 & 0.0435 & 0.0689 \\
+Logit squared-error R-squared & 0.0161 & 0.0356 & 0.0423 & 0.0443 \\
+OLS R-squared (same sample) & 0.0158 & 0.0347 & 0.0426 & 0.0416 \\
+Tjur R-squared & 0.0162 & 0.0358 & 0.0427 & 0.0439 \\
+AUC (in-sample) & 0.632 & 0.735 & 0.646 & 0.696 \\
+Admission-year effects & Yes & Yes & Yes & Yes \\
+\hline\hline\end{tabular}
+\begin{minipage}{0.98\textwidth}\footnotesize
+\textit{Notes:} Probability effects and school-clustered delta-method SEs (parentheses), both in percentage points. Income rows average discrete contrasts relative to decile 1, holding observed scores/year fixed. Score rows are average partial derivatives, incorporating the full cubic score polynomial and interactions. Admission-year effects are included. The 5,105 admission-2026 observations with no field events are omitted; OLS is refit on the identical logit sample. McFadden pseudo-$R^2$ is likelihood-based and not directly comparable to OLS $R^2$. The squared-error $R^2$ uses the same Brier-loss denominator as OLS. All fit metrics are in-sample. Engineering includes manufacturing/construction; Medicine+ uses the original six-program health-field list.
+\end{minipage}
+\end{table}

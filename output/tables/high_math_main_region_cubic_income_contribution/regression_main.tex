@@ -1,0 +1,33 @@
+\begin{table}[!htbp]\centering
+\caption{Main premium-enrollment outcomes: high-math OLS with home-region effects}
+\label{tab:region-d5-high-math-premium-cubic-income-main}
+\small
+\begin{tabular}{lrrrr}\hline\hline
+ & Institution & Field & Either & Both \\ \hline
+Math: average derivative (per SD) & 15.29 (0.50) & 16.07 (0.54) & 12.86 (0.41) & 18.50 (0.58) \\
+Verbal: average derivative (per SD) & 4.83 (0.26) & 1.62 (0.29) & 2.77 (0.19) & 3.68 (0.29) \\
+Income decile 1 vs. 5 & -0.44 (1.04) & 1.29 (1.18) & 1.04 (1.05) & -0.19 (0.97) \\
+Income decile 2 vs. 5 & 0.27 (0.96) & 1.16 (1.08) & 1.14 (0.95) & 0.29 (0.92) \\
+Income decile 3 vs. 5 & -0.04 (0.88) & -0.62 (1.06) & -1.03 (0.98) & 0.37 (0.82) \\
+Income decile 4 vs. 5 & 0.49 (0.90) & -0.19 (0.96) & 0.21 (0.88) & 0.10 (0.81) \\
+Income decile 5 & Reference & Reference & Reference & Reference \\
+Income decile 6 vs. 5 & 0.06 (0.83) & 0.36 (0.89) & -0.26 (0.77) & 0.67 (0.74) \\
+Income decile 7 vs. 5 & 1.50 (0.78) & -0.66 (0.83) & -0.21 (0.73) & 1.05 (0.73) \\
+Income decile 8 vs. 5 & 1.94 (0.78) & -1.02 (0.80) & -0.21 (0.70) & 1.13 (0.71) \\
+Income decile 9 vs. 5 & 5.48 (0.80) & -2.45 (0.77) & -0.24 (0.68) & 3.27 (0.75) \\
+Income decile 10 vs. 5 & 17.33 (1.01) & -12.72 (0.95) & 2.00 (0.66) & 2.61 (0.98) \\
+\hline
+Outcome mean (\%) & 52.63 & 62.97 & 80.78 & 34.82 \\
+Full R-squared & 0.3297 & 0.0870 & 0.1411 & 0.1741 \\
+R-squared without income & 0.3101 & 0.0746 & 0.1404 & 0.1736 \\
+Income share of explained variation (\%) & 5.94 & 14.26 & 0.48 & 0.30 \\
+Income indicators: joint clustered p-value & $<$0.001 & $<$0.001 & $<$0.001 & $<$0.001 \\
+Observations & 93,423 & 93,423 & 93,423 & 93,423 \\
+School clusters & 2,735 & 2,735 & 2,735 & 2,735 \\
+Admission-year indicators & Yes & Yes & Yes & Yes \\
+Reported home-region indicators & Yes & Yes & Yes & Yes \\
+\hline\hline\end{tabular}
+\begin{minipage}{0.98\textwidth}\footnotesize
+\textit{Notes:} Income-decile coefficients and score average derivatives are in percentage points; school-clustered CR1 SEs are in parentheses. Score controls include $M,V,M^2,V^2,MV,M^3,V^3,M^2V,MV^2$. Income decile 5 is the reference. Admission-year effects are included in both full and reduced models. Both models additionally include 16 reported home-region categories from same-year PAES/PDT domicile data, with one category omitted. Income share is $(R^2_{full}-R^2_{without\ income})/R^2_{full}$, expressed as a percentage; it measures incremental explanatory power after scores, admission year, and home region, not a causal contribution. All models require original $z_{math} \geq 1$, without restandardizing scores or re-ranking income. The sample includes 8,522 non-enrollees and 840 admission-2026 records. Either is the inclusive union; all four outcomes are zero for non-enrollees.
+\end{minipage}
+\end{table}

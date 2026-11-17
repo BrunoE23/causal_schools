@@ -1,0 +1,36 @@
+\begin{table}[!htbp]
+\centering
+\caption{School ranking preferences with PAES M1: pooled total slopes}
+\label{tab:paes-m1-pooled-total-slopes}
+\small
+\setlength{\tabcolsep}{4pt}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lcc}
+\toprule
+Regressor or total slope & Published student coordinates & Home-comuna centroids \\
+\midrule
+Non-TP: Math VA & -0.0395 (0.0030) & -0.0371 (0.0030) \\
+Non-TP: Exam-taking VA & 0.1055 (0.0046) & 0.0990 (0.0046) \\
+Non-TP: High-premium-field VA & 0.0096 (0.0032) & 0.0073 (0.0032) \\
+Non-TP: High-premium-institution VA & -0.0044 (0.0032) & -0.0095 (0.0032) \\
+Non-TP: PAES M1 school mean & 0.1541 (0.0038) & 0.1486 (0.0038) \\
+\midrule
+Mixed HC/TP: Math VA & -0.0322 (0.0056) & -0.0281 (0.0056) \\
+Mixed HC/TP: Exam-taking VA & 0.0280 (0.0035) & 0.0314 (0.0035) \\
+Mixed HC/TP: High-premium-field VA & 0.0496 (0.0022) & 0.0478 (0.0021) \\
+Mixed HC/TP: High-premium-institution VA & -0.0369 (0.0042) & -0.0421 (0.0042) \\
+Mixed HC/TP: PAES M1 school mean & 0.2066 (0.0060) & 0.1903 (0.0059) \\
+\midrule
+TP only: Math VA & -0.0570 (0.0091) & -0.0670 (0.0090) \\
+TP only: Exam-taking VA & 0.0116 (0.0048) & 0.0205 (0.0047) \\
+TP only: High-premium-field VA & 0.0484 (0.0025) & 0.0480 (0.0024) \\
+TP only: High-premium-institution VA & -0.0176 (0.0046) & -0.0176 (0.0045) \\
+TP only: PAES M1 school mean & 0.1213 (0.0099) & 0.1272 (0.0098) \\
+\bottomrule
+\end{tabular}
+}
+\par\smallskip
+\begin{minipage}{0.98\linewidth}\footnotesize
+\textit{Notes:} Joint submitted-set rank-ordered logits with four VAs, PAES M1 school mean, two school-type indicators, ten type-by-metric interactions and log(1 + distance in km). Parentheses report student-clustered standard errors. Total slopes add baseline coefficients and relevant interactions; their standard errors include covariance terms. The original four-VA normalization is fixed across 2,501 pooled destination schools; M1 is standardized across unique schools in the common PAES-complete sample. Both distance versions and matched-baseline fits retain the same complete rankings within each applicant group. Non-TP includes HC-only, artistic-only and other schools. Type-indicator coefficients apply only at all five standardized metrics equal to zero. PAES process 2025 records 2024 graduates' regular late-2024 M1 sitting, after the 2018-2020 applications; the score mean is measured among test takers. No 2024-process fallback is used. Associations are descriptive; separate group logits can differ in utility-error scale.
+\end{minipage}
+\end{table}

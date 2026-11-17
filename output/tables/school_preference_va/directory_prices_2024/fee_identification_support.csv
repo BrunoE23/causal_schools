@@ -1,0 +1,56 @@
+field,prefix,code,label,term,group,n_schools,n_pairs,n_rankings,within_ranking_ss,estimated,status
+PAGO_MATRICULA,enrollment_fee,2,"CLP 1,000-10,000",enrollment_fee_band_2,pooled,291,115038,71697,62846.502577024,TRUE,Estimated
+PAGO_MATRICULA,enrollment_fee,3,"CLP 10,001-25,000",enrollment_fee_band_3,pooled,6,1440,1440,1051.40836598061,TRUE,Estimated
+PAGO_MATRICULA,enrollment_fee,4,"CLP 25,001-50,000",enrollment_fee_band_4,pooled,4,844,844,634.301588974751,TRUE,Estimated
+PAGO_MATRICULA,enrollment_fee,5,"CLP 50,001-100,000",enrollment_fee_band_5,pooled,11,2748,2550,1964.58088812847,TRUE,Estimated
+PAGO_MATRICULA,enrollment_fee,6,"Above CLP 100,000",enrollment_fee_band_6,pooled,3,665,665,540.369945003173,TRUE,Estimated
+PAGO_MENSUAL,monthly_fee,2,"CLP 1,000-10,000",monthly_fee_band_2,pooled,0,0,0,0,FALSE,No within-ranking variation
+PAGO_MENSUAL,monthly_fee,3,"CLP 10,001-25,000",monthly_fee_band_3,pooled,22,6162,6029,4580.33820674659,TRUE,Estimated
+PAGO_MENSUAL,monthly_fee,4,"CLP 25,001-50,000",monthly_fee_band_4,pooled,135,44618,37591,30977.1452696309,TRUE,Estimated
+PAGO_MENSUAL,monthly_fee,5,"CLP 50,001-100,000",monthly_fee_band_5,pooled,276,99491,62576,56034.7035099206,TRUE,Estimated
+PAGO_MENSUAL,monthly_fee,6,"Above CLP 100,000",monthly_fee_band_6,pooled,136,35377,22949,20971.5519308321,TRUE,Estimated
+BOTH,fee_information,0,Fee information unavailable (both),fee_information_unknown,pooled,37,9610,9116,6410.42325095075,TRUE,Estimated
+PAGO_MATRICULA,enrollment_fee,2,"CLP 1,000-10,000",enrollment_fee_band_2,ending_nonpriority,291,48049,27840,26088.1868568744,TRUE,Estimated
+PAGO_MATRICULA,enrollment_fee,3,"CLP 10,001-25,000",enrollment_fee_band_3,ending_nonpriority,6,654,654,488.687527899069,TRUE,Estimated
+PAGO_MATRICULA,enrollment_fee,4,"CLP 25,001-50,000",enrollment_fee_band_4,ending_nonpriority,4,304,304,234.348762348762,TRUE,Estimated
+PAGO_MATRICULA,enrollment_fee,5,"CLP 50,001-100,000",enrollment_fee_band_5,ending_nonpriority,11,1276,1180,938.920384354208,TRUE,Estimated
+PAGO_MATRICULA,enrollment_fee,6,"Above CLP 100,000",enrollment_fee_band_6,ending_nonpriority,3,278,278,231.155285170402,TRUE,Estimated
+PAGO_MENSUAL,monthly_fee,2,"CLP 1,000-10,000",monthly_fee_band_2,ending_nonpriority,0,0,0,0,FALSE,No within-ranking variation
+PAGO_MENSUAL,monthly_fee,3,"CLP 10,001-25,000",monthly_fee_band_3,ending_nonpriority,22,2187,2144,1661.36682544751,TRUE,Estimated
+PAGO_MENSUAL,monthly_fee,4,"CLP 25,001-50,000",monthly_fee_band_4,ending_nonpriority,135,18075,15095,12783.967472468,TRUE,Estimated
+PAGO_MENSUAL,monthly_fee,5,"CLP 50,001-100,000",monthly_fee_band_5,ending_nonpriority,276,42349,25061,23821.1669893574,TRUE,Estimated
+PAGO_MENSUAL,monthly_fee,6,"Above CLP 100,000",monthly_fee_band_6,ending_nonpriority,136,15433,9582,9348.77588165542,TRUE,Estimated
+BOTH,fee_information,0,Fee information unavailable (both),fee_information_unknown,ending_nonpriority,37,3427,3303,2395.35186237911,TRUE,Estimated
+PAGO_MATRICULA,enrollment_fee,2,"CLP 1,000-10,000",enrollment_fee_band_2,ending_priority,291,44648,30826,25945.9899570731,TRUE,Estimated
+PAGO_MATRICULA,enrollment_fee,3,"CLP 10,001-25,000",enrollment_fee_band_3,ending_priority,6,579,579,410.59930537299,TRUE,Estimated
+PAGO_MATRICULA,enrollment_fee,4,"CLP 25,001-50,000",enrollment_fee_band_4,ending_priority,4,417,417,312.336989685151,TRUE,Estimated
+PAGO_MATRICULA,enrollment_fee,5,"CLP 50,001-100,000",enrollment_fee_band_5,ending_priority,11,675,653,503.261144696807,TRUE,Estimated
+PAGO_MATRICULA,enrollment_fee,6,"Above CLP 100,000",enrollment_fee_band_6,ending_priority,3,147,147,121.602803324127,TRUE,Estimated
+PAGO_MENSUAL,monthly_fee,2,"CLP 1,000-10,000",monthly_fee_band_2,ending_priority,0,0,0,0,FALSE,No within-ranking variation
+PAGO_MENSUAL,monthly_fee,3,"CLP 10,001-25,000",monthly_fee_band_3,ending_priority,22,2996,2925,2215.33031565098,TRUE,Estimated
+PAGO_MENSUAL,monthly_fee,4,"CLP 25,001-50,000",monthly_fee_band_4,ending_priority,135,18650,16049,13014.4639121122,TRUE,Estimated
+PAGO_MENSUAL,monthly_fee,5,"CLP 50,001-100,000",monthly_fee_band_5,ending_priority,276,35635,24849,21526.9767698996,TRUE,Estimated
+PAGO_MENSUAL,monthly_fee,6,"Above CLP 100,000",monthly_fee_band_6,ending_priority,136,9896,7133,6476.66613350633,TRUE,Estimated
+BOTH,fee_information,0,Fee information unavailable (both),fee_information_unknown,ending_priority,37,5365,5030,3465.59468268659,TRUE,Estimated
+PAGO_MATRICULA,enrollment_fee,2,"CLP 1,000-10,000",enrollment_fee_band_2,voluntary_nonpriority,288,12300,6875,5881.60100919377,TRUE,Estimated
+PAGO_MATRICULA,enrollment_fee,3,"CLP 10,001-25,000",enrollment_fee_band_3,voluntary_nonpriority,6,110,110,82.7459023003141,TRUE,Estimated
+PAGO_MATRICULA,enrollment_fee,4,"CLP 25,001-50,000",enrollment_fee_band_4,voluntary_nonpriority,4,55,55,38.6107142857143,TRUE,Estimated
+PAGO_MATRICULA,enrollment_fee,5,"CLP 50,001-100,000",enrollment_fee_band_5,voluntary_nonpriority,11,442,395,292.457350982351,TRUE,Estimated
+PAGO_MATRICULA,enrollment_fee,6,"Above CLP 100,000",enrollment_fee_band_6,voluntary_nonpriority,3,140,140,111.668252890041,TRUE,Estimated
+PAGO_MENSUAL,monthly_fee,2,"CLP 1,000-10,000",monthly_fee_band_2,voluntary_nonpriority,0,0,0,0,FALSE,No within-ranking variation
+PAGO_MENSUAL,monthly_fee,3,"CLP 10,001-25,000",monthly_fee_band_3,voluntary_nonpriority,21,443,436,325.001921384429,TRUE,Estimated
+PAGO_MENSUAL,monthly_fee,4,"CLP 25,001-50,000",monthly_fee_band_4,voluntary_nonpriority,135,3974,3244,2631.93897152383,TRUE,Estimated
+PAGO_MENSUAL,monthly_fee,5,"CLP 50,001-100,000",monthly_fee_band_5,voluntary_nonpriority,276,12188,6848,5944.86258572439,TRUE,Estimated
+PAGO_MENSUAL,monthly_fee,6,"Above CLP 100,000",monthly_fee_band_6,voluntary_nonpriority,135,5550,3374,2858.73913607376,TRUE,Estimated
+BOTH,fee_information,0,Fee information unavailable (both),fee_information_unknown,voluntary_nonpriority,33,354,336,242.717089038413,TRUE,Estimated
+PAGO_MATRICULA,enrollment_fee,2,"CLP 1,000-10,000",enrollment_fee_band_2,voluntary_priority,286,5718,3797,3013.81468032611,TRUE,Estimated
+PAGO_MATRICULA,enrollment_fee,3,"CLP 10,001-25,000",enrollment_fee_band_3,voluntary_priority,6,70,70,49.8537439613527,TRUE,Estimated
+PAGO_MATRICULA,enrollment_fee,4,"CLP 25,001-50,000",enrollment_fee_band_4,voluntary_priority,4,55,55,38.6055555555556,TRUE,Estimated
+PAGO_MATRICULA,enrollment_fee,5,"CLP 50,001-100,000",enrollment_fee_band_5,voluntary_priority,10,178,168,117.916286594383,TRUE,Estimated
+PAGO_MATRICULA,enrollment_fee,6,"Above CLP 100,000",enrollment_fee_band_6,voluntary_priority,3,24,24,18.2551226551227,TRUE,Estimated
+PAGO_MENSUAL,monthly_fee,2,"CLP 1,000-10,000",monthly_fee_band_2,voluntary_priority,0,0,0,0,FALSE,No within-ranking variation
+PAGO_MENSUAL,monthly_fee,3,"CLP 10,001-25,000",monthly_fee_band_3,voluntary_priority,22,385,376,273.754913142413,TRUE,Estimated
+PAGO_MENSUAL,monthly_fee,4,"CLP 25,001-50,000",monthly_fee_band_4,voluntary_priority,134,2633,2234,1737.0123971245,TRUE,Estimated
+PAGO_MENSUAL,monthly_fee,5,"CLP 50,001-100,000",monthly_fee_band_5,voluntary_priority,268,5621,3703,2984.95497466799,TRUE,Estimated
+PAGO_MENSUAL,monthly_fee,6,"Above CLP 100,000",monthly_fee_band_6,voluntary_priority,133,1826,1259,1025.60926577349,TRUE,Estimated
+BOTH,fee_information,0,Fee information unavailable (both),fee_information_unknown,voluntary_priority,34,360,345,233.841373978394,TRUE,Estimated

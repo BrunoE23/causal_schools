@@ -1,5 +1,293 @@
 # Project Documentation
 
+## Continuous institution-premium VA (November 10, 2026)
+
+`code/codex/continuous_institution_va/` estimates school VA using the continuous
+institution FE from the two-way MiFuturo institution/field model. Non-enrollees
+remain NA by explicit user instruction; unsupported enrollees are also missing.
+The existing 2017-2020 baseline VA specification is retained. Official unique
+institution codes recover FEs missed by the older type/name join, without
+changing the existing binary results. Final estimation: 482,583 enrollees and
+3,256 schools in one connected high-school/middle-school component. Local
+results are in `data/clean/continuous_institution_va/`; the HTML report is in
+`output/reports/continuous_institution_va/report.html`. See decision
+`2026-11-10-continuous-institution-va.md` and the join issue in `issues.md`.
+
+## November 2026 ten-minute presentation
+
+November 4 follow-up: sample construction and the four-outcome first-stage,
+second-stage and implied-gain tables now follow September. The cross-outcome
+slide uses the four-by-four direct **unshrunk** IV block from the September paper,
+explicitly distinguished from EB main results. Appendix heterogeneity is rerun
+for the September samples by grade-4 math quintile and gender. Reproduction code
+and definitions: `code/codex/nov_pres_analysis/README.md` and `run.R`.
+The script checks all four main coefficients, SEs, Ns and first-stage F statistics
+against the saved September results before estimating subgroups. These use
+HC1 inference with estimated VA treated as fixed; contrasts are exploratory and
+unadjusted. Earlier August heterogeneity assets remain unchanged.
+
+Working deck: `writing/nov_pres/nov_pres_10min.tex` and compiled PDF alongside.
+Copied from `writing/august_pres/short_10min/august_pres_10min.tex`, preserving
+the August sources. November title date and relocated relative asset paths.
+On 2026-11-04 Bruno requested the Preview of Results numbers from sept_draft.
+This is PDF page 5 in the inherited short deck (referred to as slide 6 in chat).
+Math: mean .043, EB 90-10 .496 SD, pass-through 1.197, implied gain .594 SD.
+High-premium field: mean .347, EB 90-10 12.6 pp, pass-through .861, gain 10.8 pp.
+Sources: `output/tables/results_section/primary_seven_va_distribution.tex` and
+`output/tables/empirical_bayes_school_va/va_2017_2020__sae_2018_2020/main_table.tex`.
+Only preview numbers and title date changed; other results remain August values
+pending Bruno's sequential instructions. Build from nov_pres with
+`latexmk -pdf -interaction=nonstopmode -halt-on-error nov_pres_10min.tex`.
+Validated 24 PDF pages; only title and preview text differ from the valid August
+`august_pres_10min_fixed.pdf`. Existing overfull warnings on outcome/sample
+slides and missing cross_outcome_spec target are inherited, not repaired here.
+
+## PAES test forms (2026-10-24)
+
+Raw PAES admissions score files 2023-2026 include same-sitting form codes and
+scores. `code/codex/paes_test_forms/` pairs these fields within year/sitting/test,
+keeps science modules separate, and estimates school-adjusted form-score gaps.
+Thirteen of 32 regular-sitting joint tests survive Holm correction. The largest
+fitted gap is Reading admissions 2026, form 103 minus 106: 7.44 points (0.060 SD;
+simultaneous 95% interval 5.69-9.19). No corrected baseline balance test rejects.
+Assignment randomization and test-center/room information remain unverified, so
+these are conditional associations. Report: `output/reports/paes_test_forms/report.html`.
+See `decisions/2026-10-24-paes-test-form-advantages.md` for sample, inference and limits.
+
+## SAE applicant composition stability (2026-10-22)
+
+`code/codex/applicant_composition_trends/` constructs a school-cohort panel for
+the 100 largest genuine submitted-choice destinations in the existing 294,198
+timely grade-9 SAE applicant roster, 2018-2020. Primary measures are the average
+of both grade-4 subject z-scores, female share, and reported available-parent
+education years. It reports equal-cohort OLS trends and separately labeled
+independent-applicant HC2 tests with identical slopes. Bruno requested raw
+p-values and counts of schools with trends in one/two/three outcomes. Cohort OLS
+counts are 8/0/0 (86 schools testable); independent-applicant exact counts are
+56/23/2 (100 schools). Fourteen schools have only two cohorts. Report:
+`output/reports/applicant_composition_trends/report.html`; reusable data and
+school-level counts: `data/clean/applicant_composition_trends/`. See
+`decisions/2026-10-22-applicant-composition-trends.md` for inference and selection.
+
+The requested admission-probability-weighted proxy uses school-specific simulated
+probabilities, normalized within each school/cohort/observed characteristic, on
+the same top-100 submitted-choice panel. With unadjusted p < .05, cohort OLS finds
+9/80 schools with any trend (all exactly one); independent-applicant HC2 finds
+68/97, with exact 1/2/3 counts 47/20/1. Zero probability mass reduces supported
+cohorts; three schools have no identifiable trend. Report:
+`output/reports/applicant_composition_trends/probability_weighted.html`.
+Derived data: `data/clean/applicant_composition_trends/probability_weighted/`. Details:
+`decisions/2026-10-22-probability-weighted-applicant-composition.md`.
+
+The subsequent three-year composition table adds income decile and compares
+probability-weighted applicants, actual first-round offer recipients, and all
+attendees. Bruno explicitly chose `most_time_RBD` for attendees and inclusion of
+non-SAE students. The attendee group includes all 2018-2020 grade-8-cohort students
+in the master universe, without the SAE roster's age restriction. Save both
+equal-cohort and pooled means, supported-year counts and strict all-three means.
+Main 300-row CSV and 100-row school-wide CSV/RDS are under
+`data/clean/applicant_composition_trends/group_averages/`. The long output also
+contains strictly stochastic offers (0 < p_school < 1) and observed-only income.
+See `decisions/2026-10-22-school-composition-three-groups.md`.
+
+## School rankings and four-dimensional VA preferences (2026-10-14)
+
+The2026-10-15 PAES extension constructs graduation-RBD mean MATE1_REG_ACTUAL
+for current2024 graduates in admission process2025, retaining positive valid
+M1 scores100-1000. It adds that standardized mean and its two school-type
+interactions alongside all prior terms(18coefficients). Keep original VA
+scaling and whole-list exclusions; refit the15-term baseline on identical
+retained rankings. Separate paes_m1 data/table folders and report
+school_preference_va/with_paes_m1.html preserve prior results. These scores
+postdate SAE applications. See decisions/2026-10-15-paes-m1-school-preferences.md.
+The strict2025 sample retains273516 rankings,970924 pairs and2483 schools;
+new M1 school SD is60.02695 points. Pooled total M1 slopes are positive
+for non-TP,mixed andTP-only(.1541/.2066/.1213); math-VA partial slopes
+are negative in all three types after adding M1 on the matched sample.
+
+The approved initial demand extension uses all 294198 Table 2 timely grade-9
+applicants (2018-2020), not only those with assignment risk. Two exact joint
+rank-ordered logits condition on submitted schools: standardized current paper
+EB VAs for math, exam taking, high-premium field and high-premium institution,
+plus mixed-HC/TP and TP-only indicators, their eight interactions with VA,
+and logged student-to-campus distance, with published coordinates
+or home-comuna centers. Use raw C1 genuine submitted choices, retain priority
+applications, collapse each RBD to its first submitted program/campus, and
+exclude incomplete rankings intact. Recompute coverage and normalization for
+the selected four VAs. Code/clean data/table/report use task
+name school_preference_va. Final four-VA sample: 276193 rankings, 985285 pairs,
+2501 schools; no geography or school-type loss. The latest2026-10-15 request
+splits school type into mixedHC/TP(bothHC310 andregularTP) andTP-only(TP
+withoutHC). The single any-TP flag remains metadata. The non-TP reference
+includes1557HC-only,1artistic and16other/no-regular-secondary destinations;
+mixed690 andTP-only237. The sample and normalization are unchanged. Current
+pooled main total slopes(math/exam/field/institution) are non-TP
+.051038/.153544/.011377/-.008280, mixed
+.057614/.072937/.062579/-.057258 andTP-only
+-.006330/.025639/.057808/-.022927. Each model has15 coefficients, retaining
+main effects and distance. Total-slope SEs use the full student-clustered
+covariance; type intercepts refer only to all four VAs=0. Historical additive,
+single-TP and no-TP models are preserved in dated clean-data archives. These are
+within-submitted-set associations. See `decisions/2026-10-14-school-preference-va.md`
+and the task README for exact normalization, geography and inference.
+
+The 2026-10-15 requested subgroup extension crosses regular-round B1 low-income
+prioritario status with the existing school-ending/voluntary application flags.
+The four estimation groups have 87407, 155028, 15363 and 13799 applicants
+(ending non-prioritario, ending prioritario, voluntary non-prioritario and
+voluntary prioritario). Both distance definitions retain identical lists and
+the pooled VA normalization. Unresolved origins are excluded, not assigned to
+the voluntary group. Report: school_preference_va/by_priority_continuation.html;
+the source task adds scripts05/07/06. Current fits use the same two school-type
+indicators and all eight VA interactions in every group. Both pooled and
+subgroup reports include total VA slopes by school type and retain the raw
+15-coefficient tables. These are conditional ordering associations, and
+separate-logit scales need not be identical.
+
+The requested top-school split reuses the original top100 list (no reranking):
+HC-only/mixed/TP-only counts are4/2/4(top10),10/6/4(top20),18/15/17(top50),
+41/31/28(top100). School shares divide byN; enrollment shares use2024 whole-
+school MAT_TOTAL within each set and include all grades. Code08 generates
+output/reports/school_preference_va/top_school_types.html;09 attaches the
+indicators to existing ranking data. Shared classification:school_types.R.
+
+For average VA by school type, Bruno explicitly selected2024 Directorio
+enrollment weights.10_average_va_by_school_type.R uses national active,
+enrolled regular-secondary schools with all four EB VAs, including private
+schools. MAT_TOTAL is whole-school/all-grade enrollment. The main report is
+school_preference_va/enrollment_weighted_va_by_school_type.html, with both
+raw units and unchanged pooled school-SD units. A separately labeled appendix
+restricts to preference destinations. Do not substitute SAE attendance counts
+for these requested weights or treat MAT_TOTAL as HS-only enrollment.
+
+11_plot_va_distributions.R extends that exact population and weighting to
+four overlapping empirical CDFs per VA dimension, one per school type. The
+artistic group has two schools and is plotted as exact discrete jumps.
+Combined and individual figures are under output/figures/school_preference_va;
+report:school_preference_va/va_distributions_by_school_type.html. Raw curve
+points and inverse-CDF quantiles are saved in the task clean-data folder.
+
+The user then specified density plots and dropped artistic schools.
+12_plot_va_densities.R is the current plotting script: three overlapping
+enrollment-weighted Gaussian densities with a common bandwidth per dimension,
+using the same school VAs and weights. Active report unchanged in name;
+current figure stem is enrollment_weighted_va_densities_by_school_type.
+Artistic exclusion is limited to the density plots, not the demand models.
+
+## Directory-only preschool entry and changes (2026-10-14)
+
+For the latest school-supply request Bruno explicitly says to ignore SAE years
+and use the national school directories, available locally for 2015-2025.
+The standalone script `code/codex/kinder_capacity/04_directory_preschool_changes.R`
+reads only raw directories. Report:
+`output/reports/kinder_capacity/directory_only_preschool_changes.html`.
+Use active preschool enrollment (any ENS=10, state=1, MATRICULA=1), not SAE
+participation. Preschool covers all educacion parvularia levels and cannot
+isolate kinder. These directories
+support first observed operation and preschool status changes, but no consistent
+annual preschool capacity or available-seat series. MAT_TOTAL only starts in
+2022 and covers the whole school; preschool enrollment counts appear in 2025.
+Do not substitute enrollment for seat capacity or call first observed operation
+a verified founding date. See `decisions/2026-10-14-directory-only-preschool-accounting.md`.
+
+## Main IV tables by continuation group (2026-10-12)
+
+The report `output/reports/empirical_bayes_school_va/main_by_continuation.html`
+splits Tables 4 and 5 into school-ending and voluntary applicant rows, keeping
+all original controls, EB VA and outcome-specific restrictions. All seven pooled
+specifications reproduce the paper first. Risk rates among the Table 2 groups
+are 54.07% and 61.79%; expected VA is reported for all applicants and the exact
+IV samples. Reusable model/data outputs live under the maximum-data cohort
+pair's `by_continuation` directory; new paper-table fragments end in
+`_by_continuation.tex`. The original manuscript is unchanged. See
+`decisions/2026-10-12-main-iv-by-continuation.md` for sources and validation.
+
+## Table 2 continuation-group variant (2026-10-12)
+
+`output/tables/balance_table/balance_table_continuation.tex` adds school-ending
+and voluntary applicant columns to the three original Table 2 mean columns,
+omitting differences and tests. The HTML view is
+`output/reports/balance_table/table2_continuation.html`. It exactly reproduces
+the paper's existing samples and means, then splits its 294,198 applicants
+using cached origin-school SAE offerings: 250,564 ending, 38,868 voluntary,
+and 4,766 unresolved/other. See
+`decisions/2026-10-12-table2-continuation-groups.md` for construction and checks.
+
+## Look up paper sample statistics before recomputing (2026-10-12)
+
+For questions about the student universe, SAE applicants, or assignment-risk
+applicants, first inspect the current paper's existing sample/balance tables.
+`writing/sept_draft/sept_draft.tex` includes Table 2 from
+`output/tables/balance_table/balance_table_samples.tex`; its companion CSV has
+unrounded values. Metropolitan shares are 38.7%, 25.7%, and 27.3% respectively.
+Use the table's definitions: broad panel with observed high school and age 12-16
+(2017-2020), timely SAE applicants (2018-2020), and their assignment-risk subset.
+Do not silently substitute the broader SAE-participation exercise's population.
+
+## Compact voluntary-SAE table with grade averages (2026-10-10)
+
+The latest compact report is
+`output/reports/sae_participation/voluntary_averages.html`. Six available-grade
+means over grades 5-8 replace 24 grade-specific academic measures; squares and
+survey PC1 remain. The six separate regressions and joint comparison retain
+313,813 pupils and school-clustered SEs. Peer-GPA's separate linear coefficient
+is .023 pp, with a -.382 pp squared term; the math-gap linear coefficient is
+-.709 pp. A two-period check finds opposite conditional peer-GPA slopes in
+grades 5-6 and 7-8. Annual survey PC1 slopes remain negative (.67-1.23 pp less
+application per SD). Exact averaging, missingness and scaling decisions are in
+`decisions/2026-10-10-average-grade-histories.md`; derived data and models are
+under `data/clean/sae_participation/averaged_grades/`.
+
+## Separate academic measures and survey PCA (2026-10-10)
+
+The revised voluntary-SAE table is
+`output/reports/sae_participation/voluntary_separate_pca.html`. It adds separate
+regressions for each grade-specific academic measure plus its square, a joint
+comparison with the same controls, and same-student GPA/math-gap comparisons.
+PCA is computed separately by survey year from complete parent questionnaires
+(218,241 respondents); all 313,813 pupils remain in the main regressions with
+score-completeness controls. PC1 has positive loadings and explains 47-54% of
+item variation. More favorable PC1 scores predict .67-1.24 pp less application per
+SD conditional on all academic measures. Exact construction, coefficients and
+the GPA-gap re-expression are in
+`decisions/2026-10-10-separate-predictors-survey-pca.md`. New reusable data and
+models are under `data/clean/sae_participation/interpretation_pca/`.
+
+## SAE participation prediction (2026-10-05)
+
+The new exercise in `code/codex/sae_participation/` predicts explicit grade-9 SAE
+applications during the first observed grade-8 year, using cohorts 2017-2020.
+Regular and complementary rounds are reconstructed from raw applications; the
+legacy first-process marker is not the outcome. The administrative panel retains
+944,510 universe students; 660,426 have an origin in SAE-covered regions and enter
+the analysis. Coverage harmonizes Nuble's new 2018 region code with the April
+directory. Origin-school continuation is taken from SAE offerings; schools absent
+from the offering file remain unresolved. Predictors use grades/attendance 5-8,
+peer z-scores and quadratic terms, GPA-minus-baseline-SIMCE z-score gaps, and 39
+grade-4 parent questionnaire questions/constructs. Geography is explicitly deferred.
+This is retrospective prediction; a sensitivity excludes grade-8 annual measures.
+Bruno's primary benchmark predicts no application where grade 9 is offered and
+application where the origin ends at grade 8. The same-student held-out comparison
+in `output/reports/sae_participation/continuation_benchmark.html` restricts to the
+two resolved offering groups (120,943 pupils). Accuracy is 89.774% for the rule
+and 90.002% for the full model: 276 net errors avoided, only one among pupils
+whose schools offer grade 9. Excluding grade-8 annual measures avoids only three
+errors net. These outcomes measure applications, not actual school changes.
+The voluntary follow-up restricts to the 313,813 pupils whose schools offer grade
+9 and refits models within that group; 62,189 remain in the original holdout.
+Report: `output/reports/sae_participation/voluntary_margin.html`. New estimates
+and diagnostics are in `data/clean/sae_participation/voluntary/`. Method and timing
+details are in `decisions/2026-10-05-voluntary-sae-margin.md`.
+The latest requested output is the single joint OLS table at
+`output/reports/sae_participation/voluntary_ols.html`: all constructed predictors,
+including squares and parent questions, on the full voluntary sample, with
+school-clustered SEs and coefficients in percentage points. N = 313,813,
+schools = 2,000, R2 = .0343078. It reuses the existing constructed design without
+new feature selection; all coefficients and the regression object are saved.
+All new data are repository-local under `data/clean/sae_participation/`, with source
+Box files unchanged. Exact definitions and validation choices are in
+`decisions/2026-10-05-sae-participation-prediction.md` and the task README.
+
 ## Current compact staff-versus-VA table: fixed joint OLS (2026-09-21)
 
 Bruno requested stopping Lasso and tabulating the previously shortlisted 14
@@ -999,3 +1287,161 @@ the school-only penalty-boundary repair are documented in
 
 ### Observational VA consolidated inputs (2026-09-21)
 The observational school-VA constructor now prefers middle-school controls and full program-income columns already included in univ_gr8_df.csv, with external files used only when columns are absent. It normalizes most_time_rbd_middle to its existing internal capitalization and preserves legacy program_income/log_program_income names as aliases of the full-income measures, as defined by the income constructor. Field binaries and STEM are rebuilt from the current field_reclassified columns. The regression specification is unchanged. The constructor defaults to grade-8 cohorts 2017-2020 and supports explicit cohort windows; the second paper-facing run uses 2017-2018, and 2021 is excluded because complete baseline data select a small subset of that cohort.
+
+### SAE applications by target grade (2026-10-14)
+
+`all_apps.Rdata` and `all_apps.dta` contain PSU/PAES student records and college
+outcomes, constructed in `code/merge_all_data.R`; they are not all-grade SAE files.
+Existing cleaned SAE application objects retain grade 9. Full target-grade counts
+therefore use the raw regular-round C1 files. The all-grade diagnostic in
+`code/codex/applicant_priority_comparison/03_count_sae_applications_by_grade.R`
+covers SAE process years 2018-2020, excludes `agregada_por_continuidad == 1`, and
+keeps all other priority categories. Applications mean distinct
+year-grade-student-school pairs; program rows and distinct student counts are
+also retained. No paper-sample age or observed-high-school restrictions or
+earliest-process selection apply. Counts summed over years represent
+applicant-years, not distinct people across all years.
+
+### SIMCE parent education in school preferences (2026-10-15)
+
+The preference extension adds average family parent-education years by RBD
+from the 2022 second-year-high-school SIMCE questionnaire to the four-VA plus
+PAES-M1 joint ranking model. It averages valid mother/father years within a
+family, then family values within school; it uses all available parent reports.
+The measure is post-application for SAE cohorts 2018-2020, so its preference
+coefficient is descriptive. Details, coding, sample, normalization, subgroup
+specification and reproducible scripts are in
+`decisions/2026-10-15-simce-parent-education-school-preferences.md` and
+`code/codex/school_preference_va/README.md`.
+
+### Directory fee bands in school preferences (2026-10-21)
+
+The current school-preference extension adds 2024 Directorio enrollment
+and monthly fee bands to the seven-attribute joint model, retaining the
+273,184 applicants, 969,377 school pairs, group definitions, normalizations
+and both distances. Free is the reference in each field; the unobserved
+lowest monthly paid band has no coefficient, and the coincident unknown
+categories enter once. Code is in scripts 27-30 and
+`directory_prices_common.R` within `code/codex/school_preference_va/`.
+Derived outputs use the `directory_prices_2024` clean-data/table subfolders;
+the report is `output/reports/school_preference_va/with_directory_prices_2024.html`.
+The 2024 fees are later reported school attributes, not exact household
+payments at application time. Specification and inference are recorded in
+`decisions/2026-10-21-directory-prices-school-preferences.md`.
+
+The current report was subsequently simplified to A-D additive models:
+distance+fees; add school type+four observed outcome averages; add four VAs;
+add school type+four VAs
+without PAES. The user excluded PAES M1 from D only, leaving B unchanged. It uses
+the same 273,184 applicant lists, with no parent controls or type interactions.
+Scripts 31-33 save eight pooled models (four per distance definition) under
+the `directory_prices_2024/four_specifications` subfolders. The current HTML
+path stays the same; the older comprehensive report is retained with the
+`_full.html` suffix. See
+`decisions/2026-10-21-four-simple-preference-specifications.md`.
+
+B's observed outcome block contains the current PAES M1 mean plus the
+existing unadjusted school means of exam taking, high-premium-field and
+high-premium-institution enrollment. Script 34 reuses the school-VA
+precursor raw means and records denominators and normalization separately;
+it preserves the ranking sample and all other model specifications.
+
+The current table also inserts `A + averages` between A and B. This new
+column contains distance, fees and the four school outcome averages;
+school type first enters B. The internal key is `A_means`. Both distances
+are estimated, giving ten current model objects on the same sample; the
+historical `four_specifications` file paths stay stable.
+
+The paper master `univ_gr8_df.csv` already contains `year_1st_app` and
+`high_paying_field_m1`. Observed `year_1st_app` identifies any recorded
+regular centralized university application (2021-2026), distinct from
+financial-aid application or enrollment. Scripts 07/08 in the
+`simce4_exam_predictiveness` task read these existing outcomes and construct
+cross-fitted predicted exam scores b_i and realized gaps g_i for grade-8
+cohorts 2017/2019. Derived data are under the task's clean-data
+`bg_decomposition` folder; the separate report is `predicted_score_and_gap.html`.
+
+The current b_i/g_i outcome models are logistic, fitted and verified by
+scripts 09/10 in that task using the unchanged saved score dataset.
+The report's primary coefficients are average marginal effects in
+percentage points; raw logit coefficients and odds ratios are separate.
+Logit objects and diagnostics use `bg_decomposition/logit/`. LPM report
+and table archives have `_lpm` suffixes; script 08 now targets those files.
+
+Script `mifuturo_matricula_income/06_income_by_gender.R` provides the basic
+unadjusted projected-income comparison by gender, both retaining the
+non-enrollee income floor and restricting to HE enrollees. It uses the
+paper's 931,547-student broad panel (one unknown-gender record excluded)
+and the existing full log-income variable from the master. The resulting
+931,546 all-student and 625,616 enrolled samples have women-minus-men log
+gaps -0.02676 and -0.14422. Data, table and report use the task name
+`projected_income_gender`.
+
+`mifuturo_matricula_income/07_income_gender_score_controls.R` adds entrance-exam
+math/verbal scores and admission-year fixed effects to that gender comparison.
+It preserves the original income cache, requires both observed positive test
+scores, and compares adjusted/unadjusted estimates on the same scored students.
+The active gender-income report now shows those comparisons; the original
+unadjusted report has the `_unadjusted` suffix. Score-controlled models and
+coverage use `data/clean/projected_income_gender/score_controls/`.
+
+The historical preference report `school_preference_va/with_peer_populations.html`
+has D plus three alternative peer populations from the supplied 100-school
+school_group_averages_2018_2020.csv. The user selected all four columns on
+the 13,037 complete rankings within this file (99 used schools). Scripts
+35-37 in school_preference_va reproduce its data, estimates and report;
+derived artifacts use the task subfolder peer_populations. Original D and
+earlier preference reports are preserved.
+
+The user's subsequent full-school extension is now the active peer comparison:
+`school_preference_va/with_peer_populations_all_schools.html`. Expanded composition
+uses 3,964 observed destination/offer/attendee schools, reproducing the original
+100-school measures. All four columns retain the same 267,937 complete rankings
+(98.08% of original D), 940,605 pairs and 2,454 schools. Original VA units stay
+fixed; peer units use common attendee-school SDs on the expanded sample.
+See `decisions/2026-10-22-full-school-peer-preferences.md` and task READMEs.
+
+Destination entry-grade audit: of these 2,454 schools, the 2024 Directory
+lists 535 secondary-only schools, 1,918 basic-plus-secondary schools and one
+preschool-plus-secondary school. For grade-8 cohorts 2018-2020, 1,934 schools
+have same-RBD grade-9 continuers the next year (282,521 people). Historical
+grade-8 presence is observed at 1,935 schools; 512 have no primary grades
+observed and seven have other primary grades without grade 8. Script 39 in
+school_preference_va saves counts and school records to destination_entry_grades
+without changing models. Historical and 2024 classifications are distinct.
+
+For the 1,918 basic-plus-secondary destinations, script 40 compares advertised
+SAE grade-9 vacancies with grade 8 in process t and grade 9 in t+1, matching
+school-year A1 coverage. Separate 2018/2019/2020 vacancy-to-grade-9 ratios
+are 43.3%/42.4%/37.1%; vacancy-to-grade-8 ratios are 61.3%/55.0%/49.2%.
+No across-year pooled ratio is reported. Annual counts and every school-year
+ratio use destination_entry_grades/vacancies_vs_enrollment in the task data.
+
+## Annual secondary-school spots in SAE
+
+`code/codex/secondary_sae_spots/` describes initial regular-round A1 secondary
+capacity and advertised vacancies for every process from 2016 through 2025.
+Compare adjacent years within common region-grade coverage; full national
+secondary coverage begins in process 2020, one year after national grade-9
+coverage. An exit from positive-capacity listings is not a verified closure.
+Outputs and source manifests use `data/clean/secondary_sae_spots/`, with an HTML
+report under `output/reports/secondary_sae_spots/`. See decision
+`decisions/2026-11-11-secondary-sae-spots.md` for definitions and rollout handling.
+
+The `02_correlate_va.R` follow-up matches 2021-to-2025 capacity growth to the
+current 2017-2020 cohort EB school VA. Equal-school Pearson correlations are
+small (math .053, exam .020, high-premium field .002, institution .022), with
+99.7-99.8% coverage. Main growth retains 24 endpoint exits; logs, ranks,
+absolute changes and minimum-baseline-capacity checks are separate. This is
+descriptive with overlapping VA outcomes, not a pre-2021 forecast. Report:
+`output/reports/secondary_sae_spots/capacity_growth_vs_va_2021_2025.html`.
+See `decisions/2026-11-11-secondary-capacity-growth-va.md` for exact definitions.
+
+The enrollment follow-up (scripts 03-06) uses official April-30 classroom
+counts for 2010-2025 and fixed incumbent schools around regional first SAE
+entry (2017-2020). Math/exam high-VA enrollment growth advantages predate SAE
+and weaken afterward; field/institution evidence is weaker. School and
+region-year effects, regional clustered SEs, and multiple sensitivities are
+descriptive because VA is retrospective. See
+`decisions/2026-11-12-secondary-enrollment-trends-va.md` and report
+`output/reports/secondary_sae_spots/enrollment_trends_before_after_sae_va.html`.

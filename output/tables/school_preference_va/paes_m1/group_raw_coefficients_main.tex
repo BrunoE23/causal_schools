@@ -1,0 +1,42 @@
+\begin{table}[!htbp]
+\centering
+\caption{School ranking preferences with PAES M1: group raw coefficients main}
+\label{tab:paes-m1-group-raw-coefficients-main}
+\small
+\setlength{\tabcolsep}{4pt}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lcccc}
+\toprule
+Regressor or total slope & School ending, non-prioritario & School ending, prioritario & Voluntary, non-prioritario & Voluntary, prioritario \\
+\midrule
+Math VA & -0.0407 (0.0048) & -0.0360 (0.0045) & -0.0428 (0.0106) & -0.0319 (0.0140) \\
+Exam-taking VA & 0.1290 (0.0075) & 0.1073 (0.0066) & 0.0622 (0.0178) & 0.0705 (0.0210) \\
+High-premium-field VA & 0.0120 (0.0051) & 0.0070 (0.0048) & -0.0024 (0.0114) & 0.0259 (0.0147) \\
+High-premium-institution VA & -0.0193 (0.0051) & -0.0213 (0.0048) & 0.0452 (0.0123) & 0.0463 (0.0148) \\
+PAES M1 school mean & 0.1612 (0.0061) & 0.1250 (0.0058) & 0.1862 (0.0134) & 0.1398 (0.0178) \\
+Mixed HC/TP school & 0.3372 (0.0092) & 0.4196 (0.0075) & 0.2825 (0.0248) & 0.3066 (0.0259) \\
+TP-only school & 0.3858 (0.0184) & 0.4635 (0.0134) & 0.3742 (0.0580) & 0.4932 (0.0479) \\
+Mixed HC/TP x Math VA & -0.0155 (0.0108) & 0.0167 (0.0084) & -0.0445 (0.0284) & -0.0020 (0.0294) \\
+Mixed HC/TP x Exam-taking VA & -0.0744 (0.0096) & -0.0913 (0.0078) & -0.0459 (0.0250) & -0.0313 (0.0266) \\
+Mixed HC/TP x High-premium-field VA & 0.0324 (0.0061) & 0.0449 (0.0056) & 0.0629 (0.0149) & 0.0262 (0.0175) \\
+Mixed HC/TP x High-premium-institution VA & -0.0072 (0.0061) & -0.0420 (0.0051) & -0.0160 (0.0186) & -0.0203 (0.0198) \\
+Mixed HC/TP x PAES M1 school mean & 0.0996 (0.0118) & 0.0407 (0.0095) & 0.1624 (0.0317) & 0.1154 (0.0325) \\
+TP only x Math VA & -0.0128 (0.0179) & -0.0226 (0.0118) & -0.0444 (0.0617) & -0.0392 (0.0468) \\
+TP only x Exam-taking VA & -0.0995 (0.0115) & -0.1069 (0.0087) & -0.0367 (0.0337) & -0.0285 (0.0301) \\
+TP only x High-premium-field VA & 0.0423 (0.0067) & 0.0402 (0.0057) & 0.0452 (0.0178) & 0.0057 (0.0186) \\
+TP only x High-premium-institution VA & 0.0127 (0.0067) & -0.0172 (0.0054) & 0.0257 (0.0232) & -0.0212 (0.0224) \\
+TP only x PAES M1 school mean & 0.0103 (0.0192) & -0.0274 (0.0136) & 0.0576 (0.0619) & 0.0116 (0.0483) \\
+log(1 + distance in km) & -0.2089 (0.0056) & -0.1855 (0.0041) & -0.2390 (0.0163) & -0.1787 (0.0165) \\
+\midrule
+Applicants & 86,353 & 153,798 & 15,153 & 13,646 \\
+Student-school pairs & 332,675 & 519,247 & 56,669 & 45,800 \\
+Destination schools & 2,466 & 2,479 & 2,246 & 2,289 \\
+Log likelihood & -284,011.7872 & -386,847.4017 & -47,823.8219 & -34,118.6763 \\
+\bottomrule
+\end{tabular}
+}
+\par\smallskip
+\begin{minipage}{0.98\linewidth}\footnotesize
+\textit{Notes:} Joint submitted-set rank-ordered logits with four VAs, PAES M1 school mean, two school-type indicators, ten type-by-metric interactions and log(1 + distance in km). Parentheses report student-clustered standard errors. Total slopes add baseline coefficients and relevant interactions; their standard errors include covariance terms. The original four-VA normalization is fixed across 2,501 pooled destination schools; M1 is standardized across unique schools in the common PAES-complete sample. Both distance versions and matched-baseline fits retain the same complete rankings within each applicant group. Non-TP includes HC-only, artistic-only and other schools. Type-indicator coefficients apply only at all five standardized metrics equal to zero. PAES process 2025 records 2024 graduates' regular late-2024 M1 sitting, after the 2018-2020 applications; the score mean is measured among test takers. No 2024-process fallback is used. Associations are descriptive; separate group logits can differ in utility-error scale.
+\end{minipage}
+\end{table}

@@ -1,0 +1,57 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Flexible-score OLS: income contribution</title>
+<style>body{max-width:1200px;margin:36px auto;padding:0 24px;font:16px/1.5 system-ui;color:#233143}h1{font-size:28px}h2{font-size:23px;margin-top:40px}.intro{color:#526171}table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;margin:22px 0}th,td{padding:9px 12px;text-align:right;border-bottom:1px solid #e7ebef}th:first-child{text-align:left}thead{background:#eef3f7}tbody th{font-weight:500}.se{display:block;color:#64748b;font-size:13px}.block>*{border-top:2px solid #a8b5c2}.note{font-size:13px;color:#526171;margin:10px 0}details{margin-top:22px}summary{cursor:pointer;font-weight:600}</style></head><body>
+<h1>Premium enrollment among students with math at least +1 SD</h1>
+<p class="intro">Four linear probability models. Full cubic math/verbal controls, income-decile indicators, and admission-year effects.</p>
+<p><strong>Income share = (R-squared with income - R-squared without income) / R-squared with income.</strong> Both models use the same sample and score/year controls.</p>
+<table><thead><tr><th>Outcome</th><th>R-squared without income</th><th>Full R-squared</th><th>Income gain in R-squared</th><th>Income share of explained variation</th></tr></thead><tbody>
+<tr class=""><th scope="row">Premium institution</th><td>0.1108</td><td>0.1667</td><td>0.0559</td><td>33.54%</td></tr>
+<tr class=""><th scope="row">Premium field</th><td>0.0573</td><td>0.0756</td><td>0.0182</td><td>24.11%</td></tr>
+<tr class=""><th scope="row">Either (or both)</th><td>0.1287</td><td>0.1308</td><td>0.0021</td><td>1.62%</td></tr>
+<tr class=""><th scope="row">Both</th><td>0.0927</td><td>0.0992</td><td>0.0065</td><td>6.53%</td></tr>
+</tbody></table>
+<h2>Main premium-enrollment outcomes</h2>
+<table><thead><tr><th>Regressor / statistic</th><th>Institution</th><th>Field</th><th>Either</th><th>Both</th></tr></thead><tbody>
+<tr class=""><th scope="row">Math: average derivative (per SD)</th><td>15.60<span class="se">(0.64)</span></td><td>15.68<span class="se">(0.56)</span></td><td>12.86<span class="se">(0.41)</span></td><td>18.43<span class="se">(0.65)</span></td></tr>
+<tr class=""><th scope="row">Verbal: average derivative (per SD)</th><td>4.90<span class="se">(0.32)</span></td><td>1.51<span class="se">(0.30)</span></td><td>2.78<span class="se">(0.19)</span></td><td>3.64<span class="se">(0.31)</span></td></tr>
+<tr class="block"><th scope="row">Income decile 1</th><td>Reference</td><td>Reference</td><td>Reference</td><td>Reference</td></tr>
+<tr class=""><th scope="row">Income decile 2 vs. 1</th><td>1.96<span class="se">(1.36)</span></td><td>-0.23<span class="se">(1.30)</span></td><td>0.35<span class="se">(1.16)</span></td><td>1.39<span class="se">(1.19)</span></td></tr>
+<tr class=""><th scope="row">Income decile 3 vs. 1</th><td>4.35<span class="se">(1.28)</span></td><td>-2.62<span class="se">(1.28)</span></td><td>-1.40<span class="se">(1.14)</span></td><td>3.12<span class="se">(1.14)</span></td></tr>
+<tr class=""><th scope="row">Income decile 4 vs. 1</th><td>5.45<span class="se">(1.28)</span></td><td>-2.30<span class="se">(1.25)</span></td><td>-0.01<span class="se">(1.15)</span></td><td>3.16<span class="se">(1.10)</span></td></tr>
+<tr class=""><th scope="row">Income decile 5 vs. 1</th><td>7.29<span class="se">(1.27)</span></td><td>-2.40<span class="se">(1.18)</span></td><td>0.30<span class="se">(1.06)</span></td><td>4.58<span class="se">(1.09)</span></td></tr>
+<tr class=""><th scope="row">Income decile 6 vs. 1</th><td>8.37<span class="se">(1.27)</span></td><td>-2.28<span class="se">(1.21)</span></td><td>0.20<span class="se">(1.04)</span></td><td>5.89<span class="se">(1.13)</span></td></tr>
+<tr class=""><th scope="row">Income decile 7 vs. 1</th><td>10.86<span class="se">(1.29)</span></td><td>-3.29<span class="se">(1.17)</span></td><td>0.50<span class="se">(1.06)</span></td><td>7.08<span class="se">(1.11)</span></td></tr>
+<tr class=""><th scope="row">Income decile 8 vs. 1</th><td>12.53<span class="se">(1.31)</span></td><td>-3.72<span class="se">(1.13)</span></td><td>0.75<span class="se">(0.99)</span></td><td>8.06<span class="se">(1.09)</span></td></tr>
+<tr class=""><th scope="row">Income decile 9 vs. 1</th><td>16.48<span class="se">(1.42)</span></td><td>-5.13<span class="se">(1.09)</span></td><td>0.82<span class="se">(0.95)</span></td><td>10.54<span class="se">(1.17)</span></td></tr>
+<tr class=""><th scope="row">Income decile 10 vs. 1</th><td>35.01<span class="se">(1.86)</span></td><td>-17.24<span class="se">(1.34)</span></td><td>4.23<span class="se">(0.98)</span></td><td>13.54<span class="se">(1.36)</span></td></tr>
+<tr class="block"><th scope="row">Outcome mean (%)</th><td>52.63</td><td>62.97</td><td>80.78</td><td>34.82</td></tr>
+<tr class=""><th scope="row">Full R-squared</th><td>0.1667</td><td>0.0756</td><td>0.1308</td><td>0.0992</td></tr>
+<tr class=""><th scope="row">R-squared without income</th><td>0.1108</td><td>0.0573</td><td>0.1287</td><td>0.0927</td></tr>
+<tr class=""><th scope="row">Income share of explained variation (%)</th><td>33.54</td><td>24.11</td><td>1.62</td><td>6.53</td></tr>
+<tr class=""><th scope="row">Income indicators: joint clustered p-value</th><td><0.001</td><td><0.001</td><td><0.001</td><td><0.001</td></tr>
+<tr class=""><th scope="row">Observations</th><td>93,423</td><td>93,423</td><td>93,423</td><td>93,423</td></tr>
+<tr class=""><th scope="row">School clusters</th><td>2,735</td><td>2,735</td><td>2,735</td><td>2,735</td></tr>
+<tr class=""><th scope="row">Admission-year indicators</th><td>Yes</td><td>Yes</td><td>Yes</td><td>Yes</td></tr>
+</tbody></table>
+<details><summary>Raw coefficients on the polynomial score basis</summary>
+<table><thead><tr><th>Score term</th><th>Institution</th><th>Field</th><th>Either</th><th>Both</th></tr></thead><tbody>
+<tr class=""><th scope="row">z_math</th><td>5.06<span class="se">(7.71)</span></td><td>-4.83<span class="se">(7.54)</span></td><td>11.35<span class="se">(5.95)</span></td><td>-11.13<span class="se">(7.47)</span></td></tr>
+<tr class=""><th scope="row">z_verbal</th><td>8.49<span class="se">(2.42)</span></td><td>-1.04<span class="se">(2.49)</span></td><td>1.86<span class="se">(2.12)</span></td><td>5.59<span class="se">(2.32)</span></td></tr>
+<tr class=""><th scope="row">math2</th><td>11.22<span class="se">(3.89)</span></td><td>12.68<span class="se">(3.88)</span></td><td>5.80<span class="se">(2.88)</span></td><td>18.11<span class="se">(3.94)</span></td></tr>
+<tr class=""><th scope="row">verbal2</th><td>1.55<span class="se">(0.74)</span></td><td>-3.04<span class="se">(0.79)</span></td><td>-0.76<span class="se">(0.66)</span></td><td>-0.73<span class="se">(0.70)</span></td></tr>
+<tr class=""><th scope="row">math_verbal</th><td>-5.10<span class="se">(2.53)</span></td><td>1.71<span class="se">(2.59)</span></td><td>0.80<span class="se">(2.11)</span></td><td>-4.19<span class="se">(2.54)</span></td></tr>
+<tr class=""><th scope="row">math3</th><td>-2.63<span class="se">(0.65)</span></td><td>-2.62<span class="se">(0.67)</span></td><td>-1.79<span class="se">(0.47)</span></td><td>-3.46<span class="se">(0.69)</span></td></tr>
+<tr class=""><th scope="row">verbal3</th><td>0.34<span class="se">(0.19)</span></td><td>0.53<span class="se">(0.20)</span></td><td>0.51<span class="se">(0.16)</span></td><td>0.36<span class="se">(0.18)</span></td></tr>
+<tr class=""><th scope="row">math2_verbal</th><td>1.45<span class="se">(0.72)</span></td><td>-0.23<span class="se">(0.73)</span></td><td>-0.18<span class="se">(0.55)</span></td><td>1.41<span class="se">(0.74)</span></td></tr>
+<tr class=""><th scope="row">math_verbal2</th><td>-1.17<span class="se">(0.49)</span></td><td>0.98<span class="se">(0.50)</span></td><td>-0.23<span class="se">(0.39)</span></td><td>0.05<span class="se">(0.49)</span></td></tr>
+</tbody></table>
+<p class="note">Raw basis coefficients are in percentage points but are not constant one-SD effects. Intercepts, admission-year coefficients, confidence intervals, and covariance matrices are saved with the analysis.</p></details>
+<h2>Specification and interpretation</h2>
+<p class="note">The full model contains M, V, M^2, V^2, MV, M^3, V^3, M^2V and MV^2, nine income-decile indicators (D1 reference), and admission-year indicators. Scores retain their original within-admission-year standardization; income deciles retain the existing imputed baseline-income classification. The reduced model drops only the income indicators, retaining the identical students and all score/year controls.</p>
+<p class="note">Income share = (full R-squared - R-squared without income) / full R-squared. This is income's incremental contribution when added after scores and year, as a fraction of the variation explained by the full model (including year effects). It does not allocate explanatory power shared by income and scores. It is not a causal share. All R-squared values are ordinary unadjusted, in-sample measures.</p>
+<p class="note">Income's partial R-squared instead divides the R-squared gain by 1 minus reduced-model R-squared. It describes the fraction of previously unexplained variation removed by adding income, and is saved separately in income_contribution.csv. It is not the percentage displayed as income share.</p>
+<p class="note">Income rows below are OLS coefficients relative to decile 1. Score rows are average partial derivatives of the full cubic polynomial per SD, not finite one-SD changes. Coefficients and derivatives are multiplied by 100, with actual attended-school-clustered CR1 standard errors in parentheses. Inference uses t(G-1); the nine income coefficients are tested jointly using a clustered Wald F test.</p>
+<p class="note">The common sample has 93,423 students in 2,735 schools, including 8,522 HE non-enrollees. The sample requires original z_math >= 1 and exactly matches the preceding high-math HE-enrollment regression. Scores are not restandardized and income deciles are not re-ranked. There is no HE-enrollment or school-VA-availability condition. The 840 admission-2026 records have zero recorded premium outcomes and remain in OLS; this is not evidence about future enrollment.</p>
+<p class="note">Main outcomes are enrollment in a premium institution, a premium field, either (inclusive union), and both. All outcomes are zero for non-enrollees. R-squared contributions and standard errors do not add across these outcomes.</p>
+<p class="note">Checks verify common samples, normal equations, full and reduced clustered covariance matrices, the nested-model projection identity, and the coefficient identity either = institution + field - both in both specifications. LPM fitted values are not clipped; fractions outside [0,1] are retained in the analysis diagnostics.</p>
+</body></html>

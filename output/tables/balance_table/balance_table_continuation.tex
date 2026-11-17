@@ -1,0 +1,46 @@
+\begin{table}[H]
+\centering
+\caption{Balance across samples and applicant continuation groups}
+\label{tab:balance_samples_continuation}
+\scriptsize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}lccccc@{}}
+\toprule
+ & \shortstack{Broad Panel\\(All HS)} & \shortstack{SAE\\Applicants} & \shortstack{SAE Applicants\\w/ risk} & \shortstack{SAE Applicants\\School ends at 8} & \shortstack{SAE Applicants\\Voluntary} \\
+ & (1) & (2) & (3) & (4) & (5) \\
+\midrule
+\multicolumn{6}{l}{\textit{Student characteristics}} \\[2pt]
+Female & 0.492 & 0.484 & 0.495 & 0.474 & 0.550 \\
+Metropolitan Region (Santiago) & 0.387 & 0.257 & 0.273 & 0.239 & 0.359 \\
+Age & 13.4 & 13.4 & 13.3 & 13.4 & 13.3 \\
+\midrule
+\multicolumn{6}{l}{\textit{Baseline SIMCE variables}} \\[2pt]
+Math 4th grade (z) & 0.036 & -0.232 & -0.159 & -0.281 & 0.008 \\
+Verbal 4th grade (z) & 0.036 & -0.189 & -0.115 & -0.230 & 0.010 \\
+Income decile & 5.5 & 4.5 & 4.8 & 4.3 & 5.5 \\
+Mother education years & 11.9 & 10.9 & 11.2 & 10.7 & 12.0 \\
+\% matched all SIMCE vars & 82.4\% & 81.8\% & 83.4\% & 80.8\% & 87.8\% \\
+\midrule
+\multicolumn{6}{l}{\textit{Middle school}} \\[2pt]
+GPA (z) & 0.032 & 0.024 & 0.093 & 0.014 & 0.098 \\
+Attendance (z) & 0.021 & 0.030 & 0.043 & 0.033 & 0.014 \\
+\% matched all middle-school vars & 99.8\% & 99.8\% & 99.8\% & 99.8\% & 99.9\% \\
+\midrule
+\multicolumn{6}{l}{\textit{Outcomes}} \\[2pt]
+Std. math exam & 0.000 & -0.334 & -0.289 & -0.379 & -0.168 \\
+Std. verbal exam & 0.000 & -0.301 & -0.230 & -0.356 & -0.087 \\
+Admission exam taker & 0.776 & 0.738 & 0.769 & 0.720 & 0.842 \\
+Higher ed. enrolled & 0.672 & 0.580 & 0.617 & 0.561 & 0.685 \\
+Hi-premium institution & 0.128 & 0.056 & 0.067 & 0.048 & 0.095 \\
+Hi-premium field & 0.307 & 0.258 & 0.280 & 0.248 & 0.316 \\
+Attends non-private high school & 90.61\% & 98.86\% & 98.41\% & 99.45\% & 98.37\% \\
+N & 931,547 & 294,198 & 162,633 & 250,564 & 38,868 \\
+Share of SAE applicants & --- & 100.00\% & 55.28\% & 85.17\% & 13.21\% \\
+Percent of broad panel & 100.0\% & 31.6\% & 17.5\% & 26.9\% & 4.2\% \\
+\bottomrule
+\end{tabular}
+\par\medskip\footnotesize
+\begin{minipage}{\textwidth}
+\textit{Notes:} The first three columns reproduce Table 2. The broad panel contains cohorts 2017-2020 with an observed high school and age 12-16. SAE applicants are timely 2018-2020 grade-9 applicants; assignment risk requires maximum simulated assignment probability below one. The two new columns are subsets of the SAE-applicant column. School ending means the grade-8 origin has no offering above grade 8 in the contemporaneous SAE offering file. Voluntary means that origin offers grade 9. The classification concerns continuation availability, not an observed motive or actual school change. 4,766 applicants (1.62\%) have an unresolved origin offering or another offering pattern. They remain in the overall applicant column and, when at risk, in the risk column, but enter neither new column. Share of SAE applicants uses all 294,198 timely applicants as its denominator; the broad-panel cell is not applicable. The two continuation groups exclude the 1.62\% with unresolved/other origins. Non-private high-school attendance uses the most-attended high school and the same private-paid sector indicator as the applicant-priority comparison; the share is among students with an observed sector classification, with coverage saved separately. Cells report means among available observations, using the same variable definitions and normalization as Table 2. Block match rates and group sizes are retained. Differences, standard errors, and joint tests are omitted.
+\end{minipage}
+\end{table}

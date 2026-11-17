@@ -1,0 +1,29 @@
+\begin{table}[!htbp]
+\centering
+\caption{First-stage coefficients by origin-school continuation}
+\label{tab:first_stage-by-continuation}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lccccccc}
+\toprule
+ & \multicolumn{2}{c}{Achievement} & \multicolumn{3}{c}{Postsecondary access} & \multicolumn{2}{c}{Within higher-education choice} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-6} \cmidrule(lr){7-8}
+ & Math & Verbal & Exam taking & Fin. aid app. & Higher-ed enrollment & High-premium inst. & High-premium field \\
+\midrule
+School ending & 0.452*** & 0.452*** & 0.438*** & 0.418*** & 0.440*** & 0.259*** & 0.488*** \\
+ & (0.009) & (0.007) & (0.006) & (0.007) & (0.006) & (0.010) & (0.008) \\
+First-stage F & 2815.8 & 3742.4 & 5445.1 & 3774.0 & 4819.7 & 666.6 & 3699.9 \\
+N & 73,700 & 75,040 & 111,952 & 111,952 & 111,952 & 75,470 & 75,470 \\
+\addlinespace
+Voluntary & 0.422*** & 0.386*** & 0.353*** & 0.340*** & 0.372*** & 0.378*** & 0.423*** \\
+ & (0.019) & (0.016) & (0.015) & (0.016) & (0.015) & (0.025) & (0.018) \\
+First-stage F & 479.4 & 563.7 & 527.1 & 460.4 & 653.5 & 235.1 & 566.2 \\
+N & 16,461 & 16,719 & 21,196 & 21,196 & 21,196 & 16,789 & 16,789 \\
+\addlinespace
+\bottomrule
+\end{tabular}
+}
+\par\medskip\footnotesize
+\begin{minipage}{\textwidth}
+\textit{Notes:} First-stage and pass-through specifications are the paper's Tables 4 and 5, estimated separately within each origin-school group. Both use timely applicants with assignment risk in 2018-2020; school VA is estimated on the original 2017-2020 sample and is held fixed across groups. The first stage regresses attended-school EB VA on first-round offered-school EB VA. The pass-through regression instruments attended VA with offered VA. Both control for expected VA in that outcome, cohort indicators, grade-4 math and verbal scores, gender indicators and age indicators. Outcome-specific missingness and exam-taking restrictions match the main paper. No-offer instrument values and all VA normalizations are unchanged. Parentheses contain heteroskedasticity-robust standard errors, as in the main paper. Stars use the original normal-reference tests: *** p<0.01, ** p<0.05, * p<0.10. First-stage F is the squared robust t statistic for the single excluded instrument. These subgroup point estimates alone do not establish a statistically significant difference between groups. Assignment-risk fractions use all applicants in each Table 2 subgroup before complete-control and outcome restrictions. School ending means the grade-8 origin has no SAE offering above grade 8; voluntary means it offers grade 9. These operational labels describe continuation availability, not observed motives or actual moves. 4,766 applicants have unresolved/other origin offerings, including 3,140 with assignment risk. They are excluded from both subgroup rows. The original pooled results include them when eligible.
+\end{minipage}
+\end{table}

@@ -1,0 +1,65 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Premium field and institution regressions</title>
+<style>body{font:16px/1.5 system-ui;color:#233143;max-width:1350px;margin:30px auto;padding:0 24px}table{border-collapse:collapse;width:100%;margin:20px 0}th,td{padding:10px;border-bottom:1px solid #ddd;text-align:right}th:first-child{text-align:left}.note{font-size:14px;color:#526171}</style></head><body>
+<h1>Premium field and institution: parents + PAES versus full baseline controls</h1>
+<p>OLS linear probability models. Coefficients are percentage points; attended-high-school-clustered SEs in parentheses. All four regressions use exactly 559,914 students and 3,371 school clusters.</p>
+<table><tr><th></th><th colspan="2">High-premium field</th><th colspan="2">High-premium institution</th></tr><tr><th></th><th>Parents + PAES</th><th>Full baseline</th><th>Parents + PAES</th><th>Full baseline</th></tr>
+<tr><th>Father education (+1 year)</th><td>-0.040 (0.036)</td><td>0.144 (0.029)</td><td>1.250 (0.050)</td><td>0.166 (0.020)</td></tr>
+<tr><th>Mother education (+1 year)</th><td>-0.143 (0.035)</td><td>0.046 (0.031)</td><td>0.746 (0.042)</td><td>0.089 (0.021)</td></tr>
+<tr><th>PAES math (+1 SD)</th><td>12.758 (0.184)</td><td>11.088 (0.136)</td><td>11.298 (0.290)</td><td>7.662 (0.179)</td></tr>
+<tr><th>PAES verbal (+1 SD)</th><td>1.496 (0.131)</td><td>2.504 (0.114)</td><td>4.590 (0.156)</td><td>3.828 (0.106)</td></tr>
+<tr><th>R-squared</th><td>0.0783</td><td>0.1448</td><td>0.2085</td><td>0.3457</td></tr>
+<tr><th>Outcome mean</th><td>38.99%</td><td>38.99%</td><td>18.68%</td><td>18.68%</td></tr>
+<tr><th>Students</th><td>559,914</td><td>559,914</td><td>559,914</td><td>559,914</td></tr>
+</table>
+<p>Parents + PAES includes only an intercept, both continuous parent education variables, and linear standardized entrance math/verbal. Full baseline adds the complete observational-VA control set: separate cubic grade-4 SIMCE math/verbal terms, linear income decile, parent indigenous indicators, early-childhood attendance, middle-school GPA and attendance, and cohort, sex, age, home-comuna, middle-years-observed and middle-school indicators. Parent education enters once; destination high-school effects are not included.</p>
+<p class="note">Sample: the previous full-baseline estimation sample, including non-enrollees (zero for both outcomes), with no high-math or HE-enrollment restriction. Keep the existing high_paying_field_m1/high_inst_m1 definitions, source imputations and score normalizations. Inference uses CR1 with exact full baseline-FE degrees of freedom and t(G-1). Overall R-squared includes the explanatory contribution of the baseline fixed effects. Estimates are conditional associations.</p>
+<details><summary>All raw coefficients</summary><table><tr><th>Outcome</th><th>Model</th><th>Term</th><th>Coefficient (pp)</th><th>Clustered SE</th></tr>
+<tr><td>high_paying_field_m1</td><td>parents_paes</td><td>(Intercept)</td><td>40.5970</td><td>0.6676</td></tr>
+<tr><td>high_paying_field_m1</td><td>parents_paes</td><td>father_years</td><td>-0.0400</td><td>0.0363</td></tr>
+<tr><td>high_paying_field_m1</td><td>parents_paes</td><td>mother_years</td><td>-0.1430</td><td>0.0354</td></tr>
+<tr><td>high_paying_field_m1</td><td>parents_paes</td><td>z_math</td><td>12.7575</td><td>0.1836</td></tr>
+<tr><td>high_paying_field_m1</td><td>parents_paes</td><td>z_verbal</td><td>1.4958</td><td>0.1313</td></tr>
+<tr><td>high_paying_field_m1</td><td>all_va_baseline</td><td>z_math</td><td>11.0878</td><td>0.1358</td></tr>
+<tr><td>high_paying_field_m1</td><td>all_va_baseline</td><td>z_verbal</td><td>2.5036</td><td>0.1138</td></tr>
+<tr><td>high_paying_field_m1</td><td>all_va_baseline</td><td>income_decile_imputed</td><td>0.0197</td><td>0.0329</td></tr>
+<tr><td>high_paying_field_m1</td><td>all_va_baseline</td><td>father_educ_years_imputed</td><td>0.1443</td><td>0.0286</td></tr>
+<tr><td>high_paying_field_m1</td><td>all_va_baseline</td><td>mother_educ_years_imputed</td><td>0.0457</td><td>0.0306</td></tr>
+<tr><td>high_paying_field_m1</td><td>all_va_baseline</td><td>father_indigenous_imputed</td><td>0.4464</td><td>0.3011</td></tr>
+<tr><td>high_paying_field_m1</td><td>all_va_baseline</td><td>mother_indigenous_imputed</td><td>1.1648</td><td>0.2844</td></tr>
+<tr><td>high_paying_field_m1</td><td>all_va_baseline</td><td>sala_cuna_imputed</td><td>0.2882</td><td>0.1678</td></tr>
+<tr><td>high_paying_field_m1</td><td>all_va_baseline</td><td>jardin_imputed</td><td>0.0524</td><td>0.1491</td></tr>
+<tr><td>high_paying_field_m1</td><td>all_va_baseline</td><td>prekinder_imputed</td><td>0.7788</td><td>0.2456</td></tr>
+<tr><td>high_paying_field_m1</td><td>all_va_baseline</td><td>kinder_imputed</td><td>-0.3697</td><td>0.6378</td></tr>
+<tr><td>high_paying_field_m1</td><td>all_va_baseline</td><td>z_gpa_middle_mean</td><td>5.1786</td><td>0.1156</td></tr>
+<tr><td>high_paying_field_m1</td><td>all_va_baseline</td><td>z_att_middle_mean</td><td>-0.1340</td><td>0.0965</td></tr>
+<tr><td>high_paying_field_m1</td><td>all_va_baseline</td><td>z_sim_mat_4to</td><td>-0.7390</td><td>0.1458</td></tr>
+<tr><td>high_paying_field_m1</td><td>all_va_baseline</td><td>I(I(z_sim_mat_4to^2))</td><td>-0.3677</td><td>0.0577</td></tr>
+<tr><td>high_paying_field_m1</td><td>all_va_baseline</td><td>I(I(z_sim_mat_4to^3))</td><td>0.1512</td><td>0.0369</td></tr>
+<tr><td>high_paying_field_m1</td><td>all_va_baseline</td><td>z_sim_leng_4to</td><td>-1.9616</td><td>0.1458</td></tr>
+<tr><td>high_paying_field_m1</td><td>all_va_baseline</td><td>I(I(z_sim_leng_4to^2))</td><td>0.2077</td><td>0.0612</td></tr>
+<tr><td>high_paying_field_m1</td><td>all_va_baseline</td><td>I(I(z_sim_leng_4to^3))</td><td>-0.0075</td><td>0.0445</td></tr>
+<tr><td>high_inst_m1</td><td>parents_paes</td><td>(Intercept)</td><td>-6.9195</td><td>0.9632</td></tr>
+<tr><td>high_inst_m1</td><td>parents_paes</td><td>father_years</td><td>1.2495</td><td>0.0502</td></tr>
+<tr><td>high_inst_m1</td><td>parents_paes</td><td>mother_years</td><td>0.7465</td><td>0.0421</td></tr>
+<tr><td>high_inst_m1</td><td>parents_paes</td><td>z_math</td><td>11.2976</td><td>0.2901</td></tr>
+<tr><td>high_inst_m1</td><td>parents_paes</td><td>z_verbal</td><td>4.5895</td><td>0.1560</td></tr>
+<tr><td>high_inst_m1</td><td>all_va_baseline</td><td>z_math</td><td>7.6618</td><td>0.1790</td></tr>
+<tr><td>high_inst_m1</td><td>all_va_baseline</td><td>z_verbal</td><td>3.8278</td><td>0.1062</td></tr>
+<tr><td>high_inst_m1</td><td>all_va_baseline</td><td>income_decile_imputed</td><td>0.1305</td><td>0.0222</td></tr>
+<tr><td>high_inst_m1</td><td>all_va_baseline</td><td>father_educ_years_imputed</td><td>0.1660</td><td>0.0196</td></tr>
+<tr><td>high_inst_m1</td><td>all_va_baseline</td><td>mother_educ_years_imputed</td><td>0.0893</td><td>0.0208</td></tr>
+<tr><td>high_inst_m1</td><td>all_va_baseline</td><td>father_indigenous_imputed</td><td>0.5059</td><td>0.1868</td></tr>
+<tr><td>high_inst_m1</td><td>all_va_baseline</td><td>mother_indigenous_imputed</td><td>0.5424</td><td>0.1703</td></tr>
+<tr><td>high_inst_m1</td><td>all_va_baseline</td><td>sala_cuna_imputed</td><td>0.1655</td><td>0.1195</td></tr>
+<tr><td>high_inst_m1</td><td>all_va_baseline</td><td>jardin_imputed</td><td>0.5992</td><td>0.1039</td></tr>
+<tr><td>high_inst_m1</td><td>all_va_baseline</td><td>prekinder_imputed</td><td>0.4423</td><td>0.1590</td></tr>
+<tr><td>high_inst_m1</td><td>all_va_baseline</td><td>kinder_imputed</td><td>-1.1596</td><td>0.3566</td></tr>
+<tr><td>high_inst_m1</td><td>all_va_baseline</td><td>z_gpa_middle_mean</td><td>4.2258</td><td>0.1160</td></tr>
+<tr><td>high_inst_m1</td><td>all_va_baseline</td><td>z_att_middle_mean</td><td>0.0192</td><td>0.0695</td></tr>
+<tr><td>high_inst_m1</td><td>all_va_baseline</td><td>z_sim_mat_4to</td><td>-1.4989</td><td>0.1151</td></tr>
+<tr><td>high_inst_m1</td><td>all_va_baseline</td><td>I(I(z_sim_mat_4to^2))</td><td>0.4524</td><td>0.0458</td></tr>
+<tr><td>high_inst_m1</td><td>all_va_baseline</td><td>I(I(z_sim_mat_4to^3))</td><td>0.1627</td><td>0.0298</td></tr>
+<tr><td>high_inst_m1</td><td>all_va_baseline</td><td>z_sim_leng_4to</td><td>-1.2150</td><td>0.1043</td></tr>
+<tr><td>high_inst_m1</td><td>all_va_baseline</td><td>I(I(z_sim_leng_4to^2))</td><td>0.2349</td><td>0.0443</td></tr>
+<tr><td>high_inst_m1</td><td>all_va_baseline</td><td>I(I(z_sim_leng_4to^3))</td><td>0.1693</td><td>0.0324</td></tr>
+</table></details></body></html>

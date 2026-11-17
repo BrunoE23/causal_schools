@@ -1,0 +1,30 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Continuous institution-premium school VA</title>
+<style>body{font:16px/1.5 system-ui;max-width:1150px;margin:35px auto;padding:0 25px;color:#18323b}table{border-collapse:collapse;margin:20px 0;display:block;overflow-x:auto}td,th{padding:8px 12px;border-bottom:1px solid #d9e2e5;text-align:right}td:first-child,th:first-child{text-align:left}img{width:100%}code{font-size:14px}</style></head><body>
+<h1>Continuous institution-premium school value added</h1>
+<p><strong>482,583 students, 3,256 high schools.</strong> Non-enrollees remain NA, as requested. The outcome is the centered institution FE from the existing MiFuturo model of log income on institution and field FEs, attached to first HE enrollment.</p>
+<p>The student-weighted SD is <strong>0.03101 log-premium units</strong> for EB school VA (unshrunk: 0.03392). The school-unweighted 90th-minus-10th-percentile EB spread is 0.06874. These are effects on the institutional-premium index, not estimated effects on realized wages.</p>
+<img src="../../figures/continuous_institution_va/distribution_and_binary_comparison.png" alt="Distribution of continuous VA and comparison with binary VA">
+<h2>Sample and specification</h2>
+<p>2017-2020 grade-8 cohorts; ages 12-16; observed high-school RBD; observed math or verbal entrance score; complete VA baseline controls; HE enrollment at an institution with an estimated premium. Same baseline specification as current VA: separate cubic grade-4 math/verbal, linear imputed income, parents and early-childhood controls, middle-school GPA/attendance, cohort/sex/age/comuna/middle-years indicators, and high-school and middle-school FEs. No downstream PAES-score controls.</p>
+<p>340 eligible observations are removed by the existing estimator singleton/perfect-fit rule. The fitted model is saved. School effects are centered using estimation-sample student counts. SEs use the current lfe centered-school bootstrap setting bN=100 (the package batches this into 128 actual draws) with seed 20261110. EB shrinkage follows the existing variance-minus-noise rule; the student-weighted mean reliability is 0.937.</p>
+<p>These are observational school VA estimates conditional on HE enrollment, a downstream outcome. No lottery-IV validation is included. SEs treat estimated MiFuturo institutional premia as fixed.</p>
+<h2>Coverage before estimator drops</h2>
+<table><tr><th>fe_source</th><th>students</th></tr>
+<tr><td>observed_fe_legacy_key</td><td>391465</td></tr>
+<tr><td>not_enrolled_missing</td><td>129639</td></tr>
+<tr><td>enrolled_missing_institution_fe</td><td>10247</td></tr>
+<tr><td>observed_fe_recovered_by_code</td><td>91458</td></tr>
+</table>
+<p>Joining on unique official institution codes recovers 91,458 students at 21 institutions whose FEs were missed by the older type/name key. The largest cause is INSITUTOS versus INSTITUTOS in professional-institute type labels. All formerly matched FEs are unchanged. Unsupported institutions remain NA. Existing binary outcomes and VA files are unchanged.</p>
+<h2>School-value diagnostics</h2>
+<table><tr><th>n_students</th><th>n_schools</th><th>outcome_mean</th><th>outcome_sd</th><th>unshrunk_sd_student_weighted</th><th>eb_sd_student_weighted</th><th>eb_tau</th><th>mean_reliability_student_weighted</th></tr>
+<tr><td>482583</td><td>3256</td><td>0.01447</td><td>0.09204</td><td>0.03392</td><td>0.03101</td><td>0.03276</td><td>0.93665</td></tr>
+</table>
+<h2>Comparison with existing binary institution VA</h2>
+<table><tr><th>n_common_schools</th><th>existing_binary_n</th><th>unshrunk_pearson</th><th>eb_pearson</th><th>eb_spearman</th><th>eb_student_weighted_pearson</th></tr>
+<tr><td>3234</td><td>570772</td><td>0.86422</td><td>0.8849</td><td>0.84449</td><td>0.91518</td></tr>
+</table>
+<p>The comparison uses common schools. The existing binary VA includes non-enrollees as zero and retains its older institution matching. These correlations therefore reflect differences in outcome coding and sample as well as removal of the premium cutoff. Weighted correlation uses continuous-VA estimation counts.</p>
+<h2>Saved outputs and validation</h2>
+<p>School values, raw and EB, SEs, counts, coverage, institution crosswalk, comparison data, actual regression model and numerical checks are in <code>data/clean/continuous_institution_va/</code>. Code: <code>code/codex/continuous_institution_va/</code>. Preparation checks validate original student-level FEs, IDs, cohorts, programs, enrollment, the original binary cutoff, and source integrity. Estimation checks validate normal equations, counts, student-weighted centering and the EB identities.</p>
+</body></html>
